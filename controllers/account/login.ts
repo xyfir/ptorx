@@ -24,13 +24,13 @@ export = function (req, res) {
         }
 
         let sql: string = `
-            SELECT user_id, subscription, xadid FROM users WHERE xyfir_id = ?
+            SELECT user_id, subscription, xad_id FROM users WHERE xyfir_id = ?
         `;
         db(cn => cn.query(sql, [], (err, rows) => {
             // First login
             if (!rows.length) {
                 let insert = {
-                    xyfir_id: req.body.xid, email: body.email, xadid: body.xadid
+                    xyfir_id: req.body.xid, email: body.email, xad_id: body.xadid
                 };
                 sql = "INSERT INTO users SET ?";
                 cn.query(sql, insert, (err, result) => {
@@ -59,7 +59,7 @@ export = function (req, res) {
                     }
                     else {
                         req.session.uid = rows[0].user_id;
-                        req.session.xadid = rows[0].xadid;
+                        req.session.xadid = rows[0].xad_id;
                         req.session.subscription = rows[0].subscription;
 
                         res.json({ error: false });
