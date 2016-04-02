@@ -1,0 +1,20 @@
+{
+  "name": "ptorx",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "dependencies": {
+    "express": "^4.13.4",
+    "mysql": "^2.10.2",
+    "react": "^0.14.8",
+    "react-dom": "^0.14.8",
+    "redux": "^3.3.1",
+    "request": "^2.69.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Xyfir",
+  "license": "ISC"
+}
