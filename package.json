@@ -4,12 +4,16 @@
   "description": "",
   "main": "app.js",
   "dependencies": {
+    "body-parser": "^1.15.0",
     "express": "^4.13.4",
+    "express-mysql-session": "^1.0.0-rc.0",
+    "express-session": "^1.13.0",
     "mysql": "^2.10.2",
     "react": "^0.14.8",
     "react-dom": "^0.14.8",
     "redux": "^3.3.1",
-    "request": "^2.69.0"
+    "request": "^2.69.0",
+    "stripe": "^4.5.0"
   },
   "devDependencies": {},
   "scripts": {

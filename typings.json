@@ -1,6 +1,8 @@
 {
   "ambientDependencies": {
+    "body-parser": "registry:dt/body-parser#0.0.0+20160317120654",
     "express": "registry:dt/express#4.0.0+20160317120654",
+    "express-session": "registry:dt/express-session#0.0.0+20160331200931",
     "mysql": "registry:dt/mysql#0.0.0+20160316155526",
     "node": "registry:dt/node#4.0.0+20160330064709",
     "react": "registry:dt/react#0.14.0+20160319053454",
