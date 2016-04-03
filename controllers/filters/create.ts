@@ -21,7 +21,7 @@ export = function (req, res) {
 
     let insert = {
         user_id: req.session.uid, name: req.body.name, description: req.body.description,
-        type: req.body.type, find: req.body.find, use_regex: !!req.body.use_regex,
+        type: req.body.type, find: req.body.find, use_regex: !!req.body.useRegex,
         accept_on_match: !!req.body.acceptOnMatch
     };
 
