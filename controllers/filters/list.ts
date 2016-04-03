@@ -17,7 +17,7 @@ export = function (req, res) {
     `;
     db(cn => cn.query(sql, [req.session.uid], (err, rows) => {
         cn.release();
-        res.json({ modifiers: (err || !rows.length ? [] : rows) });
+        res.json({ filters: (err || !rows.length ? [] : rows) });
     }));
 
 };
