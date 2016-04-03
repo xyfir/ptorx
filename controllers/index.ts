@@ -13,8 +13,8 @@ router.route("/emails/:email")
     .post(require("./emails/create"))
     .update(require("./emails/update"))
     .delete(require("./emails/delete"));
-router.post("/emails/:email/send", require("./emails/send"));
 router.get("/emails/:email/messages", require("./emails/messages/list"));
+router.post("/emails/:email/messages", require("./emails/messages/send"));
 router.route("/emails/:email/messages/:id")
     .get(require("./emails/messages/get"))
     .post(require("./emails/messages/reply"))
