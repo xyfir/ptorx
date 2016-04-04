@@ -18,7 +18,7 @@
             return "Free members cannot save emails";
     }
     else {
-        if (!(email.address || '').match(/^[A-Za-z0-9-]{1,40}@ptorx.com$/))
+        if (email.address && email.address.match(/^[A-Za-z0-9-]{1,40}@ptorx.com$/))
             return "Invalid email address characters or length";
     }
 
