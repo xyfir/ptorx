@@ -8,7 +8,7 @@ import db = require("../../lib/db");
     OPTIONAL
         acceptOnMatch: boolean, useRegex: boolean
     RETURN
-        { error: boolean }
+        { error: boolean, update?: number[] }
     DESCRIPTION
         Update a filter's data
 */
@@ -31,12 +31,26 @@ export = function (req, res) {
     ];
 
     db(cn => cn.query(sql, vars, (err, result) => {
-        cn.release();
-
-        if (err || !result.affectedRows)
+        if (err || !result.affectedRows) {
+            cn.release();
             res.json({ error: true });
-        else
-            res.json({ error: false });
+        }
+        // Determine if MailGun routes need to be updated
+        else if ([1, 2, 3, 6].indexOf(req.body.type) && req.body.acceptOnMatch) {
+            sql = `SELECT email_id as id FROM linked_filters WHERE filter_id = ?`;
+            cn.query(sql, [req.params.filter], (err, rows) => {
+                cn.release();
+
+                if (err || !rows.length)
+                    res.json({ error: false });
+                else
+                    res.json({ error: false, update: rows.map(email => { return email.id; }) });
+            });
+        }
+        else {
+            cn.release();
+            res.json({ error: false })
+        }
     }));
 
 };
