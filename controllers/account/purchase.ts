@@ -1,7 +1,7 @@
 ﻿import db = require("../../lib/db");
 
 /*
-    UPDATE api/account/subscription
+    PUT api/account/subscription
     REQUIRED
         stripeToken: string, months: number
     RETURN

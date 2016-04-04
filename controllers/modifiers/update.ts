@@ -3,7 +3,7 @@ import isValid = require("../../lib/modifier/is-valid");
 import db = require("../../lib/db");
 
 /*
-    UPDATE api/modifiers/:mod
+    PUT api/modifiers/:mod
     REQUIRED
         type: number, name: string, description: string
     OPTIONAL

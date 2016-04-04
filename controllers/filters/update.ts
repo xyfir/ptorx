@@ -2,7 +2,7 @@
 import db = require("../../lib/db");
 
 /*
-    UPDATE api/filters/:filter
+    PUT api/filters/:filter
     REQUIRED
         type: number, name: string, description: string, find: string
     OPTIONAL
