@@ -1,1 +1,150 @@
-﻿
+﻿import validateModifiers = require("../../lib/email/validate-modifiers");
+import buildExpression = require("../../lib/mg-route/build-expression");
+import validateFilters = require("../../lib/email/validate-filters");
+import buildAction = require("../../lib/mg-route/build-action");
+import validate = require("../../lib/email/validate");
+import db = require("../../lib/db");
+
+import * as request from "request";
+
+/*
+    PUT api/emails/:email
+    REQUIRED
+        name: string, description: string, filters: string, modifiers: string, to: number
+    OPTIONAL
+        saveMail: boolean, noSpamFilter: boolean, noToAddress: boolean
+    RETURN
+        { error: boolean, message?: string }
+    DESCRIPTION
+        Updates a redirect email, linked entries, and MailGun route
+*/
+export = function (req, res) {
+
+    let response: string = validate(req.body, req.session.uid);
+
+    if (response !== "ok") {
+        res.json({ error: true, message: response });
+        return;
+    }
+
+    let sql: string = "";
+
+    db(cn => {
+        /* Extended Validation */
+        const step1 = () => {
+            sql = `
+                SELECT mg_route_id as mgRouteId, address, (
+                    SELECT COUNT(email_id) FROM main_emails WHERE email_id = ? AND user_id = ?
+                ) as toEmail FROM redirect_emails WHERE email_id = ? AND user_id = ?
+            `;
+            let vars = [
+                req.body.to, req.session.uid,
+                req.params.email, req.session.uid
+            ];
+
+            cn.query(sql, vars, (err, rows) => {
+                // toEmail doesn't exist and user didn't provide noToAddress
+                if (!rows[0].toEmail && !req.body.noToAddress) {
+                    cn.release();
+                    res.json({ error: true, message: "Could not find main email" });
+                }
+                // Redirect email doesn't exist
+                else if (rows[0].address == null) {
+                    cn.release();
+                    res.json({ error: true, message: "Could not find redirect email" });
+                }
+                // Validate filters and modifiers
+                else {
+                    let modifiers: number[] = req.body.modifiers.split(',');
+                    let filters: number[] = req.body.filters.split(',')
+
+                    validateFilters(filters, req, cn, (err, message) => {
+                        if (err) {
+                            cn.release();
+                            res.json({ error: true, message });
+                        }
+                        else {
+                            validateModifiers(modifiers, req, cn, (err, message) => {
+                                if (err) {
+                                    cn.release();
+                                    res.json({ error: true, message });
+                                }
+                                else {
+                                    step2({
+                                        address: rows[0].address, routeId: rows[0].mgRouteId, filters, modifiers
+                                    });
+                                }
+                            });
+                        }
+                    });
+                }
+            });
+        };
+
+        /* Update Email and MailGun Route */
+        const step2 = (data) => {
+            // Update values in redirect_emails
+            sql = `
+                UPDATE redirect_emails SET to_email = ?, name = ?, description = ?,
+                save_mail = ?, spam_filter = ? WHERE email_id = ?
+            `;
+            let vars = [
+                req.body.to, req.body.name, req.body.description,
+                !!req.body.saveMail, !req.body.noSpamFilter, req.session.uid
+            ];
+
+            cn.query(sql, vars, (err, result) => {
+                if (err || !result.affectedRows) {
+                    cn.release();
+                    res.json({ error: true, message: "An unknown error occured" });
+                    return;
+                }
+
+                let url: string = require("../../config").addresses.mailgun;
+
+                // Build MailGun route expression(s)
+                buildExpression(data.address, data.filters, cn, (expression: string) => {
+                    // Update MailGun route
+                    request.put(`${url}/routes/${data.routeId}`, {
+                        form: {
+                            priority: (!req.body.noSpamFilter ? 2 : 0), description: "",
+                            expression, action: buildAction(
+                                req.params.email, req.session.subscription,
+                                data.to_email == 0 || data.save_mail
+                            )
+                        }
+                    }, (err, response, body) => step3(data.filters, data.modifiers));
+                });
+            });
+        };
+
+        /* Create entries in linked_modifiers|filters */
+        const step3 = (filters: number[], modifiers: number[]) => {
+            // Filters/modifiers already linked will not be inserted twice due to unique constraint
+            sql = "INSERT INTO linked_filters (filter_id, email_id) VALUES ";
+            filters.forEach(filter => sql += `('${+filter}', '${+req.params.email}'), `);
+
+            cn.query(sql.substr(0, sql.length - 2), (err, result) => {
+                sql = "INSERT INTO linked_modifiers (modifier_id, email_id) VALUES ";
+                modifiers.forEach(modifier => sql += `('${+modifier}', '${+req.params.email}'), `);
+
+                cn.query(sql.substr(0, sql.length - 2), (err, result) => {
+                    // Filters/Modifiers that have been removed will be deleted via NOT IN (...)
+                    sql = "DELETE FROM linked_filters WHERE email_id = ? AND filter_id NOT IN (?)";
+
+                    cn.query(sql, [filters.join(", "), req.params.email], (err, result) => {
+                        sql = "DELETE FROM linked_modifiers WHERE email_id = ? AND modifier_id NOT IN (?)";
+                        cn.query(sql, [modifiers.join(", "), req.params.email], (err, result) => {
+                            cn.release();
+
+                            res.json({ error: false });
+                        });
+                    });
+                });
+            });
+        };
+
+        step1();
+    });
+
+};
