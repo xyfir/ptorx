@@ -5,6 +5,7 @@
   "main": "app.js",
   "dependencies": {
     "body-parser": "^1.15.0",
+    "escape-string-regexp": "^1.0.5",
     "express": "^4.13.4",
     "express-mysql-session": "^1.0.0-rc.0",
     "express-session": "^1.13.0",
