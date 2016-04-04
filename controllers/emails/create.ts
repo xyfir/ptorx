@@ -18,7 +18,7 @@ import * as request from "request";
     RETURN
         { error: boolean, message?: string, id?: number }
     DESCRIPTION
-        Returns basic information for all REDIRECT emails linked to account
+        Creates a redirect email, a its MailGun inbound route, any used links filters/modifiers
 */
 export = function (req, res) {
 
@@ -104,6 +104,7 @@ export = function (req, res) {
                     });
                 }
                 else {
+                    cn.release();
                     res.json({ error: true, message: "Could not find main email" });
                 }
             });
