@@ -1,4 +1,5 @@
-﻿import isValid = require("../../lib/filter/is-valid");
+﻿import escapeRegExp = require("escape-string-regexp");
+import isValid = require("../../lib/filter/is-valid");
 import db = require("../../lib/db");
 
 /*
@@ -19,6 +20,9 @@ export = function (req, res) {
         return;
     }
 
+    if (!req.body.useRegex)
+        req.body.find = escapeRegExp(req.body.find);
+
     let sql: string = `
         UPDATE filters SET name = ?, description = ?, type = ?, find = ?,
         accept_on_match = ?, use_regex = ?
@@ -26,7 +30,7 @@ export = function (req, res) {
     `;
     let vars = [
         req.body.name, req.body.description, req.body.type, req.body.find,
-        req.body.acceptOnMatch, req.body.useRegex,
+        !!(+req.body.acceptOnMatch), !!(+req.body.useRegex),
         req.params.filter, req.session.uid
     ];
 

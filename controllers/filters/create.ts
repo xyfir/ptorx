@@ -1,4 +1,5 @@
-﻿import isValid = require("../../lib/filter/is-valid");
+﻿import escapeRegExp = require("escape-string-regexp");
+import isValid = require("../../lib/filter/is-valid");
 import db = require("../../lib/db");
 
 /*
@@ -19,10 +20,13 @@ export = function (req, res) {
         return;
     }
 
+    if (!req.body.useRegex)
+        req.body.find = escapeRegExp(req.body.find);
+
     let insert = {
         user_id: req.session.uid, name: req.body.name, description: req.body.description,
-        type: req.body.type, find: req.body.find, use_regex: !!req.body.useRegex,
-        accept_on_match: !!req.body.acceptOnMatch
+        type: req.body.type, find: req.body.find, use_regex: !!(+req.body.useRegex),
+        accept_on_match: !!(+req.body.acceptOnMatch)
     };
 
     let sql: string = `
