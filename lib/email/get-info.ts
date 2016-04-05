@@ -9,7 +9,7 @@ if (global["__redis"] === undefined) {
 }
 
 /* Retrieve Data for /receive/ Controllers */
-export = function (email: number, fn: Function) {
+export = function (email: number, free: boolean, fn: Function) {
 
     global["__redis"].acquire((err, redis: redis.RedisClient) => {
         redis.get(email, (err, value) => {
@@ -32,6 +32,17 @@ export = function (email: number, fn: Function) {
                     }
                     else {
                         data.to = rows[0].address;
+
+                        // Free members won't have an filters/modifiers here
+                        if (free) {
+                            redis.set(email, JSON.stringify(data), (err, reply) => {
+                                redis.expire(email, 600);
+                                global["__redis"].release(redis);
+
+                                fn(false, data);
+                            });
+                            return;
+                        }
 
                         // Grab all filters that MailGun hasn't already used
                         sql = `
