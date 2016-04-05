@@ -9,6 +9,7 @@
     "express": "^4.13.4",
     "express-mysql-session": "^1.0.0-rc.0",
     "express-session": "^1.13.0",
+    "mailgun-js": "^0.7.7",
     "mysql": "^2.10.2",
     "react": "^0.14.8",
     "react-dom": "^0.14.8",
