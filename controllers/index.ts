@@ -15,7 +15,7 @@ router.route("/emails/:email")
     .delete(require("./emails/delete"));
 router.get("/emails/:email/messages", require("./emails/messages/list"));
 router.post("/emails/:email/messages", require("./emails/messages/send"));
-router.route("/emails/:email/messages/:id")
+router.route("/emails/:email/messages/:message")
     .get(require("./emails/messages/get"))
     .post(require("./emails/messages/reply"))
     .delete(require("./emails/messages/delete"));
