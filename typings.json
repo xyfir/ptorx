@@ -7,6 +7,7 @@
     "node": "registry:dt/node#4.0.0+20160330064709",
     "react": "registry:dt/react#0.14.0+20160319053454",
     "react-dom": "registry:dt/react-dom#0.14.0+20160316155526",
+    "redis": "registry:dt/redis#0.12.1+20160316155526",
     "request": "registry:dt/request#0.0.0+20160316155526"
   },
   "dependencies": {
