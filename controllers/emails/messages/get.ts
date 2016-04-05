@@ -1,5 +1,4 @@
-﻿import request = require("request");
-import db = require("../../../lib/db");
+﻿import db = require("../../../lib/db");
 
 let config  = require("../../../config");
 let mailgun = require("mailgun-js")({
@@ -23,8 +22,12 @@ export = function (req, res) {
             SELECT email_id FROM redirect_emails WHERE email_id = ? AND user_id = ?
         ) AND received + 255600 > UNIX_TIMESTAMP()
     `;
+    let vars = [
+        req.params.message,
+        req.params.email, req.sesion.uid
+    ];
 
-    db(cn => cn.query(sql, [req.params.email, req.sesion.uid], (err, rows) => {
+    db(cn => cn.query(sql, vars, (err, rows) => {
         cn.release();
 
         if (err || !rows.length) {
