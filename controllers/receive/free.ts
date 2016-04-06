@@ -26,7 +26,7 @@ let mailgun = require("mailgun-js")({
 */
 export = function (req, res) {
 
-    getInfo(req.params.email, req.session.subscription > Date.now(), (err, data) => {
+    getInfo(req.params.email, false, (err, data) => {
         if (err) {
             res.status(406);
         }
