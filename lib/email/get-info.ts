@@ -20,7 +20,7 @@ export = function (email: number, free: boolean, fn: Function) {
                 
                 // Grab to_email address
                 let sql: string = `
-                    SELECT address FROM mail_emails WHERE email_id IN (
+                    SELECT address FROM main_emails WHERE email_id IN (
                         SELECT to_email FROM redirect_emails WHERE email_id = ?
                     )
                 `;
@@ -46,7 +46,7 @@ export = function (email: number, free: boolean, fn: Function) {
 
                         // Grab all filters that MailGun hasn't already used
                         sql = `
-                            SELECT type, find, accept_on_match, use_regex FROM filters
+                            SELECT type, find, accept_on_match as acceptOnMatch FROM filters
                             WHERE filter_id IN (
                                 SELECT filter_id FROM linked_filters WHERE email_id = ?
                             ) AND NOT (accept_on_match = 1 AND type IN (1, 2, 3, 6))
@@ -66,7 +66,7 @@ export = function (email: number, free: boolean, fn: Function) {
                                 // Parse modifier.data if it's a JSON string
                                 data.modifiers = rows.map((mod) => {
                                     return {
-                                        type: mod.type, data: (mod.data != '') ? JSON.parse(mod.data) : ''
+                                        type: mod.type, data: (mod.data.substr(0, 1) == '{') ? JSON.parse(mod.data) : mod.data
                                     };
                                 });
 
