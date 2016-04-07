@@ -2,7 +2,7 @@
 import getInfo = require("../../lib/email/get-info");
 import request = require("request");
 
-let config = require("../../../config");
+let config = require("../../config");
 let mailgun = require("mailgun-js")({
     api_key: config.keys.mailgun, domain: "mail.ptorx.com"
 });
