@@ -2,10 +2,14 @@
 import buildExpression = require("../../lib/mg-route/build-expression");
 import validateFilters = require("../../lib/email/validate-filters");
 import buildAction = require("../../lib/mg-route/build-action");
+import clearCache = require("../../lib/email/clear-cache");
 import validate = require("../../lib/email/validate");
 import db = require("../../lib/db");
 
-import * as request from "request";
+let config = require("../../../config");
+let mailgun = require("mailgun-js")({
+    api_key: config.keys.mailgun, domain: "mail.ptorx.com"
+});
 
 /*
     PUT api/emails/:email
@@ -100,20 +104,16 @@ export = function (req, res) {
                     return;
                 }
 
-                let url: string = require("../../config").addresses.mailgun;
-
                 // Build MailGun route expression(s)
                 buildExpression(data.address, data.filters, cn, (expression: string) => {
                     // Update MailGun route
-                    request.put(`${url}/routes/${data.routeId}`, {
-                        form: {
-                            priority: (!req.body.noSpamFilter ? 2 : 0), description: "",
-                            expression, action: buildAction(
-                                req.params.email, req.session.subscription,
-                                data.to_email == 0 || data.save_mail
-                            )
-                        }
-                    }, (err, response, body) => step3(data.filters, data.modifiers));
+                    mailgun.routes(data.routeId).update({
+                        priority: (!req.body.noSpamFilter ? 2 : 0), description: "",
+                        expression, action: buildAction(
+                            req.params.email, req.session.subscription,
+                            data.to_email == 0 || data.save_mail
+                        )
+                    }, (err, body) => step3(data.filters, data.modifiers));
                 });
             });
         };
@@ -136,7 +136,7 @@ export = function (req, res) {
                         sql = "DELETE FROM linked_modifiers WHERE email_id = ? AND modifier_id NOT IN (?)";
                         cn.query(sql, [modifiers.join(", "), req.params.email], (err, result) => {
                             cn.release();
-
+                            clearCache(req.params.email);
                             res.json({ error: false });
                         });
                     });
