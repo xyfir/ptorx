@@ -1,4 +1,5 @@
-﻿import buildData = require("../../lib/modifier/build-data");
+﻿import clearCache = require("../../lib/email/clear-cache");
+import buildData = require("../../lib/modifier/build-data");
 import isValid = require("../../lib/modifier/is-valid");
 import db = require("../../lib/db");
 
@@ -37,12 +38,22 @@ export = function (req, res) {
     ];
 
     db(cn => cn.query(sql, vars, (err, result) => {
-        cn.release();
-
-        if (err || !result.affectedRows)
+        if (err || !result.affectedRows) {
+            cn.release();
             res.json({ error: true });
-        else
+        }
+        else {
             res.json({ error: false });
+
+            sql = "SELECT email_id as id FROM linked_modifiers WHERE modifier_id = ?";
+            cn.query(sql, [req.params.mod], (err, rows) => {
+                cn.release();
+
+                if (!rows.length) {
+                    rows.forEach(row => { clearCache(row.id); });
+                }
+            });
+        }
     }));
 
 };
