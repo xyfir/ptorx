@@ -1,7 +1,10 @@
-﻿import * as request from "request";
+﻿import clearCache = require("../../lib/email/clear-cache");
 import db = require("../../lib/db");
 
-let url: string = require("../../config").addresses.mailgun + "routes/";
+let config = require("../../../config");
+let mailgun = require("mailgun-js")({
+    api_key: config.keys.mailgun, domain: "mail.ptorx.com"
+});
 
 /*
     DELETE api/emails/:email
@@ -32,7 +35,9 @@ export = function (req, res) {
                     return;
                 }
 
-                request.del(url + rows[0].route);
+                clearCache(req.params.email);
+                mailgun.routes(rows[0].route).delete(function(){});
+
                 res.json({ error: false });
             });
         }
