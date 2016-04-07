@@ -36,6 +36,8 @@ export = function (req, res) {
             return;
         }
 
+        const data = rows[0];
+
         sql = `
             UPDATE filters SET name = ?, description = ?, type = ?, find = ?,
             accept_on_match = ?, use_regex = ?
@@ -68,14 +70,14 @@ export = function (req, res) {
                     update.forEach(email => clearCache(email));
 
                     if ( // Determine if MailGun routes need to be updated
-                        ([1, 2, 3, 6].indexOf(rows[0].type) > -1 && !!(+rows[0].acceptOnMatch))
+                        ([1, 2, 3, 6].indexOf(data.type) > -1 && !!(+data.acceptOnMatch))
                         ||
-                        ([1, 2, 3, 6].indexOf(req.body.type) > -1 && req.body.acceptOnMatch)
+                        ([1, 2, 3, 6].indexOf(+req.body.type) > -1 && req.body.acceptOnMatch)
                     ) res.json({ error: false, update });
                     else res.json({ error: false });
                 }
             });
-        }
+        });
     }));
 
 };
