@@ -9,6 +9,11 @@
 */
 export = function (req, res) {
 
+    if (req.params.email.match(/.*ptorx.com$/)) {
+        res.json({ error: true, message: "Cannot use Ptorx addresses to receive mail from Ptorx" });
+        return;
+    }
+
     let sql: string = `
         SELECT (
             COUNT(email_id) FROM main_emails WHERE user_id = ?
