@@ -1,4 +1,5 @@
-﻿import db = require("../../lib/db");
+﻿import clearCache = require("../../lib/email/clear-cache");
+import db = require("../../lib/db");
 
 /*
     DELETE api/filters/:filter
@@ -18,35 +19,53 @@ export = function (req, res) {
         }
         else {
             // Delete filter, linked entries, and return response to user
-            const deleteFilter = (update?: number[]) => {
+            const deleteFilter = (clear?: boolean, update?: number[]) => {
                 sql = "DELETE FROM filters WHERE filter_id = ?";
                 cn.query(sql, [req.params.filter], (err, result) => {
                     cn.release();
 
-                    if (err || !result.affectedRows)
+                    // Error deleting filter
+                    if (err || !result.affectedRows) {
                         res.json({ error: true });
-                    else if (update === undefined)
+                    }
+                    // Deleted fine, no further action
+                    else if (update === undefined) {
                         res.json({ error: false })
-                    else
+                    }
+                    // Deleted, send emails that need their MG route updated to client
+                    else if (!clear) {
                         res.json({ error: false, update });
+                    }
+                    // Deleted, clear Redis cache for emails linked to filter
+                    else {
+                        update.forEach(email => clearCache(email));
+                        res.json({ error: false });
+                    }
                 });
             };
 
-            // Determine if MailGun routes need to be updated
-            if ([1, 2, 3, 6].indexOf(req.body.type) && req.body.acceptOnMatch) {
-                sql = `SELECT email_id as id FROM linked_filters WHERE filter_id = ?`;
-                cn.query(sql, [req.params.filter], (err, rows) => {
+            sql = `SELECT email_id as id FROM linked_filters WHERE filter_id = ?`;
+            cn.query(sql, [req.params.filter], (err, rows) => {
+                if (err) {
                     cn.release();
+                    res.json({ error: true });
+                }
+                // Filter was not linked to any email(s)
+                else if (!rows.length) {
+                    deleteFilter();
+                }
+                // Filter was linked to email(s)
+                else {
+                    let update: number[] = rows.map(email => { return email.id; });
 
-                    if (err || !rows.length)
-                        res.json({ error: false });
+                    // MailGun routes need to be updated
+                    if ([1, 2, 3, 6].indexOf(rows[0].type) && !!(+rows[0].acceptOnMatch))
+                        deleteFilter(false, update);
+                    // Redis cache needs to be cleared
                     else
-                        deleteFilter(rows.map(email => { return email.id; }));
-                });
-            }
-            else {
-                deleteFilter();
-            }
+                        deleteFilter(true, update);
+                }
+            });
         }
     }));
 
