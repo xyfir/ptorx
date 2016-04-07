@@ -8,7 +8,7 @@ import db = require("../../lib/db");
         type: number, name: string, description: string
     OPTIONAL
         ENCRYPT
-            algorithm: string, key: string
+            key: string
         REPLACE
             value: string, with: string, regex: boolean
         TAG
@@ -32,12 +32,10 @@ export = function (req, res) {
         description: req.body.description, type: req.body.type
     };
 
-    let sql: string = `
-        INSERT INTO modifiers SET ?
-    `;
+    let sql: string = `INSERT INTO modifiers SET ?`;
     db(cn => cn.query(sql, insert, (err, result) => {
         cn.release();
-
+        
         if (err || !result.affectedRows)
             res.json({ error: true, message: "An unknown error occured" });
         else
