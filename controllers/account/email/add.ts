@@ -16,10 +16,10 @@ export = function (req, res) {
 
     let sql: string = `
         SELECT (
-            COUNT(email_id) FROM main_emails WHERE user_id = ?
+            SELECT COUNT(email_id) FROM main_emails WHERE user_id = ?
         ) as emails, (
             SELECT COUNT(email_id) FROM main_emails WHERE user_id = ? AND address = ?
-        ) as exists
+        ) as email_exists
     `;
     let vars = [
         req.session.uid,
@@ -35,7 +35,7 @@ export = function (req, res) {
             cn.release();
             res.json({ error: true, message: "Free members cannot have more than one main email" });
         }
-        else if (rows[0].exists > 0) {
+        else if (rows[0].email_exists > 0) {
             cn.release();
             res.json({ error: true, message: "This email is already linked to your account" });
         }
@@ -53,7 +53,7 @@ export = function (req, res) {
                 cn.release();
 
                 if (err || !result.affectedRows)
-                    res.json({ error: true, message: "An unknown error occured" });
+                    res.json({ error: true, message: "An unknown error occured-" });
                 else
                     res.json({ error: false, id: result.insertId });
             });
