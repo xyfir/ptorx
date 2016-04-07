@@ -1,4 +1,5 @@
-﻿import db = require("../../lib/db");
+﻿import clearCache = require("../../lib/email/clear-cache");
+import db = require("../../lib/db");
 
 /*
     DELETE api/modifiers/:mod
@@ -9,12 +10,20 @@
 */
 export = function (req, res) {
 
-    let sql: string = `
-        DELETE FROM modifiers WHERE modifier_id = ? AND user_id = ?
-    `;
-    db(cn => cn.query(sql, [req.params.mod, req.session.uid], (err, rows) => {
-        cn.release();
-        res.json({ error: !!err || !rows.length });
+    let sql: string = `SELECT email_id as id FROM linked_modifiers WHERE modifier_id = ?`;
+    db(cn => cn.query(sql, [req.params.mod], (err, rows) => {
+        sql = "DELETE FROM modifiers WHERE modifier_id = ? AND user_id = ?";
+        cn.query(sql, [req.params.mod, req.session.uid], (err, result) => {
+            cn.release();
+
+            if (err || !result.affectedRows) {
+                res.json({ error: true });
+            }
+            else {
+                rows.forEach(row => clearCache(row.id));
+                res.json({ error: false });
+            }
+        });
     }));
 
 };
