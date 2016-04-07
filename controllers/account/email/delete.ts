@@ -10,7 +10,7 @@
 export = function (req, res) {
 
     let sql: string = `
-        DELETE FROM main_emails WHERE id = ? AND user_id = ?
+        DELETE FROM main_emails WHERE email_id = ? AND user_id = ?
     `;
     let vars = [
         req.params.email, req.session.uid
