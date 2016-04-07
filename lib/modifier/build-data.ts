@@ -2,7 +2,7 @@
     
     switch (mod.type) {
         case 1:
-            return JSON.stringify({ algorithm: mod.algorithm, key: mod.key });
+            return mod.key + '';
         case 2:
             return "";
         case 3:

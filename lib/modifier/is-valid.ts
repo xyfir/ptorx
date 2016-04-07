@@ -5,7 +5,7 @@
 
     switch (mod.type) {
         case 1:
-            return typeof mod.algorithm == "string" && typeof mod.key == "string";
+            return mod.key !== undefined;
         case 2:
             return true;
         case 3:
