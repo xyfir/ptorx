@@ -14,11 +14,11 @@ app.listen(config.environment.port, () => {
 
 /* Sessions */
 let sessionStore = new sstore({
-    host: config.database.host,
-    port: config.database.port,
-    user: config.database.user,
-    password: config.database.password,
-    database: config.database.database,
+    host: config.database.mysql.host,
+    port: config.database.mysql.port,
+    user: config.database.mysql.user,
+    password: config.database.mysql.password,
+    database: config.database.mysql.database,
     useConnectionPooling: true
 });
 app.use(session({
@@ -37,10 +37,12 @@ app.use(parser.urlencoded({ extended: true }));
 
 // Express middleware / controllers
 app.use("/", express.static(__dirname + "/public"));
-app.get("/*", (req, res) => {
-    res.sendFile(__dirname + "/views/Home.html");
-});
 app.get("/panel/*", (req, res) => {
     res.sendFile(__dirname + "/views/Panel.html");
 });
 app.use("/api", require("./controllers/"));
+app.get("/*", (req, res) => {
+    req.session.uid = 1, req.session.subscription = 0;
+    res.send("hello");
+    //res.sendFile(__dirname + "/views/Home.html");
+});
