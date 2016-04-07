@@ -18,12 +18,14 @@ export = function (req, res) {
             res.json({ error: true });
         }
         else {
+            const data = rows[0];
+
             // Delete filter, linked entries, and return response to user
             const deleteFilter = (clear?: boolean, update?: number[]) => {
                 sql = "DELETE FROM filters WHERE filter_id = ?";
                 cn.query(sql, [req.params.filter], (err, result) => {
                     cn.release();
-
+                    
                     // Error deleting filter
                     if (err || !result.affectedRows) {
                         res.json({ error: true });
@@ -58,8 +60,8 @@ export = function (req, res) {
                 else {
                     let update: number[] = rows.map(email => { return email.id; });
 
-                    // MailGun routes need to be updated
-                    if ([1, 2, 3, 6].indexOf(rows[0].type) && !!(+rows[0].acceptOnMatch))
+                    // MailGun routes need to be updatedf
+                    if ([1, 2, 3, 6].indexOf(data.type) > -1 && !!(+data.acceptOnMatch))
                         deleteFilter(false, update);
                     // Redis cache needs to be cleared
                     else
