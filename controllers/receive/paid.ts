@@ -5,7 +5,7 @@ import db = require("../../lib/db");
 
 let config = require("../../config");
 let mailgun = require("mailgun-js")({
-    api_key: config.keys.mailgun, domain: "mail.ptorx.com"
+    apiKey: config.keys.mailgun, domain: "mail.ptorx.com"
 });
 
 /*
