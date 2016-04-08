@@ -23,18 +23,18 @@ export = function (req, res) {
 
     // Get message_key and address
     let sql: string = `
-        SELECT message_key as mkey, address FROM messages WHERE message_id = ? AND email_id IN (
-            SELECT email_id FROM redirect_emails WHERE email_id = ? AND user_id = ?
-        ) AND received + 255600 > UNIX_TIMESTAMP()
+        SELECT address, (
+            SELECT message_key FROM messages WHERE message_id = ? AND email_id = ?
+        ) as mkey FROM redirect_emails WHERE email_id = ? AND user_id = ?
     `;
     let vars = [
-        req.params.message,
-        req.params.email, req.sesion.uid
+        req.params.message, req.params.email,
+        req.params.email, req.session.uid
     ];
 
     db(cn => cn.query(sql, vars, (err, rows) => {
         cn.release();
-
+        
         if (err || !rows.length) {
             res.json({ error: true, message: "Message does not exist" });
         }
