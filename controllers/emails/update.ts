@@ -8,7 +8,7 @@ import db = require("../../lib/db");
 
 let config = require("../../config");
 let mailgun = require("mailgun-js")({
-    api_key: config.keys.mailgun, domain: "mail.ptorx.com"
+    apiKey: config.keys.mailgun, domain: "mail.ptorx.com"
 });
 
 /*
@@ -94,7 +94,7 @@ export = function (req, res) {
             `;
             let vars = [
                 req.body.to, req.body.name, req.body.description,
-                !!req.body.saveMail, !req.body.noSpamFilter, req.session.uid
+                !!req.body.saveMail, !req.body.noSpamFilter, req.params.email
             ];
 
             cn.query(sql, vars, (err, result) => {
@@ -113,7 +113,15 @@ export = function (req, res) {
                             req.params.email, req.session.subscription,
                             data.to_email == 0 || data.save_mail
                         )
-                    }, (err, body) => step3(data.filters, data.modifiers));
+                    }, (err, body) => {
+                        if (err) {
+                            cn.release();
+                            res.json({ error: true, message: "An unknown error occured" });
+                        }
+                        else {
+                            step3(data.filters, data.modifiers);
+                        }
+                    });
                 });
             });
         };
