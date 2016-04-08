@@ -13,14 +13,14 @@
         AND accept_on_match = 1 AND type IN (1, 2, 3, 6)
     `;
     cn.query(sql, [filters.join(", ")], (err, rows) => {
-        for (let row in rows) {
+        for (let row of rows) {
             switch (row.type) {
                 case 1:
-                    expression += ` and match_header('subject', '${row.find}')`
+                    expression += ` and match_header('subject', '${row.find}')`; break;
                 case 2:
-                    expression += ` and match_header('from', '${row.find}')`;
+                    expression += ` and match_header('from', '${row.find}')`; break;
                 case 3:
-                    expression += ` and match_header('from', '(.*)@${row.find}')`;
+                    expression += ` and match_header('from', '(.*)@${row.find}')`; break;
                 case 6:
                     expression += ` and match_header('${row.find.split(":::")[0]}', '${row.find.split(":::")[1]}')`;
             }
