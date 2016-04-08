@@ -9,7 +9,7 @@ import db = require("../../lib/db");
         type: number, name: string, description: string
     OPTIONAL
         ENCRYPT
-            algorithm: string, key: string
+            key: string
         REPLACE
             value: string, with: string, regex: boolean
         TAG
