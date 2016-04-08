@@ -24,21 +24,19 @@ export = function (req, res) {
             res.json({ error: true });
         }
         else {
-            sql = `
-                DELETE FROM redirect_emails WHERE email_id = ?
-            `;
+            sql = `DELETE FROM redirect_emails WHERE email_id = ?`;
             cn.query(sql, [req.params.email], (err, result) => {
                 cn.release();
 
                 if (err || !result.affectedRows) {
                     res.json({ error: true });
-                    return;
                 }
+                else {
+                    clearCache(req.params.email);
+                    mailgun.routes(rows[0].route).delete(function (err, body) { });
 
-                clearCache(req.params.email);
-                mailgun.routes(rows[0].route).delete(function(){});
-
-                res.json({ error: false });
+                    res.json({ error: false });
+                }
             });
         }
     }));
