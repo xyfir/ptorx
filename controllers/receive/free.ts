@@ -10,8 +10,7 @@ let mailgun = require("mailgun-js")({
 /*
     POST api/receive/free/:email
     REQUIRED
-        recipient: string, from: string, subject: string, To: string
-        body-plain: string
+        subject: string, To: string, body-plain: string
     OPTIONAL
         body-html: string
     RETURN HTTP CODE
@@ -25,10 +24,9 @@ let mailgun = require("mailgun-js")({
         Free users only receive 'accept on match' subject filtering (via MG)
 */
 export = function (req, res) {
-
     getInfo(req.params.email, false, (err, data) => {
         if (err) {
-            res.status(406);
+            res.status(406).send();
         }
         else {
             // Pull keywords out of content
@@ -61,11 +59,11 @@ export = function (req, res) {
                 // Forward message to user's main email
                 data = {
                     text: req.body["body-plain"], html: req.body["body-html"] ? req.body["body-html"] : "",
-                    from: req.body.to, to: data.address, subject: req.body.subject
+                    from: req.body.To, to: data.to, subject: req.body.subject
                 };
 
                 mailgun.messages().send(data, (err, body) => {
-                    res.status(err ? 406 : 200);
+                    res.status(err ? 406 : 200).send();
                 });
             });
         }
