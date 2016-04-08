@@ -22,10 +22,10 @@ export = function (req, res) {
     `;
     let vars = [
         req.params.message,
-        req.params.email, req.sesion.uid
+        req.params.email, req.session.uid
     ];
 
-    db(cn => cn.query(sql, [req.params.email, req.sesion.uid], (err, rows) => {
+    db(cn => cn.query(sql, vars, (err, rows) => {
         if (err || !rows.length) {
             res.json({ error: true });
         }
