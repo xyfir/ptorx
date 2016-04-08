@@ -9,7 +9,7 @@ let mailgun = require("mailgun-js")({
     GET api/emails/:email/messages/:message
     RETURN
         {
-            error: boolean, headers?: [{ header: string, value: string }],
+            error: boolean, headers?: [[ header, value ]],
             from?: string, subject?: string, text?: string, html?: string
         }
     DESCRIPTION
@@ -24,7 +24,7 @@ export = function (req, res) {
     `;
     let vars = [
         req.params.message,
-        req.params.email, req.sesion.uid
+        req.params.email, req.session.uid
     ];
 
     db(cn => cn.query(sql, vars, (err, rows) => {
@@ -35,11 +35,16 @@ export = function (req, res) {
         }
         else {
             mailgun.messages(rows[0].mkey).info((err, data) => {
-                res.json({
-                    error: false, headers: data["message-headers"], from: data["from"],
-                    subject: data["subject"], text: data["body-plain"],
-                    html: data["body-html"]
-                });
+                if (err) {
+                    res.json({ error: true });
+                }
+                else {
+                    res.json({
+                        error: false, headers: data["message-headers"], from: data["from"],
+                        subject: data["subject"], text: data["body-plain"],
+                        html: data["body-html"]
+                    });
+                }
             });
         }
     }));
