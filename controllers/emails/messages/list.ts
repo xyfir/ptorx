@@ -13,12 +13,12 @@ export = function (req, res) {
         SELECT message_id as id, received, subject FROM messages
         WHERE email_id IN (
             SELECT email_id FROM redirect_emails WHERE email_id = ? AND user_id = ?
-        ) AND received + 255600 > UNIX_TIMESTAMP()
+        ) AND (received + 255600) > UNIX_TIMESTAMP()
     `;
 
-    db(cn => cn.query(sql, [req.params.email, req.sesion.uid], (err, rows) => {
+    db(cn => cn.query(sql, [req.params.email, req.session.uid], (err, rows) => {
         cn.release();
-
+        
         res.json({ messages: (err || !rows.length) ? [] : rows });
     }));
 
