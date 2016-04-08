@@ -6,7 +6,10 @@ import validate = require("../../lib/email/validate");
 import generate = require("../../lib/email/generate");
 import db = require("../../lib/db");
 
-import * as request from "request";
+let config = require("../../config");
+let mailgun = require("mailgun-js")({
+    apiKey: config.keys.mailgun, domain: "mail.ptorx.com"
+});
 
 /*
     POST api/emails
@@ -126,20 +129,24 @@ export = function (req, res) {
 
                 // Build MailGun route expression(s)
                 buildExpression(data.address, filters, cn, (expression: string) => {
-                    request.post(url + "/routes", {
-                        form: {
-                            priority: (data.spam_filter ? 2 : 0), description: "",
-                            expression, action: buildAction(
-                                id, req.session.subscription,
-                                data.to_email == 0 || data.save_mail
-                            )
+                    mailgun.routes().create({
+                        priority: (data.spam_filter ? 2 : 0), description: "",
+                        expression, action: buildAction(
+                            id, req.session.subscription,
+                            data.to_email == 0 || data.save_mail
+                        )
+                    }, (err, body) => {
+                        if (err) {
+                            cn.release();
+                            res.json({ error: true, message: "An unknown error occured" });
                         }
-                    }, (err, response, body) => {
-                        // Save MailGun route ID to redirect_emails where email
-                        sql = "UPDATE redirect_emails SET mg_route_id = ? WHERE email_id = ?";
-                        cn.query(sql, [JSON.parse(body).route.id, id], (err, result) => {
-                            step4(id, filters, modifiers);
-                        });
+                        else {
+                            // Save MailGun route ID to redirect_emails where email
+                            sql = "UPDATE redirect_emails SET mg_route_id = ? WHERE email_id = ?";
+                            cn.query(sql, [body.route.id, id], (err, result) => {
+                                step4(id, filters, modifiers);
+                            });
+                        }
                     });
                 });
             });
