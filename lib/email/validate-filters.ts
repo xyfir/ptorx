@@ -19,14 +19,14 @@
             let types = [];
 
             // Ensure free members are only using allowed filters/options
-            for (let row in rows) {
+            for (let row of rows) {
                 if (types.indexOf(row.type) > -1 && row.type != 6) {
                     fn(true, "Cannot have multiple non-header filters");
                     return;
                 }
-
+                
                 if (Date.now() > req.session.subscription) {
-                    if (row.type != 6) {
+                    if (row.type != 1) {
                         fn(true, "Free members can only use subject filters"); return;
                     }
                     else if (row.accept_on_match != 1) {
