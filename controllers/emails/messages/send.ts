@@ -8,7 +8,7 @@ let mailgun = require("mailgun-js")({
 /*
     POST api/emails/:email/messages/
     REQUIRED
-        from: number, to: string, subject: string, content: string
+        to: string, subject: string, content: string
     RETURN
         { error: boolean, message: string }
     DESCRIPTION
