@@ -12,7 +12,7 @@
 export = function (req, res) {
 
     let sql: string = `
-        SELECT emails_id as id, name, description, address
+        SELECT email_id as id, name, description, address
         FROM redirect_emails WHERE user_id = ?
     `;
     db(cn => cn.query(sql, [req.session.uid], (err, rows) => {
