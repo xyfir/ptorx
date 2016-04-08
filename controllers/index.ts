@@ -8,9 +8,9 @@ router.post("/receive/paid/:email", require("./receive/paid"));
 
 // (Redirect) email controllers
 router.get("/emails", require("./emails/list"));
+router.post("/emails", require("./emails/create"));
 router.route("/emails/:email")
     .get(require("./emails/get"))
-    .post(require("./emails/create"))
     .put(require("./emails/update"))
     .delete(require("./emails/delete"));
 router.get("/emails/:email/messages", require("./emails/messages/list"));
