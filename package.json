@@ -14,7 +14,7 @@
     "react": "^0.14.8",
     "react-dom": "^0.14.8",
     "redis": "^2.6.0-1",
-    "redux": "^3.3.1",
+    "redux": "^3.4.0",
     "request": "^2.69.0",
     "sol-redis-pool": "^0.2.4",
     "stripe": "^4.5.0"
