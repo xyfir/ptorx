@@ -24,7 +24,7 @@ let mailgun = require("mailgun-js")({
         Free users only receive 'accept on match' subject filtering (via MG)
 */
 export = function (req, res) {
-    getInfo(req.params.email, false, (err, data) => {
+    getInfo(req.params.email, true, (err, data) => {
         if (err) {
             res.status(406).send();
         }
