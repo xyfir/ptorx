@@ -11,7 +11,7 @@ let mailgun = require("mailgun-js")({
 /*
     POST api/receive/paid/:email
     REQUIRED
-        recipient: string, from: string, subject: string, To: string
+        from: string, subject: string, To: string
         body-plain: string, message-headers: json-string
     OPTIONAL
         body-html: string, message-url: string
@@ -25,12 +25,12 @@ let mailgun = require("mailgun-js")({
 export = function (req, res) {
     
     // Get email/filters/modifiers data
-    getInfo(req.params.email, true, (err, data) => {
+    getInfo(req.params.email, false, (err, data) => {
         if (err) {
-            res.status(406);
+            res.status(406).send();
             return;
         }
-
+        
         const headers = JSON.parse(req.body["message-headers"]);
 
         // Loop through filters
@@ -63,9 +63,9 @@ export = function (req, res) {
         });
 
         // Check if all filters passed
-        for (let filter in data.filters) {
+        for (let filter of data.filters) {
             if (!filter.pass) {
-                res.status(200);
+                res.status(200).send();
                 return;
             }
         }
@@ -105,16 +105,16 @@ export = function (req, res) {
         data = {
             text: req.body["body-plain"], html: (
                 req.body["body-html"] && !textonly ? req.body["body-html"] : ""
-            ), from: req.body.to, to: data.address, subject: req.body.subject
+            ), from: req.body.To, to: data.to, subject: req.body.subject
         };
 
         // Forward message to user's main email
         mailgun.messages().send(data, (err, body) => {
             if (err) {
-                res.status(406);
+                res.status(406).send();
             }
             else {
-                res.status(200);
+                res.status(200).send();
 
                 // Optionally save message to messages table
                 if (req.body['message-url']) {
