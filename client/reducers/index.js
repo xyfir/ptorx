@@ -1,6 +1,7 @@
 // Reducers
 import modifiers from "./modifiers";
 import account from "./account";
+import emails from "./emails";
 
 import { INITIALIZE_STATE, CHANGE_VIEW } from "../actions/types/";
 
@@ -15,7 +16,8 @@ export default function (state, action) {
 
     return {
         modifiers: modifiers(state.modifiers, action),
-        account: account(state.account, action)
+        account: account(state.account, action),
+        emails: emails(state.emails, action)
     };
 
 }
