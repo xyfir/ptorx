@@ -3,7 +3,7 @@ import React from "react";
 // Action creators
 import {
     loadModifiers, deleteModifier
-} from "../../actions/creators/modifiers/";
+} from "../../actions/creators/modifiers";
 
 // Constants
 import { URL } from "../../constants/config";
