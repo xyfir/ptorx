@@ -33,7 +33,7 @@ export default class EmailList extends React.Component {
             closeOnConfirm: false
         }, () => {
             ajax({
-                url: URL + "api/modifiers/" + id,
+                url: URL + "api/emails/" + id,
                 method: "DELETE", success: (res) => {
                     if (res.error) {
                         swal("Error", "Could not delete email", "error");
@@ -53,7 +53,7 @@ export default class EmailList extends React.Component {
                 <div className="list">{
                     this.props.data.emails.map(email => {
                         return (
-                            <div className="modifier">
+                            <div className="email">
                                 <span className="name"><a href={`#emails/edit/${email.id}`}>
                                     {email.name}
                                 </a></span>
@@ -62,7 +62,7 @@ export default class EmailList extends React.Component {
                                     title="Delete Email"
                                     onClick={this.onDeleteEmail.bind(this, email.id) }
                                 />
-                                <span className="address">{mod.address}</span>
+                                <span className="address">{email.address}</span>
                                 <hr />
                                 <span className="description">{email.description}</span>
                             </div>
