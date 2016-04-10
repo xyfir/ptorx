@@ -8,7 +8,7 @@ import {
 // Constants
 import { URL } from "../../constants/config";
 
-export default class ModifierList extends React.Component {
+export default class EmailList extends React.Component {
 
     constructor(props) {
         super(props);
