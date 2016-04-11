@@ -1,5 +1,5 @@
 ﻿import escapeRegExp = require("escape-string-regexp");
-import isValid = require("../../lib/filter/is-valid");
+import validate = require("../../lib/filter/validate");
 import db = require("../../lib/db");
 
 /*
@@ -15,8 +15,10 @@ import db = require("../../lib/db");
 */
 export = function (req, res) {
 
-    if (!isValid(req.body)) {
-        res.json({ error: true, message: "Bad or missing filter data" });
+    let response = validate(req.body);
+
+    if (response != "ok") {
+        res.json({ error: true, message: response });
         return;
     }
 

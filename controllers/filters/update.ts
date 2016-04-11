@@ -1,6 +1,6 @@
 ﻿import escapeRegExp = require("escape-string-regexp");
 import clearCache = require("../../lib/email/clear-cache");
-import isValid = require("../../lib/filter/is-valid");
+import validate = require("../../lib/filter/validate");
 import db = require("../../lib/db");
 
 /*
@@ -10,14 +10,16 @@ import db = require("../../lib/db");
     OPTIONAL
         acceptOnMatch: boolean, useRegex: boolean
     RETURN
-        { error: boolean, update?: number[] }
+        { error: boolean, message?: string, update?: number[] }
     DESCRIPTION
         Update a filter's data
 */
 export = function (req, res) {
 
-    if (!isValid(req.body)) {
-        res.json({ error: true });
+    let response = validate(req.body);
+
+    if (response != "ok") {
+        res.json({ error: true, message: response });
         return;
     }
 
@@ -32,7 +34,7 @@ export = function (req, res) {
     db(cn => cn.query(sql, [req.params.filter, req.session.uid], (err, rows) => {
         if (err || !rows.length) {
             cn.release();
-            res.json({ error: true });
+            res.json({ error: true, message: "An unknown error occured" });
             return;
         }
 
@@ -52,7 +54,7 @@ export = function (req, res) {
         cn.query(sql, vars, (err, result) => {
             if (err || !result.affectedRows) {
                 cn.release();
-                res.json({ error: true });
+                res.json({ error: true, message: "An unknown error occured-" });
                 return;
             }
 
