@@ -16,7 +16,7 @@ export default class CreateModifier extends React.Component {
         super(props);
 
         this.onChangeType = this.onChangeType.bind(this);
-        this.onCreate = this.onCreate.bind(this);
+        this.onUpdate = this.onUpdate.bind(this);
 
         this.state = {
             type: 0, id: location.hash.split('/')[2], loading: true
@@ -45,7 +45,7 @@ export default class CreateModifier extends React.Component {
         this.setState({ type: +this.refs.type.value });
     }
 
-    onCreate() {
+    onUpdate() {
         let data = {
             type: +this.refs.type.value, name: this.refs.name.value,
             description: this.refs.description.value
@@ -162,7 +162,7 @@ export default class CreateModifier extends React.Component {
                 <hr />
                 {form}
                 <hr />
-                <button className="btn-primary" onClick={this.onCreate}>Create Modifier</button>
+                <button className="btn-primary" onClick={this.onUpdate}>Update Modifier</button>
             </div>
         );
     }
