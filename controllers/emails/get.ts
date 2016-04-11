@@ -4,7 +4,7 @@
     GET api/emails/:email
     RETURN
         {
-            { error: boolean, toEmail: string, saveMail: boolean, filters: [{
+            { error: boolean, toEmail: string, saveMail: boolean, spamFilter: boolean, filters: [{
                 id: number, name: string, description: string, type: number
             }], modifiers: [{
                 id: number, name: string, description: string, type: number
@@ -17,13 +17,11 @@ export = function (req, res) {
 
     // Ensure user owns email and grab toEmail/saveMail
     let sql: string = `
-        SELECT (
+        SELECT save_mail as saveMail, spam_filter as spamFilter, (
             SELECT address FROM main_emails WHERE email_id IN (
                 SELECT to_email FROM redirect_emails WHERE email_id = ? AND user_id = ?
             )
-        ) as toEmail, (
-            SELECT save_mail FROM redirect_emails WHERE email_id = ?
-        ) as saveMail
+        ) as toEmail FROM redirect_emails WHERE email_id = ?
     `;
     let vars = [
         req.params.email, req.session.uid,
@@ -33,7 +31,8 @@ export = function (req, res) {
     db(cn => cn.query(sql, vars, (err, rows) => {
 
         let response = {
-            error: true, toEmail: "", saveMail: false, filters: [], modifiers: []
+            error: true, toEmail: "", saveMail: false, spamFilter: true,
+            filters: [], modifiers: []
         };
 
         if (err || !rows.length || rows[0].toEmail == null) {
@@ -44,6 +43,7 @@ export = function (req, res) {
             response.error = false;
             response.toEmail = rows[0].toEmail;
             response.saveMail = !!(+rows[0].saveEmail);
+            response.spamFilter = !!(+rows[0].spamFilter);
 
             // Grab basic info for all filters linked to email
             sql = `
