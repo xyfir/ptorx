@@ -2,7 +2,7 @@ var gutil = require("gulp-util");
 var gzip = require("gulp-gzip");
 var gulp = require("gulp");
 
-var isDev = require("./config").environment.development;
+var isDev = require("./config").environment.type;
 
 /*
 	css
@@ -17,7 +17,7 @@ gulp.task("css", function () {
     var nano = require("cssnano");
     var ap = require("autoprefixer");
     
-    return gulp.src("./styles/style.css")
+    return gulp.src("./client/styles/style.css")
         .pipe(postcss([
             precss({}),
             ap({browsers: "last 1 version, > 10%"}),
@@ -44,7 +44,7 @@ gulp.task("client", function () {
     var extensions = [".jsx", ".js"];
     
     var b = browserify(
-        './client/containers/App.jsx', { debug: true, extensions: extensions }
+        './client/componenents/App.jsx', { debug: true, extensions: extensions }
     );
     b.transform(babelify.configure({
         extensions: extensions, presets: ["es2015", "react"]
