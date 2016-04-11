@@ -50,8 +50,13 @@ export default class CreateFilter extends React.Component {
                     data.id = res.id;
                     this.props.dispatch(addFilter(data));
 
-                    location.hash = "filters/list";
-                    swal("Success", `Filter '${data.name}' created`, "success");
+                    if (this.props.onCreate) {
+                        this.props.onCreate(res.id);
+                    }
+                    else {
+                        location.hash = "filters/list";
+                        swal("Success", `Filter '${data.name}' created`, "success");
+                    }
                 }
             }
         });
