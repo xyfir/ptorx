@@ -1,6 +1,6 @@
 ﻿import clearCache = require("../../lib/email/clear-cache");
 import buildData = require("../../lib/modifier/build-data");
-import isValid = require("../../lib/modifier/is-valid");
+import validate = require("../../lib/modifier/validate");
 import db = require("../../lib/db");
 
 /*
@@ -17,14 +17,16 @@ import db = require("../../lib/db");
         SUBJECT
             subject: string
     RETURN
-        { error: boolean }
+        { error: boolean, message: string }
     DESCRIPTION
         Update a modifier's data
 */
 export = function (req, res) {
 
-    if (!isValid(req.body)) {
-        res.json({ error: true });
+    let response = validate(req.body);
+
+    if (response != "ok") {
+        res.json({ error: true, message: response });
         return;
     }
 
@@ -40,10 +42,10 @@ export = function (req, res) {
     db(cn => cn.query(sql, vars, (err, result) => {
         if (err || !result.affectedRows) {
             cn.release();
-            res.json({ error: true });
+            res.json({ error: true, message: "An unknown error occured" });
         }
         else {
-            res.json({ error: false });
+            res.json({ error: false, message: "" });
 
             sql = "SELECT email_id as id FROM linked_modifiers WHERE modifier_id = ?";
             cn.query(sql, [req.params.mod], (err, rows) => {
