@@ -168,7 +168,7 @@ export default class UpdateModifier extends React.Component {
                 <p>Below are emails that are currently utilizing this modifier.</p>
                 <div className="linked-emails">{
                     mod.linkedTo.map(email => {
-                        return <a href={`emails/edit/${email.id}`}>{email.address}</a>;
+                        return <a href={`#emails/edit/${email.id}`}>{email.address}</a>;
                     })
                 }</div>
             </div>

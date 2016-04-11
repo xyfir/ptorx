@@ -132,7 +132,7 @@ export default class UpdateFilter extends React.Component {
                 <p>Below are emails that are currently utilizing this filter.</p>
                 <div className="linked-emails">{
                     filter.linkedTo.map(email => {
-                        return <a href={`emails/edit/${email.id}`}>{email.address}</a>;
+                        return <a href={`#emails/edit/${email.id}`}>{email.address}</a>;
                     })
                 }</div>
             </div>
