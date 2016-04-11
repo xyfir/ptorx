@@ -10,7 +10,7 @@ import { modifierTypes } from "../../constants/types";
 // Modules
 import ajax from "../../lib/ajax";
 
-export default class CreateModifier extends React.Component {
+export default class UpdateModifier extends React.Component {
 
     constructor(props) {
         super(props);
@@ -146,7 +146,7 @@ export default class CreateModifier extends React.Component {
         }
         
         return (
-            <div className="modifier-create">
+            <div className="modifier-update">
                 <label>Modifier Type</label>
                 <select ref="type" onChange={this.onChangeType} defaultValue={mod.type}>{
                     Object.keys(modifierTypes).map(k => {
