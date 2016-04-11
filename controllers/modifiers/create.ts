@@ -1,5 +1,5 @@
 ﻿import buildData = require("../../lib/modifier/build-data");
-import isValid = require("../../lib/modifier/is-valid");
+import validate = require("../../lib/modifier/validate");
 import db = require("../../lib/db");
 
 /*
@@ -22,8 +22,10 @@ import db = require("../../lib/db");
 */
 export = function (req, res) {
 
-    if (!isValid(req.body)) {
-        res.json({ error: true, message: "Bad or missing modifier data" });
+    let response = validate(req.body);
+    
+    if (response != "ok") {
+        res.json({ error: true, message: response });
         return;
     }
 
