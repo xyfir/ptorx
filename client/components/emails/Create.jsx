@@ -140,17 +140,17 @@ export default class CreateEmail extends React.Component {
                         <div className="advanced-settings">
                             <a onClick={this.onToggleShowAdvanced}>Hide Advanced Settings</a>
                             
-                            { // Save Mail, Spam Filter, No To Address
+                            <label>Spam Filter</label>
+                            <span className="input-description">By default we block any messages that are marked as spam. Disable this only if you believe legitimate messages are being blocked by the spam filter.</span>
+                            <input type="checkbox" ref="spamFilter" defaultChecked={true} />Enable
+                            
+                            { // Save Mail, No To Address
                                 isPremium
                                 ? (
                                     <div>
                                         <label>Save Mail</label>
                                         <span className="input-description">Any emails that are sent to this address will be temporarily stored for 3 days. You can then access the messages by viewing the <em>Messages</em> section when viewing this email's info. <strong>Note:</strong> This is required if you want to reply to emails.</span>
                                         <input type="checkbox" ref="saveMail" />Enable
-                                        
-                                        <label>Spam Filter</label>
-                                        <span className="input-description">By default we block any messages that are marked as spam. Disable this only if you believe legitimate messages are being blocked by the spam filter.</span>
-                                        <input type="checkbox" ref="spamFilter" defaultChecked={true} />Enable
                                         
                                         <label>No 'To' Address</label>
                                         <span className="input-description">Enabling this will allow you to avoid having emails sent to your Ptorx address redirected to your real email. This will act like the <em>Save Mail</em> feature just without the emails being redirected.</span>
