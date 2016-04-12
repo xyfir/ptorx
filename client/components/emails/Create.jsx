@@ -57,15 +57,19 @@ export default class CreateEmail extends React.Component {
         });
     }
 
-    onAddModifier(m) {
+    onAddModifier(id) {
         this.setState({
-            modifiers: this.state.modifiers.concat([m])
+            modifiers: this.state.modifiers.concat([
+                this.props.data.modifiers.find(m => { return m.id == id; })
+            ])
         });
     }
 
-    onAddFilter(f) {
+    onAddFilter(id) {
         this.setState({
-            filters: this.state.filters.concat([f])
+            filters: this.state.filters.concat([
+                this.props.data.filters.find(f => { return f.id == id; })
+            ])
         });
     }
 
