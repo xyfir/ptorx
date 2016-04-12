@@ -89,13 +89,8 @@ export default class CreateEmail extends React.Component {
                     data.id = res.id;
                     this.props.dispatch(addEmail(data));
 
-                    if (this.props.onCreate) {
-                        this.props.onCreate(res.id);
-                    }
-                    else {
-                        location.hash = "emails/list";
-                        swal("Success", `Email '${data.name}' created`, "success");
-                    }
+                    location.hash = "emails/list";
+                    swal("Success", `Email '${data.name}' created`, "success");
                 }
             }
         });
