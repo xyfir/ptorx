@@ -1,4 +1,5 @@
 export const filterTypes = {
+    '0': "All Types",
     '1': "Subject",
     '2': "Address",
     '3': "Domain",
@@ -8,6 +9,7 @@ export const filterTypes = {
 };
 
 export const modifierTypes = {
+    '0': "All Types",
     '1': "Encrypt",
     '2': "Text Only",
     '3': "Find and Replace",
