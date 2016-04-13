@@ -16,7 +16,7 @@ export default function(store) {
     const hash = location.hash.substr(1).split('/');
 
     // Update state to reflect hash
-    if (hash[0] == "acount") {
+    if (hash[0] == "account") {
         if (hash[1] == "PURCHASE_SUBSCRIPTION")
             store.dispatch(changeView(VIEWS.PURCHASE_SUBSCRIPTION));
         else
@@ -25,31 +25,31 @@ export default function(store) {
     else if (hash[0] == "filters") {
         switch (hash[1]) {
             case "create":
-                return store.dispatch(changeView(views.CREATE_FILTER));
+                return store.dispatch(changeView(VIEWS.CREATE_FILTER));
             case "edit":
-                return store.dispatch(changeView(views.EDIT_FILTER));
+                return store.dispatch(changeView(VIEWS.EDIT_FILTER));
             case "list":
-                return store.dispatch(changeView(views.LIST_FILTERS));
+                return store.dispatch(changeView(VIEWS.LIST_FILTERS));
         }
     }
     else if (hash[0] == "modifiers") {
         switch (hash[1]) {
             case "create":
-                return store.dispatch(changeView(views.CREATE_MODIFIER));
+                return store.dispatch(changeView(VIEWS.CREATE_MODIFIER));
             case "edit":
-                return store.dispatch(changeView(views.EDIT_MODIFIER));
+                return store.dispatch(changeView(VIEWS.EDIT_MODIFIER));
             case "list":
-                return store.dispatch(changeView(views.LIST_MODIFIERS));
+                return store.dispatch(changeView(VIEWS.LIST_MODIFIERS));
         }
     }
     else if (hash[0] == "emails") {
         switch (hash[1]) {
             case "create":
-                return store.dispatch(changeView(views.CREATE_EMAIL));
+                return store.dispatch(changeView(VIEWS.CREATE_EMAIL));
             case "edit":
-                return store.dispatch(changeView(views.EDIT_EMAIL));
+                return store.dispatch(changeView(VIEWS.EDIT_EMAIL));
             case "list":
-                return store.dispatch(changeView(views.LIST_EMAILS));
+                return store.dispatch(changeView(VIEWS.LIST_EMAILS));
         }
     }
     
