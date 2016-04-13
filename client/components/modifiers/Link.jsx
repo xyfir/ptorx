@@ -39,10 +39,11 @@ export default class LinkModifier extends React.Component {
     render() {
         return (
             <div className="link-modifier">
-                <div className="view-selector">
-                    <a onClick={this.onChangeView.bind(this, "search")}>Find Existing</a>
-                    <a onClick={this.onChangeView.bind(this, "create")}>Create New</a>
-                </div>
+                {
+                    this.state.view == "search"
+                    ? <a onClick={this.onChangeView.bind(this, "create")}>Switch to 'Create New Filter' Mode</a>
+                    : <a onClick={this.onChangeView.bind(this, "search")}>Switch to 'Find Existing Filter' Mode</a>
+                }
                 {
                     this.state.type == "search"
                     ? (
