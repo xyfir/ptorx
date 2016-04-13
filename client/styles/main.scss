@@ -73,6 +73,10 @@ input[type=submit], button, .btn {
 input[type=submit]:focus, button:focus {
 	background-color: $lblack;
 }
+a.btn:hover {
+    color: white;
+}
+
 
 /* FORMS */
 input[type=text], input[type=password], input[type=email], input[type=number], input[type=tel] {
