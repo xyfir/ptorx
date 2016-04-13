@@ -31,7 +31,7 @@ gulp.task("css", function () {
 	client
     - convert es2015 -> es5
     - converts JSX -> plain JS
-	- bundles React componenents
+	- bundles React components
 	- minifies / gzip
 */
 gulp.task("client", function () {
@@ -44,7 +44,7 @@ gulp.task("client", function () {
     var extensions = [".jsx", ".js"];
     
     var b = browserify(
-        './client/componenents/App.jsx', { debug: true, extensions: extensions }
+        './client/components/App.jsx', { debug: true, extensions: extensions }
     );
     b.transform(babelify.configure({
         extensions: extensions, presets: ["es2015", "react"]
