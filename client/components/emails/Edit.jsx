@@ -51,8 +51,8 @@ export default class UpdateEmail extends React.Component {
                             url: URL + "api/modifiers", success: (modifiers) => {
                                 ajax({
                                     url: URL + "api/filters", success: (filters) => {
-                                        this.props.dispatch(loadModifiers(modifiers));
-                                        this.props.dispatch(loadFilters(filters));
+                                        this.props.dispatch(loadModifiers(modifiers.modifiers));
+                                        this.props.dispatch(loadFilters(filters.filters));
                                     }
                                 })
                             }
