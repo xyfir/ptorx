@@ -242,12 +242,12 @@ export default class UpdateEmail extends React.Component {
                 <div className="linked-modifiers">{
                     this.state.modifiers.map(mod => {
                         return (
-                            <div className="filter">
+                            <div className="modifier">
                                 <span className="type">{modifierTypes[mod.type]}</span>
                                 <span className="name">{mod.name}</span>
                                 <span
                                     className="icon-trash"
-                                    title="Remove Filter"
+                                    title="Remove Modifier"
                                     onClick={this.onRemoveModifier.bind(this, mod.id) }
                                 />
                                 <hr />
