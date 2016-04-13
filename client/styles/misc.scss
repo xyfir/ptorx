@@ -1,0 +1,41 @@
+.email-create, .email-update {
+    
+    .advanced-settings > a {
+        display: inline-block;
+        margin-bottom: 1em;
+    }
+    
+    .advanced-settings > h3 {
+        margin-bottom: -0.6em;
+    }
+    
+    .link-modifier > a, .link-filter > a {
+        margin: 1.3em;
+        display: block;
+    }
+
+    .linked-filters > .filter, .linked-modifiers > .modifier,
+    .link-filter > div > .list, .link-modifier > div > .list {
+    
+        background-color: $lllgray;
+        padding: 0.5em;
+        width: 70%;
+        margin: auto;
+        
+        .type {
+            font-weight: bold;
+        }
+        .type::after {
+            content: " - ";
+        }
+        
+        .description {
+            display: block;
+            width: 80%;
+            margin: auto;
+            font-size: 90%;
+        }
+        
+    }
+    
+}
