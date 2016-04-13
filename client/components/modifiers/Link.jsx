@@ -41,11 +41,11 @@ export default class LinkModifier extends React.Component {
             <div className="link-modifier">
                 {
                     this.state.view == "search"
-                    ? <a onClick={this.onChangeView.bind(this, "create")}>Switch to 'Create New Filter' Mode</a>
-                    : <a onClick={this.onChangeView.bind(this, "search")}>Switch to 'Find Existing Filter' Mode</a>
+                    ? <a onClick={this.onChangeView.bind(this, "create")}>Switch to 'Create New Modifier' Mode</a>
+                    : <a onClick={this.onChangeView.bind(this, "search")}>Switch to 'Find Existing Modifier' Mode</a>
                 }
                 {
-                    this.state.type == "search"
+                    this.state.view == "search"
                     ? (
                         <div>
                             <input
@@ -69,7 +69,6 @@ export default class LinkModifier extends React.Component {
                                             <span className="name"><a onClick={this.onAdd.bind(this, m.id)}>
                                                 {m.name}
                                             </a></span>
-                                            <hr />
                                             <span className="description">{m.description}</span>
                                         </div>
                                     );

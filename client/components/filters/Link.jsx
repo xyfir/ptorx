@@ -45,7 +45,7 @@ export default class LinkFilter extends React.Component {
                     : <a onClick={this.onChangeView.bind(this, "search")}>Switch to 'Find Existing Filter' Mode</a>
                 }
                 {
-                    this.state.type == "search"
+                    this.state.view == "search"
                     ? (
                         <div>
                             <input
@@ -69,7 +69,6 @@ export default class LinkFilter extends React.Component {
                                             <span className="name"><a onClick={this.onAdd.bind(this, f.id)}>
                                                 {f.name}
                                             </a></span>
-                                            <hr />
                                             <span className="description">{f.description}</span>
                                         </div>
                                     );
