@@ -77,6 +77,10 @@ export default class CreateEmail extends React.Component {
     }
 
     onAddModifier(id) {
+        if (this.state.modifiers.find(m => {
+            return m.id == id;
+        }) !== undefined) return;
+        
         this.setState({
             modifiers: this.state.modifiers.concat([
                 this.props.data.modifiers.find(m => { return m.id == id; })
@@ -85,6 +89,10 @@ export default class CreateEmail extends React.Component {
     }
 
     onAddFilter(id) {
+        if (this.state.filters.find(f => {
+            return f.id == id;
+        }) !== undefined) return;
+        
         this.setState({
             filters: this.state.filters.concat([
                 this.props.data.filters.find(f => { return f.id == id; })
