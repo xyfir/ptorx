@@ -104,9 +104,11 @@ export default class CreateFilter extends React.Component {
                 <label>On Match Action</label>
                 <span className="input-description">This is the action taken when an email message matches your filter. If <strong>Accept on Match</strong> is <em>enabled</em>, the message must match the filter <strong>and</strong> any other accept on match filters. If it is <em>disabled</em> and a message matches, it acts as a <strong>Reject on Match</strong> filter meaning that any messages that match this filter will be ignored.</span>
                 <input type="checkbox" ref="acceptOnMatch" />Accept on Match
-                <hr />
+                
                 {form}
-                <hr />
+                
+                { this.props.onCreate ? <span /> : <hr /> }
+                
                 <button className="btn-primary" onClick={this.onCreate}>Create Filter</button>
             </div>
         );

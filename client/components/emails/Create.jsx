@@ -148,8 +148,6 @@ export default class CreateEmail extends React.Component {
                 <span className="input-description">Describe your email a name to find it easier.</span>
                 <input type="text" ref="description" />
                 
-                <hr />
-                
                 { // Ptorx Address
                     isPremium
                     ? (
@@ -200,6 +198,8 @@ export default class CreateEmail extends React.Component {
                                 )
                             }
 
+                            <hr />
+
                             <h3>Filters</h3>
                             <p>Create or select filters for your new email to use.</p>
                             <div className="linked-filters">{
@@ -213,7 +213,6 @@ export default class CreateEmail extends React.Component {
                                                 title="Remove Filter"
                                                 onClick={this.onRemoveFilter.bind(this, filter.id) }
                                             />
-                                            <hr />
                                             <span className="description">{filter.description}</span>
                                         </div>
                                     );
@@ -241,7 +240,6 @@ export default class CreateEmail extends React.Component {
                                                 title="Remove Filter"
                                                 onClick={this.onRemoveModifier.bind(this, mod.id) }
                                             />
-                                            <hr />
                                             <span className="description">{mod.description}</span>
                                         </div>
                                     );

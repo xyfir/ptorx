@@ -141,9 +141,11 @@ export default class CreateModifier extends React.Component {
                 <label>Description</label>
                 <span className="input-description">Describe your modifier a name to find it easier.</span>
                 <input type="text" ref="description" />
-                <hr />
+                
                 {form}
-                <hr />
+                
+                { this.props.onCreate ? <span /> : <hr /> }
+                
                 <button className="btn-primary" onClick={this.onCreate}>Create Modifier</button>
             </div>
         );
