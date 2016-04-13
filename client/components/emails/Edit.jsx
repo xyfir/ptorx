@@ -5,6 +5,8 @@ import LinkModifier from "../../components/modifiers/Link";
 import LinkFilter from "../../components/filters/Link";
 
 // Action creators
+import { loadModifiers } from "../../actions/creators/modifiers";
+import { loadFilters } from "../../actions/creators/filters";
 import { editEmail } from "../../actions/creators/emails";
 
 // Constants
@@ -42,6 +44,20 @@ export default class UpdateEmail extends React.Component {
                     this.setState({
                         loading: false, filters: res.filters, modifiers: res.modifiers
                     });
+                    
+                    // Load modifiers / filters if needed
+                    if (!this.props.data.filters.length || !this.props.data.modifiers.length) {
+                        ajax({
+                            url: URL + "api/modifiers", success: (modifiers) => {
+                                ajax({
+                                    url: URL + "api/filters", success: (modifiers) => {
+                                        this.props.dispatch(loadModifiers(modifiers));
+                                        this.props.dispatch(loadFilters(filters));
+                                    }
+                                })
+                            }
+                        })
+                    }
                 }
             }
         });
