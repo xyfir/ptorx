@@ -5,6 +5,8 @@ import LinkModifier from "../../components/modifiers/Link";
 import LinkFilter from "../../components/filters/Link";
 
 // Action creators
+import { loadModifiers } from "../../actions/creators/modifiers";
+import { loadFilters } from "../../actions/creators/filters";
 import { addEmail } from "../../actions/creators/emails";
 
 // Constants
@@ -19,11 +21,28 @@ export default class CreateEmail extends React.Component {
     constructor(props) {
         super(props);
 
+        this.onToggleShowAdvanced = this.onToggleShowAdvanced.bind(this);
+        this.onAddModifier = this.onAddModifier.bind(this);
+        this.onAddFilter = this.onAddFilter.bind(this);
         this.onCreate = this.onCreate.bind(this);
 
         this.state = {
             filters: [], modifiers: [], showAdvanced: false
         };
+        
+        // Load modifiers / filters if needed
+        if (!this.props.data.filters.length || !this.props.data.modifiers.length) {
+            ajax({
+                url: URL + "api/modifiers", success: (modifiers) => {
+                    ajax({
+                        url: URL + "api/filters", success: (modifiers) => {
+                            this.props.dispatch(loadModifiers(modifiers));
+                            this.props.dispatch(loadFilters(filters));
+                        }
+                    })
+                }
+            })
+        }
     }
     
     onToggleShowAdvanced() {
@@ -75,8 +94,28 @@ export default class CreateEmail extends React.Component {
 
     onCreate() {
         let data = {
-            name: this.refs.name.value, description: this.refs.description.value
+            name: this.refs.name.value, description: this.refs.description.value, to: 0,
+            address: "", filters: this.state.filters.map(f => { return f.id; }),
+            modifiers: this.state.modifiers.map(m => { return m.id; }),
+            saveMail: +false, noSpamFilter: +false, noToAddress: +false
         };
+
+        const isPremium = this.props.data.account.subscription > Date.now();
+        
+        if (isPremium)
+            data.address = this.refs.address.value;
+        
+        if (!isPremium && !this.state.showAdvanced && !this.refs.noToAddress.checked)
+            data.to = +this.refs.to.value;
+        
+        if (this.state.showAdvanced) {
+            data.noSpamFilter = !this.refs.spamFilter.checked;
+            
+            if (isPremium) {
+                data.noToAddress = this.refs.noToAddress.checked;
+                data.saveMail = this.refs.saveMail.checked;
+            }
+        }
 
         ajax({
             url: URL + "api/emails", method: "POST", data,
