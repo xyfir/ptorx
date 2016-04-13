@@ -16,6 +16,7 @@ import setState from "../lib/set-state";
 import ajax from "../lib/ajax";
 
 // Constants
+import { CREATE_REDIRECT_EMAIL } from "../constants/views";
 import { INITIALIZE_STATE } from "../actions/types/";
 import { URL, XACC } from "../constants/config";
 
@@ -41,7 +42,7 @@ class App extends React.Component {
                 modifiers: [], filters: [], account: {
                     emails: [], subscription: 0
                 },
-                emails: [], view: ""
+                emails: [], view: CREATE_REDIRECT_EMAIL
             };
 
             ajax({
@@ -96,6 +97,8 @@ class App extends React.Component {
     }
 
     render() {
+        if (!this.state) return <div />;
+        
         let view;
 
         switch (this.state.view.split('/')[0]) {
