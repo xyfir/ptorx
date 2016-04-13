@@ -55,8 +55,10 @@ export default class LinkModifier extends React.Component {
                                 placeholder="Search"
                             />
                             <select ref="type" onChange={this.onSearch}>{
-                                Object.keys(modifierTypes).map(k => {
-                                    return <option value={k}>{modifierTypes[k]}</option>;
+                                [0].concat(Object.keys(modifierTypes)).map(k => {
+                                    return (
+                                        <option value={k}>{modifierTypes[k] || "All Types"}</option>
+                                    );
                                 })
                             }</select>
                             <div className="list">{

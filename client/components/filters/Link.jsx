@@ -55,8 +55,10 @@ export default class LinkFilter extends React.Component {
                                 placeholder="Search"
                             />
                             <select ref="type" onChange={this.onSearch}>{
-                                Object.keys(filterTypes).map(k => {
-                                    return <option value={k}>{filterTypes[k]}</option>;
+                                [0].concat(Object.keys(filterTypes)).map(k => {
+                                    return (
+                                        <option value={k}>{filterTypes[k] || "All Types"}</option>
+                                    );
                                 })
                             }</select>
                             <div className="list">{
