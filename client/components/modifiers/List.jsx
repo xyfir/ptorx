@@ -10,6 +10,9 @@ import { loadEmails } from "../../actions/creators/emails";
 import { URL } from "../../constants/config";
 import { modifierTypes } from "../../constants/types";
 
+// Modules
+import ajax from "../../lib/ajax";
+
 export default class ModifierList extends React.Component {
 
     constructor(props) {
@@ -31,8 +34,7 @@ export default class ModifierList extends React.Component {
             type: "warning",
             showCancelButton: true,
             confirmButtonColor: "#DD6B55",
-            confirmButtonText: "Yes, delete it!",
-            closeOnConfirm: false
+            confirmButtonText: "Yes, delete it!"
         }, () => {
             ajax({
                 url: URL + "api/modifiers/" + id,
