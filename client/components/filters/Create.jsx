@@ -94,18 +94,21 @@ export default class CreateFilter extends React.Component {
                         return <option value={k}>{filterTypes[k] || "Filter Type"}</option>;
                     })
                 }</select>
+                
                 <label>Name</label>
                 <span className="input-description">Give your filter a name to find it easier.</span>
                 <input type="text" ref="name" />
                 <label>Description</label>
                 <span className="input-description">Describe your filter to find it easier.</span>
                 <input type="text" ref="description" />
-                <input type="checkbox" ref="regex" />Use Regular Expression
+                
                 <label>On Match Action</label>
                 <span className="input-description">This is the action taken when an email message matches your filter. If <strong>Accept on Match</strong> is <em>enabled</em>, the message must match the filter <strong>and</strong> any other accept on match filters. If it is <em>disabled</em> and a message matches, it acts as a <strong>Reject on Match</strong> filter meaning that any messages that match this filter will be ignored.</span>
-                <input type="checkbox" ref="acceptOnMatch" />Accept on Match
+                <input type="checkbox" ref="acceptOnMatch" defaultChecked={true} />Accept on Match
                 
                 {form}
+                
+                <input type="checkbox" ref="regex" />Use Regular Expression
                 
                 { this.props.onCreate ? <span /> : <hr /> }
                 
