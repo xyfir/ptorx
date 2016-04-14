@@ -31,7 +31,7 @@ export default function (options) {
     else {
         let query = "";
         
-        for (key in options.data) {
+        for (let key in options.data) {
             query += encodeURIComponent(key) + "=" + encodeURIComponent(options.data[key]) + "&";
         }
         
