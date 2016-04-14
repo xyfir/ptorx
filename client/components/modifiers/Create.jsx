@@ -45,7 +45,7 @@ export default class CreateModifier extends React.Component {
                 }; break;
 
             case 4:
-                data2 = this.refs.subject.value; break;
+                data2 = { subject: this.refs.subject.value }; break;
 
             case 5:
                 data2 = {
@@ -131,15 +131,15 @@ export default class CreateModifier extends React.Component {
             <div className="modifier-create">
                 <label>Modifier Type</label>
                 <select ref="type" onChange={this.onChangeType}>{
-                    Object.keys(modifierTypes).map(k => {
-                        return <option value={k}>{modifierTypes[k]}</option>;
+                    [0].concat(Object.keys(modifierTypes)).map(k => {
+                        return <option value={k}>{modifierTypes[k] || "Modifier Type"}</option>;
                     })
                 }</select>
                 <label>Name</label>
                 <span className="input-description">Give your modifier a name to find it easier.</span>
                 <input type="text" ref="name" />
                 <label>Description</label>
-                <span className="input-description">Describe your modifier a name to find it easier.</span>
+                <span className="input-description">Describe your modifier to find it easier.</span>
                 <input type="text" ref="description" />
                 
                 {form}
