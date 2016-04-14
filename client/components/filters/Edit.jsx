@@ -24,18 +24,23 @@ export default class UpdateFilter extends React.Component {
         
         ajax({
             url: URL + "api/filters/" + this.state.id, success: (res) => {
-                if (err) {
+                if (res.err) {
                     swal("Error", "Could not load data", "error");
                 }
                 else {
                     delete res.error;
+                    
                     this.props.dispatch(editFilter(
                         Object.assign({}, this.props.data.filters.find(filter => {
                             return filter.id == this.state.id;
                         }), res)
                     ));
 
-                    this.setState({ loading: false });
+                    this.setState({
+                        loading: false, type: this.props.data.filters.find(filters => {
+                            return filter.id == this.state.id;
+                        }).type
+                    });
                 }
             }
         });
@@ -60,14 +65,18 @@ export default class UpdateFilter extends React.Component {
             data.find = this.refs.find.value;
 
         ajax({
-            url: URL + "api/filters" + this.state.id, method: "PUT",
+            url: URL + "api/filters/" + this.state.id, method: "PUT",
             data, success: (res) => {
                 if (res.error) {
-                    swal("Error", "Could not update filter", "error");
+                    swal("Error", res.message, "error");
                 }
                 else {
                     data.id = this.state.id;
-                    this.props.dispatch(editFilter(data));
+                    this.props.dispatch(editFilter(
+                        Object.assign({}, this.props.data.filters.find(f => {
+                            return f.id == this.state.id;
+                        }), data)
+                    ));
 
                     location.hash = "filters/list";
                     swal("Success", `Filter '${data.name}' updated`, "success");
@@ -117,7 +126,7 @@ export default class UpdateFilter extends React.Component {
                 <span className="input-description">Give your filter a name to find it easier.</span>
                 <input type="text" ref="name" defaultValue={filter.name} />
                 <label>Description</label>
-                <span className="input-description">Describe your filter a name to find it easier.</span>
+                <span className="input-description">Describe your filter to find it easier.</span>
                 <input type="text" ref="description" defaultValue={filter.description} />
                 <input type="checkbox" ref="regex" defaultChecked={filter.regex} />Use Regular Expression
                 <label>On Match Action</label>
