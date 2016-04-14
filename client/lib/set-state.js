@@ -17,7 +17,7 @@ export default function(store) {
 
     // Update state to reflect hash
     if (hash[0] == "account") {
-        if (hash[1] == "PURCHASE_SUBSCRIPTION")
+        if (hash[1] == "purchase-subscription")
             store.dispatch(changeView(VIEWS.PURCHASE_SUBSCRIPTION));
         else
             store.dispatch(changeView(VIEWS.ACCOUNT));
