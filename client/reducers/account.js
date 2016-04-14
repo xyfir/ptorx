@@ -10,7 +10,7 @@ export default function(state, action) {
 
         case ADD_EMAIL:
             return Object.assign({}, state, {
-                emails: state.emails.concat([{ id: action.id, email: action.email }])
+                emails: state.emails.concat([{ id: action.id, address: action.email }])
             });
 
         case DELETE_EMAIL:
