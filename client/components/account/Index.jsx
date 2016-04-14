@@ -44,8 +44,7 @@ export default class Account extends React.Component {
             type: "warning",
             showCancelButton: true,
             confirmButtonColor: "#DD6B55",
-            confirmButtonText: "Yes, delete it!",
-            closeOnConfirm: false
+            confirmButtonText: "Yes, delete it!"
         }, () => {
             ajax({
                 url: URL + "api/account/email/" + id,
@@ -75,6 +74,7 @@ export default class Account extends React.Component {
                            Your subscription will expire on <strong>{
                                (new Date(this.props.data.account.subscription)).toLocaleString()
                            }</strong>
+                           <br />
                            <a href="#account/purchase-subscription" className="btn btn-primary">
                                Extend Subscription
                            </a>
@@ -83,13 +83,18 @@ export default class Account extends React.Component {
                     : (
                         <div>
                             You do not have a Ptorx Premium subscription.
+                            <br />
                             <a href="#account/purchase-subscription" className="btn btn-primary">
                                 Purchase Subscription
                             </a>
                         </div>
                     )
                 }</div>
-
+                
+                <hr />
+                
+                <h3>Emails</h3>
+                <p>These are your real emails that will receive messages redirected from your Ptorx addresses.</p>
                 <div className="emails">
                     <div className="add">
                         <input type="text" ref="email" placeholder="email@example.com" />
@@ -103,7 +108,7 @@ export default class Account extends React.Component {
                                     <span className="address">{email.address}</span>
                                     <span
                                         className="icon-trash"
-                                        title="Delete Address"
+                                        title="Remove Email"
                                         onClick={this.onDeleteEmail.bind(this, email.id)}
                                     />
                                 </div>
