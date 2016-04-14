@@ -43,15 +43,15 @@ export = function (req, res) {
             else {
                 // Add months to current subscription expiration (or now())
                 let subscription: number = rows[0].subscription == 0
-                    ? (Date.now() + (months * 43200 * 60 * 1000))
-                    : ((new Date(rows[0].subscription)).getTime() + (months * 43200 * 60 * 1000));
+                    ? (Date.now() + (months * 30 * 86400 * 1000))
+                    : (rows[0].subscription + (months * 30 * 86400 * 1000));
 
                 sql = `
                     UPDATE users SET subscription = ? WHERE user_id = ?
                 `;
                 cn.query(sql, [subscription, req.session.uid], (err, result) => {
                     cn.release();
-
+                    
                     req.session.subscription = subscription;
                     res.json({ error: false, message: "" });
                 });
