@@ -24,18 +24,24 @@ export default class UpdateModifier extends React.Component {
 
         ajax({
             url: URL + "api/modifiers/" + this.state.id, success: (res) => {
-                if (err) {
+                if (res.err) {
                     swal("Error", "Could not load data", "error");
                 }
                 else {
                     delete res.error;
+                    res.data = res.data.substr(0, 1) == '{' ? JSON.parse(res.data) : res.data;
+                    
                     this.props.dispatch(editModifier(
                         Object.assign({}, this.props.data.modifiers.find(mod => {
                             return mod.id == this.state.id;
                         }), res)
                     ));
 
-                    this.setState({ loading: false });
+                    this.setState({
+                        loading: false, type: this.props.data.modifiers.find(mod => {
+                            return mod.id == this.state.id;
+                        }).type
+                    });
                 }
             }
         });
@@ -65,7 +71,7 @@ export default class UpdateModifier extends React.Component {
                 }; break;
 
             case 4:
-                data2 = this.refs.subject.value; break;
+                data2 = { subject: this.refs.subject.value }; break;
 
             case 5:
                 data2 = {
@@ -74,15 +80,19 @@ export default class UpdateModifier extends React.Component {
         }
 
         ajax({
-            url: URL + "api/modifiers" + this.state.id, method: "PUT",
+            url: URL + "api/modifiers/" + this.state.id, method: "PUT",
             data: Object.assign({}, data, data2), success: (res) => {
                 if (res.error) {
-                    swal("Error", "Could not update modifier", "error");
+                    swal("Error", res.message, "error");
                 }
                 else {
                     data.id = this.state.id;
                     data.data = data2;
-                    this.props.dispatch(editModifier(data));
+                    this.props.dispatch(editModifier(
+                        Object.assign({}, this.props.data.modifiers.find(mod => {
+                            return mod.id == this.state.id;
+                        }), data)
+                    ));
 
                     location.hash = "modifiers/list";
                     swal("Success", `Modifier '${data.name}' updated`, "success");
@@ -157,7 +167,7 @@ export default class UpdateModifier extends React.Component {
                 <span className="input-description">Give your modifier a name to find it easier.</span>
                 <input type="text" ref="name" defaultValue={mod.name} />
                 <label>Description</label>
-                <span className="input-description">Describe your modifier a name to find it easier.</span>
+                <span className="input-description">Describe your modifier to find it easier.</span>
                 <input type="text" ref="description" defaultValue={mod.description} />
                 <hr />
                 {form}
