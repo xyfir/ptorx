@@ -90,15 +90,15 @@ export default class CreateFilter extends React.Component {
             <div className="filter-create">
                 <label>Filter Type</label>
                 <select ref="type" onChange={this.onChangeType}>{
-                    Object.keys(filterTypes).map(k => {
-                        return <option value={k}>{filterTypes[k]}</option>;
+                    [0].concat(Object.keys(filterTypes)).map(k => {
+                        return <option value={k}>{filterTypes[k] || "Filter Type"}</option>;
                     })
                 }</select>
                 <label>Name</label>
                 <span className="input-description">Give your filter a name to find it easier.</span>
                 <input type="text" ref="name" />
                 <label>Description</label>
-                <span className="input-description">Describe your filter a name to find it easier.</span>
+                <span className="input-description">Describe your filter to find it easier.</span>
                 <input type="text" ref="description" />
                 <input type="checkbox" ref="regex" />Use Regular Expression
                 <label>On Match Action</label>
