@@ -73,7 +73,7 @@ export default class FilterList extends React.Component {
         }
 
         // Get email object
-        let email = emails.find((e) => { return e.id == emails[i]; });
+        let email = emails.find((e) => { return e.id == update[index]; });
 
         // All emails need to be loaded
         if (email === undefined) {
