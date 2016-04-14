@@ -15,6 +15,7 @@ export default class UpdateFilter extends React.Component {
     constructor(props) {
         super(props);
 
+        this._updateEmails = this._updateEmails.bind(this);
         this.onChangeType = this.onChangeType.bind(this);
         this.onUpdate = this.onUpdate.bind(this);
 
@@ -37,7 +38,7 @@ export default class UpdateFilter extends React.Component {
                     ));
 
                     this.setState({
-                        loading: false, type: this.props.data.filters.find(filters => {
+                        loading: false, type: this.props.data.filters.find(filter => {
                             return filter.id == this.state.id;
                         }).type
                     });
@@ -80,9 +81,64 @@ export default class UpdateFilter extends React.Component {
 
                     location.hash = "filters/list";
                     swal("Success", `Filter '${data.name}' updated`, "success");
+                    
+                    // Filter was linked to emails that we must now trigger updates on
+                    if (res.update !== undefined)
+                        this._updateEmails(this.state.id, this.props.data.emails, res.update);
                 }
             }
         });
+    }
+
+    _updateEmails(id, emails, update, index = 0) {
+        if (update[index] === undefined) return;
+
+        // Get email object
+        let email = emails.find((e) => { return e.id == update[index]; });
+
+        // All emails need to be loaded
+        if (email === undefined) {
+            ajax({
+                url: URL + "api/emails", success: (res) => {
+                    this._updateEmails(id, res.emails, update, index);
+                }
+            });
+        }
+        // Full email data needs to be loaded
+        else if (email.toEmail === undefined) {
+            ajax({
+                url: URL + "api/emails/" + email.id, success: (res) => {
+                    email = Object.assign(email, res);
+
+                    emails.forEach((e, i) => {
+                        if (e.id == email.id)
+                            emails[i] = email;
+                    });
+
+                    this._updateEmails(id, emails, update, index);
+                }
+            });
+        }
+        // Update email
+        else {
+            const filters = email.filters.map(f => {
+                return f.id;
+            }).join(',');
+            const modifiers = email.modifiers.map(mod => {
+                return mod.id;
+            }).join(',');
+            
+            ajax({
+                url: URL + "api/emails/" + email.id, method: "PUT",
+                data: {
+                    name: email.name, description: email.description, to: mail.toEmail,
+                    saveMail: +email.saveMail, noSpamFilter: +(!email.spamFilter),
+                    filters, modifiers, noToAddress: +(email.address == '')
+                }, success: (res) => {
+                    this._updateEmails(id, emails, update, index + 1);
+                }
+            });
+        }
     }
 
     render() {
@@ -122,21 +178,28 @@ export default class UpdateFilter extends React.Component {
                         return <option value={k}>{filterTypes[k]}</option>;
                     })
                 }</select>
+                
                 <label>Name</label>
                 <span className="input-description">Give your filter a name to find it easier.</span>
                 <input type="text" ref="name" defaultValue={filter.name} />
                 <label>Description</label>
                 <span className="input-description">Describe your filter to find it easier.</span>
                 <input type="text" ref="description" defaultValue={filter.description} />
-                <input type="checkbox" ref="regex" defaultChecked={filter.regex} />Use Regular Expression
+                
                 <label>On Match Action</label>
                 <span className="input-description">This is the action taken when an email message matches your filter. If <strong>Accept on Match</strong> is <em>enabled</em>, the message must match the filter <strong>and</strong> any other accept on match filters. If it is <em>disabled</em> and a message matches, it acts as a <strong>Reject on Match</strong> filter meaning that any messages that match this filter will be ignored.</span>
                 <input type="checkbox" ref="acceptOnMatch" defaultChecked={filter.acceptOnMatch} />Accept on Match
-                <hr />
+                
                 {form}
+                
+                <input type="checkbox" ref="regex" defaultChecked={filter.regex} />Use Regular Expression
+                
                 <hr />
+                
                 <button className="btn-primary" onClick={this.onUpdate}>Update Filter</button>
+                
                 <hr />
+                
                 <h3>Linked To</h3>
                 <p>Below are emails that are currently utilizing this filter.</p>
                 <div className="linked-emails">{
