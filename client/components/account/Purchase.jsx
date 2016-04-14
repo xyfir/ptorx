@@ -6,6 +6,9 @@ import { purchaseSubscription } from "../../actions/creators/account/subscriptio
 // Constants
 import { URL, STRIPE_KEY_PUB } from "../../constants/config";
 
+// Modules
+import ajax from "../../lib/ajax";
+
 export default class Purchase extends React.Component {
 
     constructor(props) {
@@ -20,7 +23,7 @@ export default class Purchase extends React.Component {
             
             Stripe.card.createToken(this.refs.stripeForm, (s, res) => {
             if (res.error) {
-                this.props.dispatch(error(res.error.message));
+                swal("Error", res.error.message, "error");
                 return;
             }
             
@@ -41,7 +44,15 @@ export default class Purchase extends React.Component {
                         swal("Error", res.message, "error");
                     }
                     else {
-                        this.props.dispatch(purchaseSubscription(months));
+                        const days = [0, 30, 180, 360][data.months];
+                        let subscription = this.props.data.account.subscription;
+                        
+                        if (subscription == 0)
+                            subscription = Date.now() + (days * 86400 * 1000);
+                        else
+                            subscription += (days * 86400 * 1000);
+                        
+                        this.props.dispatch(purchaseSubscription(subscription));
                         swal("Purchase Complete", "", "success");
                     }
                 }
@@ -74,10 +85,12 @@ export default class Purchase extends React.Component {
                         <label>CVC</label>
                         <input type="number" data-stripe="cvc" />
                     
-                        <label>Expiration (MM/YYYY)</label>
-                        <input type="number" data-stripe="exp-month" placeholder="07"/>
-                        <span> / </span>
-                        <input type="number" data-stripe="exp-year" placeholder="2020" />
+                        <div className="expiration">
+                            <label>Expiration (MM/YYYY)</label>
+                            <input type="number" data-stripe="exp-month" placeholder="07"/>
+                            <span> / </span>
+                            <input type="number" data-stripe="exp-year" placeholder="2020" />
+                        </div>
                     </form>
                     
                     <button onClick={this.onPurchase} className="btn-primary">Purchase</button>
