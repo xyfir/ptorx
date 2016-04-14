@@ -81,3 +81,33 @@
     }
     
 }
+
+.modifiers, .filters {
+    
+    .list {
+        
+        .modifier, .filter {
+            background-color: $lllgray;
+            padding: 0.5em;
+            width: 70%;
+            margin: auto;
+            margin-bottom: 0.5em;
+        }
+        
+        .type {
+            font-weight: bold;
+        }
+        .type::after {
+            content: " - ";
+        }
+        
+        .description {
+            display: block;
+            width: 80%;
+            margin: auto;
+            font-size: 90%;
+        }
+        
+    }
+    
+}
