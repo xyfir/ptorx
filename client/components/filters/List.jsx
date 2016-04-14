@@ -36,8 +36,7 @@ export default class FilterList extends React.Component {
             type: "warning",
             showCancelButton: true,
             confirmButtonColor: "#DD6B55",
-            confirmButtonText: "Yes, delete it!",
-            closeOnConfirm: false
+            confirmButtonText: "Yes, delete it!"
         }, () => {
             ajax({
                 url: URL + "api/filters/" + id,
