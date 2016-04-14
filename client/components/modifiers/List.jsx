@@ -61,6 +61,7 @@ export default class ModifierList extends React.Component {
         return (
             <div className="modifiers">
                 <a href="#modifiers/create" className="btn btn-primary">Create a Modifier</a>
+                <hr />
                 <div className="list">{
                     this.props.data.modifiers.map(mod => {
                         return (
@@ -74,7 +75,6 @@ export default class ModifierList extends React.Component {
                                     title="Delete Modifier"
                                     onClick={this.onDeleteModifier.bind(this, mod.id) }
                                 />
-                                <hr />
                                 <span className="description">{mod.description}</span>
                             </div>
                         );

@@ -127,6 +127,7 @@ export default class FilterList extends React.Component {
         return (
             <div className="filters">
                 <a href="#filters/create" className="btn btn-primary">Create a Filter</a>
+                <hr />
                 <div className="list">{
                     this.props.data.filters.map(filter => {
                         return (
@@ -140,7 +141,6 @@ export default class FilterList extends React.Component {
                                     title="Delete Filter"
                                     onClick={this.onDeleteFilter.bind(this, filter.id) }
                                 />
-                                <hr />
                                 <span className="description">{filter.description}</span>
                             </div>
                         );
