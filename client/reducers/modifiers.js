@@ -12,7 +12,7 @@ export default function(state, action) {
 
         case EDIT_MODIFIER:
             return (() => {
-                let temp = Object.assign({}, state);
+                let temp = state.slice(0);
                 
                 temp.forEach((mod, i) => {
                     if (action.data.id == mod.id)

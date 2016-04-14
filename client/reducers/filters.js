@@ -12,7 +12,7 @@ export default function(state, action) {
 
         case EDIT_FILTER:
             return (() => {
-                let temp = Object.assign({}, state);
+                let temp = state.slice(0);
                 
                 temp.forEach((f, i) => {
                     if (action.data.id == f.id)
