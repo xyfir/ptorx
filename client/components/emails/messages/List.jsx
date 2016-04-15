@@ -63,7 +63,8 @@ export default class MessageList extends React.Component {
                 </nav>
                 
                 <div className="list">{
-                    this.props.data.messages.map(msg => {
+                    this.props.data.messages.length
+                    ? this.props.data.messages.map(msg => {
                         return (
                             <div className="message">
                                 <span className="subject">
@@ -81,7 +82,7 @@ export default class MessageList extends React.Component {
                                 }</span>
                             </div>
                         );
-                    })
+                    }) : <h3>Your inbox is empty</h3>
                 }</div>
             </div>
         );
