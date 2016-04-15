@@ -82,11 +82,11 @@
     
 }
 
-.modifiers, .filters {
+.modifiers, .filters, .emails {
     
     .list {
         
-        .modifier, .filter {
+        .modifier, .filter, .email {
             background-color: $lllgray;
             padding: 0.5em;
             width: 70%;
@@ -106,6 +106,10 @@
             width: 80%;
             margin: auto;
             font-size: 90%;
+        }
+        
+        .address {
+            display: block;
         }
         
     }
