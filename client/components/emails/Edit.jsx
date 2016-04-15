@@ -21,6 +21,8 @@ export default class UpdateEmail extends React.Component {
     constructor(props) {
         super(props);
 
+        this.onAddModifier = this.onAddModifier.bind(this);
+        this.onAddFilter = this.onAddFilter.bind(this);
         this.onUpdate = this.onUpdate.bind(this);
 
         this.state = {
@@ -105,18 +107,18 @@ export default class UpdateEmail extends React.Component {
             noToAddress: +false, to: this.props.data.account.emails.find(e => {
                 return e.address == this.refs.to.value;
             }).id,
-            noSpamFilter: +(!this.refs.spamFilter.value), saveMail: +false,
+            noSpamFilter: +(!this.refs.spamFilter.checked), saveMail: +false,
             modifiers: this.state.modifiers.map(m => { return m.id; }),
             filters: this.state.filters.map(f => { return f.id; })
         };
 
         if (this.props.data.account.subscription > Date.now()) {
-            data.saveMail = +this.refs.saveMail.value;
-            data.noToAddress = +this.refs.noToAddress.value;
+            data.saveMail = +this.refs.saveMail.checked;
+            data.noToAddress = +this.refs.noToAddress.checked;
         }
 
         ajax({
-            url: URL + "api/emails" + this.state.id, method: "PUT", data,
+            url: URL + "api/emails/" + this.state.id, method: "PUT", data,
             success: (res) => {
                 if (res.error) {
                     swal("Error", res.message, "error");
