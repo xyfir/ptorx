@@ -19,7 +19,8 @@ export default function (state, action) {
         modifiers: modifiers(state.modifiers, action),
         filters: filters(state.filters, action),
         account: account(state.account, action),
-        emails: emails(state.emails, action)
+        emails: emails(state.emails, action),
+        view: state.view
     };
 
 }
