@@ -43,13 +43,25 @@ export default function(store) {
         }
     }
     else if (hash[0] == "emails") {
-        switch (hash[1]) {
-            case "create":
-                return store.dispatch(changeView(VIEWS.CREATE_REDIRECT_EMAIL));
-            case "edit":
-                return store.dispatch(changeView(VIEWS.EDIT_REDIRECT_EMAIL));
-            case "list":
-                return store.dispatch(changeView(VIEWS.LIST_REDIRECT_EMAILS));
+        if (hash[1] == "messages") {
+            switch (hash[3]) {
+                case "send":
+                    return store.dispatch(changeView(VIEWS.SEND_MESSAGE));
+                case "list":
+                    return store.dispatch(changeView(VIEWS.LIST_MESSAGES));
+                case "view":
+                    return store.dispatch(changeView(VIEWS.VIEW_MESSAGE));
+            }
+        }
+        else {
+            switch (hash[1]) {
+                case "create":
+                    return store.dispatch(changeView(VIEWS.CREATE_REDIRECT_EMAIL));
+                case "edit":
+                    return store.dispatch(changeView(VIEWS.EDIT_REDIRECT_EMAIL));
+                case "list":
+                    return store.dispatch(changeView(VIEWS.LIST_REDIRECT_EMAILS));
+            }
         }
     }
     
