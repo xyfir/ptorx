@@ -12,7 +12,7 @@ export default class Messages extends React.Component {
     }
 
     render() {
-        switch (this.props.data.view.split('/')[3]) {=
+        switch (this.props.data.view.split('/')[3]) {
             case "SEND":
                 return <Send data={this.props.data} dispatch={this.props.dispatch} />;
             case "VIEW":
