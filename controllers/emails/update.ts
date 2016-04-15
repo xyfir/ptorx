@@ -48,7 +48,7 @@ export = function (req, res) {
 
             cn.query(sql, vars, (err, rows) => {
                 // toEmail doesn't exist and user didn't provide noToAddress
-                if (!rows[0].toEmail && !req.body.noToAddress) {
+                if (!rows[0].toEmail && !(+req.body.noToAddress)) {
                     cn.release();
                     res.json({ error: true, message: "Could not find main email" });
                 }
@@ -94,7 +94,7 @@ export = function (req, res) {
             `;
             let vars = [
                 req.body.to, req.body.name, req.body.description,
-                !!req.body.saveMail, !req.body.noSpamFilter, req.params.email
+                !!(+req.body.saveMail), !(+req.body.noSpamFilter), req.params.email
             ];
 
             cn.query(sql, vars, (err, result) => {
@@ -108,7 +108,7 @@ export = function (req, res) {
                 buildExpression(data.address, data.filters, cn, (expression: string) => {
                     // Update MailGun route
                     mailgun.routes(data.routeId).update({
-                        priority: (!req.body.noSpamFilter ? 2 : 0), description: "",
+                        priority: (!(+req.body.noSpamFilter) ? 2 : 0), description: "",
                         expression, action: buildAction(
                             req.params.email, req.session.subscription,
                             data.to_email == 0 || data.save_mail

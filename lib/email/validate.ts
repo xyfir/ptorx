@@ -12,9 +12,9 @@
             return "Free members can only have a subject filter";
         if ((email.modifiers || '').length > 0)
             return "Free members cannot use modifiers";
-        if (!email.to || email.noToAddress)
+        if (!email.to || !!(+email.noToAddress))
             return "Free member emails must redirect to a main address";
-        if (email.saveMail)
+        if (!!(+email.saveMail))
             return "Free members cannot save emails";
     }
     else {

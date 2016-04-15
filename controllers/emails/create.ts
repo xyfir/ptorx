@@ -76,13 +76,13 @@ export = function (req, res) {
             sql = "SELECT email_id FROM main_emails WHERE email_id = ? AND user_id = ?";
             cn.query(sql, [req.body.to, req.session.uid], (err, rows) => {
                 // To email exists or user is allowed to use no to address
-                if (!rows.length && req.body.noToAddress || !!rows.length) {
+                if (!rows.length && !!(+req.body.noToAddress) || !!rows.length) {
                     // Build insert data object
                     let data = {
                         description: req.body.description, to_email: rows[0].email_id || 0,
                         address: email, user_id: req.session.uid, name: req.body.name,
-                        spam_filter: !req.body.noSpamFilter,
-                        save_mail: !!req.body.save_mail
+                        spam_filter: !(+req.body.noSpamFilter),
+                        save_mail: !!(+req.body.saveMail)
                     };
 
                     let modifiers: number[] = req.body.modifiers.split(',');
