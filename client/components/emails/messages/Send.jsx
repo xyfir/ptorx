@@ -1,5 +1,11 @@
 import React from "react";
 
+// Constants
+import { URL } from "../../../constants/config";
+
+// Modules
+import ajax from "../../../lib/ajax";
+
 export default class SendMessage extends React.Component {
     
     constructor(props) {

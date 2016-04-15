@@ -3,13 +3,13 @@ import React from "react";
 // Action creators
 import {
     loadMessages, deleteMessage
-} from "../../actions/creators/messages";
+} from "../../../actions/creators/messages";
 
 // Constants
-import { URL } from "../../constants/config";
+import { URL } from "../../../constants/config";
 
 // Modules
-import ajax from "../../lib/ajax";
+import ajax from "../../../lib/ajax";
 
 export default class MessageList extends React.Component {
 
