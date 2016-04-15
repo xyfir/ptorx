@@ -166,6 +166,11 @@ export default class UpdateEmail extends React.Component {
         
         return (
             <div className="email-update">
+                <nav className="nav-bar-sub">
+                    <a href={`#emails/messages/${this.state.id}/send`}>Send Message</a>
+                    <a href={`#emails/messages/${this.state.id}/list`}>Messages</a>
+                </nav>
+            
                 <span className="address">{email.address}</span>
             
                 <hr />
