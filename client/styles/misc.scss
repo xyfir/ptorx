@@ -82,11 +82,11 @@
     
 }
 
-.modifiers, .filters, .emails {
+.modifiers, .filters, .emails, .messages {
     
     .list {
         
-        .modifier, .filter, .email {
+        .modifier, .filter, .email, .message {
             background-color: $lllgray;
             padding: 0.5em;
             width: 70%;
@@ -108,7 +108,7 @@
             font-size: 90%;
         }
         
-        .address {
+        .address, .received {
             display: block;
         }
         
@@ -131,5 +131,15 @@
         max-height: 12em;
         overflow-y: auto;
     } 
+    
+}
+
+.message-send, .message-reply {
+    
+    textarea {
+        width: 70%;
+        height: 25em;
+        text-align: center;
+    }
     
 }
