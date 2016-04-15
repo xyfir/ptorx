@@ -42,7 +42,7 @@ app.get("/panel/*", (req, res) => {
 });
 app.use("/api", require("./controllers/"));
 app.get("/*", (req, res) => {
-    req.session.uid = 1, req.session.subscription = 0;
+    req.session.uid = 1, req.session.subscription = Date.now() + (1000 * 60 * 60);
     res.send("hello");
     //res.sendFile(__dirname + "/views/Home.html");
 });
