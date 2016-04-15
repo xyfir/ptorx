@@ -115,7 +115,7 @@ input[type=checkbox] {
 
 
 /* NAVBAR */
-.nav-bar {
+.nav-bar, .nav-bar-sub {
     
     background-color: $purple;
     width: 80%;
@@ -131,6 +131,9 @@ input[type=checkbox] {
         color: $lgray;
     }
     
+}
+.nav-bar-sub {
+	width: 60%;
 }
 
 .sweet-alert > fieldset > input {
