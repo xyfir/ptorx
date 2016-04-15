@@ -8,6 +8,9 @@ import {
 // Constants
 import { URL } from "../../constants/config";
 
+// Modules
+import ajax from "../../lib/ajax";
+
 export default class EmailList extends React.Component {
 
     constructor(props) {
@@ -29,8 +32,7 @@ export default class EmailList extends React.Component {
             type: "warning",
             showCancelButton: true,
             confirmButtonColor: "#DD6B55",
-            confirmButtonText: "Yes, delete it!",
-            closeOnConfirm: false
+            confirmButtonText: "Yes, delete it!"
         }, () => {
             ajax({
                 url: URL + "api/emails/" + id,
@@ -50,6 +52,7 @@ export default class EmailList extends React.Component {
         return (
             <div className="emails">
                 <a href="#emails/create" className="btn btn-primary">Create an Email</a>
+                <hr />
                 <div className="list">{
                     this.props.data.emails.map(email => {
                         return (
@@ -63,7 +66,6 @@ export default class EmailList extends React.Component {
                                     onClick={this.onDeleteEmail.bind(this, email.id) }
                                 />
                                 <span className="address">{email.address}</span>
-                                <hr />
                                 <span className="description">{email.description}</span>
                             </div>
                         );
