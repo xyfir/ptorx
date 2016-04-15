@@ -113,15 +113,15 @@ export default class CreateEmail extends React.Component {
         if (isPremium)
             data.address = this.refs.address.value;
         
-        if (!isPremium && !this.state.showAdvanced && !this.refs.noToAddress.checked)
+        if (!isPremium || !this.state.showAdvanced || !this.refs.noToAddress.checked)
             data.to = +this.refs.to.value;
         
         if (this.state.showAdvanced) {
-            data.noSpamFilter = !this.refs.spamFilter.checked;
+            data.noSpamFilter = +(!this.refs.spamFilter.checked);
             
             if (isPremium) {
-                data.noToAddress = this.refs.noToAddress.checked;
-                data.saveMail = this.refs.saveMail.checked;
+                data.noToAddress = +this.refs.noToAddress.checked;
+                data.saveMail = +this.refs.saveMail.checked;
             }
         }
 
