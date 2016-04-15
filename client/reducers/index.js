@@ -1,5 +1,6 @@
 // Reducers
 import modifiers from "./modifiers";
+import messages from "./messages";
 import filters from "./filters";
 import account from "./account";
 import emails from "./emails";
@@ -17,6 +18,7 @@ export default function (state, action) {
 
     return {
         modifiers: modifiers(state.modifiers, action),
+        messages: messages(state.messages, action),
         filters: filters(state.filters, action),
         account: account(state.account, action),
         emails: emails(state.emails, action),
