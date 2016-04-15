@@ -45,11 +45,11 @@ export default function(store) {
     else if (hash[0] == "emails") {
         switch (hash[1]) {
             case "create":
-                return store.dispatch(changeView(VIEWS.CREATE_EMAIL));
+                return store.dispatch(changeView(VIEWS.CREATE_REDIRECT_EMAIL));
             case "edit":
-                return store.dispatch(changeView(VIEWS.EDIT_EMAIL));
+                return store.dispatch(changeView(VIEWS.EDIT_REDIRECT_EMAIL));
             case "list":
-                return store.dispatch(changeView(VIEWS.LIST_EMAILS));
+                return store.dispatch(changeView(VIEWS.LIST_REDIRECT_EMAILS));
         }
     }
     
