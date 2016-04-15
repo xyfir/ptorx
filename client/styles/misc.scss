@@ -119,3 +119,17 @@
 .linked-emails > a {
     display: block;
 }
+
+.email-create, .email-update {
+    
+    .address {
+        font-size: 125%;
+        font-weight: bold;
+    }
+    
+    .link-filter > .list, .link-modifier > .list {
+        max-height: 12em;
+        overflow-y: auto;
+    } 
+    
+}
