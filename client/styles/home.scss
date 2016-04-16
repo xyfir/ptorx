@@ -1,0 +1,45 @@
+.home {
+    
+    margin: 0em;
+    
+    .section-1 {
+        
+        background-color: $purple;
+        padding: 1em;
+        color: white;
+        text-align: left;
+        
+        h1, h2, h3 {
+            color: $black;
+        }
+        
+        a {
+            color: $lgray;
+        }
+        a:hover {
+            color: $gray;
+        }
+        
+    }
+    
+    .section-1:nth-child(1) > a {
+        margin: 0.4em;
+    }
+    
+    .section-2 {
+        
+        background-color: white;
+        padding: 1em;
+        text-align: right;
+        
+        h1, h2, h3 {
+            color: $purple;
+        }
+        
+    }
+    
+    th {
+        padding-right: 0.6em;
+    }
+    
+}
