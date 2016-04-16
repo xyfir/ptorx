@@ -5,7 +5,8 @@
     RETURN
         {
             error: boolean, find: string, acceptOnMatch: boolean,
-            regex: boolean, linkedTo: [{ id, address }]
+            regex: boolean, linkedTo: [{ id: number, address: string }],
+            id: number, name: string, description: string, type: number
         }
     DESCRIPTION
         Returns data for a specific filter
@@ -13,24 +14,21 @@
 export = function (req, res) {
 
     let sql: string = `
-        SELECT find, accept_on_match as acceptOnMatch, use_regex as regex
-        FROM filters WHERE filter_id = ? AND user_id = ?
+        SELECT filter_id as id, name, description, type, find, accept_on_match as acceptOnMatch,
+        use_regex as regex FROM filters WHERE filter_id = ? AND user_id = ?
     `;
     db(cn => cn.query(sql, [req.params.filter, req.session.uid], (err, rows) => {
 
-        let response = {
-            error: true, find: "", linkedTo: [], acceptOnMatch: false, regex: false
-        };
-
         if (err || !rows.length) {
             cn.release();
-            res.json(response);
+            res.json({ error: true });
         }
         else {
+            let response = rows[0];
+            
             response.error = false;
-            response.find = rows[0].find;
-            response.regex = !!(+rows[0].regex);
-            response.acceptOnMatch = !!(+rows[0].acceptOnMatch);
+            response.regex = !!(+response.regex);
+            response.acceptOnMatch = !!(+response.acceptOnMatch);
 
             sql = `
                 SELECT address, email_id as id FROM redirect_emails WHERE email_id IN (
