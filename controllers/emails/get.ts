@@ -3,12 +3,14 @@
 /*
     GET api/emails/:email
     RETURN
-        {
-            { error: boolean, toEmail: string, saveMail: boolean, spamFilter: boolean, filters: [{
+        { 
+            error: boolean, toEmail: string, saveMail: boolean, spamFilter: boolean,
+            id: number, name: string, description: string, address: string,
+            filters: [{
                 id: number, name: string, description: string, type: number
             }], modifiers: [{
                 id: number, name: string, description: string, type: number
-            }] }
+            }]
         }
     DESCRIPTION
         Returns data for a specific REDIRECT email
@@ -17,7 +19,8 @@ export = function (req, res) {
 
     // Ensure user owns email and grab toEmail/saveMail
     let sql: string = `
-        SELECT save_mail as saveMail, spam_filter as spamFilter, (
+        SELECT email_id as id, name, description, address, save_mail as saveMail,
+        spam_filter as spamFilter, (
             SELECT address FROM main_emails WHERE email_id IN (
                 SELECT to_email FROM redirect_emails WHERE email_id = ? AND user_id = ?
             )
@@ -29,21 +32,16 @@ export = function (req, res) {
     ];
 
     db(cn => cn.query(sql, vars, (err, rows) => {
-
-        let response = {
-            error: true, toEmail: "", saveMail: false, spamFilter: true,
-            filters: [], modifiers: []
-        };
-
         if (err || !rows.length || rows[0].toEmail == null) {
             cn.release();
-            res.json(response);
+            res.json({ error: true });
         }
         else {
+            let response = rows[0];
+            
             response.error = false;
-            response.toEmail = rows[0].toEmail;
-            response.saveMail = !!(+rows[0].saveEmail);
-            response.spamFilter = !!(+rows[0].spamFilter);
+            response.saveMail = !!(+response.saveEmail);
+            response.spamFilter = !!(+response.spamFilter);
 
             // Grab basic info for all filters linked to email
             sql = `
