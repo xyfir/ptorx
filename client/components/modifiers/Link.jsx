@@ -1,6 +1,7 @@
 import React from "react";
 
 // Components
+import Search from "../misc/Search";
 import Create from "./Create";
 
 // Constants
@@ -26,10 +27,8 @@ export default class LinkModifier extends React.Component {
         this.setState({ view });
     }
     
-    onSearch() {
-        this.setState({ search: {
-            query: this.refs.search.value, type: +this.refs.type.value
-        }});
+    onSearch(search) {
+        this.setState({ search });
     }
     
     onAdd(id) {
@@ -48,19 +47,7 @@ export default class LinkModifier extends React.Component {
                     this.state.view == "search"
                     ? (
                         <div>
-                            <input
-                                type="text"
-                                ref="search"
-                                onChange={this.onSearch}
-                                placeholder="Search"
-                            />
-                            <select ref="type" onChange={this.onSearch}>{
-                                [0].concat(Object.keys(modifierTypes)).map(k => {
-                                    return (
-                                        <option value={k}>{modifierTypes[k] || "All Types"}</option>
-                                    );
-                                })
-                            }</select>
+                            <Search onSearch={this.onSearch} type="modifier" />
                             <div className="list">{
                                 findMatches(this.props.data.modifiers, this.state.search).map(m => {
                                     return (
