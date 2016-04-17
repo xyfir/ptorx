@@ -12,11 +12,21 @@ import { modifierTypes } from "../../constants/types";
 
 // Modules
 import ajax from "../../lib/ajax";
+import findMatches from "../../lib/find-matching";
+
+// Components
+import Search from "../misc/Search";
 
 export default class ModifierList extends React.Component {
 
     constructor(props) {
         super(props);
+
+        this.state = {
+            search: { query: "", type: 0 }
+        };
+        
+        this.onSearch = this.onSearch.bind(this);
 
         if (props.data.modifiers.length == 0) {
             ajax({
@@ -25,6 +35,10 @@ export default class ModifierList extends React.Component {
                 }
             });
         }
+    }
+
+    onSearch(search) {
+        this.setState({ search });
     }
 
     onDeleteModifier(id) {
@@ -64,8 +78,10 @@ export default class ModifierList extends React.Component {
             <div className="modifiers">
                 <a href="#modifiers/create" className="btn btn-primary">Create a Modifier</a>
                 <hr />
+                <Search onSearch={this.onSearch} type="modifier" />
+                <hr />
                 <div className="list">{
-                    this.props.data.modifiers.map(mod => {
+                    findMatches(this.props.data.modifiers, this.state.search).map(mod => {
                         return (
                             <div className="modifier">
                                 <span className="type">{modifierTypes[mod.type]}</span>
