@@ -12,11 +12,21 @@ import { URL } from "../../constants/config";
 
 // Modules
 import ajax from "../../lib/ajax";
+import findMatches from "../../lib/find-matching";
+
+// Components
+import Search from "../misc/Search";
 
 export default class FilterList extends React.Component {
 
     constructor(props) {
         super(props);
+
+        this.state = {
+            search: { query: "", type: 0 }
+        };
+        
+        this.onSearch = this.onSearch.bind(this);
 
         if (props.data.filters.length == 0) {
             ajax({
@@ -27,6 +37,10 @@ export default class FilterList extends React.Component {
         }
 
         this._updateEmails = this._updateEmails.bind(this);
+    }
+    
+    onSearch(search) {
+        this.setState({ search });
     }
 
     onDeleteFilter(id) {
@@ -127,8 +141,10 @@ export default class FilterList extends React.Component {
             <div className="filters">
                 <a href="#filters/create" className="btn btn-primary">Create a Filter</a>
                 <hr />
+                <Search onSearch={this.onSearch} type="filter" />
+                <hr />
                 <div className="list">{
-                    this.props.data.filters.map(filter => {
+                    findMatches(this.props.data.filters, this.state.search).map(filter => {
                         return (
                             <div className="filter">
                                 <span className="type">{filterTypes[filter.type]}</span>
