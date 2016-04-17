@@ -10,11 +10,21 @@ import { URL } from "../../constants/config";
 
 // Modules
 import ajax from "../../lib/ajax";
+import findMatches from "../../lib/find-matching";
+
+// Components
+import Search from "../misc/Search";
 
 export default class EmailList extends React.Component {
 
     constructor(props) {
         super(props);
+
+        this.state = {
+            search: { query: "", type: 0 }
+        };
+        
+        this.onSearch = this.onSearch.bind(this);
 
         if (props.data.emails.length == 0) {
             ajax({
@@ -23,6 +33,10 @@ export default class EmailList extends React.Component {
                 }
             });
         }
+    }
+
+    onSearch(search) {
+        this.setState({ search });
     }
 
     onDeleteEmail(id) {
@@ -53,8 +67,10 @@ export default class EmailList extends React.Component {
             <div className="emails">
                 <a href="#emails/create" className="btn btn-primary">Create an Email</a>
                 <hr />
+                <Search onSearch={this.onSearch} type="email" />
+                <hr />
                 <div className="list">{
-                    this.props.data.emails.map(email => {
+                    findMatches(this.props.data.emails, this.state.search).map(email => {
                         return (
                             <div className="email">
                                 <span className="name"><a href={`#emails/edit/${email.id}`}>
