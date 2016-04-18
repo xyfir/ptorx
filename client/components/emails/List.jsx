@@ -42,7 +42,7 @@ export default class EmailList extends React.Component {
     onDeleteEmail(id) {
         swal({
             title: "Are you sure?",
-            text: "You will no longer receive emails sent to this address.",
+            text: "You will no longer receive emails sent to this address. You will not be able to recreate this address.",
             type: "warning",
             showCancelButton: true,
             confirmButtonColor: "#DD6B55",
@@ -51,12 +51,10 @@ export default class EmailList extends React.Component {
             ajax({
                 url: URL + "api/emails/" + id,
                 method: "DELETE", success: (res) => {
-                    if (res.error) {
+                    if (res.error)
                         swal("Error", "Could not delete email", "error");
-                    }
-                    else {
+                    else
                         this.props.dispatch(deleteEmail(id));
-                    }
                 }
             });
         });
