@@ -24,11 +24,14 @@ export = function (req, res) {
             res.json({ error: true });
         }
         else {
-            sql = `DELETE FROM redirect_emails WHERE email_id = ?`;
-            cn.query(sql, [req.params.email], (err, result) => {
-                cn.release();
+            sql = `
+                UPDATE redirect_emails SET user_id = 0, to_email = 0, name = '',
+                description = '', mg_route_id = '' WHERE email_id = ?
+            `;
 
+            cn.query(sql, [req.params.email], (err, result) => {
                 if (err || !result.affectedRows) {
+                    cn.release();
                     res.json({ error: true });
                 }
                 else {
@@ -36,6 +39,14 @@ export = function (req, res) {
                     mailgun.routes(rows[0].route).delete(function (err, body) { });
 
                     res.json({ error: false });
+
+                    sql = "DELETE FROM linked_filters WHERE email_id = ?";
+                    cn.query(sql, [req.params.email], (err, result) => {
+                        sql = "DELETE FROM linked_modifiers WHERE emails_id = ?"
+                        cn.query(sql, [req.params.email], (err, result) => {
+                            cn.release();
+                        });
+                    });
                 }
             });
         }
