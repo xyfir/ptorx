@@ -105,7 +105,7 @@ export default class Account extends React.Component {
                         this.props.data.account.emails.map(email => {
                             return (
                                 <div className="email">
-                                    <span className="address">{email.address}</span>
+                                    <span className="main-address">{email.address}</span>
                                     <span
                                         className="icon-trash"
                                         title="Remove Email"
