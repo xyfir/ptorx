@@ -10,11 +10,11 @@ export = function (cn, fn: Function) {
         email += String(Date.now()).substr(-2);
 
         let sql: string = `SELECT email_id FROM redirect_emails WHERE address = ?`;
-        cn.query(sql, [email + "@ptorx.com"], (err, rows) => {
+        cn.query(sql, [email + "@mail.ptorx.com"], (err, rows) => {
             if (!!rows.length)
                 generate(email);
             else
-                fn(email + "@ptorx.com");
+                fn(email + "@mail.ptorx.com");
         });
     };
 
