@@ -1,4 +1,4 @@
-﻿import db = require("../../lib/db");
+﻿const db = require("lib/db");
 
 /*
     GET api/account
@@ -7,9 +7,9 @@
     DESCRIPTION
         Returns all MAIN emails on account and subscription expiration
 */
-export = function (req, res) {
+module.exports = function(req, res) {
 
-    let sql: string = `
+    let sql = `
         SELECT email_id as id, address FROM main_emails WHERE user_id = ?
     `;
     db(cn => cn.query(sql, [req.session.uid], (err, rows) => {

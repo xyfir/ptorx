@@ -1,5 +1,5 @@
-﻿import * as request from "request";
-import db = require("../../lib/db");
+﻿const request = require("request");
+const db = require("lib/db");
 
 /*
     POST api/account/login
@@ -10,9 +10,9 @@ import db = require("../../lib/db");
     DESCRIPTION
         Register or login user
 */
-export = function (req, res) {
+module.exports = function(req, res) {
 
-    let url: string = require("../../config").addresses.xacc
+    let url = require("../../config").addresses.xacc
         + `api/service/13/${req.body.xid}/${req.body.auth}`;
 
     request(url, (err, response, body) => {
@@ -23,7 +23,7 @@ export = function (req, res) {
             return;
         }
 
-        let sql: string = `
+        let sql = `
             SELECT user_id, subscription, xad_id FROM users WHERE xyfir_id = ?
         `;
         db(cn => cn.query(sql, [req.body.xid], (err, rows) => {

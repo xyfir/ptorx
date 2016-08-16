@@ -1,5 +1,5 @@
-﻿import clearCache = require("../../lib/email/clear-cache");
-import db = require("../../lib/db");
+﻿const clearCache = require("lib/email/clear-cache");
+const db = require("lib/db");
 
 /*
     DELETE api/modifiers/:mod
@@ -8,9 +8,9 @@ import db = require("../../lib/db");
     DESCRIPTION
         Deletes a modifier
 */
-export = function (req, res) {
+module.exports = function(req, res) {
 
-    let sql: string = `SELECT email_id as id FROM linked_modifiers WHERE modifier_id = ?`;
+    let sql = `SELECT email_id as id FROM linked_modifiers WHERE modifier_id = ?`;
     db(cn => cn.query(sql, [req.params.mod], (err, rows) => {
         sql = "DELETE FROM modifiers WHERE modifier_id = ? AND user_id = ?";
         cn.query(sql, [req.params.mod, req.session.uid], (err, result) => {

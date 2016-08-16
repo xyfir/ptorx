@@ -1,10 +1,10 @@
-﻿import getKeywords = require("../../lib/keywords/get");
-import getInfo = require("../../lib/email/get-info");
-import request = require("request");
+﻿const getKeywords = require("lib/keywords/get");
+const getInfo = require("lib/email/get-info");
+const request = require("request");
 
-let config = require("../../config");
+let config = require("config");
 let mailgun = require("mailgun-js")({
-    apiKey: config.keys.mailgun, domain: "mail.ptorx.com"
+    apiKey: config.keys.mailgun, domain: "ptorx.com"
 });
 
 /*
@@ -23,19 +23,20 @@ let mailgun = require("mailgun-js")({
     NOTES
         Free users only receive 'accept on match' subject filtering (via MG)
 */
-export = function (req, res) {
+module.exports = function(req, res) {
+    
     getInfo(req.params.email, true, (err, data) => {
         if (err) {
             res.status(406).send();
         }
         else {
             // Pull keywords out of content
-            let keywords: string = (getKeywords(req.body["body-plain"], 25)
+            let keywords = (getKeywords(req.body["body-plain"], 25)
                 .concat(req.body.subject.toLowerCase().split(' '))
             ).join(',');
-            let xads: string = require("../../config").addresses.xads;
+            let xads = require("../../config").addresses.xads;
 
-            let url: string = encodeURI(`${xads}&count=1&types=1,2&ip=${req.ip}&keywords=${keywords}`);
+            let url = encodeURI(`${xads}&count=1&types=1,2&ip=${req.ip}&keywords=${keywords}`);
 
             // Generate an advertisement via XAds
             request(url, (err, response, body) => {

@@ -1,7 +1,7 @@
-﻿import clearCache = require("../../lib/email/clear-cache");
-import buildData = require("../../lib/modifier/build-data");
-import validate = require("../../lib/modifier/validate");
-import db = require("../../lib/db");
+﻿const clearCache = require("lib/email/clear-cache");
+const buildData = require("lib/modifier/build-data");
+const validate = require("lib/modifier/validate");
+const db = require("lib/db");
 
 /*
     PUT api/modifiers/:mod
@@ -21,7 +21,7 @@ import db = require("../../lib/db");
     DESCRIPTION
         Update a modifier's data
 */
-export = function (req, res) {
+module.exports = function(req, res) {
 
     let response = validate(req.body);
 
@@ -30,7 +30,7 @@ export = function (req, res) {
         return;
     }
 
-    let sql: string = `
+    let sql = `
         UPDATE modifiers SET name = ?, description = ?, type = ?, data = ?
         WHERE modifier_id = ? AND user_id = ?
     `;

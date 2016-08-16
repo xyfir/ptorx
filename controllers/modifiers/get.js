@@ -1,4 +1,4 @@
-﻿import db = require("../../lib/db");
+﻿const db = require("lib/db");
 
 /*
     GET api/modifiers/:mod
@@ -10,9 +10,9 @@
     DESCRIPTION
         Returns data and linkedTo for a specific modifier
 */
-export = function (req, res) {
+module.exports = function(req, res) {
 
-    let sql: string = `
+    let sql = `
         SELECT modifier_id as id, name, description, type, data FROM modifiers
         WHERE modifier_id = ? AND user_id = ?
     `;

@@ -1,6 +1,6 @@
-﻿import buildData = require("../../lib/modifier/build-data");
-import validate = require("../../lib/modifier/validate");
-import db = require("../../lib/db");
+﻿const buildData = require("lib/modifier/build-data");
+const validate = require("lib/modifier/validate");
+const db = require("lib/db");
 
 /*
     POST api/modifiers
@@ -20,7 +20,7 @@ import db = require("../../lib/db");
     DESCRIPTION
         Create a new modifier
 */
-export = function (req, res) {
+module.exports = function(req, res) {
 
     let response = validate(req.body);
     
@@ -34,7 +34,7 @@ export = function (req, res) {
         description: req.body.description, type: req.body.type
     };
 
-    let sql: string = `INSERT INTO modifiers SET ?`;
+    let sql = `INSERT INTO modifiers SET ?`;
     db(cn => cn.query(sql, insert, (err, result) => {
         cn.release();
         

@@ -1,11 +1,11 @@
-﻿import escapeRegExp = require("escape-string-regexp");
-import encrypt = require("../../lib/encrypt");
-import getInfo = require("../../lib/email/get-info");
-import db = require("../../lib/db");
+﻿const escapeRegExp = require("escape-string-regexp");
+const encrypt = require("lib/encrypt");
+const getInfo = require("lib/email/get-info");
+const db = require("lib/db");
 
-let config = require("../../config");
+let config = require("config");
 let mailgun = require("mailgun-js")({
-    apiKey: config.keys.mailgun, domain: "mail.ptorx.com"
+    apiKey: config.keys.mailgun, domain: "ptorx.com"
 });
 
 /*
@@ -22,7 +22,7 @@ let mailgun = require("mailgun-js")({
         Messages are ran through any filters that can't be run on MailGun
         Messages are then modified via modifiers
 */
-export = function (req, res) {
+module.exports = function(req, res) {
     
     // Get email/filters/modifiers data
     getInfo(req.params.email, false, (err, data) => {
@@ -54,7 +54,7 @@ export = function (req, res) {
                     else if (req.body["body-html"])
                         return data.filters[i].pass = !req.body["body-html"].match(new RegExp(filter.find, 'g'));
                 case 6: // Header
-                    let find: string[] = filter.find.split(":::");
+                    let find = filter.find.split(":::");
                     headers.forEach(header => {
                         if (header[0] == find[0] && ('' + header[1]).match(new RegExp(find[1], 'g')))
                             data.filters[i].pass = false;
@@ -70,7 +70,7 @@ export = function (req, res) {
             }
         }
 
-        let textonly: boolean = false;
+        let textonly = false;
 
         // Loop through modifiers
         data.modifiers.forEach(modifier => {
@@ -118,7 +118,7 @@ export = function (req, res) {
 
                 // Optionally save message to messages table
                 if (req.body['message-url']) {
-                    let sql: string = `
+                    let sql = `
                         INSERT INTO messages (email_id, message_key, received, subject) VALUES (?, ?, ?, ?)
                     `;
                     let vars = [

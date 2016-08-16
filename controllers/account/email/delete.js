@@ -1,4 +1,4 @@
-﻿import db = require("../../../lib/db");
+﻿const db = require("lib/db");
 
 /*
     DELETE api/account/email/:email
@@ -7,9 +7,9 @@
     DESCRIPTION
         Deletes a MAIN email from user's account
 */
-export = function (req, res) {
+module.exports = function(req, res) {
 
-    let sql: string = `
+    let sql = `
         DELETE FROM main_emails WHERE email_id = ? AND user_id = ?
     `;
     let vars = [

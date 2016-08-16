@@ -1,4 +1,4 @@
-﻿import db = require("../../../lib/db");
+﻿const db = require("lib/db");
 
 /*
     POST api/account/email/:email
@@ -7,14 +7,16 @@
     DESCRIPTION
         Adds a MAIN email to user's account
 */
-export = function (req, res) {
+module.exports = function(req, res) {
 
     if (req.params.email.match(/.*ptorx.com$/)) {
-        res.json({ error: true, message: "Cannot use Ptorx addresses to receive mail from Ptorx" });
-        return;
+        res.json({
+            error: true,
+            message: "Cannot use Ptorx addresses to receive mail from Ptorx"
+        }); return;
     }
 
-    let sql: string = `
+    let sql = `
         SELECT (
             SELECT COUNT(email_id) FROM main_emails WHERE user_id = ?
         ) as emails, (

@@ -1,4 +1,4 @@
-﻿import db = require("../../lib/db");
+﻿const db = require("lib/db");
 
 /*
     PUT api/account/subscription
@@ -9,17 +9,17 @@
     DESCRIPTION
         Add months to user's subscription after charging card via Stripe
 */
-export = function (req, res) {
+module.exports = function(req, res) {
 
-    let stripeKey: string = require("../../config").keys.stripe;
-    let amount: number = [0, 3, 15, 24][req.body.months] * 100;
+    let stripeKey = require("../../config").keys.stripe;
+    let amount = [0, 3, 15, 24][req.body.months] * 100;
 
     if (!amount) {
         res.json({ error: true, message: "Invalid subscription length" });
         return;
     }
 
-    let months: number = [0, 1, 6, 12][req.body.months];
+    let months = [0, 1, 6, 12][req.body.months];
 
     let info = {
         amount, currency: "usd", source: req.body.stripeToken,
@@ -32,7 +32,7 @@ export = function (req, res) {
             return;
         }
 
-        let sql: string = `
+        let sql = `
             SELECT subscription FROM users WHERE user_id = ?
         `;
         db(cn => cn.query(sql, [req.session.uid], (err, rows) => {
@@ -42,7 +42,7 @@ export = function (req, res) {
             }
             else {
                 // Add months to current subscription expiration (or now())
-                let subscription: number = rows[0].subscription == 0
+                let subscription = rows[0].subscription == 0
                     ? (Date.now() + (months * 30 * 86400 * 1000))
                     : (rows[0].subscription + (months * 30 * 86400 * 1000));
 
