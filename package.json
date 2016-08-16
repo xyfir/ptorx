@@ -27,6 +27,8 @@
     "browserify": "^13.1.0",
     "cssnano": "^3.7.4",
     "gulp": "^3.9.1",
+    "gulp-favicons": "^2.2.6",
+    "gulp-fontello": "^0.4.6",
     "gulp-gzip": "^1.4.0",
     "gulp-postcss": "^6.1.1",
     "gulp-streamify": "^1.0.2",
