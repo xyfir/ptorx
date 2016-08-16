@@ -1,8 +1,8 @@
-var gutil = require("gulp-util");
-var gzip = require("gulp-gzip");
-var gulp = require("gulp");
+const gutil = require("gulp-util");
+const gzip = require("gulp-gzip");
+const gulp = require("gulp");
 
-var isDev = require("./config").environment.type;
+const isDev = require("./config").environment.type;
 
 /*
 	css
@@ -11,11 +11,11 @@ var isDev = require("./config").environment.type;
 	- autoprefixer
 	- minifies / gzip
 */
-gulp.task("css", function () {
-    var postcss = require("gulp-postcss");
-    var precss = require("precss");
-    var nano = require("cssnano");
-    var ap = require("autoprefixer");
+gulp.task("css", function() {
+    const postcss = require("gulp-postcss");
+    const precss = require("precss");
+    const nano = require("cssnano");
+    const ap = require("autoprefixer");
     
     return gulp.src("./client/styles/style.css")
         .pipe(postcss([
@@ -23,8 +23,8 @@ gulp.task("css", function () {
             ap({browsers: "last 1 version, > 10%"}),
             nano({ autoprefixer: false, zindex: false })
         ]))
-		.pipe(!isDev ? gzip() : gutil.noop())
-		.pipe(gulp.dest("./public/css"));
+		//.pipe(!isDev ? gzip() : gutil.noop())
+		.pipe(gulp.dest("./static/css"));
 });
 
 /*
@@ -34,16 +34,16 @@ gulp.task("css", function () {
 	- bundles React components
 	- minifies / gzip
 */
-gulp.task("client", function () {
-    var browserify = require("browserify");
-    var streamify = require("gulp-streamify");
-    var babelify = require("babelify");
-    var uglify = require("gulp-uglify");
-    var source = require("vinyl-source-stream");
+gulp.task("client", function() {
+    const browserify = require("browserify");
+    const streamify = require("gulp-streamify");
+    const babelify = require("babelify");
+    const uglify = require("gulp-uglify");
+    const source = require("vinyl-source-stream");
 
-    var extensions = [".jsx", ".js"];
+    const extensions = [".jsx", ".js"];
     
-    var b = browserify(
+    const b = browserify(
         './client/components/App.jsx', { debug: true, extensions: extensions }
     );
     b.transform(babelify.configure({
@@ -57,6 +57,31 @@ gulp.task("client", function () {
             compress: { unused: false }
         }))
         .on('error', gutil.log))
-		.pipe(!isDev ? gzip() : gutil.noop())
-		.pipe(gulp.dest('./public/js/'));
+		//.pipe(!isDev ? gzip() : gutil.noop())
+		.pipe(gulp.dest('./static/js/'));
+});
+
+/*
+	favicons
+    - generate favicons from icon.png
+    - place in static/icons
+*/
+gulp.task("favicons", function() {
+    const favicons = require("gulp-favicons");
+
+    return gulp.src("icon.png")
+    .pipe(favicons({}))
+    .on("error", gutil.log)
+    .pipe(gulp.dest("./static/icons/"));
+});
+
+/*
+	fontello
+    - get font and css files from fontello
+    - place in ./static/fontello
+*/
+gulp.task("fontello", function() {
+    return gulp.src("fontello.json")
+        .pipe(require("gulp-fontello")())
+        .pipe(gulp.dest("./static/fontello"));
 });
