@@ -1,15 +1,13 @@
-/// <reference path="typings/main.d.ts" />
-
-import * as express from "express";
-import * as session from "express-session";
-import * as parser from "body-parser";
+const express =  require("express");
+const session = require("express-session");
+const parser = require("body-parser");
 
 let sstore = require("express-mysql-session");
 let app = express();
 
 let config = require("./config");
 app.listen(config.environment.port, () => {
-    console.log("SERVER RUNNING ON", config.environment.port);
+    console.log("~~Server running on port", config.environment.port);
 });
 
 /* Sessions */
@@ -36,12 +34,15 @@ app.use(parser.json());
 app.use(parser.urlencoded({ extended: true }));
 
 // Express middleware / controllers
-app.use("/", express.static(__dirname + "/public"));
+app.use("/static", express.static(__dirname + "/static"));
 app.get("/panel/*", (req, res) => {
     res.sendFile(__dirname + "/views/Panel.html");
 });
 app.use("/api", require("./controllers/"));
 app.get("/*", (req, res) => {
-    req.session.uid = 1, req.session.subscription = Date.now() + (1000 * 60 * 60); // ** remove
+    if (config.environment.type == "dev") {
+        req.session.uid = 1,
+        req.session.subscription = Date.now() + (1000 * 60 * 60);
+    }
     res.sendFile(__dirname + "/views/Home.html");
 });
