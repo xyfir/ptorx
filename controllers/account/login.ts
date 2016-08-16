@@ -26,7 +26,7 @@ export = function (req, res) {
         let sql: string = `
             SELECT user_id, subscription, xad_id FROM users WHERE xyfir_id = ?
         `;
-        db(cn => cn.query(sql, [], (err, rows) => {
+        db(cn => cn.query(sql, [req.body.xid], (err, rows) => {
             // First login
             if (!rows.length) {
                 let insert = {
