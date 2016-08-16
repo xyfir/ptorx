@@ -1,4 +1,4 @@
-﻿import * as express from "express";
+﻿const express = require("express");
 
 let router = express.Router();
 
@@ -44,4 +44,4 @@ router.route("/account/email/:email")
     .delete(require("./account/email/delete"));
 router.post("/account/login", require("./account/login"));
 
-export = router;
+module.exports = router;
