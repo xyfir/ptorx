@@ -12,7 +12,7 @@
 export = function (req, res) {
 
     let stripeKey: string = require("../../config").keys.stripe;
-    let amount: number = [0, 3, 15, 24][req.body.months] * 1000;
+    let amount: number = [0, 3, 15, 24][req.body.months] * 100;
 
     if (!amount) {
         res.json({ error: true, message: "Invalid subscription length" });
