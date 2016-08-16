@@ -4,6 +4,7 @@
   "description": "",
   "main": "app.js",
   "dependencies": {
+    "app-module-path": "^1.1.0",
     "body-parser": "^1.15.2",
     "escape-string-regexp": "^1.0.5",
     "express": "^4.14.0",
