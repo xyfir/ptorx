@@ -1,11 +1,28 @@
 .home {
     
     margin: 0em;
+
+    section {
+        padding: 1% 20%;
+    }
+
+    table {
+        
+        text-align: center;
+
+        th {
+            padding-right: 0.6em;
+        }
+
+    }
+
+    a {
+        margin: 0.2em;
+    }
     
     .section-1 {
         
         background-color: $purple;
-        padding: 1em;
         color: white;
         text-align: left;
         
@@ -22,24 +39,15 @@
         
     }
     
-    .section-1:nth-child(1) > a {
-        margin: 0.4em;
-    }
-    
     .section-2 {
         
         background-color: white;
-        padding: 1em;
         text-align: right;
         
         h1, h2, h3 {
             color: $purple;
         }
         
-    }
-    
-    th {
-        padding-right: 0.6em;
     }
     
 }
