@@ -11,7 +11,7 @@ import { URL } from "../../constants/config";
 import { modifierTypes } from "../../constants/types";
 
 // Modules
-import ajax from "../../lib/ajax";
+import request from "../../lib/request";
 import findMatches from "../../lib/find-matching";
 
 // Components
@@ -29,7 +29,7 @@ export default class ModifierList extends React.Component {
         this.onSearch = this.onSearch.bind(this);
 
         if (props.data.modifiers.length == 0) {
-            ajax({
+            request({
                 url: URL + "api/modifiers", success: (res) => {
                     this.props.dispatch(loadModifiers(res.modifiers));
                 }
@@ -50,7 +50,7 @@ export default class ModifierList extends React.Component {
             confirmButtonColor: "#DD6B55",
             confirmButtonText: "Yes, delete it!"
         }, () => {
-            ajax({
+            request({
                 url: URL + "api/modifiers/" + id,
                 method: "DELETE", success: (res) => {
                     if (res.error) {

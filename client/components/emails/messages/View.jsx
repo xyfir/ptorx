@@ -4,7 +4,7 @@ import React from "react";
 import { URL } from "../../../constants/config";
 
 // Modules
-import ajax from "../../../lib/ajax";
+import request from "../../../lib/request";
 
 export default class ViewMessage extends React.Component {
     
@@ -17,7 +17,7 @@ export default class ViewMessage extends React.Component {
             content: {}, showHeaders: false, showHTML: false
         };
         
-        ajax({
+        request({
             url: `${URL}api/emails/${this.state.id}/messages/${this.state.message}`,
             success: (res) => {
                 if (res.error)
@@ -46,7 +46,7 @@ export default class ViewMessage extends React.Component {
     }
     
     onReply() {
-        ajax({
+        request({
             url: `${URL}api/emails/${this.state.id}/messages/${this.state.message}`,
             method: "POST", data: { content: this.refs.content.value },
             success: (res) => {

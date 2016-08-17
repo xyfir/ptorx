@@ -9,7 +9,7 @@ import {
 import { URL } from "../../../constants/config";
 
 // Modules
-import ajax from "../../../lib/ajax";
+import request from "../../../lib/request";
 
 export default class MessageList extends React.Component {
 
@@ -20,7 +20,7 @@ export default class MessageList extends React.Component {
             id: location.hash.split('/')[2], loading: true
         };
 
-        ajax({
+        request({
             url: `${URL}api/emails/${this.state.id}/messages`,
             success: (res) => {
                 this.props.dispatch(loadMessages(res.messages));
@@ -38,7 +38,7 @@ export default class MessageList extends React.Component {
             confirmButtonColor: "#DD6B55",
             confirmButtonText: "Yes, delete it!"
         }, () => {
-            ajax({
+            request({
                 url: `${URL}api/emails/${this.state.id}/messages/${id}`,
                 method: "DELETE", success: (res) => {
                     if (res.error) {

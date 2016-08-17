@@ -14,7 +14,7 @@ import { URL } from "../../constants/config";
 import { filterTypes, modifierTypes } from "../../constants/types";
 
 // Modules
-import ajax from "../../lib/ajax";
+import request from "../../lib/request";
 
 export default class CreateEmail extends React.Component {
 
@@ -32,9 +32,9 @@ export default class CreateEmail extends React.Component {
         
         // Load modifiers / filters if needed
         if (!this.props.data.filters.length || !this.props.data.modifiers.length) {
-            ajax({
+            request({
                 url: URL + "api/modifiers", success: (modifiers) => {
-                    ajax({
+                    request({
                         url: URL + "api/filters", success: (filters) => {
                             this.props.dispatch(loadModifiers(modifiers.modifiers));
                             this.props.dispatch(loadFilters(filters.filters));
@@ -125,7 +125,7 @@ export default class CreateEmail extends React.Component {
             }
         }
 
-        ajax({
+        request({
             url: URL + "api/emails", method: "POST", data,
             success: (res) => {
                 if (res.error) {

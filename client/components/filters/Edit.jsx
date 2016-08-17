@@ -8,7 +8,7 @@ import { URL } from "../../constants/config";
 import { filterTypes } from "../../constants/types";
 
 // Modules
-import ajax from "../../lib/ajax";
+import request from "../../lib/request";
 
 export default class UpdateFilter extends React.Component {
 
@@ -23,7 +23,7 @@ export default class UpdateFilter extends React.Component {
             type: 0, id: location.hash.split('/')[2], loading: true
         };
         
-        ajax({
+        request({
             url: URL + "api/filters/" + this.state.id, success: (res) => {
                 if (res.err) {
                     swal("Error", "Could not load data", "error");
@@ -65,7 +65,7 @@ export default class UpdateFilter extends React.Component {
         else
             data.find = this.refs.find.value;
 
-        ajax({
+        request({
             url: URL + "api/filters/" + this.state.id, method: "PUT",
             data, success: (res) => {
                 if (res.error) {
@@ -98,7 +98,7 @@ export default class UpdateFilter extends React.Component {
 
         // All emails need to be loaded
         if (email === undefined) {
-            ajax({
+            request({
                 url: URL + "api/emails", success: (res) => {
                     this._updateEmails(id, res.emails, update, index);
                 }
@@ -106,7 +106,7 @@ export default class UpdateFilter extends React.Component {
         }
         // Full email data needs to be loaded
         else if (email.toEmail === undefined) {
-            ajax({
+            request({
                 url: URL + "api/emails/" + email.id, success: (res) => {
                     email = Object.assign(email, res);
 
@@ -128,7 +128,7 @@ export default class UpdateFilter extends React.Component {
                 return mod.id;
             }).join(',');
             
-            ajax({
+            request({
                 url: URL + "api/emails/" + email.id, method: "PUT",
                 data: {
                     name: email.name, description: email.description, to: mail.toEmail,

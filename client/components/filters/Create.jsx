@@ -8,7 +8,7 @@ import { URL } from "../../constants/config";
 import { filterTypes } from "../../constants/types";
 
 // Modules
-import ajax from "../../lib/ajax";
+import request from "../../lib/request";
 
 export default class CreateFilter extends React.Component {
 
@@ -39,7 +39,7 @@ export default class CreateFilter extends React.Component {
         else
             data.find = this.refs.find.value;
 
-        ajax({
+        request({
             url: URL + "api/filters", method: "POST", data,
             success: (res) => {
                 if (res.error) {

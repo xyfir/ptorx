@@ -8,7 +8,7 @@ import { URL } from "../../constants/config";
 import { modifierTypes } from "../../constants/types";
 
 // Modules
-import ajax from "../../lib/ajax";
+import request from "../../lib/request";
 
 export default class CreateModifier extends React.Component {
 
@@ -53,7 +53,7 @@ export default class CreateModifier extends React.Component {
                 }; break;
         }
 
-        ajax({
+        request({
             url: URL + "api/modifiers", method: "POST", data: Object.assign({}, data, data2),
             success: (res) => {
                 if (res.error) {

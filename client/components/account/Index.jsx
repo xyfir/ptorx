@@ -7,7 +7,7 @@ import Purchase from "./Purchase";
 import { deleteEmail, addEmail } from "../../actions/creators/account/email";
 
 // Modules
-import ajax from "../../lib/ajax";
+import request from "../../lib/request";
 
 // Constants
 import { URL } from "../../constants/config";
@@ -24,7 +24,7 @@ export default class Account extends React.Component {
     onAddEmail() {
         const email = this.refs.email.value;
         
-        ajax({
+        request({
             url: URL + "api/account/email/" + email,
             method: "POST", success: (res) => {
                 if (res.error) {
@@ -46,7 +46,7 @@ export default class Account extends React.Component {
             confirmButtonColor: "#DD6B55",
             confirmButtonText: "Yes, delete it!"
         }, () => {
-            ajax({
+            request({
                 url: URL + "api/account/email/" + id,
                 method: "DELETE", success: (res) => {
                     if (res.error) {

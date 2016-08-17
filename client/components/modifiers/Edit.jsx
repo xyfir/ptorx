@@ -8,7 +8,7 @@ import { URL } from "../../constants/config";
 import { modifierTypes } from "../../constants/types";
 
 // Modules
-import ajax from "../../lib/ajax";
+import request from "../../lib/request";
 
 export default class UpdateModifier extends React.Component {
 
@@ -22,7 +22,7 @@ export default class UpdateModifier extends React.Component {
             type: 0, id: location.hash.split('/')[2], loading: true
         };
 
-        ajax({
+        request({
             url: URL + "api/modifiers/" + this.state.id, success: (res) => {
                 if (res.err) {
                     swal("Error", "Could not load data", "error");
@@ -79,7 +79,7 @@ export default class UpdateModifier extends React.Component {
                 }; break;
         }
 
-        ajax({
+        request({
             url: URL + "api/modifiers/" + this.state.id, method: "PUT",
             data: Object.assign({}, data, data2), success: (res) => {
                 if (res.error) {

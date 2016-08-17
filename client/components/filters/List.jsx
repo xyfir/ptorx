@@ -11,7 +11,7 @@ import { filterTypes } from "../../constants/types";
 import { URL } from "../../constants/config";
 
 // Modules
-import ajax from "../../lib/ajax";
+import request from "../../lib/request";
 import findMatches from "../../lib/find-matching";
 
 // Components
@@ -29,7 +29,7 @@ export default class FilterList extends React.Component {
         this.onSearch = this.onSearch.bind(this);
 
         if (props.data.filters.length == 0) {
-            ajax({
+            request({
                 url: URL + "api/filters", success: (res) => {
                     this.props.dispatch(loadFilters(res.filters));
                 }
@@ -52,7 +52,7 @@ export default class FilterList extends React.Component {
             confirmButtonColor: "#DD6B55",
             confirmButtonText: "Yes, delete it!"
         }, () => {
-            ajax({
+            request({
                 url: URL + "api/filters/" + id,
                 method: "DELETE", success: (res) => {
                     if (res.error) {
@@ -91,7 +91,7 @@ export default class FilterList extends React.Component {
 
         // All emails need to be loaded
         if (email === undefined) {
-            ajax({
+            request({
                 url: URL + "api/emails", success: (res) => {
                     this._updateEmails(id, res.emails, update, index);
                 }
@@ -99,7 +99,7 @@ export default class FilterList extends React.Component {
         }
         // Full email data needs to be loaded
         else if (email.toEmail === undefined) {
-            ajax({
+            request({
                 url: URL + "api/emails/" + email.id, success: (res) => {
                     email = Object.assign(email, res);
 
@@ -123,7 +123,7 @@ export default class FilterList extends React.Component {
                 return mod.id;
             }).join(',');
             
-            ajax({
+            request({
                 url: URL + "api/emails/" + email.id, method: "PUT",
                 data: {
                     name: email.name, description: email.description, to: mail.toEmail,

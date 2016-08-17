@@ -4,7 +4,7 @@ import React from "react";
 import { URL } from "../../../constants/config";
 
 // Modules
-import ajax from "../../../lib/ajax";
+import request from "../../../lib/request";
 
 export default class SendMessage extends React.Component {
     
@@ -17,7 +17,7 @@ export default class SendMessage extends React.Component {
     }
     
     onSend() {
-        ajax({
+        request({
             url: `${URL}api/emails/${this.state.id}/messages/`,
             method: "POST", data: {
                 to: this.refs.to.value, subject: this.refs.subject.value,

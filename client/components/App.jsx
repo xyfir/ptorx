@@ -14,7 +14,7 @@ import Emails from "./emails/index";
 // Modules
 import parseHashQuery from "lib/parse-hash-query";
 import setState from "lib/set-state";
-import ajax from "lib/ajax";
+import request from "lib/request";
 
 // Constants
 import { CREATE_REDIRECT_EMAIL } from "constants/views";
@@ -46,7 +46,7 @@ class App extends React.Component {
                 emails: [], view: CREATE_REDIRECT_EMAIL
             };
 
-            ajax({
+            request({
                 url: URL + "api/account", success: (res) => {
                     if (!res.loggedIn) {
                         location.href = XACC + "login/14";
@@ -75,7 +75,7 @@ class App extends React.Component {
 
         // Attempt to login using XID/AUTH or skip to initialize()
         if (q.xid && q.auth) {
-            ajax({
+            request({
                 url: URL + "api/account/login",
                 method: "POST", data: q,
                 success: (res) => {

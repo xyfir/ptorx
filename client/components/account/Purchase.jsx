@@ -7,7 +7,7 @@ import { purchaseSubscription } from "../../actions/creators/account/subscriptio
 import { URL, STRIPE_KEY_PUB } from "../../constants/config";
 
 // Modules
-import ajax from "../../lib/ajax";
+import request from "../../lib/request";
 
 export default class Purchase extends React.Component {
 
@@ -37,7 +37,7 @@ export default class Purchase extends React.Component {
                 return;
             }
             
-            ajax({
+            request({
                 url: URL + "api/account/subscription",
                 method: "PUT", data, success: (res) => {
                     if (res.err) {

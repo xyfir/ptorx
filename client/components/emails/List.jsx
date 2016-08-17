@@ -9,7 +9,7 @@ import {
 import { URL } from "../../constants/config";
 
 // Modules
-import ajax from "../../lib/ajax";
+import request from "../../lib/request";
 import findMatches from "../../lib/find-matching";
 
 // Components
@@ -27,7 +27,7 @@ export default class EmailList extends React.Component {
         this.onSearch = this.onSearch.bind(this);
 
         if (props.data.emails.length == 0) {
-            ajax({
+            request({
                 url: URL + "api/emails", success: (res) => {
                     this.props.dispatch(loadEmails(res.emails));
                 }
@@ -48,7 +48,7 @@ export default class EmailList extends React.Component {
             confirmButtonColor: "#DD6B55",
             confirmButtonText: "Yes, delete it!"
         }, () => {
-            ajax({
+            request({
                 url: URL + "api/emails/" + id,
                 method: "DELETE", success: (res) => {
                     if (res.error)
