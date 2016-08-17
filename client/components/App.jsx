@@ -3,22 +3,23 @@ import { render } from "react-dom";
 
 // Redux store / reducers
 import { createStore } from "redux";
-import reducers from "../reducers/";
+import reducers from "reducers/index";
 
 // Components
-import Modifiers from "./modifiers/";
-import Account from "./account/";
-import Filters from "./filters/";
-import Emails from "./emails/";
+import Modifiers from "./modifiers/index";
+import Account from "./account/index";
+import Filters from "./filters/index";
+import Emails from "./emails/index";
 
 // Modules
-import setState from "../lib/set-state";
-import ajax from "../lib/ajax";
+import parseHashQuery from "lib/parse-hash-query";
+import setState from "lib/set-state";
+import ajax from "lib/ajax";
 
 // Constants
-import { CREATE_REDIRECT_EMAIL } from "../constants/views";
-import { INITIALIZE_STATE } from "../actions/types/";
-import { URL, XACC } from "../constants/config";
+import { CREATE_REDIRECT_EMAIL } from "constants/views";
+import { URL, XACC, LOG_STATE } from "constants/config";
+import { INITIALIZE_STATE } from "actions/types/index";
 
 let store = createStore(reducers);
 
@@ -31,7 +32,7 @@ class App extends React.Component {
             this.setState(store.getState());
         });
 
-        if (location.href.indexOf("http://localhost") == 0) {
+        if (LOG_STATE) {
             store.subscribe(() => {
                 console.log(store.getState());
             });
@@ -47,53 +48,50 @@ class App extends React.Component {
 
             ajax({
                 url: URL + "api/account", success: (res) => {
-                    state.account = res;
-                    
-                    this.state = state;
+                    if (!res.loggedIn) {
+                        location.href = XACC + "login/14";
+                    }
+                    else {
+                        state.account = res;
 
-                    // Push initial state to store
-                    store.dispatch({
-                        type: INITIALIZE_STATE, state
-                    });
+                        this.state = state;
 
-                    // Set state based on current url hash
-                    setState(store);
-                    
-                    // Update state according to url hash
-                    window.onhashchange = () => setState(store);
+                        // Push initial state to store
+                        store.dispatch({
+                            type: INITIALIZE_STATE, state
+                        });
+
+                        // Set state based on current url hash
+                        setState(store);
+                        
+                        // Update state according to url hash
+                        window.onhashchange = () => setState(store);
+                    }
                 }
             })            
         };
 
+        const q = parseHashQuery();
+
         // Attempt to login using XID/AUTH or skip to initialize()
-        if (location.href.indexOf("xid=") > -1 && location.href.indexOf("auth=") > -1) {
-            // Login using XID/AUTH_TOKEN
-            let xid = location.href.substring(
-                location.href.lastIndexOf("?xid=") + 5,
-                location.href.lastIndexOf("&auth")
-            );
-            let auth = location.href.substring(
-                location.href.lastIndexOf("&auth=") + 6
-            );
-            
+        if (q.xid && q.auth) {
             ajax({
                 url: URL + "api/account/login",
-                method: "POST",
-                data: { xid, auth },
+                method: "POST", data: q,
                 success: (res) => {
-                    if (res.error ) {
+                    if (res.error) {
                         location.href = XACC + "login/14";
                     }
                     else {
                         initialize();
-                        history.pushState({}, '', URL + "panel/");
+                        location.hash = location.hash.split('?')[0];
                     }
                 }
             });
         }
         else {
             initialize();
-        }        
+        }
     }
 
     render() {
