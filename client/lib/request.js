@@ -1,11 +1,12 @@
-export default function (options) {
+export default function(options) {
+    
     let request = new XMLHttpRequest();
     
     // Set method and URL
     request.open(options.method || "GET", options.url, true);
     
     // Handle response
-    request.onload = function () {
+    request.onload = function() {
         if (this.status >= 200 && this.status < 400) {
             switch (options.dataType) {
                 case "text":
@@ -18,11 +19,6 @@ export default function (options) {
             options.error(this.responseText, this.status);
         }
     };
-    
-    // Set session cookie
-    request.withCredentials = true;
-    let session = document.cookie.replace(/(?:(?:^|.*;\s*)connect.sid\s*\=\s*([^;]*).*$)|^.*$/, "$1");
-    request.setRequestHeader("Cookie", "connect.sid=" + session);
     
     // Send request + data
     if (options.method == undefined || options.method == "GET") {
@@ -40,4 +36,5 @@ export default function (options) {
         request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
         request.send(query);
     }
+    
 };
