@@ -1,8 +1,8 @@
-﻿import db = require("../../../lib/db");
+﻿const db = require("lib/db");
 
-let config = require("../../../config");
+let config = require("config");
 let mailgun = require("mailgun-js")({
-    apiKey: config.keys.mailgun, domain: "mail.ptorx.com"
+    apiKey: config.keys.mailgun, domain: "ptorx.com"
 });
 
 /*
@@ -14,14 +14,14 @@ let mailgun = require("mailgun-js")({
     DESCRIPTION
         Sends an email from a REDIRECT email
 */
-export = function (req, res) {
+module.exports = function(req, res) {
 
     if (Date.now() > req.session.subscription) {
         res.json({ error: true, message: "Free members cannot send emails from Ptorx" });
         return;
     }
 
-    let sql: string = `SELECT address FROM redirect_emails WHERE email_id = ? AND user_id = ?`;
+    let sql = `SELECT address FROM redirect_emails WHERE email_id = ? AND user_id = ?`;
 
     db(cn => cn.query(sql, [req.params.email, req.session.uid], (err, rows) => {
         cn.release();

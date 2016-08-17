@@ -1,4 +1,4 @@
-﻿import db = require("../../../lib/db");
+﻿const db = require("lib/db");
 
 /*
     GET api/emails/:email/messages
@@ -7,7 +7,7 @@
     DESCRIPTION
         Return basic data on any stored messages for email
 */
-export = function (req, res) {
+module.exports = function(req, res) {
 
     let sql: string = `
         SELECT message_id as id, received, subject FROM messages

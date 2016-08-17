@@ -1,4 +1,4 @@
-﻿import db = require("../../lib/db");
+﻿const db = require("lib/db");
 
 /*
     GET api/filters
@@ -9,9 +9,9 @@
     DESCRIPTION
         Returns basic information for all filters linked to account
 */
-export = function (req, res) {
+module.exports = function(req, res) {
 
-    let sql: string = `
+    let sql = `
         SELECT filter_id as id, name, description, type
         FROM filters WHERE user_id = ? 
     `;

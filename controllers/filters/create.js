@@ -1,6 +1,6 @@
-﻿import escapeRegExp = require("escape-string-regexp");
-import validate = require("../../lib/filter/validate");
-import db = require("../../lib/db");
+﻿const escapeRegExp = require("escape-string-regexp");
+const validate = require("lib/filter/validate");
+const db = require("lib/db");
 
 /*
     POST api/filters
@@ -13,7 +13,7 @@ import db = require("../../lib/db");
     DESCRIPTION
         Create a new filter
 */
-export = function (req, res) {
+module.exports = function(req, res) {
 
     let response = validate(req.body);
 
@@ -31,7 +31,7 @@ export = function (req, res) {
         accept_on_match: !!(+req.body.acceptOnMatch)
     };
 
-    let sql: string = `
+    let sql = `
         INSERT INTO filters SET ?
     `;
     db(cn => cn.query(sql, insert, (err, result) => {

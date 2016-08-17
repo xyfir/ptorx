@@ -1,5 +1,5 @@
-﻿import clearCache = require("../../lib/email/clear-cache");
-import db = require("../../lib/db");
+﻿const clearCache = require("lib/email/clear-cache");
+const db = require("lib/db");
 
 /*
     DELETE api/filters/:filter
@@ -8,9 +8,9 @@ import db = require("../../lib/db");
     DESCRIPTION
         Deletes a filter
 */
-export = function (req, res) {
+module.exports = function(req, res) {
 
-    let sql: string = `
+    let sql = `
         SELECT type, accept_on_match as acceptOnMatch FROM filters WHERE filter_id = ? AND user_id = ?
     `;
     db(cn => cn.query(sql, [req.params.filter, req.session.uid], (err, rows) => {
@@ -21,7 +21,7 @@ export = function (req, res) {
             const data = rows[0];
 
             // Delete filter, linked entries, and return response to user
-            const deleteFilter = (clear?: boolean, update?: number[]) => {
+            const deleteFilter = (clear, update) => {
                 sql = "DELETE FROM filters WHERE filter_id = ?";
                 cn.query(sql, [req.params.filter], (err, result) => {
                     cn.release();
@@ -58,7 +58,7 @@ export = function (req, res) {
                 }
                 // Filter was linked to email(s)
                 else {
-                    let update: number[] = rows.map(email => { return email.id; });
+                    let update = rows.map(email => email.id);
 
                     // MailGun routes need to be updatedf
                     if ([1, 2, 3, 6].indexOf(data.type) > -1 && !!(+data.acceptOnMatch))

@@ -1,14 +1,14 @@
-﻿import validateModifiers = require("../../lib/email/validate-modifiers");
-import buildExpression = require("../../lib/mg-route/build-expression");
-import validateFilters = require("../../lib/email/validate-filters");
-import buildAction = require("../../lib/mg-route/build-action");
-import clearCache = require("../../lib/email/clear-cache");
-import validate = require("../../lib/email/validate");
-import db = require("../../lib/db");
+﻿const validateModifiers = require("lib/email/validate-modifiers");
+const buildExpression = require("lib/mg-route/build-expression");
+const validateFilters = require("lib/email/validate-filters");
+const buildAction = require("lib/mg-route/build-action");
+const clearCache = require("lib/email/clear-cache");
+const validate = require("lib/email/validate");
+const db = require("lib/db");
 
-let config = require("../../config");
+let config = require("config");
 let mailgun = require("mailgun-js")({
-    apiKey: config.keys.mailgun, domain: "mail.ptorx.com"
+    apiKey: config.keys.mailgun, domain: "ptorx.com"
 });
 
 /*
@@ -22,16 +22,16 @@ let mailgun = require("mailgun-js")({
     DESCRIPTION
         Updates a redirect email, linked entries, and MailGun route
 */
-export = function (req, res) {
+module.exports = function(req, res) {
 
-    let response: string = validate(req.body, req.session.uid);
+    let response = validate(req.body, req.session.uid);
 
     if (response !== "ok") {
         res.json({ error: true, message: response });
         return;
     }
 
-    let sql: string = "";
+    let sql = "";
 
     db(cn => {
         /* Extended Validation */
@@ -59,8 +59,8 @@ export = function (req, res) {
                 }
                 // Validate filters and modifiers
                 else {
-                    let modifiers: number[] = req.body.modifiers.split(',');
-                    let filters: number[] = req.body.filters.split(',')
+                    let modifiers = req.body.modifiers.split(',');
+                    let filters = req.body.filters.split(',')
 
                     validateFilters(filters, req, cn, (err, message) => {
                         if (err) {
@@ -105,7 +105,7 @@ export = function (req, res) {
                 }
 
                 // Build MailGun route expression(s)
-                buildExpression(data.address, data.filters, cn, (expression: string) => {
+                buildExpression(data.address, data.filters, cn, (expression) => {
                     // Update MailGun route
                     mailgun.routes(data.routeId).update({
                         priority: (!(+req.body.noSpamFilter) ? 2 : 0), description: "",
@@ -127,7 +127,7 @@ export = function (req, res) {
         };
 
         /* Create entries in linked_modifiers|filters */
-        const step3 = (filters: number[], modifiers: number[]) => {
+        const step3 = (filters, modifiers) => {
             // Filters/modifiers already linked will not be inserted twice due to unique constraint
             sql = "INSERT INTO linked_filters (filter_id, email_id) VALUES ";
             filters.forEach(filter => sql += `('${+filter}', '${+req.params.email}'), `);

@@ -1,4 +1,4 @@
-﻿import db = require("../../lib/db");
+﻿const db = require("lib/db ");
 
 /*
     GET api/emails/:email
@@ -15,10 +15,10 @@
     DESCRIPTION
         Returns data for a specific REDIRECT email
 */
-export = function (req, res) {
+module.exports = function(req, res) {
 
     // Ensure user owns email and grab toEmail/saveMail
-    let sql: string = `
+    let sql = `
         SELECT email_id as id, name, description, address, save_mail as saveMail,
         spam_filter as spamFilter, (
             SELECT address FROM main_emails WHERE email_id IN (

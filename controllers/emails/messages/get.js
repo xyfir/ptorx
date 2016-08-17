@@ -1,6 +1,6 @@
-﻿import db = require("../../../lib/db");
+﻿const db = require("lib/db");
 
-let config  = require("../../../config");
+let config  = require("config");
 let mailgun = require("mailgun-js")({
     apiKey: config.keys.mailgun, domain: "mail.ptorx.com"
 });
@@ -15,9 +15,9 @@ let mailgun = require("mailgun-js")({
     DESCRIPTION
         Return message content
 */
-export = function (req, res) {
+module.exports = function(req, res) {
     
-    let sql: string = `
+    let sql = `
         SELECT message_key as mkey FROM messages WHERE message_id = ? AND email_id IN (
             SELECT email_id FROM redirect_emails WHERE email_id = ? AND user_id = ?
         ) AND received + 255600 > UNIX_TIMESTAMP()

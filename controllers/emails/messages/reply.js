@@ -1,8 +1,8 @@
-﻿import db = require("../../../lib/db");
+﻿const db = require("lib/db");
 
-let config = require("../../../config");
+let config = require("config");
 let mailgun = require("mailgun-js")({
-    apiKey: config.keys.mailgun, domain: "mail.ptorx.com"
+    apiKey: config.keys.mailgun, domain: "ptorx.com"
 });
 
 /*
@@ -14,15 +14,17 @@ let mailgun = require("mailgun-js")({
     DESCRIPTION
         Send reply to a stored message
 */
-export = function (req, res) {
+module.exports = function(req, res) {
 
     if (Date.now() > req.session.subscription) {
-        res.json({ error: true, message: "Free members cannot send replies from Ptorx" });
-        return;
+        res.json({
+            error: true,
+            message: "Free members cannot send replies from Ptorx"
+        }); return;
     }
 
     // Get message_key and address
-    let sql: string = `
+    let sql = `
         SELECT address, (
             SELECT message_key FROM messages WHERE message_id = ? AND email_id = ?
         ) as mkey FROM redirect_emails WHERE email_id = ? AND user_id = ?

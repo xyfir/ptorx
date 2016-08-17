@@ -1,4 +1,4 @@
-﻿import db = require("../../lib/db");
+﻿const db = require("lib/db");
 
 /*
     GET api/emails
@@ -9,9 +9,9 @@
     DESCRIPTION
         Returns basic information for all REDIRECT emails linked to account
 */
-export = function (req, res) {
+module.exports = function(req, res) {
 
-    let sql: string = `
+    let sql = `
         SELECT email_id as id, name, description, address
         FROM redirect_emails WHERE user_id = ?
     `;

@@ -1,9 +1,9 @@
-﻿import clearCache = require("../../lib/email/clear-cache");
-import db = require("../../lib/db");
+﻿const clearCache = require("lib/email/clear-cache");
+const db = require("lib/db ");
 
-let config = require("../../config");
+let config = require("config");
 let mailgun = require("mailgun-js")({
-    apiKey: config.keys.mailgun, domain: "mail.ptorx.com"
+    apiKey: config.keys.mailgun, domain: "ptorx.com"
 });
 
 /*
@@ -13,9 +13,9 @@ let mailgun = require("mailgun-js")({
     DESCRIPTION
         Deletes a redirect email, its MailGun route, and any entries in linked_modifiers|filters
 */
-export = function (req, res) {
+module.exports = function(req, res) {
 
-    let sql: string = `
+    let sql = `
         SELECT mg_route_id as route FROM redirect_emails WHERE email_id = ? AND user_id = ?
     `;
     db(cn => cn.query(sql, [req.params.email, req.session.uid], (err, rows) => {
@@ -36,7 +36,7 @@ export = function (req, res) {
                 }
                 else {
                     clearCache(req.params.email);
-                    mailgun.routes(rows[0].route).delete(function (err, body) { });
+                    mailgun.routes(rows[0].route).delete((err, body) => {});
 
                     res.json({ error: false });
 

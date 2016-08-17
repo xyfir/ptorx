@@ -1,7 +1,7 @@
-﻿import escapeRegExp = require("escape-string-regexp");
-import clearCache = require("../../lib/email/clear-cache");
-import validate = require("../../lib/filter/validate");
-import db = require("../../lib/db");
+﻿const escapeRegExp = require("escape-string-regexp");
+const clearCache = require("lib/email/clear-cache");
+const validate = require("lib/filter/validate");
+const db = require("lib/db");
 
 /*
     PUT api/filters/:filter
@@ -14,7 +14,7 @@ import db = require("../../lib/db");
     DESCRIPTION
         Update a filter's data
 */
-export = function (req, res) {
+module.exports = function(req, res) {
 
     let response = validate(req.body);
 
@@ -26,7 +26,7 @@ export = function (req, res) {
     if (!req.body.useRegex)
         req.body.find = escapeRegExp(req.body.find);
 
-    let sql: string = `
+    let sql = `
         SELECT type, accept_on_match as acceptOnMatch FROM filters
         WHERE filter_id = ? AND user_id = ?
     `;
@@ -66,7 +66,7 @@ export = function (req, res) {
                     res.json({ error: false });
                 }
                 else {
-                    let update: number[] = rows.map(email => { return email.id; });
+                    let update = rows.map(email => email.id);
 
                     // Clear from Redis cache
                     update.forEach(email => clearCache(email));

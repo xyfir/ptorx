@@ -1,4 +1,4 @@
-﻿import db = require("../../lib/db");
+﻿const db = require("lib/db");
 
 /*
     GET api/filters/:filter
@@ -11,9 +11,9 @@
     DESCRIPTION
         Returns data for a specific filter
 */
-export = function (req, res) {
+module.exports = function(req, res) {
 
-    let sql: string = `
+    let sql = `
         SELECT filter_id as id, name, description, type, find, accept_on_match as acceptOnMatch,
         use_regex as regex FROM filters WHERE filter_id = ? AND user_id = ?
     `;
