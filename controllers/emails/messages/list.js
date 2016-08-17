@@ -9,7 +9,7 @@
 */
 module.exports = function(req, res) {
 
-    let sql: string = `
+    let sql = `
         SELECT message_id as id, received, subject FROM messages
         WHERE email_id IN (
             SELECT email_id FROM redirect_emails WHERE email_id = ? AND user_id = ?
