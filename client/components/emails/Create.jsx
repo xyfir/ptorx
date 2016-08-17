@@ -162,7 +162,7 @@ export default class CreateEmail extends React.Component {
                         <div>
                             <label>Address</label>
                             <span className="input-description">Customize your Ptorx address or leave it blank for a randomly generated address.</span>
-                            <input type="text" ref="address" placeholder="user@mail.ptorx.com" />
+                            <input type="text" ref="address" placeholder="user@ptorx.com" />
                         </div>
                     ) : (
                         <div />
