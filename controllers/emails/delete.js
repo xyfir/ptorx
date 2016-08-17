@@ -1,5 +1,5 @@
 ﻿const clearCache = require("lib/email/clear-cache");
-const db = require("lib/db ");
+const db = require("lib/db");
 
 let config = require("config");
 let mailgun = require("mailgun-js")({

@@ -4,7 +4,7 @@ const validateFilters = require("lib/email/validate-filters");
 const buildAction = require("lib/mg-route/build-action");
 const validate = require("lib/email/validate");
 const generate = require("lib/email/generate");
-const db = require("lib/db ");
+const db = require("lib/db");
 
 let config = require("config");
 let mailgun = require("mailgun-js")({
