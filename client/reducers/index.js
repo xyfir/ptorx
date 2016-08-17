@@ -5,7 +5,7 @@ import filters from "./filters";
 import account from "./account";
 import emails from "./emails";
 
-import { INITIALIZE_STATE, CHANGE_VIEW } from "../actions/types/";
+import { INITIALIZE_STATE, CHANGE_VIEW } from "actions/types/index";
 
 export default function (state, action) {
 
