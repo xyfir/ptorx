@@ -3,11 +3,19 @@
 /*
     GET api/account
     RETURN
-        { emails: [{ id: number, address: string }], subscription: number }
+        {
+            loggedIn: boolean, emails?: [{ id: number, address: string }],
+            subscription?: number
+        }
     DESCRIPTION
         Returns all MAIN emails on account and subscription expiration
 */
 module.exports = function(req, res) {
+
+    if (!req.session.uid) {
+        res.json({ loggedIn: false });
+        return;
+    }
 
     let sql = `
         SELECT email_id as id, address FROM main_emails WHERE user_id = ?
@@ -15,10 +23,10 @@ module.exports = function(req, res) {
     db(cn => cn.query(sql, [req.session.uid], (err, rows) => {
         cn.release();
 
-        if (err || !rows.length)
-            res.json({ emails: [], subscription: req.session.subscription });
-        else
-            res.json({ emails: rows, subscription: req.session.subscription });
+        res.json({
+            loggedIn: true, emails: rows || [],
+            subscription: req.session.subscription
+        });
     }));
 
 };
