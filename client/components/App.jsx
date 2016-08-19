@@ -49,7 +49,7 @@ class App extends React.Component {
             request({
                 url: URL + "api/account", success: (res) => {
                     if (!res.loggedIn) {
-                        location.href = XACC + "app/#/login/14";
+                        location.href = XACC + "app/#/login/13";
                     }
                     else {
                         state.account = res;
@@ -80,7 +80,7 @@ class App extends React.Component {
                 method: "POST", data: q,
                 success: (res) => {
                     if (res.error) {
-                        location.href = XACC + "app/#/login/14";
+                        location.href = XACC + "app/#/login/13";
                     }
                     else {
                         initialize();
