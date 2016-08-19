@@ -1,7 +1,7 @@
 import React from "react";
 
 // Components
-import Messages from "./messages/index";
+import Messages from "./messages/Index";
 import Create from "./Create";
 import Edit from "./Edit";
 import List from "./List";

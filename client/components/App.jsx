@@ -6,10 +6,10 @@ import { createStore } from "redux";
 import reducers from "reducers/index";
 
 // Components
-import Modifiers from "./modifiers/index";
-import Account from "./account/index";
-import Filters from "./filters/index";
-import Emails from "./emails/index";
+import Modifiers from "./modifiers/Index";
+import Account from "./account/Index";
+import Filters from "./filters/Index";
+import Emails from "./emails/Index";
 
 // Modules
 import parseHashQuery from "lib/parse-hash-query";
