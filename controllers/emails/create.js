@@ -43,7 +43,7 @@ module.exports = function(req, res) {
                 if (Date.now() > req.session.subscription) {
                     sql = "SELECT COUNT(email_id) as emails FROM redirect_emails WHERE user_id = ?";
                     cn.query(sql, [req.session.uid], (err, rows) => {
-                        if (rows[0].emails > 20) {
+                        if (rows[0].emails >= 20) {
                             cn.release();
                             res.json({ error: true, message: "Free members limited to 20 redirect emails" });
                         }
