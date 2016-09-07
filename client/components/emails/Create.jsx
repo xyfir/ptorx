@@ -54,7 +54,7 @@ export default class CreateEmail extends React.Component {
                 showCancelButton: true,
                 confirmButtonColor: "#DD6B55",
                 confirmButtonText: "Continue",
-                closeOnConfirm: false
+                closeOnConfirm: true
             }, () => {
                 this.setState({ showAdvanced: false });
             });
