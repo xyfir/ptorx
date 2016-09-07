@@ -10,16 +10,22 @@
 module.exports = function(req, res) {
 
     let sql = `
-        SELECT message_id as id, received, subject FROM messages
-        WHERE email_id IN (
-            SELECT email_id FROM redirect_emails WHERE email_id = ? AND user_id = ?
-        ) AND (received + 255600) > UNIX_TIMESTAMP()
+        DELETE FROM messages WHERE received + 255600 < UNIX_TIMESTAMP()
     `;
 
-    db(cn => cn.query(sql, [req.params.email, req.session.uid], (err, rows) => {
-        cn.release();
-        
-        res.json({ messages: (err || !rows.length) ? [] : rows });
+    db(cn => cn.query(sql, (err, result) => {
+        sql = `
+            SELECT message_id as id, received, subject FROM messages
+            WHERE email_id IN (
+                SELECT email_id FROM redirect_emails WHERE email_id = ? AND user_id = ?
+            )
+        `;
+
+        cn.query(sql, [req.params.email, req.session.uid], (err, rows) => {
+            cn.release();
+
+            res.json({ messages: (err || !rows.length) ? [] : rows });
+        });
     }));
 
 };
