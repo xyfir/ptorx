@@ -1,4 +1,5 @@
 ﻿const request = require("request");
+const crypto = require("lib/crypto");
 const db = require("lib/db");
 
 const config = require("config");
@@ -8,18 +9,24 @@ const config = require("config");
     REQUIRED
         xid: string, auth: string
     RETURN
-        { error: boolean }
+        { error: boolean, accessToken?: string }
     DESCRIPTION
         Register or login user
 */
 module.exports = function(req, res) {
 
     let url = config.addresses.xacc
-        + "api/service/13/" + config.keys.xacc
+        + "api/service/13"
+        + "/" + config.keys.xacc
         + "/" + req.body.xid
         + "/" + req.body.auth;
 
     request(url, (err, response, body) => {
+        if (err) {
+            res.json({ error: true });
+            return;
+        }
+
         body = JSON.parse(body);
 
         if (body.error) {
@@ -48,7 +55,12 @@ module.exports = function(req, res) {
                         req.session.xadid = body.xadid;
                         req.session.subscription = 0;
 
-                        res.json({ error: false });
+                        res.json({
+                            error: false, accessToken: crypto.encrypt(
+                                result.insertId + "-" + body.accessToken,
+                                config.keys.accessToken
+                            )
+                        });
                     }
                 });
             }
@@ -66,7 +78,12 @@ module.exports = function(req, res) {
                         req.session.xadid = rows[0].xad_id;
                         req.session.subscription = rows[0].subscription;
 
-                        res.json({ error: false });
+                        res.json({
+                            error: false, accessToken: crypto.encrypt(
+                                rows[0].user_id + "-" + body.accessToken,
+                                config.keys.accessToken
+                            )
+                        });
                     }
                 });
             }
