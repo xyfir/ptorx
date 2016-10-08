@@ -59,7 +59,7 @@ module.exports = function(req, res) {
                 }
                 // Validate access token with Xyfir Accounts
                 else {
-                    let url = config.address.xacc + "api/service/13/"
+                    let url = config.addresses.xacc + "api/service/13/"
                     + `${config.keys.xacc}/${rows[0].xyfir_id}/${token[1]}`;
 
                     request(url, (err, response, body) => {
