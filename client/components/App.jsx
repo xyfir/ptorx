@@ -18,7 +18,7 @@ import request from "lib/request";
 
 // Constants
 import { CREATE_REDIRECT_EMAIL } from "constants/views";
-import { URL, XACC, LOG_STATE } from "constants/config";
+import { URL, XACC, LOG_STATE, ENVIRONMENT } from "constants/config";
 import { INITIALIZE_STATE } from "actions/types/index";
 
 let store = createStore(reducers);
@@ -39,6 +39,15 @@ class App extends React.Component {
         }
 
         const initialize = () => {
+            // Access token is generated upon a successful login
+            // Used to create new session without forcing login each time
+            const token = localStorage.getItem("access_token") || "";
+
+            // Access token is required
+            if (!token && ENVIRONMENT != "dev") {
+                location.href = XACC + "app/#/login/13";
+            }
+
             let state = {
                 modifiers: [], filters: [], account: {
                     emails: [], subscription: 0
@@ -46,29 +55,27 @@ class App extends React.Component {
                 emails: [], view: CREATE_REDIRECT_EMAIL
             };
 
-            request({
-                url: URL + "api/account", success: (res) => {
-                    if (!res.loggedIn) {
-                        location.href = XACC + "app/#/login/13";
-                    }
-                    else {
-                        state.account = res;
-
-                        this.state = state;
-
-                        // Push initial state to store
-                        store.dispatch({
-                            type: INITIALIZE_STATE, state
-                        });
-
-                        // Set state based on current url hash
-                        setState(store);
-                        
-                        // Update state according to url hash
-                        window.onhashchange = () => setState(store);
-                    }
+            request({url: URL + "api/account?token=" + token, success: (res) => {
+                if (!res.loggedIn) {
+                    location.href = XACC + "app/#/login/13";
                 }
-            })            
+                else {
+                    state.account = res;
+
+                    this.state = state;
+
+                    // Push initial state to store
+                    store.dispatch({
+                        type: INITIALIZE_STATE, state
+                    });
+
+                    // Set state based on current url hash
+                    setState(store);
+                    
+                    // Update state according to url hash
+                    window.onhashchange = () => setState(store);
+                }
+            }});            
         };
 
         const q = parseHashQuery();
@@ -83,6 +90,7 @@ class App extends React.Component {
                         location.href = XACC + "app/#/login/13";
                     }
                     else {
+                        localStorage.setItem("access_token", res.accessToken);
                         initialize();
                         location.hash = location.hash.split('?')[0];
                     }
