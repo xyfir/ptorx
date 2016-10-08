@@ -1,5 +1,5 @@
 ﻿const escapeRegExp = require("escape-string-regexp");
-const encrypt = require("lib/encrypt");
+const crypto = require("lib/crypto");
 const getInfo = require("lib/email/get-info");
 const db = require("lib/db");
 
@@ -76,9 +76,9 @@ module.exports = function(req, res) {
         data.modifiers.forEach(modifier => {
             switch (modifier.type) {
                 case 1: // Encrypt
-                    req.body["body-plain"] = encrypt(req.body["body-plain"], modifier.data);
+                    req.body["body-plain"] = crypto.encrypt(req.body["body-plain"], modifier.data);
                     if (req.body["body-html"] && !textonly)
-                        req.body["body-html"] = encrypt(req.body["body-html"], modifier.data);
+                        req.body["body-html"] = crypto.encrypt(req.body["body-html"], modifier.data);
                     break;
                 case 2: // Text Only
                     textonly = true; break;
