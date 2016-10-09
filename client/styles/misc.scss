@@ -40,39 +40,6 @@
     
 }
 
-.account {
-    
-    h3 {
-        margin-bottom: 0.6em;
-    }
-    
-    .subscription {
-        
-        a.btn {
-            display: inline-block;
-            margin-top: 1em;
-            height: 1.42em;
-        }
-        
-    }
-    
-    .emails {
-        
-        .add > input {
-            display: inline;
-        }
-        
-        .list {
-            background-color: $lllgray;
-            padding: 0.5em;
-            width: 70%;
-            margin: auto;
-        }
-        
-    }
-    
-}
-
 .purchase-subscription {
     
     .expiration > input {
@@ -144,6 +111,47 @@
     
 }
 
-.main-address {
-    display: inline;
+.account {
+    
+    h3 {
+        margin-bottom: 0.6em;
+    }
+    
+    .subscription {
+        
+        a.btn {
+            display: inline-block;
+            margin-top: 1em;
+            height: 1.42em;
+        }
+        
+    }
+    
+    .main-emails {
+        
+        .add > input {
+            display: inline;
+        }
+        
+        .list {
+            
+            background-color: $lllgray;
+            padding: 0.5em;
+            width: 70%;
+            margin: auto;
+
+            .email {
+
+                a {
+                    font-size: 90%;
+                    display: block;
+                    margin: auto;
+                }
+                
+            }
+
+        }
+        
+    }
+    
 }
