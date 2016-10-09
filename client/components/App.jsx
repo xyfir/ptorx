@@ -81,6 +81,11 @@ class App extends React.Component {
 
         const q = parseHashQuery();
 
+        // PhoneGap app opens to ptorx.com/panel/#?phonegap=1
+        if (q.phonegap) {
+            localStorage.setItem("isPhoneGap", "true");
+        }
+
         // Attempt to login using XID/AUTH or skip to initialize()
         if (q.xid && q.auth) {
             request({
