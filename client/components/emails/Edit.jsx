@@ -29,6 +29,12 @@ export default class UpdateEmail extends React.Component {
             id: location.hash.split('/')[2], loading: true,
             filters: [], modifiers: []
         };
+
+        const email =this.props.data.emails.find(e => e.id == this.state.id);
+
+        if (email === undefined) {
+            location.href = "#emails/list";
+        }
         
         request({
             url: URL + "api/emails/" + this.state.id, success: (res) => {
@@ -38,9 +44,7 @@ export default class UpdateEmail extends React.Component {
                 else {
                     delete res.error;
                     this.props.dispatch(editEmail(
-                        Object.assign({}, this.props.data.emails.find(e => {
-                            return e.id == this.state.id;
-                        }), res)
+                        Object.assign({}, email, res)
                     ));
 
                     this.setState({
