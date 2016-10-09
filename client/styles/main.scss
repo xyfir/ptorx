@@ -115,13 +115,14 @@ input[type=checkbox] {
 
 
 /* NAVBAR */
-.nav-bar, .nav-bar-sub {
+.nav-bar {
     
     background-color: $purple;
-    width: 80%;
-    margin: auto;
     padding: 0.25em 0em;
-    margin-bottom: 2em;
+    position: fixed;
+	top: 0%;
+	left: 0%;
+	right: 0%;
     
     a {
         color: white;
@@ -133,7 +134,26 @@ input[type=checkbox] {
     
 }
 .nav-bar-sub {
-	width: 60%;
+	
+	background-color: $purple;
+	padding: 0.25em 0em;
+	width: 80%;
+	margin: auto;
+	margin-bottom: 1em;
+
+	a {
+		color: white;
+		margin: 0.5em;
+	}
+
+	a:hover {
+		color: $lgray;
+	}
+
+}
+
+div.ptorx > div {
+	padding-top: 1em;
 }
 
 .sweet-alert > fieldset > input {
