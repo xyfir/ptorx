@@ -3,7 +3,7 @@
 <widget xmlns     = "http://www.w3.org/ns/widgets"
         xmlns:gap = "http://phonegap.com/ns/1.0"
         id        = "com.xyfir.ptorx"
-        version   = "1.1.0">
+        version   = "1.2.0">
 
     <name>Ptorx</name>
 
@@ -104,7 +104,7 @@
     <splash platform="ios" src="res/screens/ios/screen-ipad-portrait-2x.png" width="1536" height="2048" />
 
     <gap:config-file platform="ios" parent="CFBundleShortVersionString">
-        <string>1.1.0</string>
+        <string>1.2.0</string>
     </gap:config-file>
 
     <!-- A wildcard can be used to whitelist the entire network, over HTTP and HTTPS -->
