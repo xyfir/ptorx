@@ -20,8 +20,10 @@ const config = require("config");
 module.exports = function(req, res) {
 
     db(cn => {
+        let sql = "";
+
         const getInfo = (uid) => {
-            let sql = `
+            sql = `
                 SELECT email_id as id, address FROM main_emails WHERE user_id = ?
             `;
             cn.query(sql, [uid], (err, rows) => {
