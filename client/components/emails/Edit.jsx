@@ -184,7 +184,7 @@ export default class UpdateEmail extends React.Component {
                 <input type="text" ref="name" defaultValue={email.name} />
                 
                 <label>Description</label>
-                <span className="input-description">Describe your email a name to find it easier.</span>
+                <span className="input-description">Describe your email to find it easier.</span>
                 <input type="text" ref="description" defaultValue={email.description} />
                 
                 <hr />
