@@ -28,10 +28,8 @@ export default class DynamicStyles extends React.Component {
     }
 
     _isPhoneGap() {
-        return localStorage.getItem("isPhoneGap") || (
-            (window.cordova || window.PhoneGap || window.phonegap)
-            && /^file:\/{3}[^\/]/i.test(window.location.href)
-        );
+        return localStorage.getItem("isPhoneGap") == "true"
+            || window.cordova || window.PhoneGap || window.phonegap;
     }
 
     _isIOS() {
