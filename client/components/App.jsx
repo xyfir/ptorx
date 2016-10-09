@@ -6,6 +6,7 @@ import { createStore } from "redux";
 import reducers from "reducers/index";
 
 // Components
+import DynamicStyles from "./misc/DynamicStyles";
 import Modifiers from "./modifiers/Index";
 import Account from "./account/Index";
 import Filters from "./filters/Index";
@@ -127,6 +128,7 @@ class App extends React.Component {
                     <a href="#modifiers/list">Modifiers</a>
                 </nav>
                 {view}
+                <DynamicStyles />
             </div>                
         );
     }
