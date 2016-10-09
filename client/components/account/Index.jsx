@@ -95,7 +95,7 @@ export default class Account extends React.Component {
                 
                 <h3>Emails</h3>
                 <p>These are your real emails that will receive messages redirected from your Ptorx addresses.</p>
-                <div className="emails">
+                <div className="main-emails">
                     <div className="add">
                         <input type="text" ref="email" placeholder="email@example.com" />
                         <span className="icon-add" title="Add Email" onClick={this.onAddEmail} />
@@ -106,11 +106,11 @@ export default class Account extends React.Component {
                             return (
                                 <div className="email">
                                     <span className="main-address">{email.address}</span>
-                                    <span
+                                    <a
                                         className="icon-trash"
                                         title="Remove Email"
                                         onClick={this.onDeleteEmail.bind(this, email.id)}
-                                    />
+                                    >Delete Email</a>
                                 </div>
                             );
                         })
