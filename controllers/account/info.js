@@ -19,6 +19,14 @@ const config = require("config");
 */
 module.exports = function(req, res) {
 
+    // Wipe session, return loggedIn: false
+    const error = () => {
+        req.session.uid = req.session.subscription = 0;
+        req.session.xadid = "";
+
+        res.json({ loggedIn: false });
+    };
+
     db(cn => {
         let sql = "";
 
@@ -29,10 +37,20 @@ module.exports = function(req, res) {
             cn.query(sql, [uid], (err, rows) => {
                 cn.release();
 
-                res.json({
-                    loggedIn: true, emails: rows || [],
-                    subscription: req.session.subscription
-                });
+                if (err || !rows.length) {
+                    error();
+                }
+                else {
+                    // Set session, return account info
+                    req.session.uid = uid,
+                    req.session.xadid = rows[0].xadid,
+                    req.session.subscription = rows[0].subscription;
+                    
+                    res.json({
+                        loggedIn: true, emails: rows || [],
+                        subscription: rows[0].subscription
+                    });
+                }
             });
         };
 
@@ -46,7 +64,7 @@ module.exports = function(req, res) {
             // Invalid token
             if (!token[0] || !token[1]) {
                 cn.release();
-                res.json({ loggedIn: false });
+                error();
                 return;
             }
 
@@ -57,7 +75,7 @@ module.exports = function(req, res) {
                 // User doesn't exist
                 if (err || !rows.length) {
                     cn.release();
-                    res.json({ loggedIn: false });
+                    error();
                 }
                 // Validate access token with Xyfir Accounts
                 else {
@@ -68,7 +86,7 @@ module.exports = function(req, res) {
                         // Error in request
                         if (err) {
                             cn.release();
-                            res.json({ loggedIn: false });
+                            error();
                             return;
                         }
 
@@ -79,7 +97,7 @@ module.exports = function(req, res) {
                             req.session.uid = req.session.subscription = 0;
                             
                             cn.release();
-                            res.json({ loggedIn: false });
+                            error();
                         }
                         // Access token valid
                         else {
@@ -96,7 +114,7 @@ module.exports = function(req, res) {
         // Force login
         else {
             cn.release();
-            res.json({ loggedIn: false });
+            error();
         }
     });
 
