@@ -30,7 +30,7 @@ module.exports = function(req, res) {
     db(cn => {
         let sql = "";
 
-        const getInfo = (uid) => {
+        const getInfo = (uid, subscription, xadid) => {
             sql = `
                 SELECT email_id as id, address FROM main_emails WHERE user_id = ?
             `;
@@ -43,12 +43,11 @@ module.exports = function(req, res) {
                 else {
                     // Set session, return account info
                     req.session.uid = uid,
-                    req.session.xadid = rows[0].xadid,
-                    req.session.subscription = rows[0].subscription;
+                    req.session.xadid = xadid,
+                    req.session.subscription = subscription;
                     
                     res.json({
-                        loggedIn: true, emails: rows || [],
-                        subscription: rows[0].subscription
+                        loggedIn: true, emails: rows, subscription
                     });
                 }
             });
@@ -68,8 +67,7 @@ module.exports = function(req, res) {
                 return;
             }
 
-            // Get user's Xyfir ID
-            sql = `SELECT xyfir_id FROM users WHERE user_id = ?`;
+            sql = `SELECT xyfir_id, subscription, xad_id FROM users WHERE user_id = ?`;
 
             cn.query(sql, [token[0]], (err, rows) => {
                 // User doesn't exist
@@ -101,7 +99,7 @@ module.exports = function(req, res) {
                         }
                         // Access token valid
                         else {
-                            getInfo(token[0]);
+                            getInfo(token[0], rows[0].subscription, rows[0].xad_id);
                         }
                     });
                 }
@@ -109,7 +107,7 @@ module.exports = function(req, res) {
         }
         // Get info for dev user
         else if (config.environment.type == "dev") {
-            getInfo(1);
+            getInfo(1, 0, '');
         }
         // Force login
         else {
