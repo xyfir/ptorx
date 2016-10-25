@@ -37,19 +37,14 @@ module.exports = function(req, res) {
             cn.query(sql, [uid], (err, rows) => {
                 cn.release();
 
-                if (err || !rows.length) {
-                    error();
-                }
-                else {
-                    // Set session, return account info
-                    req.session.uid = uid,
-                    req.session.xadid = xadid,
-                    req.session.subscription = subscription;
-                    
-                    res.json({
-                        loggedIn: true, emails: rows, subscription
-                    });
-                }
+                // Set session, return account info
+                req.session.uid = uid,
+                req.session.xadid = xadid,
+                req.session.subscription = subscription;
+                
+                res.json({
+                    loggedIn: true, emails: rows, subscription
+                });
             });
         };
 
