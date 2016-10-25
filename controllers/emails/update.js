@@ -24,7 +24,7 @@ let mailgun = require("mailgun-js")({
 */
 module.exports = function(req, res) {
 
-    let response = validate(req.body, req.session.uid);
+    let response = validate(req.body, req.session.subscription);
 
     if (response !== "ok") {
         res.json({ error: true, message: response });
