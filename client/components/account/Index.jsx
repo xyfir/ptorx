@@ -4,14 +4,14 @@ import React from "react";
 import Purchase from "./Purchase";
 
 // Action creators
-import { deleteEmail, addEmail } from "../../actions/creators/account/email";
+import { deleteEmail, addEmail } from "actions/creators/account/email";
 
 // Modules
-import request from "../../lib/request";
+import request from "lib/request";
 
 // Constants
-import { URL } from "../../constants/config";
-import { PURCHASE_SUBSCRIPTION } from "../../constants/views";
+import { URL } from "constants/config";
+import { PURCHASE_SUBSCRIPTION } from "constants/views";
 
 export default class Account extends React.Component {
 
@@ -62,60 +62,92 @@ export default class Account extends React.Component {
 
     render() {
         if (this.props.data.view == PURCHASE_SUBSCRIPTION) {
-            return <Purchase data={this.props.data} dispatch={this.props.dispatch} />;
+            return (
+                <Purchase
+                    data={this.props.data}
+                    dispatch={this.props.dispatch}
+                />
+            );
         }
         
         return (
             <div className="account">
-                <div className="subscription">{
-                    this.props.data.account.subscription > Date.now()
-                    ? (
-                       <div>
-                           Your subscription will expire on <strong>{
-                               (new Date(this.props.data.account.subscription)).toLocaleString()
-                           }</strong>
-                           <br />
-                           <a href="#account/purchase-subscription" className="btn btn-primary">
-                               Extend Subscription
-                           </a>
-                       </div> 
-                    )
-                    : (
-                        <div>
-                            You do not have a Ptorx Premium subscription.
-                            <br />
-                            <a href="#account/purchase-subscription" className="btn btn-primary">
-                                Purchase Subscription
-                            </a>
-                        </div>
-                    )
-                }</div>
-                
-                <hr />
-                
-                <h3>Emails</h3>
-                <p>These are your real emails that will receive messages redirected from your Ptorx addresses.</p>
-                <div className="main-emails">
-                    <div className="add">
-                        <input type="text" ref="email" placeholder="email@example.com" />
-                        <span className="icon-add" title="Add Email" onClick={this.onAddEmail} />
-                    </div>
+                <section className="referral-link">
+                    <label>Referral Program</label>
+                    <span className="input-description">
+                        Refer new users to Ptorx and they'll receive 10% off of their first purchase.
+                        <br />
+                        You'll receive one week of free premium subscription time for every month they purchase.
+                    </span>
+                    <input
+                        type="text" readonly
+                        value={"https://ptorx.com/#?r=" + this.props.data.account.uid}
+                        onFocus={(e) => e.target.select()}
+                    />
+                </section>
 
-                    <div className="list">{
-                        this.props.data.account.emails.map(email => {
-                            return (
-                                <div className="email">
-                                    <span className="main-address">{email.address}</span>
-                                    <a
-                                        className="icon-trash"
-                                        title="Remove Email"
-                                        onClick={this.onDeleteEmail.bind(this, email.id)}
-                                    >Delete Email</a>
-                                </div>
-                            );
-                        })
-                    }</div>
-                </div>
+                {this.props.data.account.subscription > Date.now() ? (
+                    <section className="subscription">
+                        Your subscription will expire on <strong>{
+                            (new Date(this.props.data.account.subscription))
+                                .toLocaleString()
+                        }</strong>
+                        
+                        <br />
+                        
+                        <button
+                            onClick={() =>
+                                location.hash = "#account/purchase-subscription"
+                            }
+                            className="btn btn-primary"
+                        >
+                            Extend Subscription
+                        </button>
+                    </section>
+                ) : (
+                    <section className="subscription">
+                        You do not have a Ptorx Premium subscription.
+                        
+                        <br />
+
+                        <button
+                            onClick={() =>
+                                location.hash = "#account/purchase-subscription"
+                            }
+                            className="btn btn-primary"
+                        >
+                            Purchase Subscription
+                        </button>
+                    </section>
+                )}
+                
+                <section className="emails">
+                    <h3>Emails</h3>
+                    <p>
+                        These are your real emails that will receive messages redirected from your Ptorx addresses.
+                    </p>
+                    <div className="main-emails">
+                        <div className="add">
+                            <input type="text" ref="email" placeholder="email@example.com" />
+                            <span className="icon-add" title="Add Email" onClick={this.onAddEmail} />
+                        </div>
+
+                        <div className="list">{
+                            this.props.data.account.emails.map(email => {
+                                return (
+                                    <div className="email">
+                                        <span className="main-address">{email.address}</span>
+                                        <a
+                                            className="icon-trash"
+                                            title="Remove Email"
+                                            onClick={this.onDeleteEmail.bind(this, email.id)}
+                                        >Delete Email</a>
+                                    </div>
+                                );
+                            })
+                        }</div>
+                    </div>
+                </section>
             </div>                
         );
     }    
