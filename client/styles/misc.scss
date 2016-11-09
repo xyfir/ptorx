@@ -117,14 +117,8 @@
         margin-bottom: 0.6em;
     }
     
-    .subscription {
-        
-        a.btn {
-            display: inline-block;
-            margin-top: 1em;
-            height: 1.42em;
-        }
-        
+    .subscription > .btn {
+        margin-top: 1em;
     }
     
     .main-emails {
@@ -135,12 +129,13 @@
         
         .list {
             
-            background-color: $lllgray;
             padding: 0.5em;
             width: 70%;
             margin: auto;
 
             .email {
+
+                background-color: $llgray;
 
                 a {
                     font-size: 90%;
