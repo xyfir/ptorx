@@ -3,17 +3,17 @@ import React from "react";
 // Action creators
 import {
     loadEmails, deleteEmail
-} from "../../actions/creators/emails";
+} from "actions/creators/emails";
 
 // Constants
-import { URL } from "../../constants/config";
+import { URL } from "constants/config";
 
 // Modules
-import request from "../../lib/request";
-import findMatches from "../../lib/find-matching";
+import request from "lib/request";
+import findMatches from "lib/find-matching";
 
 // Components
-import Search from "../misc/Search";
+import Search from "components/misc/Search";
 
 export default class EmailList extends React.Component {
 
@@ -63,10 +63,16 @@ export default class EmailList extends React.Component {
     render() {
         return (
             <div className="emails">
-                <a href="#emails/create" className="btn btn-primary">Create an Email</a>
-                <hr />
+                <button onClick={() => {
+                    location.hash = "#emails/create";
+                }}
+                    className="btn-primary"
+                >
+                    Create an Email
+                </button>
+                
                 <Search onSearch={this.onSearch} type="email" />
-                <hr />
+                
                 <div className="list">{
                     findMatches(this.props.data.emails, this.state.search).map(email => {
                         return (
