@@ -1,62 +1,129 @@
-﻿const db = require("lib/db");
+﻿const request = require("request");
+const stripe = require("stripe");
+const db = require("lib/db");
+
+const config = require("config");
+
+function setSubscription(subscription, days) {
+    return Date.now() > subscription
+        ? (Date.now() + ((60 * 60 * 24 * days) * 1000))
+        : (subscription + ((60 * 60 * 24 * days) * 1000));
+}
+
+// Give user who referred buyer one week subscription for every month bought
+function rewardReferrer(cn, ref, days) {
+    let sql = `
+        SELECT subscription FROM users WHERE user_id = ?
+    `, vars = [ref];
+
+    cn.query(sql, vars, (err, rows) => {
+        if (err || !rows.length) {
+            cn.release();
+        }
+        else {
+            sql = `
+                UPDATE users SET subscription = ? WHERE user_id = ?
+            `, vars = [
+                setSubscription(rows[0].subscription, (days / 30) * 7 ), ref
+            ];
+
+            cn.query(sql, vars, (err, result) => cn.release());
+        }
+    });
+}
+
+// Notify XACC of purchase
+function rewardAffiliate(aff, amount) {
+    request.post({
+        url: config.address.xacc + "api/affiliate/purchase", form: {
+            service: 13, serviceKey: config.keys.xacc,
+            promoCode: aff, amount
+        }
+    }, (err, response, body) => 1);
+}
 
 /*
     PUT api/account/subscription
     REQUIRED
-        stripeToken: string, months: number
+        stripeToken: string, subscription: number
     RETURN
-        { error: boolean, message: string }
+        { error: boolean, message?: string }
     DESCRIPTION
         Add months to user's subscription after charging card via Stripe
 */
 module.exports = function(req, res) {
 
-    let stripeKey = require("../../config").keys.stripe;
-    let amount = [0, 3, 15, 24][req.body.months] * 100;
+    let sql = `
+        SELECT subscription, referral FROM users WHERE user_id = ?
+    `, vars = [
+        req.session.uid
+    ];
 
-    if (!amount) {
-        res.json({ error: true, message: "Invalid subscription length" });
-        return;
-    }
-
-    let months = [0, 1, 6, 12][req.body.months];
-
-    let info = {
-        amount, currency: "usd", source: req.body.stripeToken,
-        description: "Ptorx - Premium Subscription"
-    };
-
-    require("stripe")(stripeKey).charges.create(info, (err, charge) => {
-        if (err) {
-            res.json({ error: true, message: "Error processing your card. Please try again." });
+    db(cn => cn.query(sql, vars, (err, rows) => {
+        if (err || !rows.length) {
+            cn.release();
+            res.json({ error: true, message: "An unknown error occured" });
             return;
         }
 
-        let sql = `
-            SELECT subscription FROM users WHERE user_id = ?
-        `;
-        db(cn => cn.query(sql, [req.session.uid], (err, rows) => {
-            if (err || !rows.length) {
-                cn.release();
-                res.json({ error: true, message: "An unknown error occured" });
-            }
-            else {
-                // Add months to current subscription expiration (or now())
-                let subscription = rows[0].subscription == 0
-                    ? (Date.now() + (months * 30 * 86400 * 1000))
-                    : (rows[0].subscription + (months * 30 * 86400 * 1000));
+        let amount = [0, 300, 1500, 2400][req.body.subscription];
 
-                sql = `
-                    UPDATE users SET subscription = ? WHERE user_id = ?
-                `;
-                cn.query(sql, [subscription, req.session.uid], (err, result) => {
-                    cn.release();
-                    
-                    req.session.subscription = subscription;
-                    res.json({ error: false, message: "" });
-                });
+        if (!amount) {
+            res.json({ error: true, message: "Invalid subscription length" });
+            return;
+        }
+
+        // Add days to current subscription expiration (or now())
+        const days = [0, 30, 180, 365][req.body.subscription];
+        const subscription = setSubscription(rows[0].subscription, days);
+        
+        const referral = JSON.parse(rows[0].referral);
+
+        // Discount 10% off of first purchase
+        if ((referral.referral || referral.affiliate) && !referral.hasMadePurchase) {
+            referral.hasMadePurchase = true;
+            amount -= amount * 0.10;
+        }
+        
+        stripe(config.keys.stripe).charges.create({
+            amount, currency: "usd", source: req.body.stripeToken,
+            description: "Ptorx - Premium Subscription"
+        }, (err, charge) => {
+            if (err) {
+                res.json({
+                    error: true,
+                    message: "Error processing your card. Please try again."
+                }); return;
             }
-        }));
-    });
+
+            // Update user's account
+            sql = `
+                UPDATE users SET subscription = ?, referral = ? WHERE user_id = ?
+            `, vars = [
+                subscription, JSON.stringify(referral), req.session.uid
+            ];
+
+            cn.query(sql, vars, (err, result) => {
+                if (err || !result.affectedRows) {
+                    cn.release();
+                    res.json({ error: true, message: "An unknown error occured" });
+                    return;
+                }
+                else if (referral.referral) {
+                    rewardReferrer(cn, referral.referral, days);
+                }
+                else if (referral.affiliate) {
+                    cn.release();
+                    rewardAffiliate(referral.affiliate, amount);
+                }
+                else {
+                    cn.release();
+                }
+                
+                req.session.subscription = subscription;
+                res.json({ error: false });
+            });
+        });
+    }));
 
 };
