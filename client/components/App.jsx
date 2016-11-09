@@ -89,6 +89,9 @@ class App extends React.Component {
         }
         // Attempt to login using XID/AUTH or skip to initialize()
         else if (q.xid && q.auth) {
+            q.affiliate = localStorage.getItem("affiliate") || "";
+            q.referral = localStorage.getItem("referral") || "";
+            
             request({
                 url: URL + "api/account/login",
                 method: "POST", data: q,
