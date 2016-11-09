@@ -11,7 +11,10 @@ const config = require("config");
     RETURN
         {
             loggedIn: boolean, emails?: [{ id: number, address: string }],
-            subscription?: number
+            subscription?: number, uid?: number, referral?: {
+                affiliate?: string, referral?: string,
+                hasMadePurchase?: boolean
+            }
         }
     DESCRIPTION
         Creates a new session using access token
@@ -30,11 +33,11 @@ module.exports = function(req, res) {
     db(cn => {
         let sql = "";
 
-        const getInfo = (uid, subscription, xadid) => {
+        const getInfo = (uid, subscription, xadid, referral) => {
             sql = `
                 SELECT email_id as id, address FROM main_emails WHERE user_id = ?
             `;
-            cn.query(sql, [uid], (err, rows) => {
+            cn.query(sql, [uid], (err, emails) => {
                 cn.release();
 
                 // Set session, return account info
@@ -43,7 +46,7 @@ module.exports = function(req, res) {
                 req.session.subscription = subscription;
                 
                 res.json({
-                    loggedIn: true, emails: rows, subscription
+                    loggedIn: true, emails, subscription, referral, uid
                 });
             });
         };
@@ -62,7 +65,10 @@ module.exports = function(req, res) {
                 return;
             }
 
-            sql = `SELECT xyfir_id, subscription, xad_id FROM users WHERE user_id = ?`;
+            sql = `
+                SELECT xyfir_id, subscription, xad_id, referral
+                FROM users WHERE user_id = ?
+            `;
 
             cn.query(sql, [token[0]], (err, rows) => {
                 // User doesn't exist
@@ -94,7 +100,10 @@ module.exports = function(req, res) {
                         }
                         // Access token valid
                         else {
-                            getInfo(token[0], rows[0].subscription, rows[0].xad_id);
+                            getInfo(
+                                token[0], rows[0].subscription, rows[0].xad_id,
+                                JSON.parse(rows[0].referral)
+                            );
                         }
                     });
                 }
@@ -102,7 +111,16 @@ module.exports = function(req, res) {
         }
         // Get info for dev user
         else if (config.environment.type == "dev") {
-            getInfo(1, 0, '');
+            sql = `
+                SELECT subscription, xad_id, referral FROM users
+                WHERE user_id = 1
+            `;
+
+            cn.query(sql, (err, rows) => {
+                getInfo(
+                    1, rows[0].subscription, rows[0].xad_id, rows[0].referral
+                );
+            });
         }
         // Force login
         else {
