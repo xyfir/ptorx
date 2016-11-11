@@ -108,9 +108,9 @@ export default class Purchase extends React.Component {
                                     placeholder="2020"
                                 />
                             </div>
-
-                            <button className="btn-primary">Purchase</button>
                         </form>
+
+                        <button className="btn-primary">Purchase</button>
                     </form>
                 </section>
             </div>
