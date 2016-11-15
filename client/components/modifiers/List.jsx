@@ -76,10 +76,16 @@ export default class ModifierList extends React.Component {
     render() {
         return (
             <div className="modifiers">
-                <a href="#modifiers/create" className="btn btn-primary">Create a Modifier</a>
-                <hr />
+                <button onClick={() => {
+                    location.hash = "#modifiers/create";
+                }}
+                    className="btn-primary"
+                >
+                    Create a Modifier
+                </button>
+                
                 <Search onSearch={this.onSearch} type="modifier" />
-                <hr />
+                
                 <div className="list">{
                     findMatches(this.props.data.modifiers, this.state.search).map(mod => {
                         return (

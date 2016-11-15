@@ -139,10 +139,16 @@ export default class FilterList extends React.Component {
     render() {
         return (
             <div className="filters">
-                <a href="#filters/create" className="btn btn-primary">Create a Filter</a>
-                <hr />
+                <button onClick={() => {
+                    location.hash = "#filters/create";
+                }}
+                    className="btn-primary"
+                >
+                    Create a Filter
+                </button>
+                
                 <Search onSearch={this.onSearch} type="filter" />
-                <hr />
+                
                 <div className="list">{
                     findMatches(this.props.data.filters, this.state.search).map(filter => {
                         return (
