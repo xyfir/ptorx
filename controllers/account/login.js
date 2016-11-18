@@ -48,8 +48,9 @@ module.exports = function(req, res) {
                 };
                 
                 const createAccount = () => {
+                    sql = "INSERT INTO users SET ?";
+                    
                     cn.query(sql, insert, (err, result) => {
-                        sql = "INSERT INTO users SET ?";
                         cn.release();
 
                         if (err || !result.affectedRows) {
