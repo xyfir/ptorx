@@ -47,6 +47,24 @@
       "css": "windows",
       "code": 61818,
       "src": "fontawesome"
+    },
+    {
+      "uid": "d5098cb09be5827a2911dbab5af49ad2",
+      "css": "arrow-down",
+      "code": 59394,
+      "src": "entypo"
+    },
+    {
+      "uid": "43c4064ec1260d0e55c37e0467c75cbb",
+      "css": "arrow-up",
+      "code": 59395,
+      "src": "entypo"
+    },
+    {
+      "uid": "c8585e1e5b0467f28b70bce765d5840c",
+      "css": "duplicate",
+      "code": 61637,
+      "src": "fontawesome"
     }
   ]
 }
