@@ -14,11 +14,11 @@ export default class Messages extends React.Component {
     render() {
         switch (this.props.data.view.split('/')[2]) {
             case "SEND":
-                return <Send data={this.props.data} dispatch={this.props.dispatch} />;
+                return <Send {...this.props} />;
             case "VIEW":
-                return <View data={this.props.data} dispatch={this.props.dispatch} />;
+                return <View {...this.props} />;
             case "LIST":
-                return <List data={this.props.data} dispatch={this.props.dispatch} />;
+                return <List {...this.props} />;
         }
     }
 
