@@ -45,7 +45,8 @@ module.exports = function(req, res) {
 
             // Grab basic info for all filters linked to email
             sql = `
-                SELECT filter_id as id, name, description, type FROM filters WHERE filter_id IN (
+                SELECT filter_id as id, name, description, type
+                FROM filters WHERE filter_id IN (
                     SELECT filter_id FROM linked_filters WHERE email_id = ?
                 )
             `;
@@ -54,9 +55,15 @@ module.exports = function(req, res) {
 
                 // Grab basic info for all modifiers linked to email
                 sql = `
-                    SELECT modifier_id as id, name, description, type FROM modifiers WHERE modifier_id IN (
-                        SELECT modifier_id FROM linked_modifiers WHERE email_id = ?
-                    )
+                    SELECT
+                        modifiers.modifier_id as id, modifiers.name,
+                        modifiers.description, modifiers.type
+                    FROM
+                        modifiers, linked_modifiers
+                    WHERE
+                        modifiers.modifier_id = linked_modifiers.modifier_id
+                        AND linked_modifiers.email_id = ?
+                    ORDER BY linked_modifiers.order_number
                 `;
                 cn.query(sql, [req.params.email], (err, rows) => {
                     cn.release();
