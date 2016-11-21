@@ -42,7 +42,8 @@ export default class EmailList extends React.Component {
     onDeleteEmail(id) {
         swal({
             title: "Are you sure?",
-            text: "You will no longer receive emails sent to this address. You will not be able to recreate this address.",
+            text: "You will no longer receive emails sent to this address. \
+                You will not be able to recreate this address.",
             type: "warning",
             showCancelButton: true,
             confirmButtonColor: "#DD6B55",
@@ -74,19 +75,34 @@ export default class EmailList extends React.Component {
                 <Search onSearch={this.onSearch} type="email" />
                 
                 <div className="list">{
-                    findMatches(this.props.data.emails, this.state.search).map(email => {
+                    findMatches(
+                        this.props.data.emails, this.state.search
+                    ).map(email => {
                         return (
                             <div className="email">
-                                <span className="name"><a href={`#emails/edit/${email.id}`}>
-                                    {email.name}
-                                </a></span>
-                                <span
-                                    className="icon-trash"
-                                    title="Delete Email"
-                                    onClick={this.onDeleteEmail.bind(this, email.id) }
-                                />
-                                <span className="address">{email.address}</span>
-                                <span className="description">{email.description}</span>
+                                <span className="name">
+                                    <a href={`#emails/edit/${email.id}`}>
+                                        {email.name}
+                                    </a>
+                                </span>
+                                <span className="address">{
+                                    email.address
+                                }</span>
+                                <span className="description">{
+                                    email.description
+                                }</span>
+                                <div className="controls">
+                                    <a
+                                        className="icon-trash"
+                                        onClick={
+                                            () => this.onDeleteEmail(email.id)
+                                        }
+                                    >Delete</a>
+                                    <a
+                                        className="icon-duplicate"
+                                        href={`#emails/create?copy=${email.id}`}
+                                    >Duplicate</a>
+                                </div>
                             </div>
                         );
                     })
