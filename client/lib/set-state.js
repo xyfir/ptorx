@@ -1,8 +1,8 @@
 // Action creators
-import { changeView } from "../actions/creators/index";
+import { changeView } from "actions/creators/index";
 
 // Constants
-import * as VIEWS from "../constants/views";
+import * as VIEWS from "constants/views";
 
 export default function(store) {
 
@@ -13,7 +13,7 @@ export default function(store) {
     }
 
     const state = store.getState();
-    const hash = location.hash.substr(1).split('/');
+    const hash = location.hash.substr(1).split('?')[0].split('/');
 
     // Update state to reflect hash
     if (hash[0] == "account") {
