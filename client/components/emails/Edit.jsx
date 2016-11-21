@@ -1,20 +1,20 @@
 import React from "react";
 
 // Components
-import LinkModifier from "../../components/modifiers/Link";
-import LinkFilter from "../../components/filters/Link";
+import LinkModifier from "components/modifiers/Link";
+import LinkFilter from "components/filters/Link";
 
 // Action creators
-import { loadModifiers } from "../../actions/creators/modifiers";
-import { loadFilters } from "../../actions/creators/filters";
-import { editEmail } from "../../actions/creators/emails";
+import { loadModifiers } from "actions/creators/modifiers";
+import { loadFilters } from "actions/creators/filters";
+import { editEmail } from "actions/creators/emails";
 
 // Constants
-import { URL } from "../../constants/config";
-import { filterTypes, modifierTypes } from "../../constants/types";
+import { URL } from "constants/config";
+import { filterTypes, modifierTypes } from "constants/types";
 
 // Modules
-import request from "../../lib/request";
+import request from "lib/request";
 
 export default class UpdateEmail extends React.Component {
 
@@ -30,7 +30,7 @@ export default class UpdateEmail extends React.Component {
             filters: [], modifiers: []
         };
 
-        const email =this.props.data.emails.find(e => e.id == this.state.id);
+        const email = this.props.data.emails.find(e => e.id == this.state.id);
 
         if (email === undefined) {
             location.href = "#emails/list";
@@ -40,44 +40,83 @@ export default class UpdateEmail extends React.Component {
             url: URL + "api/emails/" + this.state.id, success: (res) => {
                 if (res.err) {
                     swal("Error", "Could not load data", "error");
+                    return;
                 }
-                else {
-                    delete res.error;
-                    this.props.dispatch(editEmail(
-                        Object.assign({}, email, res)
-                    ));
+                
+                delete res.error;
+                this.props.dispatch(editEmail(
+                    Object.assign({}, email, res)
+                ));
 
-                    this.setState({
-                        loading: false, filters: res.filters, modifiers: res.modifiers
+                this.setState({
+                    loading: false, filters: res.filters,
+                    modifiers: res.modifiers
+                });
+                
+                // Load modifiers / filters if needed
+                if (!this.props.data.filters.length) {
+                    request({
+                        url: URL + "api/filters", success: (filters) => {     
+                            this.props.dispatch(
+                                loadFilters(filters.filters)
+                            );
+                        }
                     });
-                    
-                    // Load modifiers / filters if needed
-                    if (!this.props.data.filters.length || !this.props.data.modifiers.length) {
-                        request({
-                            url: URL + "api/modifiers", success: (modifiers) => {
-                                request({
-                                    url: URL + "api/filters", success: (filters) => {
-                                        this.props.dispatch(loadModifiers(modifiers.modifiers));
-                                        this.props.dispatch(loadFilters(filters.filters));
-                                    }
-                                })
-                            }
-                        })
-                    }
+                }
+                if (!this.props.data.modifiers.length) {
+                    request({
+                        url: URL + "api/modifiers", success: (modifiers) => {
+                            this.props.dispatch(
+                                loadModifiers(modifiers.modifiers)
+                            );
+                        }
+                    });
                 }
             }
         });
     }
 
+    onMoveModifierDown(id) {
+        let mods = this.state.modifiers.slice(0);
+        const i = mods.findIndex(m => m.id == id);
+
+        // Swap indexes with next sibling
+        // Ensure modifier is not last in array
+        if (i != -1 && i != mods.length - 1) {
+            const a = Object.assign({}, mods[i]);
+            const b = Object.assign({}, mods[i + 1]);
+
+            mods[i] = b, mods[i + 1] = a;
+
+            this.setState({ modifiers: mods }); 
+        }
+    }
+
+    onMoveModifierUp(id) {
+        let mods = this.state.modifiers.slice(0);
+        const i = mods.findIndex(m => m.id == id);
+
+        // Swap indexes with previous sibling
+        // Ensure modifier is not first in array
+        if (i > 0) {
+            const a = Object.assign({}, mods[i]);
+            const b = Object.assign({}, mods[i - 1]);
+
+            mods[i] = b, mods[i - 1] = a;
+
+            this.setState({ modifiers: mods }); 
+        }
+    }
+
     onRemoveModifier(id) {
         this.setState({
-            modifiers: this.state.modifiers.filter(mod => { return mod.id != id; })
+            modifiers: this.state.modifiers.filter(mod => mod.id != id)
         });
     }
 
     onRemoveFilter(id) {
         this.setState({
-            filters: this.state.filters.filter(f => { return f.id != id; })
+            filters: this.state.filters.filter(f => f.id != id)
         });
     }
 
@@ -88,7 +127,7 @@ export default class UpdateEmail extends React.Component {
         
         this.setState({
             modifiers: this.state.modifiers.concat([
-                this.props.data.modifiers.find(m => { return m.id == id; })
+                this.props.data.modifiers.find(m => m.id == id)
             ])
         });
     }
@@ -100,7 +139,7 @@ export default class UpdateEmail extends React.Component {
         
         this.setState({
             filters: this.state.filters.concat([
-                this.props.data.filters.find(f => { return f.id == id; })
+                this.props.data.filters.find(f => f.id == id)
             ])
         });
     }
@@ -171,8 +210,12 @@ export default class UpdateEmail extends React.Component {
         return (
             <div className="email-update">
                 <nav className="nav-bar-sub">
-                    <a href={`#emails/messages/${this.state.id}/send`}>Send Message</a>
-                    <a href={`#emails/messages/${this.state.id}/list`}>Messages</a>
+                    <a href={`#emails/messages/${this.state.id}/send`}>
+                        Send Message
+                    </a>
+                    <a href={`#emails/messages/${this.state.id}/list`}>
+                        Messages
+                    </a>
                 </nav>
             
                 <span className="address">{email.address}</span>
@@ -180,40 +223,70 @@ export default class UpdateEmail extends React.Component {
                 <hr />
             
                 <label>Name</label>
-                <span className="input-description">Give your email a name to find it easier.</span>
+                <span className="input-description">
+                    Give your email a name to find it easier.
+                </span>
                 <input type="text" ref="name" defaultValue={email.name} />
                 
                 <label>Description</label>
-                <span className="input-description">Describe your email to find it easier.</span>
-                <input type="text" ref="description" defaultValue={email.description} />
+                <span className="input-description">
+                    Describe your email to find it easier.
+                </span>
+                <input
+                    type="text"
+                    ref="description"
+                    defaultValue={email.description}
+                />
                 
                 <hr />
                 
                 <label>Redirect To</label>
-                <span className="input-description">This is your real email that messages sent to your Ptorx address will be redirected to.</span>
+                <span className="input-description">
+                    This is your real email that messages sent to your Ptorx address will be redirected to.
+                </span>
                 <select ref="to" defaultValue={email.toEmail}>{
-                    this.props.data.account.emails.map(email => {
-                        return <option value={email.address}>{email.address}</option>;
+                    this.props.data.account.emails.map(e => {
+                        return (
+                            <option value={e.address}>{e.address}</option>
+                        );
                     })
                 }</select>
                 
                 <hr />
                 
                 <label>Spam Filter</label>
-                <span className="input-description">By default we block any messages that are marked as spam. Disable this only if you believe legitimate messages are being blocked by the spam filter.</span>
-                <input type="checkbox" ref="spamFilter" defaultChecked={email.spamFilter} />Enable
+                <span className="input-description">
+                    By default we block any messages that are marked as spam. Disable this only if you believe legitimate messages are being blocked by the spam filter.
+                </span>
+                <input
+                    type="checkbox"
+                    ref="spamFilter"
+                    defaultChecked={email.spamFilter}
+                />Enable
                 
                 { // Save Mail, No To Address
                     this.props.data.account.subscription > Date.now()
                     ? (
                         <div>
                             <label>Save Mail</label>
-                            <span className="input-description">Any emails that are sent to this address will be temporarily stored for 3 days. You can then access the messages by viewing the <em>Messages</em> section when viewing this email's info. <strong>Note:</strong> This is required if you want to reply to emails.</span>
-                            <input type="checkbox" ref="saveMail" defaultChecked={email.saveMail} />Enable
+                            <span className="input-description">
+                                Any emails that are sent to this address will be temporarily stored for 3 days. You can then access the messages by viewing the <em>Messages</em> section when viewing this email's info. <strong>Note:</strong> This is required if you want to reply to emails.
+                            </span>
+                            <input
+                                type="checkbox"
+                                ref="saveMail"
+                                defaultChecked={email.saveMail}
+                            />Enable
                             
                             <label>No 'To' Address</label>
-                            <span className="input-description">Enabling this will allow you to avoid having emails sent to your Ptorx address redirected to your real email. This will act like the <em>Save Mail</em> feature just without the emails being redirected.</span>
-                            <input type="checkbox" ref="noToAddress" defaultChecked={email.address == ''} />Enable
+                            <span className="input-description">
+                                Enabling this will allow you to avoid having emails sent to your Ptorx address redirected to your real email. This will act like the <em>Save Mail</em> feature just without the emails being redirected.
+                            </span>
+                            <input
+                                type="checkbox"
+                                ref="noToAddress"
+                                defaultChecked={email.address == ''}
+                            />Enable
                         </div>
                     ) : (
                         <div />
@@ -228,14 +301,18 @@ export default class UpdateEmail extends React.Component {
                     this.state.filters.map(filter => {
                         return (
                             <div className="filter">
-                                <span className="type">{filterTypes[filter.type]}</span>
+                                <span className="type">{
+                                    filterTypes[filter.type]
+                                }</span>
                                 <span className="name">{filter.name}</span>
                                 <span
                                     className="icon-trash"
                                     title="Remove Filter"
-                                    onClick={this.onRemoveFilter.bind(this, filter.id) }
+                                    onClick={() => this.onRemoveFilter(filter.id)}
                                 />
-                                <span className="description">{filter.description}</span>
+                                <span className="description">{
+                                    filter.description
+                                }</span>
                             </div>
                         );
                     })
@@ -255,14 +332,36 @@ export default class UpdateEmail extends React.Component {
                     this.state.modifiers.map(mod => {
                         return (
                             <div className="modifier">
-                                <span className="type">{modifierTypes[mod.type]}</span>
+                                <span className="type">{
+                                    modifierTypes[mod.type]
+                                }</span>
                                 <span className="name">{mod.name}</span>
-                                <span
-                                    className="icon-trash"
-                                    title="Remove Modifier"
-                                    onClick={this.onRemoveModifier.bind(this, mod.id) }
-                                />
-                                <span className="description">{mod.description}</span>
+                                <span className="description">{
+                                    mod.description
+                                }</span>
+                                <div className="controls">
+                                    <a
+                                        className="icon-trash"
+                                        onClick={
+                                            () => this.onRemoveModifier(mod.id)
+                                        }
+                                    >Remove</a>
+
+                                    <a
+                                        className="icon-arrow-up"
+                                        onClick={() => {
+                                            this.onMoveModifierUp(mod.id);
+                                        }}
+                                        title="Change modifier order"
+                                    >Up</a>
+                                    <a
+                                        className="icon-arrow-down"
+                                        onClick={() => {
+                                            this.onMoveModifierDown(mod.id);
+                                        }}
+                                        title="Change modifier order"
+                                    >Down</a>
+                                </div>
                             </div>
                         );
                     })
@@ -272,7 +371,9 @@ export default class UpdateEmail extends React.Component {
                 
                 <hr />
                 
-                <button className="btn-primary" onClick={this.onUpdate}>Update Email</button>
+                <button className="btn-primary" onClick={this.onUpdate}>
+                    Update Email
+                </button>
             </div>
         );
     }
