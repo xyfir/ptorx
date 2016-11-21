@@ -14,6 +14,7 @@ import { URL } from "constants/config";
 import { filterTypes, modifierTypes } from "constants/types";
 
 // Modules
+import parseQuery from "lib/parse-hash-query";
 import request from "lib/request";
 
 export default class CreateEmail extends React.Component {
@@ -27,21 +28,49 @@ export default class CreateEmail extends React.Component {
         this.onCreate = this.onCreate.bind(this);
 
         this.state = {
-            filters: [], modifiers: [], showAdvanced: false
+            filters: [], modifiers: [], showAdvanced: false, loading: true
         };
-        
+    }
+
+    componentWillMount() {
         // Load modifiers / filters if needed
-        if (!this.props.data.filters.length || !this.props.data.modifiers.length) {
+        if (!this.props.data.modifiers.length) {
             request({
                 url: URL + "api/modifiers", success: (modifiers) => {
-                    request({
-                        url: URL + "api/filters", success: (filters) => {
-                            this.props.dispatch(loadModifiers(modifiers.modifiers));
-                            this.props.dispatch(loadFilters(filters.filters));
-                        }
-                    })
+                    this.props.dispatch(loadModifiers(modifiers.modifiers));
                 }
-            })
+            });
+        }
+        if (!this.props.data.filters.length) {
+            request({
+                url: URL + "api/filters", success: (filters) => {
+                    this.props.dispatch(loadFilters(filters.filters));
+                }
+            });
+        }
+
+        const q = parseQuery();
+
+        // Load data from email with id q.copy
+        if (q.copy) {
+            const email = this.props.data.emails.find(
+                e => e.id == q.copy
+            );
+
+            if (!email) return;
+
+            request({
+                url: URL + "api/emails/" + q.copy, success: (res) => {
+                    if (!res.err) {
+                        this.setState(Object.assign(
+                            {}, email, res, { showAdvanced: true, loading: false }
+                        ));
+                    }
+                }
+            });
+        }
+        else {
+            this.setState({ loading: false });
         }
     }
     
@@ -145,7 +174,10 @@ export default class CreateEmail extends React.Component {
     }
 
     render() {
+        if (this.state.loading) return <div />;
+
         const isPremium = this.props.data.account.subscription > Date.now();
+        const email = this.state; console.log("email/state", this.state);
         
         return (
             <div className="email-create">
@@ -153,13 +185,17 @@ export default class CreateEmail extends React.Component {
                 <span className="input-description">
                     Give your email a name to find it easier.
                 </span>
-                <input type="text" ref="name" />
+                <input type="text" ref="name" defaultValue={email.name} />
                 
                 <label>Description</label>
                 <span className="input-description">
                     Describe your email to find it easier.
                 </span>
-                <input type="text" ref="description" />
+                <input
+                    type="text"
+                    ref="description"
+                    defaultValue={email.description}
+                />
                 
                 { // Ptorx Address
                     isPremium
@@ -184,9 +220,9 @@ export default class CreateEmail extends React.Component {
                 <span className="input-description">
                     This is your real email that messages sent to your Ptorx address will be redirected to.
                 </span>
-                <select ref="to">{
-                    this.props.data.account.emails.map(email => {
-                        return <option value={email.id}>{email.address}</option>;
+                <select ref="to" defaultValue={email.toEmail}>{
+                    this.props.data.account.emails.map(e => {
+                        return <option value={e.id}>{e.address}</option>;
                     })
                 }</select>
                 
@@ -205,7 +241,9 @@ export default class CreateEmail extends React.Component {
                         <input
                             type="checkbox"
                             ref="spamFilter"
-                            defaultChecked={true}
+                            defaultChecked={
+                                email.name ? email.spamFilter : true
+                            }
                         />Enable
                         
                         { // Save Mail, No To Address
@@ -215,13 +253,25 @@ export default class CreateEmail extends React.Component {
                                     <span className="input-description">
                                         Any emails that are sent to this address will be temporarily stored for 3 days. You can then access the messages by viewing the <em>Messages</em> section when viewing this email's info. <strong>Note:</strong> This is required if you want to reply to emails.
                                     </span>
-                                    <input type="checkbox" ref="saveMail" />Enable
+                                    <input
+                                        type="checkbox"
+                                        ref="saveMail"
+                                        defaultChecked={
+                                            email.name ? email.saveMail : false
+                                        }
+                                    />Enable
                                     
                                     <label>No 'To' Address</label>
                                     <span className="input-description">
                                         Enabling this will allow you to avoid having emails sent to your Ptorx address redirected to your real email. This will act like the <em>Save Mail</em> feature just without the emails being redirected.
                                     </span>
-                                    <input type="checkbox" ref="noToAddress" />Enable
+                                    <input
+                                        type="checkbox"
+                                        ref="noToAddress"
+                                        defaultChecked={
+                                            email.name ? email.noToAddress : false
+                                        }
+                                    />Enable
                                 </div>
                             ) : (
                                 <div />
