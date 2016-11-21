@@ -150,3 +150,8 @@
     }
     
 }
+
+div.controls > a {
+    user-select: none;
+    margin: 0.3em;
+}
