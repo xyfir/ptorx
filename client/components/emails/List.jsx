@@ -101,7 +101,7 @@ export default class EmailList extends React.Component {
                                     <a
                                         className="icon-duplicate"
                                         href={`#emails/create?copy=${email.id}`}
-                                    >Duplicate</a>
+                                    >Copy</a>
                                 </div>
                             </div>
                         );
