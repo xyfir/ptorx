@@ -3,13 +3,13 @@ import React from "react";
 // Action creators
 import {
     loadMessages, deleteMessage
-} from "../../../actions/creators/messages";
+} from "actions/creators/messages";
 
 // Constants
-import { URL } from "../../../constants/config";
+import { URL } from "constants/config";
 
 // Modules
-import request from "../../../lib/request";
+import request from "lib/request";
 
 export default class MessageList extends React.Component {
 
@@ -58,8 +58,12 @@ export default class MessageList extends React.Component {
         return (
             <div className="messages">
                 <nav className="nav-bar-sub">
-                    <a href={`#emails/messages/${this.state.id}/send`}>Send Message</a>
-                    <a href={`#emails/list`}>Emails</a>
+                    <a href={`#emails/messages/${this.state.id}/send`}>
+                        Send Message
+                    </a>
+                    <a href={`#emails/edit/${this.state.id}`}>
+                        Edit Email
+                    </a>
                 </nav>
                 
                 <div className="list">{

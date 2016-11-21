@@ -1,10 +1,10 @@
 import React from "react";
 
 // Constants
-import { URL } from "../../../constants/config";
+import { URL } from "constants/config";
 
 // Modules
-import request from "../../../lib/request";
+import request from "lib/request";
 
 export default class SendMessage extends React.Component {
     
@@ -27,7 +27,12 @@ export default class SendMessage extends React.Component {
                     swal("Error", res.message, "error");
                 }
                 else {
-                    swal("Success", `Message sent to ${this.refs.to.value}`, "success");
+                    swal(
+                        "Success",
+                        `Message sent to ${this.refs.to.value}`,
+                        "success"
+                    );
+
                     location.hash = `emails/messages/${this.state.id}/list`;
                 }
             }
@@ -38,11 +43,13 @@ export default class SendMessage extends React.Component {
         return (
             <div className="message-send">
                 <nav className="nav-bar-sub">
-                    <a href={`#emails/messages/${this.state.id}/list`}>Messages</a>
-                    <a href={`#emails/list`}>Emails</a>
+                    <a href={`#emails/messages/${this.state.id}/list`}>
+                        Messages
+                    </a>
+                    <a href={`#emails/edit/${this.state.id}`}>
+                        Edit Email
+                    </a>
                 </nav>
-                
-                <hr />
                 
                 <input type="text" ref="to" placeholder="To" />
                 
