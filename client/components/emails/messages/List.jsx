@@ -5,10 +5,8 @@ import {
     loadMessages, deleteMessage
 } from "actions/creators/messages";
 
-// Constants
-import { URL } from "constants/config";
-
 // Modules
+import parseQuery from "lib/parse-hash-query";
 import request from "lib/request";
 
 export default class MessageList extends React.Component {
@@ -17,15 +15,16 @@ export default class MessageList extends React.Component {
         super(props);
 
         this.state = {
-            id: location.hash.split('/')[2], loading: true
+            id: location.hash.split('/')[2], rejected: !!parseQuery().rejected,
+            loading: true
         };
 
-        request({
-            url: `${URL}api/emails/${this.state.id}/messages`,
-            success: (res) => {
-                this.props.dispatch(loadMessages(res.messages));
-                this.setState({ loading: false });
-            }
+        const url = `../api/emails/${this.state.id}/messages`
+            + (this.state.rejected ? "?rejected=1" : "");
+
+        request(url, (res) => {
+            this.props.dispatch(loadMessages(res.messages));
+            this.setState({ loading: false });
         });
     }
 
@@ -39,15 +38,13 @@ export default class MessageList extends React.Component {
             confirmButtonText: "Yes, delete it!"
         }, () => {
             request({
-                url: `${URL}api/emails/${this.state.id}/messages/${id}`,
-                method: "DELETE", success: (res) => {
-                    if (res.error) {
-                        swal("Error", "Could not delete message", "error");
-                    }
-                    else {
-                        this.props.dispatch(deleteMessage(id));
-                    }
-                }
+                url: `../api/emails/${this.state.id}/messages/${id}`,
+                method: "DELETE",
+            }, (res) => {
+                if (res.error)
+                    swal("Error", "Could not delete message", "error");
+                else
+                    this.props.dispatch(deleteMessage(id));
             });
         });
     }
@@ -64,6 +61,15 @@ export default class MessageList extends React.Component {
                     <a href={`#emails/edit/${this.state.id}`}>
                         Edit Email
                     </a>
+                    <a onClick={() => {
+                        if (this.state.rejected)
+                            location.hash = location.hash.split('?')[0];
+                        else
+                            location.hash += "?rejected=1";
+                        location.reload();
+                    }}>
+                        {this.state.rejected ? "" : "Rejected "}Messages
+                    </a>
                 </nav>
                 
                 <div className="list">{
@@ -72,21 +78,24 @@ export default class MessageList extends React.Component {
                         return (
                             <div className="message">
                                 <span className="subject">
-                                    <a href={`#emails/messages/${this.state.id}/view/${msg.id}`}>
-                                        {msg.subject}
-                                    </a>
+                                    <a href={
+                                        "#emails/messages/" + this.state.id
+                                        + "/view/" + msg.id
+                                    }>{msg.subject}</a>
                                 </span>
-                                <span
-                                    className="icon-trash"
-                                    title="Delete Message"
-                                    onClick={this.onDeleteMessage.bind(this, msg.id) }
-                                />
                                 <span className="received">{
-                                    (new Date(msg.received * 1000)).toLocaleString()
+                                    (new Date(msg.received * 1000))
+                                        .toLocaleString()
                                 }</span>
+                                <div className="controls">
+                                    <a
+                                        className="icon-trash"
+                                        onClick={() => this.onDeleteMessage(msg.id)}
+                                    >Delete</a>
+                                </div>
                             </div>
                         );
-                    }) : <h3>Your inbox is empty</h3>
+                    }) : <h3>This inbox is empty</h3>
                 }</div>
             </div>
         );
