@@ -150,19 +150,33 @@ export default class FilterList extends React.Component {
                 <Search onSearch={this.onSearch} type="filter" />
                 
                 <div className="list">{
-                    findMatches(this.props.data.filters, this.state.search).map(filter => {
+                    findMatches(this.props.data.filters, this.state.search)
+                    .map(filter => {
                         return (
                             <div className="filter">
-                                <span className="type">{filterTypes[filter.type]}</span>
-                                <span className="name"><a href={`#filters/edit/${filter.id}`}>
-                                    {filter.name}
-                                </a></span>
-                                <span
-                                    className="icon-trash"
-                                    title="Delete Filter"
-                                    onClick={this.onDeleteFilter.bind(this, filter.id) }
-                                />
-                                <span className="description">{filter.description}</span>
+                                <span className="type">{
+                                    filterTypes[filter.type]
+                                }</span>
+                                <span className="name">
+                                    <a href={`#filters/edit/${filter.id}`}>
+                                        {filter.name}
+                                    </a>
+                                </span>
+                                
+                                <span className="description">{
+                                    filter.description
+                                }</span>
+                                
+                                <div className="controls">
+                                    <a
+                                        className="icon-edit"
+                                        href={`#filters/edit/${filter.id}`}
+                                    >Edit</a>
+                                    <a
+                                        className="icon-trash"
+                                        onClick={() => this.onDeleteFilter(filter.id)}
+                                    >Delete</a>
+                                </div>
                             </div>
                         );
                     })

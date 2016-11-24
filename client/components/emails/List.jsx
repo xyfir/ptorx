@@ -85,13 +85,20 @@ export default class EmailList extends React.Component {
                                         {email.name}
                                     </a>
                                 </span>
+                                
                                 <span className="address">{
                                     email.address
                                 }</span>
+                                
                                 <span className="description">{
                                     email.description
                                 }</span>
+                                
                                 <div className="controls">
+                                    <a
+                                        className="icon-edit"
+                                        href={`#emails/edit/${email.id}`}
+                                    >Edit</a>
                                     <a
                                         className="icon-trash"
                                         onClick={

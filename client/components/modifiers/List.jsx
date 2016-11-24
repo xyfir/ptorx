@@ -87,19 +87,33 @@ export default class ModifierList extends React.Component {
                 <Search onSearch={this.onSearch} type="modifier" />
                 
                 <div className="list">{
-                    findMatches(this.props.data.modifiers, this.state.search).map(mod => {
+                    findMatches(this.props.data.modifiers, this.state.search)
+                    .map(mod => {
                         return (
                             <div className="modifier">
-                                <span className="type">{modifierTypes[mod.type]}</span>
-                                <span className="name"><a href={`#modifiers/edit/${mod.id}`}>
-                                    {mod.name}
-                                </a></span>
-                                <span
-                                    className="icon-trash"
-                                    title="Delete Modifier"
-                                    onClick={this.onDeleteModifier.bind(this, mod.id) }
-                                />
-                                <span className="description">{mod.description}</span>
+                                <span className="type">{
+                                    modifierTypes[mod.type]
+                                }</span>
+                                <span className="name">
+                                    <a href={`#modifiers/edit/${mod.id}`}>
+                                        {mod.name}
+                                    </a>
+                                </span>
+                                
+                                <span className="description">{
+                                    mod.description
+                                }</span>
+
+                                <div className="controls">
+                                    <a
+                                        className="icon-edit"
+                                        href={`#modifiers/edit/${mod.id}`}
+                                    >Edit</a>
+                                    <a
+                                        className="icon-trash"
+                                        onClick={() => this.onDeleteModifier(mod.id)}
+                                    >Delete</a>
+                                </div>
                             </div>
                         );
                     })
