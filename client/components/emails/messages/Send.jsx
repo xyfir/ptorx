@@ -46,6 +46,9 @@ export default class SendMessage extends React.Component {
                     <a href={`#emails/messages/${this.state.id}/list`}>
                         Messages
                     </a>
+                    <a href={`#emails/messages/${this.state.id}/list?rejected=1`}>
+                        Rejected Messages
+                    </a>
                     <a href={`#emails/edit/${this.state.id}`}>
                         Edit Email
                     </a>

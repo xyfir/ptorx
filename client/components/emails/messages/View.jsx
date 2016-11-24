@@ -1,10 +1,10 @@
 import React from "react";
 
 // Constants
-import { URL } from "../../../constants/config";
+import { URL } from "constants/config";
 
 // Modules
-import request from "../../../lib/request";
+import request from "lib/request";
 
 export default class ViewMessage extends React.Component {
     
@@ -67,7 +67,12 @@ export default class ViewMessage extends React.Component {
         return (
             <div className="message-view">
                 <nav className="nav-bar-sub">
-                    <a href={`#emails/messages/${this.state.id}/list`}>Messages</a>
+                    <a href={`#emails/messages/${this.state.id}/list`}>
+                        Messages
+                    </a>
+                    <a href={`#emails/messages/${this.state.id}/list?rejected=1`}>
+                        Rejected Messages
+                    </a>
                     <a href={`#emails/list`}>Emails</a>
                 </nav>
                 
