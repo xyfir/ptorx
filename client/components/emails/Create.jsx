@@ -177,7 +177,7 @@ export default class CreateEmail extends React.Component {
         if (this.state.loading) return <div />;
 
         const isPremium = this.props.data.account.subscription > Date.now();
-        const email = this.state; console.log("email/state", this.state);
+        const email = this.state;
         
         return (
             <div className="email-create">
@@ -251,7 +251,11 @@ export default class CreateEmail extends React.Component {
                                 <div>
                                     <label>Save Mail</label>
                                     <span className="input-description">
-                                        Any emails that are sent to this address will be temporarily stored for 3 days. You can then access the messages by viewing the <em>Messages</em> section when viewing this email's info. <strong>Note:</strong> This is required if you want to reply to emails.
+                                        Any emails that are sent to this address will be temporarily stored for 3 days. You can then access the messages by viewing the 'Messages' section when viewing this email's info.
+                                        <br />
+                                        'Rejected' emails that don't match your filters will also be saved in a separate section for only rejected emails. If you have 'Spam Filter' enabled, messages detected as spam will <em>not</em> be stored at all.
+                                        <br />
+                                        This option is required if you want to reply to emails.
                                     </span>
                                     <input
                                         type="checkbox"

@@ -264,34 +264,35 @@ export default class UpdateEmail extends React.Component {
                     defaultChecked={email.spamFilter}
                 />Enable
                 
-                { // Save Mail, No To Address
-                    this.props.data.account.subscription > Date.now()
-                    ? (
-                        <div>
-                            <label>Save Mail</label>
-                            <span className="input-description">
-                                Any emails that are sent to this address will be temporarily stored for 3 days. You can then access the messages by viewing the <em>Messages</em> section when viewing this email's info. <strong>Note:</strong> This is required if you want to reply to emails.
+                {this.props.data.account.subscription > Date.now() ? (
+                    <div>
+                        <label>Save Mail</label>
+                        <span className="input-description">
+                                Any emails that are sent to this address will be temporarily stored for 3 days. You can then access the messages by viewing the 'Messages' section when viewing this email's info.
+                                <br />
+                                'Rejected' emails that don't match your filters will also be saved in a separate section for only rejected emails. If you have 'Spam Filter' enabled, messages detected as spam will <em>not</em> be stored at all.
+                                <br />
+                                This option is required if you want to reply to emails.
                             </span>
-                            <input
-                                type="checkbox"
-                                ref="saveMail"
-                                defaultChecked={email.saveMail}
-                            />Enable
-                            
-                            <label>No 'To' Address</label>
-                            <span className="input-description">
-                                Enabling this will allow you to avoid having emails sent to your Ptorx address redirected to your real email. This will act like the <em>Save Mail</em> feature just without the emails being redirected.
-                            </span>
-                            <input
-                                type="checkbox"
-                                ref="noToAddress"
-                                defaultChecked={email.address == ''}
-                            />Enable
-                        </div>
-                    ) : (
-                        <div />
-                    )
-                }
+                        <input
+                            type="checkbox"
+                            ref="saveMail"
+                            defaultChecked={email.saveMail}
+                        />Enable
+                        
+                        <label>No 'To' Address</label>
+                        <span className="input-description">
+                            Enabling this will allow you to avoid having emails sent to your Ptorx address redirected to your real email. This will act like the <em>Save Mail</em> feature just without the emails being redirected.
+                        </span>
+                        <input
+                            type="checkbox"
+                            ref="noToAddress"
+                            defaultChecked={email.address == ''}
+                        />Enable
+                    </div>
+                ) : (
+                    <div />
+                )}
 
                 <hr />
 
