@@ -1,6 +1,7 @@
 ﻿const escapeRegExp = require("escape-string-regexp");
-const crypto = require("lib/crypto");
+const saveMessage = require("lib/email/save-message");
 const getInfo = require("lib/email/get-info");
+const crypto = require("lib/crypto");
 const db = require("lib/db");
 
 let config = require("config");
@@ -38,26 +39,39 @@ module.exports = function(req, res) {
             // All filters here other than text/html content are reject on match
             switch (filter.type) {
                 case 1: // Subject
-                    return data.filters[i].pass = !req.body.subject.match(new RegExp(filter.find, 'g'));
+                    return data.filters[i].pass = !req.body.subject
+                        .match(new RegExp(filter.find, 'g'));
                 case 2: // From Address
-                    return data.filters[i].pass = !req.body.from.match(new RegExp(filter.find, 'g'));
+                    return data.filters[i].pass = !req.body.from
+                        .match(new RegExp(filter.find, 'g'));
                 case 3: // From Domain
-                    return data.filters[i].pass = !req.body.from.match(new RegExp(`(.*)@${filter.find}'`, 'g'));
+                    return data.filters[i].pass = !req.body.from
+                        .match(new RegExp(`(.*)@${filter.find}'`, 'g'));
                 case 4: // Text
-                    if (!!(+filter.acceptOnMatch))
-                        return data.filters[i].pass = !!req.body["body-plain"].match(new RegExp(filter.find, 'g'));
-                    else
-                        return data.filters[i].pass = !req.body["body-plain"].match(new RegExp(filter.find, 'g'));
+                    if (!!(+filter.acceptOnMatch)) {
+                        return data.filters[i].pass = !!req.body["body-plain"]
+                            .match(new RegExp(filter.find, 'g'));
+                    }
+                    else {
+                        return data.filters[i].pass = !req.body["body-plain"]
+                            .match(new RegExp(filter.find, 'g'));
+                    }
                 case 5: // HTML
-                    if (!!(+filter.acceptOnMatch))
-                        return data.filters[i].pass = !!(req.body["body-html"] || '').match(new RegExp(filter.find, 'g'));
-                    else if (req.body["body-html"])
-                        return data.filters[i].pass = !req.body["body-html"].match(new RegExp(filter.find, 'g'));
+                    if (!!(+filter.acceptOnMatch)) {
+                        return data.filters[i].pass = !!(req.body["body-html"] || '')
+                            .match(new RegExp(filter.find, 'g'));
+                    }
+                    else if (req.body["body-html"]) {
+                        return data.filters[i].pass = !req.body["body-html"]
+                            .match(new RegExp(filter.find, 'g'));
+                    }
                 case 6: // Header
                     let find = filter.find.split(":::");
                     headers.forEach(header => {
-                        if (header[0] == find[0] && ('' + header[1]).match(new RegExp(find[1], 'g')))
-                            data.filters[i].pass = false;
+                        if (
+                            header[0] == find[0]
+                            && ('' + header[1]).match(new RegExp(find[1], 'g'))
+                        ) data.filters[i].pass = false;
                     });
             }
         });
@@ -65,6 +79,9 @@ module.exports = function(req, res) {
         // Check if all filters passed
         for (let filter of data.filters) {
             if (!filter.pass) {
+                // Optionally save as rejected message
+                if (req.body["message-url"]) saveMessage(req, true);
+
                 res.status(200).send();
                 return;
             }
@@ -76,19 +93,27 @@ module.exports = function(req, res) {
         data.modifiers.forEach(modifier => {
             switch (modifier.type) {
                 case 1: // Encrypt
-                    req.body["body-plain"] = crypto.encrypt(req.body["body-plain"], modifier.data);
-                    if (req.body["body-html"] && !textonly)
-                        req.body["body-html"] = crypto.encrypt(req.body["body-html"], modifier.data);
+                    req.body["body-plain"] = crypto.encrypt(
+                        req.body["body-plain"], modifier.data
+                    );
+                    
+                    if (req.body["body-html"] && !textonly) {
+                        req.body["body-html"] = crypto.encrypt(
+                            req.body["body-html"], modifier.data
+                        );
+                    }
                     break;
                 case 2: // Text Only
                     textonly = true; break;
                 case 3: // Find & Replace
                     req.body["body-plain"] = req.body["body-plain"].replace(
-                        new RegExp(modifier.data.value, 'g'), modifier.data.with
+                        new RegExp(modifier.data.value, 'g'),
+                        modifier.data.with
                     );
                     if (req.body["body-html"] && !textonly) {
                         req.body["body-html"] = req.body["body-html"].replace(
-                            new RegExp(modifier.data.value, 'g'), modifier.data.with
+                            new RegExp(modifier.data.value, 'g'),
+                            modifier.data.with
                         );
                     }
                     break;
@@ -102,14 +127,15 @@ module.exports = function(req, res) {
             }
         });
 
-        data = {
-            text: req.body["body-plain"], html: (
-                req.body["body-html"] && !textonly ? req.body["body-html"] : ""
-            ), from: req.body.To, to: data.to, subject: req.body.subject
+        const message = {
+            text: req.body["body-plain"], from: req.body.To, to: data.to,
+            subject: req.body.subject, html: (
+                req.body["body-html"] && (!textonly ? req.body["body-html"] : "")
+            )
         };
 
         // Forward message to user's main email
-        mailgun.messages().send(data, (err, body) => {
+        mailgun.messages().send(message, (err, body) => {
             if (err) {
                 res.status(406).send();
             }
@@ -117,18 +143,7 @@ module.exports = function(req, res) {
                 res.status(200).send();
 
                 // Optionally save message to messages table
-                if (req.body['message-url']) {
-                    let sql = `
-                        INSERT INTO messages (email_id, message_key, received, subject) VALUES (?, ?, ?, ?)
-                    `;
-                    let vars = [
-                        req.params.email, req.body['message-url'].split('/').slice(-1)[0],
-                        req.body.timestamp, req.body.subject
-                        
-                    ];
-
-                    db(cn => cn.query(sql, vars, (err, result) => cn.release()));
-                }
+                if (req.body["message-url"]) saveMessage(req, false);
             }
         });
     });
