@@ -18,7 +18,7 @@
     "redux": "^3.6.0",
     "request": "^2.79.0",
     "sol-redis-pool": "^0.3.2",
-    "stripe": "^4.13.0"
+    "stripe": "^4.14.0"
   },
   "devDependencies": {
     "autoprefixer": "^6.5.3",
@@ -26,7 +26,7 @@
     "babel-preset-react": "^6.16.0",
     "babelify": "^7.3.0",
     "browserify": "^13.1.1",
-    "cssnano": "^3.8.0",
+    "cssnano": "^3.8.1",
     "gulp": "^3.9.1",
     "gulp-favicons": "^2.2.7",
     "gulp-fontello": "^0.4.6",
