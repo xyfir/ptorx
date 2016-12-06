@@ -129,7 +129,8 @@ module.exports = function(req, res) {
 
                 // Build MailGun route expression(s)
                 buildExpression({
-                    address: data.address, filters, saveMail: data.save_mail
+                    address: data.address, filters,
+                    saveMail: data.save_mail || data.to_email == 0
                 }, cn, (expression) => {
                     mailgun.routes().create({
                         priority: (data.spam_filter ? 2 : 0), description: "",

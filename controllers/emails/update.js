@@ -115,7 +115,7 @@ module.exports = function(req, res) {
                 // Build MailGun route expression(s)
                 buildExpression({
                     address: data.address, filters: data.filters,
-                    saveMail: !!(+req.body.saveMail)
+                    saveMail: !!(+req.body.saveMail) || req.body.to == 0
                 }, cn, (expression) => {
                     // Update MailGun route
                     mailgun.routes(data.routeId).update({
@@ -123,7 +123,7 @@ module.exports = function(req, res) {
                         description: "", expression,
                         action: buildAction(
                             req.params.email, req.session.subscription,
-                            data.to_email == 0 || data.save_mail
+                            req.body.to == 0 || !!(+req.body.saveMail)
                         )
                     }, (err, body) => {
                         if (err) {
