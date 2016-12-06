@@ -113,7 +113,10 @@ module.exports = function(req, res) {
                 }
 
                 // Build MailGun route expression(s)
-                buildExpression(data.address, data.filters, cn, (expression) => {
+                buildExpression({
+                    address: data.address, filters: data.filters,
+                    saveMail: !!(+req.body.saveMail)
+                }, cn, (expression) => {
                     // Update MailGun route
                     mailgun.routes(data.routeId).update({
                         priority: (!(+req.body.noSpamFilter) ? 2 : 0),
