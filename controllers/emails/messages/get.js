@@ -18,11 +18,12 @@ let mailgun = require("mailgun-js")({
 module.exports = function(req, res) {
     
     let sql = `
-        SELECT message_key as mkey FROM messages WHERE message_id = ? AND email_id IN (
-            SELECT email_id FROM redirect_emails WHERE email_id = ? AND user_id = ?
+        SELECT message_key as mkey FROM messages
+        WHERE message_key = ? AND email_id IN (
+            SELECT email_id FROM redirect_emails
+            WHERE email_id = ? AND user_id = ?
         ) AND received + 255600 > UNIX_TIMESTAMP()
-    `;
-    let vars = [
+    `, vars = [
         req.params.message,
         req.params.email, req.session.uid
     ];
@@ -40,9 +41,9 @@ module.exports = function(req, res) {
                 }
                 else {
                     res.json({
-                        error: false, headers: data["message-headers"], from: data["from"],
-                        subject: data["subject"], text: data["body-plain"],
-                        html: data["body-html"]
+                        text: data["body-plain"], html: data["body-html"],
+                        error: false, headers: data["message-headers"],
+                        from: data["from"], subject: data["subject"]
                     });
                 }
             });

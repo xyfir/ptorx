@@ -16,11 +16,12 @@ module.exports = function(req, res) {
 
     // Make sure message exists and user has access
     let sql = `
-        SELECT message_key as mkey FROM messages WHERE message_id = ? AND email_id IN (
-            SELECT email_id FROM redirect_emails WHERE email_id = ? AND user_id = ?
+        SELECT message_key as mkey FROM messages
+        WHERE message_key = ? AND email_id IN (
+            SELECT email_id FROM redirect_emails
+            WHERE email_id = ? AND user_id = ?
         )
-    `;
-    let vars = [
+    `, vars = [
         req.params.message,
         req.params.email, req.session.uid
     ];
@@ -31,9 +32,13 @@ module.exports = function(req, res) {
         }
         else {
             // Delete message ref from Ptorx
-            sql = `DELETE FROM messages WHERE message_id = ? AND email_id = ?`;
+            sql = `
+                DELETE FROM messages WHERE message_key = ? AND email_id = ?
+            `, vars = [
+                req.params.message, req.params.email
+            ];
 
-            cn.query(sql, [req.params.message, req.params.email], (err, result) => {
+            cn.query(sql, vars, (err, result) => {
                 cn.release();
 
                 if (err || !result.affectedRows) {

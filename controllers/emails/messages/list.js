@@ -19,7 +19,7 @@ module.exports = function(req, res) {
     db(cn => cn.query(sql, (err, result) => {
         sql = `
             SELECT
-                m.message_id as id, m.received, m.subject
+                m.message_key as id, m.received, m.subject
             FROM
                 messages AS m, redirect_emails AS re
             WHERE

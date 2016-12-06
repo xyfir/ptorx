@@ -26,10 +26,11 @@ module.exports = function(req, res) {
     // Get message_key and address
     let sql = `
         SELECT address, (
-            SELECT message_key FROM messages WHERE message_id = ? AND email_id = ?
-        ) as mkey FROM redirect_emails WHERE email_id = ? AND user_id = ?
-    `;
-    let vars = [
+            SELECT message_key FROM messages
+            WHERE message_key = ? AND email_id = ?
+        ) as mkey FROM redirect_emails
+        WHERE email_id = ? AND user_id = ?
+    `, vars = [
         req.params.message, req.params.email,
         req.params.email, req.session.uid
     ];
@@ -44,20 +45,26 @@ module.exports = function(req, res) {
             // Get original messages' data
             mailgun.messages(rows[0].mkey).info((err, data) => {
                 if (err) {
-                    res.json({ error: true, message: "An unknown error occured" });
+                    res.json({
+                        error: true, message: "An unknown error occured"
+                    });
                 }
                 else {
                     data = {
-                        from: rows[0].address, to: data.sender, text: req.body.content,
-                        subject: "RE: " + data.subject,
+                        from: rows[0].address, to: data.sender,
+                        text: req.body.content, subject: "Re: " + data.subject
                     };
 
                     // Send reply
                     mailgun.messages().send(data, (err, body) => {
-                        if (err)
-                            res.json({ error: true, message: "An unknown error occured" });
-                        else
+                        if (err) {
+                            res.json({
+                                error: true, message: "An unknown error occured"
+                            });
+                        }
+                        else {
                             res.json({ error: false });
+                        }
                     });
                 }
             });
