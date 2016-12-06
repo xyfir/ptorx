@@ -27,10 +27,8 @@ export default class ViewMessage extends React.Component {
             }
         );
         
-        this.onShowReplyForm = this.onShowReplyForm.bind(this);
         this.onShowHeaders = this.onShowHeaders.bind(this);
         this.onShowHTML = this.onShowHTML.bind(this);
-        this.onReply = this.onReply.bind(this);
     }
     
     onShowReplyForm() {
@@ -45,7 +43,9 @@ export default class ViewMessage extends React.Component {
         this.setState({ showHTML: true });
     }
     
-    onReply() {
+    onReply(e) {
+        e.preventDefault();
+
         request({
             url: `${URL}api/emails/${this.state.id}/messages/${this.state.message}`,
             method: "POST", data: { content: this.refs.content.value }
@@ -75,79 +75,77 @@ export default class ViewMessage extends React.Component {
                     <a href={`#emails/list`}>Emails</a>
                 </nav>
                 
-                <hr />
-                
-                <table className="message">
-                    <tr>
-                        <th>From</th><td>{this.state.content.from}</td>
-                    </tr>
-                    <tr>
-                        <th>To</th>
-                        <td>{this.props.data.emails.find(e => {
+                <dl className="message">
+                        <dt>From</dt>
+                        <dd>{this.state.content.from}</dd>
+
+                        <dt>To</dt>
+                        <dd>{this.props.data.emails.find(e => {
                             return e.id == this.state.id;
-                        }).address}</td>
-                    </tr>
-                    <tr>
-                        <th>Subject</th>
-                        <td>{this.state.content.subject}</td>
-                    </tr>
-                    <tr>
-                        <th>Headers</th>
-                        <td>{
-                            this.state.showHeaders
-                            ? (
-                                <div className="headers">{
-                                    this.state.content.headers.map(header => {
-                                        return (
-                                            <div className="header">
-                                                <span>{header[0]}</span>
-                                                <span>{header[1]}</span>
-                                            </div>
-                                        );
-                                    })
-                                }</div>
+                        }).address}</dd>
+
+                        <dt>Subject</dt>
+                        <dd>{this.state.content.subject}</dd>
+                    
+                        <dt>Headers</dt>
+                        <dd>{this.state.showHeaders ? (
+                            <dl className="headers">{
+                                this.state.content.headers.map(header => {
+                                    return (
+                                        <div className="header">
+                                            <dt>{header[0]}</dt>
+                                            <dd>{header[1]}</dd>
+                                        </div>
+                                    );
+                                })
+                            }</dl>
+                        ) : (
+                            <a onClick={this.onShowHeaders}>
+                                View Message Headers
+                            </a>
+                        )}</dd>
+                    
+                        <dt>Text Content</dt>
+                        <dd className="text">{this.state.content.text}</dd>
+                    
+                    {this.state.content.html ? (
+                        <div>
+                            <dt>HTML Content</dt>
+                            <dd>{this.state.showHTML ? (
+                                <div
+                                    className="html"
+                                    dangerouslySetInnerHTML={{
+                                        __html: this.state.content.html
+                                    }}
+                                />
                             ) : (
-                                <a onClick={this.onShowHeaders}>View Message Headers</a>
-                            )
-                        }</td>
-                    </tr>
-                    <tr>
-                        <th>Text Content</th>
-                        <td>{this.state.content.text}</td>
-                    </tr>
-                    {
-                        this.state.content.html
-                        ? (
-                            <tr>
-                                <th>HTML Content</th>
-                                <td>{
-                                    this.state.showHTML
-                                    ? <div dangerouslySetInnerHTML={{ __html: this.state.content.html}} />
-                                    : <a onClick={this.onShowHTML}>Show HTML Content</a>
-                                }</td>
-                            </tr>
-                        ) : (<tr />)
-                    }
-                </table>
-                
-                <hr />
-                
-                {
-                    this.state.onShowReplyForm
-                    ? (
-                        <div className="message-reply">
-                            <textarea ref="content"></textarea>
-                            
-                            <button onClick={this.onReply} className="btn-primary">
-                                Send Reply
-                            </button>
+                                <a onClick={this.onShowHTML}>
+                                    Show HTML Content
+                                </a>
+                            )}</dd>
                         </div>
                     ) : (
-                        <button onClick={this.onShowReplyForm} className="btn-secondary">
-                            Reply
+                        <div />
+                    )}
+                </dl>
+                
+                {this.state.showReplyForm ? (
+                    <form
+                        className="message-reply"
+                        onSubmit={(e) => this.onReply(e)}
+                    >
+                        <textarea ref="content" />
+                        
+                        <button className="btn-primary">
+                            Send Reply
                         </button>
-                    )
-                }
+                    </form>
+                ) : (
+                    <button
+                        onClick={() => this.onShowReplyForm()}
+                        className="btn-secondary"
+                    >Reply</button>
+                )}
             </div>
         );
     }
