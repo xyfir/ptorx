@@ -121,6 +121,33 @@
     
 }
 
+.message-view {
+
+    dl {
+
+        dt {
+            font-weight: bold;
+        }
+
+        dd {
+            margin-left: 0;
+        }
+
+        dd.html, dd.text, dl.headers {
+            background-color: $lllgray;
+            width: 60%;
+            margin: auto;
+            padding: 0.5em;
+        }
+
+        dl.headers {
+            font-size: 80%;
+        }
+
+    }
+
+}
+
 .account {
     
     h3 {
