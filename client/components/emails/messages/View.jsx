@@ -13,19 +13,19 @@ export default class ViewMessage extends React.Component {
         
         this.state = {
             id: location.hash.split('/')[2], showReplyForm: false,
-            message: location.hash.split('/')[2], loading: true,
+            message: location.hash.split('/')[4], loading: true,
             content: {}, showHeaders: false, showHTML: false
         };
         
-        request({
-            url: `${URL}api/emails/${this.state.id}/messages/${this.state.message}`,
-            success: (res) => {
+        request(
+            `${URL}api/emails/${this.state.id}/messages/${this.state.message}`,
+            (res) => {
                 if (res.error)
                     swal("Error", "Could not load message", "error");
                 else
                     this.setState({ loading: false, content: res });
             }
-        })
+        );
         
         this.onShowReplyForm = this.onShowReplyForm.bind(this);
         this.onShowHeaders = this.onShowHeaders.bind(this);
@@ -48,17 +48,16 @@ export default class ViewMessage extends React.Component {
     onReply() {
         request({
             url: `${URL}api/emails/${this.state.id}/messages/${this.state.message}`,
-            method: "POST", data: { content: this.refs.content.value },
-            success: (res) => {
-                if (res.error) {
-                    swal("Error", res.message, "error");
-                }
-                else {
-                    swal("Success", `Message sent to ${this.refs.to.value}`, "success");
-                    location.hash = `emails/messages/${this.state.id}/list`;
-                }
+            method: "POST", data: { content: this.refs.content.value }
+        }, (res) => {
+            if (res.error) {
+                swal("Error", res.message, "error");
             }
-        })
+            else {
+                swal("Success", `Message sent to ${this.refs.to.value}`, "success");
+                location.hash = `emails/messages/${this.state.id}/list`;
+            }
+        });
     }
     
     render() {
