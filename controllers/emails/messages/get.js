@@ -1,9 +1,7 @@
-﻿const db = require("lib/db");
+﻿const request = require("request");
+const db = require("lib/db");
 
-let config  = require("config");
-let mailgun = require("mailgun-js")({
-    apiKey: config.keys.mailgun, domain: "ptorx.com"
-});
+const config  = require("config");
 
 /*
     GET api/emails/:email/messages/:message
@@ -35,15 +33,22 @@ module.exports = function(req, res) {
             res.json({ error: true });
         }
         else {
-            mailgun.messages(rows[0].mkey).info((err, data) => {
+            // mailgun-js gives error when loading message
+            const url = "https://api:" + config.keys.mailgun
+                + "@se.api.mailgun.net/v3/domains/" + "ptorx.com"
+                + "/messages/" + req.params.message;
+
+            request.get(url, (err, response, body) => {
                 if (err) {
                     res.json({ error: true });
                 }
                 else {
+                    body = JSON.parse(body);
+
                     res.json({
-                        text: data["body-plain"], html: data["body-html"],
-                        error: false, headers: data["message-headers"],
-                        from: data["from"], subject: data["subject"]
+                        text: body["body-plain"], html: body["body-html"],
+                        error: false, headers: body["message-headers"],
+                        from: body["from"], subject: body["subject"]
                     });
                 }
             });
