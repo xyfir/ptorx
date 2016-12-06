@@ -20,13 +20,15 @@ let mailgun = require("mailgun-js")({
         200: Success, 406: Error
     DESCRIPTION
         Receive emails for addresses linked to premium users
-        Messages are ran through any filters that can't be run on MailGun
+        Messages are ran through any filters that weren't or can't be run on MailGun
         Messages are then modified via modifiers
 */
 module.exports = function(req, res) {
+
+    const save = !!req.body["message-url"];
     
     // Get email/filters/modifiers data
-    getInfo(req.params.email, false, (err, data) => {
+    getInfo(req.params.email, false, save, (err, data) => {
         if (err) {
             res.status(406).send();
             return;
@@ -36,51 +38,51 @@ module.exports = function(req, res) {
 
         // Loop through filters
         data.filters.forEach((filter, i) => {
-            // All filters here other than text/html content are reject on match
+            // MailGun already validated filter
+            if (filter.pass) return;
+
             switch (filter.type) {
                 case 1: // Subject
-                    return data.filters[i].pass = !req.body.subject
+                    data.filters[i].pass = req.body.subject
                         .match(new RegExp(filter.find, 'g'));
+                    break;
                 case 2: // From Address
-                    return data.filters[i].pass = !req.body.from
+                     data.filters[i].pass = req.body.from
                         .match(new RegExp(filter.find, 'g'));
+                    break;
                 case 3: // From Domain
-                    return data.filters[i].pass = !req.body.from
+                     data.filters[i].pass = req.body.from
                         .match(new RegExp(`(.*)@${filter.find}'`, 'g'));
+                    break;
                 case 4: // Text
-                    if (!!(+filter.acceptOnMatch)) {
-                        return data.filters[i].pass = !!req.body["body-plain"]
-                            .match(new RegExp(filter.find, 'g'));
-                    }
-                    else {
-                        return data.filters[i].pass = !req.body["body-plain"]
-                            .match(new RegExp(filter.find, 'g'));
-                    }
+                     data.filters[i].pass = req.body["body-plain"]
+                        .match(new RegExp(filter.find, 'g'));
+                    break;
                 case 5: // HTML
-                    if (!!(+filter.acceptOnMatch)) {
-                        return data.filters[i].pass = !!(req.body["body-html"] || '')
-                            .match(new RegExp(filter.find, 'g'));
-                    }
-                    else if (req.body["body-html"]) {
-                        return data.filters[i].pass = !req.body["body-html"]
-                            .match(new RegExp(filter.find, 'g'));
-                    }
+                     data.filters[i].pass = (req.body["body-html"] || '')
+                        .match(new RegExp(filter.find, 'g'));
+                    break;
                 case 6: // Header
                     let find = filter.find.split(":::");
                     headers.forEach(header => {
                         if (
                             header[0] == find[0]
                             && ('' + header[1]).match(new RegExp(find[1], 'g'))
-                        ) data.filters[i].pass = false;
+                        ) data.filters[i].pass = true;
                     });
             }
+
+            // Flip value if reject on match
+            data.filters[i].pass = !!(+filter.acceptOnMatch)
+                ? !!data.filters[i].pass
+                : !data.filters[i].pass;
         });
 
         // Check if all filters passed
         for (let filter of data.filters) {
             if (!filter.pass) {
                 // Optionally save as rejected message
-                if (req.body["message-url"]) saveMessage(req, true);
+                if (save) saveMessage(req, true);
 
                 res.status(200).send();
                 return;
@@ -143,7 +145,7 @@ module.exports = function(req, res) {
                 res.status(200).send();
 
                 // Optionally save message to messages table
-                if (req.body["message-url"]) saveMessage(req, false);
+                if (save) saveMessage(req, false);
             }
         });
     });
