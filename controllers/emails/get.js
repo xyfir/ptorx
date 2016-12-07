@@ -4,9 +4,9 @@
     GET api/emails/:email
     RETURN
         { 
-            error: boolean, toEmail: string, saveMail: boolean, spamFilter: boolean,
-            id: number, name: string, description: string, address: string,
-            filters: [{
+            error: boolean, toEmail: string, saveMail: boolean,
+            spamFilter: boolean, id: number, name: string, description: string,
+            address: string, filters: [{
                 id: number, name: string, description: string, type: number
             }], modifiers: [{
                 id: number, name: string, description: string, type: number
@@ -19,14 +19,16 @@ module.exports = function(req, res) {
 
     // Ensure user owns email and grab toEmail/saveMail
     let sql = `
-        SELECT email_id as id, name, description, address, save_mail as saveMail,
-        spam_filter as spamFilter, (
-            SELECT address FROM main_emails WHERE email_id IN (
-                SELECT to_email FROM redirect_emails WHERE email_id = ? AND user_id = ?
-            )
-        ) as toEmail FROM redirect_emails WHERE email_id = ?
-    `;
-    let vars = [
+        SELECT
+            email_id as id, name, description, address, save_mail as saveMail,
+            spam_filter as spamFilter, (
+                SELECT address FROM main_emails WHERE email_id IN (
+                    SELECT to_email FROM redirect_emails
+                    WHERE email_id = ? AND user_id = ?
+                )
+            ) as toEmail
+        FROM redirect_emails WHERE email_id = ?
+    `, vars = [
         req.params.email, req.session.uid,
         req.params.email
     ];
@@ -40,7 +42,7 @@ module.exports = function(req, res) {
             let response = rows[0];
             
             response.error = false;
-            response.saveMail = !!(+response.saveEmail);
+            response.saveMail = !!(+response.saveMail);
             response.spamFilter = !!(+response.spamFilter);
 
             // Grab basic info for all filters linked to email
