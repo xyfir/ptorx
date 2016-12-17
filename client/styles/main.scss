@@ -126,41 +126,30 @@ input[type=checkbox] {
 
 
 /* NAVBAR */
-.navbar {
-    
-    background-color: $purple;
+nav {
+	background-color: $purple;
     padding: 0.25em 0em;
+	display: flex;
+
+	>a {
+        color: white;
+		flex: 1;
+        
+		&:hover {
+			color: $lgray;
+		}
+    }
+}
+nav.navbar {
     position: fixed;
 	top: 0%;
 	left: 0%;
 	right: 0%;
-    
-    a {
-        color: white;
-        margin: 1em;
-    }
-    a:hover {
-        color: $lgray;
-    }
-    
 }
-.navbar-sub {
-	
-	background-color: $purple;
-	padding: 0.25em 0em;
+nav.navbar-sub {
 	width: 80%;
 	margin: auto;
 	margin-bottom: 1em;
-
-	a {
-		color: white;
-		margin: 0.5em;
-	}
-
-	a:hover {
-		color: $lgray;
-	}
-
 }
 
 div.ptorx > div {
