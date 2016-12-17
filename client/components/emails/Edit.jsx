@@ -209,7 +209,7 @@ export default class UpdateEmail extends React.Component {
         
         return (
             <div className="email-update">
-                <nav className="nav-bar-sub">
+                <nav className="navbar-sub">
                     <a href={`#emails/messages/${this.state.id}/send`}>
                         Send Message
                     </a>

@@ -65,7 +65,7 @@ export default class ViewMessage extends React.Component {
         
         return (
             <div className="message-view">
-                <nav className="nav-bar-sub">
+                <nav className="navbar-sub">
                     <a href={`#emails/messages/${this.state.id}/list`}>
                         Messages
                     </a>

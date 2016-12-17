@@ -54,7 +54,7 @@ export default class MessageList extends React.Component {
         
         return (
             <div className="messages">
-                <nav className="nav-bar-sub">
+                <nav className="navbar-sub">
                     <a href={`#emails/messages/${this.state.id}/send`}>
                         Send Message
                     </a>

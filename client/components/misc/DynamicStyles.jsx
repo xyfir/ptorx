@@ -16,11 +16,11 @@ export default class DynamicStyles extends React.Component {
         return `
             div.ptorx > div {
                 margin-top: ${
-                    document.querySelector("nav.nav-bar").scrollHeight
+                    document.querySelector("nav.navbar").scrollHeight
                     + (this._isPhoneGap() && this._isIOS() ? 20 : 0)
                 }px;
             }
-            nav.nav-bar {${
+            nav.navbar {${
                 this._isPhoneGap() && this._isIOS()
                 ? "padding-top: 20px;" : ""
             }}

@@ -130,7 +130,7 @@ class App extends React.Component {
         
         return (
             <div className="ptorx">
-                <nav className="nav-bar">
+                <nav className="navbar">
                     <a href="#account">Account</a>
                     <a href="#emails/list">Emails</a>
                     <a href="#filters/list">Filters</a>
