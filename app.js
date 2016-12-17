@@ -48,3 +48,6 @@ app.get("/*", (req, res) => {
     }
     res.sendFile(__dirname + "/views/Home.html");
 });
+
+if (config.environment.runCronJobs)
+    require("./cron/start")();
