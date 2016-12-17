@@ -12,29 +12,23 @@
 */
 module.exports = function(req, res) {
 
-    let sql = `
-        DELETE FROM messages WHERE received + 255600 < UNIX_TIMESTAMP()
-    `, vars = [];
+    const sql = `
+        SELECT
+            m.message_key as id, m.received, m.subject
+        FROM
+            messages AS m, redirect_emails AS re
+        WHERE
+            m.email_id = re.email_id AND m.rejected = ?
+            AND m.received + 255600 > UNIX_TIMESTAMP()
+            AND re.email_id = ? AND re.user_id = ?
+    `, vars = [
+        !!+req.query.rejected,
+        req.params.email, req.session.uid
+    ];
 
-    db(cn => cn.query(sql, (err, result) => {
-        sql = `
-            SELECT
-                m.message_key as id, m.received, m.subject
-            FROM
-                messages AS m, redirect_emails AS re
-            WHERE
-                m.email_id = re.email_id AND m.rejected = ?
-                AND re.email_id = ? AND re.user_id = ?
-        `, vars = [
-            !!+req.query.rejected,
-            req.params.email, req.session.uid
-        ];
-
-        cn.query(sql, vars, (err, rows) => {
-            cn.release();
-
-            res.json({ messages: (err || !rows.length) ? [] : rows });
-        });
+    db(cn => cn.query(sql, vars, (err, rows) => {
+        cn.release();
+        res.json({ messages: (err || !rows.length) ? [] : rows });
     }));
 
 };
