@@ -11,7 +11,8 @@ const config = require("config");
     RETURN
         {
             loggedIn: boolean, emails?: [{ id: number, address: string }],
-            subscription?: number, uid?: number, referral?: {
+            subscription?: number, uid?: number, trial?: boolean,
+            referral?: {
                 affiliate?: string, referral?: string,
                 hasMadePurchase?: boolean
             }
@@ -66,7 +67,7 @@ module.exports = function(req, res) {
             }
 
             sql = `
-                SELECT xyfir_id, subscription, xad_id, referral
+                SELECT xyfir_id, subscription, xad_id, referral, trial
                 FROM users WHERE user_id = ?
             `;
 
@@ -112,7 +113,7 @@ module.exports = function(req, res) {
         // Get info for dev user
         else if (config.environment.type == "dev") {
             sql = `
-                SELECT subscription, xad_id, referral FROM users
+                SELECT subscription, xad_id, referral, trial FROM users
                 WHERE user_id = 1
             `;
 
