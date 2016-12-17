@@ -98,9 +98,11 @@ module.exports = function(req, res) {
 
             // Update user's account
             sql = `
-                UPDATE users SET subscription = ?, referral = ? WHERE user_id = ?
+                UPDATE users SET subscription = ?, referral = ?, trial = 0
+                WHERE user_id = ?
             `, vars = [
-                subscription, JSON.stringify(referral), req.session.uid
+                subscription, JSON.stringify(referral),
+                req.session.uid
             ];
 
             cn.query(sql, vars, (err, result) => {
