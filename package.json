@@ -6,6 +6,7 @@
   "dependencies": {
     "app-module-path": "^2.1.0",
     "body-parser": "^1.15.2",
+    "cron": "^1.1.1",
     "escape-string-regexp": "^1.0.5",
     "express": "^4.14.0",
     "express-mysql-session": "^1.2.0",
