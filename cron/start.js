@@ -37,7 +37,7 @@ module.exports = function() {
         true
     );
 
-    // Expires subscriptions by deleting emails, filters, etc
+    // Expires subscriptions by deleting redirect emails and their MG routes
     // Run once a day
     // No retry
     new cron.CronJob(
