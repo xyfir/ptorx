@@ -4,6 +4,7 @@ const validateFilters = require("lib/email/validate-filters");
 const buildAction = require("lib/mg-route/build-action");
 const validate = require("lib/email/validate");
 const generate = require("lib/email/generate");
+const request = require("request");
 const db = require("lib/db");
 
 const config = require("config");
@@ -40,16 +41,18 @@ module.exports = function(req, res) {
         const step1 = () => {
             sql = `
                 SELECT emails_created, subscription, trial, (
-                    SELECT * FROM redirect_emails
+                    SELECT COUNT(email_id) FROM redirect_emails
                     WHERE user_id = ? AND created >= CURDATE()
                 ) AS emails_created_today
+                FROM users WHERE user_id = ?
             `, vars = [
+                req.session.uid,
                 req.session.uid
             ];
             
             cn.query(sql, vars, (err, rows) => {
                 if (err || !rows.length) {
-                    error = "An unknown error occured";
+                    error = "An unknown error occured-";
                 }
                 else if (Date.now() > rows[0].subscription) {
                     error = "You do not have a subscription";
@@ -180,7 +183,7 @@ module.exports = function(req, res) {
                 if (err || !result.affectedRows) {
                     cn.release();
                     res.json({
-                        error: true, message: "An unknown error occured"
+                        error: true, message: "An unknown error occured--"
                     }); return;
                 }
 
@@ -200,7 +203,8 @@ module.exports = function(req, res) {
                         if (err) {
                             cn.release();
                             res.json({
-                                error: true, message: "An unknown error occured"
+                                error: true,
+                                message: "An unknown error occured---"
                             });
                         }
                         else {
