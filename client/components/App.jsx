@@ -112,6 +112,24 @@ class App extends React.Component {
         }
     }
 
+    onShowTrialInfo() {
+        swal({
+            title: "Free Trial",
+            text: `
+                To prevent abuse to our system, some restrictions are placed on free trial users:
+                <ol>
+                    <li>Limited to creating up to 5 proxy emails a day</li>
+                    <li>Limited to creating up to 15 proxy emails total</li>
+                    <li>Must complete a verification captcha before creating a proxy email</li>
+                    <li>Cannot have more than one main email address</li>
+                    <li>Cannot send messages or reply to received mail</li>
+                </ol>
+                These restrictions can be removed by purchasing a subscription.
+            `,
+            html: true
+        });
+    }
+
     render() {
         if (!this.state) return <div />;
         
@@ -136,7 +154,21 @@ class App extends React.Component {
                     <a href="#filters/list">Filters</a>
                     <a href="#modifiers/list">Modifiers</a>
                 </nav>
+
+                {this.state.account.trial ? (
+                    <div className="trial">
+                        <strong>Your account is currently in trial mode.</strong> Some limitations apply.
+                        <a
+                            className="icon-info"
+                            onClick={() => this.onShowTrialInfo()}
+                        />
+                    </div>    
+                ) : (
+                    <div />    
+                )}
+
                 {view}
+
                 <DynamicStyles />
             </div>                
         );
