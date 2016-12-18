@@ -234,8 +234,12 @@ module.exports = function(req, res) {
                 + filters.map(f => `('${+f}', '${+emailId}')`).join(", ");
 
             cn.query(sql, () => {
-                sql = "INSERT INTO linked_modifiers (modifier_id, email_id) VALUES "
-                    + modifiers.map(m => `('${+m}', '${+emailId}')`).join(", ");
+                sql = `
+                    INSERT INTO linked_modifiers
+                    (modifier_id, email_id, order_number) VALUES 
+                ` + modifiers.map((m, i) =>
+                    `('${+m}', '${+emailId}', '${i}')`
+                ).join(", ");
 
                 cn.query(sql, () => {
                     sql = `
