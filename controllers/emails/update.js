@@ -6,8 +6,8 @@ const clearCache = require("lib/email/clear-cache");
 const validate = require("lib/email/validate");
 const db = require("lib/db");
 
-let config = require("config");
-let mailgun = require("mailgun-js")({
+const config = require("config");
+const mailgun = require("mailgun-js")({
     apiKey: config.keys.mailgun, domain: "ptorx.com"
 });
 
@@ -50,14 +50,14 @@ module.exports = function(req, res) {
 
             cn.query(sql, vars, (err, rows) => {
                 // toEmail doesn't exist and user didn't provide noToAddress
-                if (!rows[0].toEmail && !(+req.body.noToAddress)) {
+                if (!rows[0].toEmail && !+req.body.noToAddress) {
                     cn.release();
                     res.json({
                         error: true, message: "Could not find main email"
                     });
                 }
                 // Redirect email doesn't exist
-                else if (rows[0].address == null) {
+                else if (!rows[0].address) {
                     cn.release();
                     res.json({
                         error: true, message: "Could not find redirect email"
@@ -65,19 +65,19 @@ module.exports = function(req, res) {
                 }
                 // Validate filters and modifiers
                 else {
-                    let modifiers = req.body.modifiers.split(',');
-                    let filters = req.body.filters.split(',')
+                    const modifiers = req.body.modifiers.split(',');
+                    const filters = req.body.filters.split(',')
 
-                    validateFilters(filters, req, cn, (err, message) => {
+                    validateFilters(filters, req, cn, (err, msg) => {
                         if (err) {
                             cn.release();
-                            res.json({ error: true, message });
+                            res.json({ error: true, message: msg });
                         }
                         else {
-                            validateModifiers(modifiers, req, cn, (err, message) => {
+                            validateModifiers(modifiers, req, cn, (err, msg) => {
                                 if (err) {
                                     cn.release();
-                                    res.json({ error: true, message });
+                                    res.json({ error: true, message: msg });
                                 }
                                 else {
                                     step2({
@@ -97,11 +97,14 @@ module.exports = function(req, res) {
         const step2 = (data) => {
             // Update values in redirect_emails
             sql = `
-                UPDATE redirect_emails SET to_email = ?, name = ?, description = ?,
-                save_mail = ?, spam_filter = ? WHERE email_id = ?
+                UPDATE redirect_emails SET
+                    to_email = ?, name = ?, description = ?,
+                    save_mail = ?, spam_filter = ?
+                WHERE email_id = ?
             `, vars = [
                 req.body.to, req.body.name, req.body.description,
-                !!(+req.body.saveMail), !(+req.body.noSpamFilter), req.params.email
+                !!+req.body.saveMail, !+req.body.noSpamFilter,
+                req.params.email
             ];
 
             cn.query(sql, vars, (err, result) => {
@@ -115,15 +118,15 @@ module.exports = function(req, res) {
                 // Build MailGun route expression(s)
                 buildExpression({
                     address: data.address, filters: data.filters,
-                    saveMail: !!(+req.body.saveMail) || req.body.to == 0
+                    saveMail: !!+req.body.saveMail || req.body.to == 0
                 }, cn, (expression) => {
                     // Update MailGun route
                     mailgun.routes(data.routeId).update({
-                        priority: (!(+req.body.noSpamFilter) ? 2 : 0),
+                        priority: (!+req.body.noSpamFilter ? 2 : 0),
                         description: "", expression,
                         action: buildAction(
                             req.params.email, req.session.subscription,
-                            req.body.to == 0 || !!(+req.body.saveMail)
+                            req.body.to == 0 || !!+req.body.saveMail
                         )
                     }, (err, body) => {
                         if (err) {
@@ -143,12 +146,10 @@ module.exports = function(req, res) {
         /* Create entries in linked_modifiers|filters */
         const step3 = (filters, modifiers) => {
             // Filters already linked will not be inserted twice due to unique constraint
-            sql = "INSERT INTO linked_filters (filter_id, email_id) VALUES ";
-            filters.forEach(filter => {
-                sql += `('${+filter}', '${+req.params.email}'), `;
-            });
+            sql = "INSERT INTO linked_filters (filter_id, email_id) VALUES "
+            + filters.map(f =>`('${+f}', '${+req.params.email}')`).join(", ");
 
-            cn.query(sql.substr(0, sql.length - 2), (err, result) => {
+            cn.query(sql, () => {
                 // Delete all modifiers since the order may have changed
                 sql = `
                     DELETE FROM linked_modifiers WHERE email_id = ?
@@ -156,17 +157,16 @@ module.exports = function(req, res) {
                     req.params.email
                 ];
 
-                cn.query(sql, vars, (err, result) => {
+                cn.query(sql, vars, () => {
                     // Insert modifiers
                     sql = `
                         INSERT INTO linked_modifiers
                         (modifier_id, email_id, order_number) VALUES 
-                    `;
-                    modifiers.forEach((modifier, i) => {
-                        sql += `('${+modifier}', '${+req.params.email}', '${i}'), `
-                    });
+                    ` + modifiers.map(m =>
+                        `('${+m}', '${+req.params.email}', '${i}')`
+                    ).join(", ");
 
-                    cn.query(sql.substr(0, sql.length - 2), (err, result) => {
+                    cn.query(sql, () => {
                         // Filters that have been removed will be deleted via NOT IN (...)
                         sql = `
                             DELETE FROM linked_filters
@@ -175,7 +175,7 @@ module.exports = function(req, res) {
                             req.params.email, filters
                         ];
 
-                        cn.query(sql, vars, (err, result) => {
+                        cn.query(sql, vars, () => {
                             cn.release();
                             clearCache(req.params.email);
                             res.json({ error: false });
