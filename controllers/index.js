@@ -5,6 +5,7 @@ let router = express.Router();
 // MailGun Inbound Controllers
 router.post("/receive/free/:email", require("./receive/free"));
 router.post("/receive/paid/:email", require("./receive/paid"));
+router.post("/receive/:email", require("./receive"));
 
 // (Redirect) email controllers
 router.get("/emails", require("./emails/list"));
