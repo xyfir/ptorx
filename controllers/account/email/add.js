@@ -19,13 +19,15 @@ module.exports = function(req, res) {
     let sql = `
         SELECT (
             SELECT COUNT(email_id) FROM main_emails WHERE user_id = ?
-        ) as emails, (
+        ) AS emails, (
             SELECT COUNT(email_id) FROM main_emails WHERE user_id = ? AND address = ?
-        ) as email_exists
-    `;
-    let vars = [
+        ) AS email_exists, (
+            SELECT trial FROM users WHERE user_id = ?
+        ) AS trial
+    `, vars = [
         req.session.uid,
-        req.session.uid, req.params.email
+        req.session.uid, req.params.email,
+        req.session.uid
     ];
 
     db(cn => cn.query(sql, vars, (err, rows) => {
@@ -33,20 +35,29 @@ module.exports = function(req, res) {
             cn.release();
             res.json({ error: true, message: "An unknown error occured" });
         }
-        else if (rows[0].emails > 0 && Date.now() > req.session.subscription) {
+        else if (rows[0].emails > 0 && rows[0].trial) {
             cn.release();
-            res.json({ error: true, message: "Free members cannot have more than one main email" });
+            res.json({
+                error: true,
+                message: "Trial users cannot have more than one main email"
+            });
         }
         else if (rows[0].email_exists > 0) {
             cn.release();
-            res.json({ error: true, message: "This email is already linked to your account" });
+            res.json({
+                error: true,
+                message: "This email is already linked to your account"
+            });
         }
         else if (req.params.email.length < 6 || req.params.email.length > 64) {
             cn.release();
-            res.json({ error: true, message: "Invalid email length. 6-64 characters required" });
+            res.json({
+                error: true,
+                message: "Invalid email length. 6-64 characters required"
+            });
         }
         else {
-            let insert = {
+            const insert = {
                 user_id: req.session.uid, address: req.params.email
             };
             sql = "INSERT INTO main_emails SET ?";
@@ -55,7 +66,7 @@ module.exports = function(req, res) {
                 cn.release();
 
                 if (err || !result.affectedRows)
-                    res.json({ error: true, message: "An unknown error occured-" });
+                    res.json({ error: true, message: "An error occured-" });
                 else
                     res.json({ error: false, id: result.insertId });
             });
