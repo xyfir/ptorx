@@ -64,7 +64,7 @@ export default class CreateEmail extends React.Component {
             if (!email) return;
 
             request("../api/emails/" + q.copy, (res) => {
-                if (!res.err) {
+                if (!res.error) {
                     this.setState(Object.assign(
                         {}, email, res, { showAdvanced: true, loading: false }
                     ));
