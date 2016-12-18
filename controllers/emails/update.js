@@ -162,7 +162,7 @@ module.exports = function(req, res) {
                     sql = `
                         INSERT INTO linked_modifiers
                         (modifier_id, email_id, order_number) VALUES 
-                    ` + modifiers.map(m =>
+                    ` + modifiers.map((m, i) =>
                         `('${+m}', '${+req.params.email}', '${i}')`
                     ).join(", ");
 
