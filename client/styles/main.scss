@@ -156,6 +156,12 @@ div.ptorx > div {
 	padding-top: 1em;
 }
 
+/* SWEET ALERT */
 .sweet-alert > fieldset > input {
     display: none;
+}
+.sweet-alert p {
+	margin: auto !important;
+	max-height: 20em;
+	overflow: auto;
 }
