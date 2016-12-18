@@ -34,7 +34,7 @@ module.exports = function(req, res) {
     db(cn => {
         let sql = "";
 
-        const getInfo = (uid, subscription, xadid, referral) => {
+        const getInfo = (uid, row) => {
             sql = `
                 SELECT email_id as id, address FROM main_emails WHERE user_id = ?
             `;
@@ -43,11 +43,12 @@ module.exports = function(req, res) {
 
                 // Set session, return account info
                 req.session.uid = uid,
-                req.session.xadid = xadid,
-                req.session.subscription = subscription;
+                req.session.xadid = row.xadid,
+                req.session.subscription = row.subscription;
                 
                 res.json({
-                    loggedIn: true, emails, subscription, referral, uid
+                    loggedIn: true, uid, emails, subscription: row.subscription,
+                    referral: JSON.parse(row.referral), trial: !!row.trial
                 });
             });
         };
@@ -101,10 +102,7 @@ module.exports = function(req, res) {
                         }
                         // Access token valid
                         else {
-                            getInfo(
-                                token[0], rows[0].subscription, rows[0].xad_id,
-                                JSON.parse(rows[0].referral)
-                            );
+                            getInfo(token[0], rows[0]);
                         }
                     });
                 }
@@ -117,11 +115,7 @@ module.exports = function(req, res) {
                 WHERE user_id = 1
             `;
 
-            cn.query(sql, (err, rows) => {
-                getInfo(
-                    1, rows[0].subscription, rows[0].xad_id, rows[0].referral
-                );
-            });
+            cn.query(sql, (err, rows) => getInfo(1, rows[0]));
         }
         // Force login
         else {
