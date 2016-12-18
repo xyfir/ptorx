@@ -14,7 +14,7 @@ export default class DynamicStyles extends React.Component {
 
     _generateStyles() {
         return `
-            div.ptorx > div {
+            div.ptorx > div:nth-child(2) {
                 margin-top: ${
                     document.querySelector("nav.navbar").scrollHeight
                     + (this._isPhoneGap() && this._isIOS() ? 20 : 0)
