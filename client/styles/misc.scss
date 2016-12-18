@@ -37,6 +37,24 @@
         }
         
     }
+
+    .g-recaptcha {
+        display: inline-block;
+    }
+
+    .recaptcha-wrapper {
+        text-align: center;
+    }
+    
+    .address {
+        font-size: 125%;
+        font-weight: bold;
+    }
+    
+    .link-filter > .list, .link-modifier > .list {
+        max-height: 12em;
+        overflow-y: auto;
+    }
     
 }
 
@@ -95,20 +113,6 @@
 
 .linked-emails > a {
     display: block;
-}
-
-.email-create, .email-update {
-    
-    .address {
-        font-size: 125%;
-        font-weight: bold;
-    }
-    
-    .link-filter > .list, .link-modifier > .list {
-        max-height: 12em;
-        overflow-y: auto;
-    } 
-    
 }
 
 .message-send, .message-reply {
