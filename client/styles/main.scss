@@ -3,6 +3,13 @@ body {
 	line-height: 142%;
 	font-family: "Source Sans Pro",Calibri,Candara,sans-serif;
     text-align: center;
+    margin: 0;
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+}
+main#content {
+	flex: 1;
 }
 hr {
 	border: none;
@@ -29,6 +36,19 @@ span[class^="icon-"]:hover {
 		margin: 0em;
 	}
 
+}
+
+/* FOOTER */
+footer {
+	background-color: $llgray;
+	padding: 0.2em;
+	border-top: solid 0.1em $lgray;
+	margin-top: 1em;
+
+	>a {
+		display: inline-block;
+		margin: 0em 0.5em;
+	}
 }
 
 
