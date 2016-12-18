@@ -6,8 +6,8 @@ const validate = require("lib/email/validate");
 const generate = require("lib/email/generate");
 const db = require("lib/db");
 
-let config = require("config");
-let mailgun = require("mailgun-js")({
+const config = require("config");
+const mailgun = require("mailgun-js")({
     apiKey: config.keys.mailgun, domain: "ptorx.com"
 });
 
@@ -17,90 +17,146 @@ let mailgun = require("mailgun-js")({
         name: string, description: string, address: string, filters: string,
         modifiers: string, to: number
     OPTIONAL
-        saveMail: boolean, noSpamFilter: boolean, noToAddress: boolean
+        saveMail: boolean, noSpamFilter: boolean, noToAddress: boolean,
+        recaptcha: string
     RETURN
         { error: boolean, message?: string, id?: number }
     DESCRIPTION
-        Creates a redirect email, a its MailGun inbound route, any used links filters/modifiers
+        Creates a redirect email, its MailGun inbound route, any used links filters/modifiers
 */
 module.exports = function(req, res) {
 
-    let response = validate(req.body, req.session.subscription);
+    const response = validate(req.body, req.session.subscription);
 
     if (response !== "ok") {
         res.json({ error: true, message: response });
         return;
     }
 
-    let sql = "";
+    let sql = "", vars = [], error = "";
 
     db(cn => {
-        /* Generate address OR check if user provided exists */
+        /* Get data / more validation */
         const step1 = () => {
-            // Generate an address
-            if (req.body.address == '') {
-                // Free members limited to 20 redirect emails
-                if (Date.now() > req.session.subscription) {
-                    sql = "SELECT COUNT(email_id) as emails FROM redirect_emails WHERE user_id = ?";
-                    cn.query(sql, [req.session.uid], (err, rows) => {
-                        if (rows[0].emails >= 20) {
-                            cn.release();
-                            res.json({ error: true, message: "Free members limited to 20 redirect emails" });
+            sql = `
+                SELECT emails_created, subscription, trial, (
+                    SELECT * FROM redirect_emails
+                    WHERE user_id = ? AND created >= CURDATE()
+                ) AS emails_created_today
+            `, vars = [
+                req.session.uid
+            ];
+            
+            cn.query(sql, vars, (err, rows) => {
+                if (err || !rows.length) {
+                    error = "An unknown error occured";
+                }
+                else if (Date.now() > rows[0].subscription) {
+                    error = "You do not have a subscription";
+                }
+                else if (rows[0].trial) {
+                    if (rows[0].emails_created_today >= 5)
+                        error = "Trial users can only create 5 emails per day";
+                    else if (rows[0].emails_created >= 15)
+                        error = "Trial users can only create 15 emails total";
+                }
+                else if (rows[0].emails_created_today >= 20) {
+                    error = "You can only create up to 20 emails per day.";
+                }
+                
+                if (error) {
+                    res.json({ error: true, message: error });
+                }
+                // Validate captcha
+                else if (rows[0].trial) {
+                    request.post({
+                        url: "https://www.google.com/recaptcha/api/siteverify",
+                        form: {
+                            secret: config.keys.recaptcha,
+                            response: req.body.recaptcha,
+                            remoteip: req.ip
+                        }
+                    }, (e, r, body) => {
+                        if (e || !JSON.parse(body).success) {
+                            res.json({
+                                error: true, message: "Invalid captcha"
+                            });
                         }
                         else {
-                            generate(cn, step2);
+                            step2();
                         }
                     });
                 }
-                else {
-                    generate(cn, step2);
-                }
+                else step2();
+            });
+        }
+
+        /* Generate address OR check if user provided exists */
+        const step2 = () => {
+            // Generate an address
+            if (req.body.address == '') {
+                generate(cn, step3);
             }
             // Make sure address exists
             else {
-                sql = "SELECT email_id FROM redirect_emails WHERE address = ?";
-                cn.query(sql, [req.body.address], (err, rows) => {
-                    if (!!rows.length) {
+                sql = `
+                    SELECT email_id FROM redirect_emails WHERE address = ?
+                `, vars = [
+                    req.body.address
+                ];
+
+                cn.query(sql, vars, (err, rows) => {
+                    if (err || !!rows.length) {
                         cn.release();
-                        res.json({ error: true, message: "That email address is already in use" });
+                        res.json({
+                            error: true,
+                            message: "That email address is already in use"
+                        });
                     }
                     else {
-                        step2(req.body.address);
+                        step3(req.body.address);
                     }
                 });
             }
         };
 
         /* Finish validation */
-        const step2 = (email) => {
-            sql = "SELECT email_id FROM main_emails WHERE email_id = ? AND user_id = ?";
-            cn.query(sql, [req.body.to, req.session.uid], (err, rows) => {
-                // To email exists or user is allowed to use no to address
-                if (!rows.length && !!(+req.body.noToAddress) || !!rows.length) {
+        const step3 = (email) => {
+            sql = `
+                SELECT email_id FROM main_emails
+                WHERE email_id = ? AND user_id = ?
+            `, vars = [
+                req.body.to, req.session.uid
+            ];
+
+            cn.query(sql, vars, (err, rows) => {
+                // 'To' email exists or user is not using a 'to' address
+                if (!!+req.body.noToAddress || rows.length) {
                     // Build insert data object
-                    let data = {
-                        description: req.body.description, to_email: rows[0].email_id || 0,
-                        address: email, user_id: req.session.uid, name: req.body.name,
-                        spam_filter: !(+req.body.noSpamFilter),
-                        save_mail: !!(+req.body.saveMail)
+                    const data = {
+                        to_email: rows[0].email_id || 0, name: req.body.name,
+                        address: email, user_id: req.session.uid,
+                        spam_filter: !+req.body.noSpamFilter,
+                        description: req.body.description,
+                        save_mail: !!+req.body.saveMail
                     };
 
-                    let modifiers = req.body.modifiers.split(',');
-                    let filters = req.body.filters.split(',')
+                    const modifiers = req.body.modifiers.split(',');
+                    const filters = req.body.filters.split(',')
 
-                    validateFilters(filters, req, cn, (err, message) => {
+                    validateFilters(filters, req, cn, (err, msg) => {
                         if (err) {
                             cn.release();
-                            res.json({ error: true, message });
+                            res.json({ error: true, message: msg });
                         }
                         else {
-                            validateModifiers(modifiers, req, cn, (err, message) => {
+                            validateModifiers(modifiers, req, cn, (err, msg) => {
                                 if (err) {
                                     cn.release();
-                                    res.json({ error: true, message });
+                                    res.json({ error: true, message: msg });
                                 }
                                 else {
-                                    step3(data, filters, modifiers);
+                                    step4(data, filters, modifiers);
                                 }
                             });
                         }
@@ -108,24 +164,27 @@ module.exports = function(req, res) {
                 }
                 else {
                     cn.release();
-                    res.json({ error: true, message: "Could not find main email" });
+                    res.json({
+                        error: true, message: "Could not find main email"
+                    });
                 }
             });
         };
 
         /* Create email and MailGun route */
-        const step3 = (data, filters, modifiers) => {
+        const step4 = (data, filters, modifiers) => {
             // Insert email
             sql = "INSERT INTO redirect_emails SET ?";
+
             cn.query(sql, data, (err, result) => {
                 if (err || !result.affectedRows) {
                     cn.release();
-                    res.json({ error: true, message: "An unknown error occured" });
-                    return;
+                    res.json({
+                        error: true, message: "An unknown error occured"
+                    }); return;
                 }
 
-                let url = require("config").addresses.mailgun;
-                let id = result.insertId;
+                const id = result.insertId;
 
                 // Build MailGun route expression(s)
                 buildExpression({
@@ -141,13 +200,22 @@ module.exports = function(req, res) {
                     }, (err, body) => {
                         if (err) {
                             cn.release();
-                            res.json({ error: true, message: "An unknown error occured" });
+                            res.json({
+                                error: true, message: "An unknown error occured"
+                            });
                         }
                         else {
                             // Save MailGun route ID to redirect_emails where email
-                            sql = "UPDATE redirect_emails SET mg_route_id = ? WHERE email_id = ?";
-                            cn.query(sql, [body.route.id, id], (err, result) => {
-                                step4(id, filters, modifiers);
+                            sql = `
+                                UPDATE redirect_emails SET mg_route_id = ?
+                                WHERE email_id = ?
+                            `, vars = [
+                                body.route.id,
+                                id
+                            ];
+
+                            cn.query(sql, vars, (err, result) => {
+                                step5(id, filters, modifiers);
                             });
                         }
                     });
@@ -156,18 +224,25 @@ module.exports = function(req, res) {
         };
 
         /* Create entries in linked_modifiers|filters */
-        const step4 = (emailId, filters, modifiers) => {
-            sql = "INSERT INTO linked_filters (filter_id, email_id) VALUES ";
-            filters.forEach(filter => sql += `('${+filter}', '${+emailId}'), `);
+        const step5 = (emailId, filters, modifiers) => {
+            res.json({ error: false, id: emailId });
 
-            cn.query(sql.substr(0, sql.length - 2), (err, result) => {
-                sql = "INSERT INTO linked_modifiers (modifier_id, email_id) VALUES ";
-                modifiers.forEach(modifier => sql += `('${+modifier}', '${+emailId}'), `);
+            sql = "INSERT INTO linked_filters (filter_id, email_id) VALUES "
+                + filters.map(f => `('${+f}', '${+emailId}')`).join(", ");
 
-                cn.query(sql.substr(0, sql.length - 2), (err, result) => {
-                    cn.release();
+            cn.query(sql, () => {
+                sql = "INSERT INTO linked_modifiers (modifier_id, email_id) VALUES "
+                    + modifiers.map(m => `('${+m}', '${+emailId}')`).join(", ");
 
-                    res.json({ error: false, id: emailId });
+                cn.query(sql, () => {
+                    sql = `
+                        UPDATE users SET emails_created = emails_created + 1
+                        WHERE user_id = ?
+                    `, vars = [
+                        req.session.uid
+                    ];
+                    
+                    cn.query(sql, vars, () => cn.release());
                 });
             });
         };
