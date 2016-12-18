@@ -1,14 +1,14 @@
 import React from "react";
 
 // Components
-import Search from "../misc/Search";
+import Search from "components/misc/Search";
 import Create from "./Create";
 
 // Constants
-import { modifierTypes } from "../../constants/types";
+import { modifierTypes } from "constants/types";
 
 // Modules
-import findMatches from "../../lib/find-matching";
+import findMatches from "lib/find-matching";
 
 export default class LinkModifier extends React.Component {
 
@@ -38,38 +38,46 @@ export default class LinkModifier extends React.Component {
     render() {
         return (
             <div className="link-modifier">
-                {
-                    this.state.view == "search"
-                    ? <a onClick={this.onChangeView.bind(this, "create")}>Switch to 'Create New Modifier' Mode</a>
-                    : <a onClick={this.onChangeView.bind(this, "search")}>Switch to 'Find Existing Modifier' Mode</a>
-                }
-                {
-                    this.state.view == "search"
-                    ? (
-                        <div>
-                            <Search onSearch={this.onSearch} type="modifier" />
-                            <div className="list">{
-                                findMatches(this.props.data.modifiers, this.state.search).map(m => {
-                                    return (
-                                        <div className="modifier">
-                                            <span className="type">{modifierTypes[m.type]}</span>
-                                            <span className="name"><a onClick={this.onAdd.bind(this, m.id)}>
-                                                {m.name}
-                                            </a></span>
-                                            <span className="description">{m.description}</span>
-                                        </div>
-                                    );
-                                })
-                            }</div>
-                        </div>
-                    ) : (
-                        <Create
-                            data={this.props.data}
-                            dispatch={this.props.dispatch}
-                            onCreate={this.onAdd}
-                        />
-                    )
-                }
+                {this.state.view == "search" ? (
+                    <a onClick={() => this.onChangeView("create")}>
+                        Switch to 'Create New Modifier' Mode
+                    </a>
+                ) : (
+                    <a onClick={() => this.onChangeView("search")}>
+                        Switch to 'Find Existing Modifier' Mode
+                    </a>
+                )}
+                
+                {this.state.view == "search" ? (
+                    <div>
+                        <Search onSearch={this.onSearch} type="modifier" />
+                        <div className="list">{
+                            findMatches(
+                                this.props.data.modifiers, this.state.search
+                            ).map(m =>
+                                <div className="modifier">
+                                    <span className="type">{
+                                        modifierTypes[m.type]
+                                    }</span>
+                                    <span className="name">
+                                        <a onClick={() => this.onAdd(m.id)}>
+                                            {m.name}
+                                        </a>
+                                    </span>
+                                    <span className="description">{
+                                        m.description
+                                    }</span>
+                                </div>
+                            )
+                        }</div>
+                    </div>
+                ) : (
+                    <Create
+                        data={this.props.data}
+                        dispatch={this.props.dispatch}
+                        onCreate={this.onAdd}
+                    />
+                )}
             </div>
         );
     }
