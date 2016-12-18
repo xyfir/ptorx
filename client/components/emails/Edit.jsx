@@ -146,19 +146,17 @@ export default class UpdateEmail extends React.Component {
 
     onUpdate() {
         let data = {
-            name: this.refs.name.value, description: this.refs.description.value,
-            noToAddress: +false, to: this.props.data.account.emails.find(e => {
-                return e.address == this.refs.to.value;
-            }).id,
-            noSpamFilter: +(!this.refs.spamFilter.checked), saveMail: +false,
-            modifiers: this.state.modifiers.map(m => { return m.id; }),
-            filters: this.state.filters.map(f => { return f.id; })
+            to: this.props.data.account.emails.find(e =>
+                e.address == this.refs.to.value
+            ).id,
+            name: this.refs.name.value,
+            saveMail: +this.refs.saveMail.checked,
+            description: this.refs.description.value,
+            filters: this.state.filters.map(f => f.id),
+            noToAddress: +this.refs.noToAddress.checked,
+            noSpamFilter: +(!this.refs.spamFilter.checked),
+            modifiers: this.state.modifiers.map(m => m.id)
         };
-
-        if (this.props.data.account.subscription > Date.now()) {
-            data.saveMail = +this.refs.saveMail.checked;
-            data.noToAddress = +this.refs.noToAddress.checked;
-        }
 
         request({
             url: URL + "api/emails/" + this.state.id, method: "PUT", data,
@@ -168,28 +166,28 @@ export default class UpdateEmail extends React.Component {
                 }
                 else {
                     // data.to (id) -> data.toEmail (address)
-                    data.toEmail = this.props.data.account.emails.find(e => {
-                        return e.id == data.to;
-                    }).address; delete data.to;
+                    data.toEmail = this.props.data.account.emails.find(e =>
+                        e.id == data.to
+                    ).address; delete data.to;
                     
                     // Set address
                     if (data.noToAddress) {
                         data.address = "";
                     }
                     else {
-                        data.address = this.props.data.emails.find(e => {
-                            return e.id == this.state.id;
-                        }).address;
+                        data.address = this.props.data.emails.find(e =>
+                            e.id == this.state.id
+                        ).address;
                     }
                     delete data.noToAddress;
                     
                     // data.modifiers|filters from id array -> object array
-                    data.modifiers = data.modifiers.map(m => {
-                        return this.props.data.modifiers.find(mod => { return m == mod.id; });
-                    });
-                    data.filters = data.filters.map(f => {
-                        return this.props.data.filters.find(filter => { return f == filter.id; });
-                    });
+                    data.modifiers = data.modifiers.map(m =>
+                        this.props.data.modifiers.find(mod => m == mod.id)
+                    );
+                    data.filters = data.filters.map(f =>
+                        this.props.data.filters.find(filter => f == filter.id)
+                    );
                     
                     data.id = this.state.id;
                     
@@ -264,35 +262,29 @@ export default class UpdateEmail extends React.Component {
                     defaultChecked={email.spamFilter}
                 />Enable
                 
-                {this.props.data.account.subscription > Date.now() ? (
-                    <div>
-                        <label>Save Mail</label>
-                        <span className="input-description">
-                                Any emails that are sent to this address will be temporarily stored for 3 days. You can then access the messages by viewing the 'Messages' section when viewing this email's info.
-                                <br />
-                                'Rejected' emails that don't match your filters will also be saved in a separate section for only rejected emails. If you have 'Spam Filter' enabled, messages detected as spam will <em>not</em> be stored at all.
-                                <br />
-                                This option is required if you want to reply to emails.
-                            </span>
-                        <input
-                            type="checkbox"
-                            ref="saveMail"
-                            defaultChecked={email.saveMail}
-                        />Enable
-                        
-                        <label>No 'To' Address</label>
-                        <span className="input-description">
-                            Enabling this will allow you to avoid having emails sent to your Ptorx address redirected to your real email. This will act like the <em>Save Mail</em> feature just without the emails being redirected.
-                        </span>
-                        <input
-                            type="checkbox"
-                            ref="noToAddress"
-                            defaultChecked={email.address == ''}
-                        />Enable
-                    </div>
-                ) : (
-                    <div />
-                )}
+                <label>Save Mail</label>
+                <span className="input-description">
+                        Any emails that are sent to this address will be temporarily stored for 3 days. You can then access the messages by viewing the 'Messages' section when viewing this email's info.
+                        <br />
+                        'Rejected' emails that don't match your filters will also be saved in a separate section for only rejected emails. If you have 'Spam Filter' enabled, messages detected as spam will <em>not</em> be stored at all.
+                        <br />
+                        This option is required if you want to reply to emails.
+                    </span>
+                <input
+                    type="checkbox"
+                    ref="saveMail"
+                    defaultChecked={email.saveMail}
+                />Enable
+                
+                <label>No 'To' Address</label>
+                <span className="input-description">
+                    Enabling this will allow you to avoid having emails sent to your Ptorx address redirected to your real email. This will act like the <em>Save Mail</em> feature just without the emails being redirected.
+                </span>
+                <input
+                    type="checkbox"
+                    ref="noToAddress"
+                    defaultChecked={email.address == ''}
+                />Enable
 
                 <hr />
 
