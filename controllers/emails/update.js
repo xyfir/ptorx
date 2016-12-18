@@ -125,7 +125,7 @@ module.exports = function(req, res) {
                         priority: (!+req.body.noSpamFilter ? 2 : 0),
                         description: "", expression,
                         action: buildAction(
-                            req.params.email, req.session.subscription,
+                            req.params.email,
                             req.body.to == 0 || !!+req.body.saveMail
                         )
                     }, (err, body) => {

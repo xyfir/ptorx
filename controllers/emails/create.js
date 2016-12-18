@@ -194,8 +194,7 @@ module.exports = function(req, res) {
                     mailgun.routes().create({
                         priority: (data.spam_filter ? 2 : 0), description: "",
                         expression, action: buildAction(
-                            id, req.session.subscription,
-                            data.to_email == 0 || data.save_mail
+                            id, data.to_email == 0 || data.save_mail
                         )
                     }, (err, body) => {
                         if (err) {
