@@ -1,7 +1,7 @@
 ﻿const db = require("lib/db");
 
-let config = require("config");
-let mailgun = require("mailgun-js")({
+const config = require("config");
+const mailgun = require("mailgun-js")({
     apiKey: config.keys.mailgun, domain: "ptorx.com"
 });
 
@@ -16,22 +16,18 @@ let mailgun = require("mailgun-js")({
 */
 module.exports = function(req, res) {
 
-    if (Date.now() > req.session.subscription) {
-        res.json({
-            error: true,
-            message: "Free members cannot send replies from Ptorx"
-        }); return;
-    }
-
     // Get message_key and address
-    let sql = `
+    const sql = `
         SELECT address, (
             SELECT message_key FROM messages
             WHERE message_key = ? AND email_id = ?
-        ) as mkey FROM redirect_emails
+        ) AS mkey, (
+            SELECT trial FROM users WHERE user_id = ?
+        ) AS trial FROM redirect_emails
         WHERE email_id = ? AND user_id = ?
     `, vars = [
         req.params.message, req.params.email,
+        req.session.uid,
         req.params.email, req.session.uid
     ];
 
@@ -40,6 +36,11 @@ module.exports = function(req, res) {
         
         if (err || !rows.length) {
             res.json({ error: true, message: "Message does not exist" });
+        }
+        else if (rows[0].trial) {
+            res.json({
+                error: true, message: "Trial users cannot reply to mail"
+            });
         }
         else {
             // Get original messages' data
