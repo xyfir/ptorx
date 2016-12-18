@@ -51,7 +51,9 @@ module.exports = (fn) => db(cn => {
                         <br />
                         Current server time is <strong>${(new Date()).toLocaleString()}</strong> (at time of sending this email).
                         <br /><br />
-                        Thank you for being a Ptorx subscriber! We hope you'll stick around a bit longer. Have any questions? Send a reply to this email or use our <a href="https://xyfir.com/#/contact">contact form</a>.
+                        Thank you for being a Ptorx subscriber! We hope you'll stick around a bit longer.
+                        <br /><br />
+                        Have any questions or feedback? Send a reply to this email or use our <a href="https://xyfir.com/#/contact">contact form</a>. Interested in other Xyfir projects? Take a look at all of the projects in the <a href="https://xyfir.com/#/network">Xyfir Network</a>.
                     `,
                     () => cn.resume()
                 );
