@@ -44,7 +44,8 @@ module.exports = function(req, res) {
             if (!rows.length) {
                 let insert = {
                     xyfir_id: req.body.xid, email: body.email, xad_id: body.xadid,
-                    subscription: 0, referral: "{}"
+                    subscription: Date.now() + (1000 * (60 * 60 * 24 * 7)),
+                    referral: "{}"
                 };
                 
                 const createAccount = () => {
@@ -59,7 +60,7 @@ module.exports = function(req, res) {
                         else {
                             req.session.uid = result.insertId;
                             req.session.xadid = body.xadid;
-                            req.session.subscription = 0;
+                            req.session.subscription = insert.subscription;
 
                             res.json({
                                 error: false, accessToken: crypto.encrypt(
