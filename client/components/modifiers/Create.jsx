@@ -1,14 +1,14 @@
 import React from "react";
 
 // Action creators
-import { addModifier } from "../../actions/creators/modifiers";
+import { addModifier } from "actions/creators/modifiers";
 
 // Constants
-import { URL } from "../../constants/config";
-import { modifierTypes } from "../../constants/types";
+import { URL } from "constants/config";
+import { modifierTypes } from "constants/types";
 
 // Modules
-import request from "../../lib/request";
+import request from "lib/request";
 
 export default class CreateModifier extends React.Component {
 
@@ -18,7 +18,7 @@ export default class CreateModifier extends React.Component {
         this.onChangeType = this.onChangeType.bind(this);
         this.onCreate = this.onCreate.bind(this);
 
-        this.state = { type: 0 };
+        this.state = { type: 0, useRegex: false };
     }
 
     onChangeType() {
@@ -29,7 +29,7 @@ export default class CreateModifier extends React.Component {
         let data = {
             type: +this.refs.type.value, name: this.refs.name.value,
             description: this.refs.description.value
-        }, data2;
+        }, data2 = {};
 
         switch (data.type) {
             case 1:
@@ -40,8 +40,11 @@ export default class CreateModifier extends React.Component {
 
             case 3:
                 data2 = {
-                    value: this.refs.find.value, with: this.refs.replace.value,
-                    regex: +this.refs.regex.checked
+                    regex: +this.refs.regex.checked, flags: (
+                        this.refs.regexFlags
+                            ? this.refs.regexFlags.value : ""
+                    ), value: this.refs.find.value,
+                    with: this.refs.replace.value
                 }; break;
 
             case 4:
@@ -49,29 +52,34 @@ export default class CreateModifier extends React.Component {
 
             case 5:
                 data2 = {
-                    value: this.refs.tag.value, prepend: +this.refs.prepend.checked
+                    value: this.refs.tag.value,
+                    prepend: +this.refs.prepend.checked
                 }; break;
         }
 
         request({
-            url: URL + "api/modifiers", method: "POST", data: Object.assign({}, data, data2),
-            success: (res) => {
-                if (res.error) {
-                    swal("Error", res.message, "error");
+            url: "../api/modifiers", method: "POST",
+            data: Object.assign({}, data, data2)
+        }, (res) => {
+            if (res.error) {
+                swal("Error", res.message, "error");
+            }
+            else {
+                // Add to state.modifiers
+                data.id = res.id;
+                data.data = data2;
+                this.props.dispatch(addModifier(data));
+
+                if (this.props.onCreate) {
+                    this.props.onCreate(res.id);
                 }
                 else {
-                    // Add to state.modifiers
-                    data.id = res.id;
-                    data.data = data2;
-                    this.props.dispatch(addModifier(data));
-
-                    if (this.props.onCreate) {
-                        this.props.onCreate(res.id);
-                    }
-                    else {
-                        location.hash = "modifiers/list";
-                        swal("Success", `Modifier '${data.name}' created`, "success");
-                    }
+                    location.hash = "modifiers/list";
+                    swal(
+                        "Success",
+                        `Modifier '${data.name}' created`,
+                        "success"
+                    );
                 }
             }
         });
@@ -84,26 +92,52 @@ export default class CreateModifier extends React.Component {
                 form = (
                     <div>
                         <label>Encryption Key</label>
-                        <span className="input-description">Email text and HTML content will be encrypted with this key using AES-256.</span>
+                        <span className="input-description">
+                            Email text and HTML content will be encrypted with this key using AES-256.
+                        </span>
                         <input type="text" ref="key" />
                     </div>
                 ); break;
 
             case 2:
                 form = (
-                    <p>HTML will be stripped from all emails leaving plain text.</p>
+                    <p>
+                        HTML will be stripped from all emails leaving plain text.
+                    </p>
                 ); break;
 
             case 3:
                 form = (
                     <div>
                         <label>Find</label>
-                        <span className="input-description">The value to be replaced.</span>
+                        <span className="input-description">
+                            The value to be replaced.
+                        </span>
                         <input type="text" ref="find" />
+
                         <label>Replace</label>
-                        <span className="input-description">The value which replaces 'Find'.</span>
+                        <span className="input-description">
+                            The value which replaces 'Find'.
+                        </span>
+
                         <input type="text" ref="replace" />
-                        <input type="checkbox" ref="regex" />Use Regular Expression
+                        
+                        <input
+                            ref="regex"
+                            type="checkbox"
+                            onChange={() =>
+                                this.setState({ useRegex: !this.state.useRegex })
+                            }
+                        />Use Regular Expression
+
+                        {this.state.useRegex ? (
+                            <div>
+                                <label>Regular Expression Flags</label>
+                                <input type="text" ref="regexFlags" />
+                            </div>
+                        ) : (
+                            <div />
+                        )}
                     </div>
                 ); break;
 
@@ -111,7 +145,9 @@ export default class CreateModifier extends React.Component {
                 form = (
                     <div>
                         <label>Subject</label>
-                        <span className="input-description">The text to replace an email's subject with.</span>
+                        <span className="input-description">
+                            The text to replace an email's subject with.
+                        </span>
                         <input type="text" ref="subject" />
                     </div>
                 ); break;
@@ -120,9 +156,15 @@ export default class CreateModifier extends React.Component {
                 form = (
                     <div>
                         <label>Subject Tag</label>
-                        <span className="input-description">The value to append or prepend to an email's subject.</span>
+                        <span className="input-description">
+                            The value to append or prepend to an email's subject.
+                        </span>
                         <input type="text" ref="tag" />
-                        <input type="checkbox" ref="prepend" defaultChecked={true} />Prepend Tag
+                        <input
+                            type="checkbox"
+                            ref="prepend"
+                            defaultChecked={true}
+                        />Prepend Tag
                     </div>
                 ); break;
         }
@@ -131,22 +173,31 @@ export default class CreateModifier extends React.Component {
             <div className="modifier-create">
                 <label>Modifier Type</label>
                 <select ref="type" onChange={this.onChangeType}>{
-                    [0].concat(Object.keys(modifierTypes)).map(k => {
-                        return <option value={k}>{modifierTypes[k] || "Modifier Type"}</option>;
-                    })
+                    [0].concat(Object.keys(modifierTypes)).map(k =>
+                        <option value={k}>{
+                            modifierTypes[k] || "Modifier Type"
+                        }</option>
+                    )
                 }</select>
                 <label>Name</label>
-                <span className="input-description">Give your modifier a name to find it easier.</span>
+                <span className="input-description">
+                    Give your modifier a name to find it easier.
+                </span>
                 <input type="text" ref="name" />
+                
                 <label>Description</label>
-                <span className="input-description">Describe your modifier to find it easier.</span>
+                <span className="input-description">
+                    Describe your modifier to find it easier.
+                </span>
                 <input type="text" ref="description" />
                 
                 {form}
                 
                 { this.props.onCreate ? <span /> : <hr /> }
                 
-                <button className="btn-primary" onClick={this.onCreate}>Create Modifier</button>
+                <button className="btn-primary" onClick={this.onCreate}>
+                    Create Modifier
+                </button>
             </div>
         );
     }
