@@ -1,5 +1,4 @@
-﻿const escapeRegExp = require("escape-string-regexp");
-const validate = require("lib/filter/validate");
+﻿const validate = require("lib/filter/validate");
 const db = require("lib/db");
 
 /*
@@ -21,9 +20,6 @@ module.exports = function(req, res) {
         res.json({ error: true, message: response });
         return;
     }
-
-    if (!req.body.useRegex)
-        req.body.find = escapeRegExp(req.body.find);
 
     let insert = {
         user_id: req.session.uid, name: req.body.name, description: req.body.description,

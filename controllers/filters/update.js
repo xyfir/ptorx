@@ -1,5 +1,4 @@
-﻿const escapeRegExp = require("escape-string-regexp");
-const clearCache = require("lib/email/clear-cache");
+﻿const clearCache = require("lib/email/clear-cache");
 const validate = require("lib/filter/validate");
 const db = require("lib/db");
 
@@ -22,9 +21,6 @@ module.exports = function(req, res) {
         res.json({ error: true, message: response });
         return;
     }
-
-    if (!req.body.useRegex)
-        req.body.find = escapeRegExp(req.body.find);
 
     let sql = `
         SELECT type, accept_on_match as acceptOnMatch FROM filters
