@@ -116,16 +116,32 @@ module.exports = function(req, res) {
                 case 2: // Text Only
                     textonly = true; break;
                 case 3: // Find & Replace
+                    // Escape search if not regular expression
+                    modifier.data.value = !modifier.data.regex
+                        ? escapeRegExp(modifier.data.value)
+                        : modifier.data.value;
+                    
+                    // Escape '$' if not regular expression
+                    modifier.data.with = !modifier.data.regex
+                        ? modifier.data.value.replace(/\$/g, "$$")
+                        : modifier.data.value;
+
                     req.body["body-plain"] = req.body["body-plain"].replace(
-                        new RegExp(modifier.data.value, 'g'),
+                        new RegExp(
+                            modifier.data.value, modifier.data.flags
+                        ),
                         modifier.data.with
                     );
+                    
                     if (req.body["body-html"] && !textonly) {
                         req.body["body-html"] = req.body["body-html"].replace(
-                            new RegExp(modifier.data.value, 'g'),
+                            new RegExp(
+                                modifier.data.value, modifier.data.flags
+                            ),
                             modifier.data.with
                         );
                     }
+                    
                     break;
                 case 4: // Subject Overwrite
                     req.body.subject = modifier.data; break;
