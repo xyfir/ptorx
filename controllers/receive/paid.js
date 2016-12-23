@@ -41,6 +41,10 @@ module.exports = function(req, res) {
             // MailGun already validated filter
             if (filter.pass) return;
 
+            // Escape regex if filter is not using regex
+            if (!filter.regex && filter.type != 6)
+                filter.find = escapeRegExp(filter.find);
+
             switch (filter.type) {
                 case 1: // Subject
                     data.filters[i].pass = req.body.subject
@@ -63,11 +67,15 @@ module.exports = function(req, res) {
                         .match(new RegExp(filter.find, 'g'));
                     break;
                 case 6: // Header
-                    let find = filter.find.split(":::");
+                    const find = filter.find.split(":::");
+                    
                     headers.forEach(header => {
                         if (
                             header[0] == find[0]
-                            && ('' + header[1]).match(new RegExp(find[1], 'g'))
+                            && ('' + header[1]).match(new RegExp(
+                                !filter.regex ? escapeRegExp(find[1]) : find[1],
+                                'g'
+                            ))
                         ) data.filters[i].pass = true;
                     });
             }
