@@ -1,5 +1,5 @@
 const sendEmail = require("lib/email/send");
-const db = require("db");
+const db = require("lib/db");
 
 const config = require("config");
 const mailgun = require("mailgun-js")({
