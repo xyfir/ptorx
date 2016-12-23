@@ -122,13 +122,13 @@ export default class CreateModifier extends React.Component {
 
                         <input type="text" ref="replace" />
                         
-                        <input
+                        <label><input
                             ref="regex"
                             type="checkbox"
                             onChange={() =>
                                 this.setState({ useRegex: !this.state.useRegex })
                             }
-                        />Use Regular Expression
+                        />Use Regular Expression</label>
 
                         {this.state.useRegex ? (
                             <div>
@@ -160,11 +160,11 @@ export default class CreateModifier extends React.Component {
                             The value to append or prepend to an email's subject.
                         </span>
                         <input type="text" ref="tag" />
-                        <input
+                        <label><input
                             type="checkbox"
                             ref="prepend"
                             defaultChecked={true}
-                        />Prepend Tag
+                        />Prepend Tag</label>
                     </div>
                 ); break;
         }

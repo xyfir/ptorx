@@ -208,19 +208,19 @@ export default class UpdateFilter extends React.Component {
                 <span className="input-description">
                     This is the action taken when an email message matches your filter. If <strong>Accept on Match</strong> is <em>enabled</em>, the message must match the filter <strong>and</strong> any other accept on match filters. If it is <em>disabled</em> and a message matches, it acts as a <strong>Reject on Match</strong> filter meaning that any messages that match this filter will be ignored.
                 </span>
-                <input
+                <label><input
                     type="checkbox"
                     ref="acceptOnMatch"
                     defaultChecked={filter.acceptOnMatch}
-                />Accept on Match
+                />Accept on Match</label>
                 
                 {form}
                 
-                <input
+                <label><input
                     type="checkbox"
                     ref="regex"
                     defaultChecked={filter.regex}
-                />Use Regular Expression
+                />Use Regular Expression</label>
                 
                 <hr />
                 

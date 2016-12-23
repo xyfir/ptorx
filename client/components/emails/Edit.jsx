@@ -256,11 +256,11 @@ export default class UpdateEmail extends React.Component {
                 <span className="input-description">
                     By default we block any messages that are marked as spam. Disable this only if you believe legitimate messages are being blocked by the spam filter.
                 </span>
-                <input
+                <label><input
                     type="checkbox"
                     ref="spamFilter"
                     defaultChecked={email.spamFilter}
-                />Enable
+                />Enable</label>
                 
                 <label>Save Mail</label>
                 <span className="input-description">
@@ -270,21 +270,21 @@ export default class UpdateEmail extends React.Component {
                         <br />
                         This option is required if you want to reply to emails.
                     </span>
-                <input
+                <label><input
                     type="checkbox"
                     ref="saveMail"
                     defaultChecked={email.saveMail}
-                />Enable
+                />Enable</label>
                 
                 <label>No 'To' Address</label>
                 <span className="input-description">
                     Enabling this will allow you to avoid having emails sent to your Ptorx address redirected to your real email. This will act like the <em>Save Mail</em> feature just without the emails being redirected.
                 </span>
-                <input
+                <label><input
                     type="checkbox"
                     ref="noToAddress"
                     defaultChecked={email.address == ''}
-                />Enable
+                />Enable</label>
 
                 <hr />
 

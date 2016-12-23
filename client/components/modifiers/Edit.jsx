@@ -146,12 +146,12 @@ export default class UpdateModifier extends React.Component {
                         </span>
                         <input type="text" ref="replace" defaultValue={mod.data.with} />
                         
-                        <input
+                        <label><input
                             ref="regex"
                             type="checkbox"
                             onChange={() => this.setState({ useRegex: !this.useRegex })}
                             defaultChecked={mod.data.regex}
-                        />Use Regular Expression
+                        />Use Regular Expression</label>
 
                         {mod.data.regex || this.state.useRegex ? (
                             <div>
@@ -195,11 +195,11 @@ export default class UpdateModifier extends React.Component {
                             ref="tag"
                             defaultValue={mod.data.value}
                         />
-                        <input
+                        <label><input
                             type="checkbox"
                             ref="prepend"
                             defaultChecked={mod.data.prepend}
-                        />Prepend Tag
+                        />Prepend Tag</label>
                     </div>
                 ); break;
         }
