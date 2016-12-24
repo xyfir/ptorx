@@ -28,7 +28,7 @@ module.exports = function(req, res) {
     const save = !!req.body["message-url"];
     
     // Get email/filters/modifiers data
-    getInfo(req.params.email, false, save, (err, data) => {
+    getInfo(req.params.email, save, (err, data) => {
         if (err) {
             res.status(406).send();
             return;
@@ -153,25 +153,34 @@ module.exports = function(req, res) {
             }
         });
 
-        const message = {
-            text: req.body["body-plain"], from: req.body.To, to: data.to,
-            subject: req.body.subject, html: (
-                req.body["body-html"] && (!textonly ? req.body["body-html"] : "")
-            )
-        };
+        // Message should be redirected
+        if (data.to) {
+            const message = {
+                text: req.body["body-plain"], from: req.body.To, to: data.to,
+                subject: req.body.subject, html: (
+                    req.body["body-html"]
+                    && (!textonly ? req.body["body-html"] : "")
+                )
+            };
 
-        // Forward message to user's main email
-        mailgun.messages().send(message, (err, body) => {
-            if (err) {
-                res.status(406).send();
-            }
-            else {
-                res.status(200).send();
+            // Forward message to user's main email
+            mailgun.messages().send(message, (err, body) => {
+                if (err) {
+                    res.status(406).send();
+                }
+                else {
+                    res.status(200).send();
 
-                // Optionally save message to messages table
-                if (save) saveMessage(req, false);
-            }
-        });
+                    // Optionally save message to messages table
+                    if (save) saveMessage(req, false);
+                }
+            });
+        }
+        // Message must be saved since it's not being redirected
+        else {
+            saveMessage(req, false);
+            res.status(200).send();
+        }
     });
 
 };
