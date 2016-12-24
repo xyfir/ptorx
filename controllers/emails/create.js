@@ -133,15 +133,22 @@ module.exports = function(req, res) {
             ];
 
             cn.query(sql, vars, (err, rows) => {
+                if (err) {
+                    cn.release();
+                    res.json({
+                        error: true, message: "An unknown error occured"
+                    });
+                }
                 // 'To' email exists or user is not using a 'to' address
-                if (!!+req.body.noToAddress || rows.length) {
+                else if (!!+req.body.noToAddress || rows.length) {
                     // Build insert data object
                     const data = {
-                        to_email: rows[0].email_id || 0, name: req.body.name,
-                        address: email, user_id: req.session.uid,
+                        to_email: (rows.length ? rows[0].email_id : 0),
                         spam_filter: !+req.body.noSpamFilter,
+                        name: req.body.name, address: email,
                         description: req.body.description,
-                        save_mail: !!+req.body.saveMail
+                        save_mail: !!+req.body.saveMail,
+                        user_id: req.session.uid
                     };
 
                     const modifiers = req.body.modifiers.split(',');
