@@ -8,6 +8,7 @@ import reducers from "reducers/index";
 // Components
 import DynamicStyles from "./misc/DynamicStyles";
 import Modifiers from "./modifiers/Index";
+import HelpDocs from "./misc/HelpDocs";
 import Account from "./account/Index";
 import Filters from "./filters/Index";
 import Emails from "./emails/Index";
@@ -170,6 +171,8 @@ class App extends React.Component {
                 {view}
 
                 <DynamicStyles />
+
+                <HelpDocs />
             </div>                
         );
     }
