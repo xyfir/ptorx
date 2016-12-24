@@ -265,7 +265,7 @@ export default class CreateEmail extends React.Component {
                             type="checkbox"
                             ref="noToAddress"
                             defaultChecked={
-                                email.name ? email.noToAddress : false
+                                email.name ? !email.toEmail : false
                             }
                         />Enable</label>
 

@@ -283,7 +283,7 @@ export default class UpdateEmail extends React.Component {
                 <label><input
                     type="checkbox"
                     ref="noToAddress"
-                    defaultChecked={email.address == ''}
+                    defaultChecked={!email.toEmail}
                 />Enable</label>
 
                 <hr />
