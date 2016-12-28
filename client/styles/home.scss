@@ -2,18 +2,28 @@
     
     margin: 0em;
 
+    section.trial, section.main, nav, footer, section.premium {
+        text-align: center;
+    }
+
+    nav.navbar {
+        display: flex;
+        border-bottom: solid 0.1em $llgray;
+
+        >a {
+            flex: 1;
+        }
+    }
+
     table {
         
         text-align: center;
+        margin: auto;
 
         th {
             padding-right: 0.6em;
         }
 
-    }
-
-    a {
-        margin: 0.2em;
     }
 
     section {
@@ -28,7 +38,6 @@
         
         background-color: $purple;
         color: white;
-        text-align: right;
         
         h1, h2, h3 {
             color: $llgray;
@@ -46,7 +55,6 @@
     section:nth-child(odd) {
         
         background-color: white;
-        text-align: left;
         
         h1, h2, h3 {
             color: $purple;
@@ -54,28 +62,97 @@
         
     }
 
-    section.install > a {
-        font-size: 110%;
-        display: inline-block;
-        padding: 0.2em;
+    section.with-screenshot {
+        display: flex;
+        align-items: center;
+
+        >img {
+            height: 24em;
+            flex: 1;
+        }
+        >div {
+            flex: 3;
+        }
+    }
+
+    section.install {
+
+        p {
+            margin-bottom: 1em;
+        }
+        
+        a[class^="icon-"] {
+            font-size: 125%;
+            display: inline-block;
+            padding: 0.2em;
+        }
+
+    }
+
+    section.trial {
+        .note {
+            display: block;
+        }
+
+        button {
+            background-color: $lpurple;
+
+            &:hover {
+                filter: saturate(90%);
+            }
+
+            margin-bottom: 0.5em;
+        }
     }
 
     section.main {
+        
+        display: flex;
+        align-items: center;
+        height: 70vh;
+        font-size: 200%;
 
-        text-align: center;
+        .subtitle {
+            line-height: 1.5;
+        }
 
-        .iframe-container {
-            margin: 1em;
+        .platforms {
+            display: block;
+            font-size: 50%;
+            color: $dgray;
+            margin-top: 2em;
         }
 
     }
 
     footer {
 
+        background-color: $llgray;
+        margin-top: 0;
+        border-top: none;
+
         a {
             margin: 0.5em;
         }
 
+    }
+
+    @media (max-width: 400px) {
+        
+        text-align: center;
+
+        section.with-screenshot {
+            display: block !important;
+
+            >img {
+                height: 10em;
+            }
+        }
+
+    }
+
+    @media (min-width: 401px) {
+        text-align: justify;
     }
     
 }
