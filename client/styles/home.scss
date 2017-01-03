@@ -2,7 +2,8 @@
     
     margin: 0em;
 
-    section.trial, section.main, nav, footer, section.premium {
+    section.trial, section.main, section.premium, section.overview,
+    nav, footer {
         text-align: center;
     }
 
@@ -111,6 +112,10 @@
         align-items: center;
         height: 70vh;
         font-size: 200%;
+
+        >div {
+            width: 100%;
+        }
 
         .subtitle {
             line-height: 1.5;
