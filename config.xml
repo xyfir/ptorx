@@ -3,12 +3,12 @@
 <widget xmlns     = "http://www.w3.org/ns/widgets"
         xmlns:gap = "http://phonegap.com/ns/1.0"
         id        = "com.xyfir.ptorx"
-        version   = "1.4.0">
+        version   = "1.5.0">
 
     <name>Ptorx</name>
 
     <description>
-        An extra layer of security, privacy, and control for your emails.
+        Proxy emails for an extra layer of security, privacy, and control for your emails.
     </description>
 
     <author href="https://xyfir.com" email="contact@xyfir.com">
@@ -20,7 +20,8 @@
     <preference name="orientation"                value="default" />
     <preference name="target-device"              value="universal" />
     <preference name="fullscreen"                 value="true" />
-    <preference name="webviewbounce"              value="true" />
+    <preference name="webviewbounce"              value="false" />
+    <preference name="DisallowOverscroll"         value="true" />
     <preference name="prerendered-icon"           value="true" />
     <preference name="stay-in-webview"            value="true" />
     <preference name="exit-on-suspend"            value="false" />
@@ -29,13 +30,8 @@
     <preference name="android-installLocation"    value="auto" />
 
     <!-- Core plugins -->
-    <plugin name="cordova-plugin-battery-status" />
-    <plugin name="cordova-plugin-camera" />
-    <plugin name="cordova-plugin-media-capture" />
     <plugin name="cordova-plugin-console" />
-    <plugin name="cordova-plugin-contacts" />
     <plugin name="cordova-plugin-device" />
-    <plugin name="cordova-plugin-device-motion" />
     <plugin name="cordova-plugin-device-orientation" />
     <plugin name="cordova-plugin-dialogs" />
     <plugin name="cordova-plugin-file" />
@@ -46,8 +42,10 @@
     <plugin name="cordova-plugin-media" />
     <plugin name="cordova-plugin-network-information" />
     <plugin name="cordova-plugin-splashscreen" />
-    <plugin name="cordova-plugin-vibration" />
     <plugin name="cordova-plugin-whitelist" />
+
+    <!-- Other plugins -->
+    <plugin name="cordova-plugin-inapppurchase" />
 
     <!-- Platforms to build for -->
     <platform name="ios" />
@@ -55,7 +53,7 @@
     <platform name="winphone" />
 
     <!-- Icons -->
-    <icon src="icon.png" />
+    <icon src="res/icons/icon.png" />
     
     <icon platform="ios" src="res/icons/ios/icon-small.png" width="29" height="29" />
     <icon platform="ios" src="res/icons/ios/icon-small-2x.png" width="58" height="58" />
@@ -88,7 +86,7 @@
     <icon platform="windows" src="res/icons/windows8/storelogo.png" width="50" height="50" />
 
     <!-- Splash screens -->
-    <splash src="splash.png" />
+    <splash src="res/screens/splash.png" />
 
     <splash platform="android" qualifier="ldpi" src="res/screens/android/screen-ldpi-portrait.png" />
     <splash platform="android" qualifier="mdpi" src="res/screens/android/screen-mdpi-portrait.png" />
@@ -103,9 +101,9 @@
     <splash platform="ios" src="res/screens/ios/screen-ipad-portrait.png" width="768" height="1024" />
     <splash platform="ios" src="res/screens/ios/screen-ipad-portrait-2x.png" width="1536" height="2048" />
 
-    <gap:config-file platform="ios" parent="CFBundleShortVersionString">
-        <string>1.4.0</string>
-    </gap:config-file>
+    <config-file platform="ios" parent="CFBundleShortVersionString">
+        <string>1.5.0</string>
+    </config-file>
 
     <!-- A wildcard can be used to whitelist the entire network, over HTTP and HTTPS -->
     <allow-navigation href="*" />
