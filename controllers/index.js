@@ -39,7 +39,8 @@ router.route("/modifiers/:mod")
 
 // Account controllers
 router.get("/account", require("./account/info"));
-router.put("/account/subscription", require("./account/purchase"));
+router.post("/account/stripe-purchase", require("./account/stripe-purchase"));
+router.post("/account/native-purchase", require("./account/native-purchase"));
 router.route("/account/email/:email")
     .post(require("./account/email/add"))
     .delete(require("./account/email/delete"));

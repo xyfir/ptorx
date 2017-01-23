@@ -43,7 +43,7 @@ function rewardAffiliate(aff, amount) {
 }
 
 /*
-    PUT api/account/subscription
+    POST api/account/stripe-purchase
     REQUIRED
         stripeToken: string, subscription: number
     RETURN
