@@ -92,7 +92,7 @@
     
 }
 
-.purchase-subscription {
+.purchase-subscription.stripe {
 
     input[type="number"] {
         -moz-appearance: textfield;
@@ -109,6 +109,32 @@
         width: 4em;
     }
     
+}
+
+.purchase-subscription.native {
+
+    .product {
+        background-color: $lllgray;
+        width: 80%;
+        padding: 0.5em;
+        margin: 1em auto;
+        font-size: 125%;
+
+        .title {
+            font-weight: bold;
+        }
+
+        .description {
+            display: block;
+            margin-bottom: 0.5em;
+        }
+
+        .btn-primary {
+            min-width: 10em;
+            font-size: 60%;
+        }
+    }
+
 }
 
 .modifiers, .filters, .emails, .messages {
