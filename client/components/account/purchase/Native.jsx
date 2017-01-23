@@ -14,7 +14,7 @@ export default class NativePurchase extends React.Component {
         this.state = { products: [] };
     }
 
-    componentWillMount() {return;
+    componentWillMount() {
         // inAppPurchase global set by cordova-plugin-inapppurchase in PG wrapper
         if (!window.inAppPurchase) {
             swal("Error", "An unknown error occured", "error");
