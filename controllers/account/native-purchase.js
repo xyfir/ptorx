@@ -12,9 +12,9 @@ function setSubscription(subscription, days) {
 
 function applySubscriptions(purchases) {
     const subscriptions = {
-        "com.xyfir.ptorx.premium.30-days": 30,
-        "com.xyfir.ptorx.premium.182-days": 182,
-        "com.xyfir.ptorx.premium.365-days": 365
+        "com.xyfir.ptorx.premium.30days": 30,
+        "com.xyfir.ptorx.premium.182days": 182,
+        "com.xyfir.ptorx.premium.365days": 365
     };
 
     let sql  = "SELECT subscription FROM users WHERE user_id = ?",
