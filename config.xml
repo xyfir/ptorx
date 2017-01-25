@@ -50,7 +50,6 @@
     <!-- Platforms to build for -->
     <platform name="ios" />
     <platform name="android" />
-    <platform name="winphone" />
 
     <!-- Icons -->
     <icon src="res/icons/icon.png" />
