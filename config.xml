@@ -3,7 +3,7 @@
 <widget xmlns     = "http://www.w3.org/ns/widgets"
         xmlns:gap = "http://phonegap.com/ns/1.0"
         id        = "com.xyfir.ptorx"
-        version   = "1.5.0">
+        version   = "1.6.0">
 
     <name>Ptorx</name>
 
@@ -28,6 +28,7 @@
     <preference name="show-splash-screen-spinner" value="false" />
     <preference name="auto-hide-splash-screen"    value="true" />
     <preference name="android-installLocation"    value="auto" />
+    <preference name="CRIPageLoadPromptInterval"  value="0" />
 
     <!-- Core plugins -->
     <plugin name="cordova-plugin-console" />
@@ -46,6 +47,7 @@
 
     <!-- Other plugins -->
     <plugin name="cordova-plugin-inapppurchase" />
+    <plugin name="cordova-plugin-remote-injection" />
 
     <!-- Platforms to build for -->
     <platform name="ios" />
@@ -101,7 +103,7 @@
     <splash platform="ios" src="res/screens/ios/screen-ipad-portrait-2x.png" width="1536" height="2048" />
 
     <config-file platform="ios" parent="CFBundleShortVersionString">
-        <string>1.5.0</string>
+        <string>1.6.0</string>
     </config-file>
 
     <!-- A wildcard can be used to whitelist the entire network, over HTTP and HTTPS -->
