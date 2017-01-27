@@ -53,7 +53,7 @@ export default class NativePurchase extends React.Component {
                 .then(() => {
                     request({
                         url: "../api/account/native-purchase",
-                        method: "POST", data
+                        method: "POST", data: { data }
                     }, (res) => {
                         if (res.error) {
                             swal("Error", res.message, "error");
