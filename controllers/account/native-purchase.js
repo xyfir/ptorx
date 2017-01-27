@@ -10,7 +10,7 @@ function setSubscription(subscription, days) {
         : (subscription + ((60 * 60 * 24 * days) * 1000));
 }
 
-function applySubscriptions(purchases) {
+function applySubscriptions(req, res, purchases) {
     const subscriptions = {
         "com.xyfir.ptorx.premium.30days": 30,
         "com.xyfir.ptorx.premium.182days": 182,
@@ -59,15 +59,16 @@ function applySubscriptions(purchases) {
 */
 module.exports = function(req, res) {
 
+    req.body.data = JSON.parse(req.body.data);
     let data;
 
     // Signature property is empty string if from Apple
-    const store = !req.body.signature
+    const store = !req.body.data.signature
         ? iap.APPLE : iap.GOOGLE;
 
     // Set data to validate
     if (store == iap.APPLE) {
-        data = req.body.receipt;
+        data = req.body.data.receipt;
     }
     else {
         if (config.environment.type == "prod") {
@@ -82,7 +83,7 @@ module.exports = function(req, res) {
         }
 
         data = {
-            receipt: req.body.receipt, signature: req.body.signature
+            receipt: req.body.data.receipt, signature: req.body.data.signature
         };
     }
 
@@ -97,7 +98,7 @@ module.exports = function(req, res) {
                 if (!iap.isValidated(response))
                     throw "Invalid purchase receipt received";
                 
-                applySubscriptions(iap.getPurchaseData(response));
+                applySubscriptions(req, res, iap.getPurchaseData(response));
             });
         });
     }
