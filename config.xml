@@ -3,7 +3,7 @@
 <widget xmlns     = "http://www.w3.org/ns/widgets"
         xmlns:gap = "http://phonegap.com/ns/1.0"
         id        = "com.xyfir.ptorx"
-        version   = "1.6.0">
+        version   = "1.7.0">
 
     <name>Ptorx</name>
 
@@ -29,6 +29,7 @@
     <preference name="auto-hide-splash-screen"    value="true" />
     <preference name="android-installLocation"    value="auto" />
     <preference name="CRIPageLoadPromptInterval"  value="0" />
+    <preference name="SplashMaintainAspectRatio"  value="true" /
 
     <!-- Core plugins -->
     <plugin name="cordova-plugin-console" />
@@ -37,7 +38,6 @@
     <plugin name="cordova-plugin-dialogs" />
     <plugin name="cordova-plugin-file" />
     <plugin name="cordova-plugin-file-transfer" />
-    <plugin name="cordova-plugin-geolocation" />
     <plugin name="cordova-plugin-globalization" />
     <plugin name="cordova-plugin-inappbrowser" />
     <plugin name="cordova-plugin-media" />
@@ -49,61 +49,74 @@
     <plugin name="cordova-plugin-inapppurchase" />
     <plugin name="cordova-plugin-remote-injection" />
 
-    <!-- Platforms to build for -->
-    <platform name="ios" />
-    <platform name="android" />
-
     <!-- Icons -->
-    <icon src="res/icons/icon.png" />
+    <icon src="icon.png" />
     
-    <icon platform="ios" src="res/icons/ios/icon-small.png" width="29" height="29" />
-    <icon platform="ios" src="res/icons/ios/icon-small-2x.png" width="58" height="58" />
-    <icon platform="ios" src="res/icons/ios/icon-40.png" width="40" height="40" />
-    <icon platform="ios" src="res/icons/ios/icon-40-2x.png" width="80" height="80" />
-    <icon platform="ios" src="res/icons/ios/icon-50.png" width="50" height="50" />
-    <icon platform="ios" src="res/icons/ios/icon-50-2x.png" width="100" height="100" />
-    <icon platform="ios" src="res/icons/ios/icon.png" width="57" height="57" />
-    <icon platform="ios" src="res/icons/ios/icon-2x.png" width="114" height="114" />
-    <icon platform="ios" src="res/icons/ios/icon-60.png" width="60" height="60" />
-    <icon platform="ios" src="res/icons/ios/icon-60-2x.png" width="120" height="120" />
-    <icon platform="ios" src="res/icons/ios/icon-60-3x.png" width="180" height="180" />
-    <icon platform="ios" src="res/icons/ios/icon-72.png" width="72" height="72" />
-    <icon platform="ios" src="res/icons/ios/icon-72-2x.png" width="144" height="144" />
-    <icon platform="ios" src="res/icons/ios/icon-76.png" width="76" height="76" />
-    <icon platform="ios" src="res/icons/ios/icon-76-2x.png" width="152" height="152" />
-
-    <icon platform="android" qualifier="ldpi" src="res/icons/android/icon-36-ldpi.png"/>
-    <icon platform="android" qualifier="mdpi" src="res/icons/android/icon-48-mdpi.png"/>
-    <icon platform="android" qualifier="hdpi" src="res/icons/android/icon-72-hdpi.png"/>
-    <icon platform="android" qualifier="xhdpi" src="res/icons/android/icon-96-xhdpi.png"/>
-    <icon platform="android" qualifier="xxhdpi" src="res/icons/android/icon-144-xxhdpi.png"/>
-    <icon platform="android" qualifier="xxxhdpi" src="res/icons/android/icon-192-xxxhdpi.png"/>
-
-    <icon platform="wp8" src="res/icons/wp8/ApplicationIcon.png" width="99" height="99" />
-    <icon platform="wp8" src="res/icons/wp8/Background.png" width="159" height="159" />
-
-    <icon platform="windows" src="res/icons/windows8/logo.png" width="150" height="150" />
-    <icon platform="windows" src="res/icons/windows8/smalllogo.png" width="30" height="30" />
-    <icon platform="windows" src="res/icons/windows8/storelogo.png" width="50" height="50" />
+    <platform name="android">
+        <icon density="ldpi" src="res/icons/android/icon-36-ldpi.png" />
+        <icon density="mdpi" src="res/icons/android/icon-48-mdpi.png" />
+        <icon density="hdpi" src="res/icons/android/icon-72-hdpi.png" />
+        <icon density="xhdpi" src="res/icons/android/icon-96-xhdpi.png" />
+        <icon density="xxhdpi" src="res/icons/android/icon-144-xxhdpi.png" />
+        <icon density="xxxhdpi" src="res/icons/android/icon-192-xxxhdpi.png" />
+    </platform>
+    
+    <platform name="ios">
+        <icon height="29" src="res/icons/ios/icon-small.png" width="29" />
+        <icon height="58" src="res/icons/ios/icon-small-2x.png" width="58" />
+        <icon height="87" src="res/icons/ios/icon-small-3x.png" width="87" />
+        <icon height="40" src="res/icons/ios/icon-40.png" width="40" />
+        <icon height="80" src="res/icons/ios/icon-40-2x.png" width="80" />
+        <icon height="120" src="res/icons/ios/icon-40-3x.png" width="120" />
+        <icon height="50" src="res/icons/ios/icon-50.png" width="50" />
+        <icon height="100" src="res/icons/ios/icon-50-2x.png" width="100" />
+        <icon height="57" src="res/icons/ios/icon-57.png" width="57" />
+        <icon height="114" src="res/icons/ios/icon-57-2x.png" width="114" />
+        <icon height="60" src="res/icons/ios/icon-60.png" width="60" />
+        <icon height="120" src="res/icons/ios/icon-60-2x.png" width="120" />
+        <icon height="180" src="res/icons/ios/icon-60-3x.png" width="180" />
+        <icon height="72" src="res/icons/ios/icon-72.png" width="72" />
+        <icon height="144" src="res/icons/ios/icon-72-2x.png" width="144" />
+        <icon height="76" src="res/icons/ios/icon-76.png" width="76" />
+        <icon height="152" src="res/icons/ios/icon-76-2x.png" width="152" />
+        <icon height="167" src="res/icons/ios/icon-83.5-2x.png" width="167" />
+    </platform>
 
     <!-- Splash screens -->
-    <splash src="res/screens/splash.png" />
+    <splash src="splash.png" />
 
-    <splash platform="android" qualifier="ldpi" src="res/screens/android/screen-ldpi-portrait.png" />
-    <splash platform="android" qualifier="mdpi" src="res/screens/android/screen-mdpi-portrait.png" />
-    <splash platform="android" qualifier="hdpi" src="res/screens/android/screen-hdpi-portrait.png" />
-    <splash platform="android" qualifier="xhdpi" src="res/screens/android/screen-xhdpi-portrait.png" />
+    <platform name="android">
+        <splash density="land-hdpi" src="res/screens/android/screen-hdpi-landscape.png" />
+        <splash density="land-ldpi" src="res/screens/android/screen-ldpi-landscape.png" />
+        <splash density="land-mdpi" src="res/screens/android/screen-mdpi-landscape.png" />
+        <splash density="land-xhdpi" src="res/screens/android/screen-xhdpi-landscape.png" />
+        <splash density="land-xxhdpi" src="res/screens/android/screen-xxhdpi-landscape.png" />
+        <splash density="land-xxxhdpi" src="res/screens/android/screen-xxxhdpi-landscape.png" />
+        <splash density="port-hdpi" src="res/screens/android/screen-hdpi-portrait.png" />
+        <splash density="port-ldpi" src="res/screens/android/screen-ldpi-portrait.png" />
+        <splash density="port-mdpi" src="res/screens/android/screen-mdpi-portrait.png" />
+        <splash density="port-xhdpi" src="res/screens/android/screen-xhdpi-portrait.png" />
+        <splash density="port-xxhdpi" src="res/screens/android/screen-xxhdpi-portrait.png" />
+        <splash density="port-xxxhdpi" src="res/screens/android/screen-xxxhdpi-portrait.png" />
+    </platform>
 
-    <splash platform="ios" src="res/screens/ios/screen-iphone-portrait.png" width="320" height="480" />
-    <splash platform="ios" src="res/screens/ios/screen-iphone-portrait-2x.png" width="640" height="960" />
-    <splash platform="ios" src="res/screens/ios/screen-iphone-portrait-568h-2x.png" width="640" height="1136" />
-    <splash platform="ios" src="res/screens/ios/screen-iphone-portrait-667h.png" width="750" height="1334" />
-    <splash platform="ios" src="res/screens/ios/screen-iphone-portrait-736h.png" width="1242" height="2208" />
-    <splash platform="ios" src="res/screens/ios/screen-ipad-portrait.png" width="768" height="1024" />
-    <splash platform="ios" src="res/screens/ios/screen-ipad-portrait-2x.png" width="1536" height="2048" />
+    <platform name="ios">
+        <splash width="640" height="1136" src="res/screens/ios/screen-iphone-568h-2x.png" />
+        <splash width="320" height="480" src="res/screens/ios/screen-iphone-portrait.png" />
+        <splash width="640" height="960" src="res/screens/ios/screen-iphone-portrait-2x.png" />
+        <splash width="750" height="1334" src="res/screens/ios/screen-iphone-portrait-667h.png" />
+        <splash width="1242" height="2208" src="res/screens/ios/screen-iphone-portrait-736h.png" />
+        <splash width="2208" height="1242" src="res/screens/ios/screen-iphone-landscape-736h.png" />
+        <splash width="768" height="1024" src="res/screens/ios/screen-ipad-portrait.png" />
+        <splash width="1536" height="2048" src="res/screens/ios/screen-ipad-portrait-2x.png" />
+        <splash width="1024" height="768" src="res/screens/ios/screen-ipad-landscape.png" />
+        <splash width="2048" height="1536" src="res/screens/ios/screen-ipad-landscape-2x.png" />
+        <splash width="2732" height="2048" src="res/screens/ios/screen-ipad-landscape-ipadpro.png" />
+        <splash width="2048" height="2732" src="res/screens/ios/screen-ipad-portrait-ipadpro.png" />
+    </platform>
 
     <config-file platform="ios" parent="CFBundleShortVersionString">
-        <string>1.6.0</string>
+        <string>1.7.0</string>
     </config-file>
 
     <!-- A wildcard can be used to whitelist the entire network, over HTTP and HTTPS -->
