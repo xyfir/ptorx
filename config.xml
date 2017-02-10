@@ -29,7 +29,7 @@
     <preference name="auto-hide-splash-screen"    value="true" />
     <preference name="android-installLocation"    value="auto" />
     <preference name="CRIPageLoadPromptInterval"  value="0" />
-    <preference name="SplashMaintainAspectRatio"  value="true" /
+    <preference name="SplashMaintainAspectRatio"  value="true" />
 
     <!-- Core plugins -->
     <plugin name="cordova-plugin-console" />
