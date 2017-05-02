@@ -23,7 +23,8 @@
     "request": "^2.81.0",
     "rword": "^2.1.0",
     "sol-redis-pool": "^0.3.3",
-    "stripe": "^4.18.0"
+    "stripe": "^4.18.0",
+    "superagent": "^3.5.2"
   },
   "devDependencies": {
     "babel-preset-es2015": "^6.24.1",
