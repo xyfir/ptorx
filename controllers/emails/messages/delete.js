@@ -1,4 +1,4 @@
-﻿const db = require("lib/db");
+const db = require("lib/db");
 
 let config = require("config");
 let mailgun = require("mailgun-js")({

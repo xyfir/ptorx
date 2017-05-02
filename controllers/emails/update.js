@@ -1,4 +1,4 @@
-﻿const validateModifiers = require("lib/email/validate-modifiers");
+const validateModifiers = require("lib/email/validate-modifiers");
 const buildExpression = require("lib/mg-route/build-expression");
 const validateFilters = require("lib/email/validate-filters");
 const buildAction = require("lib/mg-route/build-action");

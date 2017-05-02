@@ -1,4 +1,4 @@
-﻿const request = require("request");
+const request = require("request");
 const crypto = require("lib/crypto");
 const db = require("lib/db");
 

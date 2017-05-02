@@ -1,4 +1,4 @@
-﻿const getKeywords = require("lib/keywords/get");
+const getKeywords = require("lib/keywords/get");
 const getInfo = require("lib/email/get-info");
 const request = require("request");
 

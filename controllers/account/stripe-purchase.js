@@ -1,4 +1,4 @@
-﻿const request = require("request");
+const request = require("request");
 const stripe = require("stripe");
 const db = require("lib/db");
 

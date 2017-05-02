@@ -1,4 +1,4 @@
-﻿const validate = require("lib/filter/validate");
+const validate = require("lib/filter/validate");
 const db = require("lib/db");
 
 /*

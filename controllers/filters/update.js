@@ -1,4 +1,4 @@
-﻿const clearCache = require("lib/email/clear-cache");
+const clearCache = require("lib/email/clear-cache");
 const validate = require("lib/filter/validate");
 const db = require("lib/db");
 

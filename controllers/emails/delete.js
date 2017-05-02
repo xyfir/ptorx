@@ -1,4 +1,4 @@
-﻿const clearCache = require("lib/email/clear-cache");
+const clearCache = require("lib/email/clear-cache");
 const db = require("lib/db");
 
 let config = require("config");

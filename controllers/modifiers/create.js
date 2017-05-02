@@ -1,4 +1,4 @@
-﻿const buildData = require("lib/modifier/build-data");
+const buildData = require("lib/modifier/build-data");
 const validate = require("lib/modifier/validate");
 const db = require("lib/db");
 

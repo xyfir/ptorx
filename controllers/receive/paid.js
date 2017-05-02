@@ -1,4 +1,4 @@
-﻿const escapeRegExp = require("escape-string-regexp");
+const escapeRegExp = require("escape-string-regexp");
 const saveMessage = require("lib/email/save-message");
 const getInfo = require("lib/email/get-info");
 const crypto = require("lib/crypto");
