@@ -1,187 +1,180 @@
 /* MISC */
 body {
-	line-height: 142%;
-	font-family: "Source Sans Pro",Calibri,Candara,sans-serif;
-    text-align: center;
-    margin: 0;
-    display: flex;
-    min-height: 100vh;
-    flex-direction: column;
+  line-height: 142%;
+  font-family: 'Roboto', sans-serif;
+  text-align: center;
+  margin: 0;
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
 }
 main#content {
-	flex: 1;
+  flex: 1;
 }
 hr {
-	border: none;
-	height: 0.1em;
-	margin: 1em auto;
-	width: 80%;
-	background-color: $lgray;
+  border: none;
+  height: 0.1em;
+  margin: 1em auto;
+  width: 80%;
+  background-color: $lgray;
 }
 button {
-    cursor: pointer;
+  cursor: pointer;
 }
-span[class^="icon-"]:hover {
-    cursor: pointer;
-    color: $dgray;
+span[class^='icon-']:hover {
+  cursor: pointer;
+  color: $dgray;
 }
 .ptorx section {
-	
-	background-color: $lllgray;
-	padding: 0.5em;
-	margin: 1em auto;
-	width: 80%;
+  background-color: $lllgray;
+  padding: 0.5em;
+  margin: 1em auto;
+  width: 80%;
 
-	>h3, >h2, >h1, >p {
-		margin: 0em;
-	}
-
+  >h3, >h2, >h1, >p {
+    margin: 0em;
+  }
 }
 
 /* FOOTER */
 footer {
-	background-color: $llgray;
-	padding: 0.2em;
-	border-top: solid 0.1em $lgray;
-	margin-top: 1em;
+  padding: 0.2em;
+  margin-top: 1em;
 
-	>a {
-		display: inline-block;
-		margin: 0em 0.5em;
-	}
+  >a {
+    display: inline-block;
+    margin: 0em 0.5em;
+  }
 }
 
 
 /* LINKS */
 a {
-	color: $purple;
-    cursor: pointer;
-	text-decoration: none;
+  color: $purple;
+  cursor: pointer;
+  text-decoration: none;
 }
 a:hover, a:focus {
-	color: $lpurple;
+  color: $lpurple;
 }
 .link-lg {
-	font-size: 125%;
+  font-size: 125%;
 }
 
 
 /* BUTTONS */
 input[type=submit], button, .btn {
-	height: 3.142em;
-	min-width: 7em;
-	color:#fff;
-	border: 0;
-	text-transform: uppercase;
-	margin-left: 0.5em;
-	margin-right: 0.5em;
+  height: 3.142em;
+  min-width: 7em;
+  color:#fff;
+  border: 0;
+  text-transform: uppercase;
+  margin-left: 0.5em;
+  margin-right: 0.5em;
 }
 .btn-sm {
-	height: 2.142em;
-	min-width: 5em;
+  height: 2.142em;
+  min-width: 5em;
 }
 .btn-lg {
-	font-size: 140%;
+  font-size: 140%;
 }
 .btn-primary {
-	background-color: $purple;
+  background-color: $purple;
 }
 .btn-primary:hover {
-	background-color: $lpurple; 
+  background-color: $lpurple; 
 }
 .btn-secondary {
-	background-color: $gray;
+  background-color: $gray;
 }
 .btn-secondary:hover {
-	background-color: $lgray;
+  background-color: $lgray;
 }
 .btn-danger {
-	background-color: $danger;
+  background-color: $danger;
 }
 .btn-danger:hover {
-	background-color: $ldanger;
-}
-input[type=submit]:focus, button:focus {
-	background-color: $lblack;
+  background-color: $ldanger;
 }
 a.btn:hover {
-    color: white;
+  color: white;
 }
 
 
 /* FORMS */
-input[type=text], input[type=password], input[type=email], input[type=number], input[type=tel] {
-    text-align: center;
-	height: 1.571em;
+input[type=text], input[type=password], input[type=email], input[type=number] {
+  text-align: center;
+  height: 1.571em;
 }
-input[type=text], input[type=password], input[type=email], input[type=tel] {
-	width: 16em;
+input[type=text], input[type=password], input[type=email] {
+  width: 16em;
 }
-input[type=text]:focus, input[type=password]:focus, input[type=email]:focus, input[type=number]:focus, input[type=tel]:focus, textarea:focus, select:focus {
-	border-color: $gray;
-	outline: none;
+input[type=text]:focus, input[type=password]:focus, input[type=email]:focus, input[type=number]:focus, textarea:focus, select:focus {
+  border-color: $gray;
+  outline: none;
 }
-input[type=text], input[type=password], input[type=email], input[type=number], input[type=tel], textarea, select {
-	padding: 4px 8px;
-	color: $lblack;
-	border: 1px solid $llgray;
-	background-color: rgba(255,255,255,.8);
-	display: block;
-	margin: 1em auto;
+input[type=text], input[type=password], input[type=email], input[type=number], textarea, select {
+  padding: 4px 8px;
+  color: $lblack;
+  border: 1px solid $llgray;
+  background-color: rgba(255,255,255,.8);
+  display: block;
+  margin: 1em auto;
 }
 label {
-    display: block;
-    font-weight: bold;
+  display: block;
+  font-weight: bold;
 }
 .input-description {
-    font-size: 90%;
-    color: $dgray;
-    display: block;
-    width: 80%;
-    margin: auto;
+  font-size: 90%;
+  color: $dgray;
+  display: block;
+  width: 80%;
+  margin: auto;
 }
 input[type=checkbox] {
-    margin-bottom: 1em;
+  margin-bottom: 1em;
 }
 
 
 /* NAVBAR */
 nav {
-	background-color: $purple;
-    padding: 0.25em 0em;
-	display: flex;
+  background-color: $purple;
+  padding: 0.25em 0em;
+  display: flex;
 
-	>a {
-        color: white;
-		flex: 1;
-        
-		&:hover {
-			color: $lgray;
-		}
+  >a {
+    color: white;
+    flex: 1;
+    
+    &:hover {
+      color: $lgray;
     }
+  }
 }
 nav.navbar {
-    position: fixed;
-	top: 0%;
-	left: 0%;
-	right: 0%;
+  position: fixed;
+  top: 0%;
+  left: 0%;
+  right: 0%;
 }
 nav.navbar-sub {
-	width: 80%;
-	margin: auto;
-	margin-bottom: 1em;
+  width: 80%;
+  margin: auto;
+  margin-bottom: 1em;
 }
 
 div.ptorx > div:nth-child(2) {
-	padding-top: 1em;
+  padding-top: 1em;
 }
 
 /* SWEET ALERT */
 .sweet-alert > fieldset > input {
-    display: none;
+  display: none;
 }
 .sweet-alert p {
-	margin: auto !important;
-	max-height: 20em;
-	overflow: auto;
+  margin: auto !important;
+  max-height: 20em;
+  overflow: auto;
 }
