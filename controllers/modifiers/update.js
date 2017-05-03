@@ -1,61 +1,67 @@
-const clearCache = require("lib/email/clear-cache");
-const buildData = require("lib/modifier/build-data");
-const validate = require("lib/modifier/validate");
-const db = require("lib/db");
+const clearCache = require('lib/email/clear-cache');
+const buildData = require('lib/modifier/build-data');
+const validate = require('lib/modifier/validate');
+const mysql = require('lib/mysql');
 
 /*
-    PUT api/modifiers/:mod
-    REQUIRED
-        type: number, name: string, description: string
-    OPTIONAL
-        ENCRYPT
-            key: string
-        REPLACE
-            value: string, with: string, regex: boolean
-        TAG
-            prepend: string, value: string
-        SUBJECT
-            subject: string
-    RETURN
-        { error: boolean, message: string }
-    DESCRIPTION
-        Update a modifier's data
+  PUT api/modifiers/:mod
+  REQUIRED
+    type: number, name: string, description: string
+  OPTIONAL
+    ENCRYPT
+      key: string
+    REPLACE
+      value: string, with: string, regex: boolean
+    TAG
+      prepend: string, value: string
+    SUBJECT
+      subject: string
+    CONCATENATE
+      add: string, to: string, separator: string
+  RETURN
+    { error: boolean, message: string }
+  DESCRIPTION
+    Update a modifier's data
 */
-module.exports = function(req, res) {
+module.exports = async function(req, res) {
 
-    let response = validate(req.body);
+  const db = new mysql();
 
-    if (response != "ok") {
-        res.json({ error: true, message: response });
-        return;
-    }
+  try {
+    validate(req.body)
 
     let sql = `
-        UPDATE modifiers SET name = ?, description = ?, type = ?, data = ?
-        WHERE modifier_id = ? AND user_id = ?
-    `;
-    let vars = [
-        req.body.name, req.body.description, req.body.type, buildData(req.body),
-        req.params.mod, req.session.uid
+      UPDATE modifiers SET name = ?, description = ?, type = ?, data = ?
+      WHERE modifier_id = ? AND user_id = ?
+    `,
+    vars = [
+      req.body.name, req.body.description, req.body.type, buildData(req.body),
+      req.params.mod, req.session.uid
     ];
 
-    db(cn => cn.query(sql, vars, (err, result) => {
-        if (err || !result.affectedRows) {
-            cn.release();
-            res.json({ error: true, message: "An unknown error occured" });
-        }
-        else {
-            res.json({ error: false, message: "" });
+    await db.getConnection();
 
-            sql = "SELECT email_id as id FROM linked_modifiers WHERE modifier_id = ?";
-            cn.query(sql, [req.params.mod], (err, rows) => {
-                cn.release();
+    const result = await db.query(sql, vars);
+    
+    if (!result.affectedRows) throw 'An unknown error occured';
 
-                if (!rows.length) {
-                    rows.forEach(row => { clearCache(row.id); });
-                }
-            });
-        }
-    }));
+    sql = `
+      SELECT email_id as id FROM linked_modifiers WHERE modifier_id = ?
+    `,
+    vars = [
+      req.params.mod
+    ];
+
+    const rows = await db.query(sql, vars);
+    db.release();
+
+    if (!rows.length) rows.forEach(row => clearCache(row.id));
+
+    res.json({ error: false, message: '' });
+  }
+  catch (err) {
+    db.release();
+    res.json({ error: true, message: err });
+  }
 
 };

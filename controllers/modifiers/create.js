@@ -1,47 +1,53 @@
-const buildData = require("lib/modifier/build-data");
-const validate = require("lib/modifier/validate");
-const db = require("lib/db");
+const buildData = require('lib/modifier/build-data');
+const validate = require('lib/modifier/validate');
+const mysql = require('lib/mysql');
 
 /*
-    POST api/modifiers
-    REQUIRED
-        type: number, name: string, description: string
-    OPTIONAL
-        ENCRYPT
-            key: string
-        REPLACE
-            value: string, with: string, regex: boolean
-        TAG
-            prepend: string, value: string
-        SUBJECT
-            subject: string
-    RETURN
-        { error: boolean, message?: string, id?: number }
-    DESCRIPTION
-        Create a new modifier
+  POST api/modifiers
+  REQUIRED
+    type: number, name: string, description: string
+  OPTIONAL
+    ENCRYPT
+      key: string
+    REPLACE
+      value: string, with: string, regex: boolean
+    TAG
+      prepend: string, value: string
+    SUBJECT
+      subject: string
+    CONCATENATE
+      add: string, to: string, separator: string
+  RETURN
+    { error: boolean, message?: string, id?: number }
+  DESCRIPTION
+    Create a new modifier
 */
-module.exports = function(req, res) {
+module.exports = async function(req, res) {
 
-    let response = validate(req.body);
-    
-    if (response != "ok") {
-        res.json({ error: true, message: response });
-        return;
-    }
+  const db = new mysql();
 
-    let insert = {
-        data: buildData(req.body), user_id: req.session.uid, name: req.body.name,
-        description: req.body.description, type: req.body.type
-    };
+  try {
+    await db.getConnection();
 
-    let sql = `INSERT INTO modifiers SET ?`;
-    db(cn => cn.query(sql, insert, (err, result) => {
-        cn.release();
-        
-        if (err || !result.affectedRows)
-            res.json({ error: true, message: "An unknown error occured" });
-        else
-            res.json({ error: false, id: result.insertId });
-    }));
+    validate(req.body);
+
+    const sql = `
+      INSERT INTO modifiers SET ?
+    `,
+    insert = {
+      data: buildData(req.body), user_id: req.session.uid, name: req.body.name,
+      description: req.body.description, type: req.body.type
+    },
+    result = await db.query(sql, insert);
+
+    if (!result.affectedRows) throw 'An unknown error occured';
+
+    db.release();
+    res.json({ error: false, id: result.insertId });
+  }
+  catch (err) {
+    db.release();
+    res.json({ error: true, message: err });
+  }
 
 };
