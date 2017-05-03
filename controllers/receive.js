@@ -157,6 +157,7 @@ module.exports = function(req, res) {
           break;
         
         case 6: // Concatenate
+        case 7: // Asana
           req.body[modifier.data.to] +=
             modifier.data.separator +
             req.body[modifier.data.add];
