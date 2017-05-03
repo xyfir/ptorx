@@ -1,263 +1,227 @@
 .ptorx {
+  >.icon-info {
+    position: fixed;
+    bottom: 8%;
+    left: 2%;
+    font-size: 150%;
+    z-index: 1;
+  }
 
-    >.icon-info {
-        position: fixed;
-        bottom: 5%;
-        left: 2%;
-        font-size: 150%;
-        z-index: 1;
+  >.help-docs {
+    position: fixed;
+    top: 10%;
+    left: 10%;
+    right: 10%;
+    bottom: 10%;
+    z-index: 1;
+    padding: 1em;
+    overflow: auto;
+    box-shadow: 0.1em 0.1em 0.3em $black;
+    background-color: white;
+
+    >.icon-close {
+      display: block;
+      text-align: right;
     }
-
-    >.help-docs {
-        position: fixed;
-        top: 10%;
-        left: 10%;
-        right: 10%;
-        bottom: 10%;
-        z-index: 1;
-        padding: 1em;
-        overflow: auto;
-        box-shadow: 0.1em 0.1em 0.3em $black;
-        background-color: white;
-
-        >.icon-close {
-            display: block;
-            text-align: right;
-        }
-    }
-
+  }
 }
 
 .help-docs.markdown {
-    text-align: left;
+  text-align: left;
 }
 
 .email-create, .email-update {
-    
-    .advanced-settings > a {
-        display: inline-block;
-        margin-bottom: 1em;
-    }
-    
-    .advanced-settings > h3 {
-        margin-bottom: -0.6em;
-    }
-    
-    .link-modifier > a, .link-filter > a {
-        margin: 1.3em;
-        display: block;
-    }
+  .advanced-settings > a {
+    display: inline-block;
+    margin-bottom: 1em;
+  }
+  
+  .advanced-settings > h3 {
+    margin-bottom: -0.6em;
+  }
+  
+  .link-modifier > a, .link-filter > a {
+    margin: 1.3em;
+    display: block;
+  }
 
-    .linked-filters > .filter, .linked-modifiers > .modifier,
-    .link-filter > div > .list, .link-modifier > div > .list {
+  .linked-filters > .filter, .linked-modifiers > .modifier,
+  .link-filter > div > .list, .link-modifier > div > .list {
+    background-color: $lllgray;
+    padding: 0.5em;
+    margin: auto;
     
-        background-color: $lllgray;
-        padding: 0.5em;
-        width: 70%;
-        margin: auto;
-        
-        .type {
-            font-weight: bold;
-        }
-        .type::after {
-            content: " - ";
-        }
-        
-        .description {
-            display: block;
-            width: 80%;
-            margin: auto;
-            font-size: 90%;
-        }
-        
+    .type {
+      font-weight: bold;
     }
+    .type::after {
+      content: " - ";
+    }
+    
+    .description {
+      display: block;
+      width: 80%;
+      margin: auto;
+      font-size: 90%;
+    }
+  }
 
-    .g-recaptcha {
-        display: inline-block;
-    }
+  .g-recaptcha {
+    display: inline-block;
+  }
 
-    .recaptcha-wrapper {
-        text-align: center;
-    }
-    
-    .address {
-        font-size: 125%;
-        font-weight: bold;
-    }
-    
-    .link-filter > .list, .link-modifier > .list {
-        max-height: 12em;
-        overflow-y: auto;
-    }
-    
+  .recaptcha-wrapper {
+    text-align: center;
+  }
+  
+  .address {
+    font-size: 125%;
+    font-weight: bold;
+  }
+  
+  .link-filter > .list, .link-modifier > .list {
+    max-height: 12em;
+    overflow-y: auto;
+  }
 }
 
 .purchase-subscription.stripe {
+  input[type="number"] {
+    -moz-appearance: textfield;
+  }
 
-    input[type="number"] {
-        -moz-appearance: textfield;
-    }
+  input[type="number"]::-webkit-outer-spin-button,
+  input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
 
-    input[type="number"]::-webkit-outer-spin-button,
-    input[type="number"]::-webkit-inner-spin-button {
-        -webkit-appearance: none;
-        margin: 0;
-    }
-
-    .expiration > input {
-        display: inline;
-        width: 4em;
-    }
-    
+  .expiration > input {
+    display: inline;
+    width: 4em;
+  }
 }
 
 .purchase-subscription.native {
+  .product {
+    background-color: $lllgray;
+    width: 80%;
+    padding: 0.5em;
+    margin: 1em auto;
+    font-size: 125%;
 
-    .product {
-        background-color: $lllgray;
-        width: 80%;
-        padding: 0.5em;
-        margin: 1em auto;
-        font-size: 125%;
-
-        .title {
-            font-weight: bold;
-        }
-
-        .description {
-            display: block;
-            margin-bottom: 0.5em;
-        }
-
-        .btn-primary {
-            min-width: 10em;
-            font-size: 60%;
-        }
+    .title {
+      font-weight: bold;
     }
 
+    .description {
+      display: block;
+      margin-bottom: 0.5em;
+    }
+
+    .btn-primary {
+      min-width: 10em;
+      font-size: 60%;
+    }
+  }
 }
 
 .modifiers, .filters, .emails, .messages {
-    
-    .list {
-        
-        .modifier, .filter, .email, .message {
-            background-color: $lllgray;
-            padding: 0.5em;
-            width: 70%;
-            margin: auto;
-            margin-bottom: 0.5em;
-        }
-        
-        .type {
-            font-weight: bold;
-        }
-        .type::after {
-            content: " - ";
-        }
-        
-        .description {
-            display: block;
-            width: 80%;
-            margin: auto;
-            font-size: 90%;
-        }
-        
-        .address, .received {
-            display: block;
-        }
-        
+  .list {
+    .modifier, .filter, .email, .message {
+      background-color: $lllgray;
+      padding: 0.5em;
+      margin: auto;
+      margin-bottom: 0.5em;
     }
     
+    .type {
+      font-weight: bold;
+    }
+    .type::after {
+      content: " - ";
+    }
+    
+    .description {
+      display: block;
+      width: 80%;
+      margin: auto;
+      font-size: 90%;
+    }
+    
+    .address, .received {
+      display: block;
+    } 
+  }
 }
 
 .linked-emails > a {
-    display: block;
+  display: block;
 }
 
 .message-send, .message-reply {
-    
-    textarea {
-        width: 70%;
-        height: 25em;
-        text-align: center;
-    }
-    
+  textarea {
+    height: 25em;
+    text-align: center;
+  }
 }
 
 .message-view {
-
-    dl {
-
-        dt {
-            font-weight: bold;
-        }
-
-        dd {
-            margin-left: 0;
-        }
-
-        div.html, dd.text, dl.headers {
-            background-color: $lllgray;
-            width: 60%;
-            margin: auto;
-            padding: 0.5em;
-        }
-
-        dl.headers {
-            font-size: 80%;
-        }
-
+  dl {
+    dt {
+      font-weight: bold;
     }
 
+    dd {
+      margin-left: 0;
+    }
+
+    div.html, dd.text, dl.headers {
+      background-color: $lllgray;
+      width: 60%;
+      margin: auto;
+      padding: 0.5em;
+    }
+
+    dl.headers {
+      font-size: 80%;
+    }
+  }
 }
 
 .account {
-    
-    h3 {
-        margin-bottom: 0.6em;
+  
+  h3 {
+    margin-bottom: 0.6em;
+  }
+
+  .subscription > .btn {
+    margin-top: 1em;
+  }
+  
+  .main-emails {
+    input {
+      display: inline;
     }
     
-    .subscription > .btn {
-        margin-top: 1em;
-    }
-    
-    .main-emails {
-        
-        .add > input {
-            display: inline;
-        }
-        
-        .list {
-            
-            padding: 0.5em;
-            width: 70%;
-            margin: auto;
+    >.list {
+      padding: 0.5em;
+      margin: auto;
 
-            .email {
-
-                background-color: $llgray;
-
-                a {
-                    font-size: 90%;
-                    display: block;
-                    margin: auto;
-                }
-                
-            }
-
-        }
-        
-    }
-    
+      a {
+        font-size: 90%;
+        margin: auto;
+      } 
+    } 
+  }
 }
 
 div.controls > a {
-    user-select: none;
-    margin: 0.3em;
+  user-select: none;
+  margin: 0.3em;
 }
 
 .trial {
-    margin-bottom: 1em;
-    color: $dgray;
+  margin-bottom: 1em;
+  color: $dgray;
 }
