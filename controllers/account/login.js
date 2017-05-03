@@ -1,137 +1,142 @@
-const request = require("request");
-const crypto = require("lib/crypto");
-const db = require("lib/db");
+const request = require('superagent');
+const crypto = require('lib/crypto');
+const moment = require('moment');
+const mysql = require('lib/mysql');
 
-const config = require("config");
+const config = require('config');
 
 /*
-    POST api/account/login
-    REQUIRED
-        xid: string, auth: string
-    OPTIONAL
-        referral: number, affiliate: string
-    RETURN
-        { error: boolean, accessToken?: string }
-    DESCRIPTION
-        Register or login user
+  POST api/account/login
+  REQUIRED
+    xid: string, auth: string
+  OPTIONAL
+    referral: number, affiliate: string
+  RETURN
+    { error: boolean, accessToken?: string }
+  DESCRIPTION
+    Register or login user
 */
-module.exports = function(req, res) {
+module.exports = async function(req, res) {
 
-    let url = config.addresses.xacc
-        + "api/service/13"
-        + "/" + config.keys.xacc
-        + "/" + req.body.xid
-        + "/" + req.body.auth;
+  const db = new mysql();
 
-    request(url, (err, response, body) => {
-        if (err) {
-            res.json({ error: true });
-            return;
+  try {
+    // Get user's data from xyAccounts
+    const xaccResult = await request
+      .get(
+        config.addresses.xacc + 'api/service/13/user'
+      )
+      .query({
+        key: config.keys.xacc, xid: req.body.xid, token: req.body.auth
+      });
+    
+    if (xaccResult.body.error) throw '-';
+
+    await db.getConnection();
+
+    // Get user data from db
+    let sql = `
+      SELECT user_id, subscription, xad_id FROM users WHERE xyfir_id = ?
+    `,
+    vars = [
+      req.body.xid
+    ],
+    rows = await db.query(sql, vars);
+
+    // First login: create user's account
+    if (!rows.length) {
+      sql = `
+        INSERT INTO users SET ?
+      `;
+      const insert = {
+        xyfir_id: req.body.xid, email: xaccResult.body.email,
+        subscription: moment().add(7, 'days').unix() * 1000,
+        xad_id: xaccResult.body.xadid, referral: '{}'
+      };
+
+      // Save referral info
+      if (req.body.referral) {
+        insert.referral = JSON.stringify({
+          referral: req.body.referral, hasMadePurchase: false
+        });
+      }
+      // Validate affiliate promo code
+      else if (req.body.affiliate) {
+        try {
+          const xaccResult2 = await request
+            .post(config.address.xacc + 'api/affiliate/signup')
+            .send({
+              service: 13, serviceKey: config.keys.xacc,
+              promoCode: req.body.affiliate
+            });
+          
+          // Save affiliate info
+          if (!xaccResult2.body.error && xaccResult2.body.promo == 4) {
+            insert.referral = JSON.stringify({
+              affiliate: req.body.affiliate,
+              hasMadePurchase: false
+            });
+          }
         }
+        catch (e) { return; }
+      }
 
-        body = JSON.parse(body);
+      // Create user
+      const result = await db.query(sql, insert);
+      
+      if (!result.affectedRows) throw '--';
 
-        if (body.error) {
-            res.json({ error: true });
-            return;
-        }
+      // Add user's account email to main_emails
+      sql = `
+        INSERT INTO main_emails (user_id, address) VALUES (?, ?)
+      `,
+      vars = [
+        result.insertId, insert.email
+      ];
+      
+      await db.query(sql, vars);
+      db.release();
 
-        let sql = `
-            SELECT user_id, subscription, xad_id FROM users WHERE xyfir_id = ?
-        `;
-        db(cn => cn.query(sql, [req.body.xid], (err, rows) => {
-            // First login
-            if (!rows.length) {
-                let insert = {
-                    xyfir_id: req.body.xid, email: body.email, xad_id: body.xadid,
-                    subscription: Date.now() + (1000 * (60 * 60 * 24 * 7)),
-                    referral: "{}"
-                };
-                
-                const createAccount = () => {
-                    sql = "INSERT INTO users SET ?";
-                    
-                    cn.query(sql, insert, (err, result) => {
-                        cn.release();
+      req.session.uid = result.insertId,
+      req.session.xadid = xaccResult.body.xadid,
+      req.session.subscription = insert.subscription;
 
-                        if (err || !result.affectedRows) {
-                            res.json({ error: true });
-                        }
-                        else {
-                            req.session.uid = result.insertId;
-                            req.session.xadid = body.xadid;
-                            req.session.subscription = insert.subscription;
+      res.json({
+        error: false, accessToken: crypto.encrypt(
+          result.insertId + '-' + xaccResult.body.accessToken,
+          config.keys.accessToken
+        )
+      });
+    }
+    // Normal login: update user's data
+    else {
+      sql = `
+        UPDATE users SET email = ? WHERE user_id = ?
+      `,
+      vars = [
+        xaccResult.body.email, rows[0].user_id
+      ];
 
-                            res.json({
-                                error: false, accessToken: crypto.encrypt(
-                                    result.insertId + "-" + body.accessToken,
-                                    config.keys.accessToken
-                                )
-                            });
-                        }
-                    });
-                };
+      const result = await db.query(sql, vars);
+      db.release();
 
-                if (req.body.referral) {
-                    insert.referral = JSON.stringify({
-                        referral: req.body.referral, hasMadePurchase: false
-                    });
+      if (!result.affectedRows) throw '---';
 
-                    createAccount();
-                }
-                // Validate affiliate promo code
-                else if (req.body.affiliate) {
-                    request.post({
-                        url: config.address.xacc + "api/affiliate/signup", form: {
-                            service: 13, serviceKey: config.keys.xacc,
-                            promoCode: req.body.affiliate
-                        }
-                    }, (err, response, body) => {
-                        if (err) {
-                            createAccount();
-                        }
-                        else {
-                            body = JSON.parse(body);
+      req.session.uid = rows[0].user_id,
+      req.session.xadid = rows[0].xad_id,
+      req.session.subscription = rows[0].subscription;
 
-                            if (!body.error && body.promo == 4) {
-                                insert.referral = JSON.stringify({
-                                    affiliate: req.body.affiliate,
-                                    hasMadePurchase: false
-                                });
-                            }
-
-                            createAccount();
-                        }
-                    });
-                }
-                else {
-                    createAccount();
-                }
-            }
-            // Update data
-            else {
-                sql = "UPDATE users SET email = ? WHERE user_id = ?"
-                cn.query(sql, [body.email, rows[0].user_id], (err, result) => {
-                    cn.release();
-
-                    if (err) {
-                        res.json({ error: true });
-                    }
-                    else {
-                        req.session.uid = rows[0].user_id;
-                        req.session.xadid = rows[0].xad_id;
-                        req.session.subscription = rows[0].subscription;
-
-                        res.json({
-                            error: false, accessToken: crypto.encrypt(
-                                rows[0].user_id + "-" + body.accessToken,
-                                config.keys.accessToken
-                            )
-                        });
-                    }
-                });
-            }
-        }));
-    });
+      res.json({
+        error: false, accessToken: crypto.encrypt(
+          rows[0].user_id + '-' + xaccResult.body.accessToken,
+          config.keys.accessToken
+        )
+      });
+    }
+  }
+  catch (err) {
+    db.release();
+    res.json({ error: true });
+  }
 
 };
