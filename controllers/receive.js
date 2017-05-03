@@ -157,16 +157,9 @@ module.exports = function(req, res) {
           break;
         
         case 6: // Concatenate
-          (() => {
-            const add = modifier.data.add == 'subject'
-              ? req.body.subject : modifier.data.add == 'address'
-              ? req.body.from : modifier.data.add == 'domain'
-              ? req.body.from.match(/.+@(.+)/)[1] : '';
-            
-            req.body[modifier.data.to] +=
-              modifier.data.separator +
-              req.body[modifier.data.add];
-          })();
+          req.body[modifier.data.to] +=
+            modifier.data.separator +
+            req.body[modifier.data.add];
           break;
       }
     });
