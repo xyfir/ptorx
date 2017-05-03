@@ -13,5 +13,14 @@ export const modifierTypes = {
   '3': 'Find and Replace',
   '4': 'Subject Overwrite',
   '5': 'Subject Tag',
-  '6': 'Concatenate'
+  '6': 'Concatenate',
+  '7': 'Asana'
 };
+
+export const creatableModifierTypes = {
+  '1': 'Encrypt',
+  '3': 'Find and Replace',
+  '4': 'Subject Overwrite',
+  '5': 'Subject Tag',
+  '6': 'Concatenate'
+}
