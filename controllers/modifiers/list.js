@@ -1,23 +1,38 @@
-const db = require("lib/db");
+const mysql = require('lib/mysql');
 
 /*
-    GET api/modifiers
-    RETURN
-        { modifiers: [
-            id: number, name: string, description: string, type: number
-        ]}
-    DESCRIPTION
-        Returns basic information for all modifiers linked to account
+  GET api/modifiers
+  RETURN
+    { modifiers: [{
+      id: number, name: string, description: string, type: number,
+      global: boolean, uid: number
+    }] }
+  DESCRIPTION
+    Returns basic information for all modifiers linked to account
 */
-module.exports = function(req, res) {
+module.exports = async function(req, res) {
 
-    let sql = `
-        SELECT modifier_id as id, name, description, type
-        FROM modifiers WHERE user_id = ? 
-    `;
-    db(cn => cn.query(sql, [req.session.uid], (err, rows) => {
-        cn.release();
-        res.json({ modifiers: (err || !rows.length ? [] : rows) });
-    }));
+  const db = new mysql();
+
+  try {
+    await db.getConnection();
+
+    const sql = `
+      SELECT
+        user_id AS uid, modifier_id AS id, name, description, type,
+        IF(user_id = 0, 1, 0) AS global
+      FROM modifiers WHERE user_id = ? OR user_id = 0
+    `,
+    vars = [
+      req.session.uid
+    ],
+    modifiers = await db.query(sql, vars);
+
+    res.json({ modifiers });
+  }
+  catch (err) {
+    db.release();
+    res.json({ modifiers: [] });
+  }
 
 };
