@@ -38,11 +38,11 @@ export default class CreateModifier extends React.Component {
 
       case 3:
         data2 = {
-          regex: +this.refs.regex.checked, flags: (
+          regex: +this.refs.regex.checked, value: this.refs.find.value,
+          with: this.refs.replace.value, flags: (
             this.refs.regexFlags
               ? this.refs.regexFlags.value : ''
-          ), value: this.refs.find.value,
-          with: this.refs.replace.value
+          )
         };
         break;
 
@@ -52,8 +52,14 @@ export default class CreateModifier extends React.Component {
 
       case 5:
         data2 = {
-          value: this.refs.tag.value,
-          prepend: +this.refs.prepend.checked
+          value: this.refs.tag.value, prepend: +this.refs.prepend.checked
+        };
+        break;
+      
+      case 6:
+        data2 = {
+          add: this.refs.add.value, to: this.refs.to.value,
+          separator: this.refs.separator.value
         };
         break;
     }
@@ -175,8 +181,8 @@ export default class CreateModifier extends React.Component {
                 Variable #1's content is added to the end of variable #2's content.
               </span>
               <select ref='add'>
-                <option value='subject'>Subject</option>
                 <option value='from'>Sender Address</option>
+                <option value='subject'>Subject</option>
                 <option value='domain'>Sender Domain</option>
               </select>
 
