@@ -1,127 +1,109 @@
-const request = require("request");
-const crypto = require("lib/crypto");
-const db = require("lib/db");
+const request = require('superagent');
+const crypto = require('lib/crypto');
+const mysql = require('lib/mysql');
 
-const config = require("config");
+const config = require('config');
 
 /*
-    GET api/account
-    REQUIRED
-        token: string
-    RETURN
-        {
-            loggedIn: boolean, emails?: [{ id: number, address: string }],
-            subscription?: number, uid?: number, trial?: boolean,
-            referral?: {
-                affiliate?: string, referral?: string,
-                hasMadePurchase?: boolean
-            }
-        }
-    DESCRIPTION
-        Creates a new session using access token
-        Returns all MAIN emails on account and subscription expiration
+  GET api/account
+  REQUIRED
+    token: string
+  RETURN
+    {
+      loggedIn: boolean, subscription?: number, uid?: number, trial?: boolean,
+      referral?: {
+        affiliate?: string, referral?: string,
+        hasMadePurchase?: boolean
+      },
+      emails?: [{
+        id: number, address: string
+      }]
+    }
+  DESCRIPTION
+    Creates a new session using access token
+    Returns all MAIN emails on account and subscription expiration
 */
-module.exports = function(req, res) {
+module.exports = async function(req, res) {
 
-    // Wipe session, return loggedIn: false
-    const error = () => {
-        req.session.uid = req.session.subscription = 0;
-        req.session.xadid = "";
+  const db = new mysql();
 
-        res.json({ loggedIn: false });
-    };
+  try {
+    await db.getConnection();
 
-    db(cn => {
-        let sql = "";
+    let sql, vars, rows, uid, row;
 
-        const getInfo = (uid, row) => {
-            sql = `
-                SELECT email_id as id, address FROM main_emails WHERE user_id = ?
-            `;
-            cn.query(sql, [uid], (err, emails) => {
-                cn.release();
+    // Validate access token
+    if (req.query.token) {
+      // [user_id, access_token]
+      const token = crypto.decrypt(
+        req.query.token, config.keys.accessToken
+      ).split('-');
 
-                // Set session, return account info
-                req.session.uid = uid,
-                req.session.xadid = row.xadid,
-                req.session.subscription = row.subscription;
-                
-                res.json({
-                    loggedIn: true, uid, emails, subscription: row.subscription,
-                    referral: JSON.parse(row.referral), trial: !!row.trial
-                });
-            });
-        };
+      // Invalid token
+      if (!token[0] || !token[1]) throw 'Invalid token 1';
 
-        // Validate access token
-        if (req.query.token) {
-            // [user_id, access_token]
-            const token = crypto.decrypt(
-                req.query.token, config.keys.accessToken
-            ).split('-');
+      sql = `
+        SELECT xyfir_id, subscription, xad_id, referral, trial
+        FROM users WHERE user_id = ?
+      `,
+      vars = [
+        token[0]
+      ],
+      rows = await db.query(sql, vars);
 
-            // Invalid token
-            if (!token[0] || !token[1]) {
-                cn.release();
-                error();
-                return;
-            }
+      if (!rows.length) throw 'User does not exist';
 
-            sql = `
-                SELECT xyfir_id, subscription, xad_id, referral, trial
-                FROM users WHERE user_id = ?
-            `;
+      // Validate access token with Xyfir Accounts
+      const xaccResult = await request
+        .get(config.addresses.xacc + 'api/service/13/user')
+        .query({
+          key: config.keys.xacc, xid: rows[0].xyfir_id, token: token[1]
+        });
+      
+      if (xaccResult.body.error) throw 'Invalid token 2';
 
-            cn.query(sql, [token[0]], (err, rows) => {
-                // User doesn't exist
-                if (err || !rows.length) {
-                    cn.release();
-                    error();
-                }
-                // Validate access token with Xyfir Accounts
-                else {
-                    let url = config.addresses.xacc + "api/service/13/"
-                    + `${config.keys.xacc}/${rows[0].xyfir_id}/${token[1]}`;
+      uid = token[0], row = rows[0];
+    }
+    // Get info for dev user
+    else if (config.environment.type == 'dev') {
+      sql = `
+        SELECT subscription, xad_id, referral, trial FROM users
+        WHERE user_id = 1
+      `,
+      rows = await db.query(sql);
 
-                    request(url, (err, response, body) => {
-                        // Error in request
-                        if (err) {
-                            cn.release();
-                            error();
-                            return;
-                        }
+      uid = 1, row = rows[0];
+    }
+    // Force login
+    else {
+      throw 'Forcing login';
+    }
 
-                        body = JSON.parse(body);
+    sql = `
+      SELECT email_id as id, address FROM main_emails WHERE user_id = ?
+    `,
+    vars = [uid];
 
-                        // Error from Xyfir Accounts
-                        if (body.error) {
-                            req.session.uid = req.session.subscription = 0;
-                            
-                            cn.release();
-                            error();
-                        }
-                        // Access token valid
-                        else {
-                            getInfo(token[0], rows[0]);
-                        }
-                    });
-                }
-            });
-        }
-        // Get info for dev user
-        else if (config.environment.type == "dev") {
-            sql = `
-                SELECT subscription, xad_id, referral, trial FROM users
-                WHERE user_id = 1
-            `;
-
-            cn.query(sql, (err, rows) => getInfo(1, rows[0]));
-        }
-        // Force login
-        else {
-            cn.release();
-            error();
-        }
+    const emails = await db.query(sql, vars);
+    db.release();
+    
+    // Set session, return account info
+    req.session.uid = uid,
+    req.session.xadid = row.xadid,
+    req.session.subscription = row.subscription;
+    
+    res.json({
+      loggedIn: true, uid, emails, subscription: row.subscription,
+      referral: JSON.parse(row.referral), trial: !!row.trial
     });
+  }
+  catch (err) {
+    db.release();
+    
+    req.session.uid = req.session.subscription = 0;
+    req.session.xadid = '';
+
+    res.json({ loggedIn: false });
+  }
 
 };
