@@ -6,7 +6,7 @@ import { addModifier } from 'actions/creators/modifiers';
 
 // Constants
 import { URL } from 'constants/config';
-import { modifierTypes } from 'constants/types';
+import { creatableModifierTypes } from 'constants/types';
 
 export default class CreateModifier extends React.Component {
 
@@ -30,10 +30,6 @@ export default class CreateModifier extends React.Component {
     switch (data.type) {
       case 1:
         data2 = { key: this.refs.key.value };
-        break;
-
-      case 2:
-        data2 = '';
         break;
 
       case 3:
@@ -207,8 +203,10 @@ export default class CreateModifier extends React.Component {
       <div className='modifier-create'>
         <label>Modifier Type</label>
         <select ref='type' onChange={() => this.onChangeType()}>{
-          [0].concat(Object.keys(modifierTypes)).map(k =>
-            <option value={k}>{modifierTypes[k] || 'Modifier Type'}</option>
+          [0].concat(Object.keys(creatableModifierTypes)).map(k =>
+            <option value={k}>{
+              creatableModifierTypes[k] || 'Modifier Type'
+            }</option>
           )
         }</select>
         <label>Name</label>

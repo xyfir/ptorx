@@ -6,7 +6,7 @@ import { editModifier } from 'actions/creators/modifiers';
 
 // Constants
 import { URL } from 'constants/config';
-import { modifierTypes } from 'constants/types';
+import { creatableModifierTypes } from 'constants/types';
 
 export default class UpdateModifier extends React.Component {
 
@@ -60,10 +60,6 @@ export default class UpdateModifier extends React.Component {
     switch (data.type) {
       case 1:
         data2 = { key: this.refs.key.value };
-        break;
-
-      case 2:
-        data2 = '';
         break;
 
       case 3:
@@ -255,8 +251,8 @@ export default class UpdateModifier extends React.Component {
           onChange={() => this.onChangeType()}
           defaultValue={mod.type}
         >{
-          Object.keys(modifierTypes).map(k =>
-            <option value={k}>{modifierTypes[k]}</option>
+          Object.keys(creatableModifierTypes).map(k =>
+            <option value={k}>{creatableModifierTypes[k]}</option>
           )
         }</select>
         
