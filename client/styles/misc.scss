@@ -30,12 +30,7 @@
   text-align: left;
 }
 
-.email-create, .email-update {
-  .advanced-settings > a {
-    display: inline-block;
-    margin-bottom: 1em;
-  }
-  
+.email-form {
   .advanced-settings > h3 {
     margin-bottom: -0.6em;
   }
@@ -82,6 +77,23 @@
   .link-filter > .list, .link-modifier > .list {
     max-height: 12em;
     overflow-y: auto;
+  }
+
+  div.redirect-to {
+    >select {
+      display: inline-block;
+    }
+  }
+
+  div.proxy-address {
+    >input.name {
+      display: inline-block;
+    }
+
+    >span.domain {
+      color: $dgray;
+      font-weight: bold;
+    }
   }
 }
 
