@@ -1,52 +1,50 @@
-import React from "react";
+import React from 'react';
+
+// react-md
+import TextField from 'react-md/lib/TextFields';
+import Paper from 'react-md/lib/Papers';
 
 // Constants
-import { filterTypes, modifierTypes } from "../../constants/types";
+import { filterTypes, modifierTypes } from 'constants/types';
 
 export default class Search extends React.Component {
+  
+  constructor(props) {
+    super(props);
+  }
+  
+  onSearch() {
+    this.props.onSearch({
+      query: this.refs.search.getField().value,
+      type: this.refs.type ? +this.refs.type.value : 0
+    });
+  }
+  
+  render() {
+    const types = this.props.type == 'filter'
+      ? filterTypes : this.props.type == 'modifier'
+      ? modifierTypes : null;
     
-    constructor(props) {
-        super(props);
+    return (
+      <Paper zDepth={1} className='search'>
+        <TextField
+          block paddedBlock
+          id='search-box'
+          ref='search'
+          type='search'
+          onChange={e => this.onSearch()}
+          placeholder='Search'
+        />
         
-        this.onSearch = this.onSearch.bind(this);
-    }
-    
-    onSearch() {
-        this.props.onSearch({
-            query: this.refs.search.value,
-            type: this.refs.type ? +this.refs.type.value : 0
-        });
-    }
-    
-    render() {
-        let types;
-        if (this.props.type == "filter")
-            types = filterTypes;
-        else if (this.props.type == "modifier")
-            types = modifierTypes;
-        
-        return (
-            <div className="search">
-                <input
-                    type="text"
-                    ref="search"
-                    onChange={this.onSearch}
-                    placeholder="Search"
-                />
-                {
-                    types !== undefined
-                    ? (
-                        <select ref="type" onChange={this.onSearch}>{
-                            [0].concat(Object.keys(types)).map(k => {
-                                return (
-                                    <option value={k}>{types[k] || "All Types"}</option>
-                                );
-                            })
-                        }</select>
-                    ) : <div />
-                }
-            </div>
-        )
-    }
-    
+        {types ? (
+          <select ref='type' onChange={() => this.onSearch()}>{
+            [0].concat(Object.keys(types)).map(k =>
+              <option value={k}>{types[k] || 'All Types'}</option>
+            )
+          }</select>
+        ) : <div />}
+      </Paper>
+    );
+  }
+  
 }
