@@ -63,7 +63,7 @@ a:hover, a:focus {
 
 
 /* BUTTONS */
-input[type=submit], button, .btn {
+.btn, .btn-primary, .btn-secondary, .btn-danger {
   height: 3.142em;
   min-width: 7em;
   color:#fff;
