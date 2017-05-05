@@ -23,14 +23,14 @@ export default class CreateEmail extends React.Component {
   componentWillMount() {
     const q = parseQuery();
 
-    // Load data from email with id q.copy
-    if (q.copy) {
-      const email = this.props.data.emails.find(e => e.id == q.copy);
+    // Load data from email with id q.duplicate
+    if (q.duplicate) {
+      const email = this.props.data.emails.find(e => e.id == q.duplicate);
 
       if (!email) return;
 
       request
-        .get('../api/emails/' + q.copy)
+        .get('../api/emails/' + q.duplicate)
         .end((err, res) => {
           if (!err && !res.body.error) {
             this.setState({
