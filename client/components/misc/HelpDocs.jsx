@@ -1,72 +1,76 @@
-import marked from "marked";
-import React from "react";
-
-// Modules
-import request from "lib/request";
+import request from 'superagent';
+import marked from 'marked';
+import React from 'react';
 
 // Components
-import DynamicIframe from "./DynamicIframe";
+import DynamicIframe from './DynamicIframe';
+
+// react-md
+import Button from 'react-md/lib/Buttons/Button';
+import Dialog from 'react-md/lib/Dialogs';
 
 export default class HelpDocs extends React.Component {
-	
-    constructor(props) {
-        super(props);
+  
+  constructor(props) {
+    super(props);
 
-        this.state = { show: false };
+    this.state = { show: false };
+  }
+
+  componentDidUpdate() {
+    if (this.state.show) {
+      request
+        .get(
+          'https://api.github.com/repos/Xyfir/Documentation/contents/' +
+          'ptorx/help.md'
+        )
+        .end((err, res) => {
+          console.log('this', this);
+          this.refs.frame.refs.frame.contentDocument.head.innerHTML =
+            `<link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" rel="stylesheet" type="text/css">
+            <link rel='stylesheet' href='../static/css/style.css'>`;
+
+          // Convert markdown to html
+          this.refs.frame.refs.frame.contentDocument.body.innerHTML =
+            `<div class='help-docs markdown'>${
+              marked(window.atob(res.body.content), { santize: true })
+            }</div>`;
+        });
     }
+  }
 
-    componentDidUpdate() {
-        if (this.state.show) {
-            const url
-                = "https://api.github.com/repos/Xyfir/Documentation/contents/"
-                + "ptorx/help.md";
-
-            request(url, (res) => {
-                // Add CSS files
-                this.refs.frame.refs.frame.contentDocument.head.innerHTML = `
-                    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700" rel="stylesheet" type="text/css">
-                    <link rel="stylesheet" href="../static/css/style.css">
-                `;
-
-                // Convert markdown to html
-                this.refs.frame.refs.frame.contentDocument.body.innerHTML = `
-                    <div class="help-docs markdown">${
-                        marked(
-                            window.atob(res.content), { santize: true }
-                        )
-                    }</div>
-                `;
-            });
-        }
+  render() {
+    if (this.state.show) {
+      return (
+        <Dialog
+          fullPage
+          id='button-script-editor-dialog'
+          visible={true}
+          className='help-documents'
+        >
+          <Button
+            floating fixed secondary
+            tooltipPosition='top'
+            fixedPosition='bl'
+            tooltipLabel='Close help documents'
+            onClick={() => this.setState({ show: false })}
+          >close</Button>
+          
+          <DynamicIframe ref='frame' className='documentation' />
+        </Dialog>
+      );
     }
-
-    onShowHelp() {
-        this.setState({ show: !this.state.show });
+    else {
+      return (
+        <Button
+          floating fixed secondary
+          tooltipPosition='top'
+          fixedPosition='bl'
+          tooltipLabel='Help Documents'
+          onClick={() => this.setState({ show: true })}
+        >info</Button>
+      );
     }
-
-	render() {
-        if (this.state.show) {
-            return (
-                <div className="help-docs">
-                    <a
-                        className="icon-close"
-                        onClick={() => this.onShowHelp()}
-                        title="Close help documents"
-                    />
-                    
-                    <DynamicIframe ref="frame" className="documentation" />
-                </div>
-            );
-        }
-        else {
-            return (
-                <a
-                    className="icon-info"
-                    onClick={() => this.onShowHelp()}
-                    title="Show help documents"
-                />
-            );
-        }
-	}
+  }
 
 }
