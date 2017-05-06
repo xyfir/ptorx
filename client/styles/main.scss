@@ -137,7 +137,7 @@ input[type=checkbox] {
 
 
 /* NAVBAR */
-nav {
+nav.navbar, nav.navbar-sub {
   background-color: $purple;
   padding: 0.25em 0em;
   display: flex;
@@ -164,10 +164,6 @@ nav.navbar-sub {
   margin-bottom: 1em;
 }
 
-div.ptorx > div:nth-child(2) {
-  padding-top: 1em;
-}
-
 /* SWEET ALERT */
 .sweet-alert > fieldset > input {
   display: none;
@@ -181,4 +177,8 @@ div.ptorx > div:nth-child(2) {
 .md-paper.section {
   margin-left: 1em;
   margin-right: 1em;
+}
+
+div.main.md-toolbar-relative {
+  padding-top: 1em;
 }

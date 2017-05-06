@@ -125,20 +125,13 @@
   }
 }
 
-.modifiers, .filters, .emails, .messages {
+.messages {
   .list {
-    .modifier, .filter, .email, .message {
+    .message {
       background-color: $lllgray;
       padding: 0.5em;
       margin: auto;
       margin-bottom: 0.5em;
-    }
-    
-    .type {
-      font-weight: bold;
-    }
-    .type::after {
-      content: " - ";
     }
     
     .description {
@@ -148,7 +141,7 @@
       font-size: 90%;
     }
     
-    .address, .received {
+    .received {
       display: block;
     } 
   }
