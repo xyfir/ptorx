@@ -1,85 +1,83 @@
-import React from "react";
+import PropTypes from 'prop-types';
+import React from 'react';
 
 // Components
-import Search from "components/misc/Search";
-import Create from "./Create";
+import Search from 'components/misc/Search';
+import Create from './Create';
 
 // Constants
-import { modifierTypes } from "constants/types";
+import { modifierTypes } from 'constants/types';
 
 // Modules
-import findMatches from "lib/find-matching";
+import findMatches from 'lib/find-matching';
+
+// react-md
+import ListItem from 'react-md/lib/Lists/ListItem';
+import List from 'react-md/lib/Lists/List';
 
 export default class LinkModifier extends React.Component {
 
-    constructor(props) {
-        super(props);
-        
-        this.state = {
-            view: "search", search: { query: "", type: 0 }
-        };
-        
-        this.onSearch = this.onSearch.bind(this);
-        this.onAdd = this.onAdd.bind(this);
-    }
+  constructor(props) {
+    super(props);
     
-    onChangeView(view) {
-        this.setState({ view });
-    }
-    
-    onSearch(search) {
-        this.setState({ search });
-    }
-    
-    onAdd(id) {
-        this.props.onAdd(id);
-    }
+    this.state = {
+      view: 'search', search: { query: '', type: 0 }
+    };
+  }
 
-    render() {
-        return (
-            <div className="link-modifier">
-                {this.state.view == "search" ? (
-                    <a onClick={() => this.onChangeView("create")}>
-                        Switch to 'Create New Modifier' Mode
-                    </a>
-                ) : (
-                    <a onClick={() => this.onChangeView("search")}>
-                        Switch to 'Find Existing Modifier' Mode
-                    </a>
-                )}
-                
-                {this.state.view == "search" ? (
-                    <div>
-                        <Search onSearch={this.onSearch} type="modifier" />
-                        <div className="list">{
-                            findMatches(
-                                this.props.data.modifiers, this.state.search
-                            ).map(m =>
-                                <div className="modifier">
-                                    <span className="type">{
-                                        modifierTypes[m.type]
-                                    }</span>
-                                    <span className="name">
-                                        <a onClick={() => this.onAdd(m.id)}>
-                                            {m.name}
-                                        </a>
-                                    </span>
-                                    <span className="description">{
-                                        m.description
-                                    }</span>
-                                </div>
-                            )
-                        }</div>
-                    </div>
-                ) : (
-                    <Create
-                        data={this.props.data}
-                        dispatch={this.props.dispatch}
-                        onCreate={this.onAdd}
-                    />
-                )}
-            </div>
-        );
-    }
+  render() {
+    return (
+      <div className='link-modifier'>
+        {this.state.view == 'search' ? (
+          <a onClick={() => this.setState({ view: 'create' })}>
+            Create New Modifier
+          </a>
+        ) : (
+          <a onClick={() => this.setState({ view: 'search' })}>
+            Find Existing Modifier
+          </a>
+        )}
+        
+        {this.state.view == 'search' ? (
+          <div>
+            <Search
+              onSearch={v => this.setState({ search: v })}
+              type='modifier'
+            />
+
+            <List
+              className='modifiers-list section md-paper md-paper--1'
+            >{
+              findMatches(
+                this.props.data.modifiers, this.state.search, this.props.ignore
+              ).map(m =>
+                <ListItem
+                  threeLines
+                  key={m.id}
+                  onClick={() => this.props.onAdd(m.id)}
+                  className='modifier'
+                  primaryText={m.name}
+                  secondaryText={modifierTypes[m.type] + '\n' + m.description}
+                />
+              )
+            }</List>
+          </div>
+        ) : (
+          <Create
+            data={this.props.data}
+            dispatch={this.props.dispatch}
+            onCreate={this.onAdd}
+          />
+        )}
+      </div>
+    );
+  }
 
 }
+
+LinkModifier.propTypes = {
+  data: PropTypes.object.isRequired,
+  onAdd: PropTypes.func.isRequired,
+  ignore: PropTypes.arrayOf(PropTypes.object).isRequired,
+  dispatch: PropTypes.func.isRequired
+};
