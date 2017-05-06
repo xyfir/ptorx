@@ -26,10 +26,8 @@ span[class^='icon-']:hover {
   color: $dgray;
 }
 .ptorx section {
-  background-color: $lllgray;
   padding: 0.5em;
   margin: 1em auto;
-  width: 80%;
 
   >h3, >h2, >h1, >p {
     margin: 0em;
@@ -154,10 +152,11 @@ nav {
   }
 }
 nav.navbar {
-  position: fixed;
   top: 0%;
   left: 0%;
   right: 0%;
+  z-index: 1;
+  position: fixed;
 }
 nav.navbar-sub {
   width: 80%;
@@ -177,4 +176,9 @@ div.ptorx > div:nth-child(2) {
   margin: auto !important;
   max-height: 20em;
   overflow: auto;
+}
+
+.md-paper.section {
+  margin-left: 1em;
+  margin-right: 1em;
 }
