@@ -1,6 +1,7 @@
 import React from 'react';
 
 // react-md
+import SelectField from 'react-md/lib/SelectFields';
 import TextField from 'react-md/lib/TextFields';
 import Paper from 'react-md/lib/Papers';
 
@@ -11,13 +12,19 @@ export default class Search extends React.Component {
   
   constructor(props) {
     super(props);
+
+    this.state = { select: 0 }
   }
   
   onSearch() {
     this.props.onSearch({
       query: this.refs.search.getField().value,
-      type: this.refs.type ? +this.refs.type.value : 0
+      type: this.state.select
     });
+  }
+
+  onSelect(select) {
+    this.setState({ select }, () => this.onSearch());
   }
   
   render() {
@@ -26,7 +33,7 @@ export default class Search extends React.Component {
       ? modifierTypes : null;
     
     return (
-      <Paper zDepth={1} className='search'>
+      <Paper zDepth={1} className='search section'>
         <TextField
           block paddedBlock
           id='search-box'
@@ -35,14 +42,21 @@ export default class Search extends React.Component {
           onChange={e => this.onSearch()}
           placeholder='Search'
         />
-        
+
         {types ? (
-          <select ref='type' onChange={() => this.onSearch()}>{
-            [0].concat(Object.keys(types)).map(k =>
-              <option value={k}>{types[k] || 'All Types'}</option>
-            )
-          }</select>
-        ) : <div />}
+          <SelectField
+            id='select-search-type'
+            onChange={v => this.onSelect(v)}
+            position={SelectField.Positions.BELOW}
+            className='md-cell'
+            menuItems={
+              Object.keys(types).map(k =>
+                Object({ label: types[k], value: k })
+              )
+            }
+            placeholder='Type'
+          />
+        ) : null}
       </Paper>
     );
   }
