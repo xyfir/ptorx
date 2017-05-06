@@ -17,7 +17,6 @@ import Search from 'components/misc/Search';
 import ListItem from 'react-md/lib/Lists/ListItem';
 import Button from 'react-md/lib/Buttons/Button';
 import Dialog from 'react-md/lib/Dialogs';
-import Paper from 'react-md/lib/Papers';
 import List from 'react-md/lib/Lists/List';
 
 export default class EmailList extends React.Component {
@@ -115,8 +114,9 @@ export default class EmailList extends React.Component {
           type='email'
         />
 
-        <Paper zDepth={1}>
-        <List className='proxy-emails-list'>{
+        <List
+          className='proxy-emails-list section md-paper md-paper--1'
+        >{
           findMatches(
             this.props.data.emails, this.state.search
           ).map(email =>
@@ -130,7 +130,6 @@ export default class EmailList extends React.Component {
             />
           )
         }</List>
-        </Paper>
 
         <Dialog
           id='selected-email'
