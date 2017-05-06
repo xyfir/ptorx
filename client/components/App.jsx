@@ -1,182 +1,226 @@
-import React from "react";
-import { render } from "react-dom";
+import { render } from 'react-dom';
+import request from 'superagent';
+import React from 'react';
 
 // Redux store / reducers
-import { createStore } from "redux";
-import reducers from "reducers/index";
+import { createStore } from 'redux';
+import reducers from 'reducers/index';
+
+// react-md
+import ListItem from 'react-md/lib/Lists/ListItem';
+import Toolbar from 'react-md/lib/Toolbars';
+import Divider from 'react-md/lib/Dividers';
+import Drawer from 'react-md/lib/Drawers';
+import Button from 'react-md/lib/Buttons/Button';
 
 // Components
-import DynamicStyles from "./misc/DynamicStyles";
-import Modifiers from "./modifiers/Index";
-import HelpDocs from "./misc/HelpDocs";
-import Account from "./account/Index";
-import Filters from "./filters/Index";
-import Emails from "./emails/Index";
+import Modifiers from 'components/modifiers/Index';
+import HelpDocs from 'components/misc/HelpDocs';
+import Account from 'components/account/Index';
+import Filters from 'components/filters/Index';
+import Emails from 'components/emails/Index';
 
 // Modules
-import parseHashQuery from "lib/parse-hash-query";
-import setState from "lib/set-state";
-import request from "lib/request";
+import parseHashQuery from 'lib/parse-hash-query';
+import setState from 'lib/set-state';
 
 // Constants
-import { CREATE_REDIRECT_EMAIL } from "constants/views";
-import { URL, XACC, LOG_STATE, ENVIRONMENT } from "constants/config";
-import { INITIALIZE_STATE } from "actions/types/index";
+import { URL, XACC, LOG_STATE, ENVIRONMENT } from 'constants/config';
+import { CREATE_REDIRECT_EMAIL } from 'constants/views';
+import { INITIALIZE_STATE } from 'actions/types/index';
 
-let store = createStore(reducers);
+const store = createStore(reducers);
 
 class App extends React.Component {
 
-    constructor(props) {
-        super(props);
+  constructor(props) {
+    super(props);
 
-        store.subscribe(() => {
-            this.setState(store.getState());
-        });
+    store.subscribe(() => this.setState(store.getState()));
 
-        if (LOG_STATE) {
-            store.subscribe(() => {
-                console.log(store.getState());
+    if (LOG_STATE) {
+      store.subscribe(() => console.log(store.getState()));
+    }
+
+    const initialize = () => {
+      // Access token is generated upon a successful login
+      // Used to create new session without forcing login each time
+      const token = localStorage.getItem('access_token') || '';
+
+      // Access token is required
+      if (!token && ENVIRONMENT != 'dev') {
+        location.href = XACC + 'app/#/login/13';
+      }
+
+      const state = {
+        view: CREATE_REDIRECT_EMAIL, modifiers: [], filters: [], emails: [],
+        drawer: false, account: {
+          emails: [], subscription: 0
+        },
+      };
+
+      request
+        .get('../api/account')
+        .query({ token })
+        .end((err, res) => {
+          if (err || !res.body.loggedIn) {
+            location.href = XACC + 'app/#/login/13';
+          }
+          else {
+            state.account = res.body;
+
+            this.state = state;
+
+            // Push initial state to store
+            store.dispatch({
+              type: INITIALIZE_STATE, state
             });
-        }
 
-        const initialize = () => {
-            // Access token is generated upon a successful login
-            // Used to create new session without forcing login each time
-            const token = localStorage.getItem("access_token") || "";
-
-            // Access token is required
-            if (!token && ENVIRONMENT != "dev") {
-                location.href = XACC + "app/#/login/13";
-            }
-
-            let state = {
-                modifiers: [], filters: [], account: {
-                    emails: [], subscription: 0
-                },
-                emails: [], view: CREATE_REDIRECT_EMAIL
-            };
-
-            request({url: URL + "api/account?token=" + token, success: (res) => {
-                if (!res.loggedIn) {
-                    location.href = XACC + "app/#/login/13";
-                }
-                else {
-                    state.account = res;
-
-                    this.state = state;
-
-                    // Push initial state to store
-                    store.dispatch({
-                        type: INITIALIZE_STATE, state
-                    });
-
-                    // Set state based on current url hash
-                    setState(store);
-                    
-                    // Update state according to url hash
-                    window.onhashchange = () => setState(store);
-                }
-            }});            
-        };
-
-        const q = parseHashQuery();
-
-        // PhoneGap app opens to ptorx.com/panel/#?phonegap=1
-        if (q.phonegap) {
-            localStorage.setItem("isPhoneGap", "true");
-            initialize();
-            location.hash = "";
-        }
-        // Attempt to login using XID/AUTH or skip to initialize()
-        else if (q.xid && q.auth) {
-            q.affiliate = localStorage.getItem("affiliate") || "";
-            q.referral = localStorage.getItem("referral") || "";
+            // Set state based on current url hash
+            setState(store);
             
-            request({
-                url: URL + "api/account/login",
-                method: "POST", data: q,
-                success: (res) => {
-                    if (res.error) {
-                        location.href = XACC + "app/#/login/13";
-                    }
-                    else {
-                        localStorage.setItem("access_token", res.accessToken);
-                        initialize();
-                        location.hash = location.hash.split('?')[0];
-                    }
-                }
-            });
-        }
-        else {
-            initialize();
-        }
-    }
-
-    onShowTrialInfo() {
-        swal({
-            title: "Free Trial",
-            text: `
-                To prevent abuse to our system, some restrictions are placed on free trial users:
-                <ol>
-                    <li>Limited to creating up to 5 proxy emails a day</li>
-                    <li>Limited to creating up to 15 proxy emails total</li>
-                    <li>Must complete a verification captcha before creating a proxy email</li>
-                    <li>Cannot have more than one main email address</li>
-                    <li>Cannot send messages or reply to received mail</li>
-                </ol>
-                These restrictions can be removed by purchasing a subscription.
-            `,
-            html: true
+            // Update state according to url hash
+            window.onhashchange = () => setState(store);
+          }
         });
+    };
+
+    const q = parseHashQuery();
+
+    // PhoneGap app opens to ptorx.com/panel/#?phonegap=1
+    if (q.phonegap) {
+      localStorage.setItem('isPhoneGap', 'true');
+      initialize();
+      location.hash = '';
     }
-
-    render() {
-        if (!this.state) return <div />;
-        
-        let view;
-
-        switch (this.state.view.split('/')[0]) {
-            case "MODIFIERS":
-                view = <Modifiers data={this.state} dispatch={store.dispatch} />; break;
-            case "ACCOUNT":
-                view = <Account data={this.state} dispatch={store.dispatch} />; break;
-            case "FILTERS":
-                view = <Filters data={this.state} dispatch={store.dispatch} />; break;
-            case "EMAILS":
-                view = <Emails data={this.state} dispatch={store.dispatch} />;
-        }
-        
-        return (
-            <div className="ptorx">
-                <nav className="navbar">
-                    <a href="#account">Account</a>
-                    <a href="#emails/list">Emails</a>
-                    <a href="#filters/list">Filters</a>
-                    <a href="#modifiers/list">Modifiers</a>
-                </nav>
-
-                {this.state.account.trial ? (
-                    <div className="trial">
-                        <strong>Your account is currently in trial mode.</strong> Some limitations apply.
-                        <a
-                            className="icon-info"
-                            onClick={() => this.onShowTrialInfo()}
-                        />
-                    </div>    
-                ) : (
-                    <div />    
-                )}
-
-                {view}
-
-                <DynamicStyles />
-
-                <HelpDocs />
-            </div>                
-        );
+    // Attempt to login using XID/AUTH or skip to initialize()
+    else if (q.xid && q.auth) {
+      q.affiliate = localStorage.getItem('affiliate') || '';
+      q.referral = localStorage.getItem('referral') || '';
+      
+      request
+        .post('../api/account/login')
+        .send(q)
+        .end((err, res) => {
+          if (err || res.body.error) {
+            location.href = XACC + 'app/#/login/13';
+          }
+          else {
+            localStorage.setItem('access_token', res.body.accessToken);
+            initialize();
+            location.hash = location.hash.split('?')[0];
+          }
+        })
     }
+    else {
+      initialize();
+    }
+  }
+
+  onShowTrialInfo() {
+    swal({
+      title: 'Free Trial',
+      text: `
+        To prevent abuse to our system, some restrictions are placed on free trial users:
+        <ol>
+          <li>Limited to creating up to 5 proxy emails a day</li>
+          <li>Limited to creating up to 15 proxy emails total</li>
+          <li>Must complete a verification captcha before creating a proxy email</li>
+          <li>Cannot have more than one main email address</li>
+          <li>Cannot send messages or reply to received mail</li>
+        </ol>
+        These restrictions can be removed by purchasing a subscription.
+      `,
+      html: true
+    });
+  }
+
+  render() {
+    if (!this.state) return <div />;
+    
+    const view = (() => {
+      switch (this.state.view.split('/')[0]) {
+        case 'MODIFIERS':
+          return <Modifiers data={this.state} dispatch={store.dispatch} />;
+        case 'ACCOUNT':
+          return <Account data={this.state} dispatch={store.dispatch} />;
+        case 'FILTERS':
+          return <Filters data={this.state} dispatch={store.dispatch} />;
+        case 'EMAILS':
+          return <Emails data={this.state} dispatch={store.dispatch} />;
+      }
+    })();
+    
+    return (
+      <div className='ptorx'>
+        <Toolbar
+          colored fixed
+          actions={[
+            <Button
+              icon
+              onClick={() => location.hash = '#'}
+            >home</Button>
+          ]}
+          title='Ptorx'
+          nav={
+            <Button
+              icon
+              onClick={() => this.setState({ drawer: true })}
+            >menu</Button>
+          }
+        />
+
+        <Drawer
+          onVisibilityToggle={v => this.setState({ drawer: v })}
+          autoclose={true}
+          navItems={[
+            <a href='#account'>
+              <ListItem primaryText='Account' />
+            </a>,
+            <a href='#emails/list'>
+              <ListItem primaryText='Proxy Emails' />
+            </a>,
+            <a href='#filters/list'>
+              <ListItem primaryText='Filters' />
+            </a>,
+            <a href='#modifiers/list'>
+              <ListItem primaryText='Modifiers' />
+            </a>
+          ]}
+          visible={this.state.drawer}
+          header={
+            <Toolbar
+              colored
+              nav={
+                <Button
+                  icon
+                  onClick={() => this.setState({ drawer: false })}
+                >arrow_back</Button>
+              }
+            />
+          }
+          type={Drawer.DrawerTypes.TEMPORARY}
+        />
+
+        <div className='main md-toolbar-relative'>
+          {this.state.account.trial ? (
+            <div className='trial'>
+              <strong>Your account is currently in trial mode.</strong> Some limitations apply.
+              <a
+                className='icon-info'
+                onClick={() => this.onShowTrialInfo()}
+              />
+            </div>    
+          ) : null}
+
+          {view}
+        </div>
+
+        <HelpDocs />
+      </div>                
+    );
+  }
 
 }
 
-render(<App />, document.getElementById("content"));
+render(<App />, document.getElementById('content'));
