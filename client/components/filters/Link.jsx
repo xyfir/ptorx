@@ -1,85 +1,83 @@
-import React from "react";
+import PropTypes from 'prop-types';
+import React from 'react';
 
 // Components
-import Search from "components/misc/Search";
-import Create from "./Create";
+import Search from 'components/misc/Search';
+import Create from './Create';
 
 // Constants
-import { filterTypes } from "constants/types";
+import { filterTypes } from 'constants/types';
 
 // Modules
-import findMatches from "lib/find-matching";
+import findMatches from 'lib/find-matching';
+
+// react-md
+import ListItem from 'react-md/lib/Lists/ListItem';
+import List from 'react-md/lib/Lists/List';
 
 export default class LinkFilter extends React.Component {
 
-    constructor(props) {
-        super(props);
-        
-        this.state = {
-            view: "search", search: { query: "", type: 0 }
-        };
-        
-        this.onSearch = this.onSearch.bind(this);
-        this.onAdd = this.onAdd.bind(this);
-    }
+  constructor(props) {
+    super(props);
     
-    onChangeView(view) {
-        this.setState({ view });
-    }
-    
-    onSearch(search) {
-        this.setState({ search });
-    }
-    
-    onAdd(id) {
-        this.props.onAdd(id);
-    }
+    this.state = {
+      view: 'search', search: { query: '', type: 0 }
+    };
+  }
 
-    render() {
-        return (
-            <div className="link-filter">
-                {this.state.view == "search" ? (
-                    <a onClick={() => this.onChangeView("create")}>
-                        Switch to 'Create New Filter' Mode
-                    </a>
-                ) : (
-                    <a onClick={() => this.onChangeView("search")}>
-                        Switch to 'Find Existing Filter' Mode
-                    </a>
-                )}
-                
-                {this.state.view == "search" ? (
-                    <div>
-                        <Search onSearch={this.onSearch} type="filter" />
-                        <div className="list">{
-                            findMatches(
-                                this.props.data.filters, this.state.search
-                            ).map(f =>
-                                <div className="filter">
-                                    <span className="type">{
-                                        filterTypes[f.type]
-                                    }</span>
-                                    <span className="name">
-                                        <a onClick={() => this.onAdd(f.id)}>
-                                        {f.name}
-                                        </a>
-                                    </span>
-                                    <span className="description">{
-                                        f.description
-                                    }</span>
-                                </div>
-                            )
-                        }</div>
-                    </div>
-                ) : (
-                    <Create
-                        data={this.props.data}
-                        dispatch={this.props.dispatch}
-                        onCreate={this.onAdd}
-                    />
-                )}
-            </div>
-        );
-    }
+  render() {
+    return (
+      <div className='link-filter'>
+        {this.state.view == 'search' ? (
+          <a onClick={() => this.setState({ view: 'create' })}>
+            Create New Filter
+          </a>
+        ) : (
+          <a onClick={() => this.setState({ view: 'search' })}>
+            Find Existing Filter
+          </a>
+        )}
+        
+        {this.state.view == 'search' ? (
+          <div>
+            <Search
+              onSearch={v => this.setState({ search: v })}
+              type='filter'
+            />
+
+            <List
+              className='filters-list section md-paper md-paper--1'
+            >{
+              findMatches(
+                this.props.data.filters, this.state.search, this.props.ignore
+              ).map(f =>
+                <ListItem
+                  threeLines
+                  key={f.id}
+                  onClick={() => this.props.onAdd(f.id)}
+                  className='filter'
+                  primaryText={f.name}
+                  secondaryText={filterTypes[f.type] + '\n' + f.description}
+                />
+              )
+            }</List>
+          </div>
+        ) : (
+          <Create
+            data={this.props.data}
+            dispatch={this.props.dispatch}
+            onCreate={this.onAdd}
+          />
+        )}
+      </div>
+    );
+  }
 
 }
+
+LinkFilter.propTypes = {
+  data: PropTypes.object.isRequired,
+  onAdd: PropTypes.func.isRequired,
+  ignore: PropTypes.arrayOf(PropTypes.object).isRequired,
+  dispatch: PropTypes.func.isRequired
+};
