@@ -15,6 +15,16 @@ import { addEmail } from 'actions/creators/account/email';
 import { filterTypes, modifierTypes } from 'constants/types';
 import { RECAPTCHA_KEY } from 'constants/config';
 
+// react-md
+import TabsContainer from 'react-md/lib/Tabs/TabsContainer';
+import ListItem from 'react-md/lib/Lists/ListItem';
+import Button from 'react-md/lib/Buttons/Button';
+import Dialog from 'react-md/lib/Dialogs';
+import Paper from 'react-md/lib/Papers';
+import List from 'react-md/lib/Lists/List';
+import Tabs from 'react-md/lib/Tabs/Tabs';
+import Tab from 'react-md/lib/Tabs/Tab';
+
 export default class CreateOrEditEmailForm extends React.Component {
 
   constructor(props) {
@@ -24,7 +34,8 @@ export default class CreateOrEditEmailForm extends React.Component {
     this.onAddFilter = this.onAddFilter.bind(this);
 
     this.state = {
-      filters: this.props.email.filters, modifiers: this.props.email.modifiers
+      filters: this.props.email.filters, modifiers: this.props.email.modifiers,
+      advancedSettingsTab: 0
     };
   }
 
@@ -90,10 +101,10 @@ export default class CreateOrEditEmailForm extends React.Component {
 
   /**
    * Moves a modifier down in its list, which increases its order number.
-   * @param {number} id
    */
-  onMoveModifierDown(id) {
+  onMoveModifierDown() {
     const mods = this.state.modifiers.slice(0);
+    const id = this.state.selectedModifier;
     const i = mods.findIndex(m => m.id == id);
 
     // Swap indexes with next sibling
@@ -110,10 +121,10 @@ export default class CreateOrEditEmailForm extends React.Component {
 
   /**
    * Moves a modifier up in its list, which decreases its order number.
-   * @param {number} id
    */
-  onMoveModifierUp(id) {
+  onMoveModifierUp() {
     const mods = this.state.modifiers.slice(0);
+    const id = this.state.selectedModifier;
     const i = mods.findIndex(m => m.id == id);
 
     // Swap indexes with previous sibling
@@ -130,11 +141,12 @@ export default class CreateOrEditEmailForm extends React.Component {
 
   /**
    * Removes a modifier from `this.state.modifiers`.
-   * @param {number} id
    */
-  onRemoveModifier(id) {
+  onRemoveModifier() {
+    const id = this.state.selectedModifier;
     this.setState({
-      modifiers: this.state.modifiers.filter(mod => mod.id != id)
+      modifiers: this.state.modifiers.filter(mod => mod.id != id),
+      selectedModifier: 0
     });
   }
 
@@ -217,7 +229,10 @@ export default class CreateOrEditEmailForm extends React.Component {
     const { email } = this.props;
     
     return (
-      <form className='email-form' onSubmit={e => this.onSubmit(e)}>
+      <form
+        className='email-form section md-paper md-paper--1'
+        onSubmit={e => this.onSubmit(e)}
+      >
         <label>Name</label>
         <span className='input-description'>
           Give your email a name to find it easier.
@@ -247,8 +262,6 @@ export default class CreateOrEditEmailForm extends React.Component {
           <div />
         )}
         
-        <hr />
-        
         <div className='redirect-to'>
           <label>Redirect To</label>
           <span className='input-description'>
@@ -265,14 +278,12 @@ export default class CreateOrEditEmailForm extends React.Component {
             title='Add a real email address to account'
           />
         </div>
-        
-        <hr />
 
-        <a onClick={() =>
-          this.setState({ showAdvanced: !this.state.showAdvanced })
-        }>
-          {this.state.showAdvanced ? 'Hide' : 'Show'} Advanced Settings
-        </a>
+        {!this.state.showAdvanced ? (
+          <a onClick={() => this.setState({ showAdvanced: true})}>
+            Show Advanced Settings
+          </a>
+        ) : null}
 
         <div
           className='advanced-settings'
@@ -315,80 +326,99 @@ export default class CreateOrEditEmailForm extends React.Component {
             }
           />Enable</label>
 
-          <hr />
+          <Paper zDepth={2} className='filters-and-modifiers section'>
+          <TabsContainer
+            colored
+            onTabChange={i => this.setState({ advancedSettingsTab: i })}
+            activeTabIndex={this.state.advancedSettingsTab}
+          >
+            <Tabs tabId='tab'>
+              <Tab label='Filters'>
+                {this.state.filters.length ? <h3>Linked Filters</h3> : null}
+                
+                <List
+                  className='filters-list section md-paper md-paper--1'
+                >{
+                  this.state.filters.map(f =>
+                    <ListItem
+                      threeLines
+                      key={f.id}
+                      onClick={() => this.onRemoveFilter(f.id)}
+                      className='filter'
+                      primaryText={f.name}
+                      secondaryText={filterTypes[f.type] + '\n' + f.description}
+                    />
+                  )
+                }</List>
 
-          <h3>Filters</h3>
-          <p>Create or select filters for your email to use.</p>
-          <div className='linked-filters'>{
-            this.state.filters.map(filter =>
-              <div className='filter'>
-                <span className='type'>{
-                  filterTypes[filter.type]
-                }</span>
-                <span className='name'>{filter.name}</span>
-                <span
-                  className='icon-trash'
-                  title='Remove Filter'
-                  onClick={() => this.onRemoveFilter(filter.id)}
+                <h3>Add Filters</h3>
+
+                <LinkFilter
+                  {...this.props}
+                  onAdd={this.onAddFilter}
+                  ignore={this.state.filters}
                 />
-                <span className='description'>{
-                  filter.description
-                }</span>
-              </div>
-            )
-          }</div>
+              </Tab>
 
-          <LinkFilter data={this.props.data} onAdd={this.onAddFilter} />
+              <Tab label='Modifiers'>
+                {this.state.modifiers.length ?
+                  <h3>Linked Modifiers</h3> : null
+                }
+                
+                <p>
+                  The order in which the modifiers are listed are the order in which they are applied to emails.
+                </p>
+                
+                <List
+                  className='modifiers-list section md-paper md-paper--1'
+                >{
+                  this.state.modifiers.map(m =>
+                    <ListItem
+                      threeLines
+                      key={m.id}
+                      onClick={() => this.setState({ selectedModifier: m.id })}
+                      className='modifier'
+                      primaryText={m.name}
+                      secondaryText={
+                        modifierTypes[m.type] + '\n' + m.description
+                      }
+                    />
+                  )
+                }</List>
 
-          <hr />
+                <h3>Add Modifiers</h3>
 
-          <h3>Modifiers</h3>
-          <p>
-            Create or select modifiers for your email to use.
-            <br />
-            <strong>Note:</strong> The order in which the modifiers are listed are the order in which they are applied to emails.
-          </p>
-          <div className='linked-modifiers'>{
-            this.state.modifiers.map(mod =>
-              <div className='modifier'>
-                <span className='type'>{
-                  modifierTypes[mod.type]
-                }</span>
-                <span className='name'>{mod.name}</span>
-                <span className='description'>{
-                  mod.description
-                }</span>
-                <div className='controls'>
-                  <a
-                    className='icon-trash'
-                    onClick={
-                      () => this.onRemoveModifier(mod.id)
-                    }
-                  >Remove</a>
+                <LinkModifier
+                  {...this.props}
+                  onAdd={this.onAddModifier}
+                  ignore={this.state.modifiers}
+                />
+              </Tab>
+            </Tabs>
+          </TabsContainer>
+          </Paper>
 
-                  <a
-                    className='icon-arrow-up'
-                    onClick={() => {
-                      this.onMoveModifierUp(mod.id);
-                    }}
-                    title='Change modifier order'
-                  >Up</a>
-                  <a
-                    className='icon-arrow-down'
-                    onClick={() => {
-                      this.onMoveModifierDown(mod.id);
-                    }}
-                    title='Change modifier order'
-                  >Down</a>
-                </div>
-              </div>
-            )
-          }</div>
-
-          <LinkModifier data={this.props.data} onAdd={this.onAddModifier} />
+          <Dialog
+            id='selected-modifier'
+            onHide={() => this.setState({ selectedModifier: 0 })}
+            visible={!!this.state.selectedModifier}
+          >
+            <List>
+              <ListItem
+                primaryText='Move up'
+                onClick={() => this.onMoveModifierUp()}
+              />
+              <ListItem
+                primaryText='Move down'
+                onClick={() => this.onMoveModifierDown()}
+              />
+              <ListItem
+                primaryText='Remove'
+                onClick={() => this.onRemoveModifier()}
+              />
+            </List>
+          </Dialog>
         </div>
-        
-        <hr />
 
         {this.props.recaptcha ? (
           <div className='recaptcha-wrapper'>
@@ -401,7 +431,11 @@ export default class CreateOrEditEmailForm extends React.Component {
           <div />    
         )}
         
-        <button className='btn-primary'>Submit</button>
+        <Button
+          primary raised
+          onClick={e => this.onSubmit(e)}
+          label='Submit'
+        />
       </form>
     );
   }
