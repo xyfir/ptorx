@@ -32,33 +32,7 @@
 
 .email-form {
   .advanced-settings > h3 {
-    margin-bottom: -0.6em;
-  }
-  
-  .link-modifier > a, .link-filter > a {
-    margin: 1.3em;
-    display: block;
-  }
-
-  .linked-filters > .filter, .linked-modifiers > .modifier,
-  .link-filter > div > .list, .link-modifier > div > .list {
-    background-color: $lllgray;
-    padding: 0.5em;
-    margin: auto;
-    
-    .type {
-      font-weight: bold;
-    }
-    .type::after {
-      content: " - ";
-    }
-    
-    .description {
-      display: block;
-      width: 80%;
-      margin: auto;
-      font-size: 90%;
-    }
+    margin-bottom: 0em;
   }
 
   .g-recaptcha {
@@ -72,11 +46,6 @@
   .address {
     font-size: 125%;
     font-weight: bold;
-  }
-  
-  .link-filter > .list, .link-modifier > .list {
-    max-height: 12em;
-    overflow-y: auto;
   }
 
   div.redirect-to {
@@ -93,6 +62,24 @@
     >span.domain {
       color: $dgray;
       font-weight: bold;
+    }
+  }
+
+  div.filters-and-modifiers {
+    border: 1px solid $md-primary-color;
+
+    >section {
+      padding: 0em;
+      margin: 0em;
+
+      div[class^=link-] > a {
+        display: block;
+        margin-bottom: 1em;
+      }
+
+      ul.md-list {
+        margin-bottom: 1em;
+      }
     }
   }
 }
@@ -236,4 +223,12 @@ div.controls > a {
 .trial {
   margin-bottom: 1em;
   color: $dgray;
+}
+
+div.search {
+  margin-bottom: 1em;
+
+  input[type='search'] {
+    text-align: center;
+  }
 }
