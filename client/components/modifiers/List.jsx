@@ -14,16 +14,21 @@ import findMatches from 'lib/find-matching';
 // Components
 import Search from 'components/misc/Search';
 
+// react-md
+import ListItem from 'react-md/lib/Lists/ListItem';
+import Button from 'react-md/lib/Buttons/Button';
+import Dialog from 'react-md/lib/Dialogs';
+import List from 'react-md/lib/Lists/List';
+
 export default class ModifierList extends React.Component {
 
   constructor(props) {
     super(props);
 
     this.state = {
-      search: { query: '', type: 0 }
+      selected: 0, search: { query: '', type: 0 }
     };
-    
-    this.onSearch = this.onSearch.bind(this);
+
     if (props.data.modifiers.length == 0) {
       request
         .get('../api/modifiers')
@@ -33,11 +38,13 @@ export default class ModifierList extends React.Component {
     }
   }
 
-  onSearch(search) {
-    this.setState({ search });
-  }
+  /**
+   * Delete the selected m.
+   */
+  onDelete() {
+    const id = this.state.selected;
+    this.setState({ selected: 0 });
 
-  onDeleteModifier(id) {
     swal({
       title: 'Are you sure?',
       text: 'This modifier will be removed from any emails it is linked to.',
@@ -68,51 +75,68 @@ export default class ModifierList extends React.Component {
     });
   }
 
+  /**
+   * Open the 'EditModifier' view.
+   */
+  onEdit() {
+    location.hash = '#modifiers/edit/' + this.state.selected;
+  }
+
   render() {
     return (
       <div className='modifiers'>
-        <button
+        <Button
+          floating fixed primary
+          tooltipPosition='left'
+          tooltipLabel='Create new modifier'
           onClick={() => location.hash = '#modifiers/create'}
-          className='btn-primary'
-        >Create a Modifier</button>
+        >add</Button>
         
-        <Search onSearch={this.onSearch} type='modifier' />
-        
-        <div className='list'>{
+        <Search
+          onSearch={v => this.setState({ search: v })}
+          type='modifier'
+        />
+
+        <List
+          className='modifiers-list section md-paper md-paper--1'
+        >{
           findMatches(
             this.props.data.modifiers, this.state.search
           ).filter(
             mod => !mod.global
-          ).map(mod => {
-            return (
-              <div className='modifier'>
-                <span className='type'>{
-                  modifierTypes[mod.type]
-                }</span>
-                <span className='name'>
-                  <a href={`#modifiers/edit/${mod.id}`}>
-                    {mod.name}
-                  </a>
-                </span>
-                
-                <span className='description'>{
-                  mod.description
-                }</span>
+          ).map(m =>
+            <ListItem
+              threeLines
+              key={m.id}
+              onClick={() => this.setState({ selected: m.id })}
+              className='modifier'
+              primaryText={m.name}
+              secondaryText={modifierTypes[m.type] + '\n' + m.description}
+            />
+          )
+        }</List>
 
-                <div className='controls'>
-                  <a
-                    className='icon-edit'
-                    href={`#modifiers/edit/${mod.id}`}
-                  >Edit</a>
-                  <a
-                    className='icon-trash'
-                    onClick={() => this.onDeleteModifier(mod.id)}
-                  >Delete</a>
-                </div>
-              </div>
-            );
-          })
-        }</div>
+        <Dialog
+          id='selected-modifier'
+          title={
+            !this.state.selected ? '' : this.props.data.modifiers.find(
+              e => e.id == this.state.selected
+            ).name
+          }
+          onHide={() => this.setState({ selected: 0 })}
+          visible={!!this.state.selected}
+        >
+          <List>
+            <ListItem
+              primaryText='Edit'
+              onClick={() => this.onEdit()}
+            />
+            <ListItem
+              primaryText='Delete'
+              onClick={() => this.onDelete()}
+            />
+          </List>
+        </Dialog>
       </div>
     );
   }
