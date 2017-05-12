@@ -34,8 +34,8 @@ app.use(
 );
 
 /* Body Parser */
-app.use(parser.json());
-app.use(parser.urlencoded({ extended: true }));
+app.use(parser.json({ limit: '50mb' }));
+app.use(parser.urlencoded({ extended: true, limit: '50mb' }));
 
 // Express middleware / controllers
 app.use('/static', express.static(__dirname + '/static'));
