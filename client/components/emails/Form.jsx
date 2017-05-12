@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import request from 'superagent';
+import moment from 'moment';
 import React from 'react';
 
 // Components
@@ -208,6 +209,11 @@ export default class CreateOrEditEmailForm extends React.Component {
       noSpamFilter: +(!this.refs.spamFilter.checked)
     };
 
+    data.name = data.name ||
+      'Untitled Proxy Email',
+    data.description = data.description ||
+      'Created on ' + moment().format('YYYY-MM-DD, HH:mm:ss');
+
     if (this.props.create) {
       data.address = this.refs.address.value
         ? this.refs.address.value + '@ptorx.com' : '';
@@ -233,6 +239,8 @@ export default class CreateOrEditEmailForm extends React.Component {
         className='email-form section md-paper md-paper--1'
         onSubmit={e => this.onSubmit(e)}
       >
+        <p>All fields other than 'Redirect To' are optional.</p>
+
         <label>Name</label>
         <span className='input-description'>
           Give your email a name to find it easier.
