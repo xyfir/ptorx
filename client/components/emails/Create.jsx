@@ -5,7 +5,7 @@ import React from 'react';
 import Form from 'components/emails/Form';
 
 // Action creators
-import { addEmail } from 'actions/creators/emails';
+import { addEmail, loadEmails } from 'actions/creators/emails';
 
 // Modules
 import parseQuery from 'lib/parse-hash-query';
@@ -50,15 +50,14 @@ export default class CreateEmail extends React.Component {
       .post('../api/emails')
       .send(data)
       .end((err, res) => {
-        if (res.body.error) {
+        if (err || res.body.error) {
           swal('Error', res.body.message, 'error');
         }
         else {
-          // Add to state.emails
-          data.id = res.body.id;
-          this.props.dispatch(addEmail(data));
+          // Clear emails so they're loaded again
+          this.props.dispatch(loadEmails([]));
+          location.hash = '#emails/list';
 
-          location.hash = 'emails/list';
           swal('Success', `Email '${data.name}' created`, 'success');
         }
       });
