@@ -185,6 +185,10 @@ class App extends React.Component {
             </a>,
             <a href='#modifiers/list'>
               <ListItem primaryText='Modifiers' />
+            </a>,
+            <Divider />,
+            <a href='../api/account/logout'>
+              <ListItem primaryText='Logout' />
             </a>
           ]}
           visible={this.state.drawer}
