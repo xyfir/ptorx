@@ -135,6 +135,11 @@ class App extends React.Component {
     });
   }
 
+  onLogout() {
+    delete localStorage.access_token;
+    location.href = '../api/account/logout';
+  }
+
   render() {
     if (!this.state) return <div />;
     
@@ -187,7 +192,7 @@ class App extends React.Component {
               <ListItem primaryText='Modifiers' />
             </a>,
             <Divider />,
-            <a href='../api/account/logout'>
+            <a onClick={() => this.onLogout()}>
               <ListItem primaryText='Logout' />
             </a>
           ]}
