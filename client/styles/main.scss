@@ -11,13 +11,6 @@ body {
 main#content {
   flex: 1;
 }
-hr {
-  border: none;
-  height: 0.1em;
-  margin: 1em auto;
-  width: 80%;
-  background-color: $lgray;
-}
 button {
   cursor: pointer;
 }
@@ -32,6 +25,15 @@ span[class^='icon-']:hover {
   >h3, >h2, >h1, >p {
     margin: 0em;
   }
+}
+
+.md-paper.section {
+  margin-left: 1em;
+  margin-right: 1em;
+}
+
+div.main.md-toolbar-relative {
+  padding-top: 1em;
 }
 
 /* FOOTER */
@@ -172,13 +174,4 @@ nav.navbar-sub {
   margin: auto !important;
   max-height: 20em;
   overflow: auto;
-}
-
-.md-paper.section {
-  margin-left: 1em;
-  margin-right: 1em;
-}
-
-div.main.md-toolbar-relative {
-  padding-top: 1em;
 }
