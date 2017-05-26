@@ -1,5 +1,5 @@
 function onDeviceReady() {
-    window.location.href = "https://ptorx.com/panel/#?phonegap=1";
+  window.location.href = 'https://ptorx.com/panel/#?phonegap=1';
 }
 
-document.addEventListener("deviceready", onDeviceReady, false);
+document.addEventListener('deviceready', onDeviceReady, false);
