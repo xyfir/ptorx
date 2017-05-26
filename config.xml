@@ -2,7 +2,7 @@
 
 <widget
   xmlns:gap="http://phonegap.com/ns/1.0"
-  version="1.8.0"
+  version="1.8.1"
   xmlns="http://www.w3.org/ns/widgets"
   id="com.xyfir.ptorx"
 >
@@ -33,10 +33,6 @@
   <preference name="SplashMaintainAspectRatio" value="true" />
   <preference name="CRIPageLoadPromptInterval" value="0" />
   <preference name="CRIShowConnectionErrorDialog" value="0" />
-  <preference name="StatusBarOverlaysWebView" value="true" />
-  <preference name="StatusBarBackgroundColor" value="#6a1b9a" />
-  <preference name="StatusBarStyle" value="lightcontent" />
-
 
   <!-- Core plugins -->
   <plugin name="cordova-plugin-console" />
@@ -51,7 +47,6 @@
   <plugin name="cordova-plugin-network-information" />
   <plugin name="cordova-plugin-splashscreen" />
   <plugin name="cordova-plugin-whitelist" />
-  <plugin name="cordova-plugin-statusbar" />
 
   <!-- Other plugins -->
   <plugin name="cordova-plugin-inapppurchase" />
@@ -124,7 +119,7 @@
   </platform>
 
   <config-file platform="ios" parent="CFBundleShortVersionString">
-    <string>1.8.0</string>
+    <string>1.8.1</string>
   </config-file>
 
   <!-- A wildcard can be used to whitelist the entire network, over HTTP and HTTPS -->
