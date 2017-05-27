@@ -1,163 +1,137 @@
 .home {
-    
-    margin: 0em;
+  margin: 0em;
 
-    section.trial, section.main, section.premium, section.overview,
-    nav, footer {
-        text-align: center;
+  section.trial, section.main, section.premium, section.overview,
+  nav, footer {
+    text-align: center;
+  }
+
+  table {
+    text-align: center;
+    margin: auto;
+
+    th {
+      padding-right: 0.6em;
     }
+  }
 
-    nav.navbar {
-        display: flex;
-        border-bottom: solid 0.1em $llgray;
+  section {
+    padding: 2.5% 20%;
 
-        >a {
-            flex: 1;
-        }
+    p {
+      font-size: 100%;
     }
+  }
 
-    table {
-        
-        text-align: center;
-        margin: auto;
+  ul, ol {
+    padding-left: 1em;
+  }
+  
+  section:nth-child(even) {
+    background-color: $purple;
 
-        th {
-            padding-right: 0.6em;
-        }
-
-    }
-
-    section {
-        padding: 1% 20%;
-    }
-
-    ul, ol {
-        padding-left: 1em;
-    }
-    
-    section:nth-child(even) {
-        
-        background-color: $purple;
-        color: white;
-        
-        h1, h2, h3 {
-            color: $llgray;
-        }
-        
-        a {
-            color: $lgray;
-        }
-        a:hover {
-            color: $gray;
-        }
-        
+    p {
+      color: white;
     }
     
-    section:nth-child(odd) {
-        
-        background-color: white;
-        
-        h1, h2, h3 {
-            color: $purple;
-        }
-        
+    h1, h2, h3 {
+      color: $llgray;
     }
+    
+    a {
+      color: $lgray;
+    }
+    a:hover {
+      color: $gray;
+    }
+  }
+  
+  section:nth-child(odd) {
+    background-color: white;
+    
+    h1, h2, h3 {
+      color: $purple;
+    }
+  }
+
+  section.with-screenshot {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+
+    >img {
+      height: 30em;
+    }
+  }
+
+  section.install {
+    p {
+      margin-bottom: 1em;
+    }
+    
+    a[class^="icon-"] {
+      font-size: 125%;
+      display: inline-block;
+      padding: 0.2em;
+    }
+
+  }
+
+  section.trial {
+    >button {
+      background-color: $lpurple;
+
+      &:hover {
+        filter: saturate(90%);
+      }
+
+      margin-bottom: 0.5em;
+    }
+  }
+
+  section.main {
+    display: flex;
+    align-items: center;
+    height: 70vh;
+    font-size: 200%;
+
+    >div {
+      width: 100%;
+    }
+
+    .subtitle {
+      line-height: 1.5;
+    }
+
+    .platforms {
+      display: block;
+      font-size: 50%;
+      color: $dgray;
+      margin-top: 2em;
+    }
+  }
+
+  footer {
+    background-color: $llgray;
+    margin-top: 0;
+    border-top: none;
+
+    a {
+      margin: 0.5em;
+    }
+  }
+
+  @media (max-width: 400px) {
+    text-align: center;
 
     section.with-screenshot {
-        display: flex;
-        align-items: center;
-
-        >img {
-            height: 24em;
-            flex: 1;
-        }
-        >div {
-            flex: 3;
-        }
+      >img {
+        height: 24em;
+      }
     }
+  }
 
-    section.install {
-
-        p {
-            margin-bottom: 1em;
-        }
-        
-        a[class^="icon-"] {
-            font-size: 125%;
-            display: inline-block;
-            padding: 0.2em;
-        }
-
-    }
-
-    section.trial {
-        .note {
-            display: block;
-        }
-
-        button {
-            background-color: $lpurple;
-
-            &:hover {
-                filter: saturate(90%);
-            }
-
-            margin-bottom: 0.5em;
-        }
-    }
-
-    section.main {
-        
-        display: flex;
-        align-items: center;
-        height: 70vh;
-        font-size: 200%;
-
-        >div {
-            width: 100%;
-        }
-
-        .subtitle {
-            line-height: 1.5;
-        }
-
-        .platforms {
-            display: block;
-            font-size: 50%;
-            color: $dgray;
-            margin-top: 2em;
-        }
-
-    }
-
-    footer {
-
-        background-color: $llgray;
-        margin-top: 0;
-        border-top: none;
-
-        a {
-            margin: 0.5em;
-        }
-
-    }
-
-    @media (max-width: 400px) {
-        
-        text-align: center;
-
-        section.with-screenshot {
-            display: block !important;
-
-            >img {
-                height: 10em;
-            }
-        }
-
-    }
-
-    @media (min-width: 401px) {
-        text-align: justify;
-    }
-    
+  @media (min-width: 401px) {
+    text-align: justify;
+  }
 }

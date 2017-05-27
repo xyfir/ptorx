@@ -141,7 +141,7 @@ input[type=checkbox] {
 /* NAVBAR */
 nav.navbar, nav.navbar-sub {
   background-color: $purple;
-  padding: 0.25em 0em;
+  align-items: center;
   display: flex;
 
   >a {
@@ -154,15 +154,12 @@ nav.navbar, nav.navbar-sub {
   }
 }
 nav.navbar {
-  top: 0%;
-  left: 0%;
-  right: 0%;
-  z-index: 1;
-  position: fixed;
+  padding: 1em 0em;
 }
 nav.navbar-sub {
   width: 80%;
   margin: auto;
+  padding: 0.25em 0em;
   margin-bottom: 1em;
 }
 
