@@ -1,0 +1,46 @@
+{
+  "name": "Ptorx - Proxy Emails",
+  "short_name": "Ptorx",
+  "description": "Proxy emails for an extra layer of security, privacy, and control for your emails.",
+  "version": "1.2",
+  "manifest_version": 2,
+  "browser_action": {
+    "default_icon": {
+      "36": "res/icons/android-chrome-36x36.png",
+      "48": "res/icons/android-chrome-48x48.png",
+      "72": "res/icons/android-chrome-72x72.png",
+      "96": "res/icons/android-chrome-96x96.png",
+      "144": "res/icons/android-chrome-144x144.png",
+      "192": "res/icons/android-chrome-192x192.png",
+      "256": "res/icons/android-chrome-256x256.png",
+      "384": "res/icons/android-chrome-384x384.png",
+      "512": "res/icons/android-chrome-512x512.png"
+    },
+    "default_title": "Ptorx",
+    "default_popup": "open.html"
+  },
+  "options_ui": {
+    "page": "open.html"
+  },
+  "icons": {
+    "36": "res/icons/android-chrome-36x36.png",
+    "48": "res/icons/android-chrome-48x48.png",
+    "72": "res/icons/android-chrome-72x72.png",
+    "96": "res/icons/android-chrome-96x96.png",
+    "144": "res/icons/android-chrome-144x144.png",
+    "192": "res/icons/android-chrome-192x192.png",
+    "256": "res/icons/android-chrome-256x256.png",
+    "384": "res/icons/android-chrome-384x384.png",
+    "512": "res/icons/android-chrome-512x512.png"
+  },
+  "permissions": [
+    "tabs",
+    "storage"
+  ],
+  "applications": {
+    "gecko": {
+      "id": "ptorx@xyfir.com",
+      "strict_min_version": "50.0"
+    }
+  }
+}
