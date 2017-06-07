@@ -30,7 +30,7 @@ module.exports = async function(req, res) {
 
   try {
     // Get email/filters/modifiers data
-    const data = await getInfo(req.param.email, save);
+    const data = await getInfo(req.params.email, save);
 
     const headers = JSON.parse(req.body['message-headers']);
 
@@ -181,7 +181,7 @@ module.exports = async function(req, res) {
       if (req.body.attachments) {
         const attachments = JSON.parse(req.body.attachments);
 
-        if (attachments.length) message.attachments = [];
+        if (attachments.length) message.attachment = [];
 
         for (let att of attachments) {
           // Download file as buffer
@@ -191,7 +191,7 @@ module.exports = async function(req, res) {
             .parse(request.parse['application/octet-stream']);
           
           // Create attachment via MailGun.Attachment
-          message.attachments.push(
+          message.attachment.push(
             new mailgun.Attachment({
               data: dl.body, filename: att.name,
               contentType: att['content-type']
