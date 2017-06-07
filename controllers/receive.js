@@ -1,10 +1,10 @@
 const escapeRegExp = require('escape-string-regexp');
 const saveMessage = require('lib/email/save-message');
 const getInfo = require('lib/email/get-info');
+const request = require('superagent');
 const crypto = require('lib/crypto');
-const db = require('lib/db');
 
-const config = require('config');
+const config  = require('config');
 const mailgun = require('mailgun-js')({
   apiKey: config.keys.mailgun, domain: 'ptorx.com'
 });
@@ -12,10 +12,10 @@ const mailgun = require('mailgun-js')({
 /*
   POST api/receive/:email
   REQUIRED
-    from: string, subject: string, To: string
+    from: string, subject: string, To: string,
     body-plain: string, message-headers: json-string
   OPTIONAL
-    body-html: string, message-url: string
+    body-html: string, message-url: string, attachments: json-string
   RETURNS
     HTTP STATUS - 200: Success, 406: Error
   DESCRIPTION
@@ -23,18 +23,15 @@ const mailgun = require('mailgun-js')({
     Messages are ran through any filters that weren't or can't be run on MailGun
     Messages are then modified via modifiers
 */
-module.exports = function(req, res) {
+module.exports = async function(req, res) {
 
   const save = !!req.body['message-url'];
   req.body.domain = req.body.from.match(/.+@(.+)/)[1];
-  
-  // Get email/filters/modifiers data
-  getInfo(req.params.email, save, (err, data) => {
-    if (err) {
-      res.status(406).send();
-      return;
-    }
-    
+
+  try {
+    // Get email/filters/modifiers data
+    const data = await getInfo(req.param.email, save);
+
     const headers = JSON.parse(req.body['message-headers']);
 
     // Loop through filters
@@ -72,11 +69,13 @@ module.exports = function(req, res) {
 
           headers.forEach(header => {
             if (
-              header[0] == find[0]
-              && ('' + header[1]).match(new RegExp(
-                !filter.regex ? escapeRegExp(find[1]) : find[1],
-                'g'
-              ))
+              header[0] == find[0] &&
+              String(header[1]).match(
+                new RegExp(
+                  !filter.regex ? escapeRegExp(find[1]) : find[1],
+                  'g'
+                )
+              )
             ) data.filters[i].pass = true;
           });
       }
@@ -168,31 +167,54 @@ module.exports = function(req, res) {
     // Message should be redirected
     if (data.to) {
       const message = {
-        text: req.body['body-plain'], from: req.body.To, to: data.to,
-        subject: req.body.subject, html: (
-          req.body['body-html']
-          && (!textonly ? req.body['body-html'] : '')
-        )
+        subject: req.body.subject,
+        text: req.body['body-plain'],
+        from: req.body.To,
+        html: (
+          req.body['body-html'] &&
+          (!textonly ? req.body['body-html'] : '')
+        ),
+        to: data.to
       };
 
-      // Forward message to user's main email
-      mailgun.messages().send(message, (err, body) => {
-        if (err) {
-          res.status(406).send();
-        }
-        else {
-          res.status(200).send();
+      // Download attachments and attach them to the new message
+      if (req.body.attachments) {
+        const attachments = JSON.parse(req.body.attachments);
 
-          // Optionally save message to messages table
-          if (save) saveMessage(req, false);
+        if (attachments.length) message.attachments = [];
+
+        for (let att of attachments) {
+          // Download file as buffer
+          const dl = await request
+            .get(`https://api:${config.keys.mailgun}@${att.url.substr(8)}`)
+            .buffer(true)
+            .parse(request.parse['application/octet-stream']);
+          
+          // Create attachment via MailGun.Attachment
+          message.attachments.push(
+            new mailgun.Attachment({
+              data: dl.body, filename: att.name,
+              contentType: att['content-type']
+            })
+          );
         }
-      });
+      }
+
+      // Forward message to user's main email
+      await mailgun.messages().send(message);
+
+      // Optionally save message to messages table
+      if (save) saveMessage(req, false);
     }
     // Message must be saved since it's not being redirected
     else {
       saveMessage(req, false);
-      res.status(200).send();
     }
-  });
+
+    res.status(200).send();
+  }
+  catch (err) {
+    res.status(406).send();
+  }
 
 };
