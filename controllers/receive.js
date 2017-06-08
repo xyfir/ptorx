@@ -199,6 +199,19 @@ module.exports = async function(req, res) {
           );
         }
       }
+      // Attachments uploaded directly to Ptorx
+      else if (Array.isArray(req.files) && req.files.length) {
+        message.attachment = [];
+
+        for (let file of req.files) {
+          message.attachment.push(
+            new mailgun.Attachment({
+              data: file.buffer, filename: file.originalname,
+              contentType: file.mimetype
+            })
+          );
+        }
+      }
 
       // Forward message to user's main email
       await mailgun.messages().send(message);

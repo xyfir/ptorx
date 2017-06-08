@@ -1,9 +1,17 @@
 const express = require('express');
+const multer = require('multer');
 
 const router = express.Router();
 
+const upload = multer({
+  storage: multer.memoryStorage(),
+  limits: {
+    fieldSize: '50mb', files: 10, fileSize: 25000000
+  }
+});
+
 // MailGun Inbound Controllers
-router.post('/receive/:email', require('./receive'));
+router.post('/receive/:email', upload.any(), require('./receive'));
 
 // (Redirect) email controllers
 router.get('/emails', require('./emails/list'));
