@@ -28,10 +28,6 @@ export default class CreateModifier extends React.Component {
     data2 = {};
 
     switch (data.type) {
-      case 1:
-        data2 = { key: this.refs.key.value };
-        break;
-
       case 3:
         data2 = {
           regex: +this.refs.regex.checked, value: this.refs.find.value,
@@ -89,17 +85,6 @@ export default class CreateModifier extends React.Component {
   render() {
     const form = (() => {
       switch (this.state.type) {
-        case 1:
-          return (
-            <div className='encryption'>
-              <label>Encryption Key</label>
-              <span className='input-description'>
-                Email text and HTML content will be encrypted with this key using AES-256.
-              </span>
-              <input type='text' ref='key' />
-            </div>
-          );
-
         case 2:
           return (
             <p>

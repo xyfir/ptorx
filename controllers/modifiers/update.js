@@ -8,8 +8,6 @@ const mysql = require('lib/mysql');
   REQUIRED
     type: number, name: string, description: string
   OPTIONAL
-    ENCRYPT
-      key: string
     REPLACE
       value: string, with: string, regex: boolean
     TAG

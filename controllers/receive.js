@@ -2,7 +2,6 @@ const escapeRegExp = require('escape-string-regexp');
 const saveMessage = require('lib/email/save-message');
 const getInfo = require('lib/email/get-info');
 const request = require('superagent');
-const crypto = require('lib/crypto');
 
 const config  = require('config');
 const mailgun = require('mailgun-js')({
@@ -102,18 +101,6 @@ module.exports = async function(req, res) {
     // Loop through modifiers
     data.modifiers.forEach(modifier => {
       switch (modifier.type) {
-        case 1: // Encrypt
-          req.body['body-plain'] = crypto.encrypt(
-            req.body['body-plain'], modifier.data
-          );
-          
-          if (req.body['body-html'] && !textonly) {
-            req.body['body-html'] = crypto.encrypt(
-              req.body['body-html'], modifier.data
-            );
-          }
-          break;
-
         case 2: // Text Only
           textonly = true;
           break;

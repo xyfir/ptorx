@@ -8,7 +8,6 @@ export const filterTypes = {
 };
 
 export const modifierTypes = {
-  '1': 'Encrypt',
   '2': 'Text Only',
   '3': 'Find and Replace',
   '4': 'Subject Overwrite',
@@ -18,7 +17,6 @@ export const modifierTypes = {
 };
 
 export const creatableModifierTypes = {
-  '1': 'Encrypt',
   '3': 'Find and Replace',
   '4': 'Subject Overwrite',
   '5': 'Subject Tag',
