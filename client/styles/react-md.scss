@@ -24,3 +24,7 @@ html {
 .md-list {
   padding: 0em;
 }
+
+nav.md-drawer > ul.md-list {
+  text-align: left;
+}
