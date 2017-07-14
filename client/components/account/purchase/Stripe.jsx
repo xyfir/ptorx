@@ -1,117 +1,81 @@
-import React from "react";
+import StripeCheckout from 'react-stripe-checkout';
+import request from 'superagent';
+import React from 'react';
 
 // Constants
-import { STRIPE_KEY_PUB } from "constants/config";
+import { STRIPE_KEY_PUB } from 'constants/config';
+import subscriptions from '../../../../subscriptions';
 
-// Modules
-import request from "lib/request";
+// react-md
+import SelectField from 'react-md/lib/SelectFields';
+import Paper from 'react-md/lib/Papers';
 
 export default class StripePurchase extends React.Component {
 
-    constructor(props) {
-        super(props);
-    }
+  constructor(props) {
+    super(props);
 
-    onPurchase(e) {
-        e.preventDefault();
+    this.state = { subscription: 0 };
+  }
 
-        const purchase = () => {
-            Stripe.setPublishableKey(STRIPE_KEY_PUB);
-            
-            Stripe.card.createToken(this.refs.stripeForm, (s, res) => {
-                if (res.error) {
-                    swal("Error", res.error.message, "error");
-                    return;
-                }
-                
-                const data = {
-                    subscription: +this.refs.subscription.value,
-                    stripeToken: res.id
-                };
-                
-                if (data.subscription == 0) {
-                    swal("Error", "Select a subscription length", "error");
-                    return;
-                }
-                
-                request({
-                    url: "../api/account/stripe-purchase",
-                    method: "POST", data
-                 }, (res) => {
-                    if (res.error) {
-                        swal("Error", res.message, "error");
-                    }
-                    else {
-                        location.hash = "#account";
-                        location.reload();
-                    }
-                });
-            });
-        };
-        
-        // Dynamically load Stripe.js
-        let element = document.createElement("script");
-        element.src = "https://js.stripe.com/v2/";
-        element.type = "text/javascript";
-        element.onload = purchase;
-        document.body.appendChild(element);
-    }
+  onPurchase(token) {
+    request
+      .post('../api/account/stripe-purchase')
+      .send({
+        token: token.id, subscription: this.state.subscription
+      })
+      .end((err, res) => {
+          if (err || res.body.error) {
+            swal('Error', res.message, 'error');
+          }
+          else {
+            location.hash = '#account';
+            location.reload();
+          }
+      });
+  }
 
-    render() {
-        const discount = (
-            this.props.data.account.referral.referral
-            || this.props.data.account.referral.affiliate
-        ) && !this.props.data.account.referral.hasMadePurchase;
+  render() {
+    const subscription = subscriptions[this.state.subscription];
+    const { referral } = this.props.data.account;
+    const discount =
+      (referral.referral || referral.affiliate) &&
+      !referral.hasMadePurchase;
 
-        return (
-            <div className="purchase-subscription stripe">
-                <section>
-                    {discount ? (
-                        <p>
-                            You will receive 10% off of your first purchase.
-                        </p>
-                    ) : (
-                        <span />
-                    )}
+    return (
+      <Paper
+        zDepth={1}
+        component='section'
+        className='purchase-subscription stripe section flex'
+      >
+        {discount ? (
+          <p>You will receive 10% off of your first purchase.</p>
+        ) : null}
 
-                    <form className="form" onSubmit={(e) => this.onPurchase(e)}>
-                        <select ref="subscription" defaultValue="0">
-                            <option value="0" disabled>
-                                Subscription Length
-                            </option>
-                            <option value="1">1 Month   - $3</option>
-                            <option value="2">6 Months  - $15</option>
-                            <option value="3">12 Months - $24</option>
-                        </select>
-                    
-                        <form ref="stripeForm" className="stripe-form">
-                            <label>Card Number</label>
-                            <input type="text" data-stripe="number"/>
-            
-                            <label>CVC</label>
-                            <input type="number" data-stripe="cvc" />
-                        
-                            <div className="expiration">
-                                <label>Expiration (MM/YYYY)</label>
-                                <input
-                                    type="number"
-                                    data-stripe="exp-month"
-                                    placeholder="07"
-                                />
-                                <span> / </span>
-                                <input
-                                    type="number"
-                                    data-stripe="exp-year"
-                                    placeholder="2020"
-                                />
-                            </div>
-                        </form>
+        <SelectField
+          id='select-subscription'
+          value={this.state.subscription}
+          onChange={v => this.setState({ subscription: v })}
+          position={SelectField.Positions.BELOW}
+          className='md-cell'
+          menuItems={
+            subscriptions.map((s, i) => Object({ label: s.name, value: i }))
+          }
+          placeholder='Type'
+        />
 
-                        <button className="btn-primary">Purchase</button>
-                    </form>
-                </section>
-            </div>
-        )
-    }
+        <StripeCheckout
+          bitcoin zipCode
+          name='Ptorx // Xyfir, LLC'
+          label='Purchase'
+          token={t => this.onPurchase(t)}
+          image='https://ptorx.com/static/icons/android-chrome-192x192.png'
+          amount={subscription.amount}
+          stripeKey={STRIPE_KEY_PUB}
+          description={subscription.name}
+        />
+      </Paper>
+    )
+  }
 
 }
