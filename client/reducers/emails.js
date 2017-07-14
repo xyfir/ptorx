@@ -3,8 +3,6 @@ import {
 } from 'actions/types/emails';
 
 export default function(state, action) {
-
-  console.log('reduce state', state, 'action', action);
   
   switch (action.type) {
     case LOAD_EMAILS:

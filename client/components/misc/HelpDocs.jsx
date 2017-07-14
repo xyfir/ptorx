@@ -25,7 +25,6 @@ export default class HelpDocs extends React.Component {
           'ptorx/help.md'
         )
         .end((err, res) => {
-          console.log('this', this);
           this.refs.frame.refs.frame.contentDocument.head.innerHTML =
             `<link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" rel="stylesheet" type="text/css">
             <link rel='stylesheet' href='../static/css/style.css'>`;
