@@ -146,13 +146,15 @@ class App extends React.Component {
     const view = (() => {
       switch (this.state.view.split('/')[0]) {
         case 'MODIFIERS':
-          return <Modifiers data={this.state} dispatch={store.dispatch} />;
+          return <Modifiers data={this.state} dispatch={store.dispatch} />
         case 'ACCOUNT':
-          return <Account data={this.state} dispatch={store.dispatch} />;
+          return <Account data={this.state} dispatch={store.dispatch} />
         case 'FILTERS':
-          return <Filters data={this.state} dispatch={store.dispatch} />;
+          return <Filters data={this.state} dispatch={store.dispatch} />
         case 'EMAILS':
-          return <Emails data={this.state} dispatch={store.dispatch} />;
+          return <Emails data={this.state} dispatch={store.dispatch} />
+        case 'DOCS':
+          return <HelpDocs />
       }
     })();
     
@@ -192,6 +194,9 @@ class App extends React.Component {
               <ListItem primaryText='Modifiers' />
             </a>,
             <Divider />,
+            <a href='#docs'>
+              <ListItem primaryText='Help Docs' />
+            </a>,
             <a onClick={() => this.onLogout()}>
               <ListItem primaryText='Logout' />
             </a>
@@ -224,9 +229,7 @@ class App extends React.Component {
 
           {view}
         </div>
-
-        <HelpDocs />
-      </div>                
+      </div>
     );
   }
 
