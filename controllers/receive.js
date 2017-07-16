@@ -36,7 +36,7 @@ module.exports = async function(req, res) {
   email.senderName = email.senderName ? email.senderName[1] : '';
 
   try {
-    // Get email/filters/modifiers data
+    // Get real email / filters / modifiers
     const data = await getInfo(req.params.email, save);
 
     const headers = JSON.parse(email['message-headers']);
@@ -174,6 +174,7 @@ module.exports = async function(req, res) {
             .replace(/::body-html::/g, email['body-html'] || '')
             .replace(/::body-text::/g, email['body-plain'])
             .replace(/::sender-name::/g, email.senderName)
+            .replace(/::real-address::/g, data.to)
             .replace(/::proxy-address::/g, email.To)
             .replace(/::sender-domain::/g, email.domain)
             .replace(/::sender-address::/g, email.sender);
