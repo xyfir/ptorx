@@ -1,68 +1,71 @@
 // Action creators
-import { changeView } from "actions/creators/index";
+import { changeView } from 'actions/creators/index';
 
 // Constants
-import * as VIEWS from "constants/views";
+import * as VIEWS from 'constants/views';
 
 export default function(store) {
 
-    // Hash is empty or not set    
-    if (location.hash.length < 2) {
-        store.dispatch(changeView(VIEWS.CREATE_REDIRECT_EMAIL));
-        return;
-    }
+  // Hash is empty or not set    
+  if (location.hash.length < 2) {
+    store.dispatch(changeView(VIEWS.CREATE_REDIRECT_EMAIL));
+    return;
+  }
 
-    const state = store.getState();
-    const hash = location.hash.substr(1).split('?')[0].split('/');
+  const state = store.getState();
+  const hash = location.hash.substr(1).split('?')[0].split('/');
 
-    // Update state to reflect hash
-    if (hash[0] == "account") {
-        if (hash[1] == "purchase-subscription")
-            store.dispatch(changeView(VIEWS.PURCHASE_SUBSCRIPTION));
-        else
-            store.dispatch(changeView(VIEWS.ACCOUNT));
+  // Update state to reflect hash
+  if (hash[0] == 'account') {
+    if (hash[1] == 'purchase-subscription')
+      store.dispatch(changeView(VIEWS.PURCHASE_SUBSCRIPTION));
+    else
+      store.dispatch(changeView(VIEWS.ACCOUNT));
+  }
+  else if (hash[0] == 'filters') {
+    switch (hash[1]) {
+      case 'create':
+        return store.dispatch(changeView(VIEWS.CREATE_FILTER));
+      case 'edit':
+        return store.dispatch(changeView(VIEWS.EDIT_FILTER));
+      case 'list':
+        return store.dispatch(changeView(VIEWS.LIST_FILTERS));
     }
-    else if (hash[0] == "filters") {
-        switch (hash[1]) {
-            case "create":
-                return store.dispatch(changeView(VIEWS.CREATE_FILTER));
-            case "edit":
-                return store.dispatch(changeView(VIEWS.EDIT_FILTER));
-            case "list":
-                return store.dispatch(changeView(VIEWS.LIST_FILTERS));
-        }
+  }
+  else if (hash[0] == 'modifiers') {
+    switch (hash[1]) {
+      case 'create':
+        return store.dispatch(changeView(VIEWS.CREATE_MODIFIER));
+      case 'edit':
+        return store.dispatch(changeView(VIEWS.EDIT_MODIFIER));
+      case 'list':
+        return store.dispatch(changeView(VIEWS.LIST_MODIFIERS));
     }
-    else if (hash[0] == "modifiers") {
-        switch (hash[1]) {
-            case "create":
-                return store.dispatch(changeView(VIEWS.CREATE_MODIFIER));
-            case "edit":
-                return store.dispatch(changeView(VIEWS.EDIT_MODIFIER));
-            case "list":
-                return store.dispatch(changeView(VIEWS.LIST_MODIFIERS));
-        }
+  }
+  else if (hash[0] == 'emails') {
+    if (hash[1] == 'messages') {
+      switch (hash[3]) {
+        case 'send':
+          return store.dispatch(changeView(VIEWS.SEND_MESSAGE));
+        case 'list':
+          return store.dispatch(changeView(VIEWS.LIST_MESSAGES));
+        case 'view':
+          return store.dispatch(changeView(VIEWS.VIEW_MESSAGE));
+      }
     }
-    else if (hash[0] == "emails") {
-        if (hash[1] == "messages") {
-            switch (hash[3]) {
-                case "send":
-                    return store.dispatch(changeView(VIEWS.SEND_MESSAGE));
-                case "list":
-                    return store.dispatch(changeView(VIEWS.LIST_MESSAGES));
-                case "view":
-                    return store.dispatch(changeView(VIEWS.VIEW_MESSAGE));
-            }
-        }
-        else {
-            switch (hash[1]) {
-                case "create":
-                    return store.dispatch(changeView(VIEWS.CREATE_REDIRECT_EMAIL));
-                case "edit":
-                    return store.dispatch(changeView(VIEWS.EDIT_REDIRECT_EMAIL));
-                case "list":
-                    return store.dispatch(changeView(VIEWS.LIST_REDIRECT_EMAILS));
-            }
-        }
+    else {
+      switch (hash[1]) {
+        case 'create':
+          return store.dispatch(changeView(VIEWS.CREATE_REDIRECT_EMAIL));
+        case 'edit':
+          return store.dispatch(changeView(VIEWS.EDIT_REDIRECT_EMAIL));
+        case 'list':
+          return store.dispatch(changeView(VIEWS.LIST_REDIRECT_EMAILS));
+      }
     }
-    
+  }
+  else if (hash[0] == 'docs') {
+    return store.dispatch(changeView(VIEWS.HELP_DOCS));
+  }
+  
 }
