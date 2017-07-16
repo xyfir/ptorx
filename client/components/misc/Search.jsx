@@ -33,7 +33,7 @@ export default class Search extends React.Component {
       ? modifierTypes : null;
     
     return (
-      <Paper zDepth={1} className='search section'>
+      <Paper zDepth={1} className='search section flex'>
         <TextField
           block paddedBlock
           id='search-box'
