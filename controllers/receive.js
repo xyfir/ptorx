@@ -11,8 +11,12 @@ const mailgun = require('mailgun-js')({
 /*
   POST api/receive/:email
   REQUIRED
-    from: string, subject: string, To: string,
-    body-plain: string, message-headers: json-string
+    To: string, // Receiving proxy email address
+    from: string, // 'user@domain' OR 'FName LName <user@domain>'
+    sender: string, // Always 'user@domain'
+    subject: string,
+    body-plain: string,
+    message-headers: json-string // [['header', 'value']]
   OPTIONAL
     body-html: string, message-url: string, attachments: json-string
   RETURNS
@@ -24,14 +28,18 @@ const mailgun = require('mailgun-js')({
 */
 module.exports = async function(req, res) {
 
-  const save = !!req.body['message-url'];
-  req.body.domain = req.body.from.match(/.+@(.+)/)[1];
+  const email = req.body;
+  const save = !!email['message-url'];
+  
+  email.domain = email.sender.match(/.+@(.+)/)[1],
+  email.senderName = email.from.match(/^(.+) <(.+)>$/),
+  email.senderName = email.senderName ? email.senderName[1] : '';
 
   try {
     // Get email/filters/modifiers data
     const data = await getInfo(req.params.email, save);
 
-    const headers = JSON.parse(req.body['message-headers']);
+    const headers = JSON.parse(email['message-headers']);
 
     // Loop through filters
     data.filters.forEach((filter, i) => {
@@ -44,23 +52,23 @@ module.exports = async function(req, res) {
 
       switch (filter.type) {
         case 1: // Subject
-          data.filters[i].pass = req.body.subject
+          data.filters[i].pass = email.subject
             .match(new RegExp(filter.find, 'g'));
           break;
-        case 2: // From Address
-           data.filters[i].pass = req.body.from
+        case 2: // Sender Address
+           data.filters[i].pass = email.sender
             .match(new RegExp(filter.find, 'g'));
           break;
         case 3: // From Domain
-           data.filters[i].pass = req.body.domain
+           data.filters[i].pass = email.domain
             .match(new RegExp(`(.*)@${filter.find}'`, 'g'));
           break;
         case 4: // Text
-           data.filters[i].pass = req.body['body-plain']
+           data.filters[i].pass = email['body-plain']
             .match(new RegExp(filter.find, 'g'));
           break;
         case 5: // HTML
-           data.filters[i].pass = (req.body['body-html'] || '')
+           data.filters[i].pass = (email['body-html'] || '')
             .match(new RegExp(filter.find, 'g'));
           break;
         case 6: // Header
@@ -116,15 +124,15 @@ module.exports = async function(req, res) {
             ? modifier.data.value.replace(/\$/g, '$$')
             : modifier.data.value;
 
-          req.body['body-plain'] = req.body['body-plain'].replace(
+          email['body-plain'] = email['body-plain'].replace(
             new RegExp(
               modifier.data.value, modifier.data.flags
             ),
             modifier.data.with
           );
           
-          if (req.body['body-html'] && !textonly) {
-            req.body['body-html'] = req.body['body-html'].replace(
+          if (email['body-html'] && !textonly) {
+            email['body-html'] = email['body-html'].replace(
               new RegExp(modifier.data.value, modifier.data.flags),
               modifier.data.with
             );
@@ -132,41 +140,62 @@ module.exports = async function(req, res) {
           break;
 
         case 4: // Subject Overwrite
-          req.body.subject = modifier.data;
+          email.subject = modifier.data;
           break;
 
         case 5: // Subject Tag
           if (modifier.data.prepend)
-            req.body.subject = modifier.data.value + req.body.subject;
+            email.subject = modifier.data.value + email.subject;
           else
-            req.body.subject += modifier.data.value;
+            email.subject += modifier.data.value;
           break;
         
         case 6: // Concatenate
         case 7: // Asana
-          req.body[modifier.data.to] +=
-            modifier.data.separator +
-            req.body[modifier.data.add];
+          // Prepend
+          if (modifier.data.prepend) {
+            email[modifier.data.to] = 
+              email[modifier.data.add] +
+              modifier.data.separator +
+              email[modifier.data.to];
+          }
+          // Append
+          else {
+            email[modifier.data.to] +=
+              modifier.data.separator +
+              email[modifier.data.add];
+          }
           break;
+        
+        case 8: // Builder
+          email[modifier.data.target] = modifier.data.value
+            .replace(/::sender::/g, email.from)
+            .replace(/::subject::/g, email.subject)
+            .replace(/::body-html::/g, email['body-html'] || '')
+            .replace(/::body-text::/g, email['body-plain'])
+            .replace(/::sender-name::/g, email.senderName)
+            .replace(/::proxy-address::/g, email.To)
+            .replace(/::sender-domain::/g, email.domain)
+            .replace(/::sender-address::/g, email.sender);
       }
     });
 
     // Message should be redirected
     if (data.to) {
       const message = {
-        subject: req.body.subject,
-        text: req.body['body-plain'],
-        from: req.body.To,
+        subject: email.subject,
+        text: email['body-plain'],
+        from: email.To,
         html: (
-          req.body['body-html'] &&
-          (!textonly ? req.body['body-html'] : '')
+          email['body-html'] &&
+          (!textonly ? email['body-html'] : '')
         ),
         to: data.to
       };
 
       // Download attachments and attach them to the new message
-      if (req.body.attachments) {
-        const attachments = JSON.parse(req.body.attachments);
+      if (email.attachments) {
+        const attachments = JSON.parse(email.attachments);
 
         if (attachments.length) message.attachment = [];
 
