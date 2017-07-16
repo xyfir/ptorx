@@ -1,45 +1,40 @@
-/* MISC */
 body {
   line-height: 142%;
   font-family: 'Roboto', sans-serif;
-  text-align: center;
   margin: 0;
   display: flex;
   min-height: 100vh;
   flex-direction: column;
 }
+
 main#content {
   flex: 1;
 }
-button {
-  cursor: pointer;
-}
+
 span[class^='icon-']:hover {
   cursor: pointer;
   color: $dgray;
 }
-.ptorx section {
-  padding: 0.5em;
-  margin: 1em auto;
-
-  >h3, >h2, >h1, >p {
-    margin: 0em;
-  }
-}
 
 .md-paper.section {
-  margin-left: 1em;
-  margin-right: 1em;
+  margin: 1em;
 }
 
 div.main.md-toolbar-relative {
   padding-top: 1em;
 }
 
-/* FOOTER */
+.flex {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
 footer {
   padding: 0.2em;
   margin-top: 1em;
+  text-align: center;
 
   >a {
     display: inline-block;
@@ -47,98 +42,16 @@ footer {
   }
 }
 
-
-/* LINKS */
 a {
-  color: $purple;
-  cursor: pointer;
+  color: $md-primary-color;
   text-decoration: none;
-}
-a:hover, a:focus {
-  color: $lpurple;
-}
-.link-lg {
-  font-size: 125%;
+  cursor: pointer;
+
+  &:hover {
+    color: $md-secondary-color;
+  }
 }
 
-
-/* BUTTONS */
-.btn, .btn-primary, .btn-secondary, .btn-danger {
-  height: 3.142em;
-  min-width: 7em;
-  color:#fff;
-  border: 0;
-  text-transform: uppercase;
-  margin-left: 0.5em;
-  margin-right: 0.5em;
-}
-.btn-sm {
-  height: 2.142em;
-  min-width: 5em;
-}
-.btn-lg {
-  font-size: 140%;
-}
-.btn-primary {
-  background-color: $purple;
-}
-.btn-primary:hover {
-  background-color: $lpurple; 
-}
-.btn-secondary {
-  background-color: $gray;
-}
-.btn-secondary:hover {
-  background-color: $lgray;
-}
-.btn-danger {
-  background-color: $danger;
-}
-.btn-danger:hover {
-  background-color: $ldanger;
-}
-a.btn:hover {
-  color: white;
-}
-
-
-/* FORMS */
-input[type=text], input[type=password], input[type=email], input[type=number] {
-  text-align: center;
-  height: 1.571em;
-}
-input[type=text], input[type=password], input[type=email] {
-  width: 16em;
-}
-input[type=text]:focus, input[type=password]:focus, input[type=email]:focus, input[type=number]:focus, textarea:focus, select:focus {
-  border-color: $gray;
-  outline: none;
-}
-input[type=text], input[type=password], input[type=email], input[type=number], textarea, select {
-  padding: 4px 8px;
-  color: $lblack;
-  border: 1px solid $llgray;
-  background-color: rgba(255,255,255,.8);
-  display: block;
-  margin: 1em auto;
-}
-label {
-  display: block;
-  font-weight: bold;
-}
-.input-description {
-  font-size: 90%;
-  color: $dgray;
-  display: block;
-  width: 80%;
-  margin: auto;
-}
-input[type=checkbox] {
-  margin-bottom: 1em;
-}
-
-
-/* NAVBAR */
 nav.navbar, nav.navbar-sub {
   background-color: $purple;
   align-items: center;
@@ -153,9 +66,11 @@ nav.navbar, nav.navbar-sub {
     }
   }
 }
+
 nav.navbar {
   padding: 1em 0em;
 }
+
 nav.navbar-sub {
   width: 80%;
   margin: auto;
@@ -163,12 +78,106 @@ nav.navbar-sub {
   margin-bottom: 1em;
 }
 
-/* SWEET ALERT */
-.sweet-alert > fieldset > input {
-  display: none;
+.sweet-alert {
+  >fieldset > input {
+    display: none;
+  }
+  
+  p {
+    margin: auto !important;
+    max-height: 20em;
+    overflow: auto;
+  }
 }
-.sweet-alert p {
-  margin: auto !important;
-  max-height: 20em;
-  overflow: auto;
+
+.old {
+  text-align: center;
+
+  button {
+    cursor: pointer;
+  }
+  section {
+    padding: 0.5em;
+    margin: 1em auto;
+
+    >h3, >h2, >h1, >p {
+      margin: 0em;
+    }
+  }
+
+  .link-lg {
+    font-size: 125%;
+  }
+
+  input[type=text], input[type=password], input[type=email], input[type=number] {
+    text-align: center;
+    height: 1.571em;
+  }
+  input[type=text], input[type=password], input[type=email] {
+    width: 16em;
+  }
+  input[type=text]:focus, input[type=password]:focus, input[type=email]:focus, input[type=number]:focus, textarea:focus, select:focus {
+    border-color: $gray;
+    outline: none;
+  }
+  input[type=text], input[type=password], input[type=email], input[type=number], textarea, select {
+    padding: 4px 8px;
+    color: $lblack;
+    border: 1px solid $llgray;
+    background-color: rgba(255,255,255,.8);
+    display: block;
+    margin: 1em auto;
+  }
+  label {
+    display: block;
+    font-weight: bold;
+  }
+  .input-description {
+    font-size: 90%;
+    color: $dgray;
+    display: block;
+    width: 80%;
+    margin: auto;
+  }
+  input[type=checkbox] {
+    margin-bottom: 1em;
+  }
+
+  .btn, .btn-primary, .btn-secondary, .btn-danger {
+    height: 3.142em;
+    min-width: 7em;
+    color:#fff;
+    border: 0;
+    text-transform: uppercase;
+    margin-left: 0.5em;
+    margin-right: 0.5em;
+  }
+  .btn-sm {
+    height: 2.142em;
+    min-width: 5em;
+  }
+  .btn-lg {
+    font-size: 140%;
+  }
+  .btn-primary {
+    background-color: $purple;
+  }
+  .btn-primary:hover {
+    background-color: $lpurple; 
+  }
+  .btn-secondary {
+    background-color: $gray;
+  }
+  .btn-secondary:hover {
+    background-color: $lgray;
+  }
+  .btn-danger {
+    background-color: $danger;
+  }
+  .btn-danger:hover {
+    background-color: $ldanger;
+  }
+  a.btn:hover {
+    color: white;
+  }
 }
