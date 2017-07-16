@@ -63,7 +63,7 @@ export default class Account extends React.Component {
     }
     
     return (
-      <div className='account'>
+      <div className='account old'>
         <section className='referral-link'>
           <label>Referral Program</label>
           <span className='input-description'>

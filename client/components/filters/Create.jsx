@@ -101,7 +101,7 @@ export default class CreateFilter extends React.Component {
         }
         
         return (
-            <div className="filter-create">
+            <div className="filter-create old">
                 <label>Filter Type</label>
                 <select ref="type" onChange={this.onChangeType}>{
                     [0].concat(Object.keys(filterTypes)).map(k => {

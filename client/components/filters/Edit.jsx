@@ -177,7 +177,7 @@ export default class UpdateFilter extends React.Component {
         }
         
         return (
-            <div className="filter-update">
+            <div className="filter-update old">
                 <label>Filter Type</label>
                 <select
                     ref="type"

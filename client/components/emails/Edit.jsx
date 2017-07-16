@@ -90,7 +90,7 @@ export default class EditEmail extends React.Component {
     const email = this.props.data.emails.find(e => e.id == this.state.id);
     
     return (
-      <div className='email-update'>
+      <div className='email-update old'>
         <nav className='navbar-sub'>
           <a href={`#emails/messages/${this.state.id}/send`}>
             Send Message

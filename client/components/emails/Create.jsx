@@ -67,7 +67,7 @@ export default class CreateEmail extends React.Component {
     if (this.state.loading) return <div />;
     
     return (
-      <div className='email-create'>
+      <div className='email-create old'>
         <Form
           {...this.props}
           email={this.state.email}
