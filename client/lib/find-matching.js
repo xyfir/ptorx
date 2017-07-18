@@ -1,3 +1,5 @@
+import Fuse from 'fuse.js';
+
 /**
  * Finds matching modifiers or filters.
  * @param {object[]} items - An array of objects that must contain `name` and 
@@ -8,25 +10,37 @@
  * @returns {object[]}
  */
 export default function (items, search, ignore = []) {
-  
-  search.query = search.query.toLowerCase();
-  
-  return items.filter(item => {
+
+  items = items.filter(item => {
     // Is ignored
-    if (!!ignore.find(i => i.id == item.id))
+    if (ignore.findIndex(i => i.id == item.id) > -1)
       return false;
     // Type doesn't match and user is requesting specific type
-    else if (item.type != search.type && search.type != 0 )
+    if (search.type && item.type != search.type)
       return false;
-    // Name matches search
-    else if (item.name.toLowerCase().indexOf(search.query) > -1)
-      return true;
-    // Description matches search
-    else if (item.description.toLowerCase().indexOf(search.query) > -1)
-      return true;
-    // Email address property exists and matches search
-    else if (item.address && item.address.indexOf(search.query) > -1)
-      return true;
+    
+    return true;
   });
+
+  if (search.query) {
+    const options = {
+      shouldSort: true,
+      threshold: 0.4,
+      keys: [
+        { name: 'name', weight: 0.5 },
+        { name: 'description', weight: 0.2 }
+      ]
+    };
+
+    if (items[0] && items[0].address) {
+      options.keys.push({ name: 'address', weight: 0.7 });
+    }
+
+    const fuse = new Fuse(items, options);
+
+    items = fuse.search(search.query.toLowerCase())
+  }
+
+  return items;
   
 }
