@@ -209,14 +209,13 @@ export default class CreateOrEditEmailForm extends React.Component {
       noSpamFilter: +(!this.refs.spamFilter.checked)
     };
 
-    data.name = data.name ||
-      'Untitled Proxy Email',
-    data.description = data.description ||
-      'Created on ' + moment().format('YYYY-MM-DD, HH:mm:ss');
+    data.name = data.name || 'Untitled Proxy Email';
 
     if (this.props.create) {
       data.address = this.refs.address.value
-        ? this.refs.address.value + '@ptorx.com' : '';
+        ? this.refs.address.value + '@ptorx.com' : '',
+      data.description = data.description ||
+        'Created on ' + moment().format('YYYY-MM-DD, HH:mm:ss');
     }
 
     if (this.props.recaptcha) {
@@ -266,9 +265,7 @@ export default class CreateOrEditEmailForm extends React.Component {
             <input type='text' ref='address' className='name' />
             <span className='domain'>@ptorx.com</span>
           </div>
-        ) : (
-          <div />
-        )}
+        ) : null}
         
         <div className='redirect-to'>
           <label>Redirect To</label>
