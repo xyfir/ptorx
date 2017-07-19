@@ -1,5 +1,9 @@
 import request from 'superagent';
 import React from 'react';
+import copy from 'copyr';
+
+// react-md
+import Button from 'react-md/lib/Buttons/Button';
 
 // Components
 import Form from 'components/emails/Form';
@@ -90,7 +94,7 @@ export default class EditEmail extends React.Component {
     const email = this.props.data.emails.find(e => e.id == this.state.id);
     
     return (
-      <div className='email-update old'>
+      <div className='edit-email'>
         <nav className='navbar-sub'>
           <a href={`#emails/messages/${this.state.id}/send`}>
             Send Message
@@ -100,9 +104,15 @@ export default class EditEmail extends React.Component {
           </a>
         </nav>
       
-        <span className='address'>{email.address}</span>
-      
-        <hr />
+        <div className='address'>
+          <span>{email.address}</span>
+          <Button
+            icon primary
+            tooltipPosition='right'
+            tooltipLabel='Copy to clipboard'
+            onClick={() => copy(email.address)}
+          >content_copy</Button>
+        </div>
 
         <Form
           {...this.props}
