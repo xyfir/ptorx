@@ -18,6 +18,9 @@ import { RECAPTCHA_KEY } from 'constants/config';
 
 // react-md
 import TabsContainer from 'react-md/lib/Tabs/TabsContainer';
+import SelectField from 'react-md/lib/SelectFields';
+import TextField from 'react-md/lib/TextFields';
+import Checkbox from 'react-md/lib/SelectionControls/Checkbox';
 import ListItem from 'react-md/lib/Lists/ListItem';
 import Button from 'react-md/lib/Buttons/Button';
 import Dialog from 'react-md/lib/Dialogs';
@@ -26,7 +29,7 @@ import List from 'react-md/lib/Lists/List';
 import Tabs from 'react-md/lib/Tabs/Tabs';
 import Tab from 'react-md/lib/Tabs/Tab';
 
-export default class CreateOrEditEmailForm extends React.Component {
+export default class EmailForm extends React.Component {
 
   constructor(props) {
     super(props);
@@ -78,8 +81,8 @@ export default class CreateOrEditEmailForm extends React.Component {
    */
   onAddRealAddress() {
     swal({
-      title: 'Add a normal email address to your account',
-      text: 'Add a normal email address to your account to receive redirected '
+      title: 'Add a main email address to your account',
+      text: 'Add a main email address to your account to receive redirected '
         + 'mail at.',
       type: 'input',
       showCancelButton: true,
@@ -191,29 +194,28 @@ export default class CreateOrEditEmailForm extends React.Component {
 
   /**
    * Builds data from form and passes it to `this.props.onSubmit()`.
-   * @param {Event} e
    */
-  onSubmit(e) {
-    e && e.preventDefault();
-
+  onSubmit() {
     const data = {
       to: this.props.data.account.emails.find(e =>
-        e.address == this.refs.to.value
+        e.address == this.refs.to.state.value
       ).id,
-      name: this.refs.name.value,
+      name: this.refs.name.getField().value,
       filters: this.state.filters.map(f => f.id).join(','),
-      saveMail: +this.refs.saveMail.checked,
+      saveMail: window['checkbox--save-mail'].checked,
       modifiers: this.state.modifiers.map(m => m.id).join(','),
-      description: this.refs.description.value,
-      noToAddress: +this.refs.noToAddress.checked,
-      noSpamFilter: +(!this.refs.spamFilter.checked)
+      description: this.refs.description.getField().value,
+      noToAddress: window['checkbox--no-redirect'].checked,
+      noSpamFilter: !window['checkbox--spam-filter'].checked
     };
 
     data.name = data.name || 'Untitled Proxy Email';
 
     if (this.props.create) {
-      data.address = this.refs.address.value
-        ? this.refs.address.value + '@ptorx.com' : '',
+      data.address = this.refs.address.getField().value
+        ? this.refs.address.getField().value.split('@')[0] +
+          this.refs.domain.state.value
+        : '',
       data.description = data.description ||
         'Created on ' + moment().format('YYYY-MM-DD, HH:mm:ss');
     }
@@ -234,54 +236,72 @@ export default class CreateOrEditEmailForm extends React.Component {
     const { email } = this.props;
     
     return (
-      <form
-        className='email-form section md-paper md-paper--1'
-        onSubmit={e => this.onSubmit(e)}
+      <Paper
+        zDepth={1}
+        component='section'
+        className='email-form section flex'
       >
-        <p>All fields other than 'Redirect To' are optional.</p>
-
-        <label>Name</label>
-        <span className='input-description'>
-          Give your email a name to find it easier.
-        </span>
-        <input type='text' ref='name' defaultValue={email.name} />
-        
-        <label>Description</label>
-        <span className='input-description'>
-          Describe your email to find it easier.
-        </span>
-        <input
+        <TextField
+          id='text--name'
+          ref='name'
           type='text'
+          label='Name'
+          className='md-cell'
+          defaultValue={email.name}
+        />
+
+        <TextField
+          id='text--description'
           ref='description'
+          type='text'
+          label='Description'
+          className='md-cell'
           defaultValue={email.description}
         />
 
         {this.props.create ? (
-          <div className='proxy-address'>
-            <label>Address</label>
-            <span className='input-description'>
-              Customize your Ptorx address or leave it blank for a randomly generated address.
-            </span>
-            <input type='text' ref='address' className='name' />
-            <span className='domain'>@ptorx.com</span>
+          <div className='address flex'>
+            <TextField
+              id='text--address'
+              ref='address'
+              type='text'
+              label='Address'
+              helpText={
+                'Customize your Ptorx address or leave it blank for a ' +
+                'randomly generated address'
+              }
+              className='md-cell'
+            />
+
+            <SelectField
+              id='select--domain'
+              ref='domain'
+              label='Domain'
+              position={SelectField.Positions.BELOW}
+              className='md-cell'
+              menuItems={['@ptorx.com']}
+              defaultValue='@ptorx.com'
+            />
           </div>
         ) : null}
         
         <div className='redirect-to'>
-          <label>Redirect To</label>
-          <span className='input-description'>
-            This is your real email that messages sent to your Ptorx address will be redirected to.
-          </span>
-          <select ref='to' defaultValue={email.toEmail}>{
-            this.props.data.account.emails.map(e =>
-              <option value={e.address}>{e.address}</option>
-            )
-          }</select>
-          <a
-            className='icon-add'
-            onClick={() => this.onAddRealAddress()}
-            title='Add a real email address to account'
+          <SelectField
+            id='select--redirect'
+            ref='to'
+            label='Redirect To'
+            position={SelectField.Positions.BELOW}
+            helpText={
+              'Your real email that messages sent to your Ptorx address ' +
+              'will be redirected to'
+            }
+            className='md-cell'
+            menuItems={this.props.data.account.emails.map(e => e.address)}
+            defaultValue={
+              email.toEmail || this.props.data.account.emails[0].address
+            }
           />
+          <Button icon onClick={() => this.onAddRealAddress()}>add</Button>
         </div>
 
         {!this.state.showAdvanced ? (
@@ -291,45 +311,32 @@ export default class CreateOrEditEmailForm extends React.Component {
         ) : null}
 
         <div
-          className='advanced-settings'
-          style={{ display: this.state.showAdvanced ? 'initial' : 'none' }}
+          className='advanced-settings flex'
+          style={{ display: this.state.showAdvanced ? 'flex' : 'none' }}
         > 
-          <label>Spam Filter</label>
-          <span className='input-description'>
-            By default we block any messages that are marked as spam. Disable this only if you believe legitimate messages are being blocked by the spam filter.
-          </span>
-          <label><input
-            type='checkbox'
-            ref='spamFilter'
-            defaultChecked={email.spamFilter}
-          />Enable</label>
-          
-          <label>Save Mail</label>
-          <span className='input-description'>
-              Any emails that are sent to this address will be temporarily stored for 3 days. You can then access the messages by viewing the 'Messages' section when viewing this email's info.
-              <br />
-              'Rejected' emails that don't match your filters will also be saved in a separate section for only rejected emails. If you have 'Spam Filter' enabled, messages detected as spam will <em>not</em> be stored at all.
-              <br />
-              This option is required if you want to reply to emails.
-            </span>
-          <label><input
-            type='checkbox'
-            ref='saveMail'
-            defaultChecked={email.saveMail}
-          />Enable</label>
-          
-          <label>No 'To' Address</label>
-          <span className='input-description'>
-            Enabling this will allow you to avoid having emails sent to your Ptorx address redirected to your real email. This will act like the <em>Save Mail</em> feature just without the emails being redirected.
-          </span>
-          <label><input
-            type='checkbox'
-            ref='noToAddress'
-            defaultChecked={
-              email.noToAddress == undefined
-                ? !email.toEmail : email.noToAddress
-            }
-          />Enable</label>
+          <div className='checkboxes'>
+            <Checkbox
+              id='checkbox--spam-filter'
+              label='Spam Filter'
+              defaultChecked={email.spamFilter}
+            />
+
+            <Checkbox
+              id='checkbox--save-mail'
+              label='Save Mail'
+              defaultChecked={email.saveMail}
+            />
+
+            <Checkbox
+              id='checkbox--no-redirect'
+              label='No Redirect'
+              defaultChecked={
+                email.noToAddress == undefined
+                  ? !email.toEmail
+                  : email.noToAddress
+              }
+            />
+          </div>
 
           <Paper zDepth={2} className='filters-and-modifiers section'>
           <TabsContainer
@@ -432,22 +439,20 @@ export default class CreateOrEditEmailForm extends React.Component {
               data-sitekey={RECAPTCHA_KEY}
             />
           </div>
-        ) : (
-          <div />    
-        )}
+        ) : null}
         
         <Button
           primary raised
           onClick={e => this.onSubmit(e)}
           label='Submit'
         />
-      </form>
+      </Paper>
     );
   }
 
 }
 
-CreateOrEditEmailForm.PropTypes = {
+EmailForm.PropTypes = {
   data: PropTypes.object.isRequired,
   email: PropTypes.object,
   create: PropTypes.bool,
@@ -456,7 +461,7 @@ CreateOrEditEmailForm.PropTypes = {
   recaptcha: PropTypes.bool
 };
 
-CreateOrEditEmailForm.defaultProps = {
+EmailForm.defaultProps = {
   email: {
     name: '', description: '', toEmail: '', spamFilter: true, saveMail: false,
     noToAddress: false, filters: [], modifiers: []
