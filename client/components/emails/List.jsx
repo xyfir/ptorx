@@ -1,5 +1,6 @@
 import request from 'superagent';
 import React from 'react';
+import copy from 'copyr';
 
 // Action creators
 import { loadEmails, deleteEmail } from 'actions/creators/emails';
@@ -88,14 +89,7 @@ export default class EmailList extends React.Component {
       e => e.id == this.state.selected
     ).address;
 
-    const el = document.createElement('input');
-    el.type = 'text', el.value = email;
-    document.body.appendChild(el);
-    
-    el.select();
-    document.execCommand('copy');
-    el.remove();
-
+    copy(email);
     this.setState({ selected: 0 });
   }
 
