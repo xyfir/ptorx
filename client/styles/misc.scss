@@ -30,7 +30,7 @@
   text-align: left;
 }
 
-.email-form {
+section.email-form {
   .advanced-settings > h3 {
     margin-bottom: 0em;
   }
@@ -43,29 +43,24 @@
     text-align: center;
   }
   
-  .address {
-    font-size: 125%;
-    font-weight: bold;
+  div.address, div.redirect-to, div.advanced-settings,
+  div.advanced-settings > div {
+    width: 100%;
   }
 
   div.redirect-to {
-    >select {
-      display: inline-block;
-    }
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
-  div.proxy-address {
-    >input.name {
-      display: inline-block;
-    }
-
-    >span.domain {
-      color: $dgray;
-      font-weight: bold;
-    }
+  div.checkboxes {
+    display: flex;
+    justify-content: center;
   }
 
   div.filters-and-modifiers {
+    text-align: center;
     border: 1px solid $md-primary-color;
 
     >section {
@@ -223,5 +218,19 @@ ul.modifiers-list, ul.filters-list, ul.proxy-emails-list {
 div.filter-form {
   div.header-filter {
     width: 100%;
+  }
+}
+
+div.edit-email {
+  >div.address {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    >span {
+      font-size: 125%;
+      font-weight: bold;
+      margin-right: 0.1em;
+    }
   }
 }
