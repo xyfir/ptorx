@@ -24,3 +24,8 @@ html {
 .md-list {
   padding: 0em;
 }
+
+h2.md-title--dialog {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
