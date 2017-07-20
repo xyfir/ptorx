@@ -136,38 +136,7 @@ section.purchase-subscription.stripe {
   display: block;
 }
 
-.message-send, .message-reply {
-  textarea {
-    height: 25em;
-    text-align: center;
-  }
-}
-
-.message-view {
-  dl {
-    dt {
-      font-weight: bold;
-    }
-
-    dd {
-      margin-left: 0;
-    }
-
-    div.html, dd.text, dl.headers {
-      background-color: $lllgray;
-      width: 60%;
-      margin: auto;
-      padding: 0.5em;
-    }
-
-    dl.headers {
-      font-size: 80%;
-    }
-  }
-}
-
-.account {
-  
+.account { 
   h3 {
     margin-bottom: 0.6em;
   }
@@ -232,5 +201,37 @@ div.edit-email {
       font-weight: bold;
       margin-right: 0.1em;
     }
+  }
+}
+
+div.view-message {
+  >section.message {
+    >* {
+      width: 100%;
+      padding: 0 1em;
+    }
+
+    >div.info {
+      background-color: $md-secondary-color;
+      padding: 0 1em;
+      color: white;
+
+      >span.subject {
+        font-size: 125%;
+      }
+
+      >span.from {
+        display: block;
+      }
+
+      >span.from, >span.date {
+        font-size: 85%;
+      }
+    }
+  }
+
+  >button {
+    display: block;
+    margin: auto;
   }
 }
