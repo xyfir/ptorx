@@ -1,153 +1,115 @@
-import React from "react";
+import request from 'superagent';
+import moment from 'moment';
+import React from 'react';
 
-// Constants
-import { URL } from "constants/config";
+// react-md
+import TextField from 'react-md/lib/TextFields';
+import Button from 'react-md/lib/Buttons/Button';
+import Paper from 'react-md/lib/Papers';
 
 // Modules
-import request from "lib/request";
+import parseQuery from 'lib/parse-hash-query';
 
 export default class ViewMessage extends React.Component {
+  
+  constructor(props) {
+    super(props);
     
-    constructor(props) {
-        super(props);
-        
-        this.state = {
-            id: location.hash.split('/')[2], showReplyForm: false,
-            message: location.hash.split('/')[4], loading: true,
-            content: {}, showHeaders: false, showHTML: false
-        };
-        
-        request(
-            `${URL}api/emails/${this.state.id}/messages/${this.state.message}`,
-            (res) => {
-                if (res.error)
-                    swal("Error", "Could not load message", "error");
-                else
-                    this.setState({ loading: false, content: res });
-            }
-        );
-        
-        this.onShowHeaders = this.onShowHeaders.bind(this);
-        this.onShowHTML = this.onShowHTML.bind(this);
-    }
-    
-    onShowReplyForm() {
-        this.setState({ showReplyForm: true });
-    }
-    
-    onShowHeaders() {
-        this.setState({ showHeaders: true });
-    }
-    
-    onShowHTML() {
-        this.setState({ showHTML: true });
-    }
-    
-    onReply(e) {
-        e.preventDefault();
+    this.state = {
+      id: location.hash.split('/')[2], message: location.hash.split('/')[4],
+      showReplyForm: false, loading: true, content: {},
+    };
 
-        request({
-            url: `${URL}api/emails/${this.state.id}/messages/${this.state.message}`,
-            method: "POST", data: { content: this.refs.content.value }
-        }, (res) => {
-            if (res.error) {
-                swal("Error", res.message, "error");
-            }
-            else {
-                swal("Success", `Message sent to ${this.refs.to.value}`, "success");
-                location.hash = `emails/messages/${this.state.id}/list`;
-            }
-        });
-    }
+    if (parseQuery().reply) this.state.showReplyForm = true;
     
-    render() {
-        if (this.state.loading) return <div />;
+    request
+      .get(`../api/emails/${this.state.id}/messages/${this.state.message}`)
+      .end((err, res) => {
+        if (err || res.body.error)
+          swal('Error', 'Could not load message', 'error');
+        else
+          this.setState({ loading: false, content: res.body });
+      });
+  }
+  
+  onReply() {
+    request
+      .post(`../api/emails/${this.state.id}/messages/${this.state.message}`)
+      .send({ content: this.refs.message.getField().value })
+      .end((err, res) => {
+        if (err || res.body.error) {
+          swal('Error', res.body.message, 'error');
+        }
+        else {
+          swal(
+            'Success',
+            `Message sent to ${this.refs.to.getField().value}`,
+            'success'
+          );
+          location.hash = `#emails/messages/${this.state.id}/list`;
+        }
+      });
+  }
+  
+  render() {
+    if (this.state.loading) return <div />;
+    
+    return (
+      <div className='view-message'>
+        <nav className='navbar-sub'>
+          <a href={`#emails/messages/${this.state.id}/list`}>Messages</a>
+          <a href={`#emails/messages/${this.state.id}/list?rejected=1`}>
+            Rejected Messages
+          </a>
+          <a href={`#emails/edit/${this.state.id}`}>Edit Email</a>
+        </nav>
+
+        <Paper
+          zDepth={1}
+          component='section'
+          className='message flex section'
+        >
+          <div className='info'>
+            <span className='subject'>{this.state.content.subject}</span>
+            <span className='from'>{this.state.content.from}</span>
+            <span className='date'>{
+              moment(this.state.content.timestamp)
+                .format('MMMM Do YYYY, HH:mm:ss')
+            }</span>
+          </div>
+
+          <pre className='content'>{this.state.content.text}</pre>
+        </Paper>
         
-        return (
-            <div className="message-view">
-                <nav className="navbar-sub">
-                    <a href={`#emails/messages/${this.state.id}/list`}>
-                        Messages
-                    </a>
-                    <a href={`#emails/messages/${this.state.id}/list?rejected=1`}>
-                        Rejected Messages
-                    </a>
-                    <a href={`#emails/list`}>Emails</a>
-                </nav>
-                
-                <dl className="message">
-                        <dt>From</dt>
-                        <dd>{this.state.content.from}</dd>
-
-                        <dt>To</dt>
-                        <dd>{this.props.data.emails.find(e => {
-                            return e.id == this.state.id;
-                        }).address}</dd>
-
-                        <dt>Subject</dt>
-                        <dd>{this.state.content.subject}</dd>
-                    
-                        <dt>Headers</dt>
-                        <dd>{this.state.showHeaders ? (
-                            <dl className="headers">{
-                                this.state.content.headers.map(header => {
-                                    return (
-                                        <div className="header">
-                                            <dt>{header[0]}</dt>
-                                            <dd>{header[1]}</dd>
-                                        </div>
-                                    );
-                                })
-                            }</dl>
-                        ) : (
-                            <a onClick={this.onShowHeaders}>
-                                View Message Headers
-                            </a>
-                        )}</dd>
-                    
-                        <dt>Text Content</dt>
-                        <dd className="text">{this.state.content.text}</dd>
-                    
-                    {this.state.content.html ? (
-                        <div>
-                            <dt>HTML Content</dt>
-                            <dd>{this.state.showHTML ? (
-                                <div
-                                    className="html"
-                                    dangerouslySetInnerHTML={{
-                                        __html: this.state.content.html
-                                    }}
-                                />
-                            ) : (
-                                <a onClick={this.onShowHTML}>
-                                    Show HTML Content
-                                </a>
-                            )}</dd>
-                        </div>
-                    ) : (
-                        <div />
-                    )}
-                </dl>
-                
-                {this.state.showReplyForm ? (
-                    <form
-                        className="message-reply"
-                        onSubmit={(e) => this.onReply(e)}
-                    >
-                        <textarea ref="content" />
-                        
-                        <button className="btn-primary">
-                            Send Reply
-                        </button>
-                    </form>
-                ) : (
-                    <button
-                        onClick={() => this.onShowReplyForm()}
-                        className="btn-secondary"
-                    >Reply</button>
-                )}
-            </div>
-        );
-    }
-    
+        {this.state.showReplyForm ? (
+          <Paper
+            zDepth={1}
+            className='reply section flex'
+          >
+            <TextField
+              id='text--message'
+              ref='message'
+              rows={2}
+              type='text'
+              label='Message'
+              className='md-cell'
+            />
+            
+            <Button
+              raised primary
+              label='Send'
+              onClick={() => this.onSend()}
+            >send</Button>
+          </Paper>
+        ) : (
+          <Button
+            raised primary
+            label='Reply'
+            onClick={() => this.setState({ showReplyForm: true })}
+          />
+        )}
+      </div>
+    );
+  }
+  
 }
