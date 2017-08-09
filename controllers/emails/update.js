@@ -4,11 +4,12 @@ const validateFilters = require('lib/email/validate-filters');
 const buildAction = require('lib/mg-route/build-action');
 const clearCache = require('lib/email/clear-cache');
 const validate = require('lib/email/validate');
-const db = require('lib/db');
+const mysql = require('lib/mysql');
 
 const config = require('config');
 const mailgun = require('mailgun-js')({
-  apiKey: config.keys.mailgun, domain: 'ptorx.com'
+  apiKey: config.keys.mailgun,
+  domain: 'ptorx.com'
 });
 
 /*
@@ -23,175 +24,124 @@ const mailgun = require('mailgun-js')({
   DESCRIPTION
     Updates a redirect email, linked entries, and MailGun route
 */
-module.exports = function(req, res) {
+module.exports = async function(req, res) {
 
-  let response = validate(req.body, req.session.subscription);
+  const db = new mysql;
 
-  if (response !== 'ok') {
-    res.json({ error: true, message: response });
-    return;
-  }
+  try {
+    validate(req.body, req.session.subscription);
 
-  let sql = '', vars = [];
+    await db.getConnection();
 
-  db(cn => {
-    /* Extended Validation */
-    const step1 = () => {
-      sql = `
-        SELECT mg_route_id as mgRouteId, address, (
+    let sql = `
+      SELECT
+        mg_route_id AS mgRouteId, address, (
           SELECT COUNT(email_id) FROM main_emails
           WHERE email_id = ? AND user_id = ?
-        ) as toEmail FROM redirect_emails
-        WHERE email_id = ? AND user_id = ?
-      `, vars = [
-        req.body.to, req.session.uid,
-        req.params.email, req.session.uid
-      ];
+        ) AS toEmail
+      FROM redirect_emails
+      WHERE email_id = ? AND user_id = ?
+    `,
+    vars = [
+      req.body.to, req.session.uid,
+      req.params.email, req.session.uid
+    ],
+    rows = await db.query(sql, vars);
 
-      cn.query(sql, vars, (err, rows) => {
-        // toEmail doesn't exist and user didn't provide noToAddress
-        if (!rows[0].toEmail && !+req.body.noToAddress) {
-          cn.release();
-          res.json({
-            error: true, message: 'Could not find main email'
-          });
-        }
-        // Redirect email doesn't exist
-        else if (!rows[0].address) {
-          cn.release();
-          res.json({
-            error: true, message: 'Could not find redirect email'
-          });
-        }
-        // Validate filters and modifiers
-        else {
-          const modifiers = req.body.modifiers.split(',');
-          const filters = req.body.filters.split(',')
-          
-          validateFilters(filters, req, cn, (err, msg) => {
-            if (err) {
-              cn.release();
-              res.json({ error: true, message: msg });
-            }
-            else {
-              validateModifiers(modifiers, req, cn, (err, msg) => {
-                if (err) {
-                  cn.release();
-                  res.json({ error: true, message: msg });
-                }
-                else {
-                  step2({
-                    address: rows[0].address,
-                    routeId: rows[0].mgRouteId,
-                    filters, modifiers
-                  });
-                }
-              });
-            }
-          });
-        }
-      });
-    };
+    const { mgRouteId, address, toEmail } = rows[0];
 
-    /* Update Email and MailGun Route */
-    const step2 = (data) => {
-      // Update values in redirect_emails
-      sql = `
-        UPDATE redirect_emails SET
-          to_email = ?, name = ?, description = ?,
-          save_mail = ?, spam_filter = ?
-        WHERE email_id = ?
-      `, vars = [
-        req.body.to, req.body.name, req.body.description,
-        !!+req.body.saveMail, !+req.body.noSpamFilter,
-        req.params.email
-      ];
+    // toEmail doesn't exist and user didn't provide noToAddress
+    if (!toEmail && !req.body.noToAddress)
+        throw 'Could not find main email';
+    // Redirect email doesn't exist
+    if (!address)
+      throw 'Could not find redirect email';
+    
+    // Validate filters and modifiers
+    const modifiers = req.body.modifiers
+      ? req.body.modifiers.split(',').map(Number) : [];
+    const filters = req.body.filters
+      ? req.body.filters.split(',').map(Number) : [];
 
-      cn.query(sql, vars, (err, result) => {
-        if (err || !result.affectedRows) {
-          cn.release();
-          res.json({
-            error: true, message: 'An unknown error occured'
-          }); return;
-        }
+    await validateModifiers(modifiers, req.session.uid, db);
+    await validateFilters(filters, req.session.uid, db);
 
-        // Build MailGun route expression(s)
-        buildExpression({
-          address: data.address, filters: data.filters,
-          saveMail: !!+req.body.saveMail || req.body.to == 0
-        }, cn, (expression) => {
-          // Update MailGun route
-          mailgun.routes(data.routeId).update({
-            priority: (!+req.body.noSpamFilter ? 2 : 0),
-            description: '', expression,
-            action: buildAction(
-              req.params.email,
-              req.body.to == 0 || !!+req.body.saveMail
-            )
-          }, (err, body) => {
-            if (err) {
-              cn.release();
-              res.json({
-                error: true, message: 'An unknown error occured'
-              });
-            }
-            else {
-              step3(data.filters, data.modifiers);
-            }
-          });
-        });
-      });
-    };
+    // Update values in redirect_emails
+    sql = `
+      UPDATE redirect_emails SET
+        to_email = ?, name = ?,
+        description = ?, save_mail = ?, spam_filter = ?
+      WHERE email_id = ?
+    `,
+    vars = [
+      req.body.noToAddress ? 0 : req.body.to, req.body.name,
+      req.body.description, req.body.saveMail, !req.body.noSpamFilter,
+      req.params.email
+    ];
+    let dbRes = await db.query(sql, vars);
 
-    /* Create entries in linked_modifiers|filters */
-    const step3 = (filters, modifiers) => {
-      // Delete all filters
-      sql = `
-        DELETE FROM linked_filters WHERE email_id = ?
-      `,
-      vars = [
-        req.params.email
-      ];
+    if (!dbRes.affectedRows) throw 'An unknown error occured';
 
-      cn.query(sql, vars, (err, result) => {
-        // Delete all modifiers since the order may have changed
-        sql = `
-          DELETE FROM linked_modifiers WHERE email_id = ?
-        `,
-        vars = [
-          req.params.email
-        ];
+    // Build MailGun route expression(s)
+    const expression = await buildExpression({
+      address, filters,
+      saveMail: req.body.saveMail || req.body.to == 0
+    }, db);
 
-        cn.query(sql, vars, (err, result) => {
-          // Insert modifiers
-          sql = `
-            INSERT INTO linked_modifiers
-            (modifier_id, email_id, order_number) VALUES ${
-              modifiers.map((m, i) =>
-                `('${+m}', '${+req.params.email}', '${i}')`
-              ).join(', ')
-            }
-          `;
+    // Update MailGun route
+    await mailgun.routes(mgRouteId).update({
+      description: '',
+      expression,
+      priority: (!req.body.noSpamFilter ? 2 : 0),
+      action: buildAction({
+        id: req.params.email,
+        save: req.body.to == 0 || req.body.saveMail
+      })
+    });
 
-          cn.query(sql, (err, result) => {
-            // Insert filters
-            sql = `
-              INSERT INTO linked_filters (filter_id, email_id) VALUES ${
-                filters.map(f =>`('${+f}', '${+req.params.email}')`).join(', ')
-              }
-            `;
+    // Delete all filters
+    sql = `
+      DELETE FROM linked_filters WHERE email_id = ?
+    `,
+    vars = [
+      req.params.email
+    ],
+    dbRes = await db.query(sql, vars);
 
-            cn.query(sql, (err, result) => {
-              cn.release();
-              clearCache(req.params.email);
-              res.json({ error: false });
-            });
-          });
-        });
-      });
-    };
+    // Delete all modifiers since the order may have changed
+    sql = `
+      DELETE FROM linked_modifiers WHERE email_id = ?
+    `,
+    vars = [
+      req.params.email
+    ],
+    dbRes = await db.query(sql, vars);
 
-    step1();
-  });
+    // Insert modifiers
+    if (modifiers.length) {
+      sql =
+        'INSERT INTO linked_modifiers ' +
+        '(modifier_id, email_id, order_number) VALUES ' +
+        modifiers
+          .map((m, i) => `('${m}', '${+req.params.email}', '${i}')`)
+          .join(', '),
+      dbRes = await db.query(sql);
+    }
+
+    // Insert filters
+    if (filters.length) {
+      sql =
+        'INSERT INTO linked_filters (filter_id, email_id) VALUES ' +
+        filters.map(f =>`('${f}', '${+req.params.email}')`).join(', '),
+      dbRes = await db.query(sql);
+    }
+
+    db.release();
+    res.json({ error: false });
+  }
+  catch (err) {
+    db.release();
+    res.json({ error: true, message: err });
+  }
 
 };
