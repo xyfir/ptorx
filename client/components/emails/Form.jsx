@@ -206,7 +206,8 @@ export default class EmailForm extends React.Component {
       modifiers: this.state.modifiers.map(m => m.id).join(','),
       description: this.refs.description.getField().value,
       noToAddress: window['checkbox--no-redirect'].checked,
-      noSpamFilter: !window['checkbox--spam-filter'].checked
+      noSpamFilter: !window['checkbox--spam-filter'].checked,
+      directForward: window['checkbox--direct-forward'].checked
     };
 
     data.name = data.name || 'Untitled Proxy Email';
@@ -336,6 +337,12 @@ export default class EmailForm extends React.Component {
                   : email.noToAddress
               }
             />
+
+            <Checkbox
+              id='checkbox--direct-forward'
+              label='Direct Forward'
+              defaultChecked={email.directForward}
+            />
           </div>
 
           <Paper zDepth={2} className='filters-and-modifiers section'>
@@ -464,7 +471,7 @@ EmailForm.PropTypes = {
 EmailForm.defaultProps = {
   email: {
     name: '', description: '', toEmail: '', spamFilter: true, saveMail: false,
-    noToAddress: false, filters: [], modifiers: []
+    directForward: false, noToAddress: false, filters: [], modifiers: []
   },
   recaptcha: false, create: false
 };
