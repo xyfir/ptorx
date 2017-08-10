@@ -20,7 +20,7 @@ const mailgun = require('mailgun-js')({
     modifiers: string, to: number
   OPTIONAL
     saveMail: boolean, noSpamFilter: boolean, noToAddress: boolean,
-    recaptcha: string
+    directForward: boolean, recaptcha: string
   RETURN
     { error: boolean, message?: string, id?: number }
   DESCRIPTION
@@ -61,12 +61,8 @@ module.exports = async function(req, res) {
         throw 'Trial users can only create 5 emails per day';
       else if (rows[0].emails_created >= 15)
         throw 'Trial users can only create 15 emails total';
-    }
-    else if (rows[0].emails_created_today >= 20) {
-      throw 'You can only create up to 20 emails per day.';
-    }
-    // Validate captcha
-    else if (rows[0].trial) {
+
+      // Validate captcha
       const recaptchaRes = await request
         .post('https://www.google.com/recaptcha/api/siteverify')
         .send({
@@ -76,6 +72,9 @@ module.exports = async function(req, res) {
         });
 
       if (!recaptchaRes.body.success) throw 'Invalid captcha'
+    }
+    else if (rows[0].emails_created_today >= 20) {
+      throw 'You can only create up to 20 emails per day.';
     }
 
     let email = ''; // proxy email address
@@ -100,7 +99,7 @@ module.exports = async function(req, res) {
     }
 
     sql = `
-      SELECT email_id FROM main_emails
+      SELECT email_id, address FROM main_emails
       WHERE email_id = ? AND user_id = ?
     `,
     vars = [
@@ -113,6 +112,7 @@ module.exports = async function(req, res) {
       throw 'Could not find main email';
 
     const data = {
+      direct_forward: req.body.directForward,
       description: req.body.description,
       spam_filter: !req.body.noSpamFilter,
       save_mail: req.body.saveMail,
@@ -125,8 +125,12 @@ module.exports = async function(req, res) {
     filters = req.body.filters
       ? req.body.filters.split(',').map(Number) : [];
 
-    await validateFilters(filters, req.session.uid, db);
-    await validateModifiers(modifiers, req.session.uid, db);
+    await validateFilters(
+      filters, req.session.uid, data.direct_forward, db
+    );
+    await validateModifiers(
+      modifiers, req.session.uid, data.direct_forward, db
+    );
 
     let dbRes;
 
@@ -145,12 +149,19 @@ module.exports = async function(req, res) {
       saveMail: data.save_mail || data.to_email == 0
     }, db);
 
+    // Build Mailgun route action(s)
+    const action = buildAction(
+      req.body.directForward
+        ? { address: rows[0].address }
+        : { id, save: data.to_email == 0 || data.save_mail }
+    );
+
     // Create Mailgun route
     const mgRes = await mailgun.routes().create({
-      priority: (data.spam_filter ? 2 : 0), description: '',
-      expression, action: buildAction({
-        id, save: data.to_email == 0 || data.save_mail
-      })
+      description: '',
+      expression,
+      priority: (data.spam_filter ? 2 : 0),
+      action
     });
 
     // Save MailGun route ID to proxy email

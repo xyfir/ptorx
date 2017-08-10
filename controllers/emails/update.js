@@ -18,7 +18,8 @@ const mailgun = require('mailgun-js')({
     name: string, description: string, filters: string,
     modifiers: string, to: number
   OPTIONAL
-    saveMail: boolean, noSpamFilter: boolean, noToAddress: boolean
+    saveMail: boolean, noSpamFilter: boolean, noToAddress: boolean,
+    directForward: boolean
   RETURN
     { error: boolean, message?: string }
   DESCRIPTION
@@ -36,7 +37,7 @@ module.exports = async function(req, res) {
     let sql = `
       SELECT
         mg_route_id AS mgRouteId, address, (
-          SELECT COUNT(email_id) FROM main_emails
+          SELECT address FROM main_emails
           WHERE email_id = ? AND user_id = ?
         ) AS toEmail
       FROM redirect_emails
@@ -63,40 +64,50 @@ module.exports = async function(req, res) {
     const filters = req.body.filters
       ? req.body.filters.split(',').map(Number) : [];
 
-    await validateModifiers(modifiers, req.session.uid, db);
-    await validateFilters(filters, req.session.uid, db);
+    await validateModifiers(
+      modifiers, req.session.uid, req.body.directForward, db
+    );
+    await validateFilters(
+      filters, req.session.uid, req.body.directForward, db
+    );
 
     // Update values in redirect_emails
     sql = `
       UPDATE redirect_emails SET
         to_email = ?, name = ?,
-        description = ?, save_mail = ?, spam_filter = ?
+        description = ?, save_mail = ?,
+        direct_forward = ?, spam_filter = ?
       WHERE email_id = ?
     `,
     vars = [
       req.body.noToAddress ? 0 : req.body.to, req.body.name,
-      req.body.description, req.body.saveMail, !req.body.noSpamFilter,
+      req.body.description, req.body.saveMail,
+      req.body.directForward, !req.body.noSpamFilter,
       req.params.email
     ];
     let dbRes = await db.query(sql, vars);
 
     if (!dbRes.affectedRows) throw 'An unknown error occured';
 
-    // Build MailGun route expression(s)
+    // Build Mailgun route expression(s)
     const expression = await buildExpression({
       address, filters,
-      saveMail: req.body.saveMail || req.body.to == 0
+      saveMail: req.body.saveMail || !req.body.to
     }, db);
+
+    // Build Mailgun route action(s)
+    const action = buildAction(
+      req.body.directForward
+        ? { address: toEmail }
+        : { id: req.params.email, save: req.body.saveMail || !req.body.to }
+    )
 
     // Update MailGun route
     await mailgun.routes(mgRouteId).update({
       description: '',
       expression,
       priority: (!req.body.noSpamFilter ? 2 : 0),
-      action: buildAction({
-        id: req.params.email,
-        save: req.body.to == 0 || req.body.saveMail
-      })
+      action
     });
 
     // Delete all filters
