@@ -241,13 +241,9 @@
   </footer>
 
   <script>
-    if (location.hash.indexOf("?")) {
-      localStorage.setItem(
-        "referral", location.hash.split("?r=")[1] || ""
-      )
-      localStorage.setItem(
-        "affiliate", location.hash.split("?promo=")[1] || ""
-      );
+    if (location.hash.indexOf('?')) {
+      localStorage.referral = location.hash.split('?r=')[1] || '',
+      localStorage.affiliate = location.hash.split('?promo=')[1] || '';
     }
   </script>
 </body>
