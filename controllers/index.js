@@ -14,8 +14,9 @@ const upload = multer({
 router.post('/receive/:email', upload.any(), require('./receive'));
 
 /* PROXY EMAILS */
-router.get('/emails', require('./emails/list'));
-router.post('/emails', require('./emails/create'));
+router.route('/emails')
+  .get(require('./emails/list'))
+  .post(require('./emails/create'));
 router.route('/emails/:email')
   .get(require('./emails/get'))
   .put(require('./emails/update'))
@@ -28,16 +29,18 @@ router.route('/emails/:email/messages/:message')
   .delete(require('./emails/messages/delete'));
 
 /* FILTERS */
-router.get('/filters', require('./filters/list'));
-router.post('/filters', require('./filters/create'));
+router.route('/filters')
+  .get(require('./filters/list'))
+  .post(require('./filters/create'));
 router.route('/filters/:filter')
   .get(require('./filters/get'))
   .put(require('./filters/update'))
   .delete(require('./filters/delete'));
 
 /* MODIFIERS */
-router.get('/modifiers', require('./modifiers/list'));
-router.post('/modifiers', require('./modifiers/create'));
+router.route('/modifiers')
+  .get(require('./modifiers/list'))
+  .post(require('./modifiers/create'));
 router.route('/modifiers/:mod')
   .get(require('./modifiers/get'))
   .put(require('./modifiers/update'))
