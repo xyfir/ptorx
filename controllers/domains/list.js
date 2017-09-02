@@ -10,7 +10,7 @@ const mysql = require('lib/mysql');
       }]
     }
   DESCRIPTION
-    Returns all non-default domains linked to user's account
+    Returns all domains that the user is authorized to use
 */
 module.exports = async function(req, res) {
 
@@ -20,11 +20,13 @@ module.exports = async function(req, res) {
     await db.getConnection();
     const rows = await db.query(`
       SELECT
-        id, domain, (user_id = ?) AS isCreator
+        id, domain, (user_id = ?) AS isCreator, global
       FROM domains
-      WHERE id IN (
-        SELECT domain_id FROM domain_users WHERE user_id = ?
-      )
+      WHERE
+        global = 1 OR id IN (
+          SELECT domain_id FROM domain_users
+          WHERE user_id = ? AND authorized = 1
+        )
     `, [
       req.session.uid,
       req.session.uid
