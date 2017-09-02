@@ -18,3 +18,7 @@ export const PURCHASE_SUBSCRIPTION = 'ACCOUNT/PURCHASE_SUBSCRIPTION';
 export const ACCOUNT = 'ACCOUNT';
 
 export const HELP_DOCS = 'DOCS';
+
+export const LIST_DOMAINS = 'DOMAINS/LIST';
+export const VIEW_DOMAIN = 'DOMAINS/VIEW';
+export const ADD_DOMAIN = 'DOMAINS/ADD';
