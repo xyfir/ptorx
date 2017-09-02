@@ -235,3 +235,12 @@ div.view-message {
     margin: auto;
   }
 }
+
+section.request-domain-access {
+  >div.request-key {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
