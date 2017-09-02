@@ -8,8 +8,6 @@ import LinkModifier from 'components/modifiers/Link';
 import LinkFilter from 'components/filters/Link';
 
 // Action creators
-import { loadModifiers } from 'actions/creators/modifiers';
-import { loadFilters } from 'actions/creators/filters';
 import { addEmail } from 'actions/creators/account/email';
 
 // Constants
@@ -41,26 +39,6 @@ export default class EmailForm extends React.Component {
       filters: this.props.email.filters, modifiers: this.props.email.modifiers,
       advancedSettingsTab: 0
     };
-  }
-
-  /**
-   * Load filters and/or modifiers if needed.
-   */
-  componentWillMount() {
-    if (!this.props.data.modifiers.length) {
-      request
-        .get('../api/modifiers')
-        .end((err, res) =>
-          this.props.dispatch(loadModifiers(res.body.modifiers))
-        );
-    }
-    if (!this.props.data.filters.length) {
-      request
-        .get('../api/filters')
-        .end((err, res) =>
-          this.props.dispatch(loadFilters(res.body.filters))
-        );
-    }
   }
 
   /**
