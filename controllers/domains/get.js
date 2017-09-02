@@ -5,9 +5,11 @@ const mysql = require('lib/mysql');
   RETURN
     {
       error: boolean, message?: string,
+
+      isCreator?: boolean,
       
       id?: number, domain?: string, domainKey?: string, verified?: boolean,
-      added?: date-string,
+      added?: date-string, global: boolean,
       users?: [{
         id: string, label: string, requestKey: string, added: date-string
       }]
@@ -23,26 +25,33 @@ module.exports = async function(req, res) {
     await db.getConnection();
     const [domain] = await db.query(`
       SELECT
-        id, domain, domain_key AS domainKey, verified, added
+        id, user_id, domain, domain_key AS domainKey, added, verified, global
       FROM domains
-      WHERE id = ? AND user_id = ?
+      WHERE id = ?
     `, [
-      req.params.domain, req.session.uid
+      req.params.domain
     ]);
 
     if (!domain) throw 'Could not find domain';
 
+    domain.isCreator = domain.user_id == req.session.uid,
+    domain.error = false;
+
+    if (!domain.isCreator) {
+      db.release();
+      return res.json(domain);
+    }
+
     domain.users = await db.query(`
       SELECT user_id AS id, label, request_key AS requestKey, added
       FROM domain_users
-      WHERE domain_id = ? AND user_id != ?
+      WHERE domain_id = ? AND user_id != ? AND authorized = 1
       ORDER BY added ASC
     `, [
       domain.id, req.session.uid
     ]);
     db.release();
 
-    domain.error = false;
     res.json(domain);
   }
   catch (err) {
