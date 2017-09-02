@@ -16,6 +16,7 @@ import Button from 'react-md/lib/Buttons/Button';
 // Components
 import Modifiers from 'components/modifiers/Index';
 import HelpDocs from 'components/misc/HelpDocs';
+import Domains from 'components/domains/Domains';
 import Account from 'components/account/Index';
 import Filters from 'components/filters/Index';
 import Emails from 'components/emails/Index';
@@ -53,36 +54,52 @@ class App extends React.Component {
       }
 
       const state = {
-        view: CREATE_REDIRECT_EMAIL, modifiers: [], filters: [], emails: [],
-        drawer: false, account: {
-          emails: [], subscription: 0
-        },
+        modifiers: [], filters: [], domains: [], emails: [], messages: [],
+        drawer: false, view: CREATE_REDIRECT_EMAIL,
+        account: {
+          emails: [], uid: 0, subscription: 0
+        }
       };
 
       request
         .get('../api/account')
         .query({ token })
-        .end((err, res) => {
-          if (err || !res.body.loggedIn) {
-            location.href = XACC + 'app/#/login/13';
-          }
-          else {
-            state.account = res.body;
+        .then(res => {
+          if (!res.body.loggedIn)
+            return location.href = XACC + 'app/#/login/13';
 
-            this.state = state;
+          state.account = res.body;
 
-            // Push initial state to store
-            store.dispatch({
-              type: INITIALIZE_STATE, state
-            });
+          return request.get('../api/domains');
+        })
+        .then(res => {
+          state.domains = res.body.domains;
+          return request.get('../api/emails');
+        })
+        .then(res => {
+          state.emails = res.body.emails;
+          return request.get('../api/filters');
+        })
+        .then(res => {
+          state.filters = res.body.filters;
+          return request.get('../api/modifiers');
+        })
+        .then(res => {
+          state.modifiers = res.body.modifiers;
 
-            // Set state based on current url hash
-            setState(store);
-            
-            // Update state according to url hash
-            window.onhashchange = () => setState(store);
-          }
-        });
+          // Push initial state to store
+          store.dispatch({
+            type: INITIALIZE_STATE, state
+          });
+          this.state = state;
+
+          // Set state based on current url hash
+          setState(store);
+          
+          // Update state according to url hash
+          window.onhashchange = () => setState(store);
+        })
+        .catch(err => swal('Error', err, 'error'));
     };
 
     const q = parseHashQuery();
@@ -95,8 +112,8 @@ class App extends React.Component {
     }
     // Attempt to login using XID/AUTH or skip to initialize()
     else if (q.xid && q.auth) {
-      q.affiliate = localStorage.getItem('affiliate') || '';
-      q.referral = localStorage.getItem('referral') || '';
+      q.affiliate = localStorage.affiliate || '',
+      q.referral = localStorage.referral || '';
       
       request
         .post('../api/account/login')
@@ -144,17 +161,15 @@ class App extends React.Component {
     if (!this.state) return <div />;
     
     const view = (() => {
+      const props = { data: this.state, dispatch: store.dispatch };
+
       switch (this.state.view.split('/')[0]) {
-        case 'MODIFIERS':
-          return <Modifiers data={this.state} dispatch={store.dispatch} />
-        case 'ACCOUNT':
-          return <Account data={this.state} dispatch={store.dispatch} />
-        case 'FILTERS':
-          return <Filters data={this.state} dispatch={store.dispatch} />
-        case 'EMAILS':
-          return <Emails data={this.state} dispatch={store.dispatch} />
-        case 'DOCS':
-          return <HelpDocs />
+        case 'MODIFIERS': return <Modifiers {...props} />
+        case 'DOMAINS': return <Domains {...props} />
+        case 'ACCOUNT': return <Account {...props} />
+        case 'FILTERS': return <Filters {...props} />
+        case 'EMAILS': return <Emails {...props} />
+        case 'DOCS': return <HelpDocs />
       }
     })();
     
@@ -193,7 +208,12 @@ class App extends React.Component {
             <a href='#modifiers/list'>
               <ListItem primaryText='Modifiers' />
             </a>,
+            <a href='#domains'>
+              <ListItem primaryText='Domains' />
+            </a>,
+
             <Divider />,
+
             <a href='#docs'>
               <ListItem primaryText='Help Docs' />
             </a>,
