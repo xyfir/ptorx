@@ -1,58 +1,54 @@
-const request = require("request");
-const db = require("lib/db");
-
-const config  = require("config");
+const request = require('superagent');
+const config = require('config');
+const mysql = require('lib/mysql');
 
 /*
-    GET api/emails/:email/messages/:message
-    RETURN
-        {
-            error: boolean, headers?: [[ header, value ]],
-            from?: string, subject?: string, text?: string, html?: string
-        }
-    DESCRIPTION
-        Return message content
+  GET api/emails/:email/messages/:message
+  RETURN
+    {
+      error: boolean, message?: string,
+      headers?: [[ header: string, value: string ]],
+      from?: string, subject?: string, text?: string, html?: string
+    }
+  DESCRIPTION
+    Return message content
 */
-module.exports = function(req, res) {
-    
-    let sql = `
-        SELECT message_key as mkey FROM messages
-        WHERE message_key = ? AND email_id IN (
-            SELECT email_id FROM redirect_emails
-            WHERE email_id = ? AND user_id = ?
-        ) AND received + 255600 > UNIX_TIMESTAMP()
-    `, vars = [
-        req.params.message,
-        req.params.email, req.session.uid
-    ];
+module.exports = async function(req, res) {
 
-    db(cn => cn.query(sql, vars, (err, rows) => {
-        cn.release();
+  const db = new mysql;
 
-        if (err || !rows.length) {
-            res.json({ error: true });
-        }
-        else {
-            // mailgun-js gives error when loading message
-            const url = "https://api:" + config.keys.mailgun
-                + "@se.api.mailgun.net/v3/domains/" + "ptorx.com"
-                + "/messages/" + req.params.message;
+  try {
+    await db.getConnection();
+    const [message] = await db.query(`
+      SELECT
+        d.domain
+      FROM
+        messages AS m, domains AS d, redirect_emails AS re
+      WHERE
+        m.message_key = ? AND re.email_id = ? AND re.user_id = ? AND
+        m.received + 255600 > UNIX_TIMESTAMP() AND
+        m.email_id = re.email_id AND d.id = re.domain_id
+    `, [
+      req.params.message, req.params.email, req.session.uid
+    ]);
+    db.release();
 
-            request.get(url, (err, response, body) => {
-                if (err) {
-                    res.json({ error: true });
-                }
-                else {
-                    body = JSON.parse(body);
+    if (!message) throw 'Could not find message';
 
-                    res.json({
-                        text: body["body-plain"], html: body["body-html"],
-                        error: false, headers: body["message-headers"],
-                        from: body["from"], subject: body["subject"]
-                    });
-                }
-            });
-        }
-    }));
+    const mgRes = await request.get(
+      config.addresses.mailgun + 'domains/' +
+      message.domain + '/messages/' + req.params.message
+    );
+
+    res.json({
+      text: mgRes.body['body-plain'], html: mgRes.body['body-html'],
+      error: false, headers: mgRes.body['message-headers'],
+      from: mgRes.body.from, subject: mgRes.body.subject
+    });
+  }
+  catch (err) {
+    db.release();
+    res.json({ error: true, message: err.toString() });
+  }
 
 };
