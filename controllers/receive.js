@@ -2,17 +2,14 @@ const escapeRegExp = require('escape-string-regexp');
 const saveMessage = require('lib/email/save-message');
 const getInfo = require('lib/email/get-info');
 const request = require('superagent');
-
-const config  = require('config');
-const mailgun = require('mailgun-js')({
-  apiKey: config.keys.mailgun, domain: 'ptorx.com'
-});
+const MailGun = require('mailgun-js');
+const config = require('config');
 
 /*
   POST api/receive/:email
   REQUIRED
     To: string, // Receiving proxy email address
-    from: string, // 'user@domain' OR 'FName LName <user@domain>'
+    from: string, // 'user@domain' OR 'Sender Name <user@domain>'
     sender: string, // Always 'user@domain'
     subject: string,
     body-plain: string,
@@ -31,12 +28,13 @@ module.exports = async function(req, res) {
   const email = req.body;
   const save = !!email['message-url'];
   
-  email.domain = email.sender.match(/.+@(.+)/)[1],
+  email.senderDomain = email.sender.match(/.+@(.+)/)[1],
+  email.proxyDomain = email.To.split('@')[1],
   email.senderName = email.from.match(/^(.+) <(.+)>$/),
   email.senderName = email.senderName ? email.senderName[1] : '';
 
   try {
-    // Get real email / filters / modifiers
+    // Get primary email / filters / modifiers
     const data = await getInfo(req.params.email, save);
 
     const headers = JSON.parse(email['message-headers']);
@@ -60,7 +58,7 @@ module.exports = async function(req, res) {
             .match(new RegExp(filter.find, 'g'));
           break;
         case 3: // From Domain
-           data.filters[i].pass = email.domain
+           data.filters[i].pass = email.senderDomain
             .match(new RegExp(`(.*)@${filter.find}'`, 'g'));
           break;
         case 4: // Text
@@ -176,7 +174,7 @@ module.exports = async function(req, res) {
             .replace(/::sender-name::/g, email.senderName)
             .replace(/::real-address::/g, data.to)
             .replace(/::proxy-address::/g, email.To)
-            .replace(/::sender-domain::/g, email.domain)
+            .replace(/::sender-domain::/g, email.senderDomain)
             .replace(/::sender-address::/g, email.sender);
       }
     });
@@ -193,6 +191,10 @@ module.exports = async function(req, res) {
         ),
         to: data.to
       };
+
+      const mailgun = MailGun({
+        apiKey: config.keys.mailgun, domain: email.proxyDomain
+      });
 
       // Download attachments and attach them to the new message
       if (email.attachments) {
