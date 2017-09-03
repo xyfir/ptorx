@@ -2,15 +2,10 @@ const validateModifiers = require('lib/email/validate-modifiers');
 const buildExpression = require('lib/mg-route/build-expression');
 const validateFilters = require('lib/email/validate-filters');
 const buildAction = require('lib/mg-route/build-action');
-const clearCache = require('lib/email/clear-cache');
 const validate = require('lib/email/validate');
-const mysql = require('lib/mysql');
-
+const MailGun = require('mailgun-js');
 const config = require('config');
-const mailgun = require('mailgun-js')({
-  apiKey: config.keys.mailgun,
-  domain: 'ptorx.com'
-});
+const mysql = require('lib/mysql');
 
 /*
   PUT api/emails/:email
@@ -36,20 +31,22 @@ module.exports = async function(req, res) {
 
     let sql = `
       SELECT
-        mg_route_id AS mgRouteId, address, (
-          SELECT address FROM main_emails
-          WHERE email_id = ? AND user_id = ?
-        ) AS toEmail
-      FROM redirect_emails
-      WHERE email_id = ? AND user_id = ?
+        re.mg_route_id AS mgRouteId, me.address AS toEmail, d.domain,
+        CONCAT(re.address, '@', d.domain) AS address
+      FROM
+        redirect_emails AS re, domains AS d, main_emails AS me
+      WHERE
+        re.email_id = ? AND
+        d.id = re.domain_id AND
+        me.email_id = ? AND me.user_id = ?
     `,
     vars = [
-      req.body.to, req.session.uid,
-      req.params.email, req.session.uid
+      req.params.email,
+      req.body.to, req.session.uid
     ],
     rows = await db.query(sql, vars);
 
-    const { mgRouteId, address, toEmail } = rows[0];
+    const { mgRouteId, address, toEmail, domain } = rows[0];
 
     // toEmail doesn't exist and user didn't provide noToAddress
     if (!toEmail && !req.body.noToAddress)
@@ -101,6 +98,10 @@ module.exports = async function(req, res) {
         ? { address: toEmail }
         : { id: req.params.email, save: req.body.saveMail || !req.body.to }
     )
+
+    const mailgun = MailGun({
+      apiKey: config.keys.mailgun, domain
+    });
 
     // Update MailGun route
     await mailgun.routes(mgRouteId).update({
