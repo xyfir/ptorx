@@ -4,20 +4,17 @@ const validateFilters = require('lib/email/validate-filters');
 const buildAction = require('lib/mg-route/build-action');
 const validate = require('lib/email/validate');
 const generate = require('lib/email/generate');
+const MailGun = require('mailgun-js');
 const request = require('superagent');
 const mysql = require('lib/mysql');
 
 const config = require('config');
-const mailgun = require('mailgun-js')({
-  apiKey: config.keys.mailgun,
-  domain: 'ptorx.com'
-});
 
 /*
   POST api/emails
   REQUIRED
-    name: string, description: string, address: string, filters: string,
-    modifiers: string, to: number
+    name: string, description: string, address: string, domain: number,
+    filters: string, modifiers: string, to: number
   OPTIONAL
     saveMail: boolean, noSpamFilter: boolean, noToAddress: boolean,
     directForward: boolean, recaptcha: string
@@ -38,14 +35,24 @@ module.exports = async function(req, res) {
     // Load data needed for extended validation
     let sql = `
       SELECT
-        emails_created, subscription, trial, (
+        emails_created AS emailsCreated, subscription, trial, (
           SELECT COUNT(email_id) FROM redirect_emails
           WHERE user_id = ? AND created >= CURDATE()
-        ) AS emails_created_today
+        ) AS emailsCreatedToday, (
+          SELECT domain FROM domains
+          WHERE id = ? AND verified = 1 AND (
+            global = 1 OR id IN(
+              SELECT domain_id FROM domain_users
+              WHERE domain_id = ? AND user_id = ? AND authorized = 1
+            )
+          )
+        ) AS domain
       FROM users WHERE user_id = ?
     `,
     vars = [
       req.session.uid,
+      req.body.domain,
+      req.body.domain, req.session.uid,
       req.session.uid
     ],
     rows = await db.query(sql, vars);
@@ -56,10 +63,13 @@ module.exports = async function(req, res) {
     else if (Date.now() > rows[0].subscription) {
       throw 'You do not have a subscription';
     }
+    else if (!rows[0].domain) {
+      throw 'Invalid / unverified / unauthorized domain';
+    }
     else if (rows[0].trial) {
-      if (rows[0].emails_created_today >= 5)
+      if (rows[0].emailsCreatedToday >= 5)
         throw 'Trial users can only create 5 emails per day';
-      else if (rows[0].emails_created >= 15)
+      else if (rows[0].emailsCreated >= 15)
         throw 'Trial users can only create 15 emails total';
 
       // Validate captcha
@@ -73,29 +83,31 @@ module.exports = async function(req, res) {
 
       if (!recaptchaRes.body.success) throw 'Invalid captcha'
     }
-    else if (rows[0].emails_created_today >= 20) {
+    else if (rows[0].emailsCreatedToday >= 20) {
       throw 'You can only create up to 20 emails per day.';
     }
 
-    let email = ''; // proxy email address
+    let address = ''; // proxy email address without @domain.com
+    const {domain} = rows[0];
 
     // Generate an available address
     if (req.body.address == '') {
-      email = await generate(db);
+      address = await generate(db, req.body.domain);
     }
     // Make sure address exists
     else {
       sql = `
-        SELECT email_id FROM redirect_emails WHERE address = ?
+        SELECT email_id FROM redirect_emails
+        WHERE address = ? AND domain_id = ?
       `,
       vars = [
-        req.body.address
+        req.body.address, req.body.domain
       ],
       rows = await db.query(sql, vars);
 
       if (rows.length) throw 'That email address is already in use';
 
-      email = req.body.address;
+      address = req.body.address;
     }
 
     sql = `
@@ -116,9 +128,11 @@ module.exports = async function(req, res) {
       description: req.body.description,
       spam_filter: !req.body.noSpamFilter,
       save_mail: req.body.saveMail,
+      domain_id: req.body.domain,
       to_email: (req.body.noToAddress ? 0 : rows[0].email_id),
       user_id: req.session.uid,
-      name: req.body.name, address: email
+      address,
+      name: req.body.name
     },
     modifiers = req.body.modifiers
       ? req.body.modifiers.split(',').map(Number) : [],
@@ -145,8 +159,9 @@ module.exports = async function(req, res) {
 
     // Build MailGun route expression(s)
     const expression = await buildExpression({
-      address: data.address, filters,
-      saveMail: data.save_mail || data.to_email == 0
+      saveMail: data.save_mail || data.to_email == 0,
+      address: data.address + '@' + domain,
+      filters
     }, db);
 
     // Build Mailgun route action(s)
@@ -155,6 +170,8 @@ module.exports = async function(req, res) {
         ? { address: rows[0].address }
         : { id, save: data.to_email == 0 || data.save_mail }
     );
+
+    const mailgun = MailGun({ apiKey: config.keys.mailgun, domain });
 
     // Create Mailgun route
     const mgRes = await mailgun.routes().create({
