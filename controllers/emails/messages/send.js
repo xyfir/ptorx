@@ -1,50 +1,57 @@
-const db = require("lib/db");
-
-const config = require("config");
-const mailgun = require("mailgun-js")({
-    apiKey: config.keys.mailgun, domain: "ptorx.com"
-});
+const MailGun = require('mailgun-js');
+const config = require('config');
+const mysql = require('lib/mysql');
 
 /*
-    POST api/emails/:email/messages/
-    REQUIRED
-        to: string, subject: string, content: string
-    RETURN
-        { error: boolean, message: string }
-    DESCRIPTION
-        Sends an email from a REDIRECT email
+  POST api/emails/:email/messages
+  REQUIRED
+    to: string, subject: string, content: string
+  RETURN
+    { error: boolean, message: string }
+  DESCRIPTION
+    Sends an email from a REDIRECT email
 */
-module.exports = function(req, res) {
+module.exports = async function(req, res) {
 
-    const sql = `
-        SELECT address, (
-            SELECT trial FROM users WHERE user_id = ?
-        ) AS trial FROM redirect_emails
-        WHERE email_id = ? AND user_id = ?
-    `, vars = [
-        req.session.uid,
-        req.params.email, req.session.uid
-    ];
+  const db = new mysql;
 
-    db(cn => cn.query(sql, vars, (err, rows) => {
-        cn.release();
+  try {
+    await db.getConnection();
+    const [row] = await db.query(`
+      SELECT
+        re.address, d.domain, u.trial
+      FROM
+        domains AS d, redirect_emails AS re, users AS u, main_emails AS me
+      WHERE
+        re.email_id = ? AND u.user_id = ? AND
+        re.user_id = u.user_id AND me.email_id = re.to_email AND
+        d.id = re.domain_id
+    `, [
+      req.params.email, req.session.uid
+    ]);
+    db.release();
 
-        if (err || !rows.length) {
-            res.json({ error: true, message: "Email does not exist" });
-        }
-        else if (rows[0].trial) {
-            res.json({ error: true, message: "Trial users cannot send mail" });
-        }
-        else {
-            const data = {
-                from: rows[0].address, to: req.body.to, subject: req.body.subject,
-                text: req.body.content
-            };
+    if (!row)
+      throw 'Email does not exist';
+    if (row.trial)
+      throw 'Trial users cannot send mail';
 
-            mailgun.messages().send(data, (err, body) => {
-                res.json({ error: !!err });
-            });
-        }
-    }));
+    const mailgun = MailGun({
+      apiKey: config.keys.mailgun, domain: row.domain
+    });
 
-};
+    await mailgun.messages().send({
+      to: req.body.to,
+      from: row.address + '@' + row.domain,
+      text: req.body.content,
+      subject: req.body.subject
+    });
+
+    res.json({ error: false });
+  }
+  catch (err) {
+    db.release();
+    res.json({ error: true, message: err });
+  }
+
+}
