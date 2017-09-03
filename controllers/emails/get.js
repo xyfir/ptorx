@@ -5,8 +5,8 @@ const mysql = require('lib/mysql');
   RETURN
     { 
       error: boolean, toEmail: string, saveMail: boolean, name: string,
+      address: string, domainId: number, directForward: boolean,
       spamFilter: boolean, id: number, description: string,
-      address: string, directForward: boolean,
       filters: [{
         id: number, name: string, description: string, type: number
       }],
@@ -15,7 +15,7 @@ const mysql = require('lib/mysql');
       }]
     }
   DESCRIPTION
-    Returns data for a specific proxy email
+    Returns full data for a single proxy email
 */
 module.exports = async function(req, res) {
 
@@ -27,8 +27,9 @@ module.exports = async function(req, res) {
     // Ensure user owns email and grab toEmail/saveMail
     let sql = `
       SELECT
-        email_id AS id, name, description, address, save_mail AS saveMail,
-        spam_filter AS spamFilter, direct_forward AS directForward,
+        email_id AS id, name, description, domain_id AS domainId, address,
+        save_mail AS saveMail, spam_filter AS spamFilter,
+        direct_forward AS directForward,
         (SELECT address FROM main_emails WHERE email_id IN (
           SELECT to_email FROM redirect_emails
           WHERE email_id = ? AND user_id = ?
