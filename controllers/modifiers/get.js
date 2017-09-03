@@ -1,45 +1,54 @@
-const db = require("lib/db");
+const mysql = require('lib/mysql');
 
 /*
-    GET api/modifiers/:mod
-    RETURN
-        {
-            error: boolean, data: json-string, linkedTo: [{ id: number, address: string }],
-            id: number, name: string, description: string, type: number
-        }
-    DESCRIPTION
-        Returns data and linkedTo for a specific modifier
+  GET api/modifiers/:mod
+  RETURN
+    {
+      error: boolean, message?: string,
+      id: number, name: string, description: string, type: number
+      data: json-string, linkedTo: [{ id: number, address: string }]
+    }
+  DESCRIPTION
+    Returns data and linkedTo for a specific modifier
 */
-module.exports = function(req, res) {
+module.exports = async function(req, res) {
 
-    let sql = `
-        SELECT modifier_id as id, name, description, type, data FROM modifiers
-        WHERE modifier_id = ? AND user_id = ?
-    `;
-    db(cn => cn.query(sql, [req.params.mod, req.session.uid], (err, rows) => {
+  const db = new mysql;
 
-        if (err || !rows.length) {
-            cn.release();
-            res.json({ error: true });
-        }
-        else {
-            let response = rows[0];
-            response.error = false;
+  try {
+    await db.getConnection();
+    const [modifier] = await db.query(`
+      SELECT
+        modifier_id AS id, name, description, type, data
+      FROM modifiers
+      WHERE modifier_id = ? AND user_id = ?
+    `, [
+      req.params.mod, req.session.uid
+    ]);
 
-            sql = `
-                SELECT address, email_id as id FROM redirect_emails WHERE email_id IN (
-                    SELECT email_id FROM linked_modifiers WHERE modifier_id = ?
-                )
-            `;
-            cn.query(sql, [req.params.mod], (err, rows) => {
-                cn.release();
+    if (!modifier) throw 'Could not find modifier';
 
-                response.linkedTo = (err || !rows.length ? [] : rows);
+    modifier.error = false;
 
-                res.json(response);
-            });
-        }
+    modifier.linkedTo = await db.query(`
+    SELECT
+      email_id AS id, CONCAT(re.address, '@', d.domain) AS address
+    FROM
+      redirect_emails AS re, domains AS d
+    WHERE
+      re.email_id IN (
+        SELECT email_id FROM linked_modifiers WHERE modifier_id = ?
+      ) AND d.id = re.domain_id
+    `, [
+      req.params.mod
+    ]);
+    db.release();
 
-    }));
+    res.json(modifier);
+  }
+  catch (err) {
+    db.release();
+    res.json({ error: true, message: string });
+  }
 
 };
