@@ -1,55 +1,69 @@
-const clearCache = require("lib/email/clear-cache");
-const db = require("lib/db");
-
-let config = require("config");
-let mailgun = require("mailgun-js")({
-    apiKey: config.keys.mailgun, domain: "ptorx.com"
-});
+const MailGun = require('mailgun-js');
+const config = require('config');
+const mysql = require('lib/mysql');
 
 /*
-    DELETE api/emails/:email
-    RETURN
-        { error: boolean }
-    DESCRIPTION
-        Deletes a redirect email, its MailGun route, and any entries in linked_modifiers|filters
+  DELETE api/emails/:email
+  RETURN
+    { error: boolean, message?: string }
+  DESCRIPTION
+    Marks a proxy email as deleted, delete its MailGun route, and deletes its
+    links to any filters or modifiers
 */
-module.exports = function(req, res) {
+module.exports = async function(req, res) {
 
-    let sql = `
-        SELECT mg_route_id as route FROM redirect_emails WHERE email_id = ? AND user_id = ?
-    `;
-    db(cn => cn.query(sql, [req.params.email, req.session.uid], (err, rows) => {
-        if (err || !rows.length) {
-            cn.release();
-            res.json({ error: true });
-        }
-        else {
-            sql = `
-                UPDATE redirect_emails SET user_id = 0, to_email = 0, name = '',
-                description = '', mg_route_id = '' WHERE email_id = ?
-            `;
+  const db = new mysql;
 
-            cn.query(sql, [req.params.email], (err, result) => {
-                if (err || !result.affectedRows) {
-                    cn.release();
-                    res.json({ error: true });
-                }
-                else {
-                    clearCache(req.params.email);
-                    mailgun.routes(rows[0].route).delete((err, body) => {});
+  try {
+    await db.getConnection();
+    const [email] = await db.query(`
+      SELECT
+        re.mg_route_id AS mgRouteId, d.domain
+      FROM
+        redirect_emails AS re, domains AS d
+      WHERE
+        re.email_id = ? AND re.user_id = ? AND d.id = re.domain_id
+    `, [
+      req.params.email, req.session.uid
+    ]);
 
-                    res.json({ error: false });
+    if (!email) throw 'Could not find email in your account';
 
-                    sql = "DELETE FROM linked_filters WHERE email_id = ?";
-                    cn.query(sql, [req.params.email], (err, result) => {
-                        sql = "DELETE FROM linked_modifiers WHERE emails_id = ?"
-                        cn.query(sql, [req.params.email], (err, result) => {
-                            cn.release();
-                        });
-                    });
-                }
-            });
-        }
-    }));
+    // Remove any information that could be linked to the creator
+    // Keep in database so that a 'deleted' proxy email cannot be created again
+    await db.query(`
+      UPDATE redirect_emails SET
+        user_id = 0, to_email = 0, name = '', description = '',
+        mg_route_id = ''
+      WHERE email_id = ?
+    `, [
+      req.params.email
+    ]);
+
+    const mailgun = MailGun({
+      apiKey: config.keys.mailgun, domain: email.domain
+    });
+
+    await mailgun.routes(email.mgRouteId).delete();
+
+    // Because proxy email is not actually getting deleted and thus won't
+    // trigger a foreign key ON DELETE CASCADE we must manually remove the
+    // linked filters and modifiers
+    await db.query(
+      'DELETE FROM linked_filters WHERE email_id = ?',
+      [req.params.email]
+    );
+    await db.query(
+      'DELETE FROM linked_modifiers WHERE email_id = ?',
+      [req.params.email]
+    );
+    db.release();
+
+    res.json({ error: false });
+  }
+  catch (err) {
+    db.release();
+    res.json({ error: true, message: err });
+  }
 
 };
