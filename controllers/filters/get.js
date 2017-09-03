@@ -1,49 +1,61 @@
-const db = require("lib/db");
+const mysql = require('lib/mysql');
 
 /*
-    GET api/filters/:filter
-    RETURN
-        {
-            error: boolean, find: string, acceptOnMatch: boolean,
-            regex: boolean, linkedTo: [{ id: number, address: string }],
-            id: number, name: string, description: string, type: number
-        }
-    DESCRIPTION
-        Returns data for a specific filter
+  GET api/filters/:filter
+  RETURN
+    {
+      error: boolean, message?: string,
+      
+      id: number, name: string, description: string, type: number,
+      find: string, acceptOnMatch: boolean, regex: boolean,
+      linkedTo: [{
+        id: number, address: string
+      }]
+    }
+  DESCRIPTION
+    Returns data for a specific filter
 */
-module.exports = function(req, res) {
+module.exports = async function(req, res) {
 
-    let sql = `
-        SELECT filter_id as id, name, description, type, find, accept_on_match as acceptOnMatch,
-        use_regex as regex FROM filters WHERE filter_id = ? AND user_id = ?
-    `;
-    db(cn => cn.query(sql, [req.params.filter, req.session.uid], (err, rows) => {
+  const db = new mysql;
 
-        if (err || !rows.length) {
-            cn.release();
-            res.json({ error: true });
-        }
-        else {
-            let response = rows[0];
-            
-            response.error = false;
-            response.regex = !!(+response.regex);
-            response.acceptOnMatch = !!(+response.acceptOnMatch);
+  try {
+    await db.getConnection();
+    const [filter] = await db.query(`
+      SELECT
+        filter_id AS id, name, description, type, find,
+        accept_on_match as acceptOnMatch, use_regex AS regex
+      FROM filters
+      WHERE filter_id = ? AND user_id = ?
+    `, [
+      req.params.filter, req.session.uid
+    ]);
 
-            sql = `
-                SELECT address, email_id as id FROM redirect_emails WHERE email_id IN (
-                    SELECT email_id FROM linked_filters WHERE filter_id = ?
-                )
-            `;
-            cn.query(sql, [req.params.filter], (err, rows) => {
-                cn.release();
+    if (!filter) throw 'Could not find filter';
 
-                response.linkedTo = (err || !rows.length ? [] : rows);
+    filter.error = false,
+    filter.regex = !!+filter.regex,
+    filter.acceptOnMatch = !!+filter.acceptOnMatch;
 
-                res.json(response);
-            });
-        }
+    filter.linkedTo = await db.query(`
+      SELECT
+        email_id AS id, CONCAT(re.address, '@', d.domain) AS address
+      FROM
+        redirect_emails AS re, domains AS d
+      WHERE
+        re.email_id IN (
+          SELECT email_id FROM linked_filters WHERE filter_id = ?
+        ) AND d.id = re.domain_id
+    `, [
+      req.params.filter
+    ]);
+    db.release();
 
-    }));
+    res.json(filter);
+  }
+  catch (err) {
+    db.release();
+    res.json({ error: true, message: err });
+  }
 
 };
