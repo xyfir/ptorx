@@ -1,75 +1,65 @@
-const db = require("lib/db");
-
-const config = require("config");
-const mailgun = require("mailgun-js")({
-    apiKey: config.keys.mailgun, domain: "ptorx.com"
-});
+const MailGun = require('mailgun-js');
+const request = require('superagent');
+const config = require('config');
+const mysql = require('lib/mysql');
 
 /*
-    POST api/emails/:email/messages/:message
-    REQUIRED
-        content: string
-    RETURN
-        { error: boolean, message: string }
-    DESCRIPTION
-        Send reply to a stored message
+  POST api/emails/:email/messages/:message
+  REQUIRED
+    content: string
+  RETURN
+    { error: boolean, message: string }
+  DESCRIPTION
+    Send reply to a stored message
 */
-module.exports = function(req, res) {
+module.exports = async function(req, res) {
 
-    // Get message_key and address
-    const sql = `
-        SELECT address, (
-            SELECT message_key FROM messages
-            WHERE message_key = ? AND email_id = ?
-        ) AS mkey, (
-            SELECT trial FROM users WHERE user_id = ?
-        ) AS trial FROM redirect_emails
-        WHERE email_id = ? AND user_id = ?
-    `, vars = [
-        req.params.message, req.params.email,
-        req.session.uid,
-        req.params.email, req.session.uid
-    ];
+  const db = new mysql;
 
-    db(cn => cn.query(sql, vars, (err, rows) => {
-        cn.release();
-        
-        if (err || !rows.length) {
-            res.json({ error: true, message: "Message does not exist" });
-        }
-        else if (rows[0].trial) {
-            res.json({
-                error: true, message: "Trial users cannot reply to mail"
-            });
-        }
-        else {
-            // Get original messages' data
-            mailgun.messages(rows[0].mkey).info((err, data) => {
-                if (err) {
-                    res.json({
-                        error: true, message: "An unknown error occured"
-                    });
-                }
-                else {
-                    data = {
-                        from: rows[0].address, to: data.sender,
-                        text: req.body.content, subject: "Re: " + data.subject
-                    };
+  try {
+    await db.getConnection();
+    const [row] = await db.query(`
+      SELECT
+        re.address, d.domain, m.message_url AS msgUrl, u.trial
+      FROM
+        messages AS m, domains AS d, redirect_emails AS re, users AS u
+      WHERE
+        m.message_key = ? AND re.email_id = ? AND u.user_id = ? AND
+        m.received + 255600 > UNIX_TIMESTAMP() AND re.user_id = u.user_id AND
+        m.email_id = re.email_id AND d.id = re.domain_id
+    `, [
+      req.params.message, req.params.email, req.session.uid
+    ]);
+    db.release();
 
-                    // Send reply
-                    mailgun.messages().send(data, (err, body) => {
-                        if (err) {
-                            res.json({
-                                error: true, message: "An unknown error occured"
-                            });
-                        }
-                        else {
-                            res.json({ error: false });
-                        }
-                    });
-                }
-            });
-        }
-    }));
+    if (!row)
+      throw 'Message does not exist';
+    if (row.trial)
+      throw 'Trial users cannot reply to mail';
+
+    // Get original messages' data
+    // Cannot load message with mailgun-js
+    const {body: message} = await request
+      .get(row.msgUrl)
+      .auth('api', config.keys.mailgun);
+
+    const mailgun = MailGun({
+      apiKey: config.keys.mailgun, domain: row.domain
+    });
+
+    // Send reply
+    await mailgun.messages().send({
+      to: message.sender,
+      from: row.address + '@' + row.domain,
+      text: req.body.content,
+      subject: 'Re: ' + message.subject
+    });
+
+    res.json({ error: false });
+  }
+  catch (err) {
+    db.release();
+    res.json({ error: true, message: err });
+  }
 
 };
