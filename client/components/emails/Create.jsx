@@ -35,7 +35,7 @@ export default class CreateEmail extends React.Component {
           if (!err && !res.body.error) {
             this.setState({
               showAdvanced: true, loading: false,
-              email: Object.assign(email, res.body)
+              email: Object.assign({}, email, res.body)
             });
           }
         });
