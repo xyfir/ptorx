@@ -1,50 +1,25 @@
-const cron = require("cron");
+const sendSubscriptionEpirationEmails =
+  require('cron/send-subscription-expiration-emails');
+const deleteExpiredMessages =
+  require('cron/delete-expired-messages');
+const expireSubscriptions =
+  require('cron/expire-subscriptions');
 
-/*
-    Sets tasks to run at appropriate times
-    Handles errors / responses from tasks
-*/
+/**
+ * Sets tasks to run at appropriate times.
+ */
 module.exports = function() {
-    
-    const tasks = {
-        sendSubscriptionEpirationEmails:
-            require("./send-subscription-expiration-emails"),
-        deleteExpiredMessages:
-            require("./delete-expired-messages"),
-        expireSubscriptions:
-            require("./expire-subscriptions")
-    };
 
-    // Delete expired messages
-    // Runs every hour
-    // No retry
-    new cron.CronJob(
-        "2 * * * *",
-        () => tasks.deleteExpiredMessages(),
-        () => 1,
-        true
-    );
+  // Delete expired messages
+  // Run every hour
+  setInterval(deleteExpiredMessages, 3600 * 1000);
 
-    // Sends notification emails to users whose subscription is near expiration
-    // Run once a day
-    // Retries once on failure
-    new cron.CronJob(
-        "0 1 * * *",
-        () => tasks.sendSubscriptionEpirationEmails(err => {
-            if (err) tasks.sendSubscriptionEpirationEmails(() => 1);
-        }),
-        () => 1,
-        true
-    );
+  // Sends notification emails to users whose subscription is near expiration
+  // Run once a day
+  setInterval(sendSubscriptionEpirationEmails, 86400 * 1000);
 
-    // Expires subscriptions by deleting redirect emails and their MG routes
-    // Run once a day
-    // No retry
-    new cron.CronJob(
-        "0 2 * * *",
-        () => tasks.expireSubscriptions(),
-        () => 1,
-        true
-    );
+  // Expires subscriptions by deleting proxy emails and their MG routes
+  // Run once a day
+  setInterval(expireSubscriptions, 86400 * 1000);
 
 };
