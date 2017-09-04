@@ -21,13 +21,13 @@ module.exports = async function(req, res) {
     await db.getConnection();
     const [message] = await db.query(`
       SELECT
-        d.domain
+        message_url AS url
       FROM
-        messages AS m, domains AS d, redirect_emails AS re
+        messages AS m, redirect_emails AS re
       WHERE
         m.message_key = ? AND re.email_id = ? AND re.user_id = ? AND
         m.received + 255600 > UNIX_TIMESTAMP() AND
-        m.email_id = re.email_id AND d.id = re.domain_id
+        m.email_id = re.email_id
     `, [
       req.params.message, req.params.email, req.session.uid
     ]);
@@ -35,15 +35,15 @@ module.exports = async function(req, res) {
 
     if (!message) throw 'Could not find message';
 
-    const mgRes = await request.get(
-      config.addresses.mailgun + 'domains/' +
-      message.domain + '/messages/' + req.params.message
-    );
+    // Cannot load message with mailgun-js
+    const {body: data} = await request
+      .get(message.url)
+      .auth('api', config.keys.mailgun);
 
     res.json({
-      text: mgRes.body['body-plain'], html: mgRes.body['body-html'],
-      error: false, headers: mgRes.body['message-headers'],
-      from: mgRes.body.from, subject: mgRes.body.subject
+      text: data['body-plain'], html: data['body-html'],
+      error: false, headers: data['message-headers'],
+      from: data.from, subject: data.subject
     });
   }
   catch (err) {
