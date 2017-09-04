@@ -17,12 +17,8 @@ export default props => (
 
     <List className='domains-list section md-paper md-paper--1'>{
       props.data.domains.map(d =>
-        <a href={'#domains/' + d.id}>
-          <ListItem
-            threeLines
-            key={d.id}
-            primaryText={d.domain}
-          />
+        <a href={'#domains/' + d.id} key={d.id}>
+          <ListItem primaryText={d.domain} />
         </a>
       )
     }</List>
