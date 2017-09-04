@@ -191,9 +191,9 @@ export default class EmailForm extends React.Component {
     data.name = data.name || 'Untitled Proxy Email';
 
     if (this.props.create) {
+      data.domain = this.refs.domain.state.value,
       data.address = this.refs.address.getField().value
-        ? this.refs.address.getField().value.split('@')[0] +
-          this.refs.domain.state.value
+        ? this.refs.address.getField().value.split('@')[0]
         : '',
       data.description = data.description ||
         'Created on ' + moment().format('YYYY-MM-DD, HH:mm:ss');
@@ -258,8 +258,12 @@ export default class EmailForm extends React.Component {
               label='Domain'
               position={SelectField.Positions.BELOW}
               className='md-cell'
-              menuItems={['@ptorx.com']}
-              defaultValue='@ptorx.com'
+              menuItems={
+                this.props.data.domains.map(d =>
+                  Object({ label: d.domain, value: d.id })
+                )
+              }
+              defaultValue={1}
             />
           </div>
         ) : null}
