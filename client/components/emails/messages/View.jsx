@@ -98,7 +98,7 @@ export default class ViewMessage extends React.Component {
             <Button
               raised primary
               label='Send'
-              onClick={() => this.onSend()}
+              onClick={() => this.onReply()}
             >send</Button>
           </Paper>
         ) : (
