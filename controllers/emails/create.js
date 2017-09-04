@@ -6,9 +6,8 @@ const validate = require('lib/email/validate');
 const generate = require('lib/email/generate');
 const MailGun = require('mailgun-js');
 const request = require('superagent');
-const mysql = require('lib/mysql');
-
 const config = require('config');
+const mysql = require('lib/mysql');
 
 /*
   POST api/emails
@@ -175,7 +174,7 @@ module.exports = async function(req, res) {
 
     // Create Mailgun route
     const mgRes = await mailgun.routes().create({
-      description: '',
+      description: 'Ptorx ' + config.environment.type,
       expression,
       priority: (data.spam_filter ? 2 : 0),
       action

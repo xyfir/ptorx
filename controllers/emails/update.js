@@ -105,7 +105,7 @@ module.exports = async function(req, res) {
 
     // Update MailGun route
     await mailgun.routes(mgRouteId).update({
-      description: '',
+      description: 'Ptorx ' + config.environment.type,
       expression,
       priority: (!req.body.noSpamFilter ? 2 : 0),
       action
