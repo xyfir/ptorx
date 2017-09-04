@@ -28,14 +28,19 @@ module.exports = async function(req, res) {
 
   try {
     await db.getConnection();
-    const [domain] = await db.query(`
-      SELECT id FROM domains WHERE domain = ?
+    const [row] = await db.query(`
+      SELECT
+        (SELECT id FROM domains WHERE domain = ?) AS domainId,
+        (SELECT trial FROM users WHERE user_id = ?) AS trial
     `, [
-      req.body.domain
+      req.body.domain,
+      req.session.uid
     ]);
 
+    if (row.trial) throw 'Trial users cannot add domains';
+
     // Domain already exists; user must request access
-    if (domain) {
+    if (row.domain) {
       // Generate request key
       const key = uuid();
 
@@ -44,7 +49,7 @@ module.exports = async function(req, res) {
         INSERT INTO domain_users SET ?
         ON DUPLICATE KEY UPDATE request_key = '${key}'
       `, {
-        domain_id: domain.id, user_id: req.session.uid, request_key: key
+        domain_id: row.domainId, user_id: req.session.uid, request_key: key
       });
 
       db.release();
