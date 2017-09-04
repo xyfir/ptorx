@@ -143,8 +143,9 @@ class App extends React.Component {
           <li>Limited to creating up to 5 proxy emails a day</li>
           <li>Limited to creating up to 15 proxy emails total</li>
           <li>Must complete a verification captcha before creating a proxy email</li>
-          <li>Cannot have more than one main email address</li>
+          <li>Cannot have more than one primary email address</li>
           <li>Cannot send messages or reply to received mail</li>
+          <li>Cannot add or request access to custom domains</li>
         </ol>
         These restrictions can be removed by purchasing a subscription.
       `,
