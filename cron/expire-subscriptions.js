@@ -1,55 +1,36 @@
-const db = require("lib/db");
+const deleteEmail = require('controllers/emails/delete');
+const mysql = require('lib/mysql');
 
-const config = require("config");
-const mailgun = require("mailgun-js")({
-    apiKey: config.keys.mailgun, domain: "ptorx.com"
-});
+/**
+ * 'Delete' all proxy emails owned by a user with an expired subscription. 
+ * *Warning* This task was not built with performance in mind.
+ */
+module.exports = async function() {
 
-module.exports = () => db(cn => {
+  const db = new mysql;
 
-    let sql = `
-        SELECT
-            re.mg_route_id AS route, re.email_id AS eid,
-            u.user_id AS uid
-        FROM
-            redirect_emails AS re, users AS u
-        WHERE
-            re.user_id = u.user_id
-            AND u.subscription < UNIX_TIMESTAMP() * 1000
-    `;
+  try {
+    await db.getConnection();
+    const emails = await db.query(`
+      SELECT
+        re.email_id AS id, re.user_id AS uid
+      FROM
+        redirect_emails AS re, users AS u
+      WHERE
+        u.subscription < UNIX_TIMESTAMP() * 1000 AND u.user_id != 0 AND
+        re.user_id = u.user_id
+    `);
+    db.release();
 
-    const expiredUsers = [], deleteEmails = [];
+    for (let email of emails) {
+      await deleteEmail(
+        { params: { email: email.id }, session: { uid: email.uid } },
+        { json: () => 1 }
+      );
+    }
+  }
+  catch (err) {
+    db.release();
+  }
 
-    const finish = () => {
-        sql = `
-            UPDATE users SET subscription = 0, trial = 0 WHERE user_id IN (?)
-        `;
-        
-        cn.query(sql, [expiredUsers], () => {
-            sql = `
-                DELETE FROM redirect_emails WHERE email_id IN (?)
-            `;
-
-            cn.query(sql, [deleteEmails], () => cn.release());
-        });
-    };
-
-    cn.query(sql, vars)
-        .on("error", finish)
-        .on("result", (row) => {
-            cn.pause();
-
-            mailgun.routes(row.route).delete((err, body) => {
-                if (!err) {
-                    deleteEmails.push(row.eid);
-
-                    if (expiredUsers.indexOf(row.uid) == -1)
-                        expiredUsers.push(row.uid);
-                }
-
-                cn.resume();
-            });
-        })
-        .on("end", finish);
-
-});
+}
