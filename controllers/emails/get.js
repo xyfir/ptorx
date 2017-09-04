@@ -5,8 +5,8 @@ const mysql = require('lib/mysql');
   RETURN
     { 
       error: boolean, toEmail: string, saveMail: boolean, name: string,
-      address: string, domainId: number, directForward: boolean,
-      spamFilter: boolean, id: number, description: string,
+      address: string, directForward: boolean, description: string,
+      spamFilter: boolean, id: number
       filters: [{
         id: number, name: string, description: string, type: number
       }],
@@ -24,21 +24,20 @@ module.exports = async function(req, res) {
   try {
     await db.getConnection();
 
-    // Ensure user owns email and grab toEmail/saveMail
     let sql = `
       SELECT
-        email_id AS id, name, description, domain_id AS domainId, address,
-        save_mail AS saveMail, spam_filter AS spamFilter,
-        direct_forward AS directForward,
-        (SELECT address FROM main_emails WHERE email_id IN (
-          SELECT to_email FROM redirect_emails
-          WHERE email_id = ? AND user_id = ?
-        )) AS toEmail
-      FROM redirect_emails WHERE email_id = ?
+        re.email_id AS id, re.name, re.description, re.save_mail AS saveMail,
+        CONCAT(re.address, '@', d.domain) AS address, me.address AS toEmail,
+        re.spam_filter AS spamFilter, re.direct_forward AS directForward
+      FROM
+        redirect_emails AS re, main_emails AS me, domains AS d
+      WHERE
+        re.email_id = ? AND re.user_id = ? AND
+        me.email_id = re.to_email AND
+        d.id = re.domain_id
     `,
     vars = [
-      req.params.email, req.session.uid,
-      req.params.email
+      req.params.email, req.session.uid
     ],
     rows = await db.query(sql, vars);
 
