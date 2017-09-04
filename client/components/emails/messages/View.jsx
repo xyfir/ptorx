@@ -37,17 +37,10 @@ export default class ViewMessage extends React.Component {
       .post(`../api/emails/${this.state.id}/messages/${this.state.message}`)
       .send({ content: this.refs.message.getField().value })
       .end((err, res) => {
-        if (err || res.body.error) {
+        if (err || res.body.error)
           swal('Error', res.body.message, 'error');
-        }
-        else {
-          swal(
-            'Success',
-            `Message sent to ${this.refs.to.getField().value}`,
-            'success'
-          );
-          location.hash = `#emails/messages/${this.state.id}/list`;
-        }
+        else
+          swal('Success', 'Reply sent.', 'success');
       });
   }
   
@@ -97,7 +90,7 @@ export default class ViewMessage extends React.Component {
             
             <Button
               raised primary
-              label='Send'
+              label='Reply'
               onClick={() => this.onReply()}
             >send</Button>
           </Paper>
