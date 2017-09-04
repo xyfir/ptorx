@@ -7,7 +7,6 @@
     "app-module-path": "^2.2.0",
     "body-parser": "^1.17.2",
     "copyr": "^1.0.3",
-    "cron": "^1.2.1",
     "escape-string-regexp": "^1.0.5",
     "express": "^4.15.4",
     "express-mysql-session": "^1.2.2",
