@@ -36,7 +36,7 @@ module.exports = async function(req, res) {
 
     // Get user data from db
     let sql = `
-      SELECT user_id, subscription, xad_id FROM users WHERE xyfir_id = ?
+      SELECT user_id, subscription FROM users WHERE xyfir_id = ?
     `,
     vars = [
       req.body.xid
@@ -51,7 +51,7 @@ module.exports = async function(req, res) {
       const insert = {
         xyfir_id: req.body.xid, email: xaccResult.body.email,
         subscription: moment().add(7, 'days').unix() * 1000,
-        xad_id: xaccResult.body.xadid, referral: '{}'
+        referral: '{}'
       };
 
       // Save referral info
@@ -98,7 +98,6 @@ module.exports = async function(req, res) {
       db.release();
 
       req.session.uid = result.insertId,
-      req.session.xadid = xaccResult.body.xadid,
       req.session.subscription = insert.subscription;
 
       res.json({
@@ -123,7 +122,6 @@ module.exports = async function(req, res) {
       if (!result.affectedRows) throw '---';
 
       req.session.uid = rows[0].user_id,
-      req.session.xadid = rows[0].xad_id,
       req.session.subscription = rows[0].subscription;
 
       res.json({
