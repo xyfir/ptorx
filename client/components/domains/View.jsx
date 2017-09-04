@@ -43,11 +43,11 @@ export default class ViewDomain extends React.Component {
     }, () =>
       request
         .delete(
-          `../api/domains/${this.state.id}/users/${this.props.account.uid}`
+          `../api/domains/${this.state.id}/users/${this.props.data.account.uid}`
         )
         .end((err, res) => err || res.body.error
           ? swal('Error', res.body.message, 'error')
-          : location.hash = '#domains' && location.reload()
+          : (location.hash = '#domains') && location.reload()
         )
     );
   }
@@ -68,7 +68,7 @@ export default class ViewDomain extends React.Component {
         .delete(`../api/domains/${this.state.id}`)
         .end((err, res) => err || res.body.error
           ? swal('Error', res.body.message, 'error')
-          : location.hash = '#domains' && location.reload()
+          : (location.hash = '#domains') && location.reload()
         )
     );
   }
