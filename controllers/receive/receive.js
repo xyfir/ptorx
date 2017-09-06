@@ -185,10 +185,7 @@ module.exports = async function(req, res) {
         subject: email.subject,
         text: email['body-plain'],
         from: email.To,
-        html: (
-          email['body-html'] &&
-          (!textonly ? email['body-html'] : '')
-        ),
+        html: email['body-html'] && !textonly ? email['body-html'] : '',
         to: data.to
       };
 
@@ -232,11 +229,14 @@ module.exports = async function(req, res) {
         }
       }
 
-      // Forward message to user's main email
-      await mailgun.messages().send(message);
-
       // Optionally save message to messages table
-      if (save) saveMessage(req, false);
+      if (save) {
+        const messageId = await saveMessage(req, false);
+        message['h:Reply-To'] = `${messageId}--reply@${email.proxyDomain}`;
+      }
+
+      // Forward message to user's primary email
+      await mailgun.messages().send(message);
     }
     // Message must be saved since it's not being redirected
     else {
