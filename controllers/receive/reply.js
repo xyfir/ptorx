@@ -24,7 +24,6 @@ module.exports = async function(req, res) {
     await db.getConnection();
     const [row] = await db.query(`
       SELECT
-        d.domain,
         m.sender AS originalSender,
         CONCAT(re.address, '@', d.domain) AS proxyAddress
       FROM
@@ -38,19 +37,33 @@ module.exports = async function(req, res) {
     ]);
     db.release();
 
-    if (!row) throw 'Invalid / expired message';
-
     const mailgun = MailGun({
-      apiKey: config.keys.mailgun, domain: row.domain
+      apiKey: config.keys.mailgun, domain: req.body.To.split('@')[1]
     });
 
-    await mailgun.messages().send({
-      subject: req.body.subject,
-      text: req.body['body-plain'],
-      from: row.proxyAddress,
-      html: req.body['body-html'] || '',
-      to: row.originalSender
-    });
+    // Notify sender that the message cannot be replied to
+    if (!row) {
+      await mailgun.messages().send({
+        subject: req.body.subject,
+        text:
+          'The message linked to this `Reply-To` address is either expired ' +
+          'or for some other reason cannot be found on Ptorx. You will not ' +
+          'be able to reply to it. Please start a new conversation with the ' +
+          'original sender.',
+        from: req.body.To,
+        to: req.body.sender
+      });
+    }
+    // Send reply
+    else {
+      await mailgun.messages().send({
+        subject: req.body.subject,
+        text: req.body['body-plain'],
+        from: row.proxyAddress,
+        html: req.body['body-html'] || '',
+        to: row.originalSender
+      });
+    }
 
     res.status(200).send();
   }
