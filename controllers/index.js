@@ -11,7 +11,8 @@ const upload = multer({
 });
 
 /* MAILGUN */
-router.post('/receive/:email', upload.any(), require('./receive'));
+router.post('/receive/reply', upload.any(), require('./receive/reply'));
+router.post('/receive/:email', upload.any(), require('./receive/receive'));
 
 /* PROXY EMAILS */
 router.route('/emails')
