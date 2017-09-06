@@ -31,7 +31,9 @@ export default class MessageList extends React.Component {
       });
   }
 
-  onDelete(id) {
+  onDelete() {
+    const id = this.state.selected;
+
     swal({
       title: 'Are you sure?',
       text: 'This action cannot be undone',
@@ -42,10 +44,13 @@ export default class MessageList extends React.Component {
     }, () => request
       .delete(`../api/emails/${this.state.emailId}/messages/${id}`)
       .end((err, res) => {
-        if (err || res.body.error)
+        if (err || res.body.error) {
           swal('Error', 'Could not delete message', 'error');
-        else
+        }
+        else {
+          this.setState({ selected: '' })
           this.props.dispatch(deleteMessage(id));
+        }
       })
     );
   }
@@ -92,7 +97,7 @@ export default class MessageList extends React.Component {
           title={
             selected && messages.find(m => m.id == selected).subject
           }
-          onHide={() => this.setState({ selected: 0 })}
+          onHide={() => this.setState({ selected: '' })}
           visible={!!selected}
         >
           <List>
