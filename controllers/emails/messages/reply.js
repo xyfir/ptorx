@@ -24,7 +24,7 @@ module.exports = async function(req, res) {
       FROM
         messages AS m, domains AS d, redirect_emails AS re, users AS u
       WHERE
-        m.message_key = ? AND re.email_id = ? AND u.user_id = ? AND
+        m.id = ? AND re.email_id = ? AND u.user_id = ? AND
         m.received + 255600 > UNIX_TIMESTAMP() AND re.user_id = u.user_id AND
         m.email_id = re.email_id AND d.id = re.domain_id
     `, [
