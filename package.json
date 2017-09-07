@@ -12,7 +12,6 @@
     "express-mysql-session": "^1.2.2",
     "express-session": "^1.15.5",
     "fuse.js": "^3.0.5",
-    "in-app-purchase": "^1.7.1",
     "mailcomposer": "^4.0.2",
     "mailgun-js": "^0.13.1",
     "marked": "^0.3.6",
@@ -25,9 +24,8 @@
     "react-md": "^1.0.19",
     "react-stripe-checkout": "^2.6.3",
     "redux": "^3.7.2",
-    "request": "^2.81.0",
     "rword": "^2.1.0",
-    "stripe": "^4.24.1",
+    "stripe": "^4.25.0",
     "superagent": "^3.6.0",
     "uuid": "^3.1.0"
   },
