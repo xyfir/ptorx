@@ -79,34 +79,13 @@ section.email-form {
   }
 }
 
-section.purchase-subscription.stripe {
-  >button {
-    display: block !important;
-    margin: 1em auto;
+section.purchase-subscription {
+  >div.info {
+    text-align: center;
   }
-}
 
-.purchase-subscription.native {
-  .product {
-    background-color: $lllgray;
-    width: 80%;
-    padding: 0.5em;
-    margin: 1em auto;
-    font-size: 125%;
-
-    .title {
-      font-weight: bold;
-    }
-
-    .description {
-      display: block;
-      margin-bottom: 0.5em;
-    }
-
-    .btn-primary {
-      min-width: 10em;
-      font-size: 60%;
-    }
+  >button.StripeCheckout {
+    display: none !important;
   }
 }
 
@@ -134,32 +113,6 @@ section.purchase-subscription.stripe {
 
 .linked-emails > a {
   display: block;
-}
-
-.account { 
-  h3 {
-    margin-bottom: 0.6em;
-  }
-
-  .subscription > .btn {
-    margin-top: 1em;
-  }
-  
-  .main-emails {
-    input {
-      display: inline;
-    }
-    
-    >.list {
-      padding: 0.5em;
-      margin: auto;
-
-      a {
-        font-size: 90%;
-        margin: auto;
-      } 
-    } 
-  }
 }
 
 div.controls > a {
@@ -242,5 +195,20 @@ section.request-domain-access {
     display: flex;
     align-items: center;
     justify-content: center;
+  }
+}
+
+div.account {
+  >section.primary-emails {
+    >div.add {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    >ul.md-list {
+      margin-bottom: 0.5em;
+    }
   }
 }
