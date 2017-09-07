@@ -17,7 +17,7 @@ import Button from 'react-md/lib/Buttons/Button';
 import Modifiers from 'components/modifiers/Index';
 import HelpDocs from 'components/misc/HelpDocs';
 import Domains from 'components/domains/Domains';
-import Account from 'components/account/Index';
+import Account from 'components/account/Account';
 import Filters from 'components/filters/Index';
 import Emails from 'components/emails/Index';
 
@@ -106,7 +106,7 @@ class App extends React.Component {
 
     // PhoneGap app opens to ptorx.com/panel/#?phonegap=1
     if (q.phonegap) {
-      localStorage.setItem('isPhoneGap', 'true');
+      localStorage.isPhoneGap = true;
       initialize();
       location.hash = '';
     }
@@ -215,6 +215,9 @@ class App extends React.Component {
 
             <Divider />,
 
+            <a href='https://xyfir.com/#/contact'>
+              <ListItem primaryText='Contact Us' />
+            </a>,
             <a href='#docs'>
               <ListItem primaryText='Help Docs' />
             </a>,
