@@ -1,24 +1,18 @@
 const request = require('superagent');
+const moment = require('moment');
 const stripe = require('stripe');
 const mysql = require('lib/mysql');
 
-const subscriptions = require('subscriptions');
 const config = require('config');
 
-function setSubscription(subscription, days) {
-  return Date.now() > subscription
-    ? (Date.now() + ((60 * 60 * 24 * days) * 1000))
-    : (subscription + ((60 * 60 * 24 * days) * 1000));
-}
-
 /*
-  POST api/account/stripe-purchase
+  POST api/account/purchase
   REQUIRED
-    token: string, subscription: number
+    token: string
   RETURN
     { error: boolean, message?: string }
   DESCRIPTION
-    Add months to user's subscription after charging card via Stripe
+    Complete a user's subscription purchase
 */
 module.exports = async function(req, res) {
 
@@ -27,63 +21,50 @@ module.exports = async function(req, res) {
   try {
     await db.getConnection();
 
-    let sql = `
-      SELECT subscription, referral FROM users WHERE user_id = ?
-    `,
-    vars = [
-      req.session.uid
-    ],
-    rows = await db.query(sql, vars);
+    let rows = await db.query(
+      'SELECT subscription, referral FROM users WHERE user_id = ?',
+      [req.session.uid]
+    );
 
     if (!rows.length) throw 'Invalid user';
 
-    let {amount} = subscriptions[+req.body.subscription];
-
-    // Add days to current subscription expiration (or now())
-    const {days} = subscriptions[+req.body.subscription];
-    const subscription = setSubscription(rows[0].subscription, days);
-    
+    const subscription = setSubscription(rows[0].subscription, 365);
     const ref = JSON.parse(rows[0].referral);
+    let amount = 2500;
 
     // Discount 10% off of first purchase
     if ((ref.referral || ref.affiliate) && !ref.hasMadePurchase) {
-      ref.hasMadePurchase = true;
-      amount -= amount * 0.10;
+      ref.hasMadePurchase = true,
+      amount = 2250;
     }
 
     const charge = await stripe(config.keys.stripe).charges.create({
       amount, currency: 'usd', source: req.body.token,
-      description: 'Ptorx - Premium Subscription'
+      description: 'Ptorx'
     });
 
     // Update user's account
-    sql = `
+    const result = await db.query(`
       UPDATE users SET subscription = ?, referral = ?, trial = 0
       WHERE user_id = ?
-    `,
-    vars = [
+    `, [
       subscription, JSON.stringify(ref),
       req.session.uid
-    ];
-    const result = await db.query(sql, vars);
+    ]);
 
     if (!result.affectedRows) throw 'Could not update subscription';
       
     if (ref.referral) {
-      sql = `
-        SELECT subscription FROM users WHERE user_id = ?
-      `,
-      vars = [ref.referral],
-      rows = await db.query(sql, vars);
+      rows = await db.query(
+        'SELECT subscription FROM users WHERE user_id = ?',
+        [ref.referral]
+      );
 
       if (rows.length) {
-        sql = `
-          UPDATE users SET subscription = ? WHERE user_id = ?
-        `,
-        vars = [
-          setSubscription(rows[0].subscription, (days / 30) * 7 ), ref.referral
-        ];
-        await db.query(sql, vars);
+        await db.query(
+          'UPDATE users SET subscription = ? WHERE user_id = ?',
+          [setSubscription(rows[0].subscription, 30), ref.referral]
+        );
       }
     }
     else if (ref.affiliate) {
@@ -107,3 +88,15 @@ module.exports = async function(req, res) {
   }
 
 };
+
+/**
+ * Adds days to the user's subscription.
+ * @param {number} subscription
+ * @param {number} days
+ * @return {number}
+ */
+function setSubscription(subscription, days) {
+  return Date.now() > subscription
+    ? +moment().add(days, 'days').format('x')
+    : +moment(subscription).add(days, 'days').format('x');
+}
