@@ -50,7 +50,7 @@ module.exports = async function(req, res) {
       `;
       const insert = {
         xyfir_id: req.body.xid, email: xaccResult.body.email,
-        subscription: moment().add(7, 'days').unix() * 1000,
+        subscription: moment().add(14, 'days').unix() * 1000,
         referral: '{}'
       };
 
