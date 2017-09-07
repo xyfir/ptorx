@@ -19,9 +19,9 @@ export default function(store) {
     // Update state to reflect hash
     case 'account':
       if (hash[1] == 'purchase-subscription')
-        store.dispatch(changeView(VIEWS.PURCHASE_SUBSCRIPTION));
+        return store.dispatch(changeView(VIEWS.PURCHASE_SUBSCRIPTION));
       else
-        store.dispatch(changeView(VIEWS.ACCOUNT));
+        return store.dispatch(changeView(VIEWS.ACCOUNT));
     case 'filters':
       switch (hash[1]) {
         case 'create':
