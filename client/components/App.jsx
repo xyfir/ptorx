@@ -242,13 +242,13 @@ class App extends React.Component {
 
         <div className='main md-toolbar-relative'>
           {this.state.account.trial ? (
-            <div className='trial'>
-              <strong>Your account is currently in trial mode.</strong> Some limitations apply.
-              <a
-                className='icon-info'
+            <p className='trial'>
+              Your account is currently in trial mode. Some limitations apply.
+              <Button
+                icon
                 onClick={() => this.onShowTrialInfo()}
-              />
-            </div>    
+              >info</Button>
+            </p>    
           ) : null}
 
           {view}
