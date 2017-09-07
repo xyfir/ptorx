@@ -1,31 +1,3 @@
-.ptorx {
-  >.icon-info {
-    position: fixed;
-    bottom: 8%;
-    left: 2%;
-    font-size: 150%;
-    z-index: 1;
-  }
-
-  >.help-docs {
-    position: fixed;
-    top: 10%;
-    left: 10%;
-    right: 10%;
-    bottom: 10%;
-    z-index: 1;
-    padding: 1em;
-    overflow: auto;
-    box-shadow: 0.1em 0.1em 0.3em $black;
-    background-color: white;
-
-    >.icon-close {
-      display: block;
-      text-align: right;
-    }
-  }
-}
-
 .help-docs.markdown {
   text-align: left;
 }
@@ -120,9 +92,15 @@ div.controls > a {
   margin: 0.3em;
 }
 
-div.trial {
-  margin-bottom: 1em;
+p.trial {
   color: $dgray;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  >button {
+    margin-left: 0.2em;
+  }
 }
 
 div.search {
