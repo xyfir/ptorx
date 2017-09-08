@@ -1,5 +1,6 @@
 import request from 'superagent';
 import React from 'react';
+import swal from 'sweetalert';
 
 // Action creators
 import { loadFilters, deleteFilter } from 'actions/creators/filters';
@@ -49,28 +50,22 @@ export default class FilterList extends React.Component {
     this.setState({ selected: 0 });
 
     swal({
+      button: 'Yes',
       title: 'Are you sure?',
       text: 'This filter will be removed from any emails it is linked to.',
-      type: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#DD6B55',
-      confirmButtonText: 'Yes, delete it!'
-    }, () =>
-      request
-        .delete('../api/filters/' + id)
-        .end((err, res) => {
-          if (err || res.body.error) {
-            swal('Error', 'Could not delete filter', 'error');
-          }
-          else {
-            this.props.dispatch(deleteFilter(id));
+      icon: 'warning'
+    })
+    .then(() => request.delete('../api/filters/' + id))
+    .then(res => {
+      if (res.body.error) throw 'Could not delete filter';
 
-            // Filter was linked to emails that we must now trigger updates on
-            if (res.body.update)
-              this._removeFilter(id, this.props.data.emails, res.body.update);
-          }
-        })
-    );
+      this.props.dispatch(deleteFilter(id));
+
+      // Filter was linked to emails that we must now trigger updates on
+      if (res.body.update)
+        this._removeFilter(id, this.props.data.emails, res.body.update);
+    })
+    .catch(err => swal('Error', err.toString(), 'error'));
   }
 
   /**

@@ -1,6 +1,7 @@
 import request from 'superagent';
 import React from 'react';
 import copy from 'copyr';
+import swal from 'sweetalert';
 
 // Action creators
 import { loadEmails, deleteEmail } from 'actions/creators/emails';
@@ -55,23 +56,19 @@ export default class EmailList extends React.Component {
     this.setState({ selected: 0 });
 
     swal({
+      button: 'Yes',
       title: 'Are you sure?',
       text: 'You will no longer receive emails sent to this address. \
         You will not be able to recreate this address.',
-      type: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#DD6B55',
-      confirmButtonText: 'Yes, delete it!'
-    }, () =>
-      request
-        .delete('../api/emails/' + id)
-        .end((err, res) => {
-          if (err || res.body.error)
-            swal('Error', 'Could not delete email', 'error');
-          else
-            this.props.dispatch(deleteEmail(id));
-        })
-    );
+      icon: 'warning'
+    })
+    .then(() => request.delete('../api/emails/' + id))
+    .then(res => {
+      if (res.body.error) throw 'Could not delete email';
+
+      this.props.dispatch(deleteEmail(id));
+    })
+    .catch(err => swal('Error', err.toString(), 'error'));
   }
 
   /**

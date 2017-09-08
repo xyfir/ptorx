@@ -1,6 +1,7 @@
 import request from 'superagent';
 import React from 'react';
 import copy from 'copyr';
+import swal from 'sweetalert';
 
 // Action creators
 import { removeDomain } from 'actions/creators/domains';
@@ -34,22 +35,21 @@ export default class ViewDomain extends React.Component {
    */
   onRemoveFromAccount() {
     swal({
+      button: 'Yes',
       title: 'Are you sure?',
       text: 'Any proxy emails linked to this domain will be deleted.',
-      type: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#DD6B55',
-      confirmButtonText: 'Yes, delete it!'
-    }, () =>
-      request
-        .delete(
-          `../api/domains/${this.state.id}/users/${this.props.data.account.uid}`
-        )
-        .end((err, res) => err || res.body.error
-          ? swal('Error', res.body.message, 'error')
-          : (location.hash = '#domains') && location.reload()
-        )
-    );
+      icon: 'warning'
+    })
+    .then(() => request.delete(
+      `../api/domains/${this.state.id}/users/${this.props.data.account.uid}`
+    ))
+    .then(res => {
+      if (res.body.error) throw res.body.message;
+
+      location.hash = '#domains';
+      location.reload();
+    })
+    .catch(err => swal('Error', err.toString(), 'error'));
   }
 
   /**
@@ -57,20 +57,19 @@ export default class ViewDomain extends React.Component {
    */
   onRemoveFromPtorx() {
     swal({
+      button: 'Yes',
       title: 'Are you sure?',
       text: 'Any proxy emails linked to this domain will be deleted.',
-      type: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#DD6B55',
-      confirmButtonText: 'Yes, delete it!'
-    }, () =>
-      request
-        .delete(`../api/domains/${this.state.id}`)
-        .end((err, res) => err || res.body.error
-          ? swal('Error', res.body.message, 'error')
-          : (location.hash = '#domains') && location.reload()
-        )
-    );
+      icon: 'warning'
+    })
+    .then(() => request.delete(`../api/domains/${this.state.id}`))
+    .then(res => {
+      if (res.body.error) throw res.body.message;
+
+      location.hash = '#domains';
+      location.reload();
+    })
+    .catch(err => swal('Error', err.toString(), 'error'));
   }
 
   /**
@@ -79,20 +78,20 @@ export default class ViewDomain extends React.Component {
    */
   onRemoveUser(id) {
     swal({
+      button: 'Yes',
       title: 'Are you sure?',
       text: 'Any proxy emails the user has with this domain will be deleted.',
-      type: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#DD6B55',
-      confirmButtonText: 'Yes, delete them!'
-    }, () =>
-      request
-        .delete(`../api/domains/${this.state.id}/users/${id}`)
-        .end((err, res) => err || res.body.error
-          ? swal('Error', res.body.message, 'error')
-          : this._loadDomain()
-        )
-    );
+      icon: 'warning'
+    })
+    .then(() =>
+      request.delete(`../api/domains/${this.state.id}/users/${id}`)
+    )
+    .then(res => {
+      if (res.body.error) throw res.body.message;
+
+      this._loadDomain();
+    })
+    .catch(err => swal('Error', err.toString(), 'error'));
   }
 
   /**

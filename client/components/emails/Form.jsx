@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import request from 'superagent';
 import moment from 'moment';
 import React from 'react';
+import swal from 'sweetalert';
 
 // Components
 import LinkModifier from 'components/modifiers/Link';
@@ -59,15 +60,14 @@ export default class EmailForm extends React.Component {
    */
   onAddRealAddress() {
     swal({
-      title: 'Add a main email address to your account',
-      text: 'Add a main email address to your account to receive redirected '
-        + 'mail at.',
-      type: 'input',
-      showCancelButton: true,
-      closeOnConfirm: true,
+      title: 'Add Primary Email',
+      text: 'An address to receive redirected mail at.',
+      buttons: true,
+      content: 'input',
+      closeModal: true,
       inputPlaceholder: 'address@domain.com'
-    },
-    email => {
+    })
+    .then(email => {
       if (!email) return false;
     
       request

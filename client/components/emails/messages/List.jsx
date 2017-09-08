@@ -1,5 +1,6 @@
 import request from 'superagent';
 import React from 'react';
+import swal from 'sweetalert';
 
 // react-md
 import ListItem from 'react-md/lib/Lists/ListItem';
@@ -35,24 +36,21 @@ export default class MessageList extends React.Component {
     const id = this.state.selected;
 
     swal({
+      button: 'Yes',
       title: 'Are you sure?',
       text: 'This action cannot be undone',
-      type: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#DD6B55',
-      confirmButtonText: 'Yes, delete it!'
-    }, () => request
-      .delete(`../api/emails/${this.state.emailId}/messages/${id}`)
-      .end((err, res) => {
-        if (err || res.body.error) {
-          swal('Error', 'Could not delete message', 'error');
-        }
-        else {
-          this.setState({ selected: '' })
-          this.props.dispatch(deleteMessage(id));
-        }
-      })
-    );
+      icon: 'warning'
+    })
+    .then(() =>
+      request.delete(`../api/emails/${this.state.emailId}/messages/${id}`)
+    )
+    .then(res => {
+      if (res.body.error) throw 'Could not delete message';
+
+      this.setState({ selected: '' })
+      this.props.dispatch(deleteMessage(id));
+    })
+    .catch(err => swal('Error', err.toString(), 'error'));
   }
 
   render() {

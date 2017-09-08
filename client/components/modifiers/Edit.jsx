@@ -1,5 +1,6 @@
 import request from 'superagent';
 import React from 'react';
+import swal from 'sweetalert';
 
 // Components
 import Form from 'components/modifiers/Form';

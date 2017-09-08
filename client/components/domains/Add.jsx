@@ -1,6 +1,7 @@
 import request from 'superagent';
 import React from 'react';
 import copy from 'copyr';
+import swal from 'sweetalert';
 
 // Action creators
 import { addDomain } from 'actions/creators/domains';

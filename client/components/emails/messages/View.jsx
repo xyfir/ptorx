@@ -1,6 +1,7 @@
 import request from 'superagent';
 import moment from 'moment';
 import React from 'react';
+import swal from 'sweetalert';
 
 // react-md
 import TextField from 'react-md/lib/TextFields';

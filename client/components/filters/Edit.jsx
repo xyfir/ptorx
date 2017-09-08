@@ -1,5 +1,6 @@
 import request from 'superagent';
 import React from 'react';
+import swal from 'sweetalert';
 
 // Action creators
 import { editFilter } from 'actions/creators/filters';

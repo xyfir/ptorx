@@ -1,5 +1,6 @@
 import request from 'superagent';
 import React from 'react';
+import swal from 'sweetalert';
 
 // Action creators
 import { loadModifiers, deleteModifier } from 'actions/creators/modifiers';
@@ -46,33 +47,27 @@ export default class ModifierList extends React.Component {
     this.setState({ selected: 0 });
 
     swal({
+      button: 'Yes',
       title: 'Are you sure?',
       text: 'This modifier will be removed from any emails it is linked to.',
-      type: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#DD6B55',
-      confirmButtonText: 'Yes, delete it!'
-    }, () => {
-      request
-        .delete('../api/modifiers/' + id)
-        .end((err, res) => {
-          if (err || res.body.error) {
-            swal('Error', 'Could not delete modifier', 'error');
-          }
-          else {
-            this.props.dispatch(deleteModifier(id));
+      icon: 'warning'
+    })
+    .then(() => request.delete('../api/modifiers/' + id))
+    .then(res => {
+      if (res.body.error) throw 'Could not delete modifier';
 
-            const emails = this.props.data.emails.slice();
+      this.props.dispatch(deleteModifier(id));
 
-            // Remove any instances of modifier where linked to emails
-            emails.forEach((email, i) => {
-              email.modifiers = email.modifiers.filter(mod => mod.id != id);
-              emails[i] = email;
-            });
-            this.props.dispatch(loadEmails(emails));
-          }
-        });
-    });
+      const emails = this.props.data.emails.slice();
+
+      // Remove any instances of modifier where linked to emails
+      emails.forEach((email, i) => {
+        email.modifiers = email.modifiers.filter(mod => mod.id != id);
+        emails[i] = email;
+      });
+      this.props.dispatch(loadEmails(emails));
+    })
+    .catch(err => swal('Error', err.toString(), 'error'));
   }
 
   /**

@@ -1,6 +1,7 @@
 import request from 'superagent';
 import React from 'react';
 import copy from 'copyr';
+import swal from 'sweetalert';
 
 // react-md
 import Button from 'react-md/lib/Buttons/Button';

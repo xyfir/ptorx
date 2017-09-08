@@ -2,6 +2,7 @@ import request from 'superagent';
 import moment from 'moment';
 import React from 'react';
 import copy from 'copyr';
+import swal from 'sweetalert';
 
 // Components
 import Purchase from 'components/account/Purchase';
@@ -50,23 +51,19 @@ export default class Account extends React.Component {
     const {id} = this.state.selectedEmail;
 
     swal({
+      button: 'Yes',
       title: 'Are you sure?',
       text: 'Any proxy emails linked to this address will be deleted.',
-      type: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#DD6B55',
-      confirmButtonText: 'Yes, delete it!'
-    }, () =>
-      request
-        .delete('../api/account/email/' + id)
-        .end((err, res) => {
-          if (err || res.body.error)
-            return swal('Error', 'Could not delete address', 'error');
+      icon: 'warning'
+    })
+    .then(() => request.delete('../api/account/email/' + id))
+    .then(res => {
+      if (res.body.error) throw res.body.message;
 
-          this.setState({ selectedEmail: {} });
-          this.props.dispatch(deleteEmail(id));
-        })
-    );
+      this.setState({ selectedEmail: {} });
+      this.props.dispatch(deleteEmail(id));
+    })
+    .catch(err => swal('Error', err.toString(), 'error'));
   }
 
   render() {

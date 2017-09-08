@@ -1,6 +1,7 @@
 import StripeCheckout from 'react-stripe-checkout';
 import request from 'superagent';
 import React from 'react';
+import swal from 'sweetalert';
 
 // Constants
 import { STRIPE_KEY_PUB } from 'constants/config';
