@@ -1,6 +1,7 @@
 import { render } from 'react-dom';
 import request from 'superagent';
 import React from 'react';
+import swal from 'sweetalert';
 
 // Redux store / reducers
 import { createStore } from 'redux';
@@ -46,7 +47,7 @@ class App extends React.Component {
     const initialize = () => {
       // Access token is generated upon a successful login
       // Used to create new session without forcing login each time
-      const token = localStorage.getItem('access_token') || '';
+      const token = localStorage.accessToken || '';
 
       // Access token is required
       if (!token && ENVIRONMENT != 'dev') {
@@ -123,7 +124,7 @@ class App extends React.Component {
             location.href = XACC + 'app/#/login/13';
           }
           else {
-            localStorage.setItem('access_token', res.body.accessToken);
+            localStorage.accessToken = res.body.accessToken;
             initialize();
             location.hash = location.hash.split('?')[0];
           }
@@ -134,27 +135,8 @@ class App extends React.Component {
     }
   }
 
-  onShowTrialInfo() {
-    swal({
-      title: 'Free Trial',
-      text: `
-        To prevent abuse to our system, some restrictions are placed on free trial users:
-        <ol>
-          <li>Limited to creating up to 5 proxy emails a day</li>
-          <li>Limited to creating up to 15 proxy emails total</li>
-          <li>Must complete a verification captcha before creating a proxy email</li>
-          <li>Cannot have more than one primary email address</li>
-          <li>Cannot send messages or reply to received mail</li>
-          <li>Cannot add or request access to custom domains</li>
-        </ol>
-        These restrictions can be removed by purchasing a subscription.
-      `,
-      html: true
-    });
-  }
-
   onLogout() {
-    delete localStorage.access_token;
+    delete localStorage.accessToken;
     location.href = '../api/account/logout';
   }
 
@@ -246,7 +228,7 @@ class App extends React.Component {
               Your account is currently in trial mode. Some limitations apply.
               <Button
                 icon
-                onClick={() => this.onShowTrialInfo()}
+                href='#docs?section=free-trial'
               >info</Button>
             </p>    
           ) : null}
