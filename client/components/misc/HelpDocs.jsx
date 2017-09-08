@@ -2,6 +2,9 @@ import request from 'superagent';
 import marked from 'marked';
 import React from 'react';
 
+// Modules
+import query from 'lib/parse-hash-query';
+
 // Components
 import DynamicIframe from './DynamicIframe';
 
@@ -12,21 +15,30 @@ export default class HelpDocs extends React.Component {
   }
 
   componentDidMount() {
+    const {contentDocument: doc} = this.refs.frame.refs.frame;
+
     request
       .get(
         'https://api.github.com/repos/Xyfir/Documentation/contents/' +
         'ptorx/help.md'
       )
       .end((err, res) => {
-        this.refs.frame.refs.frame.contentDocument.head.innerHTML =
+        doc.head.innerHTML =
           `<link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" rel="stylesheet" type="text/css">
-          <link rel='stylesheet' href='../static/css/style.css'>`;
+          <link rel='stylesheet' href='../static/css/style.css'>`,
 
         // Convert markdown to html
-        this.refs.frame.refs.frame.contentDocument.body.innerHTML =
+        doc.body.innerHTML =
           `<div class='help-docs markdown'>${
             marked(window.atob(res.body.content), { santize: true })
           }</div>`;
+
+        const {section} = query();
+
+        if (section) {
+          // Doesn't work without delay. No idea why
+          setTimeout(() => doc.getElementById(section).scrollIntoView(), 250);
+        }
       });
   }
 
