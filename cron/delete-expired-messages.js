@@ -1,6 +1,6 @@
 const mysql = require('lib/mysql');
 
-module.exports = function() {
+module.exports = async function() {
 
   const db = new mysql;
 
