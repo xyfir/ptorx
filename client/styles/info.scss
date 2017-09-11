@@ -1,4 +1,4 @@
-body.home {
+div.home {
   background-color: white;
   margin: 0em;
 
@@ -78,22 +78,10 @@ body.home {
 
   }
 
-  section.trial {
-    >button {
-      background-color: $lpurple;
-
-      &:hover {
-        filter: saturate(90%);
-      }
-
-      margin-bottom: 0.5em;
-    }
-  }
-
   section.main {
     display: flex;
     align-items: center;
-    height: 70vh;
+    min-height: 70vh;
     font-size: 200%;
 
     >div {
@@ -135,4 +123,106 @@ body.home {
   @media (min-width: 401px) {
     text-align: justify;
   }
+}
+
+div.features {
+  &, >section {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+  }
+
+  >h2 {
+    margin-bottom: 0;
+    margin-top: 0.5em;
+  }
+
+  >section {
+    width: calc(100% - 1em);
+
+    >header {
+      background-color: $md-primary-color;
+      text-align: center;
+      width: 100%;
+
+      >h3, >p {
+        color: white;
+        margin-bottom: 0;
+      }
+
+      >p {
+        margin-bottom: 0.3em;
+      }
+    }
+
+    >ul strong {
+      font-weight: bold;
+      color: $md-secondary-color;
+    }
+  }
+}
+
+div.landing-page {
+  text-align: center;
+
+  >header {
+    display: flex;
+    min-height: 70vh;
+    flex-direction: column;
+    justify-content: center;
+
+    >h2 {
+      color: $md-primary-color;
+      font-size: 200%;
+    }
+
+    >p {
+      color: $dgray;
+      font-size: 100%;
+    }
+  }
+
+  >section.free-trial {
+    background-color: $md-primary-color;
+    padding-bottom: 1.5em;
+
+    >p {
+      color: white;
+      font-size: 100%;
+    }
+  }
+
+  >section.more-info {
+    padding: 1.5em 0;
+
+    >p {
+      font-size: 100%;
+    }
+  }
+
+  div.typed-strings {
+    display: none;
+  }
+
+  div.typed-container {
+    background-color: $lllgray;
+    padding: 1em;
+    border-radius: 5px;
+    margin: 1em;
+    border: $llgray 0.1em solid;
+
+    span.address {
+      color: $md-secondary-color;
+      font-weight: bold;
+    }
+
+    strong {
+      font-weight: bold;
+    }
+  }
+}
+
+button.start-trial {
+  font-size: 2em;
+  height: 2.5em;
 }
