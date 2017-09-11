@@ -1,11 +1,11 @@
 {
   "name": "ptorx",
-  "version": "4.3.0",
+  "version": "4.4.0",
   "description": "",
   "main": "app.js",
   "dependencies": {
     "app-module-path": "^2.2.0",
-    "body-parser": "^1.17.2",
+    "body-parser": "^1.18.0",
     "copyr": "^1.0.3",
     "escape-string-regexp": "^1.0.5",
     "express": "^4.15.4",
@@ -21,13 +21,14 @@
     "prop-types": "^15.5.10",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
-    "react-md": "^1.0.19",
+    "react-md": "^1.1.1",
     "react-stripe-checkout": "^2.6.3",
     "redux": "^3.7.2",
     "rword": "^2.1.0",
     "stripe": "^4.25.0",
     "superagent": "^3.6.0",
-    "sweetalert": "^2.0.2",
+    "sweetalert": "^2.0.3",
+    "typed.js": "^2.0.5",
     "uuid": "^3.1.0"
   },
   "devDependencies": {
