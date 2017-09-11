@@ -39,8 +39,8 @@ app.use(parser.urlencoded({ extended: true, limit: '26mb' }));
 
 // Express middleware / controllers
 app.use('/static', express.static(__dirname + '/static'));
-app.get('/panel/*', (req, res) =>
-  res.sendFile(__dirname + '/views/Panel.html')
+app.get('/panel*', (req, res) =>
+  res.sendFile(__dirname + '/views/panel.html')
 );
 app.use('/api', require('./controllers/'));
 app.get('/*', (req, res) => {
@@ -49,7 +49,7 @@ app.get('/*', (req, res) => {
     req.session.subscription = moment().add(7, 'days').unix() * 1000;
   }
 
-  res.sendFile(__dirname + '/views/Home.html');
+  res.sendFile(__dirname + '/views/info.html');
 });
 
 if (config.environment.runCronJobs) require('./cron/start')();
