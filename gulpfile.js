@@ -16,7 +16,7 @@ gulp.task('css', () => {
     .pipe(gulp.dest('./static/css'))
 });
 
-gulp.task('client', () => {
+function buildJs(file) {
   const browserify = require('browserify');
   const streamify = require('gulp-streamify');
   const babelify = require('babelify');
@@ -26,7 +26,7 @@ gulp.task('client', () => {
   const extensions = ['.jsx', '.js'];
   
   const b = browserify(
-    './client/components/App.jsx', {
+    `./client/components/${file}.jsx`, {
       debug: true, extensions, paths: ['./client']
     }
   );
@@ -35,7 +35,7 @@ gulp.task('client', () => {
   }));
   
   return b.bundle()
-    .pipe(source('App.js'))
+    .pipe(source(`${file}.js`))
     .pipe(
       prod ? streamify(uglify({
         mangle: false,
@@ -44,7 +44,10 @@ gulp.task('client', () => {
       .on('error', gutil.log) : gutil.noop()
     )
     .pipe(gulp.dest('./static/js/'));
-});
+}
+
+gulp.task('js:app', () => buildJs('App'));
+gulp.task('js:info', () => buildJs('Info'));
 
 gulp.task('favicons', () => {
   const favicons = require('gulp-favicons');
