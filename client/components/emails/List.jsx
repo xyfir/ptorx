@@ -97,8 +97,9 @@ export default class EmailList extends React.Component {
           floating fixed primary
           tooltipPosition='left'
           tooltipLabel='Create new proxy email'
+          iconChildren='add'
           onClick={() => location.hash = '#emails/create'}
-        >add</Button>
+        />
         
         <Search
           onSearch={v => this.setState({ search: v })}

@@ -22,8 +22,8 @@ export default class ModifierForm extends React.Component {
   onSubmit() {
     const modifier = {
       type: this.state.type,
-      name: this.refs.name.getField().value,
-      description: this.refs.description.getField().value
+      name: this.refs.name.value,
+      description: this.refs.description.value
     };
     let data;
 
@@ -31,20 +31,20 @@ export default class ModifierForm extends React.Component {
       case 3:
         data = {
           regex: this.state.useRegex,
-          value: this.refs.find.getField().value,
-          with: this.refs.replace.getField().value,
+          value: this.refs.find.value,
+          with: this.refs.replace.value,
           flags: this.refs.regexFlags
-            ? this.refs.regexFlags.getField().value : ''
+            ? this.refs.regexFlags.value : ''
         };
         break;
 
       case 4:
-        data = { subject: this.refs.subject.getField().value };
+        data = { subject: this.refs.subject.value };
         break;
 
       case 5:
         data = {
-          value: this.refs.tag.getField().value,
+          value: this.refs.tag.value,
           prepend: window['checkbox--prepend'].checked
         };
         break;
@@ -54,13 +54,13 @@ export default class ModifierForm extends React.Component {
           to: this.refs.to.state.value,
           add: this.refs.add.state.value,
           prepend: window['checkbox--prepend'].checked,
-          separator: this.refs.separator.getField().value
+          separator: this.refs.separator.value
         };
         break;
       
       case 8:
         data = {
-          value: this.refs.value.getField().value,
+          value: this.refs.value.value,
           target: this.refs.target.state.value
         };
         break;
@@ -301,8 +301,7 @@ export default class ModifierForm extends React.Component {
           <Button
             raised primary
             onClick={() => this.onSubmit()}
-            label='Submit'
-          />
+          >Submit</Button>
         </Paper>
         
         {form}

@@ -12,8 +12,9 @@ export default props => (
       floating fixed primary
       tooltipPosition='left'
       tooltipLabel='Add domain'
+      iconChildren='add'
       onClick={() => location.hash = '#domains/add'}
-    >add</Button>
+    />
 
     <List className='domains-list section md-paper md-paper--1'>{
       props.data.domains.map(d =>

@@ -23,6 +23,10 @@ html {
 
 .md-list {
   padding: 0em;
+
+  .md-tile-text--secondary.md-tile-text--three-lines.md-text--secondary {
+    height: initial;
+  }
 }
 
 h2.md-title--dialog {

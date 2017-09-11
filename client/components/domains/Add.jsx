@@ -33,7 +33,7 @@ export default class AddDomain extends React.Component {
   }
 
   onAdd() {
-    const domain = this.refs.domain.getField().value;
+    const domain = this.refs.domain.value;
 
     request
       .post('../api/domains')
@@ -77,9 +77,9 @@ export default class AddDomain extends React.Component {
   
           <Button
             primary raised
-            label='Add'
+            iconChildren='add'
             onClick={() => this.onAdd()}
-          >add</Button>
+          >Add</Button>
         </Paper>
       );
 
@@ -106,8 +106,9 @@ export default class AddDomain extends React.Component {
             />
             <Button
               primary icon
+              iconChildren='content_copy'
               onClick={() => copy(this.state.requestKey)}
-            >content_copy</Button>
+            />
           </div>
         </Paper>
       );
@@ -189,9 +190,8 @@ export default class AddDomain extends React.Component {
 
           <Button
             primary raised
-            label='View Domain'
             onClick={() => location.hash = '#domains/' + this.state.domainId}
-          />
+          >View Domain</Button>
         </Paper>
       );
     }

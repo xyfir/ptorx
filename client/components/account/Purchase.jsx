@@ -82,8 +82,8 @@ export default class Purchase extends React.Component {
             // bad code, don't care
             document.querySelector('.StripeCheckout').click()
           }
-          label='Purchase'
-        >credit_card</Button>
+          iconChildren='credit_card'
+        >Purchase</Button>
       </Paper>
     )
   }

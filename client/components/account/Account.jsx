@@ -32,7 +32,7 @@ export default class Account extends React.Component {
   }
 
   onAddEmail() {
-    const email = this.refs.email.getField().value;
+    const email = this.refs.email.value;
     
     request
       .post('../api/account/email/' + email)
@@ -86,9 +86,9 @@ export default class Account extends React.Component {
 
           <Button
             flat primary
-            label='Copy Link'
+            iconChildren='content_copy'
             onClick={() => copy('https://ptorx.com/#?r=' + account.uid)}
-          >content_copy</Button>
+          >Copy Link</Button>
         </Paper>
 
         <Paper
@@ -107,11 +107,10 @@ export default class Account extends React.Component {
               {this.state.canPurchase ? (
                 <Button
                   raised primary
-                  label='Extend'
                   onClick={() => location.hash =
                     '#account/purchase-subscription'
                   }
-                />
+                >Extend</Button>
               ) : (
                 <p>Subscriptions must be extended via Ptorx's website.</p>
               )}
@@ -125,11 +124,10 @@ export default class Account extends React.Component {
               {this.state.canPurchase ? (
                 <Button
                   raised primary
-                  label='Purchase'
                   onClick={() => location.hash =
                     '#account/purchase-subscription'
                   }
-                />
+                >Purchase</Button>
               ) : (
                 <p>Subscriptions must be purchased via Ptorx's website.</p>
               )}
@@ -155,7 +153,7 @@ export default class Account extends React.Component {
               label='Email'
               className='md-cell'
             />
-            <Button icon onClick={() => this.onAddEmail()}>add</Button>
+            <Button icon iconChildren='add' onClick={() => this.onAddEmail()}/>
           </div>
 
           <List>{

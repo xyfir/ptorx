@@ -36,7 +36,7 @@ export default class ViewMessage extends React.Component {
   onReply() {
     request
       .post(`../api/emails/${this.state.id}/messages/${this.state.message}`)
-      .send({ content: this.refs.message.getField().value })
+      .send({ content: this.refs.message.value })
       .end((err, res) => {
         if (err || res.body.error)
           swal('Error', res.body.message, 'error');
@@ -91,16 +91,15 @@ export default class ViewMessage extends React.Component {
             
             <Button
               raised primary
-              label='Reply'
+              iconChildren='send'
               onClick={() => this.onReply()}
-            >send</Button>
+            >Reply</Button>
           </Paper>
         ) : (
           <Button
             raised primary
-            label='Reply'
             onClick={() => this.setState({ showReplyForm: true })}
-          />
+          >Reply</Button>
         )}
       </div>
     );

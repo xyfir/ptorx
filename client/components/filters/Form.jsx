@@ -22,21 +22,21 @@ export default class FilterForm extends React.Component {
   onSubmit() {
     const data = {
       type: this.state.type,
-      name: this.refs.name.getField().value,
+      name: this.refs.name.value,
       useRegex: window['checkbox--regex'].checked,
-      description: this.refs.description.getField().value,
+      description: this.refs.description.value,
       acceptOnMatch: window['checkbox--accept-on-match'].checked
     };
 
     // Only header filters have different values than others
     if (data.type == 6) {
       data.find =
-        this.refs.headerName.getField().value +
+        this.refs.headerName.value +
         ':::' +
-        this.refs.headerValue.getField().value;
+        this.refs.headerValue.value;
     }
     else {
-      data.find = this.refs.find.getField().value;
+      data.find = this.refs.find.value;
     }
 
     this.props.onSubmit(data);
@@ -141,9 +141,8 @@ export default class FilterForm extends React.Component {
 
           <Button
             primary raised
-            label='Submit'
             onClick={() => this.onSubmit()}
-          />
+          >Submit</Button>
         </Paper>
 
         {filter.linkedTo.length ? (

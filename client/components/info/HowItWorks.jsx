@@ -63,9 +63,11 @@ export default class HowItWorks extends React.Component {
     if (this.state.view == 'start') return (
       <div className='how-it-works start'>
         <h2>How Ptorx Works</h2>
-        <Button icon primary onClick={() => this.onPlay()}>
-          play_circle_outline
-        </Button>
+        <Button
+          icon primary
+          iconChildren='play_circle_outline'
+          onClick={() => this.onPlay()}
+        />
       </div>
     )
 
@@ -75,10 +77,15 @@ export default class HowItWorks extends React.Component {
           <span className='typed' />
         </div>
 
-        <Button icon primary onClick={() => this.onPlay()}>{
-          this.state.paused || this.state.complete
-            ? 'play_circle_outline' : 'pause_circle_outline'
-        }</Button>
+        <Button
+          icon primary
+          onClick={() => this.onPlay()}
+          iconChildren={
+            this.state.paused || this.state.complete
+              ? 'play_circle_outline'
+              : 'pause_circle_outline'
+          }
+        />
 
         <div className='typed-strings set-1'>
           <span>Curious how Ptorx works?</span>

@@ -84,8 +84,9 @@ export default class ModifierList extends React.Component {
           floating fixed primary
           tooltipPosition='left'
           tooltipLabel='Create new modifier'
+          iconChildren='add'
           onClick={() => location.hash = '#modifiers/create'}
-        >add</Button>
+        />
         
         <Search
           onSearch={v => this.setState({ search: v })}

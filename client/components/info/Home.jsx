@@ -26,8 +26,7 @@ export default () => (
         onClick={() => location.href =
           'https://accounts.xyfir.com/app/#/register/13'
         }
-        label='Try Free'
-      />
+      >Try Free</Button>
       
       <p>
         All that's needed to start your trial is a free <a target='_blank' href='https://accounts.xyfir.com/'>Xyfir Account</a>. No payment information required.

@@ -18,7 +18,7 @@ export default class Search extends React.Component {
   
   onSearch() {
     this.props.onSearch({
-      query: this.refs.search.getField().value,
+      query: this.refs.search.value,
       type: this.state.select
     });
   }

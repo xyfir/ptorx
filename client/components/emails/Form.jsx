@@ -178,11 +178,11 @@ export default class EmailForm extends React.Component {
       to: this.props.data.account.emails.find(e =>
         e.address == this.refs.to.state.value
       ).id,
-      name: this.refs.name.getField().value,
+      name: this.refs.name.value,
       filters: this.state.filters.map(f => f.id).join(','),
       saveMail: window['checkbox--save-mail'].checked,
       modifiers: this.state.modifiers.map(m => m.id).join(','),
-      description: this.refs.description.getField().value,
+      description: this.refs.description.value,
       noToAddress: window['checkbox--no-redirect'].checked,
       noSpamFilter: !window['checkbox--spam-filter'].checked,
       directForward: window['checkbox--direct-forward'].checked
@@ -192,8 +192,8 @@ export default class EmailForm extends React.Component {
 
     if (this.props.create) {
       data.domain = this.refs.domain.state.value,
-      data.address = this.refs.address.getField().value
-        ? this.refs.address.getField().value.split('@')[0]
+      data.address = this.refs.address.value
+        ? this.refs.address.value.split('@')[0]
         : '',
       data.description = data.description ||
         'Created on ' + moment().format('YYYY-MM-DD, HH:mm:ss');
@@ -284,7 +284,11 @@ export default class EmailForm extends React.Component {
               email.toEmail || this.props.data.account.emails[0].address
             }
           />
-          <Button icon onClick={() => this.onAddRealAddress()}>add</Button>
+          <Button
+            icon
+            iconChildren='add'
+            onClick={() => this.onAddRealAddress()}
+          />
         </div>
 
         {!this.state.showAdvanced ? (
@@ -433,8 +437,7 @@ export default class EmailForm extends React.Component {
         <Button
           primary raised
           onClick={e => this.onSubmit(e)}
-          label='Submit'
-        />
+        >Submit</Button>
       </Paper>
     );
   }

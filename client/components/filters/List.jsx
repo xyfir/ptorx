@@ -152,8 +152,9 @@ export default class FilterList extends React.Component {
           floating fixed primary
           tooltipPosition='left'
           tooltipLabel='Create new filter'
+          iconChildren='add'
           onClick={() => location.hash = '#filters/create'}
-        >add</Button>
+        />
         
         <Search
           onSearch={v => this.setState({ search: v })}

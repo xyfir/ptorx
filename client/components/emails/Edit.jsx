@@ -111,8 +111,9 @@ export default class EditEmail extends React.Component {
             icon primary
             tooltipPosition='right'
             tooltipLabel='Copy to clipboard'
+            iconChildren='content_copy'
             onClick={() => copy(email.address)}
-          >content_copy</Button>
+          />
         </div>
 
         <Form

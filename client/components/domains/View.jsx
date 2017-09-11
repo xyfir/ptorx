@@ -101,8 +101,8 @@ export default class ViewDomain extends React.Component {
     request
       .post(`../api/domains/${this.state.id}/users`)
       .send({
-        key: this.refs.requestKey.getField().value,
-        label: this.refs.label.getField().value
+        key: this.refs.requestKey.value,
+        label: this.refs.label.value
       })
       .end((err, res) => err || res.body.error
         ? swal('Error', res.body.message, 'error')
@@ -155,17 +155,17 @@ export default class ViewDomain extends React.Component {
 
               <Button
                 raised secondary
-                label='Verify'
+                iconChildren='verified_user'
                 onClick={() => this.onVerify()}
-              >verified_user</Button>
+              >Verify</Button>
             </div>
           )}
 
           <Button
             primary raised
-            label='Remove'
+            iconChildren='delete'
             onClick={() => this.onRemoveFromPtorx()}
-          >delete</Button>
+          >Remove</Button>
         </Paper>
 
         <Paper
@@ -194,9 +194,9 @@ export default class ViewDomain extends React.Component {
   
           <Button
             primary raised
-            label='Add'
+            iconChildren='add'
             onClick={() => this.onAddUser()}
-          >add</Button>
+          >Add</Button>
         </Paper>
 
         <Paper
@@ -220,8 +220,9 @@ export default class ViewDomain extends React.Component {
                   <TableColumn>
                     <Button
                       icon
+                      iconChildren='delete'
                       onClick={() => this.onRemoveUser(user.id)}
-                    >delete</Button>
+                    />
                   </TableColumn>
                 </TableRow>
               )
@@ -245,9 +246,9 @@ export default class ViewDomain extends React.Component {
         ) : (
           <Button
             primary raised
-            label='Remove'
+            iconChildren='delete'
             onClick={() => this.onRemoveFromAccount()}
-          >delete</Button>
+          >Remove</Button>
         )}
       </Paper>
     );

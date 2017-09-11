@@ -54,20 +54,22 @@ class PtorxInfo extends React.Component {
           actions={[
             <Button
               icon
+              iconChildren='home'
               onClick={() => location.href = '../'}
-            >home</Button>
+            />
           ]}
           title='Ptorx'
           nav={
             <Button
               icon
+              iconChildren='menu'
               onClick={() => this.setState({ drawer: true })}
-            >menu</Button>
+            />
           }
         />
 
         <Drawer
-          onVisibilityToggle={v => this.setState({ drawer: v })}
+          onVisibilityChange={v => this.setState({ drawer: v })}
           autoclose={true}
           navItems={[
             <a href='panel/'>
@@ -96,8 +98,9 @@ class PtorxInfo extends React.Component {
               nav={
                 <Button
                   icon
+                  iconChildren='arrow_back'
                   onClick={() => this.setState({ drawer: false })}
-                >arrow_back</Button>
+                />
               }
             />
           }

@@ -19,9 +19,9 @@ export default class SendMessage extends React.Component {
     request
       .post(`../api/emails/${this.state.id}/messages/`)
       .send({
-        to: this.refs.to.getField().value,
-        subject: this.refs.subject.getField().value,
-        content: this.refs.message.getField().value
+        to: this.refs.to.value,
+        subject: this.refs.subject.value,
+        content: this.refs.message.value
       })
       .end((err, res) => {
         if (err || res.body.error)
@@ -29,7 +29,7 @@ export default class SendMessage extends React.Component {
 
         swal(
           'Success',
-          `Message sent to ${this.refs.to.getField().value}`,
+          `Message sent to ${this.refs.to.value}`,
           'success'
         );
 
@@ -80,9 +80,9 @@ export default class SendMessage extends React.Component {
           
           <Button
             raised primary
-            label='Send'
+            iconChildren='send'
             onClick={() => this.onSend()}
-          >send</Button>
+          >Send</Button>
         </Paper>
       </div>
     );

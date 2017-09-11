@@ -26,8 +26,7 @@ export default ({section}) => (
         onClick={() => location.href =
           'https://accounts.xyfir.com/app/#/register/13'
         }
-        label='Try Free'
-      />
+      >Try Free</Button>
 
       <p>All that's needed to start your 14 day free trial is a valid email to create a Xyfir Account. No payment info required.</p>
     </section>

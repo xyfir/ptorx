@@ -163,20 +163,22 @@ class App extends React.Component {
           actions={[
             <Button
               icon
+              iconChildren='home'
               onClick={() => location.hash = '#'}
-            >home</Button>
+            />
           ]}
           title='Ptorx'
           nav={
             <Button
               icon
+              iconChildren='menu'
               onClick={() => this.setState({ drawer: true })}
-            >menu</Button>
+            />
           }
         />
 
         <Drawer
-          onVisibilityToggle={v => this.setState({ drawer: v })}
+          onVisibilityChange={v => this.setState({ drawer: v })}
           autoclose={true}
           navItems={[
             <a href='#account'>
@@ -214,8 +216,9 @@ class App extends React.Component {
               nav={
                 <Button
                   icon
+                  iconChildren='arrow_back'
                   onClick={() => this.setState({ drawer: false })}
-                >arrow_back</Button>
+                />
               }
             />
           }
@@ -228,8 +231,9 @@ class App extends React.Component {
               Your account is currently in trial mode. Some limitations apply.
               <Button
                 icon
+                iconChildren='info'
                 href='#docs?section=free-trial'
-              >info</Button>
+              />
             </p>    
           ) : null}
 
