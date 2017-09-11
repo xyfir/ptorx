@@ -8,10 +8,10 @@ const config = require('config');
 /*
   POST api/receive/:email
   REQUIRED
-    To: string, // Receiving proxy email address
     from: string, // 'user@domain' OR 'Sender Name <user@domain>'
     sender: string, // Always 'user@domain'
     subject: string,
+    recipient: string, // 'user@ptorx-domain'
     body-plain: string,
     message-headers: json-string // [['header', 'value']]
   OPTIONAL
@@ -28,8 +28,8 @@ module.exports = async function(req, res) {
   const email = req.body;
   const save = !!email['message-url'];
   
-  email.senderDomain = email.sender.match(/.+@(.+)/)[1],
-  email.proxyDomain = email.To.split('@')[1],
+  email.senderDomain = email.sender.split('@')[1],
+  email.proxyDomain = email.recipient.split('@')[1],
   email.senderName = email.from.match(/^(.+) <(.+)>$/),
   email.senderName = email.senderName ? email.senderName[1] : '';
 
@@ -173,7 +173,7 @@ module.exports = async function(req, res) {
             .replace(/::body-text::/g, email['body-plain'])
             .replace(/::sender-name::/g, email.senderName)
             .replace(/::real-address::/g, data.to)
-            .replace(/::proxy-address::/g, email.To)
+            .replace(/::proxy-address::/g, email.recipient)
             .replace(/::sender-domain::/g, email.senderDomain)
             .replace(/::sender-address::/g, email.sender);
       }
@@ -184,7 +184,7 @@ module.exports = async function(req, res) {
       const message = {
         subject: email.subject,
         text: email['body-plain'],
-        from: email.To,
+        from: email.recipient,
         html: email['body-html'] && !textonly ? email['body-html'] : '',
         to: data.to
       };

@@ -5,9 +5,9 @@ const mysql = require('lib/mysql');
 /*
   POST api/receive/reply
   REQUIRED
-    To: string, // message_id--reply@domain.com
     sender: string, // Always 'user@domain'
     subject: string,
+    recipient: string, // 'message_id--reply@ptorx-domain'
     body-plain: string,
   OPTIONAL
     body-html: string
@@ -21,6 +21,8 @@ module.exports = async function(req, res) {
   const db = new mysql;
 
   try {
+    const [messageId, domain] = req.body.recipient.split('--reply@');
+
     await db.getConnection();
     const [row] = await db.query(`
       SELECT
@@ -33,12 +35,12 @@ module.exports = async function(req, res) {
         re.email_id = m.email_id AND
         d.id = re.domain_id
     `, [
-      req.body.To.split('--reply@')[0]
+      messageId
     ]);
     db.release();
 
     const mailgun = MailGun({
-      apiKey: config.keys.mailgun, domain: req.body.To.split('@')[1]
+      apiKey: config.keys.mailgun, domain
     });
 
     // Notify sender that the message cannot be replied to
@@ -50,7 +52,7 @@ module.exports = async function(req, res) {
           'or for some other reason cannot be found on Ptorx. You will not ' +
           'be able to reply to it. Please start a new conversation with the ' +
           'original sender.',
-        from: req.body.To,
+        from: req.body.recipient,
         to: req.body.sender
       });
     }
