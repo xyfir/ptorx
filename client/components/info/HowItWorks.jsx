@@ -61,7 +61,7 @@ export default class HowItWorks extends React.Component {
 
   render() {
     if (this.state.view == 'start') return (
-      <div className='how-it-works start'>
+      <div className='how-ptorx-works start'>
         <h2>How Ptorx Works</h2>
         <Button
           icon primary
@@ -72,7 +72,7 @@ export default class HowItWorks extends React.Component {
     )
 
     return (
-      <div className='how-it-ptorx'>
+      <div className='how-ptorx-works'>
         <div className='typed-container'>
           <span className='typed' />
         </div>
