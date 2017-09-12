@@ -33,7 +33,7 @@ export default () => (
         <p className='subtitle'>stop spam and any other unwanted mail</p>
       </header>
       <ul>
-        <li>Use re-usable and highly customizable 'Filters' to <strong>block unwanted mail</strong>.</li>
+        <li>Use reusable and highly customizable 'Filters' to <strong>block unwanted mail</strong>.</li>
         <li><strong>Filter incoming mail</strong> by its subject, sender address, sender domain, text content, html content, or by any of the email's headers.</li>
         <li><strong>Whitelist or blacklist</strong> mail based on whether its content matches a filter.</li>
         <li>Optionally use powerful <strong>regular expressions</strong> in your filters.</li>
@@ -48,7 +48,7 @@ export default () => (
         <p className='subtitle'>take control over the content of mail you receive</p>
       </header>
       <ul>
-        <li><strong>Manipulate the content</strong> of incoming mail before it's redirected to your primary email addresses with re-usable and highly customizable 'Modifiers'.</li>
+        <li><strong>Manipulate the content</strong> of incoming mail before it's redirected to your primary email addresses with reusable and highly customizable 'Modifiers'.</li>
         <li><strong>Many modifiers available</strong>: text only, find and replace (with or without regular expressions), overwrite the subject, tag the subject with custom text, concatenate multiple email fields together, and Ptorx's custom 'Builder' modifier for complete control over certain email fields and their values.</li>
         <li><strong>Link multiple modifiers</strong> to multiple proxy emails.</li>
       </ul>
