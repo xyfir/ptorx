@@ -1,11 +1,11 @@
 {
   "name": "ptorx",
-  "version": "4.4.1",
+  "version": "4.5.0",
   "description": "",
   "main": "app.js",
   "dependencies": {
     "app-module-path": "^2.2.0",
-    "body-parser": "^1.18.0",
+    "body-parser": "^1.18.1",
     "copyr": "^1.0.3",
     "escape-string-regexp": "^1.0.5",
     "express": "^4.15.4",
@@ -25,7 +25,7 @@
     "react-stripe-checkout": "^2.6.3",
     "redux": "^3.7.2",
     "rword": "^2.1.0",
-    "stripe": "^4.25.0",
+    "stripe": "^5.0.0",
     "superagent": "^3.6.0",
     "sweetalert": "^2.0.3",
     "typed.js": "^2.0.5",
