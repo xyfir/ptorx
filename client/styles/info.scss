@@ -169,6 +169,10 @@ div.features {
 div.landing-page {
   text-align: center;
 
+  >header, >section {
+    padding: 0 1em;
+  }
+
   >header {
     display: flex;
     min-height: 70vh;
@@ -197,31 +201,38 @@ div.landing-page {
   }
 
   >section.more-info {
-    padding: 1.5em 0;
+    padding: 1.5em 1em;
 
     >p {
       font-size: 100%;
     }
   }
 
-  div.typed-strings {
-    display: none;
-  }
-
-  div.typed-container {
-    background-color: $lllgray;
-    padding: 1em;
-    border-radius: 5px;
-    margin: 1em;
-    border: $llgray 0.1em solid;
-
-    span.address {
-      color: $md-secondary-color;
-      font-weight: bold;
+  div.how-ptorx-works {
+    >h2 {
+      margin-bottom: 0;
+      margin-top: 1em;
     }
 
-    strong {
-      font-weight: bold;
+    >div.typed-strings {
+      display: none;
+    }
+  
+    >div.typed-container {
+      background-color: $lllgray;
+      padding: 1em;
+      border-radius: 5px;
+      margin: 1em;
+      border: $llgray 0.1em solid;
+  
+      span.address {
+        color: $md-secondary-color;
+        font-weight: bold;
+      }
+  
+      strong {
+        font-weight: bold;
+      }
     }
   }
 }
