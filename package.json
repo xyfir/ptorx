@@ -1,6 +1,6 @@
 {
   "name": "ptorx",
-  "version": "4.5.0",
+  "version": "4.6.0",
   "description": "",
   "main": "app.js",
   "dependencies": {
@@ -21,7 +21,7 @@
     "prop-types": "^15.5.10",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
-    "react-md": "^1.1.1",
+    "react-md": "^1.1.2",
     "react-stripe-checkout": "^2.6.3",
     "redux": "^3.7.2",
     "rword": "^2.1.0",
@@ -38,7 +38,6 @@
     "browserify": "^14.4.0",
     "gulp": "^3.9.1",
     "gulp-favicons": "^2.2.7",
-    "gulp-fontello": "^0.4.6",
     "gulp-sass": "^3.1.0",
     "gulp-streamify": "^1.0.2",
     "gulp-uglify": "^3.0.0",
