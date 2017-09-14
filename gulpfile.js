@@ -57,9 +57,3 @@ gulp.task('favicons', () => {
     .on('error', gutil.log)
     .pipe(gulp.dest('./static/icons/'));
 });
-
-gulp.task('fontello', () =>
-  gulp.src('fontello.json')
-    .pipe(require('gulp-fontello')())
-    .pipe(gulp.dest('./static/fontello'))
-);
