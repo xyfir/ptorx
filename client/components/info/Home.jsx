@@ -1,196 +1,237 @@
+import Typed from 'typed.js';
 import React from 'react';
 
 // react-md
+import FontIcon from 'react-md/lib/FontIcons';
 import Button from 'react-md/lib/Buttons/Button';
 
-export default () => (
-  <div className='home'>
-    <section className='main'>
-      <div>
-        <h1>Ptorx</h1>
-        
-        <span className='subtitle'>
-          Proxy emails for an extra layer of security, privacy, and control for your emails.
-        </span>
+// Components
+import HowItWorks from 'components/info/HowItWorks';
 
-        <span className='platforms'>
-          built for web, chrome, desktop, ios, and android
-        </span>
-      </div>
-    </section>
-
-    <section className='trial'>
-      <Button
-        secondary raised
-        className='start-trial'
-        onClick={() => location.href =
-          'https://accounts.xyfir.com/app/#/register/13'
-        }
-      >Try Free</Button>
-      
-      <p>
-        All that's needed to start your trial is a free <a target='_blank' href='https://accounts.xyfir.com/'>Xyfir Account</a>. No payment information required.
-      </p>
-    </section>
-
-    <section className='overview'>
-      <div className='item'>
-        <h2>Increase Your Security</h2>
-        <p>
-          Prevent hackers and others with malicious intentions from discovering your real email.
-        </p>
-      </div>
-      
-      <div className='item'>
-        <h2>Increase Your Privacy</h2>
-        <p>
-          Keep your real email secret and out of 'people search' websites.
-        </p>
-        <p>
-          Prevent your accounts from being 'linked' across multiple different sites via email.
-        </p>
-      </div>
-
-      <div className='item'>
-        <h2>Decrease Spam And Unwanted Emails</h2>
-        <p>
-          Delete Ptorx emails you no longer want and stop receiving mail from them.
-        </p>
-        <p>
-          Use filters to blacklist or whitelist received mail by content.
-        </p>
-      </div>
-
-      <div className='item'>
-        <h2>Increase Control Of Your Emails</h2>
-        <p>
-          Choose which mail gets redirected to your real email addresses.
-        </p>
-        <p>
-          Modify incoming mail before it's redirected to you.
-        </p>
-      </div>
-    </section>
-
-    <section className='install with-screenshot'>
-      <img src='//imgur.com/kJCPRM7.png' alt='Screenshot 1' />
-
-      <div>
-        <h2>Install</h2>
-        <p>
-          You can use Ptorx in your browser just like any other site. We also offer a Google Chrome extension as well as both mobile and desktop applications.
-        </p>
-        <a className='icon-chrome' href='https://chrome.google.com/webstore/detail/ptorx/jjhgjgpgkbnlihngkfnkafaidoggljge'>Chrome</a>
-        <br />
-        <a className='icon-apple' href='https://itunes.apple.com/us/app/ptorx/id1161180537'>iOS</a>
-        <a className='icon-android' href='https://play.google.com/store/apps/details?id=com.xyfir.ptorx'>Android</a>
-        <br />
-        <a className='icon-apple' href='https://xyfir.com/downloads/Ptorx/Ptorx_Mac.app.zip'>Mac</a>
-        <a className='icon-linux' href='https://xyfir.com/downloads/Ptorx/Ptorx_Linux.zip'>Linux</a>
-        <a className='icon-windows' href='https://xyfir.com/downloads/Ptorx/Ptorx_Win.zip'>Windows</a>
-      </div>
-    </section>
-    
-    <section className='how-it-works with-screenshot'>
-      <img src='//imgur.com/jevPhEx.png' alt='Screenshot 2' />
-
-      <div>
-        <h2>How it Works</h2>
-        <ol>
-          <li>Create a redirect email from our site, extension, or app</li>
-          <li>Add any optional customizations (filters, modifiers, etc)</li>
-          <li>Use the new redirect email we give you to sign up with a site or receive emails</li>
-          <li>Emails are sent to your Ptorx address</li>
-          <li>Our system makes sure the incoming mail matches your provided filters</li>
-          <li>Our system then applies any modifiers you specified, to the message</li>
-          <li>The email is then redirected to your main email, or stored on Ptorx for later viewing</li>
-        </ol>
-      </div>
-    </section>
-    
-    <section className='privacy with-screenshot'>
-      <img src='//imgur.com/UQ1y4XA.png' alt='Screenshot 3' />
-
-      <div>
-        <h2>Privacy</h2>
-        <p>
-          Ptorx increases by acting as a proxy for your emails. Any mail sent to one of your Ptorx addresses is redirected to your real email address. Anyone who receives your Ptorx address will not be able to find your real email.
-        </p>
-      </div>
-    </section>
-    
-    <section className='safe-from-spam with-screenshot'>
-      <img src='//imgur.com/7mobLZ4.png' alt='Screenshot 4' />
-
-      <div>
-        <h2>Safe From Spam</h2>
-        <p>
-          If a spammer ever obtains one of your Ptorx addresses, all you have to do is delete the Ptorx address and no more spam will be redirected to your main email. Additionally, you can utilize our filter system to filter out unwanted emails.
-        </p>
-      </div>
-    </section>
-    
-    <section className='security with-screenshot'>
-      <img src='//imgur.com/07emOvt.png' alt='Screenshot 5' />
-
-      <div>
-        <h2>Improved Security</h2>
-        <p>
-          An email can be a valuable thing for a hacker, spammer, or other malicious user on the internet. Ptorx can help keep your accounts safe and you can utlize filters to keep out phishing, spam, and other unwanted mail.
-        </p>
-      </div>
-    </section>
-    
-    <section className='control'>
-      <h2>Control Your Email</h2>
-      <p>Our filter and modifier systems allow you to control your email like never before.</p>
-      
-      <h3>Filters</h3>
-      <p>
-        Filters allow you to determine what emails actually get redirected to your real address by checking for values in any messages received. They are a great way to unwanted messages of all kinds. Filters include subject, sender address, sender domain, text content, HTML content, and email header filters. You can configure your email to ignore messages where a filter matches, or only accept messages that match all provided filters. You can also utilize <a target='_blank' href='https://regexone.com/'>regular expressions</a> for more advanced filters.
-      </p>
-      
-      <h3>Modifiers</h3>
-      <p>
-        Modifiers allow you to modify an incoming message's content before it is redirected to your real address. Modifiers include, but are not limited to: text only mode (removes HTML), find and replace, subject overwrite, and subject tag modifiers. Subject tag modifiers allow you to 'tag' any incoming emails by prepending or appending a string of text to the original email's subject.  
-      </p>
-    </section>
-    
-    <section className='keep-your-email with-screenshot'>
-      <img src='//imgur.com/3EGyVD7.png' alt='Screenshot 6' />
-
-      <div>
-        <h2>Keep Your Email</h2>
-        <p>
-          Since Ptorx just redirects messages to you, you don't have to give up your existing address. You can still receive and view your messages in your normal email programs, apps, and websites.
-        </p>
-      </div>
-    </section>
-    
-    <section className='premium'>
-      <h2>Ptorx Premium</h2>
-      <p>
-        You can purchase a premium subscription <a href='panel/#account/purchase-subscription'>here</a>.
-      </p>
-
-      <table>
-        <thead>
-          <tr>
-            <th>Months</th><th>Monthly Cost</th><th>Total Cost</th><th>All Features</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>One</td><td>$3.00</td><td>$3.00</td><td>Yes</td>
-          </tr>
-          <tr>
-            <td>Six</td><td>$2.50</td><td>$15.00</td><td>Yes</td>
-          </tr>
-          <tr>
-            <td>Twelve</td><td>$2.00</td><td>$24.00</td><td>Yes</td>
-          </tr>
-        </tbody>
-      </table>
-    </section>
-  </div>
+const LearnMore = ({page}) => (
+  <a href={page}><FontIcon primary>info</FontIcon>Learn More</a>
 );
+
+export default class Home extends React.Component {
+
+  constructor(props) {
+    super(props);
+
+    this.messages = [{
+      title: 'Strengthens Your Security',
+      lines: [
+        'Prevent hackers and anyone else from discovering your real email.',
+        'Use different proxy emails for every account you create and person you contact.'
+      ]
+    }, {
+      title: 'Protects Your Privacy',
+      lines: [
+        'Keep your real email secret and out of people search websites.',
+        'Prevent your accounts from being linked across multiple different sites via email.'
+      ]
+    }, {
+      title: 'Stops Unwanted Mail',
+      lines: [
+        'Disable redirection or delete proxy emails to stop receiving mail from them.',
+        'Use filters to blacklist or whitelist received mail by its content.'
+      ]
+    }, {
+      title: 'Gives You Control',
+      lines: [
+        'Choose which mail gets redirected where and when.',
+        'Modify incoming mail before it gets redirected to you.'
+      ]
+    }],
+    this.state = {
+      message: Math.floor(Math.random() * this.messages.length),
+      fade: 'in'
+    },
+
+    this._startTyping = this._startTyping.bind(this);
+  }
+
+  componentDidMount() {
+    this._startTyping();
+  }
+
+  /**
+   * Called when Typed.js completes the lines in a message.
+   */
+  onTypedComplete() {
+    this.setState({ fade: 'out' });
+
+    // There's probably a better way to do this animation...
+    setTimeout(() => {
+      let {message} = this.state;
+
+      // Last message in list, go to first message
+      if (!this.messages[message + 1])
+        message = 0;
+      // Go to next message
+      else
+        message++;
+
+      this.setState({ message, fade: 'in' }, () => this._startTyping());
+    }, 250);
+  }
+
+  /**
+   * Starts typing the lines in a specific message and adds onComplete 
+   * listener.
+   */
+  _startTyping() {
+    const {message} = this.state;
+    this.typed && this.typed.destroy();
+
+    this.typed = new Typed('span.typed-home', {
+      strings: this.messages[message].lines,
+      onComplete: () => setTimeout(() => this.onTypedComplete(), 5000),
+      startDelay: 1000,
+      backDelay: 5000,
+      typeSpeed: 45,
+      backSpeed: 0,
+      fadeOut: true,
+      loop: false
+    });
+  }
+
+  render() {
+    const message = this.messages[this.state.message];
+
+    return (
+      <div className='home'>
+        <section className={'main fade-' + this.state.fade}>
+          <h1>Ptorx {message.title}</h1>
+          
+          <div className='typed-container'>
+            <span className='typed-home' />
+          </div>
+        </section>
+
+        <section className='trial'>
+          <Button
+            secondary raised
+            className='start-trial'
+            onClick={() => location.href =
+              'https://accounts.xyfir.com/app/#/register/13'
+            }
+          >Try Free</Button>
+          
+          <p>All that's needed to start your 14 day free trial is a valid email to create a Xyfir Account. No payment info required.</p>
+        </section>
+
+        <section className='how-it-works'>
+          <HowItWorks />
+        </section>
+
+        <section className='install'>
+          <h2>Install</h2>
+          <p>
+            You can use Ptorx in your browser just like any other site. We also offer a Google Chrome extension as well as both mobile and desktop applications.
+          </p>
+          
+          <Button
+            secondary raised
+            onClick={() => location.href =
+              'panel/'
+            }
+          >Web</Button>
+          <Button
+            secondary raised
+            onClick={() => location.href =
+              'https://chrome.google.com/webstore/detail/ptorx/jjhgjgpgkbnlihngkfnkafaidoggljge'
+            }
+          >Chrome</Button>
+          <Button
+            secondary raised
+            onClick={() => location.href =
+              'https://itunes.apple.com/us/app/ptorx/id1161180537'
+            }
+          >iOS</Button>
+          <Button
+            secondary raised
+            onClick={() => location.href =
+              'https://play.google.com/store/apps/details?id=com.xyfir.ptorx'
+            }
+          >Android</Button>
+          <Button
+            secondary raised
+            onClick={() => location.href =
+              'https://xyfir.com/downloads/Ptorx/Ptorx_Mac.app.zip'
+            }
+          >Mac</Button>
+          <Button
+            secondary raised
+            onClick={() => location.href =
+              'https://xyfir.com/downloads/Ptorx/Ptorx_Linux.zip'
+            }
+          >Linux</Button>
+          <Button
+            secondary raised
+            onClick={() => location.href =
+              'https://xyfir.com/downloads/Ptorx/Ptorx_Win.zip'
+            }
+          >Windows</Button>
+        </section>
+
+        <section className='overview'>
+          <div>
+            <h3>Anonymous Proxy Emails</h3>
+            <p>Keep your real email addresses private while still receiving and sending mail from them.</p>
+            <LearnMore page='anonymous-emails' />
+          </div>
+
+          <div>
+            <h3>Secure Emails</h3>
+            <p>Prevent hackers from discovering your real emails and any accounts you've created across the web.</p>
+            <LearnMore page='safe-and-secure-emails' />
+          </div>
+
+          <div>
+            <h3>Stop Unwanted Mail</h3>
+            <p>Use custom or premade filters, disable mail redirection, or delete proxy emails that are receiving spam.</p>
+            <LearnMore page='stop-unwanted-mail' />
+          </div>
+
+          <div>
+            <h3>Temporary Addresses</h3>
+            <p>Just need a quick, disposable address that only you have access to? Ptorx makes it easy.</p>
+            <LearnMore page='temporary-emails' />
+          </div>
+
+          <div>
+            <h3>Easy Email Forwarding</h3>
+            <p>Create proxy addresses with ptorx.com or your own domains that forward mail to your primary addresses.</p>
+            <LearnMore page='email-forwarding' />
+          </div>
+
+          <div>
+            <h3>Take Control</h3>
+            <p>Email redirection, custom filters, modify incoming mail content, send or reply anonymously, and much more.</p>
+            <LearnMore page='features' />
+          </div>
+        </section>
+        
+        <section className='subscription'>
+          <h2>Ptorx Subscription</h2>
+          <span className='price'>$25 per year</span>
+
+          <ul className='features'>
+            <li>All of Ptorx's <a href='features'>features</a></li>
+            <li>30 day money-back guarantee</li>
+            <li>Pay with card or Bitcoin</li>
+            <li>Try free for 14 days</li>
+          </ul>
+
+          <Button
+            secondary raised
+            onClick={() => location.href =
+              'https://accounts.xyfir.com/app/#/register/13'
+            }
+          >Try Free</Button>
+        </section>
+      </div>
+    )
+  }
+
+}
