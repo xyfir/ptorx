@@ -1,4 +1,5 @@
 import { render } from 'react-dom';
+import request from 'superagent';
 import React from 'react';
 
 // react-md
@@ -22,12 +23,19 @@ class PtorxInfo extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = { drawer: false };
+    this.state = { drawer: false, loggedIn: false };
   }
 
   componentWillMount() {
     const q = query();
     for (let k in q) localStorage[k] = q[k];
+
+    request
+      .get('../api/account')
+      .query({ token: localStorage.accessToken || '' })
+      .end((err, res) =>
+        !err && this.setState({ loggedIn: res.body.loggedIn })
+      );
   }
 
   render() {
@@ -74,17 +82,18 @@ class PtorxInfo extends React.Component {
         <Drawer
           onVisibilityChange={v => this.setState({ drawer: v })}
           autoclose={true}
-          navItems={[
-            <a href='panel/'>
-              <ListItem primaryText='App' />
-            </a>,
-            <a href='https://accounts.xyfir.com/app/#/login/13'>
-              <ListItem primaryText='Login' />
-            </a>,
-            <a href='https://accounts.xyfir.com/app/#/register/13'>
-              <ListItem primaryText='Register' />
-            </a>,
-
+          navItems={(
+            this.state.loggedIn ? [
+              <a href='panel/'><ListItem primaryText='App' /></a>
+            ] : [
+              <a href='https://accounts.xyfir.com/app/#/login/13'>
+                <ListItem primaryText='Login' />
+              </a>,
+              <a href='https://accounts.xyfir.com/app/#/register/13'>
+                <ListItem primaryText='Register' />
+              </a>
+            ]
+          ).concat([
             <Divider />,
 
             <a href='features'>
@@ -93,7 +102,7 @@ class PtorxInfo extends React.Component {
             <a href='docs'>
               <ListItem primaryText='Help Docs' />
             </a>
-          ]}
+          ])}
           visible={this.state.drawer}
           header={
             <Toolbar
