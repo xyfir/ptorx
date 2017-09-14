@@ -149,7 +149,6 @@ module.exports = async function(req, res) {
           break;
         
         case 6: // Concatenate
-        case 7: // Asana
           // Prepend
           if (modifier.data.prepend) {
             email[modifier.data.to] = 

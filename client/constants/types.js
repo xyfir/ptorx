@@ -13,7 +13,6 @@ export const modifierTypes = {
   '4': 'Subject Overwrite',
   '5': 'Subject Tag',
   '6': 'Concatenate',
-  '7': 'Asana',
   '8': 'Builder'
 };
 
