@@ -1,106 +1,118 @@
 div.home {
-  background-color: white;
   margin: 0em;
+  margin-top: -1em;
+  text-align: center;
+  background-color: white;
 
-  section.trial, section.main, section.premium, section.overview,
-  nav, footer {
-    text-align: center;
-  }
+  >section {
+    &:nth-child(even) {
+      background-color: $purple;
+  
+      p {
+        color: white;
+      }
+      
+      h1, h2, h3 {
+        color: $llgray;
+      }
+      
+      a {
+        color: $lgray;
 
-  >section.trial {
-    padding-top: 0;
-  }
-
-  table {
-    text-align: center;
-    margin: auto;
-
-    th {
-      padding-right: 0.6em;
+        &:hover { color: $gray }
+      }
     }
-  }
 
-  section {
-    padding: 2.5% 20%;
+    &:nth-child(odd) {
+      background-color: white;
+      
+      h1, h2, h3 {
+        color: $purple;
+      }
+    }
 
     p {
       font-size: 100%;
     }
   }
 
-  ul, ol {
-    padding-left: 1em;
-  }
-  
-  section:nth-child(even) {
-    background-color: $purple;
-
-    p {
-      color: white;
-    }
-    
-    h1, h2, h3 {
-      color: $llgray;
-    }
-    
-    a {
-      color: $lgray;
-    }
-    a:hover {
-      color: $gray;
-    }
-  }
-  
-  section:nth-child(odd) {
-    background-color: white;
-    
-    h1, h2, h3 {
-      color: $purple;
-    }
-  }
-
-  section.with-screenshot {
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-
-    >img {
-      height: 30em;
-    }
-  }
-
-  section.install {
-    p {
-      margin-bottom: 1em;
-    }
-    
-    a[class^="icon-"] {
-      font-size: 125%;
-      display: inline-block;
-      padding: 0.2em;
-    }
-
-  }
-
   section.main {
     display: flex;
-    align-items: center;
-    min-height: 70vh;
     font-size: 200%;
+    min-height: 70vh;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
 
-    >div {
-      width: 100%;
+    &.fade-out {
+      @keyframes fadeOut {
+        0% {opacity: 1;}
+        100% {opacity: 0;}
+      }
+
+      animation-name: fadeOut;
+      animation-duration: 250ms;
+    }
+    &.fade-in {
+      @keyframes fadeIn{
+        0% {opacity: 0;}
+        100% {opacity: 1;}
+      }
+
+      animation-name: fadeIn;
+      animation-duration: 250ms;
     }
 
-    .subtitle {
+    >div.typed-container {
+      font-size: 70%;
       line-height: 1.5;
     }
+  }
 
-    .platforms {
-      display: block;
-      font-size: 50%;
-      color: $dgray;
-      margin-top: 2em;
+  >section.trial {
+    padding-top: 0;
+  }
+
+  >section.overview {
+    display: flex;
+    flex-wrap: wrap;
+
+    >div {
+      flex: 1;
+      border: solid 0.5em transparent;
+      display: flex;
+      align-items: center;
+      flex-direction: column;
+      justify-content: space-between;
+
+      >p {
+        text-align: justify;
+      }
+
+      >a {
+        display: flex;
+
+        >i.md-icon {
+          padding-right: 0.2em;
+        }
+      }
+    }
+  }
+
+  >section.subscription {
+    color: white;
+
+    >h2, >button {
+      margin-bottom: 0;
+    }
+
+    >span.price {
+      font-weight: bold;
+    }
+
+    >ul.features {
+      list-style: none;
+      padding-left: 0;
     }
   }
 
@@ -115,17 +127,15 @@ div.home {
   }
 
   @media (max-width: 400px) {
-    text-align: center;
-
-    section.with-screenshot {
-      >img {
-        height: 24em;
-      }
+    section {
+      padding: 1em;
     }
   }
 
   @media (min-width: 401px) {
-    text-align: justify;
+    section {
+      padding: 2em 20%;
+    }
   }
 }
 
@@ -187,6 +197,7 @@ div.landing-page {
     >p {
       color: $dgray;
       font-size: 100%;
+      margin-bottom: 1.5em;
     }
   }
 
@@ -207,37 +218,38 @@ div.landing-page {
       font-size: 100%;
     }
   }
-
-  div.how-ptorx-works {
-    >h2 {
-      margin-bottom: 0;
-      margin-top: 1em;
-    }
-
-    >div.typed-strings {
-      display: none;
-    }
-  
-    >div.typed-container {
-      background-color: $lllgray;
-      padding: 1em;
-      border-radius: 5px;
-      margin: 1em;
-      border: $llgray 0.1em solid;
-  
-      span.address {
-        color: $md-secondary-color;
-        font-weight: bold;
-      }
-  
-      strong {
-        font-weight: bold;
-      }
-    }
-  }
 }
 
 button.start-trial {
   font-size: 2em;
   height: 2.5em;
+}
+
+div.how-ptorx-works {
+  width: 100%;
+
+  >h2 {
+    margin-bottom: 0;
+  }
+
+  >div.typed-strings {
+    display: none;
+  }
+
+  >div.typed-container {
+    background-color: $lllgray;
+    padding: 1em;
+    border-radius: 5px;
+    margin: 1em;
+    border: $llgray 0.1em solid;
+
+    span.address {
+      color: $md-secondary-color;
+      font-weight: bold;
+    }
+
+    strong {
+      font-weight: bold;
+    }
+  }
 }
