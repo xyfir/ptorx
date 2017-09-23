@@ -36,7 +36,7 @@ module.exports = async function(req, res) {
 
     // Get user data from db
     let sql = `
-      SELECT user_id, subscription FROM users WHERE xyfir_id = ?
+      SELECT user_id, subscription, admin FROM users WHERE xyfir_id = ?
     `,
     vars = [
       req.body.xid
@@ -98,6 +98,7 @@ module.exports = async function(req, res) {
       db.release();
 
       req.session.uid = result.insertId,
+      req.session.admin = false,
       req.session.subscription = insert.subscription;
 
       res.json({
@@ -122,6 +123,7 @@ module.exports = async function(req, res) {
       if (!result.affectedRows) throw '---';
 
       req.session.uid = rows[0].user_id,
+      req.session.admin = !!rows[0].admin,
       req.session.subscription = rows[0].subscription;
 
       res.json({

@@ -43,7 +43,7 @@ module.exports = async function(req, res) {
       if (!token[0] || !token[1]) throw 'Invalid token 1';
 
       sql = `
-        SELECT xyfir_id, subscription, referral, trial
+        SELECT xyfir_id, subscription, referral, trial, admin
         FROM users WHERE user_id = ?
       `,
       vars = [
@@ -67,7 +67,7 @@ module.exports = async function(req, res) {
     // Get info for dev user
     else if (config.environment.type == 'dev') {
       sql = `
-        SELECT subscription, referral, trial FROM users
+        SELECT subscription, referral, trial, admin FROM users
         WHERE user_id = 1
       `,
       rows = await db.query(sql);
@@ -89,6 +89,7 @@ module.exports = async function(req, res) {
     
     // Set session, return account info
     req.session.uid = uid,
+    req.session.admin = !!row.admin,
     req.session.subscription = row.subscription;
     
     res.json({
@@ -98,9 +99,7 @@ module.exports = async function(req, res) {
   }
   catch (err) {
     db.release();
-    
-    req.session.uid = req.session.subscription = 0;
-
+    req.session.destroy();
     res.json({ loggedIn: false });
   }
 
