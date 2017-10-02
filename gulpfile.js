@@ -34,7 +34,7 @@ function buildJS(file) {
   )
   .transform(
     babelify.configure({
-      extensions, presets: ['es2015', 'react']
+      extensions, presets: ['env', 'react']
     })
   )
   .bundle()
