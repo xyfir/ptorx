@@ -150,8 +150,16 @@ export default class ViewDomain extends React.Component {
           ) : (
             <div className='unverified flex'>
               <p>
-                This domain is unverified. Check Ptorx's Help Docs for help verifying your domain. <a onClick={() => copy(this.state.domainKey)}>Copy verification key to clipboard</a>.
+                This domain is unverified. Check Ptorx's Help Docs for help verifying your domain.
               </p>
+
+              <label>TXT Hostname</label>
+              <span>{this.state.domainKey.name}</span>
+
+              <label>Value</label>
+              <a onClick={() => copy(this.state.domainKey.value)}>
+                Copy to clipboard
+              </a>
 
               <Button
                 raised secondary

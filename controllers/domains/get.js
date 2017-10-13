@@ -5,11 +5,12 @@ const mysql = require('lib/mysql');
   RETURN
     {
       error: boolean, message?: string,
-
-      isCreator?: boolean,
       
-      id?: number, domain?: string, domainKey?: string, verified?: boolean,
-      added?: date-string, global: boolean,
+      id?: number, domain?: string, verified?: boolean, added?: date-string,
+      global: boolean, isCreator?: boolean,
+      domainKey?: {
+        name: string, value: string
+      }
       users?: [{
         id: string, label: string, requestKey: string, added: date-string
       }]
@@ -41,6 +42,8 @@ module.exports = async function(req, res) {
       db.release();
       return res.json(domain);
     }
+
+    if (domain.domainKey) domain.domainKey = JSON.parse(domain.domainKey);
 
     domain.users = await db.query(`
       SELECT user_id AS id, label, request_key AS requestKey, added

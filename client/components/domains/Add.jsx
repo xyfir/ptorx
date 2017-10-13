@@ -28,7 +28,7 @@ export default class AddDomain extends React.Component {
     },
     this.state = {
       view: this.views.ADD,
-      requestKey: '', domainId: 0, domainKey: '', domain: ''
+      requestKey: '', domainId: 0, domainKey: {}, domain: ''
     };
   }
 
@@ -144,9 +144,11 @@ export default class AddDomain extends React.Component {
 
               <TableRow>
                 <TableColumn>TXT</TableColumn>
-                <TableColumn>krs._domainkey.{this.state.domain}</TableColumn>
+                <TableColumn>{this.state.domainKey.name}</TableColumn>
                 <TableColumn>
-                  <a onClick={() => copy(this.state.domainKey)}>Copy to clipboard</a>
+                  <a onClick={() => copy(this.state.domainKey.value)}>
+                    Copy to clipboard
+                  </a>
                 </TableColumn>
               </TableRow>
 
