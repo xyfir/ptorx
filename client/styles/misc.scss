@@ -176,6 +176,14 @@ section.request-domain-access {
   }
 }
 
+div.view-domains-as-creator {
+  div.unverified {
+    label {
+      font-weight: bold;    
+    }
+  }
+}
+
 div.account {
   >section.primary-emails {
     >div.add {
