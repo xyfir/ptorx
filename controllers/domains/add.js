@@ -15,7 +15,10 @@ const uuid = require('uuid/v4');
       requestKey?: string,
       
       // Domain is new and user must verify ownership
-      domainId?:string, domainKey?: string
+      domainId?:string,
+      domainKey?: {
+        name: string, value: string
+      }
     }
   DESCRIPTION
     Depending on whether the domain already exists in Ptorx's database or not,
@@ -58,7 +61,7 @@ module.exports = async function(req, res) {
     // Domain does not exist; user must verify ownership
     else {
       // Add domain to MailGun
-      const mgRes = await request
+      const {body: mgRes} = await request
         .post(config.addresses.mailgun + 'domains')
         .type('form')
         .send({
@@ -67,15 +70,16 @@ module.exports = async function(req, res) {
         });
 
       // Get domainkey
-      const key = mgRes.body.sending_dns_records
-        .find(r => /\._domainkey\./.test(r.name))
-        .value;
+      const key = mgRes.sending_dns_records
+        .find(r => /\._domainkey\./.test(r.name));
 
       // Add database, user, key to domains
-      const dbRes = await db.query(
-        `INSERT INTO domains SET ?`,
-        { domain: req.body.domain, user_id: req.session.uid, domain_key: key }
-      );
+      const dbRes = await db.query(`
+        INSERT INTO domains SET ?
+      `, {
+        domain: req.body.domain, user_id: req.session.uid,
+        domain_key: JSON.stringify({ name: key.name, value: key.value })
+      });
 
       const domainId = dbRes.insertId;
 
