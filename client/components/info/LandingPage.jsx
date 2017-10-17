@@ -1,7 +1,7 @@
 import React from 'react';
 
 // Constants
-import sections from 'constants/info-sections';
+import pages from 'constants/landing-pages';
 
 // react-md
 import Button from 'react-md/lib/Buttons/Button';
@@ -9,12 +9,12 @@ import Button from 'react-md/lib/Buttons/Button';
 // Components
 import HowItWorks from 'components/info/HowItWorks';
 
-export default ({section}) => (
-  <div className={'landing-page ' + section}>
+export default ({page}) => (
+  <div className={'landing-page ' + page}>
     <header>
-      <h2>{sections[section].title}</h2>
+      <h2>{pages[page].title}</h2>
 
-      <p>{sections[section].description}</p>
+      <p>{pages[page].description}</p>
 
       <HowItWorks />
     </header>
@@ -32,11 +32,11 @@ export default ({section}) => (
     </section>
 
     <section className='more-info'>
-      <p>If you decide to purchase a subscription and experience Ptorx in its entirety, we offer a risk-free 30 day money-back guarantee on all purchases.</p>
+      <p>If you decide to purchase a subscription and experience Ptorx in its entirety, we offer a <strong>risk-free, 30 day money-back guarantee</strong> on all purchases.</p>
 
-      <p>Ptorx has lots of features, and is used for much more than just {sections[section].featuresMessage}. Check our <a href='features'>features list</a> to learn about all we can do!</p>
+      <p><strong>Ptorx has lots of features</strong>, and is used for much more than just {pages[page].featuresMessage}. Check our <strong><a href='features'>features list</a></strong> to learn about all we can do!</p>
 
-      <p>Confused? Have questions? Browse through our <a href='docs'>Help Docs</a> or <a href='https://xyfir.com/#/contact'>send us your question</a> and we'll get back to you as soon as we can.</p>
+      <p><strong>Confused? Have questions?</strong> Browse through our <strong><a href='docs'>Help Docs</a></strong> or <strong><a href='https://xyfir.com/#/contact'>send us your question</a></strong> and we'll get back to you as soon as we can.</p>
     </section>
   </div>
 );

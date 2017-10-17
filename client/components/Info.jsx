@@ -40,15 +40,15 @@ class PtorxInfo extends React.Component {
 
   render() {
     const view = (() => {
-      const section = location.pathname.split('/')[1];
+      const page = location.pathname.split('/')[1];
 
-      switch (section) {
+      switch (page) {
         case 'safe-and-secure-emails':
         case 'stop-unwanted-mail':
         case 'anonymous-emails':
         case 'temporary-emails':
         case 'email-forwarding':
-          return <LandingPage section={section} />
+          return <LandingPage page={page} />
         case 'features':
           return <Features />
         case 'docs':
