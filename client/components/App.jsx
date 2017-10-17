@@ -63,7 +63,7 @@ class App extends React.Component {
       };
 
       request
-        .get('../api/account')
+        .get('/api/account')
         .query({ token })
         .then(res => {
           if (!res.body.loggedIn)
@@ -71,19 +71,19 @@ class App extends React.Component {
 
           state.account = res.body;
 
-          return request.get('../api/domains');
+          return request.get('/api/domains');
         })
         .then(res => {
           state.domains = res.body.domains;
-          return request.get('../api/emails');
+          return request.get('/api/emails');
         })
         .then(res => {
           state.emails = res.body.emails;
-          return request.get('../api/filters');
+          return request.get('/api/filters');
         })
         .then(res => {
           state.filters = res.body.filters;
-          return request.get('../api/modifiers');
+          return request.get('/api/modifiers');
         })
         .then(res => {
           state.modifiers = res.body.modifiers;
@@ -117,7 +117,7 @@ class App extends React.Component {
       q.referral = localStorage.referral || '';
       
       request
-        .post('../api/account/login')
+        .post('/api/account/login')
         .send(q)
         .end((err, res) => {
           if (err || res.body.error) {
@@ -137,14 +137,21 @@ class App extends React.Component {
 
   onLogout() {
     delete localStorage.accessToken;
-    location.href = '../api/account/logout';
+    location.href = '/api/account/logout';
+  }
+
+  dispatch(action) {
+    return store.dispatch(action);
   }
 
   render() {
     if (!this.state) return <div />;
     
     const view = (() => {
-      const props = { data: this.state, dispatch: store.dispatch };
+      const props = {
+        data: this.state, dispatch: store.dispatch,
+        App: this // eventually remove other props and just use App
+      };
 
       switch (this.state.view.split('/')[0]) {
         case 'MODIFIERS': return <Modifiers {...props} />
