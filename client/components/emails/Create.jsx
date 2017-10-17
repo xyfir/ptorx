@@ -16,22 +16,26 @@ export default class CreateEmail extends React.Component {
   constructor(props) {
     super(props);
 
-    this.onSubmit = this.onSubmit.bind(this);
-
     this.state = { loading: true };
   }
 
   componentWillMount() {
+    const {App} = this.props;
     const q = parseQuery();
 
     // Load data from email with id q.duplicate
     if (q.duplicate) {
-      const email = this.props.data.emails.find(e => e.id == q.duplicate);
+      const email = App.state.emails.find(e => e.id == q.duplicate);
 
       if (!email) return;
 
+      const domain = email.address.split('@')[1];
+      email.domain = App.state.domains.find(d => d.domain == domain).id;
+
+      console.log('email', email);
+
       request
-        .get('../api/emails/' + q.duplicate)
+        .get('/api/emails/' + q.duplicate)
         .end((err, res) => {
           if (!err && !res.body.error) {
             this.setState({
@@ -48,7 +52,7 @@ export default class CreateEmail extends React.Component {
 
   onSubmit(data) {
     request
-      .post('../api/emails')
+      .post('/api/emails')
       .send(data)
       .end((err, res) => {
         if (err || res.body.error) {
@@ -56,7 +60,7 @@ export default class CreateEmail extends React.Component {
         }
         else {
           // Clear emails so they're loaded again
-          this.props.dispatch(loadEmails([]));
+          this.props.App.dispatch(loadEmails([]));
           location.hash = '#emails/list';
 
           swal('Success', `Email '${data.name}' created`, 'success');
@@ -65,7 +69,7 @@ export default class CreateEmail extends React.Component {
   }
 
   render() {
-    if (this.state.loading) return <div />;
+    if (this.state.loading) return null;
     
     return (
       <div className='email-create'>
@@ -73,8 +77,8 @@ export default class CreateEmail extends React.Component {
           {...this.props}
           email={this.state.email}
           create={true}
-          onSubmit={this.onSubmit}
-          recaptcha={this.props.data.account.trial}
+          onSubmit={d => this.onSubmit(d)}
+          recaptcha={this.props.App.state.account.trial}
         />
       </div>
     );

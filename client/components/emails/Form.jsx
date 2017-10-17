@@ -263,7 +263,7 @@ export default class EmailForm extends React.Component {
                   Object({ label: d.domain, value: d.id })
                 )
               }
-              defaultValue={1}
+              defaultValue={email.domain}
             />
           </div>
         ) : null}
@@ -445,6 +445,7 @@ export default class EmailForm extends React.Component {
 }
 
 EmailForm.PropTypes = {
+  App: PropTypes.object.isRequired,
   data: PropTypes.object.isRequired,
   email: PropTypes.object,
   create: PropTypes.bool,
@@ -456,7 +457,8 @@ EmailForm.PropTypes = {
 EmailForm.defaultProps = {
   email: {
     name: '', description: '', toEmail: '', spamFilter: true, saveMail: false,
-    directForward: false, noToAddress: false, filters: [], modifiers: []
+    directForward: false, noToAddress: false, filters: [], modifiers: [],
+    domain: 1
   },
   recaptcha: false, create: false
 };
