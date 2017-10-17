@@ -92,8 +92,8 @@ export default class HowItWorks extends React.Component {
           <span><strong>Step 1.</strong> Create a new proxy email from within the Ptorx app.</span>
           <span>Customize your address. How about <span className='address'>your-custom-proxy-address@ptorx.com</span>?</span>
           <span>Feeling indecisive? Let Ptorx choose for you.</span>
-          <span>Maybe we'll choose <span className='address'>lazydog27@ptorx.com</span>.</span>
-          <span>You can also use your own domain. <span className='address'>lazydog27@your-domain.com</span> sounds good.</span>
+          <span>Maybe we'll choose <span className='address'>python52@ptorx.com</span>.</span>
+          <span>You can also use your own domain. <span className='address'>python52@your-domain.com</span> sounds good.</span>
           <span><strong>Step 2.</strong> You can optionally point it to any of your real, "primary" email addresses.</span>
           <span><span className='address'>your-primary-address@gmail.com</span></span>
           <span><span className='address'>your-primary-address@aol.com</span></span>
