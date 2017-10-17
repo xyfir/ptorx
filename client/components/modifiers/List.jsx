@@ -13,6 +13,7 @@ import { modifierTypes } from 'constants/types';
 import findMatches from 'lib/find-matching';
 
 // Components
+import Pagination from 'components/misc/Pagination';
 import Search from 'components/misc/Search';
 
 // react-md
@@ -27,7 +28,7 @@ export default class ModifierList extends React.Component {
     super(props);
 
     this.state = {
-      selected: 0, search: { query: '', type: 0 }
+      selected: 0, page: 1, search: { query: '', type: 0 }
     };
 
     if (props.data.modifiers.length == 0) {
@@ -93,24 +94,28 @@ export default class ModifierList extends React.Component {
           type='modifier'
         />
 
-        <List
-          className='modifiers-list section md-paper md-paper--1'
-        >{
-          findMatches(
-            this.props.data.modifiers, this.state.search
-          ).filter(
-            mod => !mod.global
-          ).map(m =>
-            <ListItem
-              threeLines
-              key={m.id}
-              onClick={() => this.setState({ selected: m.id })}
-              className='modifier'
-              primaryText={m.name}
-              secondaryText={modifierTypes[m.type] + '\n' + m.description}
-            />
-          )
+        <List className='modifiers-list section md-paper md-paper--1'>{
+          findMatches(this.props.data.modifiers, this.state.search)
+            .filter(mod => !mod.global)
+            .splice((this.state.page - 1) * 25, 25)
+            .map(m =>
+              <ListItem
+                threeLines
+                key={m.id}
+                onClick={() => this.setState({ selected: m.id })}
+                className='modifier'
+                primaryText={m.name}
+                secondaryText={modifierTypes[m.type] + '\n' + m.description}
+              />
+            )
         }</List>
+
+        <Pagination
+          itemsPerPage={25}
+          onGoTo={p => this.setState({ page: p })}
+          items={this.props.data.modifiers.length}
+          page={this.state.page}
+        />
 
         <Dialog
           id='selected-modifier'

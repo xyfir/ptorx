@@ -8,12 +8,12 @@ import { loadEmails } from 'actions/creators/emails';
 
 // Constants
 import { filterTypes } from 'constants/types';
-import { URL } from 'constants/config';
 
 // Modules
 import findMatches from 'lib/find-matching';
 
 // Components
+import Pagination from 'components/misc/Pagination';
 import Search from 'components/misc/Search';
 
 // react-md
@@ -28,7 +28,7 @@ export default class FilterList extends React.Component {
     super(props);
 
     this.state = {
-      selected: 0, search: { query: '', type: 0 }
+      selected: 0, page: 1, search: { query: '', type: 0 }
     };
 
     if (props.data.filters.length == 0) {
@@ -161,24 +161,28 @@ export default class FilterList extends React.Component {
           type='filter'
         />
 
-        <List
-          className='filters-list section md-paper md-paper--1'
-        >{
-          findMatches(
-            this.props.data.filters, this.state.search
-          ).filter(
-            filter => !filter.global
-          ).map(f =>
-            <ListItem
-              threeLines
-              key={f.id}
-              onClick={() => this.setState({ selected: f.id })}
-              className='filter'
-              primaryText={f.name}
-              secondaryText={filterTypes[f.type] + '\n' + f.description}
-            />
-          )
+        <List className='filters-list section md-paper md-paper--1'>{
+          findMatches(this.props.data.filters, this.state.search)
+            .filter(filter => !filter.global)
+            .splice((this.state.page - 1) * 25, 25)
+            .map(f =>
+              <ListItem
+                threeLines
+                key={f.id}
+                onClick={() => this.setState({ selected: f.id })}
+                className='filter'
+                primaryText={f.name}
+                secondaryText={filterTypes[f.type] + '\n' + f.description}
+              />
+            )
         }</List>
+
+        <Pagination
+          itemsPerPage={25}
+          onGoTo={p => this.setState({ page: p })}
+          items={this.props.data.filters.length}
+          page={this.state.page}
+        />
 
         <Dialog
           id='selected-filter'
