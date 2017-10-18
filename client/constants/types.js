@@ -22,4 +22,10 @@ export const creatableModifierTypes = {
   '5': 'Subject Tag',
   '6': 'Concatenate',
   '8': 'Builder'
-}
+};
+
+export const messageTypes = {
+  '0': 'Accepted',
+  '1': 'Rejected',
+  '2': 'Spam'
+};
