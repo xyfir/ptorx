@@ -3,6 +3,7 @@ import React from 'react';
 import swal from 'sweetalert';
 
 // react-md
+import SelectField from 'react-md/lib/SelectFields';
 import ListItem from 'react-md/lib/Lists/ListItem';
 import Dialog from 'react-md/lib/Dialogs';
 import List from 'react-md/lib/Lists/List';
@@ -10,8 +11,8 @@ import List from 'react-md/lib/Lists/List';
 // Action creators
 import { loadMessages, deleteMessage } from 'actions/creators/messages';
 
-// Modules
-import parseQuery from 'lib/parse-hash-query';
+// Constants
+import { messageTypes } from 'constants/types';
 
 export default class MessageList extends React.Component {
 
@@ -19,17 +20,16 @@ export default class MessageList extends React.Component {
     super(props);
 
     this.state = {
-      emailId: location.hash.split('/')[2], loading: true,
-      rejected: !!parseQuery().rejected
+      emailId: +location.hash.split('/')[2], loading: true, type: 0
     };
 
-    request
-      .get(`../api/emails/${this.state.emailId}/messages`)
-      .query({ rejected: this.state.rejected ? 1 : undefined })
-      .end((err, res) => {
-        this.props.dispatch(loadMessages(res.body.messages));
-        this.setState({ loading: false });
-      });
+    this._loadMessages = this._loadMessages.bind(this);
+
+    this._loadMessages(this.state.type);
+  }
+
+  componentWillUpdate(props, state) {
+    if (this.state.type != state.type) this._loadMessages(state.type);
   }
 
   onDelete() {
@@ -42,7 +42,7 @@ export default class MessageList extends React.Component {
       icon: 'warning'
     })
     .then(() =>
-      request.delete(`../api/emails/${this.state.emailId}/messages/${id}`)
+      request.delete(`/api/emails/${this.state.emailId}/messages/${id}`)
     )
     .then(res => {
       if (res.body.error) throw 'Could not delete message';
@@ -53,30 +53,48 @@ export default class MessageList extends React.Component {
     .catch(err => swal('Error', err.toString(), 'error'));
   }
 
+  /**
+   * Load messages of `type`.
+   * @param {number} type
+   */
+  _loadMessages(type) {
+    request
+      .get(`/api/emails/${this.state.emailId}/messages`)
+      .query({ type })
+      .end((err, res) => {
+        this.props.dispatch(loadMessages(res.body.messages));
+        this.setState({ loading: false });
+      });
+  }
+
   render() {
-    if (this.state.loading) return <div />;
+    if (this.state.loading) return null;
 
     const { selected, emailId } = this.state;
     const { messages } = this.props.data;
     
     return (
-      <div className='messages'>
+      <div className='messages flex'>
         <nav className='navbar-sub'>
-          <a href={`#emails/messages/${emailId}/send`}>Send Message</a>
+          <a href={`#emails/messages/${emailId}/send`}>Send</a>
           <a href={`#emails/edit/${emailId}`}>Edit Email</a>
-          <a onClick={() => {
-            if (this.state.rejected)
-              location.hash = location.hash.split('?')[0];
-            else
-              location.hash += '?rejected=1';
-            location.reload();
-          }}>
-            {this.state.rejected ? '' : 'Rejected '}Messages
-          </a>
         </nav>
+
+        <SelectField
+          id='select--type'
+          label='Filter'
+          value={this.state.type}
+          className='md-cell'
+          menuItems={
+            Object.keys(messageTypes).map(t =>
+              Object({ label: messageTypes[t], value: +t })
+            )
+          }
+          onChange={v => this.setState({ type: v })}
+        />
         
-        <List className='messages md-paper md-paper--1 section'>{
-          messages.length ?
+        {messages.length ? (
+          <List className='messages md-paper md-paper--1 section'>{
             messages.map(msg =>
               <ListItem
                 key={msg.id}
@@ -86,9 +104,11 @@ export default class MessageList extends React.Component {
                   (new Date(msg.received * 1000)).toLocaleString()
                 }
               />
-            ) :
-            <h3>This inbox is empty.</h3>
-        }</List>
+            )
+          }</List>
+        ) : (
+          <h3>This inbox is empty.</h3>
+        )}
 
         <Dialog
           id='selected-message'
