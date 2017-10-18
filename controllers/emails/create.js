@@ -126,9 +126,9 @@ module.exports = async function(req, res) {
       direct_forward: req.body.directForward,
       description: req.body.description,
       spam_filter: !req.body.noSpamFilter,
-      save_mail: req.body.saveMail,
+      save_mail: req.body.saveMail || req.body.noToAddress,
       domain_id: req.body.domain,
-      to_email: (req.body.noToAddress ? 0 : rows[0].email_id),
+      to_email: req.body.noToAddress ? 0 : rows[0].email_id,
       user_id: req.session.uid,
       address,
       name: req.body.name
@@ -158,7 +158,7 @@ module.exports = async function(req, res) {
 
     // Build MailGun route expression(s)
     const expression = await buildExpression({
-      saveMail: data.save_mail || data.to_email == 0,
+      saveMail: data.save_mail,
       address: data.address + '@' + domain,
       filters
     }, db);
@@ -167,7 +167,7 @@ module.exports = async function(req, res) {
     const action = buildAction(
       req.body.directForward
         ? { address: rows[0].address }
-        : { id, save: data.to_email == 0 || data.save_mail }
+        : { id, save: data.save_mail }
     );
 
     const mailgun = MailGun({ apiKey: config.keys.mailgun, domain });
@@ -176,7 +176,7 @@ module.exports = async function(req, res) {
     const mgRes = await mailgun.routes().create({
       description: 'Ptorx ' + config.environment.type,
       expression,
-      priority: (data.spam_filter ? 2 : 0),
+      priority: data.spam_filter && !data.save_mail ? 3000 : 1000,
       action
     });
 

@@ -68,6 +68,8 @@ module.exports = async function(req, res) {
       filters, req.session.uid, req.body.directForward, db
     );
 
+    const saveMail = req.body.saveMail || !req.body.to;
+
     // Update values in redirect_emails
     sql = `
       UPDATE redirect_emails SET
@@ -78,7 +80,7 @@ module.exports = async function(req, res) {
     `,
     vars = [
       req.body.noToAddress ? 0 : req.body.to, req.body.name,
-      req.body.description, req.body.saveMail,
+      req.body.description, saveMail,
       req.body.directForward, !req.body.noSpamFilter,
       req.params.email
     ];
@@ -87,16 +89,15 @@ module.exports = async function(req, res) {
     if (!dbRes.affectedRows) throw 'An unknown error occured';
 
     // Build Mailgun route expression(s)
-    const expression = await buildExpression({
-      address, filters,
-      saveMail: req.body.saveMail || !req.body.to
-    }, db);
+    const expression = await buildExpression(
+      { address, filters, saveMail }, db
+    );
 
     // Build Mailgun route action(s)
     const action = buildAction(
       req.body.directForward
         ? { address: toEmail }
-        : { id: req.params.email, save: req.body.saveMail || !req.body.to }
+        : { id: req.params.email, save: saveMail }
     )
 
     const mailgun = MailGun({
@@ -107,7 +108,7 @@ module.exports = async function(req, res) {
     await mailgun.routes(mgRouteId).update({
       description: 'Ptorx ' + config.environment.type,
       expression,
-      priority: (!req.body.noSpamFilter ? 2 : 0),
+      priority: !req.body.noSpamFilter && !saveMail ? 3000 : 1000,
       action
     });
 
