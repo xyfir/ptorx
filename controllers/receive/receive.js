@@ -36,8 +36,17 @@ module.exports = async function(req, res) {
   try {
     // Get primary email / filters / modifiers
     const data = await getInfo(req.params.email, save);
-
     const headers = JSON.parse(email['message-headers']);
+
+    const isEmailSpam = headers.findIndex(
+      h => h[0] == 'X-Mailgun-Sflag' && h[1] == 'Yes'
+    ) > -1;
+
+    // Save mail as spam and quit
+    if (data.spamFilter && isEmailSpam) {
+      await saveMessage(req, 2);
+      return res.status(200).send();
+    }
 
     // Loop through filters
     data.filters.forEach((filter, i) => {
@@ -95,7 +104,7 @@ module.exports = async function(req, res) {
     for (let filter of data.filters) {
       if (!filter.pass) {
         // Optionally save as rejected message
-        if (save) saveMessage(req, true);
+        if (save) saveMessage(req, 1);
 
         res.status(200).send();
         return;
@@ -230,7 +239,7 @@ module.exports = async function(req, res) {
 
       // Optionally save message to messages table
       if (save) {
-        const messageId = await saveMessage(req, false);
+        const messageId = await saveMessage(req, 0);
         message['h:Reply-To'] = `${messageId}--reply@${email.proxyDomain}`;
       }
 
@@ -239,7 +248,7 @@ module.exports = async function(req, res) {
     }
     // Message must be saved since it's not being redirected
     else {
-      saveMessage(req, false);
+      saveMessage(req, 0);
     }
 
     res.status(200).send();
