@@ -46,15 +46,12 @@ export default class ViewMessage extends React.Component {
   }
   
   render() {
-    if (this.state.loading) return <div />;
+    if (this.state.loading) return null;
     
     return (
       <div className='view-message'>
         <nav className='navbar-sub'>
-          <a href={`#emails/messages/${this.state.id}/list`}>Messages</a>
-          <a href={`#emails/messages/${this.state.id}/list?rejected=1`}>
-            Rejected Messages
-          </a>
+          <a href={`#emails/messages/${this.state.id}/list`}>Inbox</a>
           <a href={`#emails/edit/${this.state.id}`}>Edit Email</a>
         </nav>
 

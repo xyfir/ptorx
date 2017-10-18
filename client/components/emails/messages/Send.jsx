@@ -41,10 +41,7 @@ export default class SendMessage extends React.Component {
     return (
       <div className='message-send'>
         <nav className='navbar-sub'>
-          <a href={`#emails/messages/${this.state.id}/list`}>Messages</a>
-          <a href={`#emails/messages/${this.state.id}/list?rejected=1`}>
-            Rejected Messages
-          </a>
+          <a href={`#emails/messages/${this.state.id}/list`}>Inbox</a>
           <a href={`#emails/edit/${this.state.id}`}>Edit Email</a>
         </nav>
         

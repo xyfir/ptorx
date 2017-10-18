@@ -98,10 +98,10 @@ export default class EditEmail extends React.Component {
       <div className='edit-email'>
         <nav className='navbar-sub'>
           <a href={`#emails/messages/${this.state.id}/send`}>
-            Send Message
+            Send
           </a>
           <a href={`#emails/messages/${this.state.id}/list`}>
-            Messages
+            Inbox
           </a>
         </nav>
       
