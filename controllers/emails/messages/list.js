@@ -3,7 +3,7 @@ const mysql = require('lib/mysql');
 /*
   GET api/emails/:email/messages
   OPTIONAL
-    rejected: boolean
+    type: number
   RETURN
     {
       error: boolean, message?: string,
@@ -13,7 +13,7 @@ const mysql = require('lib/mysql');
     }
   DESCRIPTION
     Return basic data on any stored messages for :email
-    Returns accepted or rejected messages based on req.query.rejected
+    Returns accepted, rejected, or spam messages based on req.query.type
 */
 module.exports = async function(req, res) {
 
@@ -27,11 +27,11 @@ module.exports = async function(req, res) {
       FROM
         messages AS m, redirect_emails AS re
       WHERE
-        m.email_id = re.email_id AND m.rejected = ? AND
+        m.email_id = re.email_id AND m.type = ? AND
         m.received + 255600 > UNIX_TIMESTAMP() AND
         re.email_id = ? AND re.user_id = ?
     `, [
-      !!+req.query.rejected,
+      req.query.type,
       req.params.email, req.session.uid
     ]);
     db.release();
