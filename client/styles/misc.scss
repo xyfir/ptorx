@@ -61,25 +61,9 @@ section.purchase-subscription {
   }
 }
 
-.messages {
-  .list {
-    .message {
-      background-color: $lllgray;
-      padding: 0.5em;
-      margin: auto;
-      margin-bottom: 0.5em;
-    }
-    
-    .description {
-      display: block;
-      width: 80%;
-      margin: auto;
-      font-size: 90%;
-    }
-    
-    .received {
-      display: block;
-    } 
+div.messages {
+  >ul.messages {
+    width: 98%;
   }
 }
 
