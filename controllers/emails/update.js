@@ -31,14 +31,14 @@ module.exports = async function(req, res) {
 
     let sql = `
       SELECT
-        re.mg_route_id AS mgRouteId, me.address AS toEmail, d.domain,
-        CONCAT(re.address, '@', d.domain) AS address
+        pxe.mg_route_id AS mgRouteId, pme.address AS toEmail, d.domain,
+        CONCAT(pxe.address, '@', d.domain) AS address
       FROM
-        redirect_emails AS re, domains AS d, main_emails AS me
+        proxy_emails AS pxe, domains AS d, primary_emails AS pme
       WHERE
-        re.email_id = ? AND
-        d.id = re.domain_id AND
-        me.email_id = ? AND me.user_id = ?
+        pxe.email_id = ? AND
+        d.id = pxe.domain_id AND
+        pme.email_id = ? AND pme.user_id = ?
     `,
     vars = [
       req.params.email,
@@ -70,10 +70,10 @@ module.exports = async function(req, res) {
 
     const saveMail = req.body.saveMail || !req.body.to;
 
-    // Update values in redirect_emails
+    // Update values in proxy_emails
     sql = `
-      UPDATE redirect_emails SET
-        to_email = ?, name = ?,
+      UPDATE proxy_emails SET
+        primary_email_id = ?, name = ?,
         description = ?, save_mail = ?,
         direct_forward = ?, spam_filter = ?
       WHERE email_id = ?

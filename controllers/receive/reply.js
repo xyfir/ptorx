@@ -27,13 +27,13 @@ module.exports = async function(req, res) {
     const [row] = await db.query(`
       SELECT
         m.sender AS originalSender,
-        CONCAT(re.address, '@', d.domain) AS proxyAddress
+        CONCAT(pxe.address, '@', d.domain) AS proxyAddress
       FROM
-        messages AS m, domains AS d, redirect_emails AS re
+        messages AS m, domains AS d, proxy_emails AS pxe
       WHERE
         m.id = ? AND
-        re.email_id = m.email_id AND
-        d.id = re.domain_id
+        pxe.email_id = m.email_id AND
+        d.id = pxe.domain_id
     `, [
       messageId
     ]);

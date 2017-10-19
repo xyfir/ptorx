@@ -18,11 +18,11 @@ module.exports = async function(req, res) {
     await db.getConnection();
     const [email] = await db.query(`
       SELECT
-        re.mg_route_id AS mgRouteId, d.domain
+        pxe.mg_route_id AS mgRouteId, d.domain
       FROM
-        redirect_emails AS re, domains AS d
+        proxy_emails AS pxe, domains AS d
       WHERE
-        re.email_id = ? AND re.user_id = ? AND d.id = re.domain_id
+        pxe.email_id = ? AND pxe.user_id = ? AND d.id = pxe.domain_id
     `, [
       req.params.email, req.session.uid
     ]);
@@ -32,9 +32,9 @@ module.exports = async function(req, res) {
     // Remove any information that could be linked to the creator
     // Keep in database so that a 'deleted' proxy email cannot be created again
     await db.query(`
-      UPDATE redirect_emails SET
-        user_id = 0, to_email = 0, name = '', description = '',
-        mg_route_id = ''
+      UPDATE proxy_emails SET
+        user_id = 0, primary_email_id = 0, name = '',
+        description = '', mg_route_id = ''
       WHERE email_id = ?
     `, [
       req.params.email

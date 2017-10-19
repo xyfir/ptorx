@@ -18,9 +18,9 @@ module.exports = function(req, res) {
 
   let sql = `
     SELECT (
-      SELECT COUNT(email_id) FROM main_emails WHERE user_id = ?
+      SELECT COUNT(email_id) FROM primary_emails WHERE user_id = ?
     ) AS emails, (
-      SELECT COUNT(email_id) FROM main_emails WHERE user_id = ? AND address = ?
+      SELECT COUNT(email_id) FROM primary_emails WHERE user_id = ? AND address = ?
     ) AS email_exists, (
       SELECT trial FROM users WHERE user_id = ?
     ) AS trial
@@ -60,7 +60,7 @@ module.exports = function(req, res) {
       const insert = {
         user_id: req.session.uid, address: req.params.email
       };
-      sql = 'INSERT INTO main_emails SET ?';
+      sql = 'INSERT INTO primary_emails SET ?';
 
       cn.query(sql, insert, (err, result) => {
         cn.release();

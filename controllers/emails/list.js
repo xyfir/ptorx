@@ -20,12 +20,12 @@ module.exports = async function(req, res) {
     await db.getConnection();
     const emails = await db.query(`
       SELECT
-        re.email_id AS id, re.name, re.description,
-        CONCAT(re.address, '@', d.domain) AS address
+        pxe.email_id AS id, pxe.name, pxe.description,
+        CONCAT(pxe.address, '@', d.domain) AS address
       FROM
-        redirect_emails AS re, domains AS d
+        proxy_emails AS pxe, domains AS d
       WHERE
-        re.user_id = ? AND d.id = re.domain_id
+        pxe.user_id = ? AND d.id = pxe.domain_id
     `, [
       req.session.uid
     ]);

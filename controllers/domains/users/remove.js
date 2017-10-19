@@ -41,7 +41,7 @@ module.exports = async function(req, res) {
 
     // Get all of user's proxy emails on this domain
     const emails = await db.query(`
-      SELECT email_id AS id FROM redirect_emails
+      SELECT email_id AS id FROM proxy_emails
       WHERE user_id = ? AND domain_id = ?
     `, [
       req.params.user, req.params.domain

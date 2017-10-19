@@ -23,11 +23,11 @@ module.exports = async function(req, res) {
       SELECT
         message_url AS url
       FROM
-        messages AS m, redirect_emails AS re
+        messages AS m, proxy_emails AS pxe
       WHERE
-        m.id = ? AND re.email_id = ? AND re.user_id = ? AND
+        m.id = ? AND pxe.email_id = ? AND pxe.user_id = ? AND
         m.received + 255600 > UNIX_TIMESTAMP() AND
-        m.email_id = re.email_id
+        m.email_id = pxe.email_id
     `, [
       req.params.message, req.params.email, req.session.uid
     ]);

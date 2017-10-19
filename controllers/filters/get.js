@@ -39,13 +39,13 @@ module.exports = async function(req, res) {
 
     filter.linkedTo = await db.query(`
       SELECT
-        email_id AS id, CONCAT(re.address, '@', d.domain) AS address
+        email_id AS id, CONCAT(pxe.address, '@', d.domain) AS address
       FROM
-        redirect_emails AS re, domains AS d
+        proxy_emails AS pxe, domains AS d
       WHERE
-        re.email_id IN (
+        pxe.email_id IN (
           SELECT email_id FROM linked_filters WHERE filter_id = ?
-        ) AND d.id = re.domain_id
+        ) AND d.id = pxe.domain_id
     `, [
       req.params.filter
     ]);

@@ -80,7 +80,7 @@ module.exports = async function(req, res) {
     }
 
     sql = `
-      SELECT email_id as id, address FROM main_emails WHERE user_id = ?
+      SELECT email_id as id, address FROM primary_emails WHERE user_id = ?
     `,
     vars = [uid];
 

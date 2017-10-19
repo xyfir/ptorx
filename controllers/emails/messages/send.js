@@ -19,13 +19,14 @@ module.exports = async function(req, res) {
     await db.getConnection();
     const [row] = await db.query(`
       SELECT
-        re.address, d.domain, u.trial
+        pxe.address, d.domain, u.trial
       FROM
-        domains AS d, redirect_emails AS re, users AS u, main_emails AS me
+        domains AS d, proxy_emails AS pxe, users AS u, primary_emails AS pme
       WHERE
-        re.email_id = ? AND u.user_id = ? AND
-        re.user_id = u.user_id AND me.email_id = re.to_email AND
-        d.id = re.domain_id
+        pxe.email_id = ? AND u.user_id = ? AND
+        pme.email_id = pxe.primary_email_id AND
+        pxe.user_id = u.user_id AND
+        d.id = pxe.domain_id
     `, [
       req.params.email, req.session.uid
     ]);

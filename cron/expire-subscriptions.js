@@ -13,12 +13,12 @@ module.exports = async function() {
     await db.getConnection();
     const emails = await db.query(`
       SELECT
-        re.email_id AS id, re.user_id AS uid
+        pxe.email_id AS id, pxe.user_id AS uid
       FROM
-        redirect_emails AS re, users AS u
+        proxy_emails AS pxe, users AS u
       WHERE
         u.subscription < UNIX_TIMESTAMP() * 1000 AND u.user_id != 0 AND
-        re.user_id = u.user_id
+        pxe.user_id = u.user_id
     `);
     db.release();
 

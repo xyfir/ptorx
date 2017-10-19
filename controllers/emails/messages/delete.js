@@ -16,7 +16,7 @@ module.exports = async function(req, res) {
     await db.query(`
       DELETE FROM messages
       WHERE id = ? AND email_id = (
-        SELECT email_id FROM redirect_emails
+        SELECT email_id FROM proxy_emails
         WHERE email_id = ? AND user_id = ?
       )
     `, [

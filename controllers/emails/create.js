@@ -35,7 +35,7 @@ module.exports = async function(req, res) {
     let sql = `
       SELECT
         emails_created AS emailsCreated, subscription, trial, (
-          SELECT COUNT(email_id) FROM redirect_emails
+          SELECT COUNT(email_id) FROM proxy_emails
           WHERE user_id = ? AND created >= CURDATE()
         ) AS emailsCreatedToday, (
           SELECT domain FROM domains
@@ -96,7 +96,7 @@ module.exports = async function(req, res) {
     // Make sure address exists
     else {
       sql = `
-        SELECT email_id FROM redirect_emails
+        SELECT email_id FROM proxy_emails
         WHERE address = ? AND domain_id = ?
       `,
       vars = [
@@ -110,7 +110,7 @@ module.exports = async function(req, res) {
     }
 
     sql = `
-      SELECT email_id, address FROM main_emails
+      SELECT email_id, address FROM primary_emails
       WHERE email_id = ? AND user_id = ?
     `,
     vars = [
@@ -123,12 +123,12 @@ module.exports = async function(req, res) {
       throw 'Could not find main email';
 
     const data = {
+      primary_email_id: req.body.noToAddress ? 0 : rows[0].email_id,
       direct_forward: req.body.directForward,
       description: req.body.description,
       spam_filter: !req.body.noSpamFilter,
       save_mail: req.body.saveMail || req.body.noToAddress,
       domain_id: req.body.domain,
-      to_email: req.body.noToAddress ? 0 : rows[0].email_id,
       user_id: req.session.uid,
       address,
       name: req.body.name
@@ -148,7 +148,7 @@ module.exports = async function(req, res) {
     let dbRes;
 
     sql = `
-      INSERT INTO redirect_emails SET ?
+      INSERT INTO proxy_emails SET ?
     `,
     dbRes = await db.query(sql, data);
 
@@ -182,7 +182,7 @@ module.exports = async function(req, res) {
 
     // Save MailGun route ID to proxy email
     sql = `
-      UPDATE redirect_emails SET mg_route_id = ?
+      UPDATE proxy_emails SET mg_route_id = ?
       WHERE email_id = ?
     `,
     vars = [

@@ -86,9 +86,9 @@ module.exports = async function(req, res) {
       
       if (!result.affectedRows) throw '--';
 
-      // Add user's account email to main_emails
+      // Add user's account email to primary_emails
       sql = `
-        INSERT INTO main_emails (user_id, address) VALUES (?, ?)
+        INSERT INTO primary_emails (user_id, address) VALUES (?, ?)
       `,
       vars = [
         result.insertId, insert.email

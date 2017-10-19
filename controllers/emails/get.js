@@ -26,15 +26,15 @@ module.exports = async function(req, res) {
 
     let sql = `
       SELECT
-        re.email_id AS id, re.name, re.description, re.save_mail AS saveMail,
-        CONCAT(re.address, '@', d.domain) AS address, me.address AS toEmail,
-        re.spam_filter AS spamFilter, re.direct_forward AS directForward
+        pxe.email_id AS id, pxe.name, pxe.description, pxe.save_mail AS saveMail,
+        CONCAT(pxe.address, '@', d.domain) AS address, pme.address AS toEmail,
+        pxe.spam_filter AS spamFilter, pxe.direct_forward AS directForward
       FROM
-        redirect_emails AS re, main_emails AS me, domains AS d
+        proxy_emails AS pxe, primary_emails AS pme, domains AS d
       WHERE
-        re.email_id = ? AND re.user_id = ? AND
-        me.email_id = re.to_email AND
-        d.id = re.domain_id
+        pxe.email_id = ? AND pxe.user_id = ? AND
+        pme.email_id = pxe.primary_email_id AND
+        d.id = pxe.domain_id
     `,
     vars = [
       req.params.email, req.session.uid
