@@ -70,4 +70,4 @@ app.get('/*', (req, res) => {
   res.sendFile(__dirname + '/views/info.html');
 });
 
-if (config.environment.runCronJobs) require('./cron/start')();
+if (config.environment.runCronJobs) require('jobs/cron/start')();
