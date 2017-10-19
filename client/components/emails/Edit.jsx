@@ -20,14 +20,14 @@ export default class EditEmail extends React.Component {
     this.onSubmit = this.onSubmit.bind(this);
 
     this.state = {
-      id: location.hash.split('/')[2], loading: true
+      id: location.hash.split('/')[3], loading: true
     };
   }
 
   componentWillMount() {
     const email = this.props.data.emails.find(e => e.id == this.state.id);
 
-    if (!email) location.href = '#emails/list';
+    if (!email) location.href = '#/emails/list';
     
     request
       .get('../api/emails/' + this.state.id)
@@ -84,7 +84,7 @@ export default class EditEmail extends React.Component {
         
         this.props.dispatch(editEmail(data));
 
-        location.hash = 'emails/list';
+        location.hash = '#/emails/list';
         swal('Success', `Email '${data.name}' updated`, 'success');
       });
   }
@@ -97,10 +97,10 @@ export default class EditEmail extends React.Component {
     return (
       <div className='edit-email'>
         <nav className='navbar-sub'>
-          <a href={`#emails/messages/${this.state.id}/send`}>
+          <a href={`#/emails/messages/${this.state.id}/send`}>
             Send
           </a>
-          <a href={`#emails/messages/${this.state.id}/list`}>
+          <a href={`#/emails/messages/${this.state.id}/list`}>
             Inbox
           </a>
         </nav>

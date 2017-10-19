@@ -21,7 +21,7 @@ export default class ViewDomain extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = { id: +location.hash.split('/')[1], loading: true };
+    this.state = { id: +location.hash.split('/')[2], loading: true };
 
     this._loadDomain = this._loadDomain.bind(this);
   }
@@ -46,7 +46,7 @@ export default class ViewDomain extends React.Component {
     .then(res => {
       if (res.body.error) throw res.body.message;
 
-      location.hash = '#domains';
+      location.hash = '#/domains';
       location.reload();
     })
     .catch(err => swal('Error', err.toString(), 'error'));
@@ -66,7 +66,7 @@ export default class ViewDomain extends React.Component {
     .then(res => {
       if (res.body.error) throw res.body.message;
 
-      location.hash = '#domains';
+      location.hash = '#/domains';
       location.reload();
     })
     .catch(err => swal('Error', err.toString(), 'error'));
@@ -126,7 +126,7 @@ export default class ViewDomain extends React.Component {
     request
       .get('../api/domains/' + this.state.id)
       .end((err, res) => {
-        if (err || res.body.error) return location.hash = '#domains';
+        if (err || res.body.error) return location.hash = '#/domains';
 
         res.body.loading = false;
         this.setState(res.body);

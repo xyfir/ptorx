@@ -315,7 +315,7 @@ export default class ModifierForm extends React.Component {
             
             <div className='linked-emails'>{
               mod.linkedTo.map(email =>
-                <a key={email.id} href={`#emails/edit/${email.id}`}>{
+                <a key={email.id} href={`#/emails/edit/${email.id}`}>{
                   email.address
                 }</a>
               )

@@ -61,7 +61,7 @@ export default class CreateEmail extends React.Component {
         else {
           // Clear emails so they're loaded again
           this.props.App.dispatch(loadEmails([]));
-          location.hash = '#emails/list';
+          location.hash = '#/emails/list';
 
           swal('Success', `Email '${data.name}' created`, 'success');
         }

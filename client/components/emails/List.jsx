@@ -43,7 +43,7 @@ export default class EmailList extends React.Component {
    * Load 'CreateEmail' view with email's values loaded in.
    */
   onDuplicate() {
-    location.hash = '#emails/create?duplicate=' + this.state.selected;
+    location.hash = '#/emails/create?duplicate=' + this.state.selected;
   }
 
   /**
@@ -73,7 +73,7 @@ export default class EmailList extends React.Component {
    * Open the 'EditEmail' view.
    */
   onEdit() {
-    location.hash = '#emails/edit/' + this.state.selected;
+    location.hash = '#/emails/edit/' + this.state.selected;
   }
 
   /**
@@ -96,7 +96,7 @@ export default class EmailList extends React.Component {
           tooltipPosition='left'
           tooltipLabel='Create new proxy email'
           iconChildren='add'
-          onClick={() => location.hash = '#emails/create'}
+          onClick={() => location.hash = '#/emails/create'}
         />
         
         <Search

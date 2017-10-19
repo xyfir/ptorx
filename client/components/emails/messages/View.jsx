@@ -17,7 +17,7 @@ export default class ViewMessage extends React.Component {
     super(props);
     
     this.state = {
-      id: location.hash.split('/')[2], message: location.hash.split('/')[4],
+      id: location.hash.split('/')[3], message: location.hash.split('/')[5],
       showReplyForm: false, loading: true, content: {},
     };
 
@@ -51,8 +51,8 @@ export default class ViewMessage extends React.Component {
     return (
       <div className='view-message'>
         <nav className='navbar-sub'>
-          <a href={`#emails/messages/${this.state.id}/list`}>Inbox</a>
-          <a href={`#emails/edit/${this.state.id}`}>Edit Email</a>
+          <a href={`#/emails/messages/${this.state.id}/list`}>Inbox</a>
+          <a href={`#/emails/edit/${this.state.id}`}>Edit Email</a>
         </nav>
 
         <Paper

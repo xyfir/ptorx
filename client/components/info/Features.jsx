@@ -73,7 +73,7 @@ export default () => (
     <p>Some of these features may be limited or entirely unavailable during your free trial.</p>
 
     <p>
-      Ready to purchase a Ptorx subscription? You can do so <a href='/panel/#account/purchase-subscription'>here</a>. $25 gets you access to all of those features, plus any future ones for an entire year.
+      Ready to purchase a Ptorx subscription? You can do so <a href='/panel/#/account/purchase-subscription'>here</a>. $25 gets you access to all of those features, plus any future ones for an entire year.
     </p>
   </div>
 )

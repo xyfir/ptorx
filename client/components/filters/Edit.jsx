@@ -16,7 +16,7 @@ export default class EditFilter extends React.Component {
     this._updateEmails = this._updateEmails.bind(this);
 
     this.state = {
-      id: location.hash.split('/')[2], loading: true
+      id: location.hash.split('/')[3], loading: true
     };
     
     request
@@ -64,7 +64,7 @@ export default class EditFilter extends React.Component {
             )
           );
 
-          location.hash = '#filters/list';
+          location.hash = '#/filters/list';
           swal('Success', `Filter '${data.name}' updated`, 'success');
           
           // Filter was linked to emails that we must now trigger updates on

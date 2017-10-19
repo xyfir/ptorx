@@ -20,7 +20,7 @@ export default class MessageList extends React.Component {
     super(props);
 
     this.state = {
-      emailId: +location.hash.split('/')[2], loading: true, type: 0
+      emailId: +location.hash.split('/')[3], loading: true, type: 0
     };
 
     this._loadMessages = this._loadMessages.bind(this);
@@ -76,8 +76,8 @@ export default class MessageList extends React.Component {
     return (
       <div className='messages flex'>
         <nav className='navbar-sub'>
-          <a href={`#emails/messages/${emailId}/send`}>Send</a>
-          <a href={`#emails/edit/${emailId}`}>Edit Email</a>
+          <a href={`#/emails/messages/${emailId}/send`}>Send</a>
+          <a href={`#/emails/edit/${emailId}`}>Edit Email</a>
         </nav>
 
         <SelectField
@@ -122,13 +122,13 @@ export default class MessageList extends React.Component {
             <ListItem
               primaryText='View'
               onClick={() => location.hash =
-                `#emails/messages/${emailId}/view/${selected}`
+                `#/emails/messages/${emailId}/view/${selected}`
               }
             />
             <ListItem
               primaryText='Reply'
               onClick={() => location.hash =
-                `#emails/messages/${emailId}/view/${selected}?reply=1`
+                `#/emails/messages/${emailId}/view/${selected}?reply=1`
               }
             />
             <ListItem

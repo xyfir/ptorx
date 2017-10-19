@@ -75,7 +75,7 @@ export default class ModifierList extends React.Component {
    * Open the 'EditModifier' view.
    */
   onEdit() {
-    location.hash = '#modifiers/edit/' + this.state.selected;
+    location.hash = '#/modifiers/edit/' + this.state.selected;
   }
 
   render() {
@@ -86,7 +86,7 @@ export default class ModifierList extends React.Component {
           tooltipPosition='left'
           tooltipLabel='Create new modifier'
           iconChildren='add'
-          onClick={() => location.hash = '#modifiers/create'}
+          onClick={() => location.hash = '#/modifiers/create'}
         />
         
         <Search

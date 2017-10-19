@@ -98,7 +98,13 @@ class App extends React.Component {
           setState(store);
           
           // Update state according to url hash
-          window.onhashchange = () => setState(store);
+          window.onhashchange = () => {
+            // Force old hash route format to new one
+            // `#${route}` -> `#/${route}`
+            if (location.hash.indexOf('#/') != 0)
+              return location.hash = '#/' + location.hash.substr(1);
+            setState(store);
+          }
         })
         .catch(err => swal('Error', err, 'error'));
     };
@@ -188,19 +194,19 @@ class App extends React.Component {
           onVisibilityChange={v => this.setState({ drawer: v })}
           autoclose={true}
           navItems={[
-            <a href='#account'>
+            <a href='#/account'>
               <ListItem primaryText='Account' />
             </a>,
-            <a href='#emails/list'>
+            <a href='#/emails/list'>
               <ListItem primaryText='Proxy Emails' />
             </a>,
-            <a href='#filters/list'>
+            <a href='#/filters/list'>
               <ListItem primaryText='Filters' />
             </a>,
-            <a href='#modifiers/list'>
+            <a href='#/modifiers/list'>
               <ListItem primaryText='Modifiers' />
             </a>,
-            <a href='#domains'>
+            <a href='#/domains'>
               <ListItem primaryText='Domains' />
             </a>,
 
@@ -209,7 +215,7 @@ class App extends React.Component {
             <a href='https://xyfir.com/#/contact'>
               <ListItem primaryText='Contact Us' />
             </a>,
-            <a href='#docs'>
+            <a href='#/docs'>
               <ListItem primaryText='Help Docs' />
             </a>,
             <a onClick={() => this.onLogout()}>
@@ -239,7 +245,7 @@ class App extends React.Component {
               <Button
                 icon
                 iconChildren='info'
-                href='#docs?section=free-trial'
+                href='#/docs?section=free-trial'
               />
             </p>    
           ) : null}

@@ -27,7 +27,7 @@ export default class Purchase extends React.Component {
             swal('Error', res.message, 'error');
           }
           else {
-            location.hash = '#account';
+            location.hash = '#/account';
             location.reload();
           }
       });
@@ -47,7 +47,7 @@ export default class Purchase extends React.Component {
       >
         <div className='info'>
           <p>
-            Check Ptorx's <a href="#docs">Help Docs</a> to see all the features a subscription gives you.
+            Check Ptorx's <a href="#/docs">Help Docs</a> to see all the features a subscription gives you.
           </p>
 
           <p>

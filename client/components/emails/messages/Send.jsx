@@ -12,7 +12,7 @@ export default class SendMessage extends React.Component {
   constructor(props) {
     super(props);
     
-    this.state = { id: location.hash.split('/')[2] };
+    this.state = { id: location.hash.split('/')[3] };
   }
   
   onSend() {
@@ -33,7 +33,7 @@ export default class SendMessage extends React.Component {
           'success'
         );
 
-        location.hash = `#emails/messages/${this.state.id}/list`;
+        location.hash = `#/emails/messages/${this.state.id}/list`;
       });
   }
   
@@ -41,8 +41,8 @@ export default class SendMessage extends React.Component {
     return (
       <div className='message-send'>
         <nav className='navbar-sub'>
-          <a href={`#emails/messages/${this.state.id}/list`}>Inbox</a>
-          <a href={`#emails/edit/${this.state.id}`}>Edit Email</a>
+          <a href={`#/emails/messages/${this.state.id}/list`}>Inbox</a>
+          <a href={`#/emails/edit/${this.state.id}`}>Edit Email</a>
         </nav>
         
         <Paper

@@ -72,7 +72,7 @@ export default class FilterList extends React.Component {
    * Open the 'EditFilter' view.
    */
   onEdit() {
-    location.hash = '#filters/edit/' + this.state.selected;
+    location.hash = '#/filters/edit/' + this.state.selected;
   }
 
   /**
@@ -153,7 +153,7 @@ export default class FilterList extends React.Component {
           tooltipPosition='left'
           tooltipLabel='Create new filter'
           iconChildren='add'
-          onClick={() => location.hash = '#filters/create'}
+          onClick={() => location.hash = '#/filters/create'}
         />
         
         <Search

@@ -13,7 +13,7 @@ export default class UpdateModifier extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = { id: location.hash.split('/')[2], loading: true };
+    this.state = { id: location.hash.split('/')[3], loading: true };
 
     request
       .get('../api/modifiers/' + this.state.id)
@@ -69,7 +69,7 @@ export default class UpdateModifier extends React.Component {
             )
           );
 
-          location.hash = '#modifiers/list';
+          location.hash = '#/modifiers/list';
           swal('Success', `Modifier '${modifier.name}' updated`, 'success');
         }
       });

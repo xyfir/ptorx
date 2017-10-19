@@ -192,7 +192,7 @@ export default class AddDomain extends React.Component {
 
           <Button
             primary raised
-            onClick={() => location.hash = '#domains/' + this.state.domainId}
+            onClick={() => location.hash = '#/domains/' + this.state.domainId}
           >View Domain</Button>
         </Paper>
       );

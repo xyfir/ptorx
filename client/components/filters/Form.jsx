@@ -158,7 +158,7 @@ export default class FilterForm extends React.Component {
             
             <div className='linked-emails'>{
               filter.linkedTo.map(email =>
-                <a key={email.id} href={`#emails/edit/${email.id}`}>{
+                <a key={email.id} href={`#/emails/edit/${email.id}`}>{
                   email.address
                 }</a>
               )

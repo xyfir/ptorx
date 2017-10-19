@@ -36,7 +36,7 @@ export default class CreateModifier extends React.Component {
             this.props.onCreate(res.body.id);
           }
           else {
-            location.hash = '#modifiers/list';
+            location.hash = '#/modifiers/list';
             swal('Success', `Modifier '${modifier.name}' created`, 'success');
           }
         }

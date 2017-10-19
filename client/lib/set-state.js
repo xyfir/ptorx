@@ -13,7 +13,7 @@ export default function(store) {
   }
 
   const state = store.getState();
-  const hash = location.hash.substr(1).split('?')[0].split('/');
+  const hash = location.hash.substr(2).split('?')[0].split('/');
 
   switch (hash[0]) {
     // Update state to reflect hash
