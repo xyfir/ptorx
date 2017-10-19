@@ -132,9 +132,7 @@ export default class Home extends React.Component {
           
           <Button
             secondary raised
-            onClick={() => location.href =
-              'panel/'
-            }
+            onClick={() => location.href = 'app/'}
           >Web</Button>
           <Button
             secondary raised

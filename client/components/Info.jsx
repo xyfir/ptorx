@@ -84,7 +84,7 @@ class PtorxInfo extends React.Component {
           autoclose={true}
           navItems={(
             this.state.loggedIn ? [
-              <a href='panel/'><ListItem primaryText='App' /></a>
+              <a href='app/'><ListItem primaryText='App' /></a>
             ] : [
               <a href='https://accounts.xyfir.com/app/#/login/13'>
                 <ListItem primaryText='Login' />

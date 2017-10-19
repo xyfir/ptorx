@@ -51,11 +51,14 @@ app.use(
 
 // Express middleware / controllers
 app.use('/static', express.static(__dirname + '/static'));
-app.get('/panel*', (req, res) =>
+app.get('/panel', (req, res) =>
   res.sendFile(__dirname + '/views/panel.html')
 );
 app.get('/admin-yCPnUcXcU10QRkwv', (req, res) =>
   res.sendFile(__dirname + '/views/admin.html')
+);
+app.get('/app', (req, res) =>
+  res.sendFile(__dirname + '/views/app.html')
 );
 app.use('/api', require('./controllers/'));
 app.get('/*', (req, res) => {

@@ -43,7 +43,7 @@ module.exports = (fn) => db(cn => {
                     row.email,
                     "Your subscription is expiring soon",
                     `
-                        Your <a href="https://ptorx.com">Ptorx</a> subscription is expiring soon! Increase your subscription in your <a href="https://ptorx.com/panel/#/account/purchase-subscription">user panel</a> before it's too late.
+                        Your <a href="https://ptorx.com">Ptorx</a> subscription is expiring soon! Increase your subscription in your <a href="https://ptorx.com/app/#/account/purchase-subscription">user panel</a> before it's too late.
                         <br /><br />
                         If your subscription expires, any proxy emails you have created will be deleted and you will no longer receive mail from them. Additionally, these deleted emails will <em>not</em> be able to be created again should you decide to purchase a new subscription after expiration.
                         <br /><br />
