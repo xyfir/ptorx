@@ -1,9 +1,9 @@
 const sendSubscriptionEpirationEmails =
-  require('cron/send-subscription-expiration-emails');
+  require('jobs/cron/send-subscription-expiration-emails');
 const deleteExpiredMessages =
-  require('cron/delete-expired-messages');
+  require('jobs/cron/delete-expired-messages');
 const expireSubscriptions =
-  require('cron/expire-subscriptions');
+  require('jobs/cron/expire-subscriptions');
 
 /**
  * Sets tasks to run at appropriate times.
