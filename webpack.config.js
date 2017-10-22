@@ -18,8 +18,8 @@ module.exports = {
   
   entry: {
     Admin: './client/components/Admin.jsx',
-    //Info: './client/components/Info.jsx',
-    //App: './client/components/App.jsx'
+    Info: './client/components/Info.jsx',
+    App: './client/components/App.jsx'
   },
   
   output: {
