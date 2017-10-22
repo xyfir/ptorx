@@ -1,10 +1,10 @@
 {
   "name": "ptorx",
-  "version": "4.8.0",
+  "version": "4.8.1",
   "description": "",
   "main": "app.js",
   "dependencies": {
-    "admyn": "^1.1.7",
+    "admyn": "^1.1.8",
     "app-module-path": "^2.2.0",
     "body-parser": "^1.18.2",
     "copyr": "^1.0.3",
@@ -33,17 +33,15 @@
     "uuid": "^3.1.0"
   },
   "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
     "babel-preset-env": "^1.6.1",
     "babel-preset-react": "^6.24.1",
-    "babelify": "^7.3.0",
-    "browserify": "^14.5.0",
     "gulp": "^3.9.1",
     "gulp-favicons": "^2.2.7",
     "gulp-sass": "^3.1.0",
-    "gulp-streamify": "^1.0.2",
-    "gulp-uglify": "^3.0.0",
     "gulp-util": "^3.0.8",
-    "vinyl-source-stream": "^1.1.0"
+    "webpack": "^3.8.1"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
