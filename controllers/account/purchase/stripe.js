@@ -6,7 +6,7 @@ const mysql = require('lib/mysql');
 const config = require('config');
 
 /*
-  POST api/account/purchase
+  POST api/account/purchase/stripe
   REQUIRED
     token: string
   RETURN
