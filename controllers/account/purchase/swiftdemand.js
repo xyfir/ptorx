@@ -60,10 +60,10 @@ module.exports = async function(req, res) {
       await db.getConnection();
       await db.query(`
         UPDATE users
-        SET subscription = ?, trial = ?
+        SET subscription = ?, referral = ?, trial = ?
         WHERE user_id = ? AND trial = ?
       `, [
-        +moment().add(90, 'days').format('x'), 0,
+        +moment().add(90, 'days').format('x'), '{}', 0,
         info.user_id, 1
       ]);
       db.release();
