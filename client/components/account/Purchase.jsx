@@ -1,3 +1,4 @@
+import { TextField, Button, Paper } from 'react-md';
 import StripeCheckout from 'react-stripe-checkout';
 import request from 'superagent';
 import React from 'react';
@@ -5,10 +6,6 @@ import swal from 'sweetalert';
 
 // Constants
 import { STRIPE_KEY_PUB } from 'constants/config';
-
-// react-md
-import Button from 'react-md/lib/Buttons/Button';
-import Paper from 'react-md/lib/Papers';
 
 export default class Purchase extends React.Component {
 
@@ -18,13 +15,13 @@ export default class Purchase extends React.Component {
     this.state = { subscription: 0 };
   }
 
-  onPurchase(token) {
+  onStripePurchase(token) {
     request
-      .post('../api/account/purchase')
+      .post('/api/account/purchase/stripe')
       .send({ token: token.id })
       .end((err, res) => {
           if (err || res.body.error) {
-            swal('Error', res.message, 'error');
+            swal('Error', res.body.message, 'error');
           }
           else {
             location.hash = '#/account';
@@ -33,17 +30,57 @@ export default class Purchase extends React.Component {
       });
   }
 
+  onSwiftDemandPurchase() {
+    const swiftId = this.refs.swift.value;
+
+    if (!swiftId) return;
+
+    request
+      .post('/api/account/purchase/swiftdemand')
+      .send({ swiftId })
+      .end((err, res) => {
+        if (err || !res.body.redirect)
+          swal('Error', res.body.message, 'error');
+        else
+          location.href = res.body.redirect;
+      });
+  }
+
   render() {
-    const { referral } = this.props.data.account;
+    const { referral, trial } = this.props.data.account;
     const discount =
       (referral.referral || referral.affiliate) &&
       !referral.hasMadePurchase;
 
-    return (
+    if (referral.referral == 'SWIFTDEMAND' && trial) return (
       <Paper
         zDepth={1}
         component='section'
-        className='purchase-subscription section flex'
+        className='purchase-subscription swiftdemand section flex'
+      >
+        <p>
+          You can purchase a one-time, three month subscription using SwiftDemand. This offer will expire when your account's one week trial ends, so get it soon!
+        </p>
+
+        <TextField
+          id='text--swift'
+          ref='swift'
+          type='text'
+          label='Your Swift ID'
+          className='md-cell'
+        />
+
+        <Button
+          primary raised
+          onClick={() => this.onSwiftDemandPurchase()}
+        >Purchase</Button>
+      </Paper>
+    )
+    else return (
+      <Paper
+        zDepth={1}
+        component='section'
+        className='purchase-subscription stripe section flex'
       >
         <div className='info'>
           <p>
@@ -69,7 +106,7 @@ export default class Purchase extends React.Component {
           bitcoin zipCode
           name='Ptorx // Xyfir, LLC'
           label='Purchase'
-          token={t => this.onPurchase(t)}
+          token={t => this.onStripePurchase(t)}
           image='https://ptorx.com/static/icons/android-chrome-192x192.png'
           amount={discount ? 2250 : 2500}
           stripeKey={STRIPE_KEY_PUB}
@@ -79,10 +116,8 @@ export default class Purchase extends React.Component {
         <Button
           raised primary
           onClick={() =>
-            // bad code, don't care
             document.querySelector('.StripeCheckout').click()
           }
-          iconChildren='credit_card'
         >Purchase</Button>
       </Paper>
     )
