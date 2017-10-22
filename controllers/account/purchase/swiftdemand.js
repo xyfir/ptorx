@@ -35,7 +35,7 @@ module.exports = async function(req, res) {
   try {
     if (body.swiftId) {
       const sdRes = await request
-        .post('https://testing.swiftdemand.com/api/v0/payments')
+        .post(config.addresses.swiftDemand + 'api/v0/payments')
         .send({
           product_id: 2,
           redirect_url: config.addresses.ptorx.root + 'app/#/account',
