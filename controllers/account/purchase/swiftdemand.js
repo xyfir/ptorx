@@ -37,7 +37,7 @@ module.exports = async function(req, res) {
       const sdRes = await request
         .post(config.addresses.swiftDemand + 'api/v0/payments')
         .send({
-          product_id: 2,
+          product_id: config.ids.swiftDemandProduct,
           redirect_url: config.addresses.ptorx.root + 'app/#/account',
           callback_url:
             config.addresses.ptorx.callback +
@@ -52,6 +52,8 @@ module.exports = async function(req, res) {
       res.json({ error: false, redirect: sdRes.body.link });
     }
     else {
+      if (body.status != 'paid') throw 'Invalid status';
+
       const info = JSON.parse(
         crypto.decrypt(query.data, config.keys.swiftDemand)
       );
