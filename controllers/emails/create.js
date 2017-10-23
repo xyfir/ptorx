@@ -74,6 +74,7 @@ module.exports = async function(req, res) {
       // Validate captcha
       const recaptchaRes = await request
         .post('https://www.google.com/recaptcha/api/siteverify')
+        .type('form')
         .send({
           secret: config.keys.recaptcha,
           response: req.body.recaptcha,
