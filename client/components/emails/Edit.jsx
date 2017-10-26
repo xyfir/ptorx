@@ -30,7 +30,7 @@ export default class EditEmail extends React.Component {
     if (!email) location.href = '#/emails/list';
     
     request
-      .get('../api/emails/' + this.state.id)
+      .get('/api/emails/' + this.state.id)
       .end((err, res) => {
         if (res.body.err) {
           swal('Error', 'Could not load data', 'error');
@@ -48,7 +48,7 @@ export default class EditEmail extends React.Component {
 
   onSubmit(data) {
     request
-      .put('../api/emails/' + this.state.id)
+      .put('/api/emails/' + this.state.id)
       .send(data)
       .end((err, res) => {
         if (err || res.body.error) {

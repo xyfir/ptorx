@@ -16,7 +16,7 @@ export default class UpdateModifier extends React.Component {
     this.state = { id: location.hash.split('/')[3], loading: true };
 
     request
-      .get('../api/modifiers/' + this.state.id)
+      .get('/api/modifiers/' + this.state.id)
       .end((err, res) => {
         if (err || res.body.err) {
           swal('Error', 'Could not load data', 'error');
@@ -49,7 +49,7 @@ export default class UpdateModifier extends React.Component {
    */
   onUpdate(modifier, data) {
     request
-      .put('../api/modifiers/' + this.state.id)
+      .put('/api/modifiers/' + this.state.id)
       .send(Object.assign({}, modifier, data))
       .end((err, res) => {
         if (err || res.body.error) {

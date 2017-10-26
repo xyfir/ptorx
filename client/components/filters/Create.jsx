@@ -16,7 +16,7 @@ export default class CreateFilter extends React.Component {
 
   onCreate(data) {
     request
-      .post('../api/filters')
+      .post('/api/filters')
       .send(data)
       .end((err, res) => {
         if (err || res.body.error)

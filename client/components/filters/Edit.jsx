@@ -20,7 +20,7 @@ export default class EditFilter extends React.Component {
     };
     
     request
-      .get('../api/filters/' + this.state.id)
+      .get('/api/filters/' + this.state.id)
       .end((err, res) => {
         if (err || res.body.error) {
           swal('Error', 'Could not load data', 'error');
@@ -45,7 +45,7 @@ export default class EditFilter extends React.Component {
 
   onUpdate(data) {
     request
-      .put('../api/filters/' + this.state.id)
+      .put('/api/filters/' + this.state.id)
       .send(data)
       .end((err, res) => {
         if (err || res.body.error) {
@@ -85,13 +85,13 @@ export default class EditFilter extends React.Component {
 
     // All emails need to be loaded
     if (email === undefined) {
-      request.get('../api/emails').end((err, res) =>
+      request.get('/api/emails').end((err, res) =>
         this._updateEmails(id, res.body.emails, update, index)
       );
     }
     // Full email data needs to be loaded
     else if (email.toEmail === undefined) {
-      request.get('../api/emails/' + email.id).end((err, res) => {
+      request.get('/api/emails/' + email.id).end((err, res) => {
         email = Object.assign(email, res.body);
 
         emails.forEach((e, i) => {
@@ -108,7 +108,7 @@ export default class EditFilter extends React.Component {
       const filters = email.filters.map(f => f.id).join(',');
       
       request
-        .put('../api/emails/' + email.id)
+        .put('/api/emails/' + email.id)
         .send({
           modifiers, filters,
           to: email.toEmail,

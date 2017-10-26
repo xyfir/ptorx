@@ -24,7 +24,7 @@ export default class ViewMessage extends React.Component {
     if (parseQuery().reply) this.state.showReplyForm = true;
     
     request
-      .get(`../api/emails/${this.state.id}/messages/${this.state.message}`)
+      .get(`/api/emails/${this.state.id}/messages/${this.state.message}`)
       .end((err, res) => {
         if (err || res.body.error)
           swal('Error', 'Could not load message', 'error');
@@ -35,7 +35,7 @@ export default class ViewMessage extends React.Component {
   
   onReply() {
     request
-      .post(`../api/emails/${this.state.id}/messages/${this.state.message}`)
+      .post(`/api/emails/${this.state.id}/messages/${this.state.message}`)
       .send({ content: this.refs.message.value })
       .end((err, res) => {
         if (err || res.body.error)

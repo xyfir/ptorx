@@ -20,7 +20,7 @@ export default class CreateModifier extends React.Component {
    */
   onCreate(modifier, data) {
     request
-      .post('../api/modifiers')
+      .post('/api/modifiers')
       .send(Object.assign({}, modifier, data))
       .end((err, res) => {
         if (err || res.body.error) {

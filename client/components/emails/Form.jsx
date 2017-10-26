@@ -71,7 +71,7 @@ export default class EmailForm extends React.Component {
       if (!email) return false;
     
       request
-        .post('../api/account/email/' + email)
+        .post('/api/account/email/' + email)
         .end((err, res) => {
           if (err || res.body.error)
             swal('Error', res.body.message, 'error');

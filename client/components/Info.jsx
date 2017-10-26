@@ -31,7 +31,7 @@ class PtorxInfo extends React.Component {
     for (let k in q) localStorage[k] = q[k];
 
     request
-      .get('../api/account')
+      .get('/api/account')
       .query({ token: localStorage.accessToken || '' })
       .end((err, res) =>
         !err && this.setState({ loggedIn: res.body.loggedIn })

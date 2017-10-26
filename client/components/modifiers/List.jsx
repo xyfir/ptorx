@@ -33,7 +33,7 @@ export default class ModifierList extends React.Component {
 
     if (props.data.modifiers.length == 0) {
       request
-        .get('../api/modifiers')
+        .get('/api/modifiers')
         .end((err, res) =>
           this.props.dispatch(loadModifiers(res.body.modifiers))
         );
@@ -53,7 +53,7 @@ export default class ModifierList extends React.Component {
       text: 'This modifier will be removed from any emails it is linked to.',
       icon: 'warning'
     })
-    .then(() => request.delete('../api/modifiers/' + id))
+    .then(() => request.delete('/api/modifiers/' + id))
     .then(res => {
       if (res.body.error) throw 'Could not delete modifier';
 

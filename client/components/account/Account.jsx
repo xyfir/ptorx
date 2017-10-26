@@ -35,7 +35,7 @@ export default class Account extends React.Component {
     const email = this.refs.email.value;
     
     request
-      .post('../api/account/email/' + email)
+      .post('/api/account/email/' + email)
       .end((err, res) => {
         if (err || res.body.error) {
           swal('Error', res.body.message, 'error');
@@ -56,7 +56,7 @@ export default class Account extends React.Component {
       text: 'Any proxy emails linked to this address will be deleted.',
       icon: 'warning'
     })
-    .then(() => request.delete('../api/account/email/' + id))
+    .then(() => request.delete('/api/account/email/' + id))
     .then(res => {
       if (res.body.error) throw res.body.message;
 

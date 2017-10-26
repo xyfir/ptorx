@@ -17,7 +17,7 @@ export default class SendMessage extends React.Component {
   
   onSend() {
     request
-      .post(`../api/emails/${this.state.id}/messages/`)
+      .post(`/api/emails/${this.state.id}/messages/`)
       .send({
         to: this.refs.to.value,
         subject: this.refs.subject.value,

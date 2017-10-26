@@ -36,7 +36,7 @@ export default class AddDomain extends React.Component {
     const domain = this.refs.domain.value;
 
     request
-      .post('../api/domains')
+      .post('/api/domains')
       .send({ domain })
       .end((err, res) => {
         if (err || res.body.error) {

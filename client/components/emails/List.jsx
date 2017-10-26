@@ -32,7 +32,7 @@ export default class EmailList extends React.Component {
   componentWillMount() {
     if (this.props.data.emails.length == 0) {
       request
-        .get('../api/emails')
+        .get('/api/emails')
         .end((err, res) =>
           !err && this.props.dispatch(loadEmails(res.body.emails))
         );
@@ -60,7 +60,7 @@ export default class EmailList extends React.Component {
         You will not be able to recreate this address.',
       icon: 'warning'
     })
-    .then(() => request.delete('../api/emails/' + id))
+    .then(() => request.delete('/api/emails/' + id))
     .then(res => {
       if (res.body.error) throw 'Could not delete email';
 

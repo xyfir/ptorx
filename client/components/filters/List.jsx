@@ -33,7 +33,7 @@ export default class FilterList extends React.Component {
 
     if (props.data.filters.length == 0) {
       request
-        .get('../api/filters')
+        .get('/api/filters')
         .end((err, res) =>
           this.props.dispatch(loadFilters(res.body.filters))
         );
@@ -55,7 +55,7 @@ export default class FilterList extends React.Component {
       text: 'This filter will be removed from any emails it is linked to.',
       icon: 'warning'
     })
-    .then(() => request.delete('../api/filters/' + id))
+    .then(() => request.delete('/api/filters/' + id))
     .then(res => {
       if (res.body.error) throw 'Could not delete filter';
 
@@ -104,7 +104,7 @@ export default class FilterList extends React.Component {
     // All emails need to be loaded
     if (email === undefined) {
       request
-        .get('../api/emails')
+        .get('/api/emails')
         .end((err, res) =>
           this._removeFilter(id, res.body.emails, update, index)
         );
@@ -112,7 +112,7 @@ export default class FilterList extends React.Component {
     // Full email data needs to be loaded
     else if (email.toEmail === undefined) {
       request
-        .get('../api/emails/' + email.id)
+        .get('/api/emails/' + email.id)
         .end((err, res) => {
           Object.assign(email, res);
 
@@ -133,7 +133,7 @@ export default class FilterList extends React.Component {
       const modifiers = email.modifiers.map(mod => mod.id).join(',');
       
       request
-        .put('../api/emails/' + email.id)
+        .put('/api/emails/' + email.id)
         .send({
           name: email.name, description: email.description, to: mail.toEmail,
           saveMail: +email.saveMail, noSpamFilter: +(!email.spamFilter),

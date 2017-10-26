@@ -41,7 +41,7 @@ export default class ViewDomain extends React.Component {
       icon: 'warning'
     })
     .then(() => request.delete(
-      `../api/domains/${this.state.id}/users/${this.props.data.account.uid}`
+      `/api/domains/${this.state.id}/users/${this.props.data.account.uid}`
     ))
     .then(res => {
       if (res.body.error) throw res.body.message;
@@ -62,7 +62,7 @@ export default class ViewDomain extends React.Component {
       text: 'Any proxy emails linked to this domain will be deleted.',
       icon: 'warning'
     })
-    .then(() => request.delete(`../api/domains/${this.state.id}`))
+    .then(() => request.delete(`/api/domains/${this.state.id}`))
     .then(res => {
       if (res.body.error) throw res.body.message;
 
@@ -84,7 +84,7 @@ export default class ViewDomain extends React.Component {
       icon: 'warning'
     })
     .then(() =>
-      request.delete(`../api/domains/${this.state.id}/users/${id}`)
+      request.delete(`/api/domains/${this.state.id}/users/${id}`)
     )
     .then(res => {
       if (res.body.error) throw res.body.message;
@@ -99,7 +99,7 @@ export default class ViewDomain extends React.Component {
    */
   onAddUser() {
     request
-      .post(`../api/domains/${this.state.id}/users`)
+      .post(`/api/domains/${this.state.id}/users`)
       .send({
         key: this.refs.requestKey.value,
         label: this.refs.label.value
@@ -115,7 +115,7 @@ export default class ViewDomain extends React.Component {
    */
   onVerify() {
     request
-      .put(`../api/domains/${this.state.id}/verify`)
+      .put(`/api/domains/${this.state.id}/verify`)
       .end((err, res) => err || res.body.error
         ? swal('Error', res.body.message, 'error')
         : this.setState({ verified: true })
@@ -124,7 +124,7 @@ export default class ViewDomain extends React.Component {
 
   _loadDomain() {
     request
-      .get('../api/domains/' + this.state.id)
+      .get('/api/domains/' + this.state.id)
       .end((err, res) => {
         if (err || res.body.error) return location.hash = '#/domains';
 
