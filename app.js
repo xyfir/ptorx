@@ -54,7 +54,7 @@ app.use('/static', express.static(__dirname + '/static'));
 app.get('/panel', (req, res) =>
   res.sendFile(__dirname + '/views/panel.html')
 );
-app.get('/admin-yCPnUcXcU10QRkwv', (req, res) =>
+app.get('/admin', (req, res) =>
   res.sendFile(__dirname + '/views/admin.html')
 );
 app.get('/app', (req, res) =>
