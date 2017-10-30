@@ -25,7 +25,7 @@ export default class HelpDocs extends React.Component {
       .end((err, res) => {
         doc.head.innerHTML =
           `<link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" rel="stylesheet" type="text/css">
-          <link rel='stylesheet' href='../static/css/style.css'>`,
+          <link rel='stylesheet' href='/static/css/styles.css'>`,
 
         // Convert markdown to html
         doc.body.innerHTML =
