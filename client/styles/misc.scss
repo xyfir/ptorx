@@ -12,22 +12,18 @@ section.email-form {
   }
 
   .recaptcha-wrapper {
+    margin-top: 1em;
     text-align: center;
   }
   
-  div.address, div.redirect-to, div.advanced-settings,
+  div.address, div.advanced-settings,
   div.advanced-settings > div {
     width: 100%;
   }
 
-  div.redirect-to {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
   div.checkboxes {
     display: flex;
+    flex-wrap: wrap;
     justify-content: center;
   }
 
@@ -113,6 +109,7 @@ div.edit-email {
 
     >span {
       font-size: 125%;
+      word-break: break-all;
       font-weight: bold;
       margin-right: 0.1em;
     }

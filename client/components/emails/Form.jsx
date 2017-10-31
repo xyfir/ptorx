@@ -8,9 +8,6 @@ import swal from 'sweetalert';
 import LinkModifier from 'components/modifiers/Link';
 import LinkFilter from 'components/filters/Link';
 
-// Action creators
-import { addEmail } from 'actions/creators/account/email';
-
 // Constants
 import { filterTypes, modifierTypes } from 'constants/types';
 import { RECAPTCHA_KEY } from 'constants/config';
@@ -53,32 +50,6 @@ export default class EmailForm extends React.Component {
       element.type = 'text/javascript';
       document.head.appendChild(element);
     }
-  }
-
-  /**
-   * Adds a real/main address to the user's account.
-   */
-  onAddRealAddress() {
-    swal({
-      title: 'Add Primary Email',
-      text: 'An address to receive redirected mail at.',
-      buttons: true,
-      content: 'input',
-      closeModal: true,
-      inputPlaceholder: 'address@domain.com'
-    })
-    .then(email => {
-      if (!email) return false;
-    
-      request
-        .post('/api/account/email/' + email)
-        .end((err, res) => {
-          if (err || res.body.error)
-            swal('Error', res.body.message, 'error');
-          else
-            this.props.dispatch(addEmail(res.body.id, email));
-        });
-    });
   }
 
   /**
@@ -267,29 +238,22 @@ export default class EmailForm extends React.Component {
             />
           </div>
         ) : null}
-        
-        <div className='redirect-to'>
-          <SelectField
-            id='select--redirect'
-            ref='to'
-            label='Redirect To'
-            position={SelectField.Positions.BELOW}
-            helpText={
-              'Your real email that messages sent to your Ptorx address ' +
-              'will be redirected to'
-            }
-            className='md-cell'
-            menuItems={this.props.data.account.emails.map(e => e.address)}
-            defaultValue={
-              email.toEmail || this.props.data.account.emails[0].address
-            }
-          />
-          <Button
-            icon
-            iconChildren='add'
-            onClick={() => this.onAddRealAddress()}
-          />
-        </div>
+
+        <SelectField
+          id='select--redirect'
+          ref='to'
+          label='Redirect To'
+          position={SelectField.Positions.BELOW}
+          helpText={
+            'Your real email that messages sent to your Ptorx address ' +
+            'will be redirected to'
+          }
+          className='md-cell'
+          menuItems={this.props.data.account.emails.map(e => e.address)}
+          defaultValue={
+            email.toEmail || this.props.data.account.emails[0].address
+          }
+        />
 
         {!this.state.showAdvanced ? (
           <a onClick={() => this.setState({ showAdvanced: true})}>
