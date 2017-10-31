@@ -1,6 +1,6 @@
 {
   "name": "ptorx",
-  "version": "4.9.1",
+  "version": "4.9.2",
   "description": "",
   "main": "app.js",
   "dependencies": {
@@ -37,6 +37,7 @@
     "babel-loader": "^7.1.2",
     "babel-preset-env": "^1.6.1",
     "babel-preset-react": "^6.24.1",
+    "compression-webpack-plugin": "^1.0.1",
     "gulp": "^3.9.1",
     "gulp-favicons": "^2.2.7",
     "gulp-sass": "^3.1.0",
