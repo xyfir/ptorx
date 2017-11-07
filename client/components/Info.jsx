@@ -16,7 +16,7 @@ import Features from 'components/info/Features';
 import Home from 'components/info/Home';
 
 // Modules
-import query from 'lib/parse-hash-query';
+import query from 'lib/parse-query-string';
 
 class PtorxInfo extends React.Component {
 
@@ -27,7 +27,8 @@ class PtorxInfo extends React.Component {
   }
 
   componentWillMount() {
-    const q = query();
+    const q = query(location.href); // in hash or search
+
     for (let k in q) localStorage[k] = q[k];
 
     request
