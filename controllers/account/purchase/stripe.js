@@ -33,10 +33,11 @@ module.exports = async function(req, res) {
     let amount = 2500;
 
     // Discount 10% off of first purchase
-    if ((ref.referral || ref.affiliate) && !ref.hasMadePurchase) {
-      ref.hasMadePurchase = true,
+    if ((ref.referral || ref.affiliate) && !ref.hasMadePurchase)
       amount = 2250;
-    }
+
+    if (ref.hasMadePurchase === false)
+      ref.hasMadePurchase = true;
 
     const charge = await stripe(config.keys.stripe).charges.create({
       amount, currency: 'usd', source: req.body.token,
