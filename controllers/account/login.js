@@ -10,7 +10,7 @@ const config = require('config');
   REQUIRED
     xid: string, auth: string
   OPTIONAL
-    referral: number, affiliate: string
+    referral: number, affiliate: string, adwords: json-string
   RETURN
     { error: boolean, accessToken?: string }
   DESCRIPTION
@@ -79,6 +79,15 @@ module.exports = async function(req, res) {
           }
         }
         catch (e) { return; }
+      }
+      // Save adwords info
+      else if (req.body.adwords) {
+        insert.referral = JSON.stringify(
+          Object.assign(
+            JSON.parse(req.body.adwords),
+            { adwords: true, hasMadePurchase: false }
+          )
+        );
       }
 
       // Create user
