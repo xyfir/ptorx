@@ -3,7 +3,7 @@ import marked from 'marked';
 import React from 'react';
 
 // Modules
-import query from 'lib/parse-hash-query';
+import query from 'lib/parse-query-string';
 
 // Components
 import DynamicIframe from './DynamicIframe';
@@ -33,7 +33,7 @@ export default class HelpDocs extends React.Component {
             marked(window.atob(res.body.content), { santize: true })
           }</div>`;
 
-        const {section} = query();
+        const {section} = query(location.hash);
 
         if (section) {
           // Doesn't work without delay. No idea why

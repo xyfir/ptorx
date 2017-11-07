@@ -23,7 +23,7 @@ import Filters from 'components/filters/Index';
 import Emails from 'components/emails/Index';
 
 // Modules
-import parseHashQuery from 'lib/parse-hash-query';
+import query from 'lib/parse-query-string';
 import setState from 'lib/set-state';
 
 // Constants
@@ -109,7 +109,7 @@ class App extends React.Component {
         .catch(err => swal('Error', err, 'error'));
     };
 
-    const q = parseHashQuery();
+    const q = query(location.hash);
 
     // PhoneGap app opens to ptorx.com/panel/#?phonegap=1
     if (q.phonegap) {
@@ -120,7 +120,9 @@ class App extends React.Component {
     // Attempt to login using XID/AUTH or skip to initialize()
     else if (q.xid && q.auth) {
       q.affiliate = localStorage.affiliate || '',
-      q.referral = localStorage.referral || '';
+      q.referral = localStorage.referral || '',
+      q.adwords = localStorage.adwords || localStorage.gclid
+        ? JSON.stringify(localStorage) : '';
       
       request
         .post('/api/account/login')

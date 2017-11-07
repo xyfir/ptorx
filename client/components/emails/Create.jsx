@@ -9,7 +9,7 @@ import Form from 'components/emails/Form';
 import { addEmail, loadEmails } from 'actions/creators/emails';
 
 // Modules
-import parseQuery from 'lib/parse-hash-query';
+import query from 'lib/parse-query-string';
 
 export default class CreateEmail extends React.Component {
 
@@ -21,7 +21,7 @@ export default class CreateEmail extends React.Component {
 
   componentWillMount() {
     const {App} = this.props;
-    const q = parseQuery();
+    const q = query(location.hash);
 
     // Load data from email with id q.duplicate
     if (q.duplicate) {

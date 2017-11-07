@@ -9,7 +9,7 @@ import Button from 'react-md/lib/Buttons/Button';
 import Paper from 'react-md/lib/Papers';
 
 // Modules
-import parseQuery from 'lib/parse-hash-query';
+import query from 'lib/parse-query-string';
 
 export default class ViewMessage extends React.Component {
   
@@ -21,7 +21,7 @@ export default class ViewMessage extends React.Component {
       showReplyForm: false, loading: true, content: {},
     };
 
-    if (parseQuery().reply) this.state.showReplyForm = true;
+    if (query(location.hash).reply) this.state.showReplyForm = true;
     
     request
       .get(`/api/emails/${this.state.id}/messages/${this.state.message}`)
