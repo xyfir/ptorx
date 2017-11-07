@@ -121,8 +121,17 @@ class App extends React.Component {
     else if (q.xid && q.auth) {
       q.affiliate = localStorage.affiliate || '',
       q.referral = localStorage.referral || '',
-      q.adwords = localStorage.adwords || localStorage.gclid
-        ? JSON.stringify(localStorage) : '';
+      q.adwords = '';
+      
+      if (localStorage.adwords || localStorage.gclid) {
+        const adwords = Object.assign({}, localStorage);
+
+        delete adwords.accessToken,
+        delete adwords.affiliate,
+        delete adwords.referral;
+
+        q.adwords = JSON.stringify(adwords);
+      }
       
       request
         .post('/api/account/login')
