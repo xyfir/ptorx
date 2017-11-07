@@ -62,12 +62,12 @@ export default class HowItWorks extends React.Component {
   render() {
     if (this.state.view == 'start') return (
       <div className='how-ptorx-works start'>
-        <h2>How Ptorx Works</h2>
+        <h2>Interested in how Ptorx works?</h2>
         <Button
-          icon primary
-          iconChildren='play_circle_outline'
+          flat primary
+          iconChildren='info'
           onClick={() => this.onPlay()}
-        />
+        >Learn More</Button>
       </div>
     )
 

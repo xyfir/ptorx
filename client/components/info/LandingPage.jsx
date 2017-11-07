@@ -28,7 +28,7 @@ export default ({page}) => (
         }
       >Try Free</Button>
 
-      <p>All that's needed to start your 14 day free trial is a valid email to create a Xyfir Account. No payment info required.</p>
+      <p>All that's needed to start your 14 day free trial is a valid email to create a Xyfir Account. Have your first proxy email ready in the next 3 minutes.</p>
     </section>
 
     <section className='more-info'>

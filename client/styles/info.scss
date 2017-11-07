@@ -224,8 +224,16 @@ button.start-trial {
 div.how-ptorx-works {
   width: 100%;
 
-  >h2 {
-    margin-bottom: 0;
+  &.start {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+
+    >h2 {
+      margin-bottom: 0;
+      margin-right: 0.2em;
+    }
   }
 
   >div.typed-strings {
