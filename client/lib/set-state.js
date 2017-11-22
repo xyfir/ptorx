@@ -73,6 +73,8 @@ export default function(store) {
       }
     case 'docs':
       return store.dispatch(changeView(VIEWS.HELP_DOCS));
+    default:
+      return store.dispatch(changeView(VIEWS.CREATE_REDIRECT_EMAIL));
   }
   
 }
