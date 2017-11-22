@@ -1,12 +1,11 @@
+import { SelectField, TextField, Paper } from 'react-md';
 import React from 'react';
-
-// react-md
-import SelectField from 'react-md/lib/SelectFields';
-import TextField from 'react-md/lib/TextFields';
-import Paper from 'react-md/lib/Papers';
 
 // Constants
 import { filterTypes, modifierTypes } from 'constants/types';
+
+// Modules
+import query from 'lib/parse-query-string';
 
 export default class Search extends React.Component {
   
@@ -15,10 +14,18 @@ export default class Search extends React.Component {
 
     this.state = { select: 0 }
   }
+
+  componentDidMount() {
+    this._search.focus();
+
+    const {q} = query(location.hash);
+
+    if (q) this.props.onSearch({ query: q, type: this.state.select });
+  }
   
   onSearch() {
     this.props.onSearch({
-      query: this.refs.search.value,
+      query: this._search.value,
       type: this.state.select
     });
   }
@@ -31,16 +38,18 @@ export default class Search extends React.Component {
     const types = this.props.type == 'filter'
       ? filterTypes : this.props.type == 'modifier'
       ? modifierTypes : null;
+    const {q} = query(location.hash);
     
     return (
       <Paper zDepth={1} className='search section flex'>
         <TextField
           block paddedBlock
           id='search-box'
-          ref='search'
+          ref={i => this._search = i}
           type='search'
           onChange={e => this.onSearch()}
           placeholder='Search'
+          defaultValue={q}
         />
 
         {types ? (
