@@ -18,12 +18,14 @@ router.post('/receive/:email', upload.any(), require('./receive/receive'));
 router.route('/emails')
   .get(require('./emails/list'))
   .post(require('./emails/create'));
+router.get('/emails/availability', require('./emails/availability'));
 router.route('/emails/:email')
   .get(require('./emails/get'))
   .put(require('./emails/update'))
   .delete(require('./emails/delete'));
-router.get('/emails/:email/messages', require('./emails/messages/list'));
-router.post('/emails/:email/messages', require('./emails/messages/send'));
+router.route('/emails/:email/messages')
+  .get(require('./emails/messages/list'))
+  .post(require('./emails/messages/send'));
 router.route('/emails/:email/messages/:message')
   .get(require('./emails/messages/get'))
   .post(require('./emails/messages/reply'))
