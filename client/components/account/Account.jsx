@@ -87,7 +87,7 @@ export default class Account extends React.Component {
           <Button
             flat primary
             iconChildren='content_copy'
-            onClick={() => copy('https://ptorx.com/#?r=' + account.uid)}
+            onClick={() => copy(`https://ptorx.com/?r=user~${account.uid}`)}
           >Copy Link</Button>
         </Paper>
 
