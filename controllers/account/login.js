@@ -1,7 +1,7 @@
 const request = require('superagent');
 const crypto = require('lib/crypto');
 const moment = require('moment');
-const mysql = require('lib/mysql');
+const MySQL = require('lib/mysql');
 
 const config = require('config');
 
@@ -10,7 +10,7 @@ const config = require('config');
   REQUIRED
     xid: string, auth: string
   OPTIONAL
-    referral: number, affiliate: string, adwords: json-string
+    referral: object
   RETURN
     { error: boolean, accessToken?: string }
   DESCRIPTION
@@ -18,7 +18,7 @@ const config = require('config');
 */
 module.exports = async function(req, res) {
 
-  const db = new mysql();
+  const db = new MySQL;
 
   try {
     // Get user's data from xyAccounts
@@ -50,45 +50,28 @@ module.exports = async function(req, res) {
       `;
       const insert = {
         xyfir_id: req.body.xid, email: xaccResult.body.email,
-        subscription: moment().add(14, 'days').unix() * 1000,
-        referral: '{}'
+        subscription: moment().add(14, 'days').unix() * 1000
       };
 
-      // Save referral info
-      if (req.body.referral) {
-        insert.referral = JSON.stringify({
-          referral: req.body.referral, hasMadePurchase: false
-        });
-      }
-      // Validate affiliate promo code
-      else if (req.body.affiliate) {
+      const referral = req.body.referral || {};
+
+      // Validate xyAccounts affiliate promo code
+      if (referral.type == 'promo') {
         try {
           const xaccResult2 = await request
             .post(config.address.xacc + 'api/affiliate/signup')
             .send({
               service: 13, serviceKey: config.keys.xacc,
-              promoCode: req.body.affiliate
+              promoCode: referral.promo
             });
-          
-          // Save affiliate info
-          if (!xaccResult2.body.error && xaccResult2.body.promo == 4) {
-            insert.referral = JSON.stringify({
-              affiliate: req.body.affiliate,
-              hasMadePurchase: false
-            });
-          }
+
+          if (xaccResult2.body.error || xaccResult2.body.promo != 4)
+            referral = {};
         }
         catch (e) { return; }
       }
-      // Save adwords info
-      else if (req.body.adwords) {
-        insert.referral = JSON.stringify(
-          Object.assign(
-            JSON.parse(req.body.adwords),
-            { adwords: true, hasMadePurchase: false }
-          )
-        );
-      }
+
+      insert.referral = JSON.stringify(referral);
 
       // Create user
       const result = await db.query(sql, insert);

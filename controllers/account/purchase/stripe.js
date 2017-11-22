@@ -1,7 +1,7 @@
 const request = require('superagent');
 const moment = require('moment');
 const stripe = require('stripe');
-const mysql = require('lib/mysql');
+const MySQL = require('lib/mysql');
 
 const config = require('config');
 
@@ -16,7 +16,7 @@ const config = require('config');
 */
 module.exports = async function(req, res) {
 
-  const db = new mysql;
+  const db = new MySQL;
 
   try {
     await db.getConnection();
@@ -29,17 +29,14 @@ module.exports = async function(req, res) {
     if (!rows.length) throw 'Invalid user';
 
     const subscription = setSubscription(rows[0].subscription, 365);
-    const ref = JSON.parse(rows[0].referral);
+    const referral = JSON.parse(rows[0].referral);
     let amount = 2500;
 
     // Discount 10% off of first purchase
-    if ((ref.referral || ref.affiliate) && !ref.hasMadePurchase)
-      amount = 2250;
+    if ((referral.user || referral.promo) && !referral.hasMadePurchase)
+      amount = 2250, referral.hasMadePurchase = true;
 
-    if (ref.hasMadePurchase === false)
-      ref.hasMadePurchase = true;
-
-    const charge = await stripe(config.keys.stripe).charges.create({
+    await stripe(config.keys.stripe).charges.create({
       amount, currency: 'usd', source: req.body.token,
       description: 'Ptorx'
     });
@@ -49,31 +46,31 @@ module.exports = async function(req, res) {
       UPDATE users SET subscription = ?, referral = ?, trial = 0
       WHERE user_id = ?
     `, [
-      subscription, JSON.stringify(ref),
+      subscription, JSON.stringify(referral),
       req.session.uid
     ]);
 
     if (!result.affectedRows) throw 'Could not update subscription';
       
-    if (ref.referral) {
+    if (referral.user) {
       rows = await db.query(
         'SELECT subscription FROM users WHERE user_id = ?',
-        [ref.referral]
+        [referral.user]
       );
 
       if (rows.length) {
         await db.query(
           'UPDATE users SET subscription = ? WHERE user_id = ?',
-          [setSubscription(rows[0].subscription, 30), ref.referral]
+          [setSubscription(rows[0].subscription, 30), referral.user]
         );
       }
     }
-    else if (ref.affiliate) {
+    else if (referral.promo) {
       request
         .post(config.address.xacc + 'api/affiliate/purchase')
         .send({
           service: 13, serviceKey: config.keys.xacc,
-          promoCode: ref.affiliate, amount
+          promoCode: referral.promo, amount
         })
         .end(() => 1);
     }

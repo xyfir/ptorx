@@ -1,6 +1,6 @@
 const request = require('superagent');
 const crypto = require('lib/crypto');
-const mysql = require('lib/mysql');
+const MySQL = require('lib/mysql');
 
 const config = require('config');
 
@@ -12,7 +12,7 @@ const config = require('config');
     {
       loggedIn: boolean, subscription?: number, uid?: number, trial?: boolean,
       referral?: {
-        affiliate?: string, referral?: string,
+        type?: string, [type]?: string|number, data?: object,
         hasMadePurchase?: boolean
       },
       emails?: [{
@@ -25,7 +25,7 @@ const config = require('config');
 */
 module.exports = async function(req, res) {
 
-  const db = new mysql();
+  const db = new MySQL;
 
   try {
     await db.getConnection();
