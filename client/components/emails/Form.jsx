@@ -35,7 +35,7 @@ export default class EmailForm extends React.Component {
 
     this.state = {
       filters: this.props.email.filters, modifiers: this.props.email.modifiers,
-      advancedSettingsTab: 0
+      advancedSettingsTab: 0, addressAvailable: true
     };
   }
 
@@ -50,6 +50,27 @@ export default class EmailForm extends React.Component {
       element.type = 'text/javascript';
       document.head.appendChild(element);
     }
+  }
+
+  /**
+   * Checks if an email address on the selected domain is available.
+   * @param {number} [domain]
+   */
+  onCheckAddress(domain = this.refs.domain.state.value) {
+    clearInterval(this.timeout);
+
+    this.timeout = setTimeout(() => {
+      const address = this.refs.address.value;
+  
+      if (!address) return this.setState({ addressAvailable: true });
+  
+      request
+        .get('/api/emails/availability')
+        .query({ domain, address })
+        .end((err, res) => !err &&
+          this.setState({ addressAvailable: res.body.available })
+        );
+    }, 250);
   }
 
   /**
@@ -196,6 +217,8 @@ export default class EmailForm extends React.Component {
           ref='name'
           type='text'
           label='Name'
+          helpText='Give your proxy email a name to find it easier'
+          maxLength={40}
           className='md-cell'
           defaultValue={email.name}
         />
@@ -205,6 +228,8 @@ export default class EmailForm extends React.Component {
           ref='description'
           type='text'
           label='Description'
+          helpText='Give your proxy email a description to find it easier'
+          maxLength={150}
           className='md-cell'
           defaultValue={email.description}
         />
@@ -216,10 +241,14 @@ export default class EmailForm extends React.Component {
               ref='address'
               type='text'
               label='Address'
+              error={!this.state.addressAvailable}
               helpText={
                 'Customize your Ptorx address or leave it blank for a ' +
                 'randomly generated address'
               }
+              onChange={() => this.onCheckAddress()}
+              errorText='Proxy address is not available'
+              maxLength={64}
               className='md-cell'
             />
 
@@ -228,6 +257,7 @@ export default class EmailForm extends React.Component {
               ref='domain'
               label='Domain'
               position={SelectField.Positions.BELOW}
+              onChange={v => this.onCheckAddress(v)}
               className='md-cell'
               menuItems={
                 this.props.data.domains.map(d =>
@@ -268,18 +298,21 @@ export default class EmailForm extends React.Component {
           <div className='checkboxes'>
             <Checkbox
               id='checkbox--spam-filter'
+              name='spam-filter'
               label='Spam Filter'
               defaultChecked={email.spamFilter}
             />
 
             <Checkbox
               id='checkbox--save-mail'
+              name='save-mail'
               label='Save Mail'
               defaultChecked={email.saveMail}
             />
 
             <Checkbox
               id='checkbox--no-redirect'
+              name='no-redirect'
               label='No Redirect'
               defaultChecked={
                 email.noToAddress == undefined
@@ -290,6 +323,7 @@ export default class EmailForm extends React.Component {
 
             <Checkbox
               id='checkbox--direct-forward'
+              name='direct-forward'
               label='Direct Forward'
               defaultChecked={email.directForward}
             />
@@ -371,6 +405,7 @@ export default class EmailForm extends React.Component {
             id='selected-modifier'
             onHide={() => this.setState({ selectedModifier: 0 })}
             visible={!!this.state.selectedModifier}
+            aria-label='Selected modifier'
           >
             <List>
               <ListItem
