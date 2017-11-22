@@ -119,18 +119,15 @@ class App extends React.Component {
     }
     // Attempt to login using XID/AUTH or skip to initialize()
     else if (q.xid && q.auth) {
-      q.affiliate = localStorage.affiliate || '',
-      q.referral = localStorage.referral || '',
-      q.adwords = '';
-      
-      if (localStorage.adwords || localStorage.gclid) {
-        const adwords = Object.assign({}, localStorage);
+      if (localStorage.r) {
+        const [type, value] = localStorage.r.split('~');
+        const referral = {
+          type, [type]: value, data: Object.assign({}, localStorage)
+        };
 
-        delete adwords.accessToken,
-        delete adwords.affiliate,
-        delete adwords.referral;
+        delete referral.data.accessToken, delete referral.data.r;
 
-        q.adwords = JSON.stringify(adwords);
+        q.referral = referral;
       }
       
       request
