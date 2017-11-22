@@ -187,8 +187,13 @@ class App extends React.Component {
           actions={[
             <Button
               icon
-              iconChildren='home'
-              onClick={() => location.hash = '#'}
+              iconChildren='search'
+              onClick={() => location.hash = '#/emails/list'}
+            />,
+            <Button
+              icon
+              iconChildren='add'
+              onClick={() => location.hash = '#/emails/create'}
             />
           ]}
           title='Ptorx'
