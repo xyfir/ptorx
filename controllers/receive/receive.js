@@ -175,15 +175,15 @@ module.exports = async function(req, res) {
         
         case 8: // Builder
           email[modifier.data.target] = modifier.data.value
-            .replace(/::sender::/g, email.from)
-            .replace(/::subject::/g, email.subject)
-            .replace(/::body-html::/g, email['body-html'] || '')
-            .replace(/::body-text::/g, email['body-plain'])
-            .replace(/::sender-name::/g, email.senderName)
-            .replace(/::real-address::/g, data.to)
-            .replace(/::proxy-address::/g, email.recipient)
-            .replace(/::sender-domain::/g, email.senderDomain)
-            .replace(/::sender-address::/g, email.sender);
+            .replace(/{{sender}}/g, email.from)
+            .replace(/{{subject}}/g, email.subject)
+            .replace(/{{body-html}}/g, email['body-html'] || '')
+            .replace(/{{body-text}}/g, email['body-plain'])
+            .replace(/{{sender-name}}/g, email.senderName)
+            .replace(/{{real-address}}/g, data.to)
+            .replace(/{{proxy-address}}/g, email.recipient)
+            .replace(/{{sender-domain}}/g, email.senderDomain)
+            .replace(/{{sender-address}}/g, email.sender);
       }
     });
 
