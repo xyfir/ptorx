@@ -25,22 +25,22 @@ const config = require('config');
 */
 module.exports = async function(req, res) {
 
-  const email = req.body;
-  const save = !!email['message-url'];
-  
-  email.senderDomain = email.sender.split('@')[1],
-  email.proxyDomain = email.recipient.split('@')[1],
-  email.senderName = email.from.match(/^(.+) <(.+)>$/),
-  email.senderName = email.senderName ? email.senderName[1] : '';
-
   try {
+    const email = req.body;
+    const save = !!email['message-url'];
+
+    email.senderDomain = email.sender.split('@')[1],
+    email.proxyDomain = email.recipient.split('@')[1],
+    email.senderName = email.from.match(/^(.+) <(.+)>$/),
+    email.senderName = email.senderName ? email.senderName[1] : '';
+
+    const headers = {};
+    JSON.parse(email['message-headers']).forEach(h => headers[h[0]] = h[1]);
+
+    const isEmailSpam = headers['X-Mailgun-Sflag'] == 'Yes';
+
     // Get primary email / filters / modifiers
     const data = await getInfo(req.params.email, save);
-    const headers = JSON.parse(email['message-headers']);
-
-    const isEmailSpam = headers.findIndex(
-      h => h[0] == 'X-Mailgun-Sflag' && h[1] == 'Yes'
-    ) > -1;
 
     // Save mail as spam and quit
     if (data.spamFilter && isEmailSpam) {
@@ -79,19 +79,13 @@ module.exports = async function(req, res) {
             .match(new RegExp(filter.find, 'g'));
           break;
         case 6: // Header
-          const find = filter.find.split(':::');
+          const [header, search] = filter.find.split(':::');
+          const regex = new RegExp(
+            !filter.regex ? escapeRegExp(search) : search, 'g'
+          );
 
-          headers.forEach(header => {
-            if (
-              header[0] == find[0] &&
-              String(header[1]).match(
-                new RegExp(
-                  !filter.regex ? escapeRegExp(find[1]) : find[1],
-                  'g'
-                )
-              )
-            ) data.filters[i].pass = true;
-          });
+          if (headers[header] && regex.test(headers[header]))
+            data.filters[i].pass = true;
       }
 
       // Flip value if reject on match
@@ -183,7 +177,11 @@ module.exports = async function(req, res) {
             .replace(/{{real-address}}/g, data.to)
             .replace(/{{proxy-address}}/g, email.recipient)
             .replace(/{{sender-domain}}/g, email.senderDomain)
-            .replace(/{{sender-address}}/g, email.sender);
+            .replace(/{{sender-address}}/g, email.sender)
+            .replace(
+              /{{header\('(.+)'\)}}/g,
+              (match, p1) => headers[p1] || match
+            );
       }
     });
 
