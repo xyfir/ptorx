@@ -57,6 +57,9 @@ module.exports = async function(req, res) {
       const info = JSON.parse(
         crypto.decrypt(query.data, config.keys.swiftDemand)
       );
+      const referral = JSON.stringify({
+        type: 'source', source: 'swiftdemand', hasMadePurchase: true
+      });
 
       // Only users in trial mode can use SwiftDemand
       await db.getConnection();
@@ -65,7 +68,7 @@ module.exports = async function(req, res) {
         SET subscription = ?, referral = ?, trial = ?
         WHERE user_id = ? AND trial = ?
       `, [
-        +moment().add(90, 'days').format('x'), '{}', 0,
+        +moment().add(90, 'days').format('x'), referral, 0,
         info.user_id, 1
       ]);
       db.release();

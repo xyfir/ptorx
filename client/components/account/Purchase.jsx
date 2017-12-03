@@ -52,14 +52,14 @@ export default class Purchase extends React.Component {
       (referral.user || referral.promo) &&
       !referral.hasMadePurchase;
 
-    if (referral.source == 'SWIFTDEMAND' && trial) return (
+    if (referral.source == 'swiftdemand' && trial) return (
       <Paper
         zDepth={1}
         component='section'
         className='purchase-subscription swiftdemand section flex'
       >
         <p>
-          You can purchase a one-time, three month subscription using SwiftDemand. This offer will expire when your account's one week trial ends, so get it soon!
+          You can purchase a one-time, three month subscription using SwiftDemand. This offer will expire when your account's 14 day free trial ends, so get it soon!
         </p>
 
         <TextField
