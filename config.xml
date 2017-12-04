@@ -2,7 +2,7 @@
 
 <widget
   xmlns:gap="http://phonegap.com/ns/1.0"
-  version="1.8.1"
+  version="1.8.2"
   xmlns="http://www.w3.org/ns/widgets"
   id="com.xyfir.ptorx"
 >
@@ -119,13 +119,11 @@
   </platform>
 
   <config-file platform="ios" parent="CFBundleShortVersionString">
-    <string>1.8.1</string>
+    <string>1.8.2</string>
   </config-file>
 
-  <!-- A wildcard can be used to whitelist the entire network, over HTTP and HTTPS -->
   <allow-navigation href="*" />
 
-  <!-- Allow links to web pages to open in a browser -->
   <allow-intent href="http://*/*" />
   <allow-intent href="https://*/*" />
 
