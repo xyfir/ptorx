@@ -2,7 +2,7 @@
   "name": "Ptorx - Proxy Emails",
   "short_name": "Ptorx",
   "description": "Proxy emails for an extra layer of security, privacy, and control for your emails.",
-  "version": "1.2",
+  "version": "1.2.1",
   "manifest_version": 2,
   "browser_action": {
     "default_icon": {
@@ -40,7 +40,7 @@
   "applications": {
     "gecko": {
       "id": "ptorx@xyfir.com",
-      "strict_min_version": "50.0"
+      "strict_min_version": "55.0"
     }
   }
 }
