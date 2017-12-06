@@ -1,6 +1,6 @@
 {
   "name": "ptorx",
-  "version": "4.12.0",
+  "version": "4.13.0",
   "description": "",
   "main": "app.js",
   "dependencies": {
@@ -22,11 +22,11 @@
     "prop-types": "^15.6.0",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
-    "react-md": "^1.2.8",
+    "react-md": "^1.2.9",
     "react-stripe-checkout": "^2.6.3",
     "redux": "^3.7.2",
     "rword": "^2.2.0",
-    "stripe": "^5.3.0",
+    "stripe": "^5.4.0",
     "superagent": "^3.8.1",
     "sweetalert": "^2.0.8",
     "typed.js": "^2.0.6",
@@ -42,7 +42,7 @@
     "gulp-favicons": "^2.2.7",
     "gulp-sass": "^3.1.0",
     "gulp-util": "^3.0.8",
-    "webpack": "^3.9.1"
+    "webpack": "^3.10.0"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
