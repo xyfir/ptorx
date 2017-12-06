@@ -47,6 +47,7 @@ class PtorxInfo extends React.Component {
         case 'safe-and-secure-emails':
         case 'stop-unwanted-mail':
         case 'anonymous-emails':
+          return <LandingPage page={page} pwnCheck={true} />
         case 'temporary-emails':
         case 'email-forwarding':
           return <LandingPage page={page} />
