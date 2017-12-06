@@ -28,7 +28,6 @@ export default class PwnCheck extends React.Component {
       .query({
         includeUnverified: true
       })
-      .set('User-Agent', 'Ptorx.com')
       .end((err, res) => {
         if (err)
           this.setState({ step: 2 });
