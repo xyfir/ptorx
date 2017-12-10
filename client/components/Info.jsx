@@ -55,8 +55,10 @@ class PtorxInfo extends React.Component {
           return <Features />
         case 'docs':
           return <HelpDocs />
-        default:
+        case '':
           return <Home />
+        default:
+          return <h2 className='status-404'>404: Page Not Found</h2>
       }
     })();
     
