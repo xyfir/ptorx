@@ -31,8 +31,16 @@ module.exports = async function(req, res) {
 
     email.senderDomain = email.sender.split('@')[1],
     email.proxyDomain = email.recipient.split('@')[1],
-    email.senderName = email.from.match(/^(.+) <(.+)>$/),
-    email.senderName = email.senderName ? email.senderName[1] : '';
+    email.senderName = email.from.match(/^(.+) <(.+)>$/);
+
+    if (email.senderName) {
+      email.originalSender = email.senderName[2],
+      email.senderName = email.senderName[1];
+    }
+    else {
+      email.originalSender = email.sender,
+      email.senderName = '';
+    }
 
     const headers = {};
     JSON.parse(email['message-headers']).forEach(h => headers[h[0]] = h[1]);
@@ -119,7 +127,7 @@ module.exports = async function(req, res) {
           modifier.data.value = !modifier.data.regex
             ? escapeRegExp(modifier.data.value)
             : modifier.data.value;
-          
+
           // Escape '$' if not regular expression
           modifier.data.with = !modifier.data.regex
             ? modifier.data.value.replace(/\$/g, '$$')
@@ -131,7 +139,7 @@ module.exports = async function(req, res) {
             ),
             modifier.data.with
           );
-          
+
           if (email['body-html'] && !textonly) {
             email['body-html'] = email['body-html'].replace(
               new RegExp(modifier.data.value, modifier.data.flags),
@@ -150,11 +158,11 @@ module.exports = async function(req, res) {
           else
             email.subject += modifier.data.value;
           break;
-        
+
         case 6: // Concatenate
           // Prepend
           if (modifier.data.prepend) {
-            email[modifier.data.to] = 
+            email[modifier.data.to] =
               email[modifier.data.add] +
               modifier.data.separator +
               email[modifier.data.to];
@@ -166,10 +174,13 @@ module.exports = async function(req, res) {
               email[modifier.data.add];
           }
           break;
-        
+
         case 8: // Builder
           email[modifier.data.target] = modifier.data.value
-            .replace(/{{sender}}/g, email.from)
+            .replace(
+              /{{sender}}/g,
+              `${email.senderName} - ${email.originalSender}`
+            )
             .replace(/{{subject}}/g, email.subject)
             .replace(/{{body-html}}/g, email['body-html'] || '')
             .replace(/{{body-text}}/g, email['body-plain'])
@@ -178,6 +189,7 @@ module.exports = async function(req, res) {
             .replace(/{{proxy-address}}/g, email.recipient)
             .replace(/{{sender-domain}}/g, email.senderDomain)
             .replace(/{{sender-address}}/g, email.sender)
+            .replace(/{{original-sender}}/g, email.originalSender)
             .replace(
               /{{header\('(.+)'\)}}/g,
               (match, p1) => headers[p1] || match
@@ -211,7 +223,7 @@ module.exports = async function(req, res) {
             .get(`https://api:${config.keys.mailgun}@${att.url.substr(8)}`)
             .buffer(true)
             .parse(request.parse['application/octet-stream']);
-          
+
           // Create attachment via MailGun.Attachment
           message.attachment.push(
             new mailgun.Attachment({
