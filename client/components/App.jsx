@@ -1,3 +1,5 @@
+import 'babel-polyfill';
+
 import { render } from 'react-dom';
 import request from 'superagent';
 import React from 'react';
