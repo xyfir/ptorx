@@ -1,5 +1,5 @@
 import {
-  ListItem, Toolbar, Divider, Drawer, Button, List, FontIcon
+  ListItem, Toolbar, MenuButton, Divider, Drawer, Button, List, FontIcon
 } from 'react-md';
 import React from 'react';
 
@@ -115,10 +115,36 @@ export default class AppNavigation extends React.Component {
               iconChildren='search'
               onClick={() => location.hash = '#/emails/list'}
             />,
-            <Button
+            <MenuButton
               icon
+              id='menu--create-item'
+              menuItems={[
+                <a href='#/emails/create'>
+                  <ListItem
+                    leftIcon={<FontIcon>email</FontIcon>}
+                    primaryText='Email'
+                  />
+                </a>,
+                <a href='#/filters/create'>
+                  <ListItem
+                    leftIcon={<FontIcon>filter_list</FontIcon>}
+                    primaryText='Filter'
+                  />
+                </a>,
+                <a href='#/modifiers/create'>
+                  <ListItem
+                    leftIcon={<FontIcon>code</FontIcon>}
+                    primaryText='Modifier'
+                  />
+                </a>,
+                <a href='#/domains/add'>
+                  <ListItem
+                    leftIcon={<FontIcon>domain</FontIcon>}
+                    primaryText='Domain'
+                  />
+                </a>
+              ]}
               iconChildren='add'
-              onClick={() => location.hash = '#/emails/create'}
             />
           ]}
           title='Ptorx'
