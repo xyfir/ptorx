@@ -43,32 +43,35 @@ export default class ModifierList extends React.Component {
   /**
    * Delete the selected m.
    */
-  onDelete() {
+  async onDelete() {
     const id = this.state.selected;
     this.setState({ selected: 0 });
 
-    swal({
-      button: 'Yes',
+    const confirm = await swal({
+      buttons: true,
       title: 'Are you sure?',
       text: 'This modifier will be removed from any emails it is linked to.',
       icon: 'warning'
-    })
-    .then(() => request.delete('/api/modifiers/' + id))
-    .then(res => {
-      if (res.body.error) throw 'Could not delete modifier';
+    });
 
-      this.props.dispatch(deleteModifier(id));
+    if (!confirm) return;
 
-      const emails = this.props.data.emails.slice();
+    request.delete('/api/modifiers/' + id)
+      .then(res => {
+        if (res.body.error) throw 'Could not delete modifier';
 
-      // Remove any instances of modifier where linked to emails
-      emails.forEach((email, i) => {
-        email.modifiers = email.modifiers.filter(mod => mod.id != id);
-        emails[i] = email;
-      });
-      this.props.dispatch(loadEmails(emails));
-    })
-    .catch(err => swal('Error', err.toString(), 'error'));
+        this.props.dispatch(deleteModifier(id));
+
+        const emails = this.props.data.emails.slice();
+
+        // Remove any instances of modifier where linked to emails
+        emails.forEach((email, i) => {
+          email.modifiers = email.modifiers.filter(mod => mod.id != id);
+          emails[i] = email;
+        });
+        this.props.dispatch(loadEmails(emails));
+      })
+      .catch(err => swal('Error', err.toString(), 'error'));
   }
 
   /**
@@ -88,7 +91,7 @@ export default class ModifierList extends React.Component {
           iconChildren='add'
           onClick={() => location.hash = '#/modifiers/create'}
         />
-        
+
         <Search
           onSearch={v => this.setState({ search: v })}
           type='modifier'

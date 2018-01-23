@@ -45,27 +45,30 @@ export default class FilterList extends React.Component {
   /**
    * Deletes the selected filter and udpates the emails it is linked to.
    */
-  onDelete() {
+  async onDelete() {
     const id = this.state.selected;
     this.setState({ selected: 0 });
 
-    swal({
-      button: 'Yes',
+    const confirm = await swal({
+      buttons: true,
       title: 'Are you sure?',
       text: 'This filter will be removed from any emails it is linked to.',
       icon: 'warning'
     })
-    .then(() => request.delete('/api/filters/' + id))
-    .then(res => {
-      if (res.body.error) throw 'Could not delete filter';
 
-      this.props.dispatch(deleteFilter(id));
+    if (!confirm) return;
 
-      // Filter was linked to emails that we must now trigger updates on
-      if (res.body.update)
-        this._removeFilter(id, this.props.data.emails, res.body.update);
-    })
-    .catch(err => swal('Error', err.toString(), 'error'));
+    request.delete('/api/filters/' + id)
+      .then(res => {
+        if (res.body.error) throw 'Could not delete filter';
+
+        this.props.dispatch(deleteFilter(id));
+
+        // Filter was linked to emails that we must now trigger updates on
+        if (res.body.update)
+          this._removeFilter(id, this.props.data.emails, res.body.update);
+      })
+      .catch(err => swal('Error', err.toString(), 'error'));
   }
 
   /**
@@ -76,11 +79,11 @@ export default class FilterList extends React.Component {
   }
 
   /**
-   * Removes a deleted filter from any proxy emails that the filter is linked 
+   * Removes a deleted filter from any proxy emails that the filter is linked
    * to.
    * @param {number} id - The id of the filter that was deleted.
    * @param {object[]} emails - Proxy email objects array.
-   * @param {number[]} update - An array of proxy email ids that the filter is 
+   * @param {number[]} update - An array of proxy email ids that the filter is
    * linked to and which need to be updated.
    * @param {number} index - The current index for the `update` array.
    */
@@ -93,7 +96,7 @@ export default class FilterList extends React.Component {
             emails[i].filters = email.filters.filter(f => f.id != id);
         });
       });
-      
+
       this.props.dispatch(loadEmails(emails));
       return;
     }
@@ -131,7 +134,7 @@ export default class FilterList extends React.Component {
         .map(filter => filter.id)
         .join(',');
       const modifiers = email.modifiers.map(mod => mod.id).join(',');
-      
+
       request
         .put('/api/emails/' + email.id)
         .send({
@@ -155,7 +158,7 @@ export default class FilterList extends React.Component {
           iconChildren='add'
           onClick={() => location.hash = '#/filters/create'}
         />
-        
+
         <Search
           onSearch={v => this.setState({ search: v })}
           type='filter'
