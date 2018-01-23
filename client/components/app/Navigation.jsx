@@ -1,5 +1,6 @@
 import {
-  ListItem, Toolbar, MenuButton, Divider, Drawer, Button, List, FontIcon
+  ListItem, Toolbar, MenuButton, Divider, Drawer, Button, List, FontIcon,
+  Subheader
 } from 'react-md';
 import React from 'react';
 
@@ -119,6 +120,7 @@ export default class AppNavigation extends React.Component {
               icon
               id='menu--create-item'
               menuItems={[
+                <Subheader primaryText='Create a new:' />,
                 <a href='#/emails/create'>
                   <ListItem
                     leftIcon={<FontIcon>email</FontIcon>}
