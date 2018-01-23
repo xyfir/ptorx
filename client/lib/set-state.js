@@ -18,10 +18,14 @@ export default function(store) {
   switch (hash[0]) {
     // Update state to reflect hash
     case 'account':
-      if (hash[1] == 'purchase-subscription')
-        return store.dispatch(changeView(VIEWS.PURCHASE_SUBSCRIPTION));
-      else
-        return store.dispatch(changeView(VIEWS.ACCOUNT));
+      switch (hash[1]) {
+        case 'purchase-subscription':
+          return store.dispatch(changeView(VIEWS.PURCHASE_SUBSCRIPTION));
+        case 'primary-emails':
+          return store.dispatch(changeView(VIEWS.PRIMARY_EMAILS));
+        default:
+          return store.dispatch(changeView(VIEWS.ACCOUNT));
+      }
     case 'filters':
       switch (hash[1]) {
         case 'create':

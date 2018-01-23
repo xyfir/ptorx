@@ -15,7 +15,7 @@ section.email-form {
     margin-top: 1em;
     text-align: center;
   }
-  
+
   div.address, div.advanced-settings,
   div.advanced-settings > div {
     width: 100%;
@@ -160,23 +160,21 @@ section.request-domain-access {
 div.view-domains-as-creator {
   div.unverified {
     label {
-      font-weight: bold;    
+      font-weight: bold;
     }
   }
 }
 
-div.account {
-  >section.primary-emails {
-    >div.add {
-      width: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
+section.primary-emails {
+  >div.add {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 
-    >ul.md-list {
-      margin-bottom: 0.5em;
-    }
+  >ul.md-list {
+    margin-bottom: 0.5em;
   }
 }
 

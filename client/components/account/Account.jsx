@@ -1,78 +1,34 @@
+import { Button, Paper } from 'react-md';
 import request from 'superagent';
 import moment from 'moment';
 import React from 'react';
 import copy from 'copyr';
-import swal from 'sweetalert';
 
 // Components
+import PrimaryEmails from 'components/account/PrimaryEmails';
 import Purchase from 'components/account/Purchase';
 
-// react-md
-import TextField from 'react-md/lib/TextFields';
-import ListItem from 'react-md/lib/Lists/ListItem';
-import Dialog from 'react-md/lib/Dialogs';
-import Button from 'react-md/lib/Buttons/Button';
-import Paper from 'react-md/lib/Papers';
-import List from 'react-md/lib/Lists/List'
-
-// Action creators
-import { deleteEmail, addEmail } from 'actions/creators/account/email';
-
 // Constants
-import { PURCHASE_SUBSCRIPTION } from 'constants/views';
+import { PURCHASE_SUBSCRIPTION, PRIMARY_EMAILS } from 'constants/views';
 
 export default class Account extends React.Component {
 
   constructor(props) {
     super(props);
 
-    this.state = {
-      selectedEmail: {}, canPurchase: !localStorage.isPhoneGap
-    };
-  }
-
-  onAddEmail() {
-    const email = this.refs.email.value;
-    
-    request
-      .post('/api/account/email/' + email)
-      .end((err, res) => {
-        if (err || res.body.error) {
-          swal('Error', res.body.message, 'error');
-        }
-        else {
-          this.props.dispatch(addEmail(res.body.id, email));
-          this.refs.email.getField().value = '';
-        }
-      });
-  }
-
-  onDeleteEmail() {
-    const {id} = this.state.selectedEmail;
-
-    swal({
-      button: 'Yes',
-      title: 'Are you sure?',
-      text: 'Any proxy emails linked to this address will be deleted.',
-      icon: 'warning'
-    })
-    .then(() => request.delete('/api/account/email/' + id))
-    .then(res => {
-      if (res.body.error) throw res.body.message;
-
-      this.setState({ selectedEmail: {} });
-      this.props.dispatch(deleteEmail(id));
-    })
-    .catch(err => swal('Error', err.toString(), 'error'));
+    this.state = { canPurchase: !window.cordova };
   }
 
   render() {
-    if (this.props.data.view == PURCHASE_SUBSCRIPTION)
-      return <Purchase {...this.props} />
+    const {account, view} = this.props.App.state;
 
-    const { account } = this.props.data;
-    
-    return (
+    if (view == PURCHASE_SUBSCRIPTION) return (
+      <Purchase {...this.props} />
+    )
+    else if (view == PRIMARY_EMAILS) return (
+      <PrimaryEmails {...this.props} />
+    )
+    else return (
       <div className='account'>
         <Paper
           zDepth={1}
@@ -103,7 +59,7 @@ export default class Account extends React.Component {
               <p>Your subscription will expire on {
                 moment(account.subscription).format('YYYY-MM-DD')
               }</p>
-              
+
               {this.state.canPurchase ? (
                 <Button
                   raised primary
@@ -134,58 +90,8 @@ export default class Account extends React.Component {
             </div>
           )}
         </Paper>
-        
-        <Paper
-          zDepth={1}
-          component='section'
-          className='primary-emails section flex'
-        >
-          <h3>Primary Emails</h3>
-          <p>
-            These are your real email addresses that will receive messages redirected from your proxy email addresses.
-          </p>
-
-          <div className='add'>
-            <TextField
-              id='email--email'
-              ref='email'
-              type='email'
-              label='Email'
-              className='md-cell'
-            />
-            <Button icon iconChildren='add' onClick={() => this.onAddEmail()}/>
-          </div>
-
-          <List>{
-            account.emails.map(email =>
-              <ListItem
-                key={email.id}
-                onClick={() => this.setState({ selectedEmail: email })}
-                primaryText={email.address} 
-              />
-            )
-          }</List>
-
-          <Dialog
-            id='selected-email'
-            title={this.state.selectedEmail.address}
-            onHide={() => this.setState({ selectedEmail: {} })}
-            visible={!!this.state.selectedEmail.id}
-          >
-            <List>
-              <ListItem
-                primaryText='Copy'
-                onClick={() => copy(this.state.selectedEmail.address)}
-              />
-              <ListItem
-                primaryText='Delete'
-                onClick={() => this.onDeleteEmail()}
-              />
-            </List>
-          </Dialog>
-        </Paper>
-      </div>                
+      </div>
     );
-  }    
+  }
 
 }
