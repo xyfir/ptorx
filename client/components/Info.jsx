@@ -10,8 +10,8 @@ import Drawer from 'react-md/lib/Drawers';
 import Button from 'react-md/lib/Buttons/Button';
 
 // Components
+import Documentation from 'components/misc/Documentation';
 import LandingPage from 'components/info/LandingPage';
-import HelpDocs from 'components/misc/HelpDocs';
 import Features from 'components/info/Features';
 import Home from 'components/info/Home';
 
@@ -54,14 +54,14 @@ class PtorxInfo extends React.Component {
         case 'features':
           return <Features />
         case 'docs':
-          return <HelpDocs />
+          return <Documentation file='help' />
         case '':
           return <Home />
         default:
           return <h2 className='status-404'>404: Page Not Found</h2>
       }
     })();
-    
+
     return (
       <div className='ptorx-info'>
         <Toolbar

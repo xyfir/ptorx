@@ -6,7 +6,7 @@ import * as VIEWS from 'constants/views';
 
 export default function(store) {
 
-  // Hash is empty or not set    
+  // Hash is empty or not set
   if (location.hash.length < 2) {
     store.dispatch(changeView(VIEWS.CREATE_REDIRECT_EMAIL));
     return;
@@ -72,9 +72,9 @@ export default function(store) {
           return store.dispatch(changeView(VIEWS.VIEW_DOMAIN));
       }
     case 'docs':
-      return store.dispatch(changeView(VIEWS.HELP_DOCS));
+      return store.dispatch(changeView(VIEWS.DOCUMENTATION));
     default:
       return store.dispatch(changeView(VIEWS.CREATE_REDIRECT_EMAIL));
   }
-  
+
 }

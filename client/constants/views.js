@@ -17,7 +17,7 @@ export const EDIT_FILTER = 'FILTERS/EDIT';
 export const PURCHASE_SUBSCRIPTION = 'ACCOUNT/PURCHASE_SUBSCRIPTION';
 export const ACCOUNT = 'ACCOUNT';
 
-export const HELP_DOCS = 'DOCS';
+export const DOCUMENTATION = 'DOCS';
 
 export const LIST_DOMAINS = 'DOMAINS/LIST';
 export const VIEW_DOMAIN = 'DOMAINS/VIEW';

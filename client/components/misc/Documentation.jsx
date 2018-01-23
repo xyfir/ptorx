@@ -8,19 +8,19 @@ import query from 'lib/parse-query-string';
 // Components
 import DynamicIframe from './DynamicIframe';
 
-export default class HelpDocs extends React.Component {
-  
+export default class Documentation extends React.Component {
+
   constructor(props) {
     super(props);
   }
 
   componentDidMount() {
-    const {contentDocument: doc} = this.refs.frame.refs.frame;
+    const {contentDocument: doc} = this._frame.refs.frame;
 
     request
       .get(
-        'https://api.github.com/repos/Xyfir/Documentation/contents/' +
-        'ptorx/help.md'
+        `https://api.github.com/repos/Xyfir/Documentation/contents/` +
+        `ptorx/${this.props.file}.md`
       )
       .end((err, res) => {
         doc.head.innerHTML =
@@ -43,7 +43,12 @@ export default class HelpDocs extends React.Component {
   }
 
   render() {
-    return <DynamicIframe ref='frame' className='documentation' />
+    return (
+      <DynamicIframe
+        ref={i => this._frame = i}
+        className='documentation'
+      />
+    );
   }
 
 }
