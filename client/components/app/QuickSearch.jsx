@@ -45,7 +45,7 @@ export default class QuickSearch extends React.Component {
           emails
             .slice(0, 7)
             .map(email =>
-              <a href={`#/emails/${email.id}`} key={email.id}>
+              <a href={`#/emails/edit/${email.id}`} key={email.id}>
                 <ListItem
                   threeLines
                   className='email'
@@ -78,7 +78,7 @@ export default class QuickSearch extends React.Component {
           filters
             .slice(0, 5)
             .map(filter =>
-              <a href={`#/filters/${filter.id}`} key={filter.id}>
+              <a href={`#/filters/edit/${filter.id}`} key={filter.id}>
                 <ListItem
                   threeLines
                   className='filter'
@@ -143,7 +143,7 @@ export default class QuickSearch extends React.Component {
           modifiers
             .slice(0, 5)
             .map(modifier =>
-              <a href={`#/modifiers/${modifier.id}`} key={modifier.id}>
+              <a href={`#/modifiers/edit/${modifier.id}`} key={modifier.id}>
                 <ListItem
                   threeLines
                   className='modifier'
@@ -168,7 +168,7 @@ export default class QuickSearch extends React.Component {
       emails: findMatches(emails, search),
       filters: findMatches(filters, search),
       domains: findMatches(domains, search),
-      modifiers: findMatches(modifiers, search)
+      modifiers: findMatches(modifiers.filter(m => !m.global), search)
     };
 
     return (
