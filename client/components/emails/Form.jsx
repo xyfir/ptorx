@@ -194,6 +194,97 @@ export default class EmailForm extends React.Component {
     this.props.onSubmit(data);
   }
 
+  _renderFilters() {
+    return (
+      <section className='filters'>
+        {this.state.filters.length ? (
+          <section className='linked'>
+            <header>
+              <h3>Linked Filters</h3>
+              <p>Click on filters below to remove them from this email.</p>
+            </header>
+
+            <List
+              className='filters-list section md-paper md-paper--1'
+            >{
+              this.state.filters.map(f =>
+                <ListItem
+                  threeLines
+                  key={f.id}
+                  onClick={() => this.onRemoveFilter(f.id)}
+                  className='filter'
+                  primaryText={f.name}
+                  secondaryText={filterTypes[f.type] + '\n' + f.description}
+                />
+              )
+            }</List>
+          </section>
+        ) : null}
+
+        <section className='add'>
+          <header>
+            <h3>Add Filters</h3>
+            <p>Click on filters below to add them to this email.</p>
+          </header>
+
+          <LinkFilter
+            {...this.props}
+            onAdd={this.onAddFilter}
+            ignore={this.state.filters}
+          />
+        </section>
+      </section>
+    );
+  }
+
+  _renderModifiers() {
+    return (
+      <section className='modifiers'>
+        {this.state.modifiers.length ? (
+          <section className='linked'>
+            <header>
+              <h3>Linked Modifiers</h3>
+              <p>Click on modifiers below to remove them from this email.</p>
+              <p>
+                The order in which the modifiers are listed are the order in which they are applied to emails.
+              </p>
+            </header>
+
+            <List
+              className='modifiers-list section md-paper md-paper--1'
+            >{
+              this.state.modifiers.map(m =>
+                <ListItem
+                  threeLines
+                  key={m.id}
+                  onClick={() => this.setState({ selectedModifier: m.id })}
+                  className='modifier'
+                  primaryText={m.name}
+                  secondaryText={
+                    modifierTypes[m.type] + '\n' + m.description
+                  }
+                />
+              )
+            }</List>
+          </section>
+        ) : null}
+
+        <section className='add'>
+          <header>
+            <h3>Add Modifiers</h3>
+            <p>Click on modifiers below to add them to this email.</p>
+          </header>
+
+          <LinkModifier
+            {...this.props}
+            onAdd={this.onAddModifier}
+            ignore={this.state.modifiers}
+          />
+        </section>
+      </section>
+    );
+  }
+
   render() {
     const {email} = this.props;
 
@@ -336,71 +427,23 @@ export default class EmailForm extends React.Component {
             'advanced-settings filters-and-modifiers ' +
             'md-paper md-paper--1 section'
           }
-          onTabChange={i => this.setState({ advancedSettingsTab: i })}
+          onTabChange={i =>
+            // !! For some reason the index `3` pops up sometimes
+            this.setState({ advancedSettingsTab: i == 0 ? 0 : 1 })
+          }
           activeTabIndex={this.state.advancedSettingsTab}
         >
           <Tabs tabId='tab'>
-            <Tab label='Filters'>
-              {this.state.filters.length ? <h3>Linked Filters</h3> : null}
-
-              <List
-                className='filters-list section md-paper md-paper--1'
-              >{
-                this.state.filters.map(f =>
-                  <ListItem
-                    threeLines
-                    key={f.id}
-                    onClick={() => this.onRemoveFilter(f.id)}
-                    className='filter'
-                    primaryText={f.name}
-                    secondaryText={filterTypes[f.type] + '\n' + f.description}
-                  />
-                )
-              }</List>
-
-              <h3>Add Filters</h3>
-
-              <LinkFilter
-                {...this.props}
-                onAdd={this.onAddFilter}
-                ignore={this.state.filters}
-              />
-            </Tab>
-
-            <Tab label='Modifiers'>
-              {this.state.modifiers.length ?
-                <h3>Linked Modifiers</h3> : null
-              }
-
-              <p>
-                The order in which the modifiers are listed are the order in which they are applied to emails.
-              </p>
-
-              <List
-                className='modifiers-list section md-paper md-paper--1'
-              >{
-                this.state.modifiers.map(m =>
-                  <ListItem
-                    threeLines
-                    key={m.id}
-                    onClick={() => this.setState({ selectedModifier: m.id })}
-                    className='modifier'
-                    primaryText={m.name}
-                    secondaryText={
-                      modifierTypes[m.type] + '\n' + m.description
-                    }
-                  />
-                )
-              }</List>
-
-              <h3>Add Modifiers</h3>
-
-              <LinkModifier
-                {...this.props}
-                onAdd={this.onAddModifier}
-                ignore={this.state.modifiers}
-              />
-            </Tab>
+            <Tab label='Filters'>{
+              this.state.advancedSettingsTab == 0
+                ? this._renderFilters()
+                : null
+            }</Tab>
+            <Tab label='Modifiers'>{
+              this.state.advancedSettingsTab == 1
+                ? this._renderModifiers()
+                : null
+            }</Tab>
           </Tabs>
         </TabsContainer>
 
@@ -445,7 +488,7 @@ export default class EmailForm extends React.Component {
 
 }
 
-EmailForm.PropTypes = {
+EmailForm.propTypes = {
   App: PropTypes.object.isRequired,
   data: PropTypes.object.isRequired,
   email: PropTypes.object,
