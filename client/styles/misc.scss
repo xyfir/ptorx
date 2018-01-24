@@ -85,10 +85,6 @@ p.trial {
 
 div.search.section.flex {
   padding: 0;
-
-  input[type='search'] {
-    text-align: center;
-  }
 }
 
 ul.modifiers-list, ul.filters-list, ul.proxy-emails-list {
@@ -180,4 +176,25 @@ section.primary-emails {
 
 div.pagination {
   text-align: center;
+}
+
+div.quick-search {
+  >section {
+    >header {
+      display: flex;
+      margin-left: 1em;
+      align-items:  center;
+
+      >h1 {
+        margin-right: 0.1em;
+        margin-bottom: 0;
+        text-transform: uppercase;
+      }
+    }
+
+    >ul.md-list {
+      margin-bottom: 3em;
+      text-align: left;
+    }
+  }
 }
