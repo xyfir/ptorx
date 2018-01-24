@@ -24,20 +24,26 @@ div.email-form {
   }
 
   >section.filters-and-modifiers {
-    text-align: center;
     padding: 0;
 
-    >section {
-      padding: 0em;
-      margin: 0em;
+    section.filters, section.modifiers {
+      header {
+        margin: 1em;
+        display: flex;
+        flex-wrap: wrap;
+        align-items:  center;
 
-      div[class^=link-] > a {
-        display: block;
-        margin-bottom: 1em;
-      }
+        >h3 {
+          margin-right: 0.3em;
+          margin-bottom: 0;
+          text-transform: uppercase;
+        }
 
-      ul.md-list {
-        margin-bottom: 1em;
+        >p {
+          margin-bottom: 0;
+          text-align: left;
+          color: $md-grey-700;
+        }
       }
     }
   }
