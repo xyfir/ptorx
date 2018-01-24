@@ -2,34 +2,30 @@
   text-align: left;
 }
 
-section.email-form {
-  .advanced-settings > h3 {
-    margin-bottom: 0em;
+div.email-form {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+
+  >section {
+    width: calc(100% - 2em);
   }
 
-  .g-recaptcha {
-    display: inline-block;
+  >section.main-form {
+    >div.address {
+      width: 100%;
+    }
   }
 
-  .recaptcha-wrapper {
-    margin-top: 1em;
-    text-align: center;
-  }
-
-  div.address, div.advanced-settings,
-  div.advanced-settings > div {
-    width: 100%;
-  }
-
-  div.checkboxes {
+  >section.checkboxes {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
   }
 
-  div.filters-and-modifiers {
+  >section.filters-and-modifiers {
     text-align: center;
-    border: 1px solid $md-primary-color;
+    padding: 0;
 
     >section {
       padding: 0em;
@@ -43,6 +39,15 @@ section.email-form {
       ul.md-list {
         margin-bottom: 1em;
       }
+    }
+  }
+
+  >div.recaptcha-wrapper {
+    margin-top: 1em;
+    text-align: center;
+
+    >div.g-recaptcha {
+      display: inline-block;
     }
   }
 }

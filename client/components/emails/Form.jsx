@@ -1,3 +1,7 @@
+import {
+  TabsContainer, SelectField, TextField, Checkbox, ListItem, Button,
+  DialogContainer, Paper, List, Tabs, Tab
+} from 'react-md';
 import PropTypes from 'prop-types';
 import request from 'superagent';
 import moment from 'moment';
@@ -11,19 +15,6 @@ import LinkFilter from 'components/filters/Link';
 // Constants
 import { filterTypes, modifierTypes } from 'constants/types';
 import { RECAPTCHA_KEY } from 'constants/config';
-
-// react-md
-import TabsContainer from 'react-md/lib/Tabs/TabsContainer';
-import SelectField from 'react-md/lib/SelectFields';
-import TextField from 'react-md/lib/TextFields';
-import Checkbox from 'react-md/lib/SelectionControls/Checkbox';
-import ListItem from 'react-md/lib/Lists/ListItem';
-import Button from 'react-md/lib/Buttons/Button';
-import Dialog from 'react-md/lib/Dialogs';
-import Paper from 'react-md/lib/Papers';
-import List from 'react-md/lib/Lists/List';
-import Tabs from 'react-md/lib/Tabs/Tabs';
-import Tab from 'react-md/lib/Tabs/Tab';
 
 export default class EmailForm extends React.Component {
 
@@ -204,227 +195,236 @@ export default class EmailForm extends React.Component {
   }
 
   render() {
-    const { email } = this.props;
+    const {email} = this.props;
 
     return (
-      <Paper
-        zDepth={1}
-        component='section'
-        className='email-form section flex'
-      >
-        <TextField
-          id='text--name'
-          ref={i => this._name = i}
-          type='text'
-          label='Name'
-          helpText='(optional) Give your proxy email a name to find it easier'
-          maxLength={40}
-          className='md-cell'
-          defaultValue={email.name}
-        />
-
-        <TextField
-          id='text--description'
-          ref={i => this._description = i}
-          type='text'
-          label='Description'
-          helpText={
-            '(optional) Give your proxy email a description to find it easier'
-          }
-          maxLength={150}
-          className='md-cell'
-          defaultValue={email.description}
-        />
-
-        {this.props.create ? (
-          <div className='address flex'>
-            <TextField
-              id='text--address'
-              ref={i => this._address = i}
-              type='text'
-              label='Address'
-              error={!this.state.addressAvailable}
-              helpText={
-                '(optional) Customize your Ptorx address or leave it blank ' +
-                'for a randomly generated address'
-              }
-              onChange={() => this.onCheckAddress()}
-              errorText='Proxy address is not available'
-              maxLength={64}
-              className='md-cell'
-            />
-
-            <SelectField
-              id='select--domain'
-              ref={i => this._domain = i}
-              label='Domain'
-              position={SelectField.Positions.BELOW}
-              onChange={v => this.onCheckAddress(v)}
-              className='md-cell'
-              menuItems={
-                this.props.data.domains.map(d =>
-                  Object({ label: `@${d.domain}`, value: d.id })
-                )
-              }
-              defaultValue={email.domain}
-            />
-          </div>
-        ) : null}
-
-        <SelectField
-          id='select--redirect'
-          ref={i => this._to = i}
-          label='Redirect To'
-          position={SelectField.Positions.BELOW}
-          helpText={
-            'Your real email that messages sent to your Ptorx address ' +
-            'will be redirected to'
-          }
-          className='md-cell'
-          menuItems={this.props.data.account.emails.map(e => e.address)}
-          defaultValue={
-            email.toEmail || this.props.data.account.emails[0].address
-          }
-        />
-
-        {!this.state.showAdvanced ? (
-          <a onClick={() => this.setState({ showAdvanced: true})}>
-            Show Advanced Settings
-          </a>
-        ) : null}
-
-        <div
-          className='advanced-settings flex'
-          style={{ display: this.state.showAdvanced ? 'flex' : 'none' }}
+      <div className='email-form'>
+        <Paper
+          zDepth={1}
+          component='section'
+          className='main-form section flex'
         >
-          <div className='checkboxes'>
-            <Checkbox
-              id='checkbox--spam-filter'
-              name='spam-filter'
-              label='Spam Filter'
-              defaultChecked={email.spamFilter}
-            />
+          <TextField
+            id='text--name'
+            ref={i => this._name = i}
+            type='text'
+            label='Name'
+            helpText={
+              '(optional) Give your email a name to find it easier'
+            }
+            maxLength={40}
+            className='md-cell'
+            defaultValue={email.name}
+          />
 
-            <Checkbox
-              id='checkbox--save-mail'
-              name='save-mail'
-              label='Save Mail'
-              defaultChecked={email.saveMail}
-            />
+          <TextField
+            id='text--description'
+            ref={i => this._description = i}
+            type='text'
+            label='Description'
+            helpText={
+              '(optional) Give your email a description to find it easier'
+            }
+            maxLength={150}
+            className='md-cell'
+            defaultValue={email.description}
+          />
 
-            <Checkbox
-              id='checkbox--no-redirect'
-              name='no-redirect'
-              label='No Redirect'
-              defaultChecked={
-                email.noToAddress == undefined
-                  ? !email.toEmail
-                  : email.noToAddress
-              }
-            />
-
-            <Checkbox
-              id='checkbox--direct-forward'
-              name='direct-forward'
-              label='Direct Forward'
-              defaultChecked={email.directForward}
-            />
-          </div>
-
-          <Paper zDepth={2} className='filters-and-modifiers section'>
-          <TabsContainer
-            colored
-            onTabChange={i => this.setState({ advancedSettingsTab: i })}
-            activeTabIndex={this.state.advancedSettingsTab}
-          >
-            <Tabs tabId='tab'>
-              <Tab label='Filters'>
-                {this.state.filters.length ? <h3>Linked Filters</h3> : null}
-
-                <List
-                  className='filters-list section md-paper md-paper--1'
-                >{
-                  this.state.filters.map(f =>
-                    <ListItem
-                      threeLines
-                      key={f.id}
-                      onClick={() => this.onRemoveFilter(f.id)}
-                      className='filter'
-                      primaryText={f.name}
-                      secondaryText={filterTypes[f.type] + '\n' + f.description}
-                    />
-                  )
-                }</List>
-
-                <h3>Add Filters</h3>
-
-                <LinkFilter
-                  {...this.props}
-                  onAdd={this.onAddFilter}
-                  ignore={this.state.filters}
-                />
-              </Tab>
-
-              <Tab label='Modifiers'>
-                {this.state.modifiers.length ?
-                  <h3>Linked Modifiers</h3> : null
+          {this.props.create ? (
+            <div className='address flex'>
+              <TextField
+                id='text--address'
+                ref={i => this._address = i}
+                type='text'
+                label='Address'
+                error={!this.state.addressAvailable}
+                helpText={
+                  '(optional) Customize your Ptorx address or leave it blank ' +
+                  'for a randomly generated address'
                 }
+                onChange={() => this.onCheckAddress()}
+                errorText='Proxy address is not available'
+                maxLength={64}
+                className='md-cell'
+              />
 
-                <p>
-                  The order in which the modifiers are listed are the order in which they are applied to emails.
-                </p>
-
-                <List
-                  className='modifiers-list section md-paper md-paper--1'
-                >{
-                  this.state.modifiers.map(m =>
-                    <ListItem
-                      threeLines
-                      key={m.id}
-                      onClick={() => this.setState({ selectedModifier: m.id })}
-                      className='modifier'
-                      primaryText={m.name}
-                      secondaryText={
-                        modifierTypes[m.type] + '\n' + m.description
-                      }
-                    />
+              <SelectField
+                id='select--domain'
+                ref={i => this._domain = i}
+                label='Domain'
+                position={SelectField.Positions.BELOW}
+                onChange={v => this.onCheckAddress(v)}
+                className='md-cell'
+                menuItems={
+                  this.props.data.domains.map(d =>
+                    Object({ label: `@${d.domain}`, value: d.id })
                   )
-                }</List>
-
-                <h3>Add Modifiers</h3>
-
-                <LinkModifier
-                  {...this.props}
-                  onAdd={this.onAddModifier}
-                  ignore={this.state.modifiers}
-                />
-              </Tab>
-            </Tabs>
-          </TabsContainer>
-          </Paper>
-
-          <Dialog
-            id='selected-modifier'
-            onHide={() => this.setState({ selectedModifier: 0 })}
-            visible={!!this.state.selectedModifier}
-            aria-label='Selected modifier'
-          >
-            <List>
-              <ListItem
-                primaryText='Move up'
-                onClick={() => this.onMoveModifierUp()}
+                }
+                defaultValue={email.domain}
               />
-              <ListItem
-                primaryText='Move down'
-                onClick={() => this.onMoveModifierDown()}
+            </div>
+          ) : null}
+
+          <SelectField
+            id='select--redirect'
+            ref={i => this._to = i}
+            label='Redirect To'
+            position={SelectField.Positions.BELOW}
+            helpText={
+              'Your real email that messages sent to your Ptorx address ' +
+              'will be redirected to'
+            }
+            className='md-cell'
+            menuItems={this.props.data.account.emails.map(e => e.address)}
+            defaultValue={
+              email.toEmail || this.props.data.account.emails[0].address
+            }
+          />
+
+          {!this.state.showAdvanced ? (
+            <Button
+              flat primary
+              onClick={() => this.setState({ showAdvanced: true})}
+              iconChildren='settings'
+            >Advanced Settings</Button>
+          ) : null}
+        </Paper>
+
+        <Paper
+          style={{ display: this.state.showAdvanced ? 'flex' : 'none' }}
+          zDepth={1}
+          component='section'
+          className='advanced-settings checkboxes section'
+        >
+          <Checkbox
+            id='checkbox--spam-filter'
+            name='spam-filter'
+            label='Spam Filter'
+            defaultChecked={email.spamFilter}
+          />
+
+          <Checkbox
+            id='checkbox--save-mail'
+            name='save-mail'
+            label='Save Mail'
+            defaultChecked={email.saveMail}
+          />
+
+          <Checkbox
+            id='checkbox--no-redirect'
+            name='no-redirect'
+            label='No Redirect'
+            defaultChecked={
+              email.noToAddress == undefined
+                ? !email.toEmail
+                : email.noToAddress
+            }
+          />
+
+          <Checkbox
+            id='checkbox--direct-forward'
+            name='direct-forward'
+            label='Direct Forward'
+            defaultChecked={email.directForward}
+          />
+        </Paper>
+
+        <TabsContainer
+          colored
+          style={{ display: this.state.showAdvanced ? 'initial' : 'none' }}
+          className={
+            'advanced-settings filters-and-modifiers ' +
+            'md-paper md-paper--1 section'
+          }
+          onTabChange={i => this.setState({ advancedSettingsTab: i })}
+          activeTabIndex={this.state.advancedSettingsTab}
+        >
+          <Tabs tabId='tab'>
+            <Tab label='Filters'>
+              {this.state.filters.length ? <h3>Linked Filters</h3> : null}
+
+              <List
+                className='filters-list section md-paper md-paper--1'
+              >{
+                this.state.filters.map(f =>
+                  <ListItem
+                    threeLines
+                    key={f.id}
+                    onClick={() => this.onRemoveFilter(f.id)}
+                    className='filter'
+                    primaryText={f.name}
+                    secondaryText={filterTypes[f.type] + '\n' + f.description}
+                  />
+                )
+              }</List>
+
+              <h3>Add Filters</h3>
+
+              <LinkFilter
+                {...this.props}
+                onAdd={this.onAddFilter}
+                ignore={this.state.filters}
               />
-              <ListItem
-                primaryText='Remove'
-                onClick={() => this.onRemoveModifier()}
+            </Tab>
+
+            <Tab label='Modifiers'>
+              {this.state.modifiers.length ?
+                <h3>Linked Modifiers</h3> : null
+              }
+
+              <p>
+                The order in which the modifiers are listed are the order in which they are applied to emails.
+              </p>
+
+              <List
+                className='modifiers-list section md-paper md-paper--1'
+              >{
+                this.state.modifiers.map(m =>
+                  <ListItem
+                    threeLines
+                    key={m.id}
+                    onClick={() => this.setState({ selectedModifier: m.id })}
+                    className='modifier'
+                    primaryText={m.name}
+                    secondaryText={
+                      modifierTypes[m.type] + '\n' + m.description
+                    }
+                  />
+                )
+              }</List>
+
+              <h3>Add Modifiers</h3>
+
+              <LinkModifier
+                {...this.props}
+                onAdd={this.onAddModifier}
+                ignore={this.state.modifiers}
               />
-            </List>
-          </Dialog>
-        </div>
+            </Tab>
+          </Tabs>
+        </TabsContainer>
+
+        <DialogContainer
+          id='selected-modifier'
+          onHide={() => this.setState({ selectedModifier: 0 })}
+          visible={!!this.state.selectedModifier}
+          aria-label='Selected modifier'
+        >
+          <List>
+            <ListItem
+              primaryText='Move up'
+              onClick={() => this.onMoveModifierUp()}
+            />
+            <ListItem
+              primaryText='Move down'
+              onClick={() => this.onMoveModifierDown()}
+            />
+            <ListItem
+              primaryText='Remove'
+              onClick={() => this.onRemoveModifier()}
+            />
+          </List>
+        </DialogContainer>
 
         {this.props.recaptcha ? (
           <div className='recaptcha-wrapper'>
@@ -438,8 +438,8 @@ export default class EmailForm extends React.Component {
         <Button
           primary raised
           onClick={e => this.onSubmit(e)}
-        >Submit</Button>
-      </Paper>
+        >{this.props.create ? 'Create' : 'Update'}</Button>
+      </div>
     );
   }
 
