@@ -1,29 +1,27 @@
+import {
+  SelectField, TextField, Checkbox, Button, Paper
+} from 'react-md';
 import PropTypes from 'prop-types';
 import React from 'react';
 
 // Constants
 import { creatableModifierTypes } from 'constants/types';
 
-// react-md
-import SelectField from 'react-md/lib/SelectFields';
-import TextField from 'react-md/lib/TextFields';
-import Checkbox from 'react-md/lib/SelectionControls/Checkbox';
-import Button from 'react-md/lib/Buttons/Button';
-import Paper from 'react-md/lib/Papers';
-
 export default class ModifierForm extends React.Component {
 
   constructor(props) {
     super(props);
 
-    this.state = { type: this.props.modifier.type, useRegex: false };
+    this.state = {
+      type: this.props.modifier.type, useRegex: false
+    };
   }
 
   onSubmit() {
     const modifier = {
       type: this.state.type,
-      name: this.refs.name.value,
-      description: this.refs.description.value
+      name: this._name.value,
+      description: this._description.value
     };
     let data;
 
@@ -31,37 +29,37 @@ export default class ModifierForm extends React.Component {
       case 3:
         data = {
           regex: this.state.useRegex,
-          value: this.refs.find.value,
-          with: this.refs.replace.value,
-          flags: this.refs.regexFlags
-            ? this.refs.regexFlags.value : ''
+          value: this._find.value,
+          with: this._replace.value,
+          flags: this._regexFlags
+            ? this._regexFlags.value : ''
         };
         break;
 
       case 4:
-        data = { subject: this.refs.subject.value };
+        data = { subject: this._subject.value };
         break;
 
       case 5:
         data = {
-          value: this.refs.tag.value,
+          value: this._tag.value,
           prepend: window['checkbox--prepend'].checked
         };
         break;
-      
+
       case 6:
         data = {
-          to: this.refs.to.state.value,
-          add: this.refs.add.state.value,
+          to: this._to.state.value,
+          add: this._add.state.value,
           prepend: window['checkbox--prepend'].checked,
-          separator: this.refs.separator.value
+          separator: this._separator.value
         };
         break;
-      
+
       case 8:
         data = {
-          value: this.refs.value.value,
-          target: this.refs.target.state.value
+          value: this._value.value,
+          target: this._target.state.value
         };
         break;
     }
@@ -71,7 +69,7 @@ export default class ModifierForm extends React.Component {
 
   render() {
     const mod = this.props.modifier;
-    
+
     const form = (() => {
       switch (this.state.type) {
         case 2: return (
@@ -88,7 +86,7 @@ export default class ModifierForm extends React.Component {
           >
             <TextField
               id='text--find'
-              ref='find'
+              ref={i => this._find = i}
               type='text'
               label='Find'
               helpText='The value to be replaced'
@@ -98,14 +96,14 @@ export default class ModifierForm extends React.Component {
 
             <TextField
               id='text--replace'
-              ref='replace'
+              ref={i => this._replace = i}
               type='text'
               label='Replace'
               helpText='The value which replaces "Find"'
               className='md-cell'
               defaultValue={mod.data.with}
             />
-            
+
             <Checkbox
               id='checkbox--regex'
               label='Regular Expression'
@@ -116,7 +114,7 @@ export default class ModifierForm extends React.Component {
             {mod.data.regex || this.state.useRegex ? (
               <TextField
                 id='text--flags'
-                ref='regexFlags'
+                ref={i => this._regexFlags = i}
                 type='text'
                 label='Regular Expression Flags'
                 helpText='Single-character regex flags'
@@ -135,7 +133,7 @@ export default class ModifierForm extends React.Component {
           >
             <TextField
               id='text--subject'
-              ref='subject'
+              ref={i => this._subject = i}
               type='text'
               label='Subject'
               helpText='The text to replace an email subject with'
@@ -153,14 +151,14 @@ export default class ModifierForm extends React.Component {
           >
             <TextField
               id='text--subject-tag'
-              ref='tag'
+              ref={i => this._tag = i}
               type='text'
               label='Subject Tag'
               helpText='The value to append or prepend to an email subject'
               className='md-cell'
               defaultValue={mod.data.value}
             />
-            
+
             <Checkbox
               id='checkbox--prepend'
               label='Prepend Tag'
@@ -168,7 +166,7 @@ export default class ModifierForm extends React.Component {
             />
           </Paper>
         );
-        
+
         case 6: return (
           <Paper
             zDepth={1}
@@ -177,11 +175,11 @@ export default class ModifierForm extends React.Component {
           >
             <SelectField
               id='select--var-1'
-              ref='add'
-              label='Add (Variable #1)'
+              ref={i => this._add = i}
+              label='Add'
               helpText={
-                'Variable #1\'s content is added to the end of variable ' +
-                '#2\'s content'
+                `The value of "Add" is added to the end of "To" or vice ` +
+                `versa if "Prepend"`
               }
               position={SelectField.Positions.BELOW}
               className='md-cell'
@@ -197,10 +195,10 @@ export default class ModifierForm extends React.Component {
 
             <TextField
               id='text--separator'
-              ref='separator'
+              ref={i => this._separator = i}
               type='text'
               label='Separator'
-              helpText='Separates variable #1 and #2'
+              helpText='Separates "Add" and "To"'
               className='md-cell'
               defaultValue={mod.data.separator}
             />
@@ -213,8 +211,8 @@ export default class ModifierForm extends React.Component {
 
             <SelectField
               id='select--var-2'
-              ref='to'
-              label='To (Variable #2)'
+              ref={i => this._to = i}
+              label='To'
               position={SelectField.Positions.ABOVE}
               className='md-cell'
               menuItems={[
@@ -235,7 +233,7 @@ export default class ModifierForm extends React.Component {
           >
             <SelectField
               id='select--target'
-              ref='target'
+              ref={i => this._target = i}
               label='Target'
               helpText='The field to build the value for'
               position={SelectField.Positions.BELOW}
@@ -250,7 +248,7 @@ export default class ModifierForm extends React.Component {
 
             <TextField
               id='text--value'
-              ref='value'
+              ref={i => this._value = i}
               rows={2}
               type='text'
               label='Value'
@@ -262,7 +260,7 @@ export default class ModifierForm extends React.Component {
         );
       }
     })();
-    
+
     return (
       <div className='modifier-form'>
         <Paper zDepth={1} component='section' className='section flex'>
@@ -279,40 +277,35 @@ export default class ModifierForm extends React.Component {
               )
             }
           />
-          
+
           <TextField
             id='text--name'
-            ref='name'
+            ref={i => this._name = i}
             type='text'
             label='Name'
             className='md-cell'
             defaultValue={mod.name}
           />
-          
+
           <TextField
             id='text--description'
-            ref='description'
+            ref={i => this._description = i}
             type='text'
             label='Description'
             className='md-cell'
             defaultValue={mod.description}
           />
-
-          <Button
-            raised primary
-            onClick={() => this.onSubmit()}
-          >Submit</Button>
         </Paper>
-        
+
         {form}
-        
+
         {mod.linkedTo.length ? (
           <Paper zDepth={1} className='linked-emails section flex'>
             <h3>Linked To</h3>
             <p>
               Below are emails that are currently utilizing this modifier.
             </p>
-            
+
             <div className='linked-emails'>{
               mod.linkedTo.map(email =>
                 <a key={email.id} href={`#/emails/edit/${email.id}`}>{
@@ -322,6 +315,13 @@ export default class ModifierForm extends React.Component {
             }</div>
           </Paper>
         ) : null}
+
+        <section className='controls'>
+          <Button
+            raised primary
+            onClick={() => this.onSubmit()}
+          >Submit</Button>
+        </section>
       </div>
     );
   }
@@ -329,17 +329,7 @@ export default class ModifierForm extends React.Component {
 }
 
 ModifierForm.propTypes = {
-  modifier: PropTypes.objectOf({
-    data: PropTypes.any,
-    type: PropTypes.number,
-    name: PropTypes.string,
-    linkedTo: PropTypes.arrayOf(
-      PropTypes.objectOf({
-        id: PropTypes.number, address: PropTypes.string
-      })
-    ),
-    description: PropTypes.string
-  }),
+  modifier: PropTypes.object,
   onSubmit: PropTypes.func.isRequired
 };
 
