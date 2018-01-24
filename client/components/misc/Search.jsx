@@ -1,4 +1,6 @@
-import { SelectField, TextField, Paper } from 'react-md';
+import {
+  MenuButton, TextField, Subheader, ListItem, Paper
+} from 'react-md';
 import React from 'react';
 
 // Constants
@@ -8,7 +10,7 @@ import { filterTypes, modifierTypes } from 'constants/types';
 import query from 'lib/parse-query-string';
 
 export default class Search extends React.Component {
-  
+
   constructor(props) {
     super(props);
 
@@ -22,7 +24,7 @@ export default class Search extends React.Component {
 
     if (q) this.props.onSearch({ query: q, type: this.state.select });
   }
-  
+
   onSearch() {
     this.props.onSearch({
       query: this._search.value,
@@ -33,13 +35,13 @@ export default class Search extends React.Component {
   onSelect(select) {
     this.setState({ select }, () => this.onSearch());
   }
-  
+
   render() {
     const types = this.props.type == 'filter'
       ? filterTypes : this.props.type == 'modifier'
       ? modifierTypes : null;
     const {q} = query(location.hash);
-    
+
     return (
       <Paper zDepth={1} className='search section flex'>
         <TextField
@@ -53,21 +55,24 @@ export default class Search extends React.Component {
         />
 
         {types ? (
-          <SelectField
-            id='select-search-type'
-            onChange={v => this.onSelect(v)}
-            position={SelectField.Positions.BELOW}
-            className='md-cell'
-            menuItems={
+          <MenuButton
+            icon
+            id='menu--create-item'
+            menuItems={[
+              <Subheader primaryText='Search by:' />
+            ].concat(
               Object.keys(types).map(k =>
-                Object({ label: types[k], value: k })
+                <ListItem
+                  onClick={() => this.onSelect(k)}
+                  primaryText={types[k]}
+                />
               )
-            }
-            placeholder='Type'
+            )}
+            iconChildren='more_vert'
           />
         ) : null}
       </Paper>
     );
   }
-  
+
 }
