@@ -20,6 +20,8 @@ export const ACCOUNT = 'ACCOUNT';
 
 export const DOCUMENTATION = 'DOCS';
 
+export const QUICK_SEARCH = 'QUICK_SEARCH';
+
 export const LIST_DOMAINS = 'DOMAINS/LIST';
 export const VIEW_DOMAIN = 'DOMAINS/VIEW';
 export const ADD_DOMAIN = 'DOMAINS/ADD';

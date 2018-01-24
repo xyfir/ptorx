@@ -77,6 +77,8 @@ export default function(store) {
       }
     case 'docs':
       return store.dispatch(changeView(VIEWS.DOCUMENTATION));
+    case 'quick-search':
+      return store.dispatch(changeView(VIEWS.QUICK_SEARCH));
     default:
       return store.dispatch(changeView(VIEWS.CREATE_REDIRECT_EMAIL));
   }

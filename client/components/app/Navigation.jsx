@@ -114,7 +114,7 @@ export default class AppNavigation extends React.Component {
             <Button
               icon
               iconChildren='search'
-              onClick={() => location.hash = '#/emails/list'}
+              onClick={() => location.hash = '#/quick-search'}
             />,
             <MenuButton
               icon

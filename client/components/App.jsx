@@ -11,6 +11,7 @@ import reducers from 'reducers/index';
 
 // Components
 import Documentation from 'components/misc/Documentation';
+import QuickSearch from 'components/app/QuickSearch';
 import Navigation from 'components/app/Navigation';
 import Modifiers from 'components/modifiers/Index';
 import Domains from 'components/domains/Domains';
@@ -24,7 +25,7 @@ import query from 'lib/parse-query-string';
 
 // Constants
 import { XACC, LOG_STATE, ENVIRONMENT } from 'constants/config';
-import { CREATE_REDIRECT_EMAIL } from 'constants/views';
+import { CREATE_REDIRECT_EMAIL, QUICK_SEARCH } from 'constants/views';
 import { INITIALIZE_STATE } from 'actions/types/index';
 
 const store = createStore(reducers);
@@ -159,6 +160,7 @@ class App extends React.Component {
       };
 
       switch (this.state.view.split('/')[0]) {
+        case 'QUICK_SEARCH': return <QuickSearch {...props} />
         case 'MODIFIERS': return <Modifiers {...props} />
         case 'DOMAINS': return <Domains {...props} />
         case 'ACCOUNT': return <Account {...props} />
