@@ -56,14 +56,14 @@ export default class EmailForm extends React.Component {
    * Checks if an email address on the selected domain is available.
    * @param {number} [domain]
    */
-  onCheckAddress(domain = this.refs.domain.state.value) {
+  onCheckAddress(domain = this._domain.state.value) {
     clearInterval(this.timeout);
 
     this.timeout = setTimeout(() => {
-      const address = this.refs.address.value;
-  
+      const address = this._address.value;
+
       if (!address) return this.setState({ addressAvailable: true });
-  
+
       request
         .get('/api/emails/availability')
         .query({ domain, address })
@@ -89,7 +89,7 @@ export default class EmailForm extends React.Component {
 
       mods[i] = b, mods[i + 1] = a;
 
-      this.setState({ modifiers: mods }); 
+      this.setState({ modifiers: mods });
     }
   }
 
@@ -109,7 +109,7 @@ export default class EmailForm extends React.Component {
 
       mods[i] = b, mods[i - 1] = a;
 
-      this.setState({ modifiers: mods }); 
+      this.setState({ modifiers: mods });
     }
   }
 
@@ -140,7 +140,7 @@ export default class EmailForm extends React.Component {
    */
   onAddModifier(id) {
     if (this.state.modifiers.find(m => m.id == id)) return;
-    
+
     this.setState({
       modifiers: this.state.modifiers.concat([
         this.props.data.modifiers.find(m => m.id == id)
@@ -154,7 +154,7 @@ export default class EmailForm extends React.Component {
    */
   onAddFilter(id) {
     if (this.state.filters.find(f => f.id == id)) return;
-    
+
     this.setState({
       filters: this.state.filters.concat([
         this.props.data.filters.find(f => f.id == id)
@@ -168,13 +168,13 @@ export default class EmailForm extends React.Component {
   onSubmit() {
     const data = {
       to: this.props.data.account.emails.find(e =>
-        e.address == this.refs.to.state.value
+        e.address == this._to.state.value
       ).id,
-      name: this.refs.name.value,
+      name: this._name.value,
       filters: this.state.filters.map(f => f.id).join(','),
       saveMail: window['checkbox--save-mail'].checked,
       modifiers: this.state.modifiers.map(m => m.id).join(','),
-      description: this.refs.description.value,
+      description: this._description.value,
       noToAddress: window['checkbox--no-redirect'].checked,
       noSpamFilter: !window['checkbox--spam-filter'].checked,
       directForward: window['checkbox--direct-forward'].checked
@@ -183,9 +183,9 @@ export default class EmailForm extends React.Component {
     data.name = data.name || 'Untitled Proxy Email';
 
     if (this.props.create) {
-      data.domain = this.refs.domain.state.value,
-      data.address = this.refs.address.value
-        ? this.refs.address.value.split('@')[0]
+      data.domain = this._domain.state.value,
+      data.address = this._address.value
+        ? this._address.value.split('@')[0]
         : '',
       data.description = data.description ||
         'Created on ' + moment().format('YYYY-MM-DD, HH:mm:ss');
@@ -205,7 +205,7 @@ export default class EmailForm extends React.Component {
 
   render() {
     const { email } = this.props;
-    
+
     return (
       <Paper
         zDepth={1}
@@ -214,10 +214,10 @@ export default class EmailForm extends React.Component {
       >
         <TextField
           id='text--name'
-          ref='name'
+          ref={i => this._name = i}
           type='text'
           label='Name'
-          helpText='Give your proxy email a name to find it easier'
+          helpText='(optional) Give your proxy email a name to find it easier'
           maxLength={40}
           className='md-cell'
           defaultValue={email.name}
@@ -225,10 +225,12 @@ export default class EmailForm extends React.Component {
 
         <TextField
           id='text--description'
-          ref='description'
+          ref={i => this._description = i}
           type='text'
           label='Description'
-          helpText='Give your proxy email a description to find it easier'
+          helpText={
+            '(optional) Give your proxy email a description to find it easier'
+          }
           maxLength={150}
           className='md-cell'
           defaultValue={email.description}
@@ -238,13 +240,13 @@ export default class EmailForm extends React.Component {
           <div className='address flex'>
             <TextField
               id='text--address'
-              ref='address'
+              ref={i => this._address = i}
               type='text'
               label='Address'
               error={!this.state.addressAvailable}
               helpText={
-                'Customize your Ptorx address or leave it blank for a ' +
-                'randomly generated address'
+                '(optional) Customize your Ptorx address or leave it blank ' +
+                'for a randomly generated address'
               }
               onChange={() => this.onCheckAddress()}
               errorText='Proxy address is not available'
@@ -254,14 +256,14 @@ export default class EmailForm extends React.Component {
 
             <SelectField
               id='select--domain'
-              ref='domain'
+              ref={i => this._domain = i}
               label='Domain'
               position={SelectField.Positions.BELOW}
               onChange={v => this.onCheckAddress(v)}
               className='md-cell'
               menuItems={
                 this.props.data.domains.map(d =>
-                  Object({ label: d.domain, value: d.id })
+                  Object({ label: `@${d.domain}`, value: d.id })
                 )
               }
               defaultValue={email.domain}
@@ -271,7 +273,7 @@ export default class EmailForm extends React.Component {
 
         <SelectField
           id='select--redirect'
-          ref='to'
+          ref={i => this._to = i}
           label='Redirect To'
           position={SelectField.Positions.BELOW}
           helpText={
@@ -294,7 +296,7 @@ export default class EmailForm extends React.Component {
         <div
           className='advanced-settings flex'
           style={{ display: this.state.showAdvanced ? 'flex' : 'none' }}
-        > 
+        >
           <div className='checkboxes'>
             <Checkbox
               id='checkbox--spam-filter'
@@ -338,7 +340,7 @@ export default class EmailForm extends React.Component {
             <Tabs tabId='tab'>
               <Tab label='Filters'>
                 {this.state.filters.length ? <h3>Linked Filters</h3> : null}
-                
+
                 <List
                   className='filters-list section md-paper md-paper--1'
                 >{
@@ -367,11 +369,11 @@ export default class EmailForm extends React.Component {
                 {this.state.modifiers.length ?
                   <h3>Linked Modifiers</h3> : null
                 }
-                
+
                 <p>
                   The order in which the modifiers are listed are the order in which they are applied to emails.
                 </p>
-                
+
                 <List
                   className='modifiers-list section md-paper md-paper--1'
                 >{
@@ -432,7 +434,7 @@ export default class EmailForm extends React.Component {
             />
           </div>
         ) : null}
-        
+
         <Button
           primary raised
           onClick={e => this.onSubmit(e)}
