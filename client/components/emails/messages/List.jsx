@@ -2,6 +2,9 @@ import request from 'superagent';
 import React from 'react';
 import swal from 'sweetalert';
 
+// Components
+import Navigation from 'components/emails/Navigation';
+
 // react-md
 import SelectField from 'react-md/lib/SelectFields';
 import ListItem from 'react-md/lib/Lists/ListItem';
@@ -72,13 +75,10 @@ export default class MessageList extends React.Component {
 
     const { selected, emailId } = this.state;
     const { messages } = this.props.data;
-    
+
     return (
       <div className='messages flex'>
-        <nav className='navbar-sub'>
-          <a href={`#/emails/messages/${emailId}/send`}>Send</a>
-          <a href={`#/emails/edit/${emailId}`}>Edit Email</a>
-        </nav>
+        <Navigation email={emailId} />
 
         <SelectField
           id='select--type'
@@ -92,7 +92,7 @@ export default class MessageList extends React.Component {
           }
           onChange={v => this.setState({ type: v })}
         />
-        
+
         {messages.length ? (
           <List className='messages md-paper md-paper--1 section'>{
             messages.map(msg =>

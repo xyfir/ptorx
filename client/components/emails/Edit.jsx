@@ -1,10 +1,11 @@
+import { Button } from 'react-md';
 import request from 'superagent';
 import React from 'react';
 import copy from 'copyr';
 import swal from 'sweetalert';
 
-// react-md
-import Button from 'react-md/lib/Buttons/Button';
+// Components
+import Navigation from 'components/emails/Navigation';
 
 // Components
 import Form from 'components/emails/Form';
@@ -28,7 +29,7 @@ export default class EditEmail extends React.Component {
     const email = this.props.data.emails.find(e => e.id == this.state.id);
 
     if (!email) location.href = '#/emails/list';
-    
+
     request
       .get('/api/emails/' + this.state.id)
       .end((err, res) => {
@@ -36,7 +37,7 @@ export default class EditEmail extends React.Component {
           swal('Error', 'Could not load data', 'error');
           return;
         }
-        
+
         delete res.body.error;
         this.props.dispatch(editEmail(
           Object.assign({}, email, res.body)
@@ -60,7 +61,7 @@ export default class EditEmail extends React.Component {
         data.toEmail = this.props.data.account.emails.find(e =>
           e.id == data.to
         ).address; delete data.to;
-        
+
         // Set address
         if (data.noToAddress) {
           data.address = '';
@@ -71,7 +72,7 @@ export default class EditEmail extends React.Component {
           ).address;
         }
         delete data.noToAddress;
-        
+
         // data.modifiers|filters from id list string -> object array
         data.modifiers = data.modifiers.split(',').map(m =>
           this.props.data.modifiers.find(mod => m == mod.id)
@@ -79,9 +80,9 @@ export default class EditEmail extends React.Component {
         data.filters = data.filters.split(',').map(f =>
           this.props.data.filters.find(filter => f == filter.id)
         );
-        
+
         data.id = this.state.id;
-        
+
         this.props.dispatch(editEmail(data));
 
         location.hash = '#/emails/list';
@@ -90,21 +91,14 @@ export default class EditEmail extends React.Component {
   }
 
   render() {
-    if (this.state.loading) return <div />;
+    if (this.state.loading) return null;
 
     const email = this.props.data.emails.find(e => e.id == this.state.id);
-    
+
     return (
       <div className='edit-email'>
-        <nav className='navbar-sub'>
-          <a href={`#/emails/messages/${this.state.id}/send`}>
-            Send
-          </a>
-          <a href={`#/emails/messages/${this.state.id}/list`}>
-            Inbox
-          </a>
-        </nav>
-      
+        <Navigation email={email.id} />
+
         <div className='address'>
           <span>{email.address}</span>
           <Button

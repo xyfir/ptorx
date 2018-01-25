@@ -1,28 +1,30 @@
+import { TextField, Button, Paper } from 'react-md';
 import request from 'superagent';
 import moment from 'moment';
 import React from 'react';
 import swal from 'sweetalert';
 
-// react-md
-import TextField from 'react-md/lib/TextFields';
-import Button from 'react-md/lib/Buttons/Button';
-import Paper from 'react-md/lib/Papers';
+// Components
+import Navigation from 'components/emails/Navigation';
 
 // Modules
 import query from 'lib/parse-query-string';
 
 export default class ViewMessage extends React.Component {
-  
+
   constructor(props) {
     super(props);
-    
+
     this.state = {
-      id: location.hash.split('/')[3], message: location.hash.split('/')[5],
-      showReplyForm: false, loading: true, content: {},
+      id: location.hash.split('/')[3],
+      message: location.hash.split('/')[5],
+      loading: true,
+      content: {},
+      showReplyForm: false
     };
 
     if (query(location.hash).reply) this.state.showReplyForm = true;
-    
+
     request
       .get(`/api/emails/${this.state.id}/messages/${this.state.message}`)
       .end((err, res) => {
@@ -32,7 +34,7 @@ export default class ViewMessage extends React.Component {
           this.setState({ loading: false, content: res.body });
       });
   }
-  
+
   onReply() {
     request
       .post(`/api/emails/${this.state.id}/messages/${this.state.message}`)
@@ -44,16 +46,13 @@ export default class ViewMessage extends React.Component {
           swal('Success', 'Reply sent.', 'success');
       });
   }
-  
+
   render() {
     if (this.state.loading) return null;
-    
+
     return (
       <div className='view-message'>
-        <nav className='navbar-sub'>
-          <a href={`#/emails/messages/${this.state.id}/list`}>Inbox</a>
-          <a href={`#/emails/edit/${this.state.id}`}>Edit Email</a>
-        </nav>
+        <Navigation email={this.state.id} />
 
         <Paper
           zDepth={1}
@@ -71,7 +70,7 @@ export default class ViewMessage extends React.Component {
 
           <pre className='content'>{this.state.content.text}</pre>
         </Paper>
-        
+
         {this.state.showReplyForm ? (
           <Paper
             zDepth={1}
@@ -85,7 +84,7 @@ export default class ViewMessage extends React.Component {
               label='Message'
               className='md-cell'
             />
-            
+
             <Button
               raised primary
               iconChildren='send'
@@ -101,5 +100,5 @@ export default class ViewMessage extends React.Component {
       </div>
     );
   }
-  
+
 }
