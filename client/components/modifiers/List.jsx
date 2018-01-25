@@ -4,7 +4,6 @@ import swal from 'sweetalert';
 
 // Action creators
 import { loadModifiers, deleteModifier } from 'actions/creators/modifiers';
-import { loadEmails } from 'actions/creators/emails';
 
 // Constants
 import { modifierTypes } from 'constants/types';
@@ -61,15 +60,6 @@ export default class ModifierList extends React.Component {
         if (res.body.error) throw 'Could not delete modifier';
 
         this.props.dispatch(deleteModifier(id));
-
-        const emails = this.props.data.emails.slice();
-
-        // Remove any instances of modifier where linked to emails
-        emails.forEach((email, i) => {
-          email.modifiers = email.modifiers.filter(mod => mod.id != id);
-          emails[i] = email;
-        });
-        this.props.dispatch(loadEmails(emails));
       })
       .catch(err => swal('Error', err.toString(), 'error'));
   }
