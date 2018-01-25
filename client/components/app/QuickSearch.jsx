@@ -35,7 +35,7 @@ export default class QuickSearch extends React.Component {
         <header>
           <h1>Emails</h1>
           <ShowMoreButton
-            link={`#/email/list?q=${encodeURIComponent(q)}`}
+            link={`#/emails/list?q=${encodeURIComponent(q)}`}
             limit={7}
             total={emails.length}
           />
