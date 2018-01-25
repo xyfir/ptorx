@@ -22,6 +22,14 @@ export default class LinkFilter extends React.Component {
   }
 
   render() {
+    const {filters} = this.props.App.state;
+
+    if (!filters.length) return (
+      <span className='no-filters'>
+        You do not have any filters to link!
+      </span>
+    )
+
     return (
       <div className='link-filter'>
         <Search
@@ -33,7 +41,7 @@ export default class LinkFilter extends React.Component {
           className='filters-list section md-paper md-paper--1'
         >{
           findMatches(
-            this.props.data.filters, this.state.search, this.props.ignore
+            filters, this.state.search, this.props.ignore
           ).map(f =>
             <ListItem
               threeLines
