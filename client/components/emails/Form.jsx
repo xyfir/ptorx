@@ -171,7 +171,7 @@ export default class EmailForm extends React.Component {
       directForward: window['checkbox--direct-forward'].checked
     };
 
-    data.name = data.name || 'Untitled Proxy Email';
+    data.name = data.name || 'Untitled';
 
     if (this.props.create) {
       data.domain = this._domain.state.value,
@@ -334,7 +334,7 @@ export default class EmailForm extends React.Component {
                   'for a randomly generated address'
                 }
                 onChange={() => this.onCheckAddress()}
-                errorText='Proxy address is not available'
+                errorText='Address is not available'
                 maxLength={64}
                 className='md-cell'
               />
