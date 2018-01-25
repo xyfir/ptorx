@@ -111,6 +111,7 @@ div.filter-form {
 
 div.edit-email {
   >div.address {
+    margin: 0 1em;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -215,4 +216,10 @@ div.modifier-form {
   >section.controls {
     text-align: center;
   }
+}
+
+nav.navbar {
+  display: flex;
+  margin-bottom: 1em;
+  justify-content: center;
 }
