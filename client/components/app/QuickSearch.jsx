@@ -23,7 +23,7 @@ export default class QuickSearch extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = { search: '' };
+    this.state = { search: { query: '' } };
   }
 
   /** @param {object[]} emails */
