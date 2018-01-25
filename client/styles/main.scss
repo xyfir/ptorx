@@ -57,33 +57,6 @@ a {
   }
 }
 
-nav.navbar, nav.navbar-sub {
-  background-color: $purple;
-  align-items: center;
-  text-align: center;
-  display: flex;
-
-  >a {
-    color: white;
-    flex: 1;
-
-    &:hover {
-      color: $lgray;
-    }
-  }
-}
-
-nav.navbar {
-  padding: 1em 0em;
-}
-
-nav.navbar-sub {
-  width: 80%;
-  margin: auto;
-  padding: 0.25em 0em;
-  margin-bottom: 1em;
-}
-
 .sweet-alert {
   >fieldset > input {
     display: none;
