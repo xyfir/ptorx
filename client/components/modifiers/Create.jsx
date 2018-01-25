@@ -36,14 +36,16 @@ export default class CreateModifier extends React.Component {
             this.props.onCreate(res.body.id);
           }
           else {
-            location.hash = '#/modifiers/list';
+            location.hash =
+              '#/modifiers/list?q=' +
+              encodeURIComponent(modifier.name);
             swal('Success', `Modifier '${modifier.name}' created`, 'success');
           }
         }
       });
   }
 
-  
+
 
   render() {
     return <Form onSubmit={(m, d) => this.onCreate(m, d)} />

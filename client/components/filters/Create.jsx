@@ -29,7 +29,7 @@ export default class CreateFilter extends React.Component {
         if (this.props.onCreate)
           return this.props.onCreate(data.id);
 
-        location.hash = '#/filters/list';
+        location.hash = '#/filters/list?q=' + encodeURIComponent(data.name);
         swal('Success', `Filter '${data.name}' created`, 'success');
       });
   }
