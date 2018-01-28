@@ -2,7 +2,7 @@
 
 <widget
   xmlns:gap="http://phonegap.com/ns/1.0"
-  version="1.8.2"
+  version="2.0.0"
   xmlns="http://www.w3.org/ns/widgets"
   id="com.xyfir.ptorx"
 >
@@ -18,8 +18,10 @@
   </author>
 
   <!-- Preferences -->
+  <preference name="phonegap-version" value="cli-8.0.0" />
+
   <preference name="permissions" value="none"/>
-  <preference name="orientation" value="default" />
+  <preference name="orientation" value="portrait" />
   <preference name="target-device" value="universal" />
   <preference name="fullscreen" value="true" />
   <preference name="webviewbounce" value="false" />
@@ -37,24 +39,27 @@
   <!-- Core plugins -->
   <plugin name="cordova-plugin-console" />
   <plugin name="cordova-plugin-device" />
-  <plugin name="cordova-plugin-device-orientation" />
   <plugin name="cordova-plugin-dialogs" />
   <plugin name="cordova-plugin-file" />
-  <plugin name="cordova-plugin-file-transfer" />
+  <plugin name="cordova-plugin-geolocation" />
   <plugin name="cordova-plugin-globalization" />
   <plugin name="cordova-plugin-inappbrowser" />
   <plugin name="cordova-plugin-media" />
   <plugin name="cordova-plugin-network-information" />
   <plugin name="cordova-plugin-splashscreen" />
   <plugin name="cordova-plugin-whitelist" />
+  <plugin name="cordova-plugin-statusbar" />
 
   <!-- Other plugins -->
-  <plugin name="cordova-plugin-inapppurchase" />
   <plugin name="cordova-plugin-remote-injection" />
+
+  <!-- Platforms to build for -->
+  <platform name="ios" />
+  <platform name="android" />
 
   <!-- Icons -->
   <icon src="icon.png" />
-  
+
   <platform name="android">
     <icon density="ldpi" src="res/icons/android/icon-36-ldpi.png" />
     <icon density="mdpi" src="res/icons/android/icon-48-mdpi.png" />
@@ -63,7 +68,7 @@
     <icon density="xxhdpi" src="res/icons/android/icon-144-xxhdpi.png" />
     <icon density="xxxhdpi" src="res/icons/android/icon-192-xxxhdpi.png" />
   </platform>
-  
+
   <platform name="ios">
     <icon height="29" src="res/icons/ios/icon-small.png" width="29" />
     <icon height="58" src="res/icons/ios/icon-small-2x.png" width="58" />
@@ -118,12 +123,10 @@
     <splash width="2048" height="2732" src="res/screens/ios/screen-ipad-portrait-ipadpro.png" />
   </platform>
 
-  <config-file platform="ios" parent="CFBundleShortVersionString">
-    <string>1.8.2</string>
-  </config-file>
-
+  <!-- Whitelist the entire network, over HTTP and HTTPS -->
   <allow-navigation href="*" />
 
+  <!-- Allow links to web pages to open in a browser -->
   <allow-intent href="http://*/*" />
   <allow-intent href="https://*/*" />
 
