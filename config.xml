@@ -2,7 +2,7 @@
 
 <widget
   xmlns:gap="http://phonegap.com/ns/1.0"
-  version="2.0.0"
+  version="2.0.1"
   xmlns="http://www.w3.org/ns/widgets"
   id="com.xyfir.ptorx"
 >
@@ -88,6 +88,7 @@
     <icon height="76" src="res/icons/ios/icon-76.png" width="76" />
     <icon height="152" src="res/icons/ios/icon-76-2x.png" width="152" />
     <icon height="167" src="res/icons/ios/icon-83.5-2x.png" width="167" />
+    <icon src="res/icons/ios/icon-1024.png" width="1024" height="1024" />
   </platform>
 
   <!-- Splash screens -->
