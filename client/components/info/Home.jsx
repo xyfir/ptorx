@@ -1,9 +1,6 @@
+import { FontIcon, Button } from 'react-md';
 import Typed from 'typed.js';
 import React from 'react';
-
-// react-md
-import FontIcon from 'react-md/lib/FontIcons';
-import Button from 'react-md/lib/Buttons/Button';
 
 // Components
 import HowItWorks from 'components/info/HowItWorks';
@@ -76,7 +73,7 @@ export default class Home extends React.Component {
   }
 
   /**
-   * Starts typing the lines in a specific message and adds onComplete 
+   * Starts typing the lines in a specific message and adds onComplete
    * listener.
    */
   _startTyping() {
@@ -102,7 +99,7 @@ export default class Home extends React.Component {
       <div className='home'>
         <section className={'main fade-' + this.state.fade}>
           <h1>Ptorx {message.title}</h1>
-          
+
           <div className='typed-container'>
             <span className='typed-home' />
           </div>
@@ -116,7 +113,7 @@ export default class Home extends React.Component {
               'https://accounts.xyfir.com/app/#/register/13'
             }
           >Try Free</Button>
-          
+
           <p>All that's needed to start your 14 day free trial is a valid email to create a Xyfir Account. No payment info required.</p>
         </section>
 
@@ -129,7 +126,7 @@ export default class Home extends React.Component {
           <p>
             You can use Ptorx in your browser just like any other site. We also offer a Google Chrome extension as well as both mobile and desktop applications.
           </p>
-          
+
           <Button
             secondary raised
             onClick={() => location.href = 'app/'}
@@ -152,24 +149,6 @@ export default class Home extends React.Component {
               'https://play.google.com/store/apps/details?id=com.xyfir.ptorx'
             }
           >Android</Button>
-          <Button
-            secondary raised
-            onClick={() => location.href =
-              'https://xyfir.com/downloads/Ptorx/Ptorx_Mac.app.zip'
-            }
-          >Mac</Button>
-          <Button
-            secondary raised
-            onClick={() => location.href =
-              'https://xyfir.com/downloads/Ptorx/Ptorx_Linux.zip'
-            }
-          >Linux</Button>
-          <Button
-            secondary raised
-            onClick={() => location.href =
-              'https://xyfir.com/downloads/Ptorx/Ptorx_Win.zip'
-            }
-          >Windows</Button>
         </section>
 
         <section className='overview'>
@@ -209,7 +188,7 @@ export default class Home extends React.Component {
             <LearnMore page='features' />
           </div>
         </section>
-        
+
         <section className='subscription'>
           <h2>Ptorx Subscription</h2>
           <span className='price'>$25 per year</span>
