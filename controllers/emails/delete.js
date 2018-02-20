@@ -1,18 +1,18 @@
 const MailGun = require('mailgun-js');
 const config = require('config');
-const mysql = require('lib/mysql');
+const MySQL = require('lib/mysql');
 
 /*
   DELETE api/emails/:email
   RETURN
     { error: boolean, message?: string }
   DESCRIPTION
-    Marks a proxy email as deleted, delete its MailGun route, and deletes its
+    Marks a proxy email as deleted, deletes its MailGun route, and deletes its
     links to any filters or modifiers
 */
 module.exports = async function(req, res) {
 
-  const db = new mysql;
+  const db = new MySQL;
 
   try {
     await db.getConnection();
@@ -33,8 +33,8 @@ module.exports = async function(req, res) {
     // Keep in database so that a 'deleted' proxy email cannot be created again
     await db.query(`
       UPDATE proxy_emails SET
-        user_id = 0, primary_email_id = 0, name = '',
-        description = '', mg_route_id = ''
+        user_id = NULL, primary_email_id = NULL, name = NULL,
+        description = NULL, mg_route_id = NULL
       WHERE email_id = ?
     `, [
       req.params.email
