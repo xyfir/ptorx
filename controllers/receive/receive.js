@@ -191,8 +191,8 @@ module.exports = async function(req, res) {
             .replace(/{{sender-address}}/g, email.sender)
             .replace(/{{original-sender}}/g, email.originalSender)
             .replace(
-              /{{header\('(.+)'\)}}/g,
-              (match, p1) => headers[p1] || match
+              /{{header\('(.+)', '(.+)'\)}}/g,
+              (match, p1, p2) => headers[p1] || p2
             );
       }
     });
