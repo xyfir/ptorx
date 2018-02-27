@@ -5,48 +5,43 @@ import React from 'react';
 // Modules
 import query from 'lib/parse-query-string';
 
-// Components
-import DynamicIframe from './DynamicIframe';
-
 export default class Documentation extends React.Component {
 
   constructor(props) {
     super(props);
+
+    this.state = { content: '', loading: true };
   }
 
-  componentDidMount() {
-    const {contentDocument: doc} = this._frame.refs.frame;
-
+  componentWillMount() {
     request
       .get(
         `https://api.github.com/repos/Xyfir/Documentation/contents/` +
-        `ptorx/${this.props.file}.md`
+        `ptorx/${this.props.file.split('?')[0]}.md`
       )
-      .end((err, res) => {
-        doc.head.innerHTML =
-          `<link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" rel="stylesheet" type="text/css">
-          <link rel='stylesheet' href='/static/css/styles.css'>`,
+      .end((err, res) => this.setState({ content: res.body.content }));
+  }
 
-        // Convert markdown to html
-        doc.body.innerHTML =
-          `<div class='help-docs markdown'>${
-            marked(window.atob(res.body.content), { santize: true })
-          }</div>`;
+  componentDidUpdate() {
+    if (!this.state.loading) return;
 
-        const {section} = query(location.hash);
+    this.setState({ loading: false });
 
-        if (section) {
-          // Doesn't work without delay. No idea why
-          setTimeout(() => doc.getElementById(section).scrollIntoView(), 250);
-        }
-      });
+    const {section} = query(location.hash);
+
+    if (section) {
+      // Doesn't work without delay. No idea why
+      setTimeout(() => document.getElementById(section).scrollIntoView(), 250);
+    }
   }
 
   render() {
     return (
-      <DynamicIframe
-        ref={i => this._frame = i}
-        className='documentation'
+      <div
+        className='documentation help markdown'
+        dangerouslySetInnerHTML={{__html:
+          marked(window.atob(this.state.content), { santize: true })
+        }}
       />
     );
   }
