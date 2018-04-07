@@ -54,14 +54,12 @@ export default class AppNavigation extends React.Component {
         leftIcon={<FontIcon>account_box</FontIcon>}
         primaryText='My Account'
         nestedItems={[
-          !window.cordova ? (
-            <a href='#/account'>
-              <ListItem
-                leftIcon={<FontIcon>account_circle</FontIcon>}
-                primaryText='Manage'
-              />
-            </a>
-          ) : <a />,
+          <a href='#/account'>
+            <ListItem
+              leftIcon={<FontIcon>account_circle</FontIcon>}
+              primaryText='Manage'
+            />
+          </a>,
           <a href='#/account/primary-emails'>
             <ListItem
               leftIcon={<FontIcon>email</FontIcon>}
