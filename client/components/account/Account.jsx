@@ -15,8 +15,6 @@ export default class Account extends React.Component {
 
   constructor(props) {
     super(props);
-
-    this.state = { canPurchase: !window.cordova };
   }
 
   render() {
@@ -60,16 +58,12 @@ export default class Account extends React.Component {
                 moment(account.subscription).format('YYYY-MM-DD')
               }</p>
 
-              {this.state.canPurchase ? (
-                <Button
-                  raised primary
-                  onClick={() => location.hash =
-                    '#/account/purchase-subscription'
-                  }
-                >Extend</Button>
-              ) : (
-                <p>Subscriptions must be extended via Ptorx's website.</p>
-              )}
+              <Button
+                raised primary
+                onClick={() => location.hash =
+                  '#/account/purchase-subscription'
+                }
+              >Extend</Button>
             </div>
           ) : (
             <div className='flex'>
@@ -77,16 +71,12 @@ export default class Account extends React.Component {
                 You do not have a Ptorx Premium subscription.
               </p>
 
-              {this.state.canPurchase ? (
-                <Button
-                  raised primary
-                  onClick={() => location.hash =
-                    '#/account/purchase-subscription'
-                  }
-                >Purchase</Button>
-              ) : (
-                <p>Subscriptions must be purchased via Ptorx's website.</p>
-              )}
+              <Button
+                raised primary
+                onClick={() => location.hash =
+                  '#/account/purchase-subscription'
+                }
+              >Purchase</Button>
             </div>
           )}
         </Paper>
