@@ -2,7 +2,7 @@
 
 <widget
   xmlns:gap="http://phonegap.com/ns/1.0"
-  version="2.0.2"
+  version="2.1.0"
   xmlns="http://www.w3.org/ns/widgets"
   id="com.xyfir.ptorx"
 >
@@ -52,6 +52,9 @@
 
   <!-- Other plugins -->
   <plugin name="cordova-plugin-remote-injection" />
+  <plugin name="cc.fovea.cordova.purchase">
+    <param name="BILLING_KEY" value="MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA11iA9W8+81mGjY3fbWUKH1M2bh04E8E7Y9iReAblXmOldUVn0hNWdk3dj4kTnxZ7PebqPtbpNksgg0CjH3ndtnGT2mwwdRVG1nW3umUOs2I6RaTN5bNTVcjI6O1KRY4pPSbqpy6rNTK7ggxMVSmYWixfGE5gl829BhAehasMSID2kSiuzesAwA2463F2e3rDrDhLu5MhEF7Nz3G4gPu7loWKUlWju1fdl33lJwub00CL36wJfHaXWhQg2Vrx9cv5gRlTgtG6fi0QTVqvazFHfBU0hMYecNmQ19H889CPJKD8p5+w91EL/elHKhUwhk7GZLA47TzhK0+THhscP1LdywIDAQAB" />
+  </plugin>
 
   <!-- Platforms to build for -->
   <platform name="ios" />
