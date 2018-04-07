@@ -58,8 +58,8 @@ router.post('/account/login', require('./account/login'));
 router.get('/account/logout', require('./account/logout'));
 
 /* ACCOUNT - PURCHASE */
-router.post('/account/purchase/stripe', require('./account/purchase/stripe'));
-router.post('/account/purchase/swiftdemand', require('./account/purchase/swiftdemand'));
+router.post('/account/purchase', require('./account/purchase/start'));
+router.get('/account/purchase', require('./account/purchase/finish'));
 
 /* DOMAINS */
 router.route('/domains')
