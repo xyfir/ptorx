@@ -61,7 +61,7 @@ module.exports = async function() {
             Your <a href='https://ptorx.com'>Ptorx</a> trial is expiring soon! Purchase a subscription in your <a href='https://ptorx.com/app/#/account/purchase-subscription'>user panel</a> before it's too late.
           </p>
         </div>
-        
+
         <div class="textWrapper">
           Have you fully explored Ptorx and all it has to offer? Some of things Ptorx can do includes, but is not limited to:
           <ul>
@@ -73,8 +73,8 @@ module.exports = async function() {
             <li><strong>Use your own domains.</strong> Don't want your proxy emails to use ptorx.com? Bring as many of your own domains as you want to Ptorx, and create proxy emails using whichever domain you choose!</li>
             <li><strong>But wait, there's more!</strong> Check Ptorx's <a href="https://ptorx.com/features">features list</a> to see all we have to offer.</li>
           </ul>
-        
-          Thanks for trying out Ptorx! We hope you'll decide to try out a full Ptorx subscription. For just <strong>$25 USD</strong> you'll increase your privacy, security, and control over your experience on the web for an entire year. We accept cards and Bitcoin. Plus, we offer a risk-free, 30 day money-back guarantee as well!
+
+          Thanks for trying out Ptorx! We hope you'll decide to try out a full Ptorx subscription. For just <strong>$9.99 USD</strong> you'll increase your privacy, security, and control over your experience on the web for an entire year. We accept cards and Bitcoin. Plus, we offer a risk-free, 30 day money-back guarantee as well!
 
           <br /><br />
 

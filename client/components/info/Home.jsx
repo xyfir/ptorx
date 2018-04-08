@@ -191,7 +191,7 @@ export default class Home extends React.Component {
 
         <section className='subscription'>
           <h2>Ptorx Subscription</h2>
-          <span className='price'>$25 per year</span>
+          <span className='price'>$9.99 per year</span>
 
           <ul className='features'>
             <li>All of Ptorx's <a href='features'>features</a></li>
