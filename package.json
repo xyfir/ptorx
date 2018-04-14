@@ -1,8 +1,19 @@
 {
   "name": "ptorx",
-  "version": "4.18.0",
+  "version": "4.19.0",
   "description": "",
   "main": "app.js",
+  "scripts": {
+    "build": "npm run build:css & npm run build:js",
+    "build:js": "webpack-cli",
+    "build:css": "npm run build:css-app & npm run build:css-admin",
+    "build:css-app":
+      "node-sass client/styles/styles.scss static/css/styles.css --output-style compressed",
+    "build:css-admin":
+      "node-sass client/styles/admin.scss static/css/admin.css --output-style compressed"
+  },
+  "author": "Xyfir",
+  "license": "ISC",
   "dependencies": {
     "admyn": "^1.2.0",
     "app-module-path": "^2.2.0",
@@ -10,7 +21,7 @@
     "copyr": "^1.0.5",
     "escape-string-regexp": "^1.0.5",
     "express": "^4.16.3",
-    "express-mysql-session": "^1.2.3",
+    "express-mysql-session": "^1.3.0",
     "express-session": "^1.15.6",
     "fuse.js": "^3.2.0",
     "mailcomposer": "^4.0.2",
@@ -37,15 +48,7 @@
     "babel-preset-env": "^1.6.1",
     "babel-preset-react": "^6.24.1",
     "compression-webpack-plugin": "^1.1.11",
-    "gulp": "^3.9.1",
-    "gulp-favicons": "^2.2.7",
-    "gulp-sass": "^4.0.0",
-    "gulp-util": "^3.0.8",
+    "node-sass": "^4.8.3",
     "webpack": "^4.5.0"
-  },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "Xyfir",
-  "license": "ISC"
+  }
 }
