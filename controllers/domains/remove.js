@@ -10,8 +10,7 @@ const mysql = require('lib/mysql');
     Remove a domain from Ptorx
 */
 module.exports = async function(req, res) {
-
-  const db = new mysql;
+  const db = new mysql();
 
   try {
     await db.getConnection();
@@ -26,17 +25,12 @@ module.exports = async function(req, res) {
       `${config.addresses.mailgun}domains/${domain.domain}`
     );
 
-    await db.query(
-      'DELETE FROM domains WHERE id = ?',
-      [req.params.domain]
-    );
+    await db.query('DELETE FROM domains WHERE id = ?', [req.params.domain]);
     db.release();
 
     res.json({ error: false });
-  }
-  catch (err) {
+  } catch (err) {
     db.release();
     res.json({ error: true, message: err });
   }
-
 };

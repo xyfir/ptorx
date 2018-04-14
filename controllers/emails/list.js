@@ -13,12 +13,12 @@ const mysql = require('lib/mysql');
     Returns basic information for all REDIRECT emails linked to account
 */
 module.exports = async function(req, res) {
-
-  const db = new mysql;
+  const db = new mysql();
 
   try {
     await db.getConnection();
-    const emails = await db.query(`
+    const emails = await db.query(
+      `
       SELECT
         pxe.email_id AS id, pxe.name, pxe.description,
         CONCAT(pxe.address, '@', d.domain) AS address
@@ -26,16 +26,14 @@ module.exports = async function(req, res) {
         proxy_emails AS pxe, domains AS d
       WHERE
         pxe.user_id = ? AND d.id = pxe.domain_id
-    `, [
-      req.session.uid
-    ]);
+    `,
+      [req.session.uid]
+    );
     db.release();
 
     res.json({ error: false, emails });
-  }
-  catch (err) {
+  } catch (err) {
     db.release();
     res.json({ error: true, message: err, emails: [] });
   }
-
 };

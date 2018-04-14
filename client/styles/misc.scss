@@ -9,39 +9,40 @@ div.email-form {
   align-items: center;
   flex-direction: column;
 
-  >section {
+  > section {
     width: calc(100% - 2em);
   }
 
-  >section.main-form {
-    >div.address {
+  > section.main-form {
+    > div.address {
       width: 100%;
     }
   }
 
-  >section.checkboxes {
+  > section.checkboxes {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
   }
 
-  >section.filters-and-modifiers {
+  > section.filters-and-modifiers {
     padding: 0;
 
-    section.filters, section.modifiers {
+    section.filters,
+    section.modifiers {
       header {
         margin: 1em;
         display: flex;
         flex-wrap: wrap;
-        align-items:  center;
+        align-items: center;
 
-        >h3 {
+        > h3 {
           margin-right: 0.3em;
           margin-bottom: 0;
           text-transform: uppercase;
         }
 
-        >p {
+        > p {
           margin-bottom: 0;
           text-align: left;
           color: $md-grey-700;
@@ -54,24 +55,24 @@ div.email-form {
     }
   }
 
-  >div.recaptcha-wrapper {
+  > div.recaptcha-wrapper {
     margin-top: 1em;
     text-align: center;
 
-    >div.g-recaptcha {
+    > div.g-recaptcha {
       display: inline-block;
     }
   }
 }
 
 section.purchase-subscription {
-  >div.info {
+  > div.info {
     text-align: center;
   }
 }
 
 div.messages {
-  >ul.messages {
+  > ul.messages {
     width: 98%;
   }
 }
@@ -91,7 +92,7 @@ p.trial {
   align-items: center;
   justify-content: center;
 
-  >button {
+  > button {
     margin-left: 0.2em;
   }
 }
@@ -101,7 +102,9 @@ div.search.section.flex {
   padding: 0;
 }
 
-ul.modifiers-list, ul.filters-list, ul.proxy-emails-list {
+ul.modifiers-list,
+ul.filters-list,
+ul.proxy-emails-list {
   text-align: center;
 }
 
@@ -112,13 +115,13 @@ div.filter-form {
 }
 
 div.edit-email {
-  >div.address {
+  > div.address {
     margin: 0 1em;
     display: flex;
     align-items: center;
     justify-content: center;
 
-    >span {
+    > span {
       font-size: 125%;
       word-break: break-all;
       font-weight: bold;
@@ -128,39 +131,40 @@ div.edit-email {
 }
 
 div.view-message {
-  >section.message {
-    >* {
+  > section.message {
+    > * {
       width: 100%;
       padding: 0 1em;
     }
 
-    >div.info {
+    > div.info {
       background-color: $md-secondary-color;
       padding: 0 1em;
       color: white;
 
-      >span.subject {
+      > span.subject {
         font-size: 125%;
       }
 
-      >span.from {
+      > span.from {
         display: block;
       }
 
-      >span.from, >span.date {
+      > span.from,
+      > span.date {
         font-size: 85%;
       }
     }
   }
 
-  >button {
+  > button {
     display: block;
     margin: auto;
   }
 }
 
 section.request-domain-access {
-  >div.request-key {
+  > div.request-key {
     width: 100%;
     display: flex;
     align-items: center;
@@ -177,14 +181,14 @@ div.view-domains-as-creator {
 }
 
 section.primary-emails {
-  >div.add {
+  > div.add {
     width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
   }
 
-  >ul.md-list {
+  > ul.md-list {
     margin-bottom: 0.5em;
   }
 }
@@ -194,20 +198,20 @@ div.pagination {
 }
 
 div.quick-search {
-  >section {
-    >header {
+  > section {
+    > header {
       display: flex;
       margin-left: 1em;
-      align-items:  center;
+      align-items: center;
 
-      >h1 {
+      > h1 {
         margin-right: 0.1em;
         margin-bottom: 0;
         text-transform: uppercase;
       }
     }
 
-    >ul.md-list {
+    > ul.md-list {
       margin-bottom: 3em;
       text-align: left;
     }
@@ -215,7 +219,7 @@ div.quick-search {
 }
 
 div.modifier-form {
-  >section.controls {
+  > section.controls {
     text-align: center;
   }
 }

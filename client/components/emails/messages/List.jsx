@@ -18,12 +18,13 @@ import { loadMessages, deleteMessage } from 'actions/creators/messages';
 import { messageTypes } from 'constants/types';
 
 export default class MessageList extends React.Component {
-
   constructor(props) {
     super(props);
 
     this.state = {
-      emailId: +location.hash.split('/')[3], loading: true, type: 0
+      emailId: +location.hash.split('/')[3],
+      loading: true,
+      type: 0
     };
 
     this._loadMessages = this._loadMessages.bind(this);
@@ -44,16 +45,16 @@ export default class MessageList extends React.Component {
       text: 'This action cannot be undone',
       icon: 'warning'
     })
-    .then(() =>
-      request.delete(`/api/emails/${this.state.emailId}/messages/${id}`)
-    )
-    .then(res => {
-      if (res.body.error) throw 'Could not delete message';
+      .then(() =>
+        request.delete(`/api/emails/${this.state.emailId}/messages/${id}`)
+      )
+      .then(res => {
+        if (res.body.error) throw 'Could not delete message';
 
-      this.setState({ selected: '' })
-      this.props.dispatch(deleteMessage(id));
-    })
-    .catch(err => swal('Error', err.toString(), 'error'));
+        this.setState({ selected: '' });
+        this.props.dispatch(deleteMessage(id));
+      })
+      .catch(err => swal('Error', err.toString(), 'error'));
   }
 
   /**
@@ -77,68 +78,58 @@ export default class MessageList extends React.Component {
     const { messages } = this.props.data;
 
     return (
-      <div className='messages flex'>
+      <div className="messages flex">
         <Navigation email={emailId} />
 
         <SelectField
-          id='select--type'
-          label='Filter'
+          id="select--type"
+          label="Filter"
           value={this.state.type}
-          className='md-cell'
-          menuItems={
-            Object.keys(messageTypes).map(t =>
-              Object({ label: messageTypes[t], value: +t })
-            )
-          }
+          className="md-cell"
+          menuItems={Object.keys(messageTypes).map(t =>
+            Object({ label: messageTypes[t], value: +t })
+          )}
           onChange={v => this.setState({ type: v })}
         />
 
         {messages.length ? (
-          <List className='messages md-paper md-paper--1 section'>{
-            messages.map(msg =>
+          <List className="messages md-paper md-paper--1 section">
+            {messages.map(msg => (
               <ListItem
                 key={msg.id}
                 onClick={() => this.setState({ selected: msg.id })}
                 primaryText={msg.subject}
-                secondaryText={
-                  (new Date(msg.received * 1000)).toLocaleString()
-                }
+                secondaryText={new Date(msg.received * 1000).toLocaleString()}
               />
-            )
-          }</List>
+            ))}
+          </List>
         ) : (
           <h3>This inbox is empty.</h3>
         )}
 
         <Dialog
-          id='selected-message'
-          title={
-            selected && messages.find(m => m.id == selected).subject
-          }
+          id="selected-message"
+          title={selected && messages.find(m => m.id == selected).subject}
           onHide={() => this.setState({ selected: '' })}
           visible={!!selected}
         >
           <List>
             <ListItem
-              primaryText='View'
-              onClick={() => location.hash =
-                `#/emails/messages/${emailId}/view/${selected}`
+              primaryText="View"
+              onClick={() =>
+                (location.hash = `#/emails/messages/${emailId}/view/${selected}`)
               }
             />
             <ListItem
-              primaryText='Reply'
-              onClick={() => location.hash =
-                `#/emails/messages/${emailId}/view/${selected}?reply=1`
+              primaryText="Reply"
+              onClick={() =>
+                (location.hash = `#/emails/messages/${emailId}/view/${selected}?reply=1`)
               }
             />
-            <ListItem
-              primaryText='Delete'
-              onClick={() => this.onDelete()}
-            />
+            <ListItem primaryText="Delete" onClick={() => this.onDelete()} />
           </List>
         </Dialog>
       </div>
     );
   }
-
 }

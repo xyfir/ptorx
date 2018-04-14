@@ -7,7 +7,6 @@ import swal from 'sweetalert';
 import Navigation from 'components/emails/Navigation';
 
 export default class SendMessage extends React.Component {
-
   constructor(props) {
     super(props);
 
@@ -26,11 +25,7 @@ export default class SendMessage extends React.Component {
         if (err || res.body.error)
           return swal('Error', res.body.message, 'error');
 
-        swal(
-          'Success',
-          `Message sent to ${this.refs.to.value}`,
-          'success'
-        );
+        swal('Success', `Message sent to ${this.refs.to.value}`, 'success');
 
         location.hash = `#/emails/messages/${this.state.id}/list`;
       });
@@ -38,47 +33,45 @@ export default class SendMessage extends React.Component {
 
   render() {
     return (
-      <div className='message-send'>
+      <div className="message-send">
         <Navigation email={this.state.id} />
 
-        <Paper
-          zDepth={1}
-          component='section'
-          className='section flex'
-        >
+        <Paper zDepth={1} component="section" className="section flex">
           <TextField
-            id='text--to'
-            ref='to'
-            type='text'
-            label='To'
-            className='md-cell'
+            id="text--to"
+            ref="to"
+            type="text"
+            label="To"
+            className="md-cell"
           />
 
           <TextField
-            id='text--subject'
-            ref='subject'
-            type='text'
-            label='Subject'
-            className='md-cell'
+            id="text--subject"
+            ref="subject"
+            type="text"
+            label="Subject"
+            className="md-cell"
           />
 
           <TextField
-            id='text--message'
-            ref='message'
+            id="text--message"
+            ref="message"
             rows={2}
-            type='text'
-            label='Message'
-            className='md-cell'
+            type="text"
+            label="Message"
+            className="md-cell"
           />
 
           <Button
-            raised primary
-            iconChildren='send'
+            raised
+            primary
+            iconChildren="send"
             onClick={() => this.onSend()}
-          >Send</Button>
+          >
+            Send
+          </Button>
         </Paper>
       </div>
     );
   }
-
 }

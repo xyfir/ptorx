@@ -9,7 +9,6 @@ import Form from 'components/filters/Form';
 import { addFilter } from 'actions/creators/filters';
 
 export default class CreateFilter extends React.Component {
-
   constructor(props) {
     super(props);
   }
@@ -26,8 +25,7 @@ export default class CreateFilter extends React.Component {
         data.id = res.body.id;
         this.props.dispatch(addFilter(data));
 
-        if (this.props.onCreate)
-          return this.props.onCreate(data.id);
+        if (this.props.onCreate) return this.props.onCreate(data.id);
 
         location.hash = '#/filters/list?q=' + encodeURIComponent(data.name);
         swal('Success', `Filter '${data.name}' created`, 'success');
@@ -35,7 +33,6 @@ export default class CreateFilter extends React.Component {
   }
 
   render() {
-    return <Form onSubmit={d => this.onCreate(d)} />
+    return <Form onSubmit={d => this.onCreate(d)} />;
   }
-
 }

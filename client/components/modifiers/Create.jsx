@@ -9,7 +9,6 @@ import Form from 'components/modifiers/Form';
 import { addModifier } from 'actions/creators/modifiers';
 
 export default class CreateModifier extends React.Component {
-
   constructor(props) {
     super(props);
   }
@@ -25,8 +24,7 @@ export default class CreateModifier extends React.Component {
       .end((err, res) => {
         if (err || res.body.error) {
           swal('Error', res.body.message, 'error');
-        }
-        else {
+        } else {
           // Add to state.modifiers
           modifier.id = res.body.id;
           modifier.data = data;
@@ -34,21 +32,16 @@ export default class CreateModifier extends React.Component {
 
           if (this.props.onCreate) {
             this.props.onCreate(res.body.id);
-          }
-          else {
+          } else {
             location.hash =
-              '#/modifiers/list?q=' +
-              encodeURIComponent(modifier.name);
+              '#/modifiers/list?q=' + encodeURIComponent(modifier.name);
             swal('Success', `Modifier '${modifier.name}' created`, 'success');
           }
         }
       });
   }
 
-
-
   render() {
-    return <Form onSubmit={(m, d) => this.onCreate(m, d)} />
+    return <Form onSubmit={(m, d) => this.onCreate(m, d)} />;
   }
-
 }

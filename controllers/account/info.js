@@ -24,8 +24,7 @@ const config = require('config');
     Returns all MAIN emails on account and subscription expiration
 */
 module.exports = async function(req, res) {
-
-  const db = new MySQL;
+  const db = new MySQL();
 
   try {
     await db.getConnection();
@@ -35,21 +34,19 @@ module.exports = async function(req, res) {
     // Validate access token
     if (req.query.token) {
       // [user_id, access_token]
-      const token = crypto.decrypt(
-        req.query.token, config.keys.accessToken
-      ).split('-');
+      const token = crypto
+        .decrypt(req.query.token, config.keys.accessToken)
+        .split('-');
 
       // Invalid token
       if (!token[0] || !token[1]) throw 'Invalid token 1';
 
-      sql = `
+      (sql = `
         SELECT xyfir_id, subscription, referral, trial, admin
         FROM users WHERE user_id = ?
-      `,
-      vars = [
-        token[0]
-      ],
-      rows = await db.query(sql, vars);
+      `),
+        (vars = [token[0]]),
+        (rows = await db.query(sql, vars));
 
       if (!rows.length) throw 'User does not exist';
 
@@ -57,50 +54,54 @@ module.exports = async function(req, res) {
       const xaccResult = await request
         .get(config.addresses.xacc + 'api/service/13/user')
         .query({
-          key: config.keys.xacc, xid: rows[0].xyfir_id, token: token[1]
+          key: config.keys.xacc,
+          xid: rows[0].xyfir_id,
+          token: token[1]
         });
-      
+
       if (xaccResult.body.error) throw 'Invalid token 2';
 
-      uid = token[0], row = rows[0];
+      (uid = token[0]), (row = rows[0]);
     }
     // Get info for dev user
     else if (config.environment.type == 'dev') {
-      sql = `
+      (sql = `
         SELECT subscription, referral, trial, admin FROM users
         WHERE user_id = 1
-      `,
-      rows = await db.query(sql);
+      `),
+        (rows = await db.query(sql));
 
-      uid = 1, row = rows[0];
+      (uid = 1), (row = rows[0]);
     }
     // Force login
     else {
       throw 'Forcing login';
     }
 
-    sql = `
+    (sql = `
       SELECT email_id as id, address FROM primary_emails WHERE user_id = ?
-    `,
-    vars = [uid];
+    `),
+      (vars = [uid]);
 
     const emails = await db.query(sql, vars);
     db.release();
-    
+
     // Set session, return account info
-    req.session.uid = uid,
-    req.session.admin = !!row.admin,
-    req.session.subscription = row.subscription;
-    
+    (req.session.uid = uid),
+      (req.session.admin = !!row.admin),
+      (req.session.subscription = row.subscription);
+
     res.json({
-      loggedIn: true, uid, emails, subscription: row.subscription,
-      referral: JSON.parse(row.referral), trial: !!row.trial
+      loggedIn: true,
+      uid,
+      emails,
+      subscription: row.subscription,
+      referral: JSON.parse(row.referral),
+      trial: !!row.trial
     });
-  }
-  catch (err) {
+  } catch (err) {
     db.release();
     req.session.destroy();
     res.json({ loggedIn: false });
   }
-
 };

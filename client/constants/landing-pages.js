@@ -24,4 +24,4 @@ export default {
     description: `Forwarding emails doesn't have to be a hassle. Ptorx's proxy emails are the easiest way to forward incoming mail from one address to another. Create as many proxy emails as you want, either with ptorx.com or your own domain, and then point that proxy email to one of your 'primary' emails and you're done! Incoming mail will be redirected to your primary address. Need to send or reply to mail from your proxy email? Ptorx can do that too!`,
     featuresMessage: 'email forwarding'
   }
-}
+};

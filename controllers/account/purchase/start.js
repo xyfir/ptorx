@@ -15,8 +15,7 @@ const MySQL = require('lib/mysql');
  * @prop {string} [url]
  */
 module.exports = async function(req, res) {
-
-  const db = new MySQL;
+  const db = new MySQL();
 
   try {
     await db.getConnection();
@@ -29,15 +28,17 @@ module.exports = async function(req, res) {
 
     const referral = JSON.parse(user.referral);
     const discount =
-      (referral.user || referral.promo) &&
-      !referral.hasMadePurchase;
+      (referral.user || referral.promo) && !referral.hasMadePurchase;
     referral.hasMadePurchase = true;
 
     const methods = (() => {
       switch (req.body.type) {
-        case 'iap': return ['iap'];
-        case 'normal': return ['card', 'crypto'];
-        case 'swiftdemand': return ['swiftdemand'];
+        case 'iap':
+          return ['iap'];
+        case 'normal':
+          return ['card', 'crypto'];
+        case 'swiftdemand':
+          return ['swiftdemand'];
       }
     })();
 
@@ -45,7 +46,8 @@ module.exports = async function(req, res) {
     let refUserSubscription;
     if (referral.user) {
       const [ru] = await db.query(
-        'SELECT subscription FROM users WHERE user_id = ?', [referral.user]
+        'SELECT subscription FROM users WHERE user_id = ?',
+        [referral.user]
       );
       if (ru) refUserSubscription = setSubscription(ru.subscription, 30);
     }
@@ -56,16 +58,18 @@ module.exports = async function(req, res) {
       .send({
         seller_id: CONFIG.ids.xyPayments,
         seller_key: CONFIG.keys.xyPayments,
-        product_id: req.body.type == 'swiftdemand'
-          ? CONFIG.ids.products.threeMonthSwiftDemand
-          : CONFIG.ids.products.oneYear,
+        product_id:
+          req.body.type == 'swiftdemand'
+            ? CONFIG.ids.products.threeMonthSwiftDemand
+            : CONFIG.ids.products.oneYear,
         methods,
         description: 'Ptorx Premium',
         info: {
           user_id: req.session.uid,
           referral,
           subscription: setSubscription(
-            user.subscription, req.body.type == 'swiftdemand' ? 90 : 365
+            user.subscription,
+            req.body.type == 'swiftdemand' ? 90 : 365
           ),
           refUserSubscription
         },
@@ -77,12 +81,10 @@ module.exports = async function(req, res) {
       });
 
     res.status(200).json({ url: payment.body.url });
-  }
-  catch (err) {
+  } catch (err) {
     db.release();
     res.status(400).json({ message: err });
   }
-
 };
 
 /**
@@ -93,6 +95,10 @@ module.exports = async function(req, res) {
  */
 function setSubscription(subscription, days) {
   return Date.now() > subscription
-    ? +moment().add(days, 'days').format('x')
-    : +moment(subscription).add(days, 'days').format('x');
+    ? +moment()
+        .add(days, 'days')
+        .format('x')
+    : +moment(subscription)
+        .add(days, 'days')
+        .format('x');
 }

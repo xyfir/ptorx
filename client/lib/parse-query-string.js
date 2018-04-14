@@ -4,7 +4,6 @@
  * @return {object}
  */
 export default function(qs) {
-
   const query = {};
   qs = qs.split('?')[1];
 
@@ -17,5 +16,4 @@ export default function(qs) {
   });
 
   return query;
-
 }

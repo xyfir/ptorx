@@ -16,28 +16,29 @@ const mysql = require('lib/mysql');
     Returns data for a specific filter
 */
 module.exports = async function(req, res) {
-
-  const db = new mysql;
+  const db = new mysql();
 
   try {
     await db.getConnection();
-    const [filter] = await db.query(`
+    const [filter] = await db.query(
+      `
       SELECT
         filter_id AS id, name, description, type, find,
         accept_on_match as acceptOnMatch, use_regex AS regex
       FROM filters
       WHERE filter_id = ? AND user_id = ?
-    `, [
-      req.params.filter, req.session.uid
-    ]);
+    `,
+      [req.params.filter, req.session.uid]
+    );
 
     if (!filter) throw 'Could not find filter';
 
-    filter.error = false,
-    filter.regex = !!+filter.regex,
-    filter.acceptOnMatch = !!+filter.acceptOnMatch;
+    (filter.error = false),
+      (filter.regex = !!+filter.regex),
+      (filter.acceptOnMatch = !!+filter.acceptOnMatch);
 
-    filter.linkedTo = await db.query(`
+    filter.linkedTo = await db.query(
+      `
       SELECT
         email_id AS id, CONCAT(pxe.address, '@', d.domain) AS address
       FROM
@@ -46,16 +47,14 @@ module.exports = async function(req, res) {
         pxe.email_id IN (
           SELECT email_id FROM linked_filters WHERE filter_id = ?
         ) AND d.id = pxe.domain_id
-    `, [
-      req.params.filter
-    ]);
+    `,
+      [req.params.filter]
+    );
     db.release();
 
     res.json(filter);
-  }
-  catch (err) {
+  } catch (err) {
     db.release();
     res.json({ error: true, message: err });
   }
-
 };

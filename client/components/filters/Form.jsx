@@ -12,7 +12,6 @@ import Paper from 'react-md/lib/Papers';
 import { filterTypes } from 'constants/types';
 
 export default class FilterForm extends React.Component {
-
   constructor(props) {
     super(props);
 
@@ -31,148 +30,135 @@ export default class FilterForm extends React.Component {
     // Only header filters have different values than others
     if (data.type == 6) {
       data.find =
-        this.refs.headerName.value +
-        ':::' +
-        this.refs.headerValue.value;
-    }
-    else {
+        this.refs.headerName.value + ':::' + this.refs.headerValue.value;
+    } else {
       data.find = this.refs.find.value;
     }
 
     this.props.onSubmit(data);
   }
-  
+
   render() {
-    const {filter} = this.props;
+    const { filter } = this.props;
 
     let form;
     if (this.state.type == 6) {
       const find = filter.find.split(':::');
       form = (
-        <div className='header-filter flex'>
+        <div className="header-filter flex">
           <TextField
-            id='text--header-name'
-            ref='headerName'
-            type='text'
-            label='Header Name'
-            helpText='The header to look for; cannot be a regular expression'
-            className='md-cell'
+            id="text--header-name"
+            ref="headerName"
+            type="text"
+            label="Header Name"
+            helpText="The header to look for; cannot be a regular expression"
+            className="md-cell"
             defaultValue={find[0]}
           />
 
           <TextField
-            id='text--header-value'
-            ref='headerValue'
-            type='text'
-            label='Header Value'
-            helpText='The value within the header value to look for'
-            className='md-cell'
+            id="text--header-value"
+            ref="headerValue"
+            type="text"
+            label="Header Value"
+            helpText="The value within the header value to look for"
+            className="md-cell"
             defaultValue={find[1]}
           />
         </div>
       );
-    }
-    else {
+    } else {
       form = (
         <TextField
-          id='text--find'
-          ref='find'
-          type='text'
-          label='Find'
-          helpText='The value to search for in an email'
-          className='md-cell'
+          id="text--find"
+          ref="find"
+          type="text"
+          label="Find"
+          helpText="The value to search for in an email"
+          className="md-cell"
           defaultValue={filter.find}
         />
       );
     }
 
     return (
-      <div className='filter-form'>
-        <Paper
-          zDepth={1}
-          component='section'
-          className='section flex'
-        >
+      <div className="filter-form">
+        <Paper zDepth={1} component="section" className="section flex">
           <SelectField
-            id='select--type'
-            label='Filter Type'
+            id="select--type"
+            label="Filter Type"
             value={this.state.type}
             onChange={type => this.setState({ type })}
             position={SelectField.Positions.BELOW}
-            className='md-cell'
-            menuItems={
-              Object.keys(filterTypes).map(k =>
-                Object({ label: filterTypes[k], value: +k })
-              )
-            }
+            className="md-cell"
+            menuItems={Object.keys(filterTypes).map(k =>
+              Object({ label: filterTypes[k], value: +k })
+            )}
           />
 
           <TextField
-            id='text--name'
-            ref='name'
-            type='text'
-            label='Name'
-            className='md-cell'
+            id="text--name"
+            ref="name"
+            type="text"
+            label="Name"
+            className="md-cell"
             defaultValue={filter.name}
           />
 
           <TextField
-            id='text--description'
-            ref='description'
-            type='text'
-            label='Description'
-            className='md-cell'
+            id="text--description"
+            ref="description"
+            type="text"
+            label="Description"
+            className="md-cell"
             defaultValue={filter.description}
           />
 
           <Checkbox
-            id='checkbox--accept-on-match'
-            label='Accept on Match'
+            id="checkbox--accept-on-match"
+            label="Accept on Match"
             defaultChecked={filter.acceptOnMatch}
           />
-          
+
           {form}
-          
+
           <Checkbox
-            id='checkbox--regex'
-            label='Regular Expression'
+            id="checkbox--regex"
+            label="Regular Expression"
             defaultChecked={filter.regex}
           />
 
-          <Button
-            primary raised
-            onClick={() => this.onSubmit()}
-          >Submit</Button>
+          <Button primary raised onClick={() => this.onSubmit()}>
+            Submit
+          </Button>
         </Paper>
 
         {filter.linkedTo.length ? (
           <Paper
             zDepth={1}
-            component='section'
-            className='linked-emails section flex'
+            component="section"
+            className="linked-emails section flex"
           >
             <h3>Linked To</h3>
-            <p>
-              Below are emails that are currently utilizing this filter.
-            </p>
-            
-            <div className='linked-emails'>{
-              filter.linkedTo.map(email =>
-                <a key={email.id} href={`#/emails/edit/${email.id}`}>{
-                  email.address
-                }</a>
-              )
-            }</div>
+            <p>Below are emails that are currently utilizing this filter.</p>
+
+            <div className="linked-emails">
+              {filter.linkedTo.map(email => (
+                <a key={email.id} href={`#/emails/edit/${email.id}`}>
+                  {email.address}
+                </a>
+              ))}
+            </div>
           </Paper>
         ) : null}
       </div>
     );
   }
-
 }
 
 FilterForm.propTypes = {
-  filter: PropTypes.objectOf(PropTypes.any/*{
+  filter: PropTypes.objectOf(
+    PropTypes.any /*{
     type: PropTypes.number,
     name: PropTypes.string,
     find: PropTypes.string,
@@ -184,13 +170,19 @@ FilterForm.propTypes = {
     ),
     description: PropTypes.string,
     acceptOnMatch: PropTypes.bool
-  }*/),
+  }*/
+  ),
   onSubmit: PropTypes.func.isRequired
 };
 
 FilterForm.defaultProps = {
   filter: {
-    type: 0, find: '', name: '', regex: false, linkedTo: [], description: '',
+    type: 0,
+    find: '',
+    name: '',
+    regex: false,
+    linkedTo: [],
+    description: '',
     acceptOnMatch: true
   }
 };

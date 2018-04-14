@@ -12,7 +12,6 @@ import { addEmail, loadEmails } from 'actions/creators/emails';
 import query from 'lib/parse-query-string';
 
 export default class CreateEmail extends React.Component {
-
   constructor(props) {
     super(props);
 
@@ -20,7 +19,7 @@ export default class CreateEmail extends React.Component {
   }
 
   componentWillMount() {
-    const {App} = this.props;
+    const { App } = this.props;
     const q = query(location.hash);
 
     // Load data from email with id q.duplicate
@@ -34,18 +33,16 @@ export default class CreateEmail extends React.Component {
 
       console.log('email', email);
 
-      request
-        .get('/api/emails/' + q.duplicate)
-        .end((err, res) => {
-          if (!err && !res.body.error) {
-            this.setState({
-              showAdvanced: true, loading: false,
-              email: Object.assign({}, email, res.body)
-            });
-          }
-        });
-    }
-    else {
+      request.get('/api/emails/' + q.duplicate).end((err, res) => {
+        if (!err && !res.body.error) {
+          this.setState({
+            showAdvanced: true,
+            loading: false,
+            email: Object.assign({}, email, res.body)
+          });
+        }
+      });
+    } else {
       this.setState({ loading: false });
     }
   }
@@ -57,8 +54,7 @@ export default class CreateEmail extends React.Component {
       .end((err, res) => {
         if (err || res.body.error) {
           swal('Error', res.body.message, 'error');
-        }
-        else {
+        } else {
           // Clear emails so they're loaded again
           this.props.App.dispatch(loadEmails([]));
           location.hash = '#/emails/list?q=' + encodeURIComponent(data.name);
@@ -70,9 +66,9 @@ export default class CreateEmail extends React.Component {
 
   render() {
     if (this.state.loading) return null;
-    
+
     return (
-      <div className='email-create'>
+      <div className="email-create">
         <Form
           {...this.props}
           email={this.state.email}
@@ -83,5 +79,4 @@ export default class CreateEmail extends React.Component {
       </div>
     );
   }
-
 }

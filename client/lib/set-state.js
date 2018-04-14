@@ -5,7 +5,6 @@ import { changeView } from 'actions/creators/index';
 import * as VIEWS from 'constants/views';
 
 export default function(store) {
-
   // Hash is empty or not set
   if (location.hash.length < 2) {
     store.dispatch(changeView(VIEWS.CREATE_REDIRECT_EMAIL));
@@ -13,7 +12,10 @@ export default function(store) {
   }
 
   const state = store.getState();
-  const hash = location.hash.substr(2).split('?')[0].split('/');
+  const hash = location.hash
+    .substr(2)
+    .split('?')[0]
+    .split('/');
 
   switch (hash[0]) {
     // Update state to reflect hash
@@ -54,8 +56,7 @@ export default function(store) {
           case 'view':
             return store.dispatch(changeView(VIEWS.VIEW_MESSAGE));
         }
-      }
-      else {
+      } else {
         switch (hash[1]) {
           case 'create':
             return store.dispatch(changeView(VIEWS.CREATE_REDIRECT_EMAIL));
@@ -82,5 +83,4 @@ export default function(store) {
     default:
       return store.dispatch(changeView(VIEWS.CREATE_REDIRECT_EMAIL));
   }
-
 }

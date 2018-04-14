@@ -12,25 +12,26 @@ const mysql = require('lib/mysql');
     Returns data and linkedTo for a specific modifier
 */
 module.exports = async function(req, res) {
-
-  const db = new mysql;
+  const db = new mysql();
 
   try {
     await db.getConnection();
-    const [modifier] = await db.query(`
+    const [modifier] = await db.query(
+      `
       SELECT
         modifier_id AS id, name, description, type, data
       FROM modifiers
       WHERE modifier_id = ? AND user_id = ?
-    `, [
-      req.params.mod, req.session.uid
-    ]);
+    `,
+      [req.params.mod, req.session.uid]
+    );
 
     if (!modifier) throw 'Could not find modifier';
 
     modifier.error = false;
 
-    modifier.linkedTo = await db.query(`
+    modifier.linkedTo = await db.query(
+      `
     SELECT
       email_id AS id, CONCAT(pxe.address, '@', d.domain) AS address
     FROM
@@ -39,16 +40,14 @@ module.exports = async function(req, res) {
       pxe.email_id IN (
         SELECT email_id FROM linked_modifiers WHERE modifier_id = ?
       ) AND d.id = pxe.domain_id
-    `, [
-      req.params.mod
-    ]);
+    `,
+      [req.params.mod]
+    );
     db.release();
 
     res.json(modifier);
-  }
-  catch (err) {
+  } catch (err) {
     db.release();
     res.json({ error: true, message: string });
   }
-
 };

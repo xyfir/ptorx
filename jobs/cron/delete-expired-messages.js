@@ -1,8 +1,7 @@
 const mysql = require('lib/mysql');
 
 module.exports = async function() {
-
-  const db = new mysql;
+  const db = new mysql();
 
   try {
     await db.getConnection();
@@ -22,9 +21,7 @@ module.exports = async function() {
     `);
 
     db.release();
-  }
-  catch (err) {
+  } catch (err) {
     db.release();
   }
-
-}
+};

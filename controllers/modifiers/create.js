@@ -21,7 +21,6 @@ const mysql = require('lib/mysql');
     Create a new modifier
 */
 module.exports = async function(req, res) {
-
   const db = new mysql();
 
   try {
@@ -32,20 +31,21 @@ module.exports = async function(req, res) {
     const sql = `
       INSERT INTO modifiers SET ?
     `,
-    insert = {
-      data: buildData(req.body), user_id: req.session.uid, name: req.body.name,
-      description: req.body.description, type: req.body.type
-    },
-    result = await db.query(sql, insert);
+      insert = {
+        data: buildData(req.body),
+        user_id: req.session.uid,
+        name: req.body.name,
+        description: req.body.description,
+        type: req.body.type
+      },
+      result = await db.query(sql, insert);
 
     if (!result.affectedRows) throw 'An unknown error occured';
 
     db.release();
     res.json({ error: false, id: result.insertId });
-  }
-  catch (err) {
+  } catch (err) {
     db.release();
     res.json({ error: true, message: err });
   }
-
 };

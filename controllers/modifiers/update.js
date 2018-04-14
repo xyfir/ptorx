@@ -22,33 +22,34 @@ const mysql = require('lib/mysql');
     Update a modifier's data
 */
 module.exports = async function(req, res) {
-
   const db = new mysql();
 
   try {
-    validate(req.body)
+    validate(req.body);
 
     let sql = `
       UPDATE modifiers SET name = ?, description = ?, type = ?, data = ?
       WHERE modifier_id = ? AND user_id = ?
     `,
-    vars = [
-      req.body.name, req.body.description, req.body.type, buildData(req.body),
-      req.params.mod, req.session.uid
-    ];
+      vars = [
+        req.body.name,
+        req.body.description,
+        req.body.type,
+        buildData(req.body),
+        req.params.mod,
+        req.session.uid
+      ];
 
     await db.getConnection();
 
     const result = await db.query(sql, vars);
-    
+
     if (!result.affectedRows) throw 'An unknown error occured';
 
-    sql = `
+    (sql = `
       SELECT email_id as id FROM linked_modifiers WHERE modifier_id = ?
-    `,
-    vars = [
-      req.params.mod
-    ];
+    `),
+      (vars = [req.params.mod]);
 
     const rows = await db.query(sql, vars);
     db.release();
@@ -56,10 +57,8 @@ module.exports = async function(req, res) {
     if (!rows.length) rows.forEach(row => clearCache(row.id));
 
     res.json({ error: false, message: '' });
-  }
-  catch (err) {
+  } catch (err) {
     db.release();
     res.json({ error: true, message: err });
   }
-
 };

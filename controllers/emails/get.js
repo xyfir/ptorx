@@ -18,8 +18,7 @@ const mysql = require('lib/mysql');
     Returns full data for a single proxy email
 */
 module.exports = async function(req, res) {
-
-  const db = new mysql;
+  const db = new mysql();
 
   try {
     await db.getConnection();
@@ -36,37 +35,32 @@ module.exports = async function(req, res) {
         pme.email_id = pxe.primary_email_id AND
         d.id = pxe.domain_id
     `,
-    vars = [
-      req.params.email, req.session.uid
-    ],
-    rows = await db.query(sql, vars);
+      vars = [req.params.email, req.session.uid],
+      rows = await db.query(sql, vars);
 
-    if (!rows.length || rows[0].toEmail == null)
-      throw 'Could not find email';
+    if (!rows.length || rows[0].toEmail == null) throw 'Could not find email';
 
     const response = rows[0];
-    
-    response.error = false,
-    response.saveMail = !!response.saveMail,
-    response.spamFilter = !!response.spamFilter,
-    response.directForward = !!response.directForward;
+
+    (response.error = false),
+      (response.saveMail = !!response.saveMail),
+      (response.spamFilter = !!response.spamFilter),
+      (response.directForward = !!response.directForward);
 
     // Grab basic info for all filters linked to email
-    sql = `
+    (sql = `
       SELECT filter_id AS id, name, description, type
       FROM filters WHERE filter_id IN (
         SELECT filter_id FROM linked_filters WHERE email_id = ?
       )
-    `,
-    vars = [
-      req.params.email
-    ],
-    rows = await db.query(sql, vars);
+    `),
+      (vars = [req.params.email]),
+      (rows = await db.query(sql, vars));
 
     response.filters = rows;
 
     // Grab basic info for all modifiers linked to email
-    sql = `
+    (sql = `
       SELECT
         modifiers.modifier_id AS id, modifiers.name,
         modifiers.description, modifiers.type
@@ -76,16 +70,14 @@ module.exports = async function(req, res) {
         modifiers.modifier_id = linked_modifiers.modifier_id
         AND linked_modifiers.email_id = ?
       ORDER BY linked_modifiers.order_number
-    `,
-    rows = await db.query(sql, vars);
+    `),
+      (rows = await db.query(sql, vars));
     db.release();
 
     response.modifiers = rows;
     res.json(response);
-  }
-  catch (err) {
+  } catch (err) {
     db.release();
     res.json({ error: true, message: err });
   }
-
 };

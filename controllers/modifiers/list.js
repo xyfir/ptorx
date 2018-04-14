@@ -11,7 +11,6 @@ const mysql = require('lib/mysql');
     Returns basic information for all modifiers linked to account
 */
 module.exports = async function(req, res) {
-
   const db = new mysql();
 
   try {
@@ -23,16 +22,12 @@ module.exports = async function(req, res) {
         IF(user_id = 0, 1, 0) AS global
       FROM modifiers WHERE user_id = ? OR user_id = 0
     `,
-    vars = [
-      req.session.uid
-    ],
-    modifiers = await db.query(sql, vars);
+      vars = [req.session.uid],
+      modifiers = await db.query(sql, vars);
 
     res.json({ modifiers });
-  }
-  catch (err) {
+  } catch (err) {
     db.release();
     res.json({ modifiers: [] });
   }
-
 };

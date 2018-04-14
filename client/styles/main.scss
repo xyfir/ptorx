@@ -16,11 +16,11 @@ main#content {
   padding: 0.4em;
   margin: 1em;
 
-  >*:first-child {
+  > *:first-child {
     margin-top: 0;
   }
 
-  >*:last-child {
+  > *:last-child {
     margin-bottom: 0;
   }
 }
@@ -41,7 +41,7 @@ footer {
   margin-top: 1em;
   text-align: center;
 
-  >a {
+  > a {
     display: inline-block;
     margin: 0em 0.5em;
   }
@@ -58,7 +58,7 @@ a {
 }
 
 .sweet-alert {
-  >fieldset > input {
+  > fieldset > input {
     display: none;
   }
 

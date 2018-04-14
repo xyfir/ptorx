@@ -20,23 +20,22 @@ import Search from 'components/misc/Search';
 import ListItem from 'react-md/lib/Lists/ListItem';
 import Button from 'react-md/lib/Buttons/Button';
 import Dialog from 'react-md/lib/Dialogs';
-import List from 'react-md/lib/Lists/List'
+import List from 'react-md/lib/Lists/List';
 
 export default class FilterList extends React.Component {
-
   constructor(props) {
     super(props);
 
     this.state = {
-      selected: 0, page: 1, search: { query: '', type: 0 }
+      selected: 0,
+      page: 1,
+      search: { query: '', type: 0 }
     };
 
     if (props.data.filters.length == 0) {
       request
         .get('/api/filters')
-        .end((err, res) =>
-          this.props.dispatch(loadFilters(res.body.filters))
-        );
+        .end((err, res) => this.props.dispatch(loadFilters(res.body.filters)));
     }
 
     this._removeFilter = this._removeFilter.bind(this);
@@ -54,11 +53,12 @@ export default class FilterList extends React.Component {
       title: 'Are you sure?',
       text: 'This filter will be removed from any emails it is linked to.',
       icon: 'warning'
-    })
+    });
 
     if (!confirm) return;
 
-    request.delete('/api/filters/' + id)
+    request
+      .delete('/api/filters/' + id)
       .then(res => {
         if (res.body.error) throw 'Could not delete filter';
 
@@ -114,18 +114,15 @@ export default class FilterList extends React.Component {
     }
     // Full email data needs to be loaded
     else if (email.toEmail === undefined) {
-      request
-        .get('/api/emails/' + email.id)
-        .end((err, res) => {
-          Object.assign(email, res);
+      request.get('/api/emails/' + email.id).end((err, res) => {
+        Object.assign(email, res);
 
-          emails.forEach((e, i) => {
-            if (e.id == email.id)
-              emails[i] = email;
-          });
-
-          this._removeFilter(id, emails, update, index);
+        emails.forEach((e, i) => {
+          if (e.id == email.id) emails[i] = email;
         });
+
+        this._removeFilter(id, emails, update, index);
+      });
     }
     // Update email
     else {
@@ -138,47 +135,49 @@ export default class FilterList extends React.Component {
       request
         .put('/api/emails/' + email.id)
         .send({
-          name: email.name, description: email.description, to: mail.toEmail,
-          saveMail: +email.saveMail, noSpamFilter: +(!email.spamFilter),
-          filters, modifiers, noToAddress: +(email.address == '')
+          name: email.name,
+          description: email.description,
+          to: mail.toEmail,
+          saveMail: +email.saveMail,
+          noSpamFilter: +!email.spamFilter,
+          filters,
+          modifiers,
+          noToAddress: +(email.address == '')
         })
-        .end((err, res) =>
-          this._removeFilter(id, emails, update, index + 1)
-        );
+        .end((err, res) => this._removeFilter(id, emails, update, index + 1));
     }
   }
 
   render() {
     return (
-      <div className='filters'>
+      <div className="filters">
         <Button
-          floating fixed primary
-          tooltipPosition='left'
-          tooltipLabel='Create new filter'
-          iconChildren='add'
-          onClick={() => location.hash = '#/filters/create'}
+          floating
+          fixed
+          primary
+          tooltipPosition="left"
+          tooltipLabel="Create new filter"
+          iconChildren="add"
+          onClick={() => (location.hash = '#/filters/create')}
         />
 
-        <Search
-          onSearch={v => this.setState({ search: v })}
-          type='filter'
-        />
+        <Search onSearch={v => this.setState({ search: v })} type="filter" />
 
-        <List className='filters-list section md-paper md-paper--1'>{
-          findMatches(this.props.data.filters, this.state.search)
+        <List className="filters-list section md-paper md-paper--1">
+          {findMatches(this.props.data.filters, this.state.search)
             .filter(filter => !filter.global)
             .splice((this.state.page - 1) * 25, 25)
-            .map(f =>
+            .map(f => (
               <ListItem
                 threeLines
                 key={f.id}
                 onClick={() => this.setState({ selected: f.id })}
-                className='filter'
+                className="filter"
                 primaryText={f.name}
                 secondaryText={filterTypes[f.type] + '\n' + f.description}
               />
-            )
-        }</List>
+            ))}
+        </List>
 
         <Pagination
           itemsPerPage={25}
@@ -188,28 +187,22 @@ export default class FilterList extends React.Component {
         />
 
         <Dialog
-          id='selected-filter'
+          id="selected-filter"
           title={
-            !this.state.selected ? '' : this.props.data.filters.find(
-              e => e.id == this.state.selected
-            ).name
+            !this.state.selected
+              ? ''
+              : this.props.data.filters.find(e => e.id == this.state.selected)
+                  .name
           }
           onHide={() => this.setState({ selected: 0 })}
           visible={!!this.state.selected}
         >
           <List>
-            <ListItem
-              primaryText='Edit'
-              onClick={() => this.onEdit()}
-            />
-            <ListItem
-              primaryText='Delete'
-              onClick={() => this.onDelete()}
-            />
+            <ListItem primaryText="Edit" onClick={() => this.onEdit()} />
+            <ListItem primaryText="Delete" onClick={() => this.onDelete()} />
           </List>
         </Dialog>
       </div>
     );
   }
-
 }

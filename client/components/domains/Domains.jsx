@@ -7,8 +7,11 @@ import Add from 'components/domains/Add';
 
 export default props => {
   switch (props.data.view.split('/')[1]) {
-    case 'VIEW': return <View {...props} />
-    case 'LIST': return <List {...props} />
-    case 'ADD':  return <Add {...props} />
+    case 'VIEW':
+      return <View {...props} />;
+    case 'LIST':
+      return <List {...props} />;
+    case 'ADD':
+      return <Add {...props} />;
   }
 };

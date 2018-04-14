@@ -22,12 +22,13 @@ import Dialog from 'react-md/lib/Dialogs';
 import List from 'react-md/lib/Lists/List';
 
 export default class ModifierList extends React.Component {
-
   constructor(props) {
     super(props);
 
     this.state = {
-      selected: 0, page: 1, search: { query: '', type: 0 }
+      selected: 0,
+      page: 1,
+      search: { query: '', type: 0 }
     };
 
     if (props.data.modifiers.length == 0) {
@@ -55,7 +56,8 @@ export default class ModifierList extends React.Component {
 
     if (!confirm) return;
 
-    request.delete('/api/modifiers/' + id)
+    request
+      .delete('/api/modifiers/' + id)
       .then(res => {
         if (res.body.error) throw 'Could not delete modifier';
 
@@ -73,35 +75,34 @@ export default class ModifierList extends React.Component {
 
   render() {
     return (
-      <div className='modifiers'>
+      <div className="modifiers">
         <Button
-          floating fixed primary
-          tooltipPosition='left'
-          tooltipLabel='Create new modifier'
-          iconChildren='add'
-          onClick={() => location.hash = '#/modifiers/create'}
+          floating
+          fixed
+          primary
+          tooltipPosition="left"
+          tooltipLabel="Create new modifier"
+          iconChildren="add"
+          onClick={() => (location.hash = '#/modifiers/create')}
         />
 
-        <Search
-          onSearch={v => this.setState({ search: v })}
-          type='modifier'
-        />
+        <Search onSearch={v => this.setState({ search: v })} type="modifier" />
 
-        <List className='modifiers-list section md-paper md-paper--1'>{
-          findMatches(this.props.data.modifiers, this.state.search)
+        <List className="modifiers-list section md-paper md-paper--1">
+          {findMatches(this.props.data.modifiers, this.state.search)
             .filter(mod => !mod.global)
             .splice((this.state.page - 1) * 25, 25)
-            .map(m =>
+            .map(m => (
               <ListItem
                 threeLines
                 key={m.id}
                 onClick={() => this.setState({ selected: m.id })}
-                className='modifier'
+                className="modifier"
                 primaryText={m.name}
                 secondaryText={modifierTypes[m.type] + '\n' + m.description}
               />
-            )
-        }</List>
+            ))}
+        </List>
 
         <Pagination
           itemsPerPage={25}
@@ -111,28 +112,22 @@ export default class ModifierList extends React.Component {
         />
 
         <Dialog
-          id='selected-modifier'
+          id="selected-modifier"
           title={
-            !this.state.selected ? '' : this.props.data.modifiers.find(
-              e => e.id == this.state.selected
-            ).name
+            !this.state.selected
+              ? ''
+              : this.props.data.modifiers.find(e => e.id == this.state.selected)
+                  .name
           }
           onHide={() => this.setState({ selected: 0 })}
           visible={!!this.state.selected}
         >
           <List>
-            <ListItem
-              primaryText='Edit'
-              onClick={() => this.onEdit()}
-            />
-            <ListItem
-              primaryText='Delete'
-              onClick={() => this.onDelete()}
-            />
+            <ListItem primaryText="Edit" onClick={() => this.onEdit()} />
+            <ListItem primaryText="Delete" onClick={() => this.onDelete()} />
           </List>
         </Dialog>
       </div>
     );
   }
-
 }

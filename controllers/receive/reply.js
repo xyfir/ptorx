@@ -17,14 +17,14 @@ const mysql = require('lib/mysql');
     Reply from a proxy address to the message's original sender
 */
 module.exports = async function(req, res) {
-
-  const db = new mysql;
+  const db = new mysql();
 
   try {
     const [messageId, domain] = req.body.recipient.split('--reply@');
 
     await db.getConnection();
-    const [row] = await db.query(`
+    const [row] = await db.query(
+      `
       SELECT
         m.sender AS originalSender,
         CONCAT(pxe.address, '@', d.domain) AS proxyAddress
@@ -34,13 +34,14 @@ module.exports = async function(req, res) {
         m.id = ? AND
         pxe.email_id = m.email_id AND
         d.id = pxe.domain_id
-    `, [
-      messageId
-    ]);
+    `,
+      [messageId]
+    );
     db.release();
 
     const mailgun = MailGun({
-      apiKey: config.keys.mailgun, domain
+      apiKey: config.keys.mailgun,
+      domain
     });
 
     // Notify sender that the message cannot be replied to
@@ -68,10 +69,8 @@ module.exports = async function(req, res) {
     }
 
     res.status(200).send();
-  }
-  catch (err) {
+  } catch (err) {
     db.release();
     res.status(406).send();
   }
-
 };

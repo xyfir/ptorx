@@ -32,7 +32,6 @@ import { INITIALIZE_STATE } from 'actions/types/index';
 const store = createStore(reducers);
 
 class App extends React.Component {
-
   constructor(props) {
     super(props);
 
@@ -53,10 +52,16 @@ class App extends React.Component {
       }
 
       const state = {
-        modifiers: [], filters: [], domains: [], emails: [], messages: [],
+        modifiers: [],
+        filters: [],
+        domains: [],
+        emails: [],
+        messages: [],
         view: CREATE_REDIRECT_EMAIL,
         account: {
-          emails: [], uid: 0, subscription: 0
+          emails: [],
+          uid: 0,
+          subscription: 0
         }
       };
 
@@ -65,7 +70,7 @@ class App extends React.Component {
         .query({ token })
         .then(res => {
           if (!res.body.loggedIn)
-            return location.href = XACC + 'app/#/login/service/13';
+            return (location.href = XACC + 'app/#/login/service/13');
 
           state.account = res.body;
 
@@ -88,7 +93,8 @@ class App extends React.Component {
 
           // Push initial state to store
           store.dispatch({
-            type: INITIALIZE_STATE, state
+            type: INITIALIZE_STATE,
+            state
           });
           this.state = state;
 
@@ -100,9 +106,9 @@ class App extends React.Component {
             // Force old hash route format to new one
             // `#${route}` -> `#/${route}`
             if (location.hash.indexOf('#/') != 0)
-              return location.hash = '#/' + location.hash.substr(1);
+              return (location.hash = '#/' + location.hash.substr(1));
             setState(store);
-          }
+          };
         })
         .catch(err => swal('Error', err, 'error'));
     };
@@ -120,7 +126,9 @@ class App extends React.Component {
       if (localStorage.r) {
         const [type, value] = localStorage.r.split('~');
         const referral = {
-          type, [type]: value, data: Object.assign({}, localStorage)
+          type,
+          [type]: value,
+          data: Object.assign({}, localStorage)
         };
 
         delete referral.data.accessToken, delete referral.data.r;
@@ -134,15 +142,13 @@ class App extends React.Component {
         .end((err, res) => {
           if (err || res.body.error) {
             location.href = XACC + 'app/#/login/service/13';
-          }
-          else {
+          } else {
             localStorage.accessToken = res.body.accessToken;
             initialize();
             location.hash = location.hash.split('?')[0];
           }
-        })
-    }
-    else {
+        });
+    } else {
       initialize();
     }
   }
@@ -156,34 +162,41 @@ class App extends React.Component {
 
     const view = (() => {
       const props = {
-        data: this.state, dispatch: store.dispatch,
+        data: this.state,
+        dispatch: store.dispatch,
         App: this // eventually remove other props and just use App
       };
 
       switch (this.state.view.split('/')[0]) {
-        case 'QUICK_SEARCH': return <QuickSearch {...props} />
-        case 'MODIFIERS': return <Modifiers {...props} />
-        case 'DOMAINS': return <Domains {...props} />
-        case 'ACCOUNT': return <Account {...props} />
-        case 'FILTERS': return <Filters {...props} />
-        case 'EMAILS': return <Emails {...props} />
+        case 'QUICK_SEARCH':
+          return <QuickSearch {...props} />;
+        case 'MODIFIERS':
+          return <Modifiers {...props} />;
+        case 'DOMAINS':
+          return <Domains {...props} />;
+        case 'ACCOUNT':
+          return <Account {...props} />;
+        case 'FILTERS':
+          return <Filters {...props} />;
+        case 'EMAILS':
+          return <Emails {...props} />;
         case 'DOCS':
-          return <Documentation file={location.hash.split('/')[2]} />
+          return <Documentation file={location.hash.split('/')[2]} />;
       }
     })();
 
     return (
-      <div className='ptorx'>
+      <div className="ptorx">
         <Navigation App={this} />
 
-        <div className='main md-toolbar-relative'>
+        <div className="main md-toolbar-relative">
           {this.state.account.trial ? (
-            <p className='trial'>
+            <p className="trial">
               Your account is currently in trial mode. Some limitations apply.
               <Button
                 icon
-                iconChildren='info'
-                href='#/docs?section=free-trial'
+                iconChildren="info"
+                href="#/docs?section=free-trial"
               />
             </p>
           ) : null}
@@ -193,7 +206,6 @@ class App extends React.Component {
       </div>
     );
   }
-
 }
 
 render(<App />, document.getElementById('content'));

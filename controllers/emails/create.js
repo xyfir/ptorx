@@ -23,8 +23,7 @@ const mysql = require('lib/mysql');
     Creates a redirect email, its MailGun inbound route, any used links filters/modifiers
 */
 module.exports = async function(req, res) {
-
-  const db = new mysql;
+  const db = new mysql();
 
   try {
     validate(req.body, req.session.subscription);
@@ -48,24 +47,22 @@ module.exports = async function(req, res) {
         ) AS domain
       FROM users WHERE user_id = ?
     `,
-    vars = [
-      req.session.uid,
-      req.body.domain,
-      req.body.domain, req.session.uid,
-      req.session.uid
-    ],
-    rows = await db.query(sql, vars);
+      vars = [
+        req.session.uid,
+        req.body.domain,
+        req.body.domain,
+        req.session.uid,
+        req.session.uid
+      ],
+      rows = await db.query(sql, vars);
 
     if (!rows.length) {
       throw 'An unknown error occured-';
-    }
-    else if (Date.now() > rows[0].subscription) {
+    } else if (Date.now() > rows[0].subscription) {
       throw 'You do not have a subscription';
-    }
-    else if (!rows[0].domain) {
+    } else if (!rows[0].domain) {
       throw 'Invalid / unverified / unauthorized domain';
-    }
-    else if (rows[0].trial) {
+    } else if (rows[0].trial) {
       if (rows[0].emailsCreatedToday >= 5)
         throw 'Trial users can only create 5 emails per day';
       else if (rows[0].emailsCreated >= 15)
@@ -81,14 +78,13 @@ module.exports = async function(req, res) {
           remoteip: req.ip
         });
 
-      if (!recaptchaRes.body.success) throw 'Invalid captcha'
-    }
-    else if (rows[0].emailsCreatedToday >= 20) {
+      if (!recaptchaRes.body.success) throw 'Invalid captcha';
+    } else if (rows[0].emailsCreatedToday >= 20) {
       throw 'You can only create up to 20 emails per day.';
     }
 
     let address = ''; // proxy email address without @domain.com
-    const {domain} = rows[0];
+    const { domain } = rows[0];
 
     // Generate an available address
     if (req.body.address == '') {
@@ -96,73 +92,73 @@ module.exports = async function(req, res) {
     }
     // Make sure address exists
     else {
-      sql = `
+      (sql = `
         SELECT email_id FROM proxy_emails
         WHERE address = ? AND domain_id = ?
-      `,
-      vars = [
-        req.body.address, req.body.domain
-      ],
-      rows = await db.query(sql, vars);
+      `),
+        (vars = [req.body.address, req.body.domain]),
+        (rows = await db.query(sql, vars));
 
       if (rows.length) throw 'That email address is already in use';
 
       address = req.body.address;
     }
 
-    sql = `
+    (sql = `
       SELECT email_id, address FROM primary_emails
       WHERE email_id = ? AND user_id = ?
-    `,
-    vars = [
-      req.body.to, req.session.uid
-    ],
-    rows = await db.query(sql, vars);
+    `),
+      (vars = [req.body.to, req.session.uid]),
+      (rows = await db.query(sql, vars));
 
     // 'To' email does not exist and user is not using a 'to' address
     if (!rows.length && !req.body.noToAddress)
       throw 'Could not find main email';
 
     const data = {
-      primary_email_id: req.body.noToAddress ? 0 : rows[0].email_id,
-      direct_forward: req.body.directForward,
-      description: req.body.description,
-      spam_filter: !req.body.noSpamFilter,
-      save_mail: req.body.saveMail || req.body.noToAddress,
-      domain_id: req.body.domain,
-      user_id: req.session.uid,
-      address,
-      name: req.body.name
-    },
-    modifiers = req.body.modifiers
-      ? req.body.modifiers.split(',').map(Number) : [],
-    filters = req.body.filters
-      ? req.body.filters.split(',').map(Number) : [];
+        primary_email_id: req.body.noToAddress ? 0 : rows[0].email_id,
+        direct_forward: req.body.directForward,
+        description: req.body.description,
+        spam_filter: !req.body.noSpamFilter,
+        save_mail: req.body.saveMail || req.body.noToAddress,
+        domain_id: req.body.domain,
+        user_id: req.session.uid,
+        address,
+        name: req.body.name
+      },
+      modifiers = req.body.modifiers
+        ? req.body.modifiers.split(',').map(Number)
+        : [],
+      filters = req.body.filters ? req.body.filters.split(',').map(Number) : [];
 
-    await validateFilters(
-      filters, req.session.uid, data.direct_forward, db
-    );
+    await validateFilters(filters, req.session.uid, data.direct_forward, db);
     await validateModifiers(
-      modifiers, req.session.uid, data.direct_forward, db
+      modifiers,
+      req.session.uid,
+      data.direct_forward,
+      db
     );
 
     let dbRes;
 
-    sql = `
+    (sql = `
       INSERT INTO proxy_emails SET ?
-    `,
-    dbRes = await db.query(sql, data);
+    `),
+      (dbRes = await db.query(sql, data));
 
     if (!dbRes.affectedRows) throw 'An unknown error occured--';
 
     const id = dbRes.insertId;
 
     // Build MailGun route expression(s)
-    const expression = await buildExpression({
-      saveMail: data.save_mail,
-      address: data.address + '@' + domain,
-      filters
-    }, db);
+    const expression = await buildExpression(
+      {
+        saveMail: data.save_mail,
+        address: data.address + '@' + domain,
+        filters
+      },
+      db
+    );
 
     // Build Mailgun route action(s)
     const action = buildAction(
@@ -182,47 +178,40 @@ module.exports = async function(req, res) {
     });
 
     // Save MailGun route ID to proxy email
-    sql = `
+    (sql = `
       UPDATE proxy_emails SET mg_route_id = ?
       WHERE email_id = ?
-    `,
-    vars = [
-      mgRes.route.id,
-      id
-    ],
-    dbRes = await db.query(sql, vars);
+    `),
+      (vars = [mgRes.route.id, id]),
+      (dbRes = await db.query(sql, vars));
 
     if (filters.length) {
-      sql = // Link filters to email
+      (sql = // Link filters to email
         'INSERT INTO linked_filters (filter_id, email_id) VALUES ' +
-        filters.map(f => `('${f}', '${id}')`).join(', '),
-      dbRes = await db.query(sql);
+        filters.map(f => `('${f}', '${id}')`).join(', ')),
+        (dbRes = await db.query(sql));
     }
 
     if (modifiers.length) {
-      sql = // Link modifiers to email
+      (sql = // Link modifiers to email
         'INSERT INTO linked_modifiers ' +
         '(modifier_id, email_id, order_number) VALUES ' +
-        modifiers.map((m, i) =>`('${m}', '${id}', '${i}')`).join(', '),
-      dbRes = await db.query(sql);
+        modifiers.map((m, i) => `('${m}', '${id}', '${i}')`).join(', ')),
+        (dbRes = await db.query(sql));
     }
 
     // Increment emails_created
-    sql = `
+    (sql = `
       UPDATE users SET emails_created = emails_created + 1
       WHERE user_id = ?
-    `,
-    vars = [
-      req.session.uid
-    ],
-    dbRes = await db.query(sql, vars);
+    `),
+      (vars = [req.session.uid]),
+      (dbRes = await db.query(sql, vars));
     db.release();
 
     res.json({ error: false, id });
-  }
-  catch (err) {
+  } catch (err) {
     db.release();
     res.json({ error: true, message: err });
   }
-
 };

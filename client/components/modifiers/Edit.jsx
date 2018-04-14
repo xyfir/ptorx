@@ -9,38 +9,38 @@ import Form from 'components/modifiers/Form';
 import { editModifier } from 'actions/creators/modifiers';
 
 export default class UpdateModifier extends React.Component {
-
   constructor(props) {
     super(props);
 
     this.state = { id: location.hash.split('/')[3], loading: true };
 
-    request
-      .get('/api/modifiers/' + this.state.id)
-      .end((err, res) => {
-        if (err || res.body.err) {
-          swal('Error', 'Could not load data', 'error');
-        }
-        else {
-          delete res.body.error;
-          res.body.data = res.body.data.substr(0, 1) == '{'
-            ? JSON.parse(res.body.data) : res.body.data;
-          
-          this.props.dispatch(editModifier(
+    request.get('/api/modifiers/' + this.state.id).end((err, res) => {
+      if (err || res.body.err) {
+        swal('Error', 'Could not load data', 'error');
+      } else {
+        delete res.body.error;
+        res.body.data =
+          res.body.data.substr(0, 1) == '{'
+            ? JSON.parse(res.body.data)
+            : res.body.data;
+
+        this.props.dispatch(
+          editModifier(
             Object.assign(
               {},
               this.props.data.modifiers.find(mod => mod.id == this.state.id),
               res.body
             )
-          ));
+          )
+        );
 
-          this.setState({
-            loading: false, type: this.props.data.modifiers.find(mod =>
-              mod.id == this.state.id
-            ).type
-          });
-        }
-      });
+        this.setState({
+          loading: false,
+          type: this.props.data.modifiers.find(mod => mod.id == this.state.id)
+            .type
+        });
+      }
+    });
   }
 
   /**
@@ -54,8 +54,7 @@ export default class UpdateModifier extends React.Component {
       .end((err, res) => {
         if (err || res.body.error) {
           swal('Error', res.body.message, 'error');
-        }
-        else {
+        } else {
           modifier.id = this.state.id;
           modifier.data = data;
 
@@ -77,10 +76,9 @@ export default class UpdateModifier extends React.Component {
 
   render() {
     if (this.state.loading) return <div />;
-    
+
     const mod = this.props.data.modifiers.find(mod => mod.id == this.state.id);
 
-    return <Form modifier={mod} onSubmit={(m, d) => this.onUpdate(m, d)} />
+    return <Form modifier={mod} onSubmit={(m, d) => this.onUpdate(m, d)} />;
   }
-
 }

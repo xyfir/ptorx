@@ -2,12 +2,11 @@ const deleteEmail = require('controllers/emails/delete');
 const mysql = require('lib/mysql');
 
 /**
- * 'Delete' all proxy emails owned by a user with an expired subscription. 
+ * 'Delete' all proxy emails owned by a user with an expired subscription.
  * *Warning* This task was not built with performance in mind.
  */
 module.exports = async function() {
-
-  const db = new mysql;
+  const db = new mysql();
 
   try {
     await db.getConnection();
@@ -28,9 +27,7 @@ module.exports = async function() {
         { json: () => 1 }
       );
     }
-  }
-  catch (err) {
+  } catch (err) {
     db.release();
   }
-
-}
+};

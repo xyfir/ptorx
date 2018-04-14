@@ -1,6 +1,4 @@
-import {
-  MenuButton, TextField, Subheader, ListItem, Paper
-} from 'react-md';
+import { MenuButton, TextField, Subheader, ListItem, Paper } from 'react-md';
 import React from 'react';
 
 // Constants
@@ -10,17 +8,16 @@ import { filterTypes, modifierTypes } from 'constants/types';
 import query from 'lib/parse-query-string';
 
 export default class Search extends React.Component {
-
   constructor(props) {
     super(props);
 
-    this.state = { select: 0 }
+    this.state = { select: 0 };
   }
 
   componentDidMount() {
     this._search.focus();
 
-    const {q} = query(location.hash);
+    const { q } = query(location.hash);
 
     if (q) this.props.onSearch({ query: q, type: this.state.select });
   }
@@ -37,42 +34,43 @@ export default class Search extends React.Component {
   }
 
   render() {
-    const types = this.props.type == 'filter'
-      ? filterTypes : this.props.type == 'modifier'
-      ? modifierTypes : null;
-    const {q} = query(location.hash);
+    const types =
+      this.props.type == 'filter'
+        ? filterTypes
+        : this.props.type == 'modifier'
+          ? modifierTypes
+          : null;
+    const { q } = query(location.hash);
 
     return (
-      <Paper zDepth={1} className='search section flex'>
+      <Paper zDepth={1} className="search section flex">
         <TextField
-          block paddedBlock
-          id='search-box'
-          ref={i => this._search = i}
-          type='search'
+          block
+          paddedBlock
+          id="search-box"
+          ref={i => (this._search = i)}
+          type="search"
           onChange={e => this.onSearch()}
-          placeholder='Search'
+          placeholder="Search"
           defaultValue={q}
         />
 
         {types ? (
           <MenuButton
             icon
-            id='menu--create-item'
-            menuItems={[
-              <Subheader primaryText='Search by:' />
-            ].concat(
-              Object.keys(types).map(k =>
+            id="menu--create-item"
+            menuItems={[<Subheader primaryText="Search by:" />].concat(
+              Object.keys(types).map(k => (
                 <ListItem
                   onClick={() => this.onSelect(k)}
                   primaryText={types[k]}
                 />
-              )
+              ))
             )}
-            iconChildren='more_vert'
+            iconChildren="more_vert"
           />
         ) : null}
       </Paper>
     );
   }
-
 }

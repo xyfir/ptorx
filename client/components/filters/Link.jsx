@@ -12,7 +12,6 @@ import { filterTypes } from 'constants/types';
 import findMatches from 'lib/find-matching';
 
 export default class LinkFilter extends React.Component {
-
   constructor(props) {
     super(props);
 
@@ -22,41 +21,32 @@ export default class LinkFilter extends React.Component {
   }
 
   render() {
-    const {filters} = this.props.App.state;
+    const { filters } = this.props.App.state;
 
-    if (!filters.length) return (
-      <span className='no-filters'>
-        You do not have any filters to link!
-      </span>
-    )
+    if (!filters.length)
+      return (
+        <span className="no-filters">You do not have any filters to link!</span>
+      );
 
     return (
-      <div className='link-filter'>
-        <Search
-          onSearch={v => this.setState({ search: v })}
-          type='filter'
-        />
+      <div className="link-filter">
+        <Search onSearch={v => this.setState({ search: v })} type="filter" />
 
-        <List
-          className='filters-list section md-paper md-paper--1'
-        >{
-          findMatches(
-            filters, this.state.search, this.props.ignore
-          ).map(f =>
+        <List className="filters-list section md-paper md-paper--1">
+          {findMatches(filters, this.state.search, this.props.ignore).map(f => (
             <ListItem
               threeLines
               key={f.id}
               onClick={() => this.props.onAdd(f.id)}
-              className='filter'
+              className="filter"
               primaryText={f.name}
               secondaryText={filterTypes[f.type] + '\n' + f.description}
             />
-          )
-        }</List>
+          ))}
+        </List>
       </div>
     );
   }
-
 }
 
 LinkFilter.propTypes = {

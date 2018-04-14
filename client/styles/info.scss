@@ -4,29 +4,35 @@ div.home {
   text-align: center;
   background-color: white;
 
-  >section {
+  > section {
     &:nth-child(even) {
       background-color: $purple;
-  
+
       p {
         color: white;
       }
-      
-      h1, h2, h3 {
+
+      h1,
+      h2,
+      h3 {
         color: $llgray;
       }
-      
+
       a {
         color: $lgray;
 
-        &:hover { color: $gray }
+        &:hover {
+          color: $gray;
+        }
       }
     }
 
     &:nth-child(odd) {
       background-color: white;
-      
-      h1, h2, h3 {
+
+      h1,
+      h2,
+      h3 {
         color: $purple;
       }
     }
@@ -46,38 +52,46 @@ div.home {
 
     &.fade-out {
       @keyframes fadeOut {
-        0% {opacity: 1;}
-        100% {opacity: 0;}
+        0% {
+          opacity: 1;
+        }
+        100% {
+          opacity: 0;
+        }
       }
 
       animation-name: fadeOut;
       animation-duration: 250ms;
     }
     &.fade-in {
-      @keyframes fadeIn{
-        0% {opacity: 0;}
-        100% {opacity: 1;}
+      @keyframes fadeIn {
+        0% {
+          opacity: 0;
+        }
+        100% {
+          opacity: 1;
+        }
       }
 
       animation-name: fadeIn;
       animation-duration: 250ms;
     }
 
-    >div.typed-container {
+    > div.typed-container {
       font-size: 70%;
       line-height: 1.5;
     }
   }
 
-  >section.trial {
+  > section.trial {
     padding-top: 0;
   }
 
-  >section.overview {
+  > section.overview {
     display: flex;
     flex-wrap: wrap;
 
-    >div {
+    > div {
       flex: 1;
       border: solid 0.5em transparent;
       display: flex;
@@ -85,28 +99,29 @@ div.home {
       flex-direction: column;
       justify-content: space-between;
 
-      >a {
+      > a {
         display: flex;
 
-        >i.md-icon {
+        > i.md-icon {
           padding-right: 0.2em;
         }
       }
     }
   }
 
-  >section.subscription {
+  > section.subscription {
     color: white;
 
-    >h2, >button {
+    > h2,
+    > button {
       margin-bottom: 0;
     }
 
-    >span.price {
+    > span.price {
       font-weight: bold;
     }
 
-    >ul.features {
+    > ul.features {
       list-style: none;
       padding-left: 0;
     }
@@ -136,36 +151,38 @@ div.home {
 }
 
 div.features {
-  &, >section {
+  &,
+  > section {
     display: flex;
     align-items: center;
     flex-direction: column;
   }
 
-  >h2 {
+  > h2 {
     margin-bottom: 0;
     margin-top: 0.5em;
   }
 
-  >section {
+  > section {
     width: calc(100% - 1em);
 
-    >header {
+    > header {
       background-color: $md-primary-color;
       text-align: center;
       width: 100%;
 
-      >h3, >p {
+      > h3,
+      > p {
         color: white;
         margin-bottom: 0;
       }
 
-      >p {
+      > p {
         margin-bottom: 0.3em;
       }
     }
 
-    >ul strong {
+    > ul strong {
       font-weight: bold;
       color: $md-secondary-color;
     }
@@ -175,42 +192,43 @@ div.features {
 div.landing-page {
   text-align: center;
 
-  >header, >section {
+  > header,
+  > section {
     padding: 0 1em;
   }
 
-  >header {
+  > header {
     display: flex;
     min-height: 70vh;
     flex-direction: column;
     justify-content: center;
 
-    >h2 {
+    > h2 {
       color: $md-primary-color;
       font-size: 200%;
     }
 
-    >p {
+    > p {
       color: $dgray;
       font-size: 100%;
       margin-bottom: 1.5em;
     }
   }
 
-  >section.free-trial {
+  > section.free-trial {
     background-color: $md-primary-color;
     padding-bottom: 1.5em;
 
-    >p {
+    > p {
       color: white;
       font-size: 100%;
     }
   }
 
-  >section.more-info {
+  > section.more-info {
     padding: 1.5em 1em;
 
-    >p {
+    > p {
       font-size: 100%;
     }
   }
@@ -230,17 +248,17 @@ div.how-ptorx-works {
     align-items: center;
     justify-content: center;
 
-    >h2 {
+    > h2 {
       margin-bottom: 0;
       margin-right: 0.2em;
     }
   }
 
-  >div.typed-strings {
+  > div.typed-strings {
     display: none;
   }
 
-  >div.typed-container {
+  > div.typed-container {
     background-color: $lllgray;
     padding: 1em;
     border-radius: 5px;
@@ -279,11 +297,11 @@ section.pwn-check {
   }
 
   &.step-2a {
-    >span.source {
+    > span.source {
       font-size: 75%;
     }
 
-    >ul.breaches {
+    > ul.breaches {
       text-align: left;
       margin-top: 0.5em;
 

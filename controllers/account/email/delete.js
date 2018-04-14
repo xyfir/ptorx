@@ -1,4 +1,4 @@
-const db = require("lib/db");
+const db = require('lib/db');
 
 /*
     DELETE api/account/email/:email
@@ -8,17 +8,15 @@ const db = require("lib/db");
         Deletes a MAIN email from user's account
 */
 module.exports = function(req, res) {
-
-    let sql = `
+  let sql = `
         DELETE FROM primary_emails WHERE email_id = ? AND user_id = ?
     `;
-    let vars = [
-        req.params.email, req.session.uid
-    ];
+  let vars = [req.params.email, req.session.uid];
 
-    db(cn => cn.query(sql, vars, (err, result) => {
-        cn.release();
-        res.json({ error: !!err || !result.affectedRows });
-    }));
-
+  db(cn =>
+    cn.query(sql, vars, (err, result) => {
+      cn.release();
+      res.json({ error: !!err || !result.affectedRows });
+    })
+  );
 };

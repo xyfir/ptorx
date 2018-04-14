@@ -12,76 +12,81 @@ import Purchase from 'components/account/Purchase';
 import { PURCHASE_SUBSCRIPTION, PRIMARY_EMAILS } from 'constants/views';
 
 export default class Account extends React.Component {
-
   constructor(props) {
     super(props);
   }
 
   render() {
-    const {account, view} = this.props.App.state;
+    const { account, view } = this.props.App.state;
 
-    if (view == PURCHASE_SUBSCRIPTION) return (
-      <Purchase {...this.props} />
-    )
-    else if (view == PRIMARY_EMAILS) return (
-      <PrimaryEmails {...this.props} />
-    )
-    else return (
-      <div className='account'>
-        <Paper
-          zDepth={1}
-          component='section'
-          className='referral-link section flex'
-        >
-          <h3>Referral Program</h3>
-          <p>
-            Refer new users to Ptorx and they'll receive 10% off of their first purchase and you'll receive a free month of subscription time when they purchase their own subscription.
-          </p>
+    if (view == PURCHASE_SUBSCRIPTION) return <Purchase {...this.props} />;
+    else if (view == PRIMARY_EMAILS) return <PrimaryEmails {...this.props} />;
+    else
+      return (
+        <div className="account">
+          <Paper
+            zDepth={1}
+            component="section"
+            className="referral-link section flex"
+          >
+            <h3>Referral Program</h3>
+            <p>
+              Refer new users to Ptorx and they'll receive 10% off of their
+              first purchase and you'll receive a free month of subscription
+              time when they purchase their own subscription.
+            </p>
 
-          <Button
-            flat primary
-            iconChildren='content_copy'
-            onClick={() => copy(`https://ptorx.com/?r=user~${account.uid}`)}
-          >Copy Link</Button>
-        </Paper>
+            <Button
+              flat
+              primary
+              iconChildren="content_copy"
+              onClick={() => copy(`https://ptorx.com/?r=user~${account.uid}`)}
+            >
+              Copy Link
+            </Button>
+          </Paper>
 
-        <Paper
-          zDepth={1}
-          component='section'
-          className='subscription section flex'
-        >
-          <h3>Subscription</h3>
+          <Paper
+            zDepth={1}
+            component="section"
+            className="subscription section flex"
+          >
+            <h3>Subscription</h3>
 
-          {account.subscription > Date.now() ? (
-            <div className='flex'>
-              <p>Your subscription will expire on {
-                moment(account.subscription).format('YYYY-MM-DD')
-              }</p>
+            {account.subscription > Date.now() ? (
+              <div className="flex">
+                <p>
+                  Your subscription will expire on{' '}
+                  {moment(account.subscription).format('YYYY-MM-DD')}
+                </p>
 
-              <Button
-                raised primary
-                onClick={() => location.hash =
-                  '#/account/purchase-subscription'
-                }
-              >Extend</Button>
-            </div>
-          ) : (
-            <div className='flex'>
-              <p>
-                You do not have a Ptorx Premium subscription.
-              </p>
+                <Button
+                  raised
+                  primary
+                  onClick={() =>
+                    (location.hash = '#/account/purchase-subscription')
+                  }
+                >
+                  Extend
+                </Button>
+              </div>
+            ) : (
+              <div className="flex">
+                <p>You do not have a Ptorx Premium subscription.</p>
 
-              <Button
-                raised primary
-                onClick={() => location.hash =
-                  '#/account/purchase-subscription'
-                }
-              >Purchase</Button>
-            </div>
-          )}
-        </Paper>
-      </div>
-    );
+                <Button
+                  raised
+                  primary
+                  onClick={() =>
+                    (location.hash = '#/account/purchase-subscription')
+                  }
+                >
+                  Purchase
+                </Button>
+              </div>
+            )}
+          </Paper>
+        </div>
+      );
   }
-
 }

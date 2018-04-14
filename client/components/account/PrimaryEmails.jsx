@@ -1,5 +1,10 @@
 import {
-  TextField, ListItem, Button, Paper, List, DialogContainer
+  TextField,
+  ListItem,
+  Button,
+  Paper,
+  List,
+  DialogContainer
 } from 'react-md';
 import request from 'superagent';
 import moment from 'moment';
@@ -11,7 +16,6 @@ import swal from 'sweetalert';
 import { deleteEmail, addEmail } from 'actions/creators/account/email';
 
 export default class PrimaryEmails extends React.Component {
-
   constructor(props) {
     super(props);
 
@@ -21,21 +25,18 @@ export default class PrimaryEmails extends React.Component {
   onAddEmail() {
     const email = this._email.value;
 
-    request
-      .post('/api/account/email/' + email)
-      .end((err, res) => {
-        if (err || res.body.error) {
-          swal('Error', res.body.message, 'error');
-        }
-        else {
-          this.props.dispatch(addEmail(res.body.id, email));
-          this._email.getField().value = '';
-        }
-      });
+    request.post('/api/account/email/' + email).end((err, res) => {
+      if (err || res.body.error) {
+        swal('Error', res.body.message, 'error');
+      } else {
+        this.props.dispatch(addEmail(res.body.id, email));
+        this._email.getField().value = '';
+      }
+    });
   }
 
   async onDeleteEmail() {
-    const {id} = this.state.selectedEmail;
+    const { id } = this.state.selectedEmail;
 
     const confirm = await swal({
       button: 'Yes',
@@ -46,7 +47,8 @@ export default class PrimaryEmails extends React.Component {
 
     if (!confirm) return;
 
-    request.delete('/api/account/email/' + id)
+    request
+      .delete('/api/account/email/' + id)
       .then(res => {
         if (res.body.error) throw res.body.message;
 
@@ -57,53 +59,54 @@ export default class PrimaryEmails extends React.Component {
   }
 
   render() {
-    const {account} = this.props.App.state;
+    const { account } = this.props.App.state;
 
     return (
       <Paper
         zDepth={1}
-        component='section'
-        className='primary-emails section flex'
+        component="section"
+        className="primary-emails section flex"
       >
         <h3>Primary Emails</h3>
         <p>
-          These are your real email addresses that will receive messages redirected from your proxy email addresses.
+          These are your real email addresses that will receive messages
+          redirected from your proxy email addresses.
         </p>
 
-        <div className='add'>
+        <div className="add">
           <TextField
-            id='email--email'
-            ref={i => this._email = i}
-            type='email'
-            label='Email'
-            className='md-cell'
+            id="email--email"
+            ref={i => (this._email = i)}
+            type="email"
+            label="Email"
+            className="md-cell"
           />
-          <Button icon iconChildren='add' onClick={() => this.onAddEmail()} />
+          <Button icon iconChildren="add" onClick={() => this.onAddEmail()} />
         </div>
 
-        <List>{
-          account.emails.map(email =>
+        <List>
+          {account.emails.map(email => (
             <ListItem
               key={email.id}
               onClick={() => this.setState({ selectedEmail: email })}
               primaryText={email.address}
             />
-          )
-        }</List>
+          ))}
+        </List>
 
         <DialogContainer
-          id='selected-email'
+          id="selected-email"
           title={this.state.selectedEmail.address}
           onHide={() => this.setState({ selectedEmail: {} })}
           visible={!!this.state.selectedEmail.id}
         >
           <List>
             <ListItem
-              primaryText='Copy'
+              primaryText="Copy"
               onClick={() => copy(this.state.selectedEmail.address)}
             />
             <ListItem
-              primaryText='Delete'
+              primaryText="Delete"
               onClick={() => this.onDeleteEmail()}
             />
           </List>
@@ -111,5 +114,4 @@ export default class PrimaryEmails extends React.Component {
       </Paper>
     );
   }
-
 }

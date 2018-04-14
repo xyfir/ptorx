@@ -6,7 +6,6 @@ import View from 'components/emails/messages/View';
 import List from 'components/emails/messages/List';
 
 export default class Messages extends React.Component {
-
   constructor(props) {
     super(props);
   }
@@ -21,5 +20,4 @@ export default class Messages extends React.Component {
         return <List {...this.props} />;
     }
   }
-
 }

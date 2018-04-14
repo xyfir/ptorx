@@ -1,6 +1,15 @@
 import {
-  TabsContainer, SelectField, TextField, Checkbox, ListItem, Button,
-  DialogContainer, Paper, List, Tabs, Tab
+  TabsContainer,
+  SelectField,
+  TextField,
+  Checkbox,
+  ListItem,
+  Button,
+  DialogContainer,
+  Paper,
+  List,
+  Tabs,
+  Tab
 } from 'react-md';
 import PropTypes from 'prop-types';
 import request from 'superagent';
@@ -17,7 +26,6 @@ import { filterTypes, modifierTypes } from 'constants/types';
 import { RECAPTCHA_KEY } from 'constants/config';
 
 export default class EmailForm extends React.Component {
-
   constructor(props) {
     super(props);
 
@@ -25,8 +33,10 @@ export default class EmailForm extends React.Component {
     this.onAddFilter = this.onAddFilter.bind(this);
 
     this.state = {
-      filters: this.props.email.filters, modifiers: this.props.email.modifiers,
-      advancedSettingsTab: 0, addressAvailable: true
+      filters: this.props.email.filters,
+      modifiers: this.props.email.modifiers,
+      advancedSettingsTab: 0,
+      addressAvailable: true
     };
   }
 
@@ -58,8 +68,9 @@ export default class EmailForm extends React.Component {
       request
         .get('/api/emails/availability')
         .query({ domain, address })
-        .end((err, res) => !err &&
-          this.setState({ addressAvailable: res.body.available })
+        .end(
+          (err, res) =>
+            !err && this.setState({ addressAvailable: res.body.available })
         );
     }, 250);
   }
@@ -78,7 +89,7 @@ export default class EmailForm extends React.Component {
       const a = Object.assign({}, mods[i]);
       const b = Object.assign({}, mods[i + 1]);
 
-      mods[i] = b, mods[i + 1] = a;
+      (mods[i] = b), (mods[i + 1] = a);
 
       this.setState({ modifiers: mods });
     }
@@ -98,7 +109,7 @@ export default class EmailForm extends React.Component {
       const a = Object.assign({}, mods[i]);
       const b = Object.assign({}, mods[i - 1]);
 
-      mods[i] = b, mods[i - 1] = a;
+      (mods[i] = b), (mods[i - 1] = a);
 
       this.setState({ modifiers: mods });
     }
@@ -158,8 +169,8 @@ export default class EmailForm extends React.Component {
    */
   onSubmit() {
     const data = {
-      to: this.props.data.account.emails.find(e =>
-        e.address == this._to.state.value
+      to: this.props.data.account.emails.find(
+        e => e.address == this._to.state.value
       ).id,
       name: this._name.value,
       filters: this.state.filters.map(f => f.id).join(','),
@@ -174,12 +185,13 @@ export default class EmailForm extends React.Component {
     data.name = data.name || 'Untitled';
 
     if (this.props.create) {
-      data.domain = this._domain.state.value,
-      data.address = this._address.value
-        ? this._address.value.split('@')[0]
-        : '',
-      data.description = data.description ||
-        'Created on ' + moment().format('YYYY-MM-DD, HH:mm:ss');
+      (data.domain = this._domain.state.value),
+        (data.address = this._address.value
+          ? this._address.value.split('@')[0]
+          : ''),
+        (data.description =
+          data.description ||
+          'Created on ' + moment().format('YYYY-MM-DD, HH:mm:ss'));
     }
 
     if (this.props.recaptcha) {
@@ -196,32 +208,30 @@ export default class EmailForm extends React.Component {
 
   _renderFilters() {
     return (
-      <section className='filters'>
+      <section className="filters">
         {this.state.filters.length ? (
-          <section className='linked'>
+          <section className="linked">
             <header>
               <h3>Linked Filters</h3>
               <p>Click on filters below to remove them from this email.</p>
             </header>
 
-            <List
-              className='filters-list section md-paper md-paper--1'
-            >{
-              this.state.filters.map(f =>
+            <List className="filters-list section md-paper md-paper--1">
+              {this.state.filters.map(f => (
                 <ListItem
                   threeLines
                   key={f.id}
                   onClick={() => this.onRemoveFilter(f.id)}
-                  className='filter'
+                  className="filter"
                   primaryText={f.name}
                   secondaryText={filterTypes[f.type] + '\n' + f.description}
                 />
-              )
-            }</List>
+              ))}
+            </List>
           </section>
         ) : null}
 
-        <section className='add'>
+        <section className="add">
           <header>
             <h3>Add Filters</h3>
             <p>Click on filters below to add them to this email.</p>
@@ -239,37 +249,34 @@ export default class EmailForm extends React.Component {
 
   _renderModifiers() {
     return (
-      <section className='modifiers'>
+      <section className="modifiers">
         {this.state.modifiers.length ? (
-          <section className='linked'>
+          <section className="linked">
             <header>
               <h3>Linked Modifiers</h3>
               <p>Click on modifiers below to remove them from this email.</p>
               <p>
-                The order in which the modifiers are listed are the order in which they are applied to emails.
+                The order in which the modifiers are listed are the order in
+                which they are applied to emails.
               </p>
             </header>
 
-            <List
-              className='modifiers-list section md-paper md-paper--1'
-            >{
-              this.state.modifiers.map(m =>
+            <List className="modifiers-list section md-paper md-paper--1">
+              {this.state.modifiers.map(m => (
                 <ListItem
                   threeLines
                   key={m.id}
                   onClick={() => this.setState({ selectedModifier: m.id })}
-                  className='modifier'
+                  className="modifier"
                   primaryText={m.name}
-                  secondaryText={
-                    modifierTypes[m.type] + '\n' + m.description
-                  }
+                  secondaryText={modifierTypes[m.type] + '\n' + m.description}
                 />
-              )
-            }</List>
+              ))}
+            </List>
           </section>
         ) : null}
 
-        <section className='add'>
+        <section className="add">
           <header>
             <h3>Add Modifiers</h3>
             <p>Click on modifiers below to add them to this email.</p>
@@ -286,86 +293,82 @@ export default class EmailForm extends React.Component {
   }
 
   render() {
-    const {email} = this.props;
+    const { email } = this.props;
 
     return (
-      <div className='email-form'>
+      <div className="email-form">
         <Paper
           zDepth={1}
-          component='section'
-          className='main-form section flex'
+          component="section"
+          className="main-form section flex"
         >
           <TextField
-            id='text--name'
-            ref={i => this._name = i}
-            type='text'
-            label='Name'
-            helpText={
-              '(optional) Give your email a name to find it easier'
-            }
+            id="text--name"
+            ref={i => (this._name = i)}
+            type="text"
+            label="Name"
+            helpText={'(optional) Give your email a name to find it easier'}
             maxLength={40}
-            className='md-cell'
+            className="md-cell"
             defaultValue={email.name}
           />
 
           <TextField
-            id='text--description'
-            ref={i => this._description = i}
-            type='text'
-            label='Description'
+            id="text--description"
+            ref={i => (this._description = i)}
+            type="text"
+            label="Description"
             helpText={
               '(optional) Give your email a description to find it easier'
             }
             maxLength={150}
-            className='md-cell'
+            className="md-cell"
             defaultValue={email.description}
           />
 
           {this.props.create ? (
-            <div className='address flex'>
+            <div className="address flex">
               <TextField
-                id='text--address'
-                ref={i => this._address = i}
-                type='text'
-                label='Address'
+                id="text--address"
+                ref={i => (this._address = i)}
+                type="text"
+                label="Address"
                 error={!this.state.addressAvailable}
                 helpText={
                   '(optional) Customize your Ptorx address or leave it blank ' +
                   'for a randomly generated address'
                 }
                 onChange={() => this.onCheckAddress()}
-                errorText='Address is not available'
+                errorText="Address is not available"
                 maxLength={64}
-                className='md-cell'
+                className="md-cell"
               />
 
               <SelectField
-                id='select--domain'
-                ref={i => this._domain = i}
-                label='Domain'
+                id="select--domain"
+                ref={i => (this._domain = i)}
+                label="Domain"
                 position={SelectField.Positions.BELOW}
                 onChange={v => this.onCheckAddress(v)}
-                className='md-cell'
-                menuItems={
-                  this.props.data.domains.map(d =>
-                    Object({ label: `@${d.domain}`, value: d.id })
-                  )
-                }
+                className="md-cell"
+                menuItems={this.props.data.domains.map(d =>
+                  Object({ label: `@${d.domain}`, value: d.id })
+                )}
                 defaultValue={email.domain}
               />
             </div>
           ) : null}
 
           <SelectField
-            id='select--redirect'
-            ref={i => this._to = i}
-            label='Redirect To'
+            id="select--redirect"
+            ref={i => (this._to = i)}
+            label="Redirect To"
             position={SelectField.Positions.BELOW}
             helpText={
               'Your real email that messages sent to your Ptorx address ' +
               'will be redirected to'
             }
-            className='md-cell'
+            className="md-cell"
             menuItems={this.props.data.account.emails.map(e => e.address)}
             defaultValue={
               email.toEmail || this.props.data.account.emails[0].address
@@ -374,37 +377,40 @@ export default class EmailForm extends React.Component {
 
           {!this.state.showAdvanced ? (
             <Button
-              flat primary
-              onClick={() => this.setState({ showAdvanced: true})}
-              iconChildren='settings'
-            >Advanced Settings</Button>
+              flat
+              primary
+              onClick={() => this.setState({ showAdvanced: true })}
+              iconChildren="settings"
+            >
+              Advanced Settings
+            </Button>
           ) : null}
         </Paper>
 
         <Paper
           style={{ display: this.state.showAdvanced ? 'flex' : 'none' }}
           zDepth={1}
-          component='section'
-          className='advanced-settings checkboxes section'
+          component="section"
+          className="advanced-settings checkboxes section"
         >
           <Checkbox
-            id='checkbox--spam-filter'
-            name='spam-filter'
-            label='Spam Filter'
+            id="checkbox--spam-filter"
+            name="spam-filter"
+            label="Spam Filter"
             defaultChecked={email.spamFilter}
           />
 
           <Checkbox
-            id='checkbox--save-mail'
-            name='save-mail'
-            label='Save Mail'
+            id="checkbox--save-mail"
+            name="save-mail"
+            label="Save Mail"
             defaultChecked={email.saveMail}
           />
 
           <Checkbox
-            id='checkbox--no-redirect'
-            name='no-redirect'
-            label='No Redirect'
+            id="checkbox--no-redirect"
+            name="no-redirect"
+            label="No Redirect"
             defaultChecked={
               email.noToAddress == undefined
                 ? !email.toEmail
@@ -413,9 +419,9 @@ export default class EmailForm extends React.Component {
           />
 
           <Checkbox
-            id='checkbox--direct-forward'
-            name='direct-forward'
-            label='Direct Forward'
+            id="checkbox--direct-forward"
+            name="direct-forward"
+            label="Direct Forward"
             defaultChecked={email.directForward}
           />
         </Paper>
@@ -433,59 +439,54 @@ export default class EmailForm extends React.Component {
           }
           activeTabIndex={this.state.advancedSettingsTab}
         >
-          <Tabs tabId='tab'>
-            <Tab label='Filters'>{
-              this.state.advancedSettingsTab == 0
+          <Tabs tabId="tab">
+            <Tab label="Filters">
+              {this.state.advancedSettingsTab == 0
                 ? this._renderFilters()
-                : null
-            }</Tab>
-            <Tab label='Modifiers'>{
-              this.state.advancedSettingsTab == 1
+                : null}
+            </Tab>
+            <Tab label="Modifiers">
+              {this.state.advancedSettingsTab == 1
                 ? this._renderModifiers()
-                : null
-            }</Tab>
+                : null}
+            </Tab>
           </Tabs>
         </TabsContainer>
 
         <DialogContainer
-          id='selected-modifier'
+          id="selected-modifier"
           onHide={() => this.setState({ selectedModifier: 0 })}
           visible={!!this.state.selectedModifier}
-          aria-label='Selected modifier'
+          aria-label="Selected modifier"
         >
           <List>
             <ListItem
-              primaryText='Move up'
+              primaryText="Move up"
               onClick={() => this.onMoveModifierUp()}
             />
             <ListItem
-              primaryText='Move down'
+              primaryText="Move down"
               onClick={() => this.onMoveModifierDown()}
             />
             <ListItem
-              primaryText='Remove'
+              primaryText="Remove"
               onClick={() => this.onRemoveModifier()}
             />
           </List>
         </DialogContainer>
 
         {this.props.recaptcha ? (
-          <div className='recaptcha-wrapper'>
-            <div
-              className='g-recaptcha'
-              data-sitekey={RECAPTCHA_KEY}
-            />
+          <div className="recaptcha-wrapper">
+            <div className="g-recaptcha" data-sitekey={RECAPTCHA_KEY} />
           </div>
         ) : null}
 
-        <Button
-          primary raised
-          onClick={e => this.onSubmit(e)}
-        >{this.props.create ? 'Create' : 'Update'}</Button>
+        <Button primary raised onClick={e => this.onSubmit(e)}>
+          {this.props.create ? 'Create' : 'Update'}
+        </Button>
       </div>
     );
   }
-
 }
 
 EmailForm.propTypes = {
@@ -500,9 +501,17 @@ EmailForm.propTypes = {
 
 EmailForm.defaultProps = {
   email: {
-    name: '', description: '', toEmail: '', spamFilter: true, saveMail: false,
-    directForward: false, noToAddress: false, filters: [], modifiers: [],
+    name: '',
+    description: '',
+    toEmail: '',
+    spamFilter: true,
+    saveMail: false,
+    directForward: false,
+    noToAddress: false,
+    filters: [],
+    modifiers: [],
     domain: 1
   },
-  recaptcha: false, create: false
+  recaptcha: false,
+  create: false
 };

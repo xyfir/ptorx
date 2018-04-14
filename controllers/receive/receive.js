@@ -24,26 +24,23 @@ const config = require('config');
     Messages are then modified via modifiers
 */
 module.exports = async function(req, res) {
-
   try {
     const email = req.body;
     const save = !!email['message-url'];
 
-    email.senderDomain = email.sender.split('@')[1],
-    email.proxyDomain = email.recipient.split('@')[1],
-    email.senderName = email.from.match(/^(.+) <(.+)>$/);
+    (email.senderDomain = email.sender.split('@')[1]),
+      (email.proxyDomain = email.recipient.split('@')[1]),
+      (email.senderName = email.from.match(/^(.+) <(.+)>$/));
 
     if (email.senderName) {
-      email.originalSender = email.senderName[2],
-      email.senderName = email.senderName[1];
-    }
-    else {
-      email.originalSender = email.sender,
-      email.senderName = '';
+      (email.originalSender = email.senderName[2]),
+        (email.senderName = email.senderName[1]);
+    } else {
+      (email.originalSender = email.sender), (email.senderName = '');
     }
 
     const headers = {};
-    JSON.parse(email['message-headers']).forEach(h => headers[h[0]] = h[1]);
+    JSON.parse(email['message-headers']).forEach(h => (headers[h[0]] = h[1]));
 
     const isEmailSpam = headers['X-Mailgun-Sflag'] == 'Yes';
 
@@ -67,29 +64,35 @@ module.exports = async function(req, res) {
 
       switch (filter.type) {
         case 1: // Subject
-          data.filters[i].pass = email.subject
-            .match(new RegExp(filter.find, 'g'));
+          data.filters[i].pass = email.subject.match(
+            new RegExp(filter.find, 'g')
+          );
           break;
         case 2: // Sender Address
-           data.filters[i].pass = email.sender
-            .match(new RegExp(filter.find, 'g'));
+          data.filters[i].pass = email.sender.match(
+            new RegExp(filter.find, 'g')
+          );
           break;
         case 3: // From Domain
-           data.filters[i].pass = email.senderDomain
-            .match(new RegExp(`(.*)@${filter.find}'`, 'g'));
+          data.filters[i].pass = email.senderDomain.match(
+            new RegExp(`(.*)@${filter.find}'`, 'g')
+          );
           break;
         case 4: // Text
-           data.filters[i].pass = email['body-plain']
-            .match(new RegExp(filter.find, 'g'));
+          data.filters[i].pass = email['body-plain'].match(
+            new RegExp(filter.find, 'g')
+          );
           break;
         case 5: // HTML
-           data.filters[i].pass = (email['body-html'] || '')
-            .match(new RegExp(filter.find, 'g'));
+          data.filters[i].pass = (email['body-html'] || '').match(
+            new RegExp(filter.find, 'g')
+          );
           break;
         case 6: // Header
           const [header, search] = filter.find.split(':::');
           const regex = new RegExp(
-            !filter.regex ? escapeRegExp(search) : search, 'g'
+            !filter.regex ? escapeRegExp(search) : search,
+            'g'
           );
 
           if (headers[header] && regex.test(headers[header]))
@@ -97,7 +100,7 @@ module.exports = async function(req, res) {
       }
 
       // Flip value if reject on match
-      data.filters[i].pass = !!(+filter.acceptOnMatch)
+      data.filters[i].pass = !!+filter.acceptOnMatch
         ? !!data.filters[i].pass
         : !data.filters[i].pass;
     });
@@ -134,9 +137,7 @@ module.exports = async function(req, res) {
             : modifier.data.value;
 
           email['body-plain'] = email['body-plain'].replace(
-            new RegExp(
-              modifier.data.value, modifier.data.flags
-            ),
+            new RegExp(modifier.data.value, modifier.data.flags),
             modifier.data.with
           );
 
@@ -155,8 +156,7 @@ module.exports = async function(req, res) {
         case 5: // Subject Tag
           if (modifier.data.prepend)
             email.subject = modifier.data.value + email.subject;
-          else
-            email.subject += modifier.data.value;
+          else email.subject += modifier.data.value;
           break;
 
         case 6: // Concatenate
@@ -170,8 +170,7 @@ module.exports = async function(req, res) {
           // Append
           else {
             email[modifier.data.to] +=
-              modifier.data.separator +
-              email[modifier.data.add];
+              modifier.data.separator + email[modifier.data.add];
           }
           break;
 
@@ -208,7 +207,8 @@ module.exports = async function(req, res) {
       };
 
       const mailgun = MailGun({
-        apiKey: config.keys.mailgun, domain: email.proxyDomain
+        apiKey: config.keys.mailgun,
+        domain: email.proxyDomain
       });
 
       // Download attachments and attach them to the new message
@@ -227,7 +227,8 @@ module.exports = async function(req, res) {
           // Create attachment via MailGun.Attachment
           message.attachment.push(
             new mailgun.Attachment({
-              data: dl.body, filename: att.name,
+              data: dl.body,
+              filename: att.name,
               contentType: att['content-type']
             })
           );
@@ -240,7 +241,8 @@ module.exports = async function(req, res) {
         for (let file of req.files) {
           message.attachment.push(
             new mailgun.Attachment({
-              data: file.buffer, filename: file.originalname,
+              data: file.buffer,
+              filename: file.originalname,
               contentType: file.mimetype
             })
           );
@@ -262,9 +264,7 @@ module.exports = async function(req, res) {
     }
 
     res.status(200).send();
-  }
-  catch (err) {
+  } catch (err) {
     res.status(406).send();
   }
-
 };

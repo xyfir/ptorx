@@ -1,27 +1,34 @@
 import {
-  LOAD_EMAILS, ADD_EMAIL, DELETE_EMAIL, EDIT_EMAIL
+  LOAD_EMAILS,
+  ADD_EMAIL,
+  DELETE_EMAIL,
+  EDIT_EMAIL
 } from 'actions/types/emails';
 
 export function loadEmails(emails) {
   return {
-    type: LOAD_EMAILS, emails
+    type: LOAD_EMAILS,
+    emails
   };
 }
 
 export function deleteEmail(id) {
   return {
-    type: DELETE_EMAIL, id
+    type: DELETE_EMAIL,
+    id
   };
 }
 
 export function addEmail(data) {
   return {
-    type: ADD_EMAIL, data
+    type: ADD_EMAIL,
+    data
   };
 }
 
 export function editEmail(data) {
   return {
-    type: EDIT_EMAIL, data
+    type: EDIT_EMAIL,
+    data
   };
 }

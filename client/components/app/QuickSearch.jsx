@@ -11,15 +11,14 @@ import findMatches from 'lib/find-matching';
 // Components
 import Search from 'components/misc/Search';
 
-const ShowMoreButton = props => props.total <= props.limit ? null : (
-  <Button
-    flat primary
-    onClick={() => location.hash = props.link}
-  >Show {props.total - props.limit} More</Button>
-);
+const ShowMoreButton = props =>
+  props.total <= props.limit ? null : (
+    <Button flat primary onClick={() => (location.hash = props.link)}>
+      Show {props.total - props.limit} More
+    </Button>
+  );
 
 export default class QuickSearch extends React.Component {
-
   constructor(props) {
     super(props);
 
@@ -41,22 +40,20 @@ export default class QuickSearch extends React.Component {
           />
         </header>
 
-        <List className='proxy-emails-list section md-paper md-paper--1'>{
-          emails
-            .slice(0, 7)
-            .map(email =>
-              <a href={`#/emails/edit/${email.id}`} key={email.id}>
-                <ListItem
-                  threeLines
-                  className='email'
-                  primaryText={email.name}
-                  secondaryText={email.address + '\n' + email.description}
-                />
-              </a>
-            )
-        }</List>
+        <List className="proxy-emails-list section md-paper md-paper--1">
+          {emails.slice(0, 7).map(email => (
+            <a href={`#/emails/edit/${email.id}`} key={email.id}>
+              <ListItem
+                threeLines
+                className="email"
+                primaryText={email.name}
+                secondaryText={email.address + '\n' + email.description}
+              />
+            </a>
+          ))}
+        </List>
       </section>
-    )
+    );
   }
 
   /** @param {object[]} filters */
@@ -74,26 +71,22 @@ export default class QuickSearch extends React.Component {
           />
         </header>
 
-        <List className='filters-list section md-paper md-paper--1'>{
-          filters
-            .slice(0, 5)
-            .map(filter =>
-              <a href={`#/filters/edit/${filter.id}`} key={filter.id}>
-                <ListItem
-                  threeLines
-                  className='filter'
-                  primaryText={filter.name}
-                  secondaryText={
-                    filterTypes[filter.type] +
-                    '\n' +
-                    filter.description
-                  }
-                />
-              </a>
-            )
-        }</List>
+        <List className="filters-list section md-paper md-paper--1">
+          {filters.slice(0, 5).map(filter => (
+            <a href={`#/filters/edit/${filter.id}`} key={filter.id}>
+              <ListItem
+                threeLines
+                className="filter"
+                primaryText={filter.name}
+                secondaryText={
+                  filterTypes[filter.type] + '\n' + filter.description
+                }
+              />
+            </a>
+          ))}
+        </List>
       </section>
-    )
+    );
   }
 
   /** @param {object[]} domains */
@@ -111,17 +104,15 @@ export default class QuickSearch extends React.Component {
           />
         </header>
 
-        <List className='domains-list section md-paper md-paper--1'>{
-          domains
-            .slice(0, 3)
-            .map(domain =>
-              <a href={'#/domains/' + domain.id} key={domain.id}>
-                <ListItem primaryText={domain.domain} />
-              </a>
-            )
-        }</List>
+        <List className="domains-list section md-paper md-paper--1">
+          {domains.slice(0, 3).map(domain => (
+            <a href={'#/domains/' + domain.id} key={domain.id}>
+              <ListItem primaryText={domain.domain} />
+            </a>
+          ))}
+        </List>
       </section>
-    )
+    );
   }
 
   /** @param {object[]} modifiers */
@@ -139,31 +130,27 @@ export default class QuickSearch extends React.Component {
           />
         </header>
 
-        <List className='modifiers-list section md-paper md-paper--1'>{
-          modifiers
-            .slice(0, 5)
-            .map(modifier =>
-              <a href={`#/modifiers/edit/${modifier.id}`} key={modifier.id}>
-                <ListItem
-                  threeLines
-                  className='modifier'
-                  primaryText={modifier.name}
-                  secondaryText={
-                    modifierTypes[modifier.type] +
-                    '\n' +
-                    modifier.description
-                  }
-                />
-              </a>
-            )
-        }</List>
+        <List className="modifiers-list section md-paper md-paper--1">
+          {modifiers.slice(0, 5).map(modifier => (
+            <a href={`#/modifiers/edit/${modifier.id}`} key={modifier.id}>
+              <ListItem
+                threeLines
+                className="modifier"
+                primaryText={modifier.name}
+                secondaryText={
+                  modifierTypes[modifier.type] + '\n' + modifier.description
+                }
+              />
+            </a>
+          ))}
+        </List>
       </section>
-    )
+    );
   }
 
   render() {
-    const {emails, filters, domains, modifiers} = this.props.App.state;
-    const {search} = this.state;
+    const { emails, filters, domains, modifiers } = this.props.App.state;
+    const { search } = this.state;
     const matches = {
       emails: findMatches(emails, search),
       filters: findMatches(filters, search),
@@ -172,11 +159,8 @@ export default class QuickSearch extends React.Component {
     };
 
     return (
-      <div className='quick-search'>
-        <Search
-          onSearch={v => this.setState({ search: v })}
-          type='email'
-        />
+      <div className="quick-search">
+        <Search onSearch={v => this.setState({ search: v })} type="email" />
 
         {matches.emails.length ? this._renderEmails(matches.emails) : null}
         {matches.filters.length ? this._renderFilters(matches.filters) : null}
@@ -187,5 +171,4 @@ export default class QuickSearch extends React.Component {
       </div>
     );
   }
-
 }

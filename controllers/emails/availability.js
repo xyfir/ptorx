@@ -10,8 +10,7 @@ const MySQL = require('lib/mysql');
     Checks whether an email address is available
 */
 module.exports = async function(req, res) {
-
-  const db = new MySQL;
+  const db = new MySQL();
 
   try {
     await db.getConnection();
@@ -22,10 +21,8 @@ module.exports = async function(req, res) {
     db.release();
 
     res.json({ error: false, available: !rows.length });
-  }
-  catch (err) {
+  } catch (err) {
     db.release();
     res.json({ error: true, message: err });
   }
-
 };

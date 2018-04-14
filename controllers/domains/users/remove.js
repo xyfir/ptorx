@@ -10,8 +10,7 @@ const mysql = require('lib/mysql');
     to remove a user from the domain.
 */
 module.exports = async function(req, res) {
-
-  const db = new mysql;
+  const db = new mysql();
 
   try {
     await db.getConnection();
@@ -27,25 +26,26 @@ module.exports = async function(req, res) {
     }
     // Remove another user from domain
     else {
-      result = await db.query(`
+      result = await db.query(
+        `
         DELETE FROM domain_users WHERE user_id = ? AND domain_id IN (
           SELECT id FROM domains WHERE id = ? AND user_id = ?
         )
-      `, [
-        req.params.user,
-        req.params.domain, req.session.uid
-      ])
+      `,
+        [req.params.user, req.params.domain, req.session.uid]
+      );
     }
 
     if (!result.affectedRows) throw 'Could not remove from domain';
 
     // Get all of user's proxy emails on this domain
-    const emails = await db.query(`
+    const emails = await db.query(
+      `
       SELECT email_id AS id FROM proxy_emails
       WHERE user_id = ? AND domain_id = ?
-    `, [
-      req.params.user, req.params.domain
-    ]);
+    `,
+      [req.params.user, req.params.domain]
+    );
     db.release();
 
     // Delete emails
@@ -57,10 +57,8 @@ module.exports = async function(req, res) {
     }
 
     res.json({ error: false });
-  }
-  catch (err) {
+  } catch (err) {
     db.release();
     res.json({ error: true, message: err });
   }
-
 };

@@ -19,7 +19,6 @@ import Home from 'components/info/Home';
 import query from 'lib/parse-query-string';
 
 class PtorxInfo extends React.Component {
-
   constructor(props) {
     super(props);
 
@@ -34,8 +33,8 @@ class PtorxInfo extends React.Component {
     request
       .get('/api/account')
       .query({ token: localStorage.accessToken || '' })
-      .end((err, res) =>
-        !err && this.setState({ loggedIn: res.body.loggedIn })
+      .end(
+        (err, res) => !err && this.setState({ loggedIn: res.body.loggedIn })
       );
   }
 
@@ -47,37 +46,38 @@ class PtorxInfo extends React.Component {
         case 'safe-and-secure-emails':
         case 'stop-unwanted-mail':
         case 'anonymous-emails':
-          return <LandingPage page={page} pwnCheck={true} />
+          return <LandingPage page={page} pwnCheck={true} />;
         case 'temporary-emails':
         case 'email-forwarding':
-          return <LandingPage page={page} />
+          return <LandingPage page={page} />;
         case 'features':
-          return <Features />
+          return <Features />;
         case 'docs':
-          return <Documentation file='help' />
+          return <Documentation file="help" />;
         case '':
-          return <Home />
+          return <Home />;
         default:
-          return <h2 className='status-404'>404: Page Not Found</h2>
+          return <h2 className="status-404">404: Page Not Found</h2>;
       }
     })();
 
     return (
-      <div className='ptorx-info'>
+      <div className="ptorx-info">
         <Toolbar
-          colored fixed
+          colored
+          fixed
           actions={[
             <Button
               icon
-              iconChildren='home'
-              onClick={() => location.href = '../'}
+              iconChildren="home"
+              onClick={() => (location.href = '../')}
             />
           ]}
-          title='Ptorx'
+          title="Ptorx"
           nav={
             <Button
               icon
-              iconChildren='menu'
+              iconChildren="menu"
               onClick={() => this.setState({ drawer: true })}
             />
           }
@@ -86,25 +86,28 @@ class PtorxInfo extends React.Component {
         <Drawer
           onVisibilityChange={v => this.setState({ drawer: v })}
           autoclose={true}
-          navItems={(
-            this.state.loggedIn ? [
-              <a href='app/'><ListItem primaryText='App' /></a>
-            ] : [
-              <a href='https://accounts.xyfir.com/app/#/login/13'>
-                <ListItem primaryText='Login' />
-              </a>,
-              <a href='https://accounts.xyfir.com/app/#/register/13'>
-                <ListItem primaryText='Register' />
-              </a>
-            ]
+          navItems={(this.state.loggedIn
+            ? [
+                <a href="app/">
+                  <ListItem primaryText="App" />
+                </a>
+              ]
+            : [
+                <a href="https://accounts.xyfir.com/app/#/login/13">
+                  <ListItem primaryText="Login" />
+                </a>,
+                <a href="https://accounts.xyfir.com/app/#/register/13">
+                  <ListItem primaryText="Register" />
+                </a>
+              ]
           ).concat([
             <Divider />,
 
-            <a href='features'>
-              <ListItem primaryText='Feature List' />
+            <a href="features">
+              <ListItem primaryText="Feature List" />
             </a>,
-            <a href='docs'>
-              <ListItem primaryText='Help Docs' />
+            <a href="docs">
+              <ListItem primaryText="Help Docs" />
             </a>
           ])}
           visible={this.state.drawer}
@@ -114,7 +117,7 @@ class PtorxInfo extends React.Component {
               nav={
                 <Button
                   icon
-                  iconChildren='arrow_back'
+                  iconChildren="arrow_back"
                   onClick={() => this.setState({ drawer: false })}
                 />
               }
@@ -123,11 +126,10 @@ class PtorxInfo extends React.Component {
           type={Drawer.DrawerTypes.TEMPORARY}
         />
 
-        <div className='main md-toolbar-relative'>{view}</div>
+        <div className="main md-toolbar-relative">{view}</div>
       </div>
     );
   }
-
 }
 
 render(<PtorxInfo />, document.getElementById('content'));

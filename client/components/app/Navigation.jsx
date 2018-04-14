@@ -1,11 +1,17 @@
 import {
-  ListItem, Toolbar, MenuButton, Divider, Drawer, Button, List, FontIcon,
+  ListItem,
+  Toolbar,
+  MenuButton,
+  Divider,
+  Drawer,
+  Button,
+  List,
+  FontIcon,
   Subheader
 } from 'react-md';
 import React from 'react';
 
 export default class AppNavigation extends React.Component {
-
   constructor(props) {
     super(props);
 
@@ -23,28 +29,25 @@ export default class AppNavigation extends React.Component {
   /** @return {JSX.Element[]} */
   _renderDrawerNavItems() {
     return [
-      <a href='#/emails/list'>
-        <ListItem
-          leftIcon={<FontIcon>email</FontIcon>}
-          primaryText='Emails'
-        />
+      <a href="#/emails/list">
+        <ListItem leftIcon={<FontIcon>email</FontIcon>} primaryText="Emails" />
       </a>,
-      <a href='#/filters/list'>
+      <a href="#/filters/list">
         <ListItem
           leftIcon={<FontIcon>filter_list</FontIcon>}
-          primaryText='Filters'
+          primaryText="Filters"
         />
       </a>,
-      <a href='#/modifiers/list'>
+      <a href="#/modifiers/list">
         <ListItem
           leftIcon={<FontIcon>code</FontIcon>}
-          primaryText='Modifiers'
+          primaryText="Modifiers"
         />
       </a>,
-      <a href='#/domains'>
+      <a href="#/domains">
         <ListItem
           leftIcon={<FontIcon>domain</FontIcon>}
-          primaryText='Domains'
+          primaryText="Domains"
         />
       </a>,
 
@@ -52,48 +55,45 @@ export default class AppNavigation extends React.Component {
 
       <ListItem
         leftIcon={<FontIcon>account_box</FontIcon>}
-        primaryText='My Account'
+        primaryText="My Account"
         nestedItems={[
-          <a href='#/account'>
+          <a href="#/account">
             <ListItem
               leftIcon={<FontIcon>account_circle</FontIcon>}
-              primaryText='Manage'
+              primaryText="Manage"
             />
           </a>,
-          <a href='#/account/primary-emails'>
+          <a href="#/account/primary-emails">
             <ListItem
               leftIcon={<FontIcon>email</FontIcon>}
-              primaryText='Primary Emails'
+              primaryText="Primary Emails"
             />
           </a>,
           <ListItem
             onClick={() => this.onLogout()}
             leftIcon={<FontIcon>close</FontIcon>}
-            primaryText='Logout'
+            primaryText="Logout"
           />
         ]}
       />,
 
       <ListItem
         leftIcon={<FontIcon>info</FontIcon>}
-        primaryText='Documentation'
+        primaryText="Documentation"
         nestedItems={[
-          <a href='#/docs/help'>
-            <ListItem
-              leftIcon={<FontIcon>help</FontIcon>}
-              primaryText='Help'
-            />
+          <a href="#/docs/help">
+            <ListItem leftIcon={<FontIcon>help</FontIcon>} primaryText="Help" />
           </a>,
-          <a href='#/docs/privacy'>
+          <a href="#/docs/privacy">
             <ListItem
               leftIcon={<FontIcon>security</FontIcon>}
-              primaryText='Privacy Policy'
+              primaryText="Privacy Policy"
             />
           </a>,
-          <a href='#/docs/tos'>
+          <a href="#/docs/tos">
             <ListItem
               leftIcon={<FontIcon>gavel</FontIcon>}
-              primaryText='Terms of Service'
+              primaryText="Terms of Service"
             />
           </a>
         ]}
@@ -102,56 +102,57 @@ export default class AppNavigation extends React.Component {
   }
 
   render() {
-    const {App} = this.props;
+    const { App } = this.props;
 
     return (
       <React.Fragment>
         <Toolbar
-          colored fixed
+          colored
+          fixed
           actions={[
             <Button
               icon
-              iconChildren='search'
-              onClick={() => location.hash = '#/quick-search'}
+              iconChildren="search"
+              onClick={() => (location.hash = '#/quick-search')}
             />,
             <MenuButton
               icon
-              id='menu--create-item'
+              id="menu--create-item"
               menuItems={[
-                <Subheader primaryText='Create a new:' />,
-                <a href='#/emails/create'>
+                <Subheader primaryText="Create a new:" />,
+                <a href="#/emails/create">
                   <ListItem
                     leftIcon={<FontIcon>email</FontIcon>}
-                    primaryText='Email'
+                    primaryText="Email"
                   />
                 </a>,
-                <a href='#/filters/create'>
+                <a href="#/filters/create">
                   <ListItem
                     leftIcon={<FontIcon>filter_list</FontIcon>}
-                    primaryText='Filter'
+                    primaryText="Filter"
                   />
                 </a>,
-                <a href='#/modifiers/create'>
+                <a href="#/modifiers/create">
                   <ListItem
                     leftIcon={<FontIcon>code</FontIcon>}
-                    primaryText='Modifier'
+                    primaryText="Modifier"
                   />
                 </a>,
-                <a href='#/domains/add'>
+                <a href="#/domains/add">
                   <ListItem
                     leftIcon={<FontIcon>domain</FontIcon>}
-                    primaryText='Domain'
+                    primaryText="Domain"
                   />
                 </a>
               ]}
-              iconChildren='add'
+              iconChildren="add"
             />
           ]}
-          title='Ptorx'
+          title="Ptorx"
           nav={
             <Button
               icon
-              iconChildren='menu'
+              iconChildren="menu"
               onClick={() => this.setState({ drawer: true })}
             />
           }
@@ -169,7 +170,7 @@ export default class AppNavigation extends React.Component {
                 <Button
                   icon
                   onClick={() => this.setState({ drawer: false })}
-                  iconChildren='arrow_back'
+                  iconChildren="arrow_back"
                 />
               }
             />
@@ -177,7 +178,6 @@ export default class AppNavigation extends React.Component {
           type={Drawer.DrawerTypes.TEMPORARY}
         />
       </React.Fragment>
-    )
+    );
   }
-
 }
