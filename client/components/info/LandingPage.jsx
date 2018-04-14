@@ -75,7 +75,7 @@ export default class LandingPage extends React.Component {
             </strong>{' '}
             or{' '}
             <strong>
-              <a href="https://xyfir.com/#/contact">send us your question</a>
+              <a href="https://www.xyfir.com/contact">send us your question</a>
             </strong>{' '}
             and we'll get back to you as soon as we can.
           </p>

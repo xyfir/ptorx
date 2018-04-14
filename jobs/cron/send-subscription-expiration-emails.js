@@ -24,7 +24,7 @@ module.exports = async function() {
       <br /><br />
       Thank you for being a Ptorx subscriber! We hope you'll stick around a bit longer.
       <br /><br /><br /><br />
-      <strong>Have any questions or feedback?</strong> Send a reply to this email or use our <a href='https://xyfir.com/#/contact'>contact form</a>. <strong>Interested in other Xyfir projects?</strong> Take a look at all of our projects in the <a href='https://xyfir.com/#/network'>Xyfir Network</a>.
+      <strong>Have any questions or feedback?</strong> Send a reply to this email or use our <a href='https://www.xyfir.com/contact'>contact form</a>. <strong>Interested in other Xyfir projects?</strong> Take a look at all of our projects in the <a href='https://www.xyfir.com/network'>Xyfir Network</a>.
     `,
       trialMessage = `
       <head>
@@ -78,7 +78,7 @@ module.exports = async function() {
 
           <br /><br />
 
-          <strong>Have any questions or feedback?</strong> Send a reply to this email or use our <a href='https://xyfir.com/#/contact'>contact form</a>.
+          <strong>Have any questions or feedback?</strong> Send a reply to this email or use our <a href='https://www.xyfir.com/contact'>contact form</a>.
         </div>
       </body>
     `,
