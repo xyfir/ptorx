@@ -74,7 +74,7 @@ module.exports = async function() {
             <li><strong>But wait, there's more!</strong> Check Ptorx's <a href="https://ptorx.com/features">features list</a> to see all we have to offer.</li>
           </ul>
 
-          Thanks for trying out Ptorx! We hope you'll decide to try out a full Ptorx subscription. For just <strong>$9.99 USD</strong> you'll increase your privacy, security, and control over your experience on the web for an entire year. We accept cards and Bitcoin. Plus, we offer a risk-free, 30 day money-back guarantee as well!
+          Thanks for trying out Ptorx! We hope you'll decide to try out a full Ptorx subscription. For just <strong>$9.99 USD</strong> you'll increase your privacy, security, and control over your experience on the web for an entire year. We accept cards and popular cryptocurrency. Plus, we offer a risk-free, 30 day money-back guarantee as well!
 
           <br /><br />
 

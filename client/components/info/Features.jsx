@@ -134,9 +134,9 @@ export default () => (
         <li>
           <strong>We respect your privacy</strong>. All that's needed to use our
           service is your email to create an account with Xyfir Accounts. Pay
-          with card (we won't save your info), or pay with Bitcoin. We won't
-          snoop through your mail, and we'll only save it if you tell us to. We
-          don't use any analytics or tracking services.
+          with card (we won't save your info), or pay with cryptocurrency. We
+          won't snoop through your mail, and we'll only save it if you tell us
+          to. We don't use any analytics or tracking services.
         </li>
         <li>
           <strong>Access Ptorx from anywhere</strong>: on the web in your

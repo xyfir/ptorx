@@ -15,7 +15,7 @@ export default class Home extends React.Component {
   constructor(props) {
     super(props);
 
-    (this.messages = [
+    this.messages = [
       {
         title: 'Strengthens Your Security',
         lines: [
@@ -44,12 +44,14 @@ export default class Home extends React.Component {
           'Modify incoming mail before it gets redirected to you.'
         ]
       }
-    ]),
-      (this.state = {
-        message: Math.floor(Math.random() * this.messages.length),
-        fade: 'in'
-      }),
-      (this._startTyping = this._startTyping.bind(this));
+    ];
+
+    this.state = {
+      message: Math.floor(Math.random() * this.messages.length),
+      fade: 'in'
+    };
+
+    this._startTyping = this._startTyping.bind(this);
   }
 
   componentDidMount() {
@@ -134,43 +136,29 @@ export default class Home extends React.Component {
           <h2>Install</h2>
           <p>
             You can use Ptorx in your browser just like any other site. We also
-            offer a Google Chrome extension as well as both mobile and desktop
-            applications.
+            offer a Google Chrome extension as well as mobile applications.
           </p>
 
-          <Button secondary raised onClick={() => (location.href = 'app/')}>
-            Web
-          </Button>
-          <Button
-            secondary
-            raised
-            onClick={() =>
-              (location.href =
-                'https://chrome.google.com/webstore/detail/ptorx/jjhgjgpgkbnlihngkfnkafaidoggljge')
-            }
-          >
-            Chrome
-          </Button>
-          <Button
-            secondary
-            raised
-            onClick={() =>
-              (location.href =
-                'https://itunes.apple.com/us/app/ptorx/id1161180537')
-            }
-          >
-            iOS
-          </Button>
-          <Button
-            secondary
-            raised
-            onClick={() =>
-              (location.href =
-                'https://play.google.com/store/apps/details?id=com.xyfir.ptorx')
-            }
-          >
-            Android
-          </Button>
+          <a href="/app/">
+            <Button secondary raised>
+              Web
+            </Button>
+          </a>
+          <a href="https://goo.gl/UESGjB">
+            <Button secondary raised>
+              Chrome
+            </Button>
+          </a>
+          <a href="https://goo.gl/1dtBUC">
+            <Button secondary raised>
+              iOS
+            </Button>
+          </a>
+          <a href="https://goo.gl/5YAqBT">
+            <Button secondary raised>
+              Android
+            </Button>
+          </a>
         </section>
 
         <section className="overview">
@@ -238,7 +226,7 @@ export default class Home extends React.Component {
               All of Ptorx's <a href="features">features</a>
             </li>
             <li>30 day money-back guarantee</li>
-            <li>Pay with card or Bitcoin</li>
+            <li>Pay with card or cryptocurrency</li>
             <li>Try free for 14 days</li>
           </ul>
 
