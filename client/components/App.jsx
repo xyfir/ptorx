@@ -47,7 +47,7 @@ class App extends React.Component {
       const token = localStorage.accessToken || '';
 
       // Access token is required
-      if (!token && ENVIRONMENT != 'dev') {
+      if (!token && ENVIRONMENT != 'development') {
         location.href = XACC + 'app/#/login/service/13';
       }
 

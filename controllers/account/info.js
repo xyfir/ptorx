@@ -64,7 +64,7 @@ module.exports = async function(req, res) {
       (uid = token[0]), (row = rows[0]);
     }
     // Get info for dev user
-    else if (config.environment.type == 'dev') {
+    else if (config.environment.type == 'development') {
       (sql = `
         SELECT subscription, referral, trial, admin FROM users
         WHERE user_id = 1
