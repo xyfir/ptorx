@@ -3,27 +3,20 @@ const webpack = require('webpack');
 const config = require('./config');
 const path = require('path');
 
-const plugins = [];
-const isProd = config.environment.type == 'prod';
+const plugins = [
+  new webpack.DefinePlugin({
+    'process.env': {
+      NODE_ENV: JSON.stringify(config.environment.type)
+    }
+  })
+];
+const isProd = config.environment.type == 'production';
 
-if (isProd) {
-  plugins.push(
-    new webpack.DefinePlugin({
-      'process.env': {
-        NODE_ENV: JSON.stringify('production')
-      }
-    }),
-    new webpack.optimize.UglifyJsPlugin({
-      mangle: false,
-      compress: { unused: false }
-    }),
-    new CompressionPlugin({
-      asset: '[path].gz'
-    })
-  );
-}
+if (isProd) plugins.push(new CompressionPlugin({ asset: '[path].gz' }));
 
 module.exports = {
+  mode: config.environment.type,
+
   entry: {
     Admin: './client/components/Admin.jsx',
     Info: './client/components/Info.jsx',
