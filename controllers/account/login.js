@@ -34,27 +34,25 @@ module.exports = async function(req, res) {
     await db.getConnection();
 
     // Get user data from db
-    let sql = `
-      SELECT user_id, subscription, admin FROM users WHERE xyfir_id = ?
-    `,
+    let sql =
+        'SELECT user_id, subscription, admin FROM users WHERE xyfir_id = ?',
       vars = [req.body.xid],
       rows = await db.query(sql, vars);
 
     // First login: create user's account
     if (!rows.length) {
-      sql = `
-        INSERT INTO users SET ?
-      `;
+      const referral = req.body.referral || {};
+
+      sql = `INSERT INTO users SET ?`;
       const insert = {
-        xyfir_id: req.body.xid,
+        trial: referral.source != 'producthunt',
         email: xaccResult.body.email,
+        xyfir_id: req.body.xid,
         subscription:
           moment()
-            .add(14, 'days')
+            .add(referral.source == 'producthunt' ? 30 : 14, 'days')
             .unix() * 1000
       };
-
-      const referral = req.body.referral || {};
 
       // Validate xyAccounts affiliate promo code
       if (referral.type == 'promo') {
@@ -82,17 +80,15 @@ module.exports = async function(req, res) {
       if (!result.affectedRows) throw '--';
 
       // Add user's account email to primary_emails
-      (sql = `
-        INSERT INTO primary_emails (user_id, address) VALUES (?, ?)
-      `),
-        (vars = [result.insertId, insert.email]);
+      sql = `INSERT INTO primary_emails (user_id, address) VALUES (?, ?)`;
+      vars = [result.insertId, insert.email];
 
       await db.query(sql, vars);
       db.release();
 
-      (req.session.uid = result.insertId),
-        (req.session.admin = false),
-        (req.session.subscription = insert.subscription);
+      req.session.uid = result.insertId;
+      req.session.admin = false;
+      req.session.subscription = insert.subscription;
 
       res.json({
         error: false,
@@ -104,19 +100,17 @@ module.exports = async function(req, res) {
     }
     // Normal login: update user's data
     else {
-      (sql = `
-        UPDATE users SET email = ? WHERE user_id = ?
-      `),
-        (vars = [xaccResult.body.email, rows[0].user_id]);
+      sql = `UPDATE users SET email = ? WHERE user_id = ?`;
+      vars = [xaccResult.body.email, rows[0].user_id];
 
       const result = await db.query(sql, vars);
       db.release();
 
       if (!result.affectedRows) throw '---';
 
-      (req.session.uid = rows[0].user_id),
-        (req.session.admin = !!rows[0].admin),
-        (req.session.subscription = rows[0].subscription);
+      req.session.uid = rows[0].user_id;
+      req.session.admin = !!rows[0].admin;
+      req.session.subscription = rows[0].subscription;
 
       res.json({
         error: false,

@@ -122,10 +122,18 @@ export default class Home extends React.Component {
             Try Free
           </Button>
 
-          <p>
-            All that's needed to start your 14 day free trial is a valid email
-            to create a Xyfir Account. No payment info required.
-          </p>
+          {localStorage.r == 'source~producthunt' ? (
+            <p>
+              Hello, ProductHunt! For a limited time we're offering 30-day
+              subscriptions for free. All the features, no limitations, and no
+              payment info required.
+            </p>
+          ) : (
+            <p>
+              All that's needed to start your 14 day free trial is a valid email
+              to create a Xyfir Account. No payment info required.
+            </p>
+          )}
         </section>
 
         <section className="how-it-works">
