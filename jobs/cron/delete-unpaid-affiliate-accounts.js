@@ -14,17 +14,20 @@ module.exports = async function() {
     `);
 
     for (let affilate of affiliates) {
-      // Get all of the users who the affiliate created after their last payment
+      // Get all of the users who the affiliate created between their last
+      // payment and 32 days ago
       const users = await db.query(
         `
           SELECT user_id AS id
           FROM affiliate_created_users
-          WHERE affiliate_id = ? AND created_at > ?
+          WHERE
+            affiliate_id = ? AND
+            created_at > ? AND
+            created_at < DATE_SUB(NOW(), INTERVAL 32 DAY)
         `,
         [affilate.id, affilate.last_payment]
       );
 
-      // Delete ALL unpaid users, regardless of creation date
       for (let user of users) await deleteUser(db, user.id);
     }
 
