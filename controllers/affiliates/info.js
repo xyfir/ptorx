@@ -8,7 +8,7 @@ const MySQL = require('lib/mysql');
     {
       user_id: number, api_key: string, subscriptions: number,
       discount: number, last_payment: string, owed: number,
-      timestamp: string
+      timestamp: string, unpaid_subscriptions: number
     }
 */
 module.exports = async function(req, res) {
