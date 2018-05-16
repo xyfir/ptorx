@@ -50,6 +50,9 @@ app.use(
 );
 
 // Express middleware / controllers
+app.get('/affiliate', (req, res) =>
+  res.sendFile(__dirname + '/views/affiliate.html')
+);
 app.use('/static', express.static(__dirname + '/static'));
 app.get('/panel', (req, res) => res.sendFile(__dirname + '/views/panel.html'));
 app.get('/admin', (req, res) => res.sendFile(__dirname + '/views/admin.html'));

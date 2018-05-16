@@ -25,6 +25,7 @@ module.exports = {
   mode: config.environment.type,
 
   entry: {
+    Affiliate: './client/components/Affiliate.jsx',
     Admin: './client/components/Admin.jsx',
     Info: './client/components/Info.jsx',
     App: './client/components/App.jsx'
