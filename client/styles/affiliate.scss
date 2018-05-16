@@ -5,3 +5,17 @@ $md-primary-color: $md-purple-800;
 $md-secondary-color: $md-indigo-500;
 
 @include react-md-everything;
+
+div.affiliate {
+  padding: 1em;
+  text-align: center;
+
+  > div.key {
+    display: flex;
+    align-items: center;
+    max-width: 24em;
+    margin: auto;
+    text-align: left;
+    margin-bottom: 1em;
+  }
+}
