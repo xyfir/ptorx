@@ -12,6 +12,21 @@ const upload = multer({
   }
 });
 
+/* AFFILIATES */
+router.get('/affiliates', require('./affiliates/info'));
+router.post('/affiliates/key', require('./affiliates/generate-key'));
+
+/* AFFILIATES - ACCOUNTS */
+router.post('/affiliates/accounts', require('./affiliates/accounts/create'));
+router.delete(
+  '/affiliates/accounts/:id',
+  require('./affiliates/accounts/delete')
+);
+
+/* AFFILIATES - PAY */
+router.get('/affiliates/pay', require('./affiliates/pay/finish'));
+router.post('/affiliates/pay', require('./affiliates/pay/start'));
+
 /* MAILGUN */
 router.post('/receive/reply', upload.any(), require('./receive/reply'));
 router.post('/receive/:email', upload.any(), require('./receive/receive'));
