@@ -7,7 +7,7 @@ const mysql = require('lib/mysql');
   RETURN
     {
       error: boolean, message?: string,
-      headers?: [[ header: string, value: string ]],
+      headers?: [[ header: string, value: string ]], received?: number,
       from?: string, subject?: string, text?: string, html?: string
     }
   DESCRIPTION
@@ -21,7 +21,7 @@ module.exports = async function(req, res) {
     const [message] = await db.query(
       `
       SELECT
-        message_url AS url
+        message_url AS url, received
       FROM
         messages AS m, proxy_emails AS pxe
       WHERE
@@ -41,6 +41,7 @@ module.exports = async function(req, res) {
       .auth('api', config.keys.mailgun);
 
     res.json({
+      ...message,
       text: data['body-plain'],
       html: data['body-html'],
       error: false,

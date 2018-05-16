@@ -55,9 +55,9 @@ export default class ViewMessage extends React.Component {
             <span className="subject">{this.state.content.subject}</span>
             <span className="from">{this.state.content.from}</span>
             <span className="date">
-              {moment(this.state.content.timestamp).format(
-                'MMMM Do YYYY, HH:mm:ss'
-              )}
+              {moment
+                .unix(this.state.content.received)
+                .format('MMMM Do YYYY, HH:mm:ss')}
             </span>
           </div>
 
