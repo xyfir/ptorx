@@ -19,7 +19,7 @@ module.exports = async function(req, res) {
     const affiliate = await getAffiliate(
       db,
       +req.session.uid,
-      moment().format('YYYY-MM-DD HH:MM:SS')
+      moment().format('YYYY-MM-DD HH:mm:ss')
     );
     db.release();
     res.status(200).json(affiliate);
