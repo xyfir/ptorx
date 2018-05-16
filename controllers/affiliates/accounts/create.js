@@ -1,8 +1,8 @@
+const authenticate = require('lib/affiliates/authenticate');
 const request = require('superagent');
 const moment = require('moment');
 const config = require('config');
 const MySQL = require('lib/mysql');
-const auth = require('basic-auth');
 
 /*
   POST /api/affiliates/accounts
@@ -15,17 +15,11 @@ const auth = require('basic-auth');
 */
 module.exports = async function(req, res) {
   const { email, note = '' } = req.body;
-  const cred = auth(req);
   const db = new MySQL();
 
   try {
-    // Validate affiliate id / key
     await db.getConnection();
-    const rows = await db.query(
-      'SELECT user_id FROM affiliates WHERE user_id = ? AND api_key = ?',
-      [cred.name, cred.pass]
-    );
-    if (!rows.length) throw 'Invalid affiliate id and/or key';
+    const affiliate = await authenticate(db, req);
 
     // Call xyAccounts to create account
     const { body: xyAccRes } = await request
@@ -60,8 +54,9 @@ module.exports = async function(req, res) {
     await db.query(`INSERT INTO affiliate_created_users SET ? `, {
       note,
       user_id,
-      affiliate_id: cred.name
+      affiliate_id: affiliate.id
     });
+    db.release();
 
     res.status(200).json({ user_id });
   } catch (err) {
