@@ -51,7 +51,7 @@ module.exports = async function(req, res) {
       to: message.sender,
       from: row.address + '@' + row.domain,
       text: req.body.content,
-      subject: 'pxe: ' + message.subject
+      subject: 'Re: ' + message.subject
     });
 
     res.json({ error: false });
