@@ -1,4 +1,3 @@
-const clearCache = require('lib/email/clear-cache');
 const db = require('lib/db');
 
 /*
@@ -19,7 +18,6 @@ module.exports = function(req, res) {
         if (err || !result.affectedRows) {
           res.json({ error: true });
         } else {
-          rows.forEach(row => clearCache(row.id));
           res.json({ error: false });
         }
       });

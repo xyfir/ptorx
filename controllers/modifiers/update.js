@@ -1,4 +1,3 @@
-const clearCache = require('lib/email/clear-cache');
 const buildData = require('lib/modifier/build-data');
 const validate = require('lib/modifier/validate');
 const mysql = require('lib/mysql');
@@ -53,8 +52,6 @@ module.exports = async function(req, res) {
 
     const rows = await db.query(sql, vars);
     db.release();
-
-    if (!rows.length) rows.forEach(row => clearCache(row.id));
 
     res.json({ error: false, message: '' });
   } catch (err) {

@@ -1,4 +1,3 @@
-const clearCache = require('lib/email/clear-cache');
 const db = require('lib/db');
 
 /*
@@ -36,10 +35,7 @@ module.exports = function(req, res) {
             // Deleted, send emails that need their MG route updated to client
             else if (!clear) {
               res.json({ error: false, update });
-            }
-            // Deleted, clear Redis cache for emails linked to filter
-            else {
-              update.forEach(email => clearCache(email));
+            } else {
               res.json({ error: false });
             }
           });

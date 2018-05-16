@@ -1,4 +1,3 @@
-const clearCache = require('lib/email/clear-cache');
 const validate = require('lib/filter/validate');
 const db = require('lib/db');
 
@@ -66,9 +65,6 @@ module.exports = function(req, res) {
             res.json({ error: false });
           } else {
             let update = rows.map(email => email.id);
-
-            // Clear from Redis cache
-            update.forEach(email => clearCache(email));
 
             if (
               // Determine if MailGun routes need to be updated
