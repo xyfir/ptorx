@@ -1,20 +1,26 @@
-const sendSubscriptionEpirationEmails = require('jobs/cron/send-subscription-expiration-emails');
-const deleteExpiredMessages = require('jobs/cron/delete-expired-messages');
-const expireSubscriptions = require('jobs/cron/expire-subscriptions');
-
 /**
  * Sets tasks to run at appropriate times.
  */
 module.exports = function() {
   // Delete expired messages
   // Run every hour
-  setInterval(deleteExpiredMessages, 3600 * 1000);
+  setInterval(require('jobs/cron/delete-expired-messages'), 3600 * 1000);
 
   // Sends notification emails to users whose subscription is near expiration
   // Run once a day
-  setInterval(sendSubscriptionEpirationEmails, 86400 * 1000);
+  setInterval(
+    require('jobs/cron/send-subscription-expiration-emails'),
+    86400 * 1000
+  );
+
+  // Delete unpaid affiliate-created accounts
+  // Run once a day
+  setInterval(
+    require('jobs/cron/delete-unpaid-affiliate-accounts'),
+    86400 * 1000
+  );
 
   // Expires subscriptions by deleting proxy emails and their MG routes
   // Run once a day
-  setInterval(expireSubscriptions, 86400 * 1000);
+  setInterval(require('jobs/cron/expire-subscriptions'), 86400 * 1000);
 };
