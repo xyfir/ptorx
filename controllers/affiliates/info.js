@@ -30,6 +30,7 @@ module.exports = async function(req, res) {
       `,
       [req.session.uid, affiliate.last_payment, affiliate.timestamp]
     );
+    db.release();
 
     affiliate.owed = +(
       unpaid_subscriptions *
