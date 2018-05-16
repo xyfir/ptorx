@@ -43,7 +43,7 @@ module.exports = async function(req, res) {
         },
         email,
         redirect_url:
-          `${CONFIG.addresses.xyAnnotations}api/affiliate/pay` +
+          `${CONFIG.addresses.ptorx.callback}api/affiliates/pay` +
           `?payment_id=PAYMENT_ID`,
         amount: affiliate.owed * 100
       });
