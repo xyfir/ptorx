@@ -37,20 +37,13 @@ export default class SendMessage extends React.Component {
         <Navigation email={this.state.id} />
 
         <Paper zDepth={1} component="section" className="section flex">
-          <TextField
-            id="text--to"
-            ref="to"
-            type="text"
-            label="To"
-            className="md-cell"
-          />
+          <TextField id="text--to" ref="to" type="text" label="To" />
 
           <TextField
             id="text--subject"
             ref="subject"
             type="text"
             label="Subject"
-            className="md-cell"
           />
 
           <TextField
@@ -59,7 +52,6 @@ export default class SendMessage extends React.Component {
             rows={2}
             type="text"
             label="Message"
-            className="md-cell"
           />
 
           <Button

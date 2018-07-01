@@ -80,7 +80,7 @@ export default class AddDomain extends React.Component {
               ref="domain"
               type="text"
               label="Domain Name"
-              className="md-cell domain-name"
+              className="domain-name"
             />
 
             <Button
@@ -118,7 +118,6 @@ export default class AddDomain extends React.Component {
                 type="text"
                 label="Request Key"
                 value={this.state.requestKey}
-                className="md-cell"
               />
               <Button
                 primary

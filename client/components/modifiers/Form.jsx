@@ -89,7 +89,6 @@ export default class ModifierForm extends React.Component {
                 type="text"
                 label="Find"
                 helpText="The value to be replaced"
-                className="md-cell"
                 defaultValue={mod.data.value}
               />
 
@@ -99,7 +98,6 @@ export default class ModifierForm extends React.Component {
                 type="text"
                 label="Replace"
                 helpText="The value which replaces &quot;Find&quot;"
-                className="md-cell"
                 defaultValue={mod.data.with}
               />
 
@@ -117,7 +115,6 @@ export default class ModifierForm extends React.Component {
                   type="text"
                   label="Regular Expression Flags"
                   helpText="Single-character regex flags"
-                  className="md-cell"
                   defaultValue={mod.data.flags}
                 />
               ) : null}
@@ -137,7 +134,6 @@ export default class ModifierForm extends React.Component {
                 type="text"
                 label="Subject"
                 helpText="The text to replace an email subject with"
-                className="md-cell"
                 defaultValue={mod.data}
               />
             </Paper>
@@ -156,7 +152,6 @@ export default class ModifierForm extends React.Component {
                 type="text"
                 label="Subject Tag"
                 helpText="The value to append or prepend to an email subject"
-                className="md-cell"
                 defaultValue={mod.data.value}
               />
 
@@ -184,7 +179,7 @@ export default class ModifierForm extends React.Component {
                   `versa if "Prepend"`
                 }
                 position={SelectField.Positions.BELOW}
-                className="md-cell"
+                className="md-full-width"
                 menuItems={[
                   { value: 'from', label: 'Sender' },
                   { value: 'subject', label: 'Subject' },
@@ -201,7 +196,6 @@ export default class ModifierForm extends React.Component {
                 type="text"
                 label="Separator"
                 helpText="Separates &quot;Add&quot; and &quot;To&quot;"
-                className="md-cell"
                 defaultValue={mod.data.separator}
               />
 
@@ -216,7 +210,7 @@ export default class ModifierForm extends React.Component {
                 ref={i => (this._to = i)}
                 label="To"
                 position={SelectField.Positions.ABOVE}
-                className="md-cell"
+                className="md-full-width"
                 menuItems={[
                   { value: 'subject', label: 'Subject' },
                   { value: 'body-html', label: 'Email Body (HTML)' },
@@ -240,7 +234,7 @@ export default class ModifierForm extends React.Component {
                 label="Target"
                 helpText="The field to build the value for"
                 position={SelectField.Positions.BELOW}
-                className="md-cell"
+                className="md-full-width"
                 menuItems={[
                   { value: 'subject', label: 'Subject' },
                   { value: 'body-html', label: 'Email Body (HTML)' },
@@ -256,7 +250,6 @@ export default class ModifierForm extends React.Component {
                 type="text"
                 label="Value"
                 helpText="Sets the value of the target field; see help docs"
-                className="md-cell"
                 defaultValue={mod.data.value}
               />
             </Paper>
@@ -273,7 +266,7 @@ export default class ModifierForm extends React.Component {
             value={this.state.type}
             onChange={type => this.setState({ type })}
             position={SelectField.Positions.BELOW}
-            className="md-cell"
+            className="md-full-width"
             menuItems={Object.keys(creatableModifierTypes).map(k =>
               Object({ label: creatableModifierTypes[k], value: +k })
             )}
@@ -284,7 +277,6 @@ export default class ModifierForm extends React.Component {
             ref={i => (this._name = i)}
             type="text"
             label="Name"
-            className="md-cell"
             defaultValue={mod.name}
           />
 
@@ -293,7 +285,6 @@ export default class ModifierForm extends React.Component {
             ref={i => (this._description = i)}
             type="text"
             label="Description"
-            className="md-cell"
             defaultValue={mod.description}
           />
         </Paper>

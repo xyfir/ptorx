@@ -72,7 +72,6 @@ export default class ViewMessage extends React.Component {
               rows={2}
               type="text"
               label="Message"
-              className="md-cell"
             />
 
             <Button

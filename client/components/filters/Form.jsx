@@ -52,7 +52,6 @@ export default class FilterForm extends React.Component {
             type="text"
             label="Header Name"
             helpText="The header to look for; cannot be a regular expression"
-            className="md-cell"
             defaultValue={find[0]}
           />
 
@@ -62,7 +61,6 @@ export default class FilterForm extends React.Component {
             type="text"
             label="Header Value"
             helpText="The value within the header value to look for"
-            className="md-cell"
             defaultValue={find[1]}
           />
         </div>
@@ -75,7 +73,6 @@ export default class FilterForm extends React.Component {
           type="text"
           label="Find"
           helpText="The value to search for in an email"
-          className="md-cell"
           defaultValue={filter.find}
         />
       );
@@ -90,7 +87,7 @@ export default class FilterForm extends React.Component {
             value={this.state.type}
             onChange={type => this.setState({ type })}
             position={SelectField.Positions.BELOW}
-            className="md-cell"
+            className="md-full-width"
             menuItems={Object.keys(filterTypes).map(k =>
               Object({ label: filterTypes[k], value: +k })
             )}
@@ -101,7 +98,6 @@ export default class FilterForm extends React.Component {
             ref="name"
             type="text"
             label="Name"
-            className="md-cell"
             defaultValue={filter.name}
           />
 
@@ -110,7 +106,6 @@ export default class FilterForm extends React.Component {
             ref="description"
             type="text"
             label="Description"
-            className="md-cell"
             defaultValue={filter.description}
           />
 

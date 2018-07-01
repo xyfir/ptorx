@@ -192,7 +192,6 @@ export default class ViewDomain extends React.Component {
               ref="requestKey"
               type="text"
               label="Request Key"
-              className="md-cell"
             />
 
             <TextField
@@ -201,7 +200,6 @@ export default class ViewDomain extends React.Component {
               type="text"
               label="Label"
               helpText="A name for the user you are adding"
-              className="md-cell"
             />
 
             <Button

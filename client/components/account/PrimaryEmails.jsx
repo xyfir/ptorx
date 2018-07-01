@@ -79,7 +79,6 @@ export default class PrimaryEmails extends React.Component {
             ref={i => (this._email = i)}
             type="email"
             label="Email"
-            className="md-cell"
           />
           <Button icon iconChildren="add" onClick={() => this.onAddEmail()} />
         </div>
