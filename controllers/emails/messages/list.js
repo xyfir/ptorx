@@ -1,7 +1,7 @@
 const mysql = require('lib/mysql');
 
 /*
-  GET api/emails/:email/messages
+  GET /api/emails/:email/messages
   OPTIONAL
     type: number
   RETURN
@@ -22,15 +22,16 @@ module.exports = async function(req, res) {
     await db.getConnection();
     const messages = await db.query(
       `
-      SELECT
-        m.id, m.received, m.subject
-      FROM
-        messages AS m, proxy_emails AS pxe
-      WHERE
-        m.email_id = pxe.email_id AND m.type = ? AND
-        m.received + 255600 > UNIX_TIMESTAMP() AND
-        pxe.email_id = ? AND pxe.user_id = ?
-    `,
+        SELECT
+          m.id, m.received, m.subject
+        FROM
+          messages AS m, proxy_emails AS pxe
+        WHERE
+          m.email_id = pxe.email_id AND m.type = ? AND
+          m.received + 255600 > UNIX_TIMESTAMP() AND
+          pxe.email_id = ? AND pxe.user_id = ?
+        ORDER BY m.received DESC
+      `,
       [req.query.type, req.params.email, req.session.uid]
     );
     db.release();
