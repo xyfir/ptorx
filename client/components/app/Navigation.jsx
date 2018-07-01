@@ -28,6 +28,8 @@ export default class AppNavigation extends React.Component {
 
   /** @return {JSX.Element[]} */
   _renderDrawerNavItems() {
+    const { App } = this.props;
+
     return [
       <a href="#/emails/list">
         <ListItem leftIcon={<FontIcon>email</FontIcon>} primaryText="Emails" />
@@ -63,6 +65,16 @@ export default class AppNavigation extends React.Component {
               primaryText="Manage"
             />
           </a>,
+          App.state.account.affiliate ? (
+            <a href="/affiliate">
+              <ListItem
+                leftIcon={<FontIcon>attach_money</FontIcon>}
+                primaryText="Affiliate"
+              />
+            </a>
+          ) : (
+            <a />
+          ),
           <a href="#/account/primary-emails">
             <ListItem
               leftIcon={<FontIcon>email</FontIcon>}
