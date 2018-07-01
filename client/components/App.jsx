@@ -191,7 +191,7 @@ class App extends React.Component {
               <Button
                 icon
                 iconChildren="info"
-                href="#/docs?section=free-trial"
+                href="#/docs/help?section=free-trial"
               />
             </p>
           ) : null}
