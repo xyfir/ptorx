@@ -1,11 +1,11 @@
 const request = require('superagent');
-const crypto = require('lib/crypto');
+const Cryptr = require('cryptr');
+const config = require('config');
+const cryptr = new Cryptr(config.keys.accessToken);
 const MySQL = require('lib/mysql');
 
-const config = require('config');
-
 /*
-  GET api/account
+  GET /api/account
   REQUIRED
     token: string
   RETURN
@@ -34,9 +34,7 @@ module.exports = async function(req, res) {
     // Validate access token
     if (req.query.token) {
       // [user_id, access_token]
-      const token = crypto
-        .decrypt(req.query.token, config.keys.accessToken)
-        .split('-');
+      const token = cryptr.decrypt(req.query.token).split('-');
 
       // Invalid token
       if (!token[0] || !token[1]) throw 'Invalid token 1';

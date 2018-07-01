@@ -1,12 +1,12 @@
 const request = require('superagent');
-const crypto = require('lib/crypto');
+const Cryptr = require('cryptr');
+const config = require('config');
+const cryptr = new Cryptr(config.keys.accessToken);
 const moment = require('moment');
 const MySQL = require('lib/mysql');
 
-const config = require('config');
-
 /*
-  POST api/account/login
+  POST /api/account/login
   REQUIRED
     xid: string, auth: string
   OPTIONAL
@@ -92,9 +92,8 @@ module.exports = async function(req, res) {
 
       res.json({
         error: false,
-        accessToken: crypto.encrypt(
-          result.insertId + '-' + xaccResult.body.accessToken,
-          config.keys.accessToken
+        accessToken: cryptr.encrypt(
+          result.insertId + '-' + xaccResult.body.accessToken
         )
       });
     }
@@ -114,9 +113,8 @@ module.exports = async function(req, res) {
 
       res.json({
         error: false,
-        accessToken: crypto.encrypt(
-          rows[0].user_id + '-' + xaccResult.body.accessToken,
-          config.keys.accessToken
+        accessToken: cryptr.encrypt(
+          rows[0].user_id + '-' + xaccResult.body.accessToken
         )
       });
     }
