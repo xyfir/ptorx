@@ -89,7 +89,8 @@ export default class EmailForm extends React.Component {
       const a = Object.assign({}, mods[i]);
       const b = Object.assign({}, mods[i + 1]);
 
-      (mods[i] = b), (mods[i + 1] = a);
+      mods[i] = b;
+      mods[i + 1] = a;
 
       this.setState({ modifiers: mods });
     }
@@ -109,7 +110,8 @@ export default class EmailForm extends React.Component {
       const a = Object.assign({}, mods[i]);
       const b = Object.assign({}, mods[i - 1]);
 
-      (mods[i] = b), (mods[i - 1] = a);
+      mods[i] = b;
+      mods[i - 1] = a;
 
       this.setState({ modifiers: mods });
     }
@@ -182,16 +184,16 @@ export default class EmailForm extends React.Component {
       directForward: window['checkbox--direct-forward'].checked
     };
 
-    data.name = data.name || 'Untitled';
+    data.name = data.name || 'Untitled Custom Proxy Email';
 
     if (this.props.create) {
-      (data.domain = this._domain.state.value),
-        (data.address = this._address.value
-          ? this._address.value.split('@')[0]
-          : ''),
-        (data.description =
-          data.description ||
-          'Created on ' + moment().format('YYYY-MM-DD, HH:mm:ss'));
+      data.domain = this._domain.state.value;
+      data.address = this._address.value
+        ? this._address.value.split('@')[0]
+        : '';
+      data.description =
+        data.description ||
+        'Created on ' + moment().format('YYYY-MM-DD, HH:mm:ss');
     }
 
     if (this.props.recaptcha) {
@@ -309,7 +311,6 @@ export default class EmailForm extends React.Component {
             label="Name"
             helpText={'(optional) Give your email a name to find it easier'}
             maxLength={40}
-            className="md-cell"
             defaultValue={email.name}
           />
 
@@ -322,12 +323,11 @@ export default class EmailForm extends React.Component {
               '(optional) Give your email a description to find it easier'
             }
             maxLength={150}
-            className="md-cell"
             defaultValue={email.description}
           />
 
           {this.props.create ? (
-            <div className="address flex">
+            <React.Fragment>
               <TextField
                 id="text--address"
                 ref={i => (this._address = i)}
@@ -341,22 +341,22 @@ export default class EmailForm extends React.Component {
                 onChange={() => this.onCheckAddress()}
                 errorText="Address is not available"
                 maxLength={64}
-                className="md-cell"
               />
 
               <SelectField
                 id="select--domain"
                 ref={i => (this._domain = i)}
                 label="Domain"
+                helpText={'The domain your proxy email will use'}
                 position={SelectField.Positions.BELOW}
                 onChange={v => this.onCheckAddress(v)}
-                className="md-cell"
+                className="md-full-width"
                 menuItems={this.props.data.domains.map(d =>
                   Object({ label: `@${d.domain}`, value: d.id })
                 )}
                 defaultValue={email.domain}
               />
-            </div>
+            </React.Fragment>
           ) : null}
 
           <SelectField
@@ -368,7 +368,7 @@ export default class EmailForm extends React.Component {
               'Your real email that messages sent to your Ptorx address ' +
               'will be redirected to'
             }
-            className="md-cell"
+            className="md-full-width"
             menuItems={this.props.data.account.emails.map(e => e.address)}
             defaultValue={
               email.toEmail || this.props.data.account.emails[0].address
