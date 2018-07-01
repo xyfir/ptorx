@@ -1,6 +1,6 @@
 {
   "name": "ptorx",
-  "version": "4.20.0",
+  "version": "4.21.0",
   "description": "",
   "main": "app.js",
   "scripts": {
@@ -12,7 +12,7 @@
     "build:css:affiliate": "node-sass client/styles/affiliate.scss static/css/affiliate.css --output-style compressed"
   },
   "author": "Xyfir",
-  "license": "ISC",
+  "license": "UNLICENSED",
   "prettier": {
     "singleQuote": true
   },
@@ -22,27 +22,27 @@
     "basic-auth": "^2.0.0",
     "body-parser": "^1.18.3",
     "copyr": "^1.0.5",
+    "cryptr": "^4.0.0",
     "escape-string-regexp": "^1.0.5",
     "express": "^4.16.3",
-    "express-mysql-session": "^1.3.0",
+    "express-mysql-session": "^2.0.0",
     "express-session": "^1.15.6",
-    "fuse.js": "^3.2.0",
+    "fuse.js": "^3.2.1",
     "mailcomposer": "^4.0.2",
-    "mailgun-js": "^0.18.0",
-    "marked": "^0.3.19",
-    "moment": "^2.22.1",
-    "multer": "^1.3.0",
+    "mailgun-js": "^0.19.0",
+    "marked": "^0.4.0",
+    "moment": "^2.22.2",
+    "multer": "^1.3.1",
     "mysql": "^2.15.0",
-    "prop-types": "^15.6.1",
-    "react": "^16.3.2",
-    "react-dom": "^16.3.2",
-    "react-md": "^1.3.1",
-    "redux": "^3.7.2",
+    "prop-types": "^15.6.2",
+    "react": "^16.4.1",
+    "react-dom": "^16.4.1",
+    "react-md": "^1.4.1",
     "rword": "^2.2.0",
     "superagent": "^3.8.3",
     "sweetalert": "^2.1.0",
-    "typed.js": "^2.0.6",
-    "uuid": "^3.2.1"
+    "typed.js": "^2.0.8",
+    "uuid": "^3.3.2"
   },
   "devDependencies": {
     "babel-core": "^6.26.3",
@@ -52,7 +52,7 @@
     "babel-preset-react": "^6.24.1",
     "compression-webpack-plugin": "^1.1.11",
     "node-sass": "^4.9.0",
-    "prettier": "^1.12.1",
-    "webpack": "^4.8.3"
+    "prettier": "^1.13.7",
+    "webpack": "^4.14.0"
   }
 }
