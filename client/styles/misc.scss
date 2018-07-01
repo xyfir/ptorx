@@ -13,12 +13,6 @@ div.email-form {
     width: calc(100% - 2em);
   }
 
-  > section.main-form {
-    > div.address {
-      width: 100%;
-    }
-  }
-
   > section.checkboxes {
     display: flex;
     flex-wrap: wrap;
