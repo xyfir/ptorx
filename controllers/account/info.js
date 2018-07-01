@@ -11,6 +11,7 @@ const MySQL = require('lib/mysql');
   RETURN
     {
       loggedIn: boolean, subscription?: number, uid?: number, trial?: boolean,
+      affiliate?: boolean,
       referral?: {
         type?: string, [type]?: string|number, data?: object,
         hasMadePurchase?: boolean
@@ -39,12 +40,12 @@ module.exports = async function(req, res) {
       // Invalid token
       if (!token[0] || !token[1]) throw 'Invalid token 1';
 
-      (sql = `
-        SELECT xyfir_id, subscription, referral, trial, admin
+      sql = `
+        SELECT xyfir_id, subscription, referral, trial, admin, affiliate
         FROM users WHERE user_id = ?
-      `),
-        (vars = [token[0]]),
-        (rows = await db.query(sql, vars));
+      `;
+      vars = [token[0]];
+      rows = await db.query(sql, vars);
 
       if (!rows.length) throw 'User does not exist';
 
@@ -59,35 +60,37 @@ module.exports = async function(req, res) {
 
       if (xaccResult.body.error) throw 'Invalid token 2';
 
-      (uid = token[0]), (row = rows[0]);
+      uid = token[0];
+      row = rows[0];
     }
     // Get info for dev user
     else if (config.environment.type == 'development') {
-      (sql = `
-        SELECT subscription, referral, trial, admin FROM users
+      sql = `
+        SELECT subscription, referral, trial, admin, affiliate FROM users
         WHERE user_id = 1
-      `),
-        (rows = await db.query(sql));
+      `;
+      rows = await db.query(sql);
 
-      (uid = 1), (row = rows[0]);
+      uid = 1;
+      row = rows[0];
     }
     // Force login
     else {
       throw 'Forcing login';
     }
 
-    (sql = `
+    sql = `
       SELECT email_id as id, address FROM primary_emails WHERE user_id = ?
-    `),
-      (vars = [uid]);
+    `;
+    vars = [uid];
 
     const emails = await db.query(sql, vars);
     db.release();
 
     // Set session, return account info
-    (req.session.uid = uid),
-      (req.session.admin = !!row.admin),
-      (req.session.subscription = row.subscription);
+    req.session.uid = uid;
+    req.session.admin = !!row.admin;
+    req.session.subscription = row.subscription;
 
     res.json({
       loggedIn: true,
@@ -95,7 +98,8 @@ module.exports = async function(req, res) {
       emails,
       subscription: row.subscription,
       referral: JSON.parse(row.referral),
-      trial: !!row.trial
+      trial: !!row.trial,
+      affiliate: !!row.affiliate
     });
   } catch (err) {
     db.release();
