@@ -21,8 +21,11 @@ import Filters from 'components/filters/Index';
 import Emails from 'components/emails/Index';
 
 // Modules
-import setState from 'lib/set-state';
+import getView from 'lib/get-view';
 import query from 'lib/parse-query-string';
+
+// Actions
+import { changeView } from 'actions/creators/index';
 
 // Constants
 import { XACC, LOG_STATE, ENVIRONMENT } from 'constants/config';
@@ -99,7 +102,7 @@ class App extends React.Component {
           this.state = state;
 
           // Set state based on current url hash
-          setState(store);
+          store.dispatch(changeView(getView(state)));
 
           // Update state according to url hash
           window.onhashchange = () => {
@@ -107,7 +110,7 @@ class App extends React.Component {
             // `#${route}` -> `#/${route}`
             if (location.hash.indexOf('#/') != 0)
               return (location.hash = '#/' + location.hash.substr(1));
-            setState(store);
+            store.dispatch(changeView(getView(state)));
           };
         })
         .catch(err => swal('Error', err, 'error'));
