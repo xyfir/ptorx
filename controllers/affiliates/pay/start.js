@@ -1,7 +1,7 @@
 const getAffiliate = require('lib/affiliates/get');
 const request = require('superagent');
 const CONFIG = require('config');
-const MySQL = require('lib/MySQL');
+const MySQL = require('lib/mysql');
 
 /*
   POST /api/affiliates/pay
