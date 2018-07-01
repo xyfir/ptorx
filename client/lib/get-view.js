@@ -8,7 +8,8 @@ import * as VIEWS from 'constants/views';
  */
 export default function(state) {
   // Hash is empty or not set
-  if (location.hash.length < 2) return VIEWS.CREATE_REDIRECT_EMAIL;
+  if (location.hash.length < 2)
+    return localStorage.defaultView || VIEWS.CREATE_REDIRECT_EMAIL;
 
   const hash = location.hash
     .substr(2)
@@ -79,6 +80,6 @@ export default function(state) {
     case 'quick-search':
       return VIEWS.QUICK_SEARCH;
     default:
-      return VIEWS.CREATE_REDIRECT_EMAIL;
+      return localStorage.defaultView || VIEWS.CREATE_REDIRECT_EMAIL;
   }
 }
