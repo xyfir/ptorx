@@ -120,10 +120,22 @@ export default class AppNavigation extends React.Component {
               id="menu--create-item"
               menuItems={[
                 <Subheader primaryText="Create a new:" />,
+                App.state.account.trial ||
+                !App.state.account.emails.length ||
+                App.state.view == 'EMAILS/CREATE' ? (
+                  <a />
+                ) : (
+                  <a href="#/emails/create?instant=1">
+                    <ListItem
+                      leftIcon={<FontIcon>email</FontIcon>}
+                      primaryText="Email (Instant)"
+                    />
+                  </a>
+                ),
                 <a href="#/emails/create">
                   <ListItem
                     leftIcon={<FontIcon>email</FontIcon>}
-                    primaryText="Email"
+                    primaryText="Email (Custom)"
                   />
                 </a>,
                 <a href="#/filters/create">

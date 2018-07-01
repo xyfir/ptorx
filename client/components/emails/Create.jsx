@@ -1,4 +1,5 @@
 import request from 'superagent';
+import moment from 'moment';
 import React from 'react';
 import swal from 'sweetalert';
 
@@ -22,7 +23,7 @@ export default class CreateEmail extends React.Component {
     const { App } = this.props;
     const q = query(location.hash);
 
-    // Load data from email with id q.duplicate
+    // Load data to prefill form from email
     if (q.duplicate) {
       const email = App.state.emails.find(e => e.id == q.duplicate);
 
@@ -30,8 +31,6 @@ export default class CreateEmail extends React.Component {
 
       const domain = email.address.split('@')[1];
       email.domain = App.state.domains.find(d => d.domain == domain).id;
-
-      console.log('email', email);
 
       request.get('/api/emails/' + q.duplicate).end((err, res) => {
         if (!err && !res.body.error) {
@@ -42,7 +41,25 @@ export default class CreateEmail extends React.Component {
           });
         }
       });
-    } else {
+    }
+    // Instantly create a new proxy email without showing form
+    else if (q.instant) {
+      this.onSubmit({
+        to: App.state.account.emails[0].id,
+        name: 'Untitled Instant Proxy Email',
+        domain: 1,
+        address: '',
+        filters: '',
+        saveMail: false,
+        modifiers: '',
+        description: 'Created on ' + moment().format('YYYY-MM-DD, HH:mm:ss'),
+        noToAddress: false,
+        noSpamFilter: false,
+        directForward: false
+      });
+    }
+    // Load form as normal
+    else {
       this.setState({ loading: false });
     }
   }
