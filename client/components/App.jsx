@@ -6,10 +6,6 @@ import request from 'superagent';
 import React from 'react';
 import swal from 'sweetalert';
 
-// Redux store / reducers
-import { createStore } from 'redux';
-import reducers from 'reducers/index';
-
 // Components
 import Documentation from 'components/misc/Documentation';
 import QuickSearch from 'components/app/QuickSearch';
@@ -23,6 +19,7 @@ import Emails from 'components/emails/Index';
 // Modules
 import getView from 'lib/get-view';
 import query from 'lib/parse-query-string';
+import store from 'lib/store';
 
 // Actions
 import { changeView } from 'actions/creators/index';
@@ -32,17 +29,12 @@ import { XACC, LOG_STATE, ENVIRONMENT } from 'constants/config';
 import { CREATE_REDIRECT_EMAIL, QUICK_SEARCH } from 'constants/views';
 import { INITIALIZE_STATE } from 'actions/types/index';
 
-const store = createStore(reducers);
-
 class App extends React.Component {
   constructor(props) {
     super(props);
 
-    store.subscribe(() => this.setState(store.getState()));
-
-    if (LOG_STATE) {
-      store.subscribe(() => console.log(store.getState()));
-    }
+    store.subscribe(state => this.setState(state));
+    if (LOG_STATE) store.subscribe(state => console.log(state));
 
     const initialize = () => {
       // Access token is generated upon a successful login
