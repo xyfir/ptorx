@@ -19,7 +19,7 @@ export default class CreateEmail extends React.Component {
     this.state = { loading: true };
   }
 
-  componentWillMount() {
+  componentDidMount() {
     const { App } = this.props;
     const q = query(location.hash);
 

@@ -25,7 +25,7 @@ export default class ViewDomain extends React.Component {
     this._loadDomain = this._loadDomain.bind(this);
   }
 
-  componentWillMount() {
+  componentDidMount() {
     this._loadDomain();
   }
 

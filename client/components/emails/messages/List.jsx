@@ -32,8 +32,9 @@ export default class MessageList extends React.Component {
     this._loadMessages(this.state.type);
   }
 
-  componentWillUpdate(props, state) {
-    if (this.state.type != state.type) this._loadMessages(state.type);
+  componentDidUpdate(prevProps, prevState) {
+    const { type } = this.state;
+    if (type != prevState.type) this._loadMessages(type);
   }
 
   onDelete() {

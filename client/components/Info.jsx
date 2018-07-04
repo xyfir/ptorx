@@ -25,7 +25,7 @@ class PtorxInfo extends React.Component {
     this.state = { drawer: false, loggedIn: false };
   }
 
-  componentWillMount() {
+  componentDidMount() {
     const q = query(location.href); // in hash or search
 
     for (let k in q) localStorage[k] = q[k];

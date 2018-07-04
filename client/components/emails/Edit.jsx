@@ -25,7 +25,7 @@ export default class EditEmail extends React.Component {
     };
   }
 
-  componentWillMount() {
+  componentDidMount() {
     const email = this.props.data.emails.find(e => e.id == this.state.id);
 
     if (!email) location.href = '#/emails/list';

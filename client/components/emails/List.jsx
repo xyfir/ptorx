@@ -25,7 +25,7 @@ export default class EmailList extends React.Component {
     };
   }
 
-  componentWillMount() {
+  componentDidMount() {
     if (this.props.data.emails.length == 0) {
       request
         .get('/api/emails')

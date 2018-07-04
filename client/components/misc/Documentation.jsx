@@ -12,7 +12,7 @@ export default class Documentation extends React.Component {
     this.state = { content: '', loading: true };
   }
 
-  componentWillMount() {
+  componentDidMount() {
     request
       .get(
         `https://api.github.com/repos/Xyfir/Documentation/contents/` +
