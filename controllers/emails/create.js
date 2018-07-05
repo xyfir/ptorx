@@ -151,14 +151,11 @@ module.exports = async function(req, res) {
     const id = dbRes.insertId;
 
     // Build MailGun route expression(s)
-    const expression = await buildExpression(
-      {
-        saveMail: data.save_mail,
-        address: data.address + '@' + domain,
-        filters
-      },
-      db
-    );
+    const expression = await buildExpression(db, {
+      saveMail: data.save_mail,
+      address: data.address + '@' + domain,
+      filters
+    });
 
     // Build Mailgun route action(s)
     const action = buildAction(

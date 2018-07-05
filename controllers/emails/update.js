@@ -89,10 +89,11 @@ module.exports = async function(req, res) {
     if (!dbRes.affectedRows) throw 'An unknown error occured';
 
     // Build Mailgun route expression(s)
-    const expression = await buildExpression(
-      { address, filters, saveMail },
-      db
-    );
+    const expression = await buildExpression(db, {
+      address,
+      filters,
+      saveMail
+    });
 
     // Build Mailgun route action(s)
     const action = buildAction(
