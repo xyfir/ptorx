@@ -1,12 +1,12 @@
 const escapeRegExp = require('escape-string-regexp');
 const saveMessage = require('lib/email/save-message');
-const getInfo = require('lib/email/get-info');
 const request = require('superagent');
 const MailGun = require('mailgun-js');
 const config = require('config');
+const MySQL = require('lib/mysql');
 
 /*
-  POST api/receive/:email
+  POST /api/receive/:email
   REQUIRED
     from: string, // 'user@domain' OR 'Sender Name <user@domain>'
     sender: string, // Always 'user@domain'
@@ -24,28 +24,96 @@ const config = require('config');
     Messages are then modified via modifiers
 */
 module.exports = async function(req, res) {
+  const db = new MySQL();
+
   try {
+    const emailId = +req.params.email;
     const email = req.body;
     const save = !!email['message-url'];
 
-    (email.senderDomain = email.sender.split('@')[1]),
-      (email.proxyDomain = email.recipient.split('@')[1]),
-      (email.senderName = email.from.match(/^(.+) <(.+)>$/));
+    email.senderDomain = email.sender.split('@')[1];
+    email.proxyDomain = email.recipient.split('@')[1];
+    email.senderName = email.from.match(/^(.+) <(.+)>$/);
 
     if (email.senderName) {
-      (email.originalSender = email.senderName[2]),
-        (email.senderName = email.senderName[1]);
+      email.originalSender = email.senderName[2];
+      email.senderName = email.senderName[1];
     } else {
-      (email.originalSender = email.sender), (email.senderName = '');
+      email.originalSender = email.sender;
+      email.senderName = '';
     }
 
     const headers = {};
     JSON.parse(email['message-headers']).forEach(h => (headers[h[0]] = h[1]));
-
     const isEmailSpam = headers['X-Mailgun-Sflag'] == 'Yes';
 
-    // Get primary email / filters / modifiers
-    const data = await getInfo(req.params.email, save);
+    // Get needed proxy email data
+    const data = { to: '', filters: [], modifiers: [], spamFilter: false };
+
+    // Grab primary_email_id address
+    await db.getConnection();
+    let rows = await db.query(
+      `
+        SELECT
+          pme.address AS address, pxe.spam_filter AS spamFilter
+        FROM
+          primary_emails AS pme, proxy_emails AS pxe
+        WHERE
+          pxe.email_id = ?
+          AND pme.email_id = pxe.primary_email_id
+      `,
+      [emailId]
+    );
+
+    if (!rows.length) throw 'Email does not exist';
+
+    data.to = rows[0].address; // will be empty string if primary_email_id = 0
+    data.spamFilter = rows[0].spamFilter;
+
+    // Grab all filters
+    // pass is set to 1 if MailGun already validated
+    data.filters = rows = await db.query(
+      `
+        SELECT
+          type, find, accept_on_match AS acceptOnMatch,
+          use_regex AS regex, IF(
+            ${save ? 0 : 1} = 1
+            AND accept_on_match = 1
+            AND type IN (1, 2, 3, 6),
+            1, 0
+          ) AS pass
+        FROM filters WHERE filter_id IN (
+          SELECT filter_id FROM linked_filters WHERE email_id = ?
+        )
+      `,
+      [emailId]
+    );
+
+    // Load modifiers
+    rows = await db.query(
+      `
+        SELECT
+          modifiers.type, modifiers.data
+        FROM
+          modifiers, linked_modifiers
+        WHERE
+          modifiers.modifier_id = linked_modifiers.modifier_id
+          AND linked_modifiers.email_id = ?
+        ORDER BY
+          linked_modifiers.order_number
+      `,
+      [emailId]
+    );
+    db.release();
+
+    // Parse modifier.data if it's a JSON string
+    data.modifiers = rows.map(mod => ({
+      type: mod.type,
+      data:
+        mod.data[0] == '{' && mod.data.slice(-1) == '}'
+          ? JSON.parse(mod.data)
+          : mod.data
+    }));
 
     // Save mail as spam and quit
     if (data.spamFilter && isEmailSpam) {
@@ -111,8 +179,7 @@ module.exports = async function(req, res) {
         // Optionally save as rejected message
         if (save) saveMessage(req, 1);
 
-        res.status(200).send();
-        return;
+        return res.status(200).send();
       }
     }
 
@@ -265,6 +332,7 @@ module.exports = async function(req, res) {
 
     res.status(200).send();
   } catch (err) {
+    db.release();
     res.status(406).send();
   }
 };
