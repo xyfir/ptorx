@@ -1,14 +1,15 @@
 const validateModifiers = require('lib/email/validate-modifiers');
 const buildExpression = require('lib/mg-route/build-expression');
 const validateFilters = require('lib/email/validate-filters');
+const requireCredits = require('lib/user/require-credits');
 const buildAction = require('lib/mg-route/build-action');
 const validate = require('lib/email/validate');
 const MailGun = require('mailgun-js');
 const config = require('config');
-const mysql = require('lib/mysql');
+const MySQL = require('lib/mysql');
 
 /*
-  PUT api/emails/:email
+  PUT /api/emails/:email
   REQUIRED
     name: string, description: string, filters: string,
     modifiers: string, to: number
@@ -21,12 +22,13 @@ const mysql = require('lib/mysql');
     Updates a redirect email, linked entries, and MailGun route
 */
 module.exports = async function(req, res) {
-  const db = new mysql();
+  const db = new MySQL();
 
   try {
     validate(req.body, req.session.subscription);
 
     await db.getConnection();
+    await requireCredits(db, +req.session.uid);
 
     let sql = `
       SELECT
@@ -68,22 +70,22 @@ module.exports = async function(req, res) {
     const saveMail = req.body.saveMail || !req.body.to;
 
     // Update values in proxy_emails
-    (sql = `
+    sql = `
       UPDATE proxy_emails SET
         primary_email_id = ?, name = ?,
         description = ?, save_mail = ?,
         direct_forward = ?, spam_filter = ?
       WHERE email_id = ?
-    `),
-      (vars = [
-        req.body.noToAddress ? 0 : req.body.to,
-        req.body.name,
-        req.body.description,
-        saveMail,
-        req.body.directForward,
-        !req.body.noSpamFilter,
-        req.params.email
-      ]);
+    `;
+    vars = [
+      req.body.noToAddress ? 0 : req.body.to,
+      req.body.name,
+      req.body.description,
+      saveMail,
+      req.body.directForward,
+      !req.body.noSpamFilter,
+      req.params.email
+    ];
     let dbRes = await db.query(sql, vars);
 
     if (!dbRes.affectedRows) throw 'An unknown error occured';
@@ -116,36 +118,36 @@ module.exports = async function(req, res) {
     });
 
     // Delete all filters
-    (sql = `
+    sql = `
       DELETE FROM linked_filters WHERE email_id = ?
-    `),
-      (vars = [req.params.email]),
-      (dbRes = await db.query(sql, vars));
+    `;
+    vars = [req.params.email];
+    dbRes = await db.query(sql, vars);
 
     // Delete all modifiers since the order may have changed
-    (sql = `
+    sql = `
       DELETE FROM linked_modifiers WHERE email_id = ?
-    `),
-      (vars = [req.params.email]),
-      (dbRes = await db.query(sql, vars));
+    `;
+    vars = [req.params.email];
+    dbRes = await db.query(sql, vars);
 
     // Insert modifiers
     if (modifiers.length) {
-      (sql =
+      sql =
         'INSERT INTO linked_modifiers ' +
         '(modifier_id, email_id, order_number) VALUES ' +
         modifiers
           .map((m, i) => `('${m}', '${+req.params.email}', '${i}')`)
-          .join(', ')),
-        (dbRes = await db.query(sql));
+          .join(', ');
+      dbRes = await db.query(sql);
     }
 
     // Insert filters
     if (filters.length) {
-      (sql =
+      sql =
         'INSERT INTO linked_filters (filter_id, email_id) VALUES ' +
-        filters.map(f => `('${f}', '${+req.params.email}')`).join(', ')),
-        (dbRes = await db.query(sql));
+        filters.map(f => `('${f}', '${+req.params.email}')`).join(', ');
+      dbRes = await db.query(sql);
     }
 
     db.release();
