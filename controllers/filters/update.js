@@ -1,46 +1,42 @@
+const requireCredits = require('lib/user/require-credits');
 const validate = require('lib/filter/validate');
-const db = require('lib/db');
+const MySQL = require('lib/mysql');
 
 /*
-    PUT api/filters/:filter
-    REQUIRED
-        type: number, name: string, description: string, find: string
-    OPTIONAL
-        acceptOnMatch: boolean, useRegex: boolean
-    RETURN
-        { error: boolean, message?: string, update?: number[] }
-    DESCRIPTION
-        Update a filter's data
+  PUT /api/filters/:filter
+  REQUIRED
+    type: number, name: string, description: string, find: string
+  OPTIONAL
+    acceptOnMatch: boolean, useRegex: boolean
+  RETURN
+    { message?: string, update?: number[] }
 */
-module.exports = function(req, res) {
-  let response = validate(req.body);
+module.exports = async function(req, res) {
+  const db = new MySQL();
 
-  if (response != 'ok') {
-    res.json({ error: true, message: response });
-    return;
-  }
+  try {
+    const valid = validate(req.body);
+    if (valid != 'ok') throw valid;
 
-  let sql = `
-        SELECT type, accept_on_match as acceptOnMatch FROM filters
+    await db.getConnection();
+    await requireCredits(db, +req.session.uid);
+
+    const [filter] = await db.query(
+      `
+        SELECT type, accept_on_match AS acceptOnMatch FROM filters
         WHERE filter_id = ? AND user_id = ?
-    `;
+      `,
+      [req.params.filter, req.session.uid]
+    );
+    if (!filter) throw 'Could not find filter';
 
-  db(cn =>
-    cn.query(sql, [req.params.filter, req.session.uid], (err, rows) => {
-      if (err || !rows.length) {
-        cn.release();
-        res.json({ error: true, message: 'An unknown error occured' });
-        return;
-      }
-
-      const data = rows[0];
-
-      sql = `
-            UPDATE filters SET name = ?, description = ?, type = ?, find = ?,
-            accept_on_match = ?, use_regex = ?
-            WHERE filter_id = ?
-        `;
-      let vars = [
+    const result = await db.query(
+      `
+        UPDATE filters SET name = ?, description = ?, type = ?, find = ?,
+        accept_on_match = ?, use_regex = ?
+        WHERE filter_id = ?
+      `,
+      [
         req.body.name,
         req.body.description,
         req.body.type,
@@ -48,35 +44,33 @@ module.exports = function(req, res) {
         !!+req.body.acceptOnMatch,
         !!+req.body.useRegex,
         req.params.filter
-      ];
+      ]
+    );
+    if (!result.affectedRows) throw 'Could not update filter';
 
-      cn.query(sql, vars, (err, result) => {
-        if (err || !result.affectedRows) {
-          cn.release();
-          res.json({ error: true, message: 'An unknown error occured-' });
-          return;
-        }
+    const rows = await db.query(
+      `SELECT email_id AS id FROM linked_filters WHERE filter_id = ?`,
+      [req.params.filter]
+    );
 
-        sql = `SELECT email_id as id FROM linked_filters WHERE filter_id = ?`;
-        cn.query(sql, [req.params.filter], (err, rows) => {
-          cn.release();
+    /** @type {number[]} */
+    let update = [];
 
-          if (!rows.length) {
-            res.json({ error: false });
-          } else {
-            let update = rows.map(email => email.id);
+    if (rows.length) {
+      const emails = rows.map(email => email.id);
 
-            if (
-              // Determine if MailGun routes need to be updated
-              ([1, 2, 3, 6].indexOf(data.type) > -1 && !!+data.acceptOnMatch) ||
-              ([1, 2, 3, 6].indexOf(+req.body.type) > -1 &&
-                req.body.acceptOnMatch)
-            )
-              res.json({ error: false, update });
-            else res.json({ error: false });
-          }
-        });
-      });
-    })
-  );
+      if (
+        // Determine if MailGun routes need to be updated
+        ([1, 2, 3, 6].indexOf(filter.type) > -1 && !!+filter.acceptOnMatch) ||
+        ([1, 2, 3, 6].indexOf(+req.body.type) > -1 && req.body.acceptOnMatch)
+      )
+        update = emails;
+    }
+
+    res.status(200).json({ update });
+  } catch (err) {
+    res.status(400).json({ message: err });
+  }
+
+  db.release();
 };
