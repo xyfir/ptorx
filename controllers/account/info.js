@@ -11,7 +11,7 @@ const MySQL = require('lib/mysql');
   RETURN
     {
       loggedIn: boolean, subscription?: number, uid?: number, trial?: boolean,
-      affiliate?: boolean,
+      affiliate?: boolean, credits?: number
       referral?: {
         type?: string, [type]?: string|number, data?: object,
         hasMadePurchase?: boolean
@@ -41,7 +41,8 @@ module.exports = async function(req, res) {
       if (!token[0] || !token[1]) throw 'Invalid token 1';
 
       sql = `
-        SELECT xyfir_id, subscription, referral, trial, admin, affiliate
+        SELECT
+          xyfir_id, subscription, referral, trial, admin, affiliate, credits
         FROM users WHERE user_id = ?
       `;
       vars = [token[0]];
@@ -66,8 +67,8 @@ module.exports = async function(req, res) {
     // Get info for dev user
     else if (config.environment.type == 'development') {
       sql = `
-        SELECT subscription, referral, trial, admin, affiliate FROM users
-        WHERE user_id = 1
+        SELECT subscription, referral, trial, admin, affiliate, credits
+        FROM users WHERE user_id = 1
       `;
       rows = await db.query(sql);
 
@@ -99,7 +100,8 @@ module.exports = async function(req, res) {
       subscription: row.subscription,
       referral: JSON.parse(row.referral),
       trial: !!row.trial,
-      affiliate: !!row.affiliate
+      affiliate: !!row.affiliate,
+      credits: row.credits
     });
   } catch (err) {
     db.release();
