@@ -1,68 +1,49 @@
-const db = require('lib/db');
+const requireCredits = require('lib/user/require-credits');
+const MySQL = require('lib/mysql');
 
 /*
-    DELETE api/filters/:filter
-    RETURN
-        { error: boolean, update?: number[] }
-    DESCRIPTION
-        Deletes a filter
+  DELETE /api/filters/:filter
+  RETURN
+    { update?: number[] }
 */
-module.exports = function(req, res) {
-  let sql = `
-        SELECT type, accept_on_match as acceptOnMatch FROM filters WHERE filter_id = ? AND user_id = ?
-    `;
-  db(cn =>
-    cn.query(sql, [req.params.filter, req.session.uid], (err, rows) => {
-      if (err || !rows.length) {
-        res.json({ error: true });
-      } else {
-        const data = rows[0];
+module.exports = async function(req, res) {
+  const db = new MySQL();
 
-        // Delete filter, linked entries, and return response to user
-        const deleteFilter = (clear, update) => {
-          sql = 'DELETE FROM filters WHERE filter_id = ?';
-          cn.query(sql, [req.params.filter], (err, result) => {
-            cn.release();
+  try {
+    await db.getConnection();
+    await requireCredits(db, +req.session.uid);
 
-            // Error deleting filter
-            if (err || !result.affectedRows) {
-              res.json({ error: true });
-            }
-            // Deleted fine, no further action
-            else if (update === undefined) {
-              res.json({ error: false });
-            }
-            // Deleted, send emails that need their MG route updated to client
-            else if (!clear) {
-              res.json({ error: false, update });
-            } else {
-              res.json({ error: false });
-            }
-          });
-        };
+    // Get filter
+    const [filter] = await db.query(
+      `
+        SELECT
+          type, accept_on_match AS acceptOnMatch
+        FROM filters
+        WHERE filter_id = ? AND user_id = ?
+      `,
+      [req.params.filter, req.session.uid]
+    );
+    if (!filter) throw 'Could not find filter';
 
-        sql = `SELECT email_id as id FROM linked_filters WHERE filter_id = ?`;
-        cn.query(sql, [req.params.filter], (err, rows) => {
-          if (err) {
-            cn.release();
-            res.json({ error: true });
-          }
-          // Filter was not linked to any email(s)
-          else if (!rows.length) {
-            deleteFilter();
-          }
-          // Filter was linked to email(s)
-          else {
-            let update = rows.map(email => email.id);
+    // Get emails linked to the filter
+    const rows = await db.query(
+      `SELECT email_id AS id FROM linked_filters WHERE filter_id = ?`,
+      [req.params.filter]
+    );
 
-            // MailGun routes need to be updatedf
-            if ([1, 2, 3, 6].indexOf(data.type) > -1 && !!+data.acceptOnMatch)
-              deleteFilter(false, update);
-            // Redis cache needs to be cleared
-            else deleteFilter(true, update);
-          }
-        });
-      }
-    })
-  );
+    /** @type {number[]} */
+    const update = rows.map(email => email.id);
+
+    // Delete the filter
+    const result = await db.query('DELETE FROM filters WHERE filter_id = ?', [
+      req.params.filter
+    ]);
+    if (!result.affectedRows) throw 'Could not delete filter';
+
+    res.status(200).json({ update });
+  } catch (err) {
+    res.status(400).json({ message: err });
+  }
+
+  db.release();
 };
