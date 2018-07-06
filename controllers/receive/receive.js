@@ -1,5 +1,6 @@
 const escapeRegExp = require('escape-string-regexp');
 const saveMessage = require('lib/email/save-message');
+const chargeUser = require('lib/user/charge');
 const request = require('superagent');
 const MailGun = require('mailgun-js');
 const config = require('config');
@@ -48,14 +49,21 @@ module.exports = async function(req, res) {
     const isEmailSpam = headers['X-Mailgun-Sflag'] == 'Yes';
 
     // Get needed proxy email data
-    const data = { to: '', filters: [], modifiers: [], spamFilter: false };
+    const data = {
+      to: '', // will be empty string if primary_email_id = 0
+      userId: 0,
+      filters: [],
+      modifiers: [],
+      spamFilter: false
+    };
 
     // Grab primary_email_id address
     await db.getConnection();
     let rows = await db.query(
       `
         SELECT
-          pme.address AS address, pxe.spam_filter AS spamFilter
+          pme.address AS \`to\`, pxe.spam_filter AS spamFilter,
+          pxe.user_id AS userId
         FROM
           primary_emails AS pme, proxy_emails AS pxe
         WHERE
@@ -64,11 +72,8 @@ module.exports = async function(req, res) {
       `,
       [emailId]
     );
-
     if (!rows.length) throw 'Email does not exist';
-
-    data.to = rows[0].address; // will be empty string if primary_email_id = 0
-    data.spamFilter = rows[0].spamFilter;
+    Object.assign(data, rows[0]);
 
     // Grab all filters
     // pass is set to 1 if MailGun already validated
@@ -104,7 +109,6 @@ module.exports = async function(req, res) {
       `,
       [emailId]
     );
-    db.release();
 
     // Parse modifier.data if it's a JSON string
     data.modifiers = rows.map(mod => ({
@@ -114,12 +118,6 @@ module.exports = async function(req, res) {
           ? JSON.parse(mod.data)
           : mod.data
     }));
-
-    // Save mail as spam and quit
-    if (data.spamFilter && isEmailSpam) {
-      await saveMessage(req, 2);
-      return res.status(200).send();
-    }
 
     // Loop through filters
     data.filters.forEach((filter, i) => {
@@ -172,16 +170,6 @@ module.exports = async function(req, res) {
         ? !!data.filters[i].pass
         : !data.filters[i].pass;
     });
-
-    // Check if all filters passed
-    for (let filter of data.filters) {
-      if (!filter.pass) {
-        // Optionally save as rejected message
-        if (save) saveMessage(req, 1);
-
-        return res.status(200).send();
-      }
-    }
 
     let textonly = false;
 
@@ -263,8 +251,20 @@ module.exports = async function(req, res) {
       }
     });
 
+    // How many credits this action will cost the user
+    let credits = 1;
+
+    // Save mail as spam and quit
+    if (data.spamFilter && isEmailSpam) {
+      await saveMessage(req, 2);
+    }
+    // Ignore if not all of the filters passed
+    else if (data.filters.findIndex(f => !f.pass) > -1) {
+      // Optionally save as a rejected message
+      if (save) saveMessage(req, 1);
+    }
     // Message should be redirected
-    if (data.to) {
+    else if (data.to) {
       const message = {
         subject: email.subject,
         text: email['body-plain'],
@@ -272,6 +272,7 @@ module.exports = async function(req, res) {
         html: email['body-html'] && !textonly ? email['body-html'] : '',
         to: data.to
       };
+      credits++;
 
       const mailgun = MailGun({
         apiKey: config.keys.mailgun,
@@ -325,14 +326,16 @@ module.exports = async function(req, res) {
       // Forward message to user's primary email
       await mailgun.messages().send(message);
     }
-    // Message must be saved since it's not being redirected
+    // Message must be saved as accepted since it's not being redirected
     else {
       saveMessage(req, 0);
     }
 
+    await chargeUser(db, data.userId, credits);
     res.status(200).send();
   } catch (err) {
-    db.release();
     res.status(406).send();
   }
+
+  db.release();
 };
