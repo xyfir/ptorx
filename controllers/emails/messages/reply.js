@@ -1,39 +1,42 @@
+const chargeUser = require('lib/user/charge');
 const MailGun = require('mailgun-js');
 const request = require('superagent');
 const config = require('config');
-const mysql = require('lib/mysql');
+const MySQL = require('lib/mysql');
 
 /*
-  POST api/emails/:email/messages/:message
+  POST /api/emails/:email/messages/:message
   REQUIRED
     content: string
   RETURN
-    { error: boolean, message: string }
+    { message?: string, credits?: number }
   DESCRIPTION
     Send reply to a stored message
 */
 module.exports = async function(req, res) {
-  const db = new mysql();
+  const db = new MySQL();
 
   try {
     await db.getConnection();
     const [row] = await db.query(
       `
-      SELECT
-        pxe.address, d.domain, m.message_url AS msgUrl, u.trial
-      FROM
-        messages AS m, domains AS d, proxy_emails AS pxe, users AS u
-      WHERE
-        m.id = ? AND pxe.email_id = ? AND u.user_id = ? AND
-        m.received + 255600 > UNIX_TIMESTAMP() AND pxe.user_id = u.user_id AND
-        m.email_id = pxe.email_id AND d.id = pxe.domain_id
-    `,
+        SELECT
+          pxe.address, d.domain, m.message_url AS msgUrl, u.trial
+        FROM
+          messages AS m, domains AS d, proxy_emails AS pxe, users AS u
+        WHERE
+          m.id = ? AND pxe.email_id = ? AND u.user_id = ? AND
+          m.received + 255600 > UNIX_TIMESTAMP() AND pxe.user_id = u.user_id AND
+          m.email_id = pxe.email_id AND d.id = pxe.domain_id
+      `,
       [req.params.message, req.params.email, req.session.uid]
     );
-    db.release();
 
     if (!row) throw 'Message does not exist';
     if (row.trial) throw 'Trial users cannot reply to mail';
+
+    const credits = await chargeUser(db, +req.session.uid, 1);
+    db.release();
 
     // Get original messages' data
     // Cannot load message with mailgun-js
@@ -54,9 +57,9 @@ module.exports = async function(req, res) {
       subject: 'Re: ' + message.subject
     });
 
-    res.json({ error: false });
+    res.status(200).json({ credits });
   } catch (err) {
     db.release();
-    res.json({ error: true, message: err });
+    res.status(400).json({ message: err });
   }
 };
