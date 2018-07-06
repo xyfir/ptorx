@@ -3,7 +3,7 @@ import {
   ADD_MODIFIER,
   DELETE_MODIFIER,
   EDIT_MODIFIER
-} from '../types/modifiers';
+} from 'constants/actions';
 
 export function loadModifiers(modifiers) {
   return {

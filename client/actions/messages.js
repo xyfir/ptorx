@@ -1,4 +1,4 @@
-import { LOAD_MESSAGES, DELETE_MESSAGE } from '../types/messages';
+import { LOAD_MESSAGES, DELETE_MESSAGE } from 'constants/actions';
 
 export function loadMessages(messages) {
   return {

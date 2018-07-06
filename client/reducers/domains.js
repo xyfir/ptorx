@@ -1,4 +1,4 @@
-import { ADD_DOMAIN } from 'actions/types/domains';
+import { ADD_DOMAIN } from 'constants/actions';
 
 export default function(state, action) {
   switch (action.type) {

@@ -3,7 +3,7 @@ import {
   ADD_FILTER,
   DELETE_FILTER,
   EDIT_FILTER
-} from '../actions/types/filters';
+} from 'constants/actions';
 
 export default function(state, action) {
   switch (action.type) {

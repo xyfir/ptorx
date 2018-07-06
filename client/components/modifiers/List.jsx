@@ -3,7 +3,7 @@ import React from 'react';
 import swal from 'sweetalert';
 
 // Action creators
-import { loadModifiers, deleteModifier } from 'actions/creators/modifiers';
+import { loadModifiers, deleteModifier } from 'actions/modifiers';
 
 // Constants
 import { modifierTypes } from 'constants/types';

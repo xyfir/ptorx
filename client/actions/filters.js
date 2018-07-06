@@ -3,7 +3,7 @@ import {
   ADD_FILTER,
   DELETE_FILTER,
   EDIT_FILTER
-} from '../types/filters';
+} from 'constants/actions';
 
 export function loadFilters(filters) {
   return {

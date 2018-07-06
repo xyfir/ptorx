@@ -3,8 +3,8 @@ import React from 'react';
 import swal from 'sweetalert';
 
 // Action creators
-import { loadFilters, deleteFilter } from 'actions/creators/filters';
-import { loadEmails } from 'actions/creators/emails';
+import { loadFilters, deleteFilter } from 'actions/filters';
+import { loadEmails } from 'actions/emails';
 
 // Constants
 import { filterTypes } from 'constants/types';

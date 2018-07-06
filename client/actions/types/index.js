@@ -1,2 +1,0 @@
-export const INITIALIZE_STATE = 'INITIALIZE_STATE';
-export const CHANGE_VIEW = 'CHANGE_VIEW';

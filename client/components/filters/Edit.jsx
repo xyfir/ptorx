@@ -3,7 +3,7 @@ import React from 'react';
 import swal from 'sweetalert';
 
 // Action creators
-import { editFilter } from 'actions/creators/filters';
+import { editFilter } from 'actions/filters';
 
 // Components
 import Form from 'components/filters/Form';

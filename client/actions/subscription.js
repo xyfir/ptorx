@@ -1,4 +1,4 @@
-import { PURCHASE_SUBSCRIPTION } from '../../types/account/subscription';
+import { PURCHASE_SUBSCRIPTION } from 'constants/actions';
 
 export function purchaseSubscription(subscription) {
   return {

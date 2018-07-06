@@ -12,7 +12,7 @@ import Dialog from 'react-md/lib/Dialogs';
 import List from 'react-md/lib/Lists/List';
 
 // Action creators
-import { loadMessages, deleteMessage } from 'actions/creators/messages';
+import { loadMessages, deleteMessage } from 'actions/messages';
 
 // Constants
 import { messageTypes } from 'constants/types';

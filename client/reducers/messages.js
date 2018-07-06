@@ -1,4 +1,4 @@
-import { LOAD_MESSAGES, DELETE_MESSAGE } from '../actions/types/messages';
+import { LOAD_MESSAGES, DELETE_MESSAGE } from 'constants/actions';
 
 export default function(state, action) {
   switch (action.type) {

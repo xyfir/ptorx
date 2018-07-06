@@ -11,7 +11,7 @@ import Navigation from 'components/emails/Navigation';
 import Form from 'components/emails/Form';
 
 // Action creators
-import { editEmail } from 'actions/creators/emails';
+import { editEmail } from 'actions/emails';
 
 export default class EditEmail extends React.Component {
   constructor(props) {

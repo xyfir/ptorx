@@ -6,7 +6,7 @@ import swal from 'sweetalert';
 import Form from 'components/filters/Form';
 
 // Action creators
-import { addFilter } from 'actions/creators/filters';
+import { addFilter } from 'actions/filters';
 
 export default class CreateFilter extends React.Component {
   constructor(props) {

@@ -6,7 +6,7 @@ import swal from 'sweetalert';
 import Form from 'components/modifiers/Form';
 
 // Action creators
-import { editModifier } from 'actions/creators/modifiers';
+import { editModifier } from 'actions/modifiers';
 
 export default class UpdateModifier extends React.Component {
   constructor(props) {

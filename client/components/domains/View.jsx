@@ -4,7 +4,7 @@ import copy from 'copyr';
 import swal from 'sweetalert';
 
 // Action creators
-import { removeDomain } from 'actions/creators/domains';
+import { removeDomain } from 'actions/domains';
 
 // react-md
 import TableColumn from 'react-md/lib/DataTables/TableColumn';

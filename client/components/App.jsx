@@ -22,12 +22,12 @@ import query from 'lib/parse-query-string';
 import store from 'lib/store';
 
 // Actions
-import { changeView } from 'actions/creators/index';
+import { changeView } from 'actions/index';
 
 // Constants
 import { XACC, LOG_STATE, ENVIRONMENT } from 'constants/config';
 import { CREATE_REDIRECT_EMAIL, QUICK_SEARCH } from 'constants/views';
-import { INITIALIZE_STATE } from 'actions/types/index';
+import { INITIALIZE_STATE } from 'constants/actions';
 
 class App extends React.Component {
   constructor(props) {

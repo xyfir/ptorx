@@ -3,7 +3,7 @@ import {
   ADD_EMAIL,
   DELETE_EMAIL,
   EDIT_EMAIL
-} from 'actions/types/emails';
+} from 'constants/actions';
 
 export function loadEmails(emails) {
   return {

@@ -1,2 +1,0 @@
-export const DELETE_EMAIL = 'ACCOUNT/DELETE_EMAIL';
-export const ADD_EMAIL = 'ACCOUNT/ADD_EMAIL';

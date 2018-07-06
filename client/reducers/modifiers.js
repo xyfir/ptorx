@@ -3,7 +3,7 @@ import {
   ADD_MODIFIER,
   DELETE_MODIFIER,
   EDIT_MODIFIER
-} from '../actions/types/modifiers';
+} from 'constants/actions';
 
 export default function(state, action) {
   switch (action.type) {

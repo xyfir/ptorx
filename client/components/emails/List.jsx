@@ -5,7 +5,7 @@ import copy from 'copyr';
 import swal from 'sweetalert';
 
 // Action creators
-import { loadEmails, deleteEmail } from 'actions/creators/emails';
+import { loadEmails, deleteEmail } from 'actions/emails';
 
 // Modules
 import findMatches from 'lib/find-matching';

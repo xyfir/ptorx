@@ -1,4 +1,4 @@
-import { ADD_EMAIL, DELETE_EMAIL } from '../../types/account/email';
+import { ADD_EMAIL, DELETE_EMAIL } from 'constants/actions';
 
 export function addEmail(id, email) {
   return {

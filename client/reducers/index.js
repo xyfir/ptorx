@@ -6,7 +6,7 @@ import account from 'reducers/account';
 import domains from 'reducers/domains';
 import emails from 'reducers/emails';
 
-import { INITIALIZE_STATE, CHANGE_VIEW } from 'actions/types/index';
+import { INITIALIZE_STATE, CHANGE_VIEW } from 'constants/actions';
 
 export default function(state, action) {
   if (action.type == INITIALIZE_STATE) return action.state;

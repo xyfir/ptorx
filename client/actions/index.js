@@ -1,4 +1,4 @@
-import { CHANGE_VIEW } from '../types/index';
+import { CHANGE_VIEW } from 'constants/actions';
 
 export function changeView(view) {
   return {
