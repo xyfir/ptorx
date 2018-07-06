@@ -160,7 +160,7 @@ module.exports = async function(req, res) {
     // Build Mailgun route action(s)
     const action = buildAction(
       req.body.directForward
-        ? { address: rows[0].address }
+        ? { id, address: rows[0].address }
         : { id, save: data.save_mail }
     );
 

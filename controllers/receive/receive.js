@@ -54,7 +54,8 @@ module.exports = async function(req, res) {
       userId: 0,
       filters: [],
       modifiers: [],
-      spamFilter: false
+      spamFilter: false,
+      directForward: false
     };
 
     // Grab primary_email_id address
@@ -63,7 +64,7 @@ module.exports = async function(req, res) {
       `
         SELECT
           pme.address AS \`to\`, pxe.spam_filter AS spamFilter,
-          pxe.user_id AS userId
+          pxe.user_id AS userId, pxe.direct_forward AS directForward
         FROM
           primary_emails AS pme, proxy_emails AS pxe
         WHERE
@@ -254,8 +255,12 @@ module.exports = async function(req, res) {
     // How many credits this action will cost the user
     let credits = 1;
 
+    // Mailgun already forwarded so all we have to do is charge the user
+    if (data.directForward) {
+      credits++;
+    }
     // Save mail as spam and quit
-    if (data.spamFilter && isEmailSpam) {
+    else if (data.spamFilter && isEmailSpam) {
       await saveMessage(req, 2);
     }
     // Ignore if not all of the filters passed
