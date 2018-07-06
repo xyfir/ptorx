@@ -1,3 +1,4 @@
+import { List, Button, DialogContainer, ListItem } from 'react-md';
 import request from 'superagent';
 import React from 'react';
 import swal from 'sweetalert';
@@ -15,12 +16,6 @@ import findMatches from 'lib/find-matching';
 // Components
 import Pagination from 'components/misc/Pagination';
 import Search from 'components/misc/Search';
-
-// react-md
-import ListItem from 'react-md/lib/Lists/ListItem';
-import Button from 'react-md/lib/Buttons/Button';
-import Dialog from 'react-md/lib/Dialogs';
-import List from 'react-md/lib/Lists/List';
 
 export default class FilterList extends React.Component {
   constructor(props) {
@@ -137,7 +132,7 @@ export default class FilterList extends React.Component {
         .send({
           name: email.name,
           description: email.description,
-          to: mail.toEmail,
+          to: email.toEmail,
           saveMail: +email.saveMail,
           noSpamFilter: +!email.spamFilter,
           filters,
@@ -186,7 +181,7 @@ export default class FilterList extends React.Component {
           page={this.state.page}
         />
 
-        <Dialog
+        <DialogContainer
           id="selected-filter"
           title={
             !this.state.selected
@@ -201,7 +196,7 @@ export default class FilterList extends React.Component {
             <ListItem primaryText="Edit" onClick={() => this.onEdit()} />
             <ListItem primaryText="Delete" onClick={() => this.onDelete()} />
           </List>
-        </Dialog>
+        </DialogContainer>
       </div>
     );
   }
