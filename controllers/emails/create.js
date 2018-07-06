@@ -1,16 +1,17 @@
 const validateModifiers = require('lib/email/validate-modifiers');
 const buildExpression = require('lib/mg-route/build-expression');
 const validateFilters = require('lib/email/validate-filters');
+const requireCredits = require('lib/user/require-credits');
 const buildAction = require('lib/mg-route/build-action');
 const validate = require('lib/email/validate');
 const generate = require('lib/email/generate');
 const MailGun = require('mailgun-js');
 const request = require('superagent');
 const config = require('config');
-const mysql = require('lib/mysql');
+const MySQL = require('lib/mysql');
 
 /*
-  POST api/emails
+  POST /api/emails
   REQUIRED
     name: string, description: string, address: string, domain: number,
     filters: string, modifiers: string, to: number
@@ -23,20 +24,23 @@ const mysql = require('lib/mysql');
     Creates a redirect email, its MailGun inbound route, any used links filters/modifiers
 */
 module.exports = async function(req, res) {
-  const db = new mysql();
+  const db = new MySQL();
 
   try {
     validate(req.body, req.session.subscription);
 
     await db.getConnection();
+    await requireCredits(db, +req.session.uid);
 
     // Load data needed for extended validation
     let sql = `
       SELECT
-        emails_created AS emailsCreated, subscription, trial, (
+        emails_created AS emailsCreated, subscription, trial,
+        (
           SELECT COUNT(email_id) FROM proxy_emails
           WHERE user_id = ? AND created >= CURDATE()
-        ) AS emailsCreatedToday, (
+        ) AS emailsCreatedToday,
+        (
           SELECT domain FROM domains
           WHERE id = ? AND verified = 1 AND (
             global = 1 OR id IN(
@@ -92,24 +96,24 @@ module.exports = async function(req, res) {
     }
     // Make sure address exists
     else {
-      (sql = `
+      sql = `
         SELECT email_id FROM proxy_emails
         WHERE address = ? AND domain_id = ?
-      `),
-        (vars = [req.body.address, req.body.domain]),
-        (rows = await db.query(sql, vars));
+      `;
+      vars = [req.body.address, req.body.domain];
+      rows = await db.query(sql, vars);
 
       if (rows.length) throw 'That email address is already in use';
 
       address = req.body.address;
     }
 
-    (sql = `
+    sql = `
       SELECT email_id, address FROM primary_emails
       WHERE email_id = ? AND user_id = ?
-    `),
-      (vars = [req.body.to, req.session.uid]),
-      (rows = await db.query(sql, vars));
+    `;
+    vars = [req.body.to, req.session.uid];
+    rows = await db.query(sql, vars);
 
     // 'To' email does not exist and user is not using a 'to' address
     if (!rows.length && !req.body.noToAddress)
@@ -141,10 +145,10 @@ module.exports = async function(req, res) {
 
     let dbRes;
 
-    (sql = `
+    sql = `
       INSERT INTO proxy_emails SET ?
-    `),
-      (dbRes = await db.query(sql, data));
+    `;
+    dbRes = await db.query(sql, data);
 
     if (!dbRes.affectedRows) throw 'An unknown error occured--';
 
@@ -175,40 +179,40 @@ module.exports = async function(req, res) {
     });
 
     // Save MailGun route ID to proxy email
-    (sql = `
+    sql = `
       UPDATE proxy_emails SET mg_route_id = ?
       WHERE email_id = ?
-    `),
-      (vars = [mgRes.route.id, id]),
-      (dbRes = await db.query(sql, vars));
+    `;
+    vars = [mgRes.route.id, id];
+    dbRes = await db.query(sql, vars);
 
     if (filters.length) {
-      (sql = // Link filters to email
+      sql = // Link filters to email
         'INSERT INTO linked_filters (filter_id, email_id) VALUES ' +
-        filters.map(f => `('${f}', '${id}')`).join(', ')),
-        (dbRes = await db.query(sql));
+        filters.map(f => `('${f}', '${id}')`).join(', ');
+      dbRes = await db.query(sql);
     }
 
     if (modifiers.length) {
-      (sql = // Link modifiers to email
+      sql = // Link modifiers to email
         'INSERT INTO linked_modifiers ' +
         '(modifier_id, email_id, order_number) VALUES ' +
-        modifiers.map((m, i) => `('${m}', '${id}', '${i}')`).join(', ')),
-        (dbRes = await db.query(sql));
+        modifiers.map((m, i) => `('${m}', '${id}', '${i}')`).join(', ');
+      dbRes = await db.query(sql);
     }
 
     // Increment emails_created
-    (sql = `
+    sql = `
       UPDATE users SET emails_created = emails_created + 1
       WHERE user_id = ?
-    `),
-      (vars = [req.session.uid]),
-      (dbRes = await db.query(sql, vars));
-    db.release();
+    `;
+    vars = [req.session.uid];
+    dbRes = await db.query(sql, vars);
 
     res.json({ error: false, id });
   } catch (err) {
-    db.release();
     res.json({ error: true, message: err });
   }
+
+  db.release();
 };
