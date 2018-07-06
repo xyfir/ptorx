@@ -6,6 +6,9 @@ import swal from 'sweetalert';
 // Components
 import Navigation from 'components/emails/Navigation';
 
+// Actions
+import { updateCredits } from 'actions/account';
+
 export default class SendMessage extends React.Component {
   constructor(props) {
     super(props);
@@ -14,19 +17,20 @@ export default class SendMessage extends React.Component {
   }
 
   onSend() {
+    const { App } = this.props;
+
     request
       .post(`/api/emails/${this.state.id}/messages/`)
       .send({
-        to: this.refs.to.value,
-        subject: this.refs.subject.value,
-        content: this.refs.message.value
+        to: this._to.value,
+        subject: this._subject.value,
+        content: this._message.value
       })
       .end((err, res) => {
-        if (err || res.body.error)
-          return swal('Error', res.body.message, 'error');
+        if (err) return swal('Error', res.body.message, 'error');
 
-        swal('Success', `Message sent to ${this.refs.to.value}`, 'success');
-
+        App.dispatch(updateCredits(res.body.credits));
+        swal('Success', `Message sent to ${this._to.value}`, 'success');
         location.hash = `#/emails/messages/${this.state.id}/list`;
       });
   }
@@ -37,18 +41,23 @@ export default class SendMessage extends React.Component {
         <Navigation email={this.state.id} />
 
         <Paper zDepth={1} component="section" className="section flex">
-          <TextField id="text--to" ref="to" type="text" label="To" />
+          <TextField
+            id="text--to"
+            ref={i => (this._to = i)}
+            type="text"
+            label="To"
+          />
 
           <TextField
             id="text--subject"
-            ref="subject"
+            ref={i => (this._subject = i)}
             type="text"
             label="Subject"
           />
 
           <TextField
             id="text--message"
-            ref="message"
+            ref={i => (this._message = i)}
             rows={2}
             type="text"
             label="Message"

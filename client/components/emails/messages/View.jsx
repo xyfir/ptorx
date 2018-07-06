@@ -10,6 +10,9 @@ import Navigation from 'components/emails/Navigation';
 // Modules
 import query from 'lib/parse-query-string';
 
+// Actions
+import { updateCredits } from 'actions/account';
+
 export default class ViewMessage extends React.Component {
   constructor(props) {
     super(props);
@@ -34,12 +37,16 @@ export default class ViewMessage extends React.Component {
   }
 
   onReply() {
+    const { App } = this.props;
+
     request
       .post(`/api/emails/${this.state.id}/messages/${this.state.message}`)
-      .send({ content: this.refs.message.value })
+      .send({ content: this._message.value })
       .end((err, res) => {
-        if (err || res.body.error) swal('Error', res.body.message, 'error');
-        else swal('Success', 'Reply sent.', 'success');
+        if (err) return swal('Error', res.body.message, 'error');
+
+        swal('Success', 'Reply sent.', 'success');
+        App.dispatch(updateCredits(res.body.credits));
       });
   }
 
@@ -68,7 +75,7 @@ export default class ViewMessage extends React.Component {
           <Paper zDepth={1} className="reply section flex">
             <TextField
               id="text--message"
-              ref="message"
+              ref={i => (this._message = i)}
               rows={2}
               type="text"
               label="Message"

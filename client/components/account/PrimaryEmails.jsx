@@ -13,7 +13,7 @@ import copy from 'copyr';
 import swal from 'sweetalert';
 
 // Action creators
-import { deleteEmail, addEmail } from 'actions/account/email';
+import { deleteEmail, addEmail } from 'actions/account';
 
 export default class PrimaryEmails extends React.Component {
   constructor(props) {
