@@ -1,12 +1,14 @@
-import { PURCHASE_SUBSCRIPTION } from 'constants/actions';
-import { ADD_PRIMARY_EMAIL, DELETE_PRIMARY_EMAIL } from 'constants/actions';
+import {
+  UPDATE_CREDITS,
+  ADD_PRIMARY_EMAIL,
+  DELETE_PRIMARY_EMAIL,
+  PURCHASE_SUBSCRIPTION
+} from 'constants/actions';
 
 export default function(state, action) {
   switch (action.type) {
-    case PURCHASE_SUBSCRIPTION:
-      return Object.assign({}, state, {
-        subscription: action.subscription
-      });
+    case UPDATE_CREDITS:
+      return Object.assign({}, state, { credits: action.credits });
 
     case ADD_PRIMARY_EMAIL:
       return Object.assign({}, state, {
@@ -15,10 +17,11 @@ export default function(state, action) {
 
     case DELETE_PRIMARY_EMAIL:
       return Object.assign({}, state, {
-        emails: state.emails.filter(email => {
-          return email.id != action.id;
-        })
+        emails: state.emails.filter(email => email.id != action.id)
       });
+
+    case PURCHASE_SUBSCRIPTION:
+      return Object.assign({}, state, { subscription: action.subscription });
 
     default:
       return state;
