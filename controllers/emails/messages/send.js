@@ -1,39 +1,42 @@
+const chargeUser = require('lib/user/charge');
 const MailGun = require('mailgun-js');
 const config = require('config');
-const mysql = require('lib/mysql');
+const MySQL = require('lib/mysql');
 
 /*
-  POST api/emails/:email/messages
+  POST /api/emails/:email/messages
   REQUIRED
     to: string, subject: string, content: string
   RETURN
-    { error: boolean, message: string }
+    { message?: string, credits?: number }
   DESCRIPTION
     Sends an email from a REDIRECT email
 */
 module.exports = async function(req, res) {
-  const db = new mysql();
+  const db = new MySQL();
 
   try {
     await db.getConnection();
     const [row] = await db.query(
       `
-      SELECT
-        pxe.address, d.domain, u.trial
-      FROM
-        domains AS d, proxy_emails AS pxe, users AS u, primary_emails AS pme
-      WHERE
-        pxe.email_id = ? AND u.user_id = ? AND
-        pme.email_id = pxe.primary_email_id AND
-        pxe.user_id = u.user_id AND
-        d.id = pxe.domain_id
-    `,
+        SELECT
+          pxe.address, d.domain, u.trial
+        FROM
+          domains AS d, proxy_emails AS pxe, users AS u, primary_emails AS pme
+        WHERE
+          pxe.email_id = ? AND u.user_id = ? AND
+          pme.email_id = pxe.primary_email_id AND
+          pxe.user_id = u.user_id AND
+          d.id = pxe.domain_id
+      `,
       [req.params.email, req.session.uid]
     );
-    db.release();
 
     if (!row) throw 'Email does not exist';
     if (row.trial) throw 'Trial users cannot send mail';
+
+    const credits = await chargeUser(db, +req.session.uid, 1);
+    db.release();
 
     const mailgun = MailGun({
       apiKey: config.keys.mailgun,
@@ -47,9 +50,9 @@ module.exports = async function(req, res) {
       subject: req.body.subject
     });
 
-    res.json({ error: false });
+    res.status(200).json({ credits });
   } catch (err) {
     db.release();
-    res.json({ error: true, message: err });
+    res.status(400).json({ message: err });
   }
 };
