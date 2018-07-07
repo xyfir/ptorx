@@ -6,9 +6,9 @@ const MySQL = require('lib/mysql');
   GET /api/affiliates
   RETURN
     {
-      user_id: number, api_key: string, subscriptions: number,
+      user_id: number, api_key: string, credits: number,
       discount: number, last_payment: string, owed: number,
-      timestamp: string, unpaid_subscriptions: number
+      timestamp: string, unpaid_credits: number
     }
 */
 module.exports = async function(req, res) {

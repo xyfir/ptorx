@@ -1,20 +1,19 @@
 const authenticate = require('lib/affiliates/authenticate');
 const request = require('superagent');
-const moment = require('moment');
 const config = require('config');
 const MySQL = require('lib/mysql');
 
 /*
   POST /api/affiliates/accounts
   REQUIRED
-    email: string
+    email: string, credits: number
   OPTIONAL
     note: string
   RETURN
     { user_id: number }
 */
 module.exports = async function(req, res) {
-  const { email, note = '' } = req.body;
+  const { email, note = '', credits } = req.body;
   const db = new MySQL();
 
   try {
@@ -33,11 +32,8 @@ module.exports = async function(req, res) {
     // Create user on Ptorx
     const dbRes = await db.query('INSERT INTO users SET ?', {
       email,
-      xyfir_id: xyAccRes.xyfir_id,
-      subscription:
-        moment()
-          .add(1, 'year')
-          .unix() * 1000
+      credits,
+      xyfir_id: xyAccRes.xyfir_id
     });
     if (!dbRes.affectedRows) throw 'Could not create Ptorx user';
 
@@ -53,6 +49,7 @@ module.exports = async function(req, res) {
     // Add user to affiliate_created_users
     await db.query(`INSERT INTO affiliate_created_users SET ? `, {
       note,
+      credits,
       user_id,
       affiliate_id: affiliate.id
     });

@@ -44,14 +44,14 @@ class Affiliate extends React.Component {
       <div className="affiliate">
         <h1>Affiliate (#{affiliate.user_id})</h1>
         <p>
-          This account has paid for <strong>{affiliate.subscriptions} </strong>
-          subscriptions and has a current discount of
-          <strong> ${affiliate.discount / 100}</strong> per generated account.
+          This account has paid for <strong>{affiliate.credits} </strong>
+          credits and has a current cost of
+          <strong> ${0.0006 - affiliate.discount}</strong> per credit, a
+          <strong> ${affiliate.discount}</strong> per credit discount.
         </p>
         <p>
           <strong>${affiliate.owed}</strong> is owed for
-          <strong> {affiliate.unpaid_subscriptions}</strong> unpaid
-          subscriptions.
+          <strong> {affiliate.unpaid_credits}</strong> unpaid credits.
         </p>
 
         <div className="key">
