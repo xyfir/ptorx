@@ -1,8 +1,8 @@
 const request = require('superagent');
+const credit = require('lib/user/credit');
 const Cryptr = require('cryptr');
 const config = require('config');
 const cryptr = new Cryptr(config.keys.accessToken);
-const moment = require('moment');
 const MySQL = require('lib/mysql');
 
 /*
@@ -34,8 +34,7 @@ module.exports = async function(req, res) {
     await db.getConnection();
 
     // Get user data from db
-    let sql =
-        'SELECT user_id, subscription, admin FROM users WHERE xyfir_id = ?',
+    let sql = 'SELECT user_id, admin FROM users WHERE xyfir_id = ?',
       vars = [req.body.xid],
       rows = await db.query(sql, vars);
 
@@ -45,13 +44,9 @@ module.exports = async function(req, res) {
 
       sql = `INSERT INTO users SET ?`;
       const insert = {
-        trial: referral.source != 'producthunt',
         email: xaccResult.body.email,
-        xyfir_id: req.body.xid,
-        subscription:
-          moment()
-            .add(referral.source == 'producthunt' ? 30 : 14, 'days')
-            .unix() * 1000
+        credits: 50,
+        xyfir_id: req.body.xid
       };
 
       // Validate xyAccounts affiliate promo code
@@ -67,9 +62,15 @@ module.exports = async function(req, res) {
 
           if (xaccResult2.body.error || xaccResult2.body.promo != 4)
             referral = {};
-        } catch (e) {
-          return;
-        }
+          else insert.credits += 50;
+        } catch (e) {}
+      }
+      // Reward credits for referral
+      else if (referral.type == 'user') {
+        try {
+          await credit(db, +referral.user, 25);
+          insert.credits += 50;
+        } catch (err) {}
       }
 
       insert.referral = JSON.stringify(referral);
@@ -88,7 +89,6 @@ module.exports = async function(req, res) {
 
       req.session.uid = result.insertId;
       req.session.admin = false;
-      req.session.subscription = insert.subscription;
 
       res.json({
         error: false,
@@ -109,7 +109,6 @@ module.exports = async function(req, res) {
 
       req.session.uid = rows[0].user_id;
       req.session.admin = !!rows[0].admin;
-      req.session.subscription = rows[0].subscription;
 
       res.json({
         error: false,
