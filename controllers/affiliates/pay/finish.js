@@ -29,22 +29,22 @@ module.exports = async function(req, res) {
     await db.getConnection();
 
     /**
-     * The total amount of subscriptions paid for by affiliate
+     * The total amount of credits paid for by affiliate
      * @type {number}
      */
-    const subscriptions =
-      payment.info.subscriptions + payment.info.unpaid_subscriptions;
-    // Discount must be between 99 ($0.99) and 249 ($2.49)
-    const discount =
-      99 > subscriptions ? 99 : subscriptions > 249 ? 249 : subscriptions;
+    const credits = payment.info.credits + payment.info.unpaid_credits;
+    // Discount is $0.000001 per credit for every 1K credits paid for
+    let discount = 0.000001 * Math.floor((credits || 1) / 1000);
+    // Discount must be minimum $0.00011 and maximum $0.0002
+    discount =
+      discount > 0.0002 ? 0.0002 : discount < 0.00011 ? 0.00011 : discount;
 
     await db.query(
       `
-        UPDATE affiliates SET
-          discount = ?, subscriptions = ?, last_payment = NOW()
+        UPDATE affiliates SET discount = ?, credits = ?, last_payment = NOW()
         WHERE user_id = ?
       `,
-      [discount, subscriptions, req.session.uid]
+      [discount, credits, req.session.uid]
     );
 
     // Mark payment fulfilled

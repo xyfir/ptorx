@@ -37,9 +37,9 @@ module.exports = async function(req, res) {
         description: 'Ptorx Affiliate',
         info: {
           user_id: req.session.uid,
+          credits: affiliate.credits,
           timestamp: req.body.timestamp,
-          subscriptions: affiliate.subscriptions,
-          unpaid_subscriptions: affiliate.unpaid_subscriptions
+          unpaid_credits: affiliate.unpaid_credits
         },
         email,
         redirect_url:
