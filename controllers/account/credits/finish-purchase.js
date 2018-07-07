@@ -1,10 +1,9 @@
 const request = require('superagent');
 const CONFIG = require('config');
-const moment = require('moment');
 const MySQL = require('lib/mysql');
 
 /**
- * `GET api/account/purchase`
+ * `GET /api/account/credits/purchase`
  * @param {object} req
  * @param {object} req.query
  * @param {number} req.query.payment_id
@@ -30,23 +29,15 @@ module.exports = async function(req, res) {
     await db.getConnection();
     await db.query(
       `
-      UPDATE users SET subscription = ?, referral = ?, trial = 0
-      WHERE user_id = ?
-    `,
+        UPDATE users SET credits = ?, referral = ?
+        WHERE user_id = ?
+      `,
       [
-        payment.body.info.subscription,
+        payment.body.info.credits,
         JSON.stringify(payment.body.info.referral),
         req.session.uid
       ]
     );
-
-    // Reward referring user
-    if (payment.body.info.refUserSubscription) {
-      await db.query('UPDATE users SET subscription = ? WHERE user_id = ?', [
-        payment.body.info.refUserSubscription,
-        payment.body.info.referral.user
-      ]);
-    }
 
     // Mark payment fulfilled
     await request
