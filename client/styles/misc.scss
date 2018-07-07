@@ -48,20 +48,21 @@ div.email-form {
       margin-left: 1em;
     }
   }
-
-  > div.recaptcha-wrapper {
-    margin-top: 1em;
-    text-align: center;
-
-    > div.g-recaptcha {
-      display: inline-block;
-    }
-  }
 }
 
-section.purchase-subscription {
-  > div.info {
-    text-align: center;
+section.purchase-credits {
+  > div.info > p {
+    font-size: 100%;
+  }
+
+  > div.md-slider-container {
+    min-width: 14em;
+  }
+
+  > ul.package-info {
+    span.value {
+      font-weight: bold;
+    }
   }
 }
 
@@ -78,17 +79,6 @@ div.messages {
 div.controls > a {
   user-select: none;
   margin: 0.3em;
-}
-
-p.trial {
-  color: $dgray;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  > button {
-    margin-left: 0.2em;
-  }
 }
 
 div.search.section.flex {
