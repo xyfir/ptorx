@@ -1,14 +1,13 @@
 import { SelectField, Button, Paper } from 'react-md';
-import moment from 'moment';
 import React from 'react';
 import copy from 'copyr';
 
 // Components
+import PurchaseCredits from 'components/account/credits/Purchase';
 import PrimaryEmails from 'components/account/PrimaryEmails';
-import Purchase from 'components/account/Purchase';
+import EarnCredits from 'components/account/credits/Earn';
 
 // Constants
-import { PURCHASE_SUBSCRIPTION, PRIMARY_EMAILS } from 'constants/views';
 import * as VIEWS from 'constants/views';
 
 export default class Account extends React.Component {
@@ -19,110 +18,73 @@ export default class Account extends React.Component {
   render() {
     const { account, view } = this.props.App.state;
 
-    if (view == PURCHASE_SUBSCRIPTION) return <Purchase {...this.props} />;
-    else if (view == PRIMARY_EMAILS) return <PrimaryEmails {...this.props} />;
-    else
-      return (
-        <div className="account">
-          <Paper
-            zDepth={1}
-            component="section"
-            className="default-view section flex"
-          >
-            <h3>Default Page</h3>
-            <p>
-              Choose the page that the Ptorx application will go to when it
-              first launches.
-            </p>
-
-            <SelectField
-              id="select--default-page"
-              label="Page"
-              onChange={v => (localStorage.defaultView = v)}
-              className="md-full-width"
-              menuItems={[
-                {
-                  label: 'Quick Search',
-                  value: VIEWS.QUICK_SEARCH
-                },
-                {
-                  label: 'Email-Only Search',
-                  value: VIEWS.LIST_REDIRECT_EMAILS
-                },
-                {
-                  label: 'Create Proxy Email',
-                  value: VIEWS.CREATE_REDIRECT_EMAIL
-                }
-              ]}
-              defaultValue={
-                localStorage.defaultView || VIEWS.CREATE_REDIRECT_EMAIL
-              }
-            />
-          </Paper>
-
-          <Paper
-            zDepth={1}
-            component="section"
-            className="referral-link section flex"
-          >
-            <h3>Referral Program</h3>
-            <p>
-              Refer new users to Ptorx and they'll receive 10% off of their
-              first purchase and you'll receive a free month of subscription
-              time when they purchase their own subscription.
-            </p>
-
-            <Button
-              flat
-              primary
-              iconChildren="content_copy"
-              onClick={() => copy(`https://ptorx.com/?r=user~${account.uid}`)}
+    switch (view) {
+      case VIEWS.PURCHASE_CREDITS:
+        return <PurchaseCredits {...this.props} />;
+      case VIEWS.PRIMARY_EMAILS:
+        return <PrimaryEmails {...this.props} />;
+      case VIEWS.EARN_CREDITS:
+        return <EarnCredits {...this.props} />;
+      default:
+        return (
+          <div className="account">
+            <Paper
+              zDepth={1}
+              component="section"
+              className="default-view section flex"
             >
-              Copy Link
-            </Button>
-          </Paper>
+              <h3>Default Page</h3>
+              <p>
+                Choose the page that the Ptorx application will go to when it
+                first launches.
+              </p>
 
-          <Paper
-            zDepth={1}
-            component="section"
-            className="subscription section flex"
-          >
-            <h3>Subscription</h3>
-
-            {account.subscription > Date.now() ? (
-              <div className="flex">
-                <p>
-                  Your subscription will expire on{' '}
-                  {moment(account.subscription).format('YYYY-MM-DD')}
-                </p>
-
-                <Button
-                  raised
-                  primary
-                  onClick={() =>
-                    (location.hash = '#/account/purchase-subscription')
+              <SelectField
+                id="select--default-page"
+                label="Page"
+                onChange={v => (localStorage.defaultView = v)}
+                className="md-full-width"
+                menuItems={[
+                  {
+                    label: 'Quick Search',
+                    value: VIEWS.QUICK_SEARCH
+                  },
+                  {
+                    label: 'Email-Only Search',
+                    value: VIEWS.LIST_REDIRECT_EMAILS
+                  },
+                  {
+                    label: 'Create Proxy Email',
+                    value: VIEWS.CREATE_REDIRECT_EMAIL
                   }
-                >
-                  Extend
-                </Button>
-              </div>
-            ) : (
-              <div className="flex">
-                <p>You do not have a Ptorx Premium subscription.</p>
+                ]}
+                defaultValue={
+                  localStorage.defaultView || VIEWS.CREATE_REDIRECT_EMAIL
+                }
+              />
+            </Paper>
 
-                <Button
-                  raised
-                  primary
-                  onClick={() =>
-                    (location.hash = '#/account/purchase-subscription')
-                  }
-                >
-                  Purchase
-                </Button>
-              </div>
-            )}
-          </Paper>
-        </div>
-      );
+            <Paper
+              zDepth={1}
+              component="section"
+              className="referral-link section flex"
+            >
+              <h3>Referral Program</h3>
+              <p>
+                Refer new users to Ptorx and you'll both receive free credits!
+              </p>
+
+              <Button
+                flat
+                primary
+                iconChildren="content_copy"
+                onClick={() => copy(`https://ptorx.com/?r=user~${account.uid}`)}
+              >
+                Copy Link
+              </Button>
+            </Paper>
+          </div>
+        );
+    }
   }
 }
