@@ -153,26 +153,12 @@ export default () => (
           the app.
         </li>
         <li>
-          30 day <strong>money-back guarantee</strong> on all purchases.
+          30 day <strong>money-back guarantee</strong> on your first purchase.
         </li>
         <li>
           <strong>Email support</strong> for questions big or small.
         </li>
-        <li>
-          14 day <strong>free trial</strong> for all new users.
-        </li>
       </ul>
     </Paper>
-
-    <p>
-      Some of these features may be limited or entirely unavailable during your
-      free trial.
-    </p>
-
-    <p>
-      Ready to purchase a Ptorx subscription? You can do so{' '}
-      <a href="/app/#/account/purchase-subscription">here</a>. $9.99 gets you
-      access to all of those features, plus any future ones for an entire year.
-    </p>
   </div>
 );

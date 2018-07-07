@@ -54,9 +54,9 @@ class App extends React.Component {
         messages: [],
         view: CREATE_REDIRECT_EMAIL,
         account: {
+          credits: 0,
           emails: [],
-          uid: 0,
-          subscription: 0
+          uid: 0
         }
       };
 
@@ -184,20 +184,7 @@ class App extends React.Component {
       <div className="ptorx">
         <Navigation App={this} />
 
-        <div className="main md-toolbar-relative">
-          {this.state.account.trial ? (
-            <p className="trial">
-              Your account is currently in trial mode. Some limitations apply.
-              <Button
-                icon
-                iconChildren="info"
-                href="#/docs/help?section=free-trial"
-              />
-            </p>
-          ) : null}
-
-          {view}
-        </div>
+        <div className="main md-toolbar-relative">{view}</div>
       </div>
     );
   }

@@ -83,7 +83,7 @@ div.home {
     }
   }
 
-  > section.trial {
+  > section.try-free {
     padding-top: 0;
   }
 
@@ -106,24 +106,6 @@ div.home {
           padding-right: 0.2em;
         }
       }
-    }
-  }
-
-  > section.subscription {
-    color: white;
-
-    > h2,
-    > button {
-      margin-bottom: 0;
-    }
-
-    > span.price {
-      font-weight: bold;
-    }
-
-    > ul.features {
-      list-style: none;
-      padding-left: 0;
     }
   }
 
@@ -215,7 +197,7 @@ div.landing-page {
     }
   }
 
-  > section.free-trial {
+  > section.try-for-free {
     background-color: $md-primary-color;
     padding-bottom: 1.5em;
 
@@ -234,7 +216,7 @@ div.landing-page {
   }
 }
 
-button.start-trial {
+button.try-free {
   font-size: 2em;
   height: 2.5em;
 }

@@ -6,7 +6,6 @@ const buildAction = require('lib/mg-route/build-action');
 const validate = require('lib/email/validate');
 const generate = require('lib/email/generate');
 const MailGun = require('mailgun-js');
-const request = require('superagent');
 const config = require('config');
 const MySQL = require('lib/mysql');
 
@@ -17,7 +16,7 @@ const MySQL = require('lib/mysql');
     filters: string, modifiers: string, to: number
   OPTIONAL
     saveMail: boolean, noSpamFilter: boolean, noToAddress: boolean,
-    directForward: boolean, recaptcha: string
+    directForward: boolean
   RETURN
     { error: boolean, message?: string, id?: number }
   DESCRIPTION
@@ -27,7 +26,7 @@ module.exports = async function(req, res) {
   const db = new MySQL();
 
   try {
-    validate(req.body, req.session.subscription);
+    validate(req.body);
 
     await db.getConnection();
     await requireCredits(db, +req.session.uid);
@@ -35,11 +34,7 @@ module.exports = async function(req, res) {
     // Load data needed for extended validation
     let sql = `
       SELECT
-        emails_created AS emailsCreated, subscription, trial,
-        (
-          SELECT COUNT(email_id) FROM proxy_emails
-          WHERE user_id = ? AND created >= CURDATE()
-        ) AS emailsCreatedToday,
+        emails_created AS emailsCreated,
         (
           SELECT domain FROM domains
           WHERE id = ? AND verified = 1 AND (
@@ -60,32 +55,8 @@ module.exports = async function(req, res) {
       ],
       rows = await db.query(sql, vars);
 
-    if (!rows.length) {
-      throw 'An unknown error occured-';
-    } else if (Date.now() > rows[0].subscription) {
-      throw 'You do not have a subscription';
-    } else if (!rows[0].domain) {
-      throw 'Invalid / unverified / unauthorized domain';
-    } else if (rows[0].trial) {
-      if (rows[0].emailsCreatedToday >= 5)
-        throw 'Trial users can only create 5 emails per day';
-      else if (rows[0].emailsCreated >= 15)
-        throw 'Trial users can only create 15 emails total';
-
-      // Validate captcha
-      const recaptchaRes = await request
-        .post('https://www.google.com/recaptcha/api/siteverify')
-        .type('form')
-        .send({
-          secret: config.keys.recaptcha,
-          response: req.body.recaptcha,
-          remoteip: req.ip
-        });
-
-      if (!recaptchaRes.body.success) throw 'Invalid captcha';
-    } else if (rows[0].emailsCreatedToday >= 20) {
-      throw 'You can only create up to 20 emails per day.';
-    }
+    if (!rows.length) throw 'Could not find user';
+    if (!rows[0].domain) throw 'Invalid / unverified / unauthorized domain';
 
     let address = ''; // proxy email address without @domain.com
     const { domain } = rows[0];

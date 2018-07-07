@@ -25,7 +25,7 @@ module.exports = async function(req, res) {
   const db = new MySQL();
 
   try {
-    validate(req.body, req.session.subscription);
+    validate(req.body);
 
     await db.getConnection();
     await requireCredits(db, +req.session.uid);

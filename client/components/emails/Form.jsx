@@ -23,7 +23,6 @@ import LinkFilter from 'components/filters/Link';
 
 // Constants
 import { filterTypes, modifierTypes } from 'constants/types';
-import { RECAPTCHA_KEY } from 'constants/config';
 
 export default class EmailForm extends React.Component {
   constructor(props) {
@@ -38,19 +37,6 @@ export default class EmailForm extends React.Component {
       advancedSettingsTab: 0,
       addressAvailable: true
     };
-  }
-
-  /**
-   * Add reCAPTCHA to page if needed.
-   */
-  componentDidMount() {
-    if (this.props.recaptcha) {
-      // Load recaptcha
-      const element = document.createElement('script');
-      element.src = 'https://www.google.com/recaptcha/api.js';
-      element.type = 'text/javascript';
-      document.head.appendChild(element);
-    }
   }
 
   /**
@@ -194,15 +180,6 @@ export default class EmailForm extends React.Component {
       data.description =
         data.description ||
         'Created on ' + moment().format('YYYY-MM-DD, HH:mm:ss');
-    }
-
-    if (this.props.recaptcha) {
-      data.recaptcha = grecaptcha.getResponse();
-
-      if (!data.recaptcha) {
-        swal('Error', 'You must complete the captcha', 'error');
-        return;
-      }
     }
 
     this.props.onSubmit(data);
@@ -475,12 +452,6 @@ export default class EmailForm extends React.Component {
           </List>
         </DialogContainer>
 
-        {this.props.recaptcha ? (
-          <div className="recaptcha-wrapper">
-            <div className="g-recaptcha" data-sitekey={RECAPTCHA_KEY} />
-          </div>
-        ) : null}
-
         <Button primary raised onClick={e => this.onSubmit(e)}>
           {this.props.create ? 'Create' : 'Update'}
         </Button>
@@ -495,8 +466,7 @@ EmailForm.propTypes = {
   email: PropTypes.object,
   create: PropTypes.bool,
   dispatch: PropTypes.func.isRequired,
-  onSubmit: PropTypes.func.isRequired,
-  recaptcha: PropTypes.bool
+  onSubmit: PropTypes.func.isRequired
 };
 
 EmailForm.defaultProps = {
@@ -512,6 +482,5 @@ EmailForm.defaultProps = {
     modifiers: [],
     domain: 1
   },
-  recaptcha: false,
   create: false
 };

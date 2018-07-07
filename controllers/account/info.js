@@ -10,8 +10,7 @@ const MySQL = require('lib/mysql');
     token: string
   RETURN
     {
-      loggedIn: boolean, subscription?: number, uid?: number, trial?: boolean,
-      affiliate?: boolean, credits?: number
+      loggedIn: boolean, uid?: number, affiliate?: boolean, credits?: number,
       referral?: {
         type?: string, [type]?: string|number, data?: object,
         hasMadePurchase?: boolean
@@ -22,7 +21,7 @@ const MySQL = require('lib/mysql');
     }
   DESCRIPTION
     Creates a new session using access token
-    Returns all MAIN emails on account and subscription expiration
+    Returns account info
 */
 module.exports = async function(req, res) {
   const db = new MySQL();
@@ -41,8 +40,7 @@ module.exports = async function(req, res) {
       if (!token[0] || !token[1]) throw 'Invalid token 1';
 
       sql = `
-        SELECT
-          xyfir_id, subscription, referral, trial, admin, affiliate, credits
+        SELECT xyfir_id, referral, admin, affiliate, credits
         FROM users WHERE user_id = ?
       `;
       vars = [token[0]];
@@ -67,7 +65,7 @@ module.exports = async function(req, res) {
     // Get info for dev user
     else if (config.environment.type == 'development') {
       sql = `
-        SELECT subscription, referral, trial, admin, affiliate, credits
+        SELECT referral, admin, affiliate, credits
         FROM users WHERE user_id = 1
       `;
       rows = await db.query(sql);
@@ -91,15 +89,12 @@ module.exports = async function(req, res) {
     // Set session, return account info
     req.session.uid = uid;
     req.session.admin = !!row.admin;
-    req.session.subscription = row.subscription;
 
     res.json({
       loggedIn: true,
       uid,
       emails,
-      subscription: row.subscription,
       referral: JSON.parse(row.referral),
-      trial: !!row.trial,
       affiliate: !!row.affiliate,
       credits: row.credits
     });

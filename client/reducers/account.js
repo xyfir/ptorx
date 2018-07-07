@@ -1,8 +1,7 @@
 import {
   UPDATE_CREDITS,
   ADD_PRIMARY_EMAIL,
-  DELETE_PRIMARY_EMAIL,
-  PURCHASE_SUBSCRIPTION
+  DELETE_PRIMARY_EMAIL
 } from 'constants/actions';
 
 export default function(state, action) {
@@ -19,9 +18,6 @@ export default function(state, action) {
       return Object.assign({}, state, {
         emails: state.emails.filter(email => email.id != action.id)
       });
-
-    case PURCHASE_SUBSCRIPTION:
-      return Object.assign({}, state, { subscription: action.subscription });
 
     default:
       return state;

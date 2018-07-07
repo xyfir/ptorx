@@ -20,8 +20,13 @@ export default function(state) {
     // Update state to reflect hash
     case 'account':
       switch (hash[1]) {
-        case 'purchase-subscription':
-          return VIEWS.PURCHASE_SUBSCRIPTION;
+        case 'credits':
+          switch (hash[2]) {
+            case 'purchase':
+              return VIEWS.PURCHASE_CREDITS;
+            case 'earn':
+              return VIEWS.EARN_CREDITS;
+          }
         case 'primary-emails':
           return VIEWS.PRIMARY_EMAILS;
         default:

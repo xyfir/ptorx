@@ -21,7 +21,7 @@ module.exports = async function(req, res) {
     const [row] = await db.query(
       `
         SELECT
-          pxe.address, d.domain, m.message_url AS msgUrl, u.trial
+          pxe.address, d.domain, m.message_url AS msgUrl
         FROM
           messages AS m, domains AS d, proxy_emails AS pxe, users AS u
         WHERE
@@ -33,7 +33,6 @@ module.exports = async function(req, res) {
     );
 
     if (!row) throw 'Message does not exist';
-    if (row.trial) throw 'Trial users cannot reply to mail';
 
     const credits = await chargeUser(db, +req.session.uid, 1);
     db.release();

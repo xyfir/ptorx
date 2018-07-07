@@ -230,7 +230,7 @@ export default class HowItWorks extends React.Component {
           <span>This still isn't all of the features Ptorx offers.</span>
           <span>
             Check the <a href="https://ptorx.com/features">features list</a>, or
-            start a free trial and experience it yourself.
+            create an account and experience it yourself.
           </span>
         </div>
       </div>

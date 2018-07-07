@@ -110,30 +110,22 @@ export default class Home extends React.Component {
           </div>
         </section>
 
-        <section className="trial">
+        <section className="try-free">
           <Button
             secondary
             raised
-            className="start-trial"
+            className="try-free"
             onClick={() =>
               (location.href = 'https://accounts.xyfir.com/app/#/register/13')
             }
           >
-            Try Free
+            Sign Up
           </Button>
 
-          {localStorage.r == 'source~producthunt' ? (
-            <p>
-              Hello, ProductHunt! For a limited time we're offering 30-day
-              subscriptions for free. All the features, no limitations, and no
-              payment info required.
-            </p>
-          ) : (
-            <p>
-              All that's needed to start your 14 day free trial is a valid email
-              to create a Xyfir Account. No payment info required.
-            </p>
-          )}
+          <p>
+            All that's needed to start using Ptorx for free is a valid email to
+            create a Xyfir Account. No payment info required.
+          </p>
         </section>
 
         <section className="how-it-works">
@@ -223,30 +215,6 @@ export default class Home extends React.Component {
             </p>
             <LearnMore page="features" />
           </div>
-        </section>
-
-        <section className="subscription">
-          <h2>Ptorx Subscription</h2>
-          <span className="price">$9.99 per year</span>
-
-          <ul className="features">
-            <li>
-              All of Ptorx's <a href="features">features</a>
-            </li>
-            <li>30 day money-back guarantee</li>
-            <li>Pay with card or cryptocurrency</li>
-            <li>Try free for 14 days</li>
-          </ul>
-
-          <Button
-            secondary
-            raised
-            onClick={() =>
-              (location.href = 'https://accounts.xyfir.com/app/#/register/13')
-            }
-          >
-            Try Free
-          </Button>
         </section>
       </div>
     );

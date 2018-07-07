@@ -4,16 +4,16 @@ const mysql = require('lib/mysql');
 const uuid = require('uuid/v4');
 
 /*
-  POST api/domains
+  POST /api/domains
   REQUIRED
     domain: string
   RETURN
     {
       error: boolean, message?: string,
-      
+
       // Domain already exists and user must request access
       requestKey?: string,
-      
+
       // Domain is new and user must verify ownership
       domainId?:string,
       domainKey?: {
@@ -31,15 +31,9 @@ module.exports = async function(req, res) {
   try {
     await db.getConnection();
     const [row] = await db.query(
-      `
-      SELECT
-        (SELECT id FROM domains WHERE domain = ?) AS domainId,
-        (SELECT trial FROM users WHERE user_id = ?) AS trial
-    `,
+      `SELECT id AS domainId FROM domains WHERE domain = ?`,
       [req.body.domain, req.session.uid]
     );
-
-    if (row.trial) throw 'Trial users cannot add domains';
 
     // Domain already exists; user must request access
     if (row.domain) {
