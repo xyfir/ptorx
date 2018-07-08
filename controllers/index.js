@@ -83,9 +83,16 @@ router
 router.post('/account/login', require('./account/login'));
 router.get('/account/logout', require('./account/logout'));
 
-/* ACCOUNT - PURCHASE */
-router.post('/account/purchase', require('./account/purchase/start'));
-router.get('/account/purchase', require('./account/purchase/finish'));
+/* ACCOUNT - CREDITS */
+router.post(
+  '/account/credits/purchase',
+  require('./account/credits/start-purchase')
+);
+router.get(
+  '/account/credits/purchase',
+  require('./account/credits/finish-purchase')
+);
+router.get('/account/credits/coinhive', require('./account/credits/coinhive'));
 
 /* DOMAINS */
 router
