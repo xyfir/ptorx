@@ -50,36 +50,13 @@ div.home {
     flex-direction: column;
     justify-content: center;
 
-    &.fade-out {
-      @keyframes fadeOut {
-        0% {
-          opacity: 1;
-        }
-        100% {
-          opacity: 0;
-        }
-      }
-
-      animation-name: fadeOut;
-      animation-duration: 250ms;
-    }
-    &.fade-in {
-      @keyframes fadeIn {
-        0% {
-          opacity: 0;
-        }
-        100% {
-          opacity: 1;
-        }
-      }
-
-      animation-name: fadeIn;
-      animation-duration: 250ms;
+    > h2 {
+      font-size: 130%;
     }
 
-    > div.typed-container {
-      font-size: 70%;
-      line-height: 1.5;
+    > h2,
+    > p {
+      line-height: 130%;
     }
   }
 
@@ -147,20 +124,22 @@ div.features {
 
   > section {
     width: calc(100% - 1em);
+    max-width: 44em;
 
     > header {
       background-color: $md-primary-color;
-      text-align: center;
+      padding: 0.5em;
       width: 100%;
 
       > h3,
       > p {
         color: white;
+        text-align: left;
         margin-bottom: 0;
       }
 
-      > p {
-        margin-bottom: 0.3em;
+      > h3 {
+        margin-right: 0.3em;
       }
     }
 
@@ -236,23 +215,16 @@ div.how-ptorx-works {
     }
   }
 
-  > div.typed-strings {
-    display: none;
-  }
-
-  > div.typed-container {
+  &.view {
     background-color: $lllgray;
-    padding: 1em;
     border-radius: 5px;
-    margin: 1em;
+    text-align: left;
+    padding: 1em;
     border: $llgray 0.1em solid;
+    margin: 1em;
 
     span.address {
       color: $md-secondary-color;
-      font-weight: bold;
-    }
-
-    strong {
       font-weight: bold;
     }
   }
