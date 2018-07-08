@@ -58,7 +58,6 @@ export default class EarnCredits extends React.Component {
   }
 
   componentWillUnmount() {
-    clearTimeout(this.timeout);
     clearInterval(this.interval);
     clearInterval(this.interval2);
   }
@@ -105,20 +104,13 @@ export default class EarnCredits extends React.Component {
   }
 
   _checkEarnings() {
-    clearTimeout(this.timeout);
-
-    // ** Force run if over a minute has passed
-    this.timeout = setTimeout(
-      () =>
-        request.get(`/api/account/credits/coinhive`).end((err, res) => {
-          if (err) return;
-          const { earned, credits } = res.body;
-          this.setState({ earned });
-          if (typeof credits == 'number')
-            this.props.App.dispatch(updateCredits(credits));
-        }),
-      1000
-    );
+    request.get(`/api/account/credits/coinhive`).end((err, res) => {
+      if (err) return;
+      const { earned, credits } = res.body;
+      this.setState({ earned });
+      if (typeof credits == 'number')
+        this.props.App.dispatch(updateCredits(credits));
+    });
   }
 
   render() {
