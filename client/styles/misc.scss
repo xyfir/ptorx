@@ -66,6 +66,16 @@ section.purchase-credits {
   }
 }
 
+section.earn-credits {
+  max-width: 30em;
+  padding: 1em;
+  margin: auto;
+
+  > p {
+    text-align: left;
+  }
+}
+
 div.messages {
   > ul.messages {
     width: 98%;
