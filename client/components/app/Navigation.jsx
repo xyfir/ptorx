@@ -5,7 +5,6 @@ import {
   Divider,
   Drawer,
   Button,
-  List,
   FontIcon,
   Subheader
 } from 'react-md';
@@ -109,7 +108,23 @@ export default class AppNavigation extends React.Component {
             />
           </a>
         ]}
-      />
+      />,
+
+      <Divider />,
+
+      <Subheader primaryText={`${App.state.account.credits} credits`} />,
+      <a href="#/account/credits/purchase">
+        <ListItem
+          leftIcon={<FontIcon>credit_card</FontIcon>}
+          primaryText="Purchase Credits"
+        />
+      </a>,
+      <a href="#/account/credits/earn">
+        <ListItem
+          leftIcon={<FontIcon>money_off</FontIcon>}
+          primaryText="Earn Credits"
+        />
+      </a>
     ];
   }
 
@@ -132,7 +147,6 @@ export default class AppNavigation extends React.Component {
               id="menu--create-item"
               menuItems={[
                 <Subheader primaryText="Create a new:" />,
-                App.state.account.trial ||
                 !App.state.account.emails.length ||
                 App.state.view == 'EMAILS/CREATE' ? (
                   <a />
