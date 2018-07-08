@@ -1,5 +1,4 @@
 import { FontIcon, Button } from 'react-md';
-import Typed from 'typed.js';
 import React from 'react';
 
 // Components
@@ -46,68 +45,41 @@ export default class Home extends React.Component {
       }
     ];
 
+    const group = Math.floor(Math.random() * this.messages.length);
+    const line = Math.floor(Math.random() * this.messages[group].lines.length);
+
     this.state = {
-      message: Math.floor(Math.random() * this.messages.length),
+      group,
+      line,
       fade: 'in'
     };
-
-    this._startTyping = this._startTyping.bind(this);
   }
 
   componentDidMount() {
-    this._startTyping();
+    this.interval = setInterval(() => {
+      this.setState({ fade: 'out' });
+
+      const group = Math.floor(Math.random() * this.messages.length);
+      const line = Math.floor(
+        Math.random() * this.messages[group].lines.length
+      );
+      this.setState({ group, line });
+    }, 7500);
   }
 
-  /**
-   * Called when Typed.js completes the lines in a message.
-   */
-  onTypedComplete() {
-    this.setState({ fade: 'out' });
-
-    // There's probably a better way to do this animation...
-    setTimeout(() => {
-      let { message } = this.state;
-
-      // Last message in list, go to first message
-      if (!this.messages[message + 1]) message = 0;
-      // Go to next message
-      else message++;
-
-      this.setState({ message, fade: 'in' }, () => this._startTyping());
-    }, 250);
-  }
-
-  /**
-   * Starts typing the lines in a specific message and adds onComplete
-   * listener.
-   */
-  _startTyping() {
-    const { message } = this.state;
-    this.typed && this.typed.destroy();
-
-    this.typed = new Typed('span.typed-home', {
-      strings: this.messages[message].lines,
-      onComplete: () => setTimeout(() => this.onTypedComplete(), 5000),
-      startDelay: 1000,
-      backDelay: 5000,
-      typeSpeed: 45,
-      backSpeed: 0,
-      fadeOut: true,
-      loop: false
-    });
+  componentWillUnmount() {
+    clearInterval(this.interval);
   }
 
   render() {
-    const message = this.messages[this.state.message];
+    const { title, lines } = this.messages[this.state.group];
+    const line = lines[this.state.line];
 
     return (
       <div className="home">
         <section className={'main fade-' + this.state.fade}>
-          <h1>Ptorx {message.title}</h1>
-
-          <div className="typed-container">
-            <span className="typed-home" />
-          </div>
+          <h2>Ptorx {title}</h2>
+          <p>{line}</p>
         </section>
 
         <section className="try-free">
