@@ -1,13 +1,7 @@
+import { ListItem, Toolbar, Divider, Drawer, Button } from 'react-md';
 import { render } from 'react-dom';
 import request from 'superagent';
 import React from 'react';
-
-// react-md
-import ListItem from 'react-md/lib/Lists/ListItem';
-import Toolbar from 'react-md/lib/Toolbars';
-import Divider from 'react-md/lib/Dividers';
-import Drawer from 'react-md/lib/Drawers';
-import Button from 'react-md/lib/Buttons/Button';
 
 // Components
 import Documentation from 'components/misc/Documentation';
@@ -57,7 +51,7 @@ class PtorxInfo extends React.Component {
         case '':
           return <Home />;
         default:
-          return <h2 className="status-404">404: Page Not Found</h2>;
+          return <h2 className="status-404">Page Not Found</h2>;
       }
     })();
 
