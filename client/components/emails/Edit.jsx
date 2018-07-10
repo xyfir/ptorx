@@ -11,13 +11,11 @@ import Navigation from 'components/emails/Navigation';
 import Form from 'components/emails/Form';
 
 // Action creators
-import { editEmail } from 'actions/emails';
+import { loadEmails } from 'actions/emails';
 
 export default class EditEmail extends React.Component {
   constructor(props) {
     super(props);
-
-    this.onSubmit = this.onSubmit.bind(this);
 
     this.state = {
       id: location.hash.split('/')[3],
@@ -26,70 +24,39 @@ export default class EditEmail extends React.Component {
   }
 
   componentDidMount() {
-    const email = this.props.data.emails.find(e => e.id == this.state.id);
+    const { App } = this.props;
+    const email = App.state.emails.find(e => e.id == this.state.id);
 
     if (!email) location.href = '#/emails/list';
 
     request.get('/api/emails/' + this.state.id).end((err, res) => {
-      if (res.body.err) {
-        swal('Error', 'Could not load data', 'error');
-        return;
-      }
+      if (err || res.body.error)
+        return swal('Error', 'Could not load data', 'error');
 
-      delete res.body.error;
-      this.props.dispatch(editEmail(Object.assign({}, email, res.body)));
-
-      this.setState({ loading: false });
+      this.setState(Object.assign({ loading: false }, res.body));
     });
   }
 
+  /** @param {object} data */
   onSubmit(data) {
+    const { App } = this.props;
+
     request
       .put('/api/emails/' + this.state.id)
       .send(data)
       .end((err, res) => {
-        if (err || res.body.error) {
-          swal('Error', res.body.message, 'error');
-          return;
-        }
+        if (err || res.body.error)
+          return swal('Error', res.body.message, 'error');
 
-        // data.to (id) -> data.toEmail (address)
-        data.toEmail = this.props.data.account.emails.find(
-          e => e.id == data.to
-        ).address;
-        delete data.to;
-
-        // Set address
-        if (data.noToAddress) {
-          data.address = '';
-        } else {
-          data.address = this.props.data.emails.find(
-            e => e.id == this.state.id
-          ).address;
-        }
-        delete data.noToAddress;
-
-        // data.modifiers|filters from id list string -> object array
-        data.modifiers = data.modifiers
-          .split(',')
-          .map(m => this.props.data.modifiers.find(mod => m == mod.id));
-        data.filters = data.filters
-          .split(',')
-          .map(f => this.props.data.filters.find(filter => f == filter.id));
-
-        data.id = this.state.id;
-
-        this.props.dispatch(editEmail(data));
-
+        App.dispatch(loadEmails([]));
         location.hash = '#/emails/list';
         swal('Success', `Email '${data.name}' updated`, 'success');
       });
   }
 
   render() {
-    if (this.state.loading) return null;
-
-    const email = this.props.data.emails.find(e => e.id == this.state.id);
+    const email = this.state;
+    if (email.loading) return null;
 
     return (
       <div className="edit-email">
@@ -107,7 +74,7 @@ export default class EditEmail extends React.Component {
           />
         </div>
 
-        <Form {...this.props} email={email} onSubmit={this.onSubmit} />
+        <Form {...this.props} email={email} onSubmit={d => this.onSubmit(d)} />
       </div>
     );
   }
