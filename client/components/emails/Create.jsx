@@ -7,7 +7,7 @@ import swal from 'sweetalert';
 import Form from 'components/emails/Form';
 
 // Action creators
-import { addEmail, loadEmails } from 'actions/emails';
+import { loadEmails } from 'actions/emails';
 
 // Modules
 import query from 'lib/parse-query-string';

@@ -17,8 +17,6 @@ export const ADD_FILTER = 'FILTERS/ADD';
 
 export const DELETE_EMAIL = 'EMAILS/DELETE';
 export const LOAD_EMAILS = 'EMAILS/LOAD';
-export const EDIT_EMAIL = 'EMAILS/EDIT';
-export const ADD_EMAIL = 'EMAILS/ADD';
 
 export const ADD_DOMAIN = 'DOMAINS/ADD';
 

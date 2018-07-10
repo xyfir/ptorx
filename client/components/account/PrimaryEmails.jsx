@@ -7,7 +7,6 @@ import {
   DialogContainer
 } from 'react-md';
 import request from 'superagent';
-import moment from 'moment';
 import React from 'react';
 import copy from 'copyr';
 import swal from 'sweetalert';
