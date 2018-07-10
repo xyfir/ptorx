@@ -1,23 +1,32 @@
-const db = require('lib/db');
+const MySQL = require('lib/mysql');
 
-/*
-    GET api/filters
-    RETURN
-        { filters: [
-            id: number, name: string, description: string, type: number
-        ]}
-    DESCRIPTION
-        Returns basic information for all filters linked to account
-*/
-module.exports = function(req, res) {
-  let sql = `
+/**
+ * GET /api/filters
+ */
+/**
+ * @typedef {object} ResponseBody
+ * @prop {FilterListItem[]} filters
+ */
+/**
+ * @typedef {object} FilterListItem
+ * @prop {number} id
+ * @prop {number} type
+ * @prop {string} name
+ * @prop {string} description
+ */
+module.exports = async function(req, res) {
+  const db = new MySQL();
+  try {
+    const filters = await db.query(
+      `
         SELECT filter_id as id, name, description, type
-        FROM filters WHERE user_id = ? 
-    `;
-  db(cn =>
-    cn.query(sql, [req.session.uid], (err, rows) => {
-      cn.release();
-      res.json({ filters: err || !rows.length ? [] : rows });
-    })
-  );
+        FROM filters WHERE user_id = ?
+      `,
+      [req.session.uid]
+    );
+    res.status(200).json({ filters });
+  } catch (err) {
+    res.status(400).json({ message: err });
+  }
+  db.release();
 };

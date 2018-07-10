@@ -1,26 +1,21 @@
-const db = require('lib/db');
+const MySQL = require('lib/mysql');
 
-/*
-    DELETE api/modifiers/:mod
-    RETURN
-        { error: boolean }
-    DESCRIPTION
-        Deletes a modifier
-*/
-module.exports = function(req, res) {
-  let sql = `SELECT email_id as id FROM linked_modifiers WHERE modifier_id = ?`;
-  db(cn =>
-    cn.query(sql, [req.params.mod], (err, rows) => {
-      sql = 'DELETE FROM modifiers WHERE modifier_id = ? AND user_id = ?';
-      cn.query(sql, [req.params.mod, req.session.uid], (err, result) => {
-        cn.release();
-
-        if (err || !result.affectedRows) {
-          res.json({ error: true });
-        } else {
-          res.json({ error: false });
-        }
-      });
-    })
-  );
+/**
+ * DELETE /api/modifiers/:mod
+ * @param {object} req
+ * @param {object} req.params
+ * @param {number} req.params.mod
+ */
+module.exports = async function(req, res) {
+  const db = new MySQL();
+  try {
+    await db.query(
+      `DELETE FROM modifiers WHERE modifier_id = ? AND user_id = ?`,
+      [req.params.mod, req.session.uid]
+    );
+    res.status(200).json({});
+  } catch (err) {
+    res.status(400).json({ message: err });
+  }
+  db.release();
 };

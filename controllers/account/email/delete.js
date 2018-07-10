@@ -1,22 +1,21 @@
-const db = require('lib/db');
+const MySQL = require('lib/mysql');
 
-/*
-    DELETE api/account/email/:email
-    RETURN
-        { error: boolean }
-    DESCRIPTION
-        Deletes a MAIN email from user's account
-*/
-module.exports = function(req, res) {
-  let sql = `
-        DELETE FROM primary_emails WHERE email_id = ? AND user_id = ?
-    `;
-  let vars = [req.params.email, req.session.uid];
-
-  db(cn =>
-    cn.query(sql, vars, (err, result) => {
-      cn.release();
-      res.json({ error: !!err || !result.affectedRows });
-    })
-  );
+/**
+ * DELETE /api/account/email/:email
+ * @param {object} req
+ * @param {object} req.params
+ * @param {number} req.params.email
+ */
+module.exports = async function(req, res) {
+  const db = new MySQL();
+  try {
+    await db.query(
+      `DELETE FROM primary_emails WHERE email_id = ? AND user_id = ?`,
+      [req.params.email, req.session.uid]
+    );
+    res.status(200).json({});
+  } catch (err) {
+    res.status(400).json({ message: err });
+  }
+  db.release();
 };
