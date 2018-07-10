@@ -1,4 +1,5 @@
 export const INITIALIZE_STATE = 'INITIALIZE_STATE';
+export const HIDE_WELCOME = 'HIDE_WELCOME';
 export const CHANGE_VIEW = 'CHANGE_VIEW';
 
 export const DELETE_MODIFIER = 'MODIFIERS/DELETE';

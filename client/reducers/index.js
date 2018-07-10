@@ -6,7 +6,7 @@ import account from 'reducers/account';
 import domains from 'reducers/domains';
 import emails from 'reducers/emails';
 
-import { INITIALIZE_STATE, CHANGE_VIEW } from 'constants/actions';
+import { INITIALIZE_STATE, CHANGE_VIEW, HIDE_WELCOME } from 'constants/actions';
 
 export default function(state, action) {
   if (action.type == INITIALIZE_STATE) return action.state;
@@ -15,6 +15,7 @@ export default function(state, action) {
   return {
     modifiers: modifiers(state.modifiers, action),
     messages: messages(state.messages, action),
+    welcome: action.type == HIDE_WELCOME ? false : state.welcome,
     filters: filters(state.filters, action),
     account: account(state.account, action),
     domains: domains(state.domains, action),
