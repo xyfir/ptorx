@@ -217,3 +217,12 @@ nav.navbar {
   margin-bottom: 1em;
   justify-content: center;
 }
+
+div#welcome-dialog {
+  min-width: 22em;
+
+  p {
+    text-align: justify;
+    font-size: 100%;
+  }
+}
