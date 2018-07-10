@@ -1,7 +1,7 @@
 import 'babel-polyfill';
 
+import { Button, DialogContainer } from 'react-md';
 import { render } from 'react-dom';
-import { Button } from 'react-md';
 import request from 'superagent';
 import React from 'react';
 import swal from 'sweetalert';
@@ -22,11 +22,11 @@ import query from 'lib/parse-query-string';
 import store from 'lib/store';
 
 // Actions
-import { changeView } from 'actions/index';
+import { changeView, hideWelcome } from 'actions/index';
 
 // Constants
 import { XACC, LOG_STATE, ENVIRONMENT } from 'constants/config';
-import { CREATE_REDIRECT_EMAIL, QUICK_SEARCH } from 'constants/views';
+import { CREATE_REDIRECT_EMAIL } from 'constants/views';
 import { INITIALIZE_STATE } from 'constants/actions';
 
 class App extends React.Component {
@@ -48,16 +48,17 @@ class App extends React.Component {
 
       const state = {
         modifiers: [],
+        messages: [],
+        welcome: !localStorage.hasRun,
         filters: [],
         domains: [],
         emails: [],
-        messages: [],
-        view: CREATE_REDIRECT_EMAIL,
         account: {
           credits: 0,
           emails: [],
           uid: 0
-        }
+        },
+        view: CREATE_REDIRECT_EMAIL
       };
 
       request
@@ -148,12 +149,19 @@ class App extends React.Component {
     }
   }
 
+  onHideWelcome() {
+    store.dispatch(hideWelcome());
+    localStorage.hasRun = true;
+  }
+
   dispatch(action) {
     return store.dispatch(action);
   }
 
   render() {
     if (!this.state) return null;
+
+    const { account, welcome } = this.state;
 
     const view = (() => {
       const props = {
@@ -185,6 +193,42 @@ class App extends React.Component {
         <Navigation App={this} />
 
         <div className="main md-toolbar-relative">{view}</div>
+
+        <DialogContainer
+          id="welcome-dialog"
+          onHide={() => this.onHideWelcome()}
+          visible={welcome}
+        >
+          <h2>What are credits?</h2>
+          <p>
+            Before you get started with Ptorx, it's important to take just a
+            second to learn what credits are and how they work. Simply put:
+            credits allow you to send and receive mail. This also includes
+            redirecting incoming mail to your primary addresses and replying to
+            received mail.
+          </p>
+          <p>
+            You have <strong>{account.credits} credits</strong> available.
+            Whenever you send or receive mail your credits will decrease,
+            usually by one or two credits per action. When your credits reach 0,
+            your proxy emails are <em>disabled</em>, meaning they'll no longer
+            work! Once you receive credits afterwards, your proxy emails will be
+            enabled again and everything will work as before.
+          </p>
+          <p>
+            Credits can be <a href="#/account/credits/purchase">purchased</a>,
+            or <a href="#/account/credits/earn">earned</a>, and are also
+            rewarded when you <a href="#/account">refer</a> other users to
+            Ptorx!
+          </p>
+          <p>
+            If you're ever feeling confused, open the app menu and check out the{' '}
+            <a href="#/docs/help">Help Docs</a>!
+          </p>
+          <Button primary raised onClick={() => this.onHideWelcome()}>
+            Got it, thanks!
+          </Button>
+        </DialogContainer>
       </div>
     );
   }
