@@ -70,22 +70,18 @@ class App extends React.Component {
 
           state.account = res.body;
 
-          return request.get('/api/domains');
+          return Promise.all([
+            request.get('/api/emails'),
+            request.get('/api/domains'),
+            request.get('/api/filters'),
+            request.get('/api/modifiers')
+          ]);
         })
         .then(res => {
-          state.domains = res.body.domains;
-          return request.get('/api/emails');
-        })
-        .then(res => {
-          state.emails = res.body.emails;
-          return request.get('/api/filters');
-        })
-        .then(res => {
-          state.filters = res.body.filters;
-          return request.get('/api/modifiers');
-        })
-        .then(res => {
-          state.modifiers = res.body.modifiers;
+          state.emails = res[0].body.emails;
+          state.domains = res[1].body.domains;
+          state.filters = res[2].body.filters;
+          state.modifiers = res[3].body.modifiers;
 
           // Push initial state to store
           store.dispatch({
