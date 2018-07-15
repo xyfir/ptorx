@@ -269,3 +269,14 @@ section.pwn-check {
 .status-404 {
   text-align: center;
 }
+
+div.xyfir-blog {
+  > input.search {
+    margin: 1em;
+    width: calc(100% - 2em) !important;
+  }
+
+  a {
+    color: $md-primary-color !important;
+  }
+}
