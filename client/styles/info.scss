@@ -271,9 +271,15 @@ section.pwn-check {
 }
 
 div.xyfir-blog {
-  > input.search {
-    margin: 1em;
-    width: calc(100% - 2em) !important;
+  padding: 1em;
+
+  * {
+    text-align: left;
+  }
+
+  > ul.posts a,
+  > article h1 {
+    line-height: 1em;
   }
 
   a {
