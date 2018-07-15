@@ -1,13 +1,14 @@
 {
   "name": "ptorx",
-  "version": "5.0.0",
+  "version": "5.1.0",
   "description": "",
   "main": "app.js",
   "scripts": {
     "build": "npm run build:css & npm run build:js",
     "build:js": "webpack-cli",
-    "build:css": "npm run build:css:app & npm run build:css:admin & npm run build:css:affiliate",
+    "build:css": "npm run build:css:app & npm run build:css:blog & npm run build:css:admin & npm run build:css:affiliate",
     "build:css:app": "node-sass client/styles/styles.scss static/css/styles.css --output-style compressed",
+    "build:css:blog": "node -e \"require('fs-extra').copy('node_modules/@xyfir/blog/dist/blog.css', 'static/css/blog.css', console.log)\"",
     "build:css:admin": "node-sass client/styles/admin.scss static/css/admin.css --output-style compressed",
     "build:css:affiliate": "node-sass client/styles/affiliate.scss static/css/affiliate.css --output-style compressed"
   },
@@ -17,6 +18,7 @@
     "singleQuote": true
   },
   "dependencies": {
+    "@xyfir/blog": "^0.1.0",
     "admyn": "^1.4.0",
     "app-module-path": "^2.2.0",
     "basic-auth": "^2.0.0",
@@ -27,6 +29,7 @@
     "express": "^4.16.3",
     "express-mysql-session": "^2.0.0",
     "express-session": "^1.15.6",
+    "fs-extra": "^6.0.1",
     "fuse.js": "^3.2.1",
     "mailcomposer": "^4.0.2",
     "mailgun-js": "^0.20.0",
@@ -52,6 +55,6 @@
     "compression-webpack-plugin": "^1.1.11",
     "node-sass": "^4.9.2",
     "prettier": "^1.13.7",
-    "webpack": "^4.15.1"
+    "webpack": "^4.16.0"
   }
 }
