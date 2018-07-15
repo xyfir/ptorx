@@ -2,6 +2,7 @@ import { ListItem, Toolbar, Divider, Drawer, Button } from 'react-md';
 import { render } from 'react-dom';
 import request from 'superagent';
 import React from 'react';
+import Blog from '@xyfir/blog';
 
 // Components
 import Documentation from 'components/misc/Documentation';
@@ -34,18 +35,27 @@ class PtorxInfo extends React.Component {
 
   render() {
     const view = (() => {
-      const page = location.pathname.split('/')[1];
+      const paths = location.pathname.split('/');
 
-      switch (page) {
+      switch (paths[1]) {
         case 'safe-and-secure-emails':
         case 'stop-unwanted-mail':
         case 'anonymous-emails':
-          return <LandingPage page={page} pwnCheck={true} />;
+          return <LandingPage page={paths[1]} pwnCheck={true} />;
         case 'temporary-emails':
         case 'email-forwarding':
-          return <LandingPage page={page} />;
+          return <LandingPage page={paths[1]} />;
         case 'features':
           return <Features />;
+        case 'blog':
+          return (
+            <Blog
+              post={paths.length == 6 ? paths.slice(2).join('/') : null}
+              groups={['ptorx']}
+              repository="Xyfir/blog-posts"
+              linkFormat="/blog/{{post.id}}"
+            />
+          );
         case 'docs':
           return <Documentation file="help" />;
         case '':
@@ -82,7 +92,7 @@ class PtorxInfo extends React.Component {
           autoclose={true}
           navItems={(this.state.loggedIn
             ? [
-                <a href="app/">
+                <a href="/app/">
                   <ListItem primaryText="App" />
                 </a>
               ]
@@ -97,11 +107,14 @@ class PtorxInfo extends React.Component {
           ).concat([
             <Divider />,
 
-            <a href="features">
+            <a href="/features">
               <ListItem primaryText="Feature List" />
             </a>,
-            <a href="docs">
+            <a href="/docs">
               <ListItem primaryText="Help Docs" />
+            </a>,
+            <a href="/blog/">
+              <ListItem primaryText="Blog" />
             </a>
           ])}
           visible={this.state.drawer}
