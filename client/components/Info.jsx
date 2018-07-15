@@ -54,6 +54,11 @@ class PtorxInfo extends React.Component {
               groups={['ptorx']}
               repository="Xyfir/blog-posts"
               linkFormat="/blog/{{post.id}}"
+              titleFormat={['Blog – Ptorx', '{{post.title}} – Blog – Ptorx']}
+              descriptionFormat={[
+                'Read about email security and privacy on the Ptorx blog.',
+                '{{post.description}}'
+              ]}
             />
           );
         case 'docs':
