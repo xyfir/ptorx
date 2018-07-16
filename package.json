@@ -1,6 +1,6 @@
 {
   "name": "ptorx",
-  "version": "5.1.1",
+  "version": "5.1.2",
   "description": "",
   "main": "app.js",
   "scripts": {
@@ -18,7 +18,7 @@
     "singleQuote": true
   },
   "dependencies": {
-    "@xyfir/blog": "^0.2.0",
+    "@xyfir/blog": "^0.2.1",
     "admyn": "^1.4.0",
     "app-module-path": "^2.2.0",
     "basic-auth": "^2.0.0",
