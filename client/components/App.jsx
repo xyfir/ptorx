@@ -10,11 +10,11 @@ import swal from 'sweetalert';
 import Documentation from 'components/misc/Documentation';
 import QuickSearch from 'components/app/QuickSearch';
 import Navigation from 'components/app/Navigation';
-import Modifiers from 'components/modifiers/Index';
+import Modifiers from 'components/modifiers/Router';
 import Domains from 'components/domains/Domains';
 import Account from 'components/account/Account';
-import Filters from 'components/filters/Index';
-import Emails from 'components/emails/Index';
+import Filters from 'components/filters/Router';
+import Emails from 'components/emails/Router';
 
 // Modules
 import getView from 'lib/get-view';
