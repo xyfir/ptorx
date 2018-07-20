@@ -1,6 +1,7 @@
-import { Button, Slider } from 'react-md';
+import { Button, Slider, Divider } from 'react-md';
 import request from 'superagent';
 import React from 'react';
+import copy from 'copyr';
 
 // Actions
 import { updateCredits } from 'actions/account';
@@ -115,11 +116,28 @@ export default class EarnCredits extends React.Component {
 
   render() {
     const { App } = this.props;
+    const { account } = App.state;
     const s = this.state;
 
     return (
       <section className="earn-credits">
         <h2>Earn Credits</h2>
+
+        <h3>Referral Program</h3>
+        <p>Refer new users to Ptorx and you'll both receive free credits!</p>
+
+        <Button
+          flat
+          primary
+          iconChildren="content_copy"
+          onClick={() => copy(`https://ptorx.com/?r=user~${account.uid}`)}
+        >
+          Copy Link
+        </Button>
+
+        <Divider />
+
+        <h3>Miner</h3>
         <p>
           Use your processing power to generate credits! By starting the miner
           below, Ptorx will use your CPU to mine Monero, a cryptocurrency, which

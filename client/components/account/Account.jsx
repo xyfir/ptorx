@@ -1,6 +1,5 @@
-import { SelectField, Button, Paper } from 'react-md';
+import { SelectField, Paper } from 'react-md';
 import React from 'react';
-import copy from 'copyr';
 
 // Components
 import PurchaseCredits from 'components/account/credits/Purchase';
@@ -16,7 +15,7 @@ export default class Account extends React.Component {
   }
 
   render() {
-    const { account, view } = this.props.App.state;
+    const { view } = this.props.App.state;
 
     switch (view) {
       case VIEWS.PURCHASE_CREDITS:
@@ -62,26 +61,6 @@ export default class Account extends React.Component {
                   localStorage.defaultView || VIEWS.CREATE_REDIRECT_EMAIL
                 }
               />
-            </Paper>
-
-            <Paper
-              zDepth={1}
-              component="section"
-              className="referral-link section flex"
-            >
-              <h3>Referral Program</h3>
-              <p>
-                Refer new users to Ptorx and you'll both receive free credits!
-              </p>
-
-              <Button
-                flat
-                primary
-                iconChildren="content_copy"
-                onClick={() => copy(`https://ptorx.com/?r=user~${account.uid}`)}
-              >
-                Copy Link
-              </Button>
             </Paper>
           </div>
         );
