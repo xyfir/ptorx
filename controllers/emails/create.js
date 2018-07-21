@@ -103,11 +103,17 @@ module.exports = async function(req, res) {
     };
     const modifiers =
       typeof req.body.modifiers == 'string'
-        ? req.body.modifiers.split(',').map(Number)
+        ? req.body.modifiers
+            .split(',')
+            .filter(f => f)
+            .map(Number)
         : req.body.modifiers || [];
     const filters =
       typeof req.body.filters == 'string'
-        ? req.body.filters.split(',').map(Number)
+        ? req.body.filters
+            .split(',')
+            .filter(f => f)
+            .map(Number)
         : req.body.filters || [];
 
     await validateFilters(filters, req.session.uid, data.direct_forward, db);
