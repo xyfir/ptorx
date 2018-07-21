@@ -1,6 +1,7 @@
 import {
   UPDATE_CREDITS,
   ADD_PRIMARY_EMAIL,
+  SET_EMAIL_TEMPLATE,
   DELETE_PRIMARY_EMAIL
 } from 'constants/actions';
 
@@ -8,6 +9,9 @@ export default function(state, action) {
   switch (action.type) {
     case UPDATE_CREDITS:
       return Object.assign({}, state, { credits: action.credits });
+
+    case SET_EMAIL_TEMPLATE:
+      return Object.assign({}, state, { email_template: action.id });
 
     case ADD_PRIMARY_EMAIL:
       return Object.assign({}, state, {

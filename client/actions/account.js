@@ -1,6 +1,7 @@
 import {
   UPDATE_CREDITS,
   ADD_PRIMARY_EMAIL,
+  SET_EMAIL_TEMPLATE,
   DELETE_PRIMARY_EMAIL
 } from 'constants/actions';
 
@@ -14,6 +15,11 @@ export function addEmail(id, email) {
     id,
     email
   };
+}
+
+/** @param {number} id */
+export function setEmailTemplate(id) {
+  return { type: SET_EMAIL_TEMPLATE, id };
 }
 
 /** @param {number} id */
