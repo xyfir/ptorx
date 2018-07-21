@@ -80,6 +80,7 @@ router
   .route('/account/email/:email')
   .post(require('./account/email/add'))
   .delete(require('./account/email/delete'));
+router.put('/account/email/template', require('./account/email/template'));
 router.post('/account/login', require('./account/login'));
 router.get('/account/logout', require('./account/logout'));
 
