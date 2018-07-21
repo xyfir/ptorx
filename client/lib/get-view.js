@@ -29,8 +29,8 @@ export default function(state) {
           }
         case 'primary-emails':
           return VIEWS.PRIMARY_EMAILS;
-        default:
-          return VIEWS.ACCOUNT;
+        case 'settings':
+          return VIEWS.SETTINGS;
       }
     case 'filters':
       switch (hash[1]) {

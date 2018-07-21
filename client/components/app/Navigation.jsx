@@ -58,10 +58,10 @@ export default class AppNavigation extends React.Component {
         leftIcon={<FontIcon>account_box</FontIcon>}
         primaryText="My Account"
         nestedItems={[
-          <a href="#/account">
+          <a href="#/account/settings">
             <ListItem
-              leftIcon={<FontIcon>account_circle</FontIcon>}
-              primaryText="Manage"
+              leftIcon={<FontIcon>settings</FontIcon>}
+              primaryText="Settings"
             />
           </a>,
           App.state.account.affiliate ? (

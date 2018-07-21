@@ -12,7 +12,7 @@ import QuickSearch from 'components/app/QuickSearch';
 import Navigation from 'components/app/Navigation';
 import Modifiers from 'components/modifiers/Router';
 import Domains from 'components/domains/Domains';
-import Account from 'components/account/Account';
+import Account from 'components/account/Router';
 import Filters from 'components/filters/Router';
 import Emails from 'components/emails/Router';
 
@@ -214,8 +214,8 @@ class App extends React.Component {
           <p>
             Credits can be <a href="#/account/credits/purchase">purchased</a>,
             or <a href="#/account/credits/earn">earned</a>, and are also
-            rewarded when you <a href="#/account">refer</a> other users to
-            Ptorx!
+            rewarded when you <a href="#/account/credits/earn">refer</a> other
+            users to Ptorx!
           </p>
           <p>
             If you're ever feeling confused, open the app menu and check out the{' '}

@@ -54,5 +54,5 @@ module.exports = async function(req, res) {
   }
 
   db.release();
-  res.redirect('/app/#/account');
+  res.redirect('/app/');
 };
