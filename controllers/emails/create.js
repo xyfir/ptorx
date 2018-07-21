@@ -13,12 +13,12 @@ const MySQL = require('lib/mysql');
   POST /api/emails
   REQUIRED
     name: string, description: string, address: string, domain: number,
-    filters: string, modifiers: string, to: number
+    filters: string | number[], modifiers: string | number[], to: number
   OPTIONAL
     saveMail: boolean, noSpamFilter: boolean, noToAddress: boolean,
     directForward: boolean
   RETURN
-    { error: boolean, message?: string, id?: number }
+    { message?: string, id?: number }
   DESCRIPTION
     Creates a redirect email, its MailGun inbound route, any used links filters/modifiers
 */
@@ -91,20 +91,24 @@ module.exports = async function(req, res) {
       throw 'Could not find main email';
 
     const data = {
-        primary_email_id: req.body.noToAddress ? 0 : rows[0].email_id,
-        direct_forward: req.body.directForward,
-        description: req.body.description,
-        spam_filter: !req.body.noSpamFilter,
-        save_mail: req.body.saveMail || req.body.noToAddress,
-        domain_id: req.body.domain,
-        user_id: req.session.uid,
-        address,
-        name: req.body.name
-      },
-      modifiers = req.body.modifiers
+      primary_email_id: req.body.noToAddress ? 0 : rows[0].email_id,
+      direct_forward: req.body.directForward,
+      description: req.body.description,
+      spam_filter: !req.body.noSpamFilter,
+      save_mail: req.body.saveMail || req.body.noToAddress,
+      domain_id: req.body.domain,
+      user_id: req.session.uid,
+      address,
+      name: req.body.name
+    };
+    const modifiers =
+      typeof req.body.modifiers == 'string'
         ? req.body.modifiers.split(',').map(Number)
-        : [],
-      filters = req.body.filters ? req.body.filters.split(',').map(Number) : [];
+        : req.body.modifiers || [];
+    const filters =
+      typeof req.body.filters == 'string'
+        ? req.body.filters.split(',').map(Number)
+        : req.body.filters || [];
 
     await validateFilters(filters, req.session.uid, data.direct_forward, db);
     await validateModifiers(
@@ -180,9 +184,9 @@ module.exports = async function(req, res) {
     vars = [req.session.uid];
     dbRes = await db.query(sql, vars);
 
-    res.json({ error: false, id });
+    res.status(200).json({ id });
   } catch (err) {
-    res.json({ error: true, message: err });
+    res.status(400).json({ message: err });
   }
 
   db.release();
