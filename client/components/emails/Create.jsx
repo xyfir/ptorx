@@ -19,46 +19,58 @@ export default class CreateEmail extends React.Component {
     this.state = { loading: true };
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     const { App } = this.props;
     const q = query(location.hash);
 
-    // Load data to prefill form from email
-    if (q.duplicate) {
-      const email = App.state.emails.find(e => e.id == q.duplicate);
+    const copy = +q.duplicate || +App.state.account.email_template;
+    let email = App.state.emails.find(e => e.id == copy);
 
-      if (!email) return;
-
+    // Load data to prefill data
+    if (email) {
       const domain = email.address.split('@')[1];
       email.domain = App.state.domains.find(d => d.domain == domain).id;
 
-      request.get('/api/emails/' + q.duplicate).end((err, res) => {
-        if (!err && !res.body.error) {
-          this.setState({
-            showAdvanced: true,
-            loading: false,
-            email: Object.assign({}, email, res.body)
-          });
-        }
-      });
+      try {
+        const res = await request.get(`/api/emails/${copy}`);
+        if (res.body.error) throw res.body;
+        email = Object.assign({}, email, res.body);
+      } catch (err) {
+        email = null;
+      }
     }
+
     // Instantly create a new proxy email without showing form
-    else if (q.instant) {
-      this.onSubmit({
-        to: App.state.account.emails[0].id,
-        name: 'Untitled Instant Proxy Email',
-        domain: 1,
-        address: '',
-        filters: '',
-        saveMail: false,
-        modifiers: '',
-        description: 'Created on ' + moment().format('YYYY-MM-DD, HH:mm:ss'),
-        noToAddress: false,
-        noSpamFilter: false,
-        directForward: false
+    if (q.instant) {
+      email = Object.assign(
+        {
+          to: App.state.account.emails[0].id,
+          name: 'Untitled Instant Proxy Email',
+          domain: 1,
+          filters: [],
+          saveMail: false,
+          modifiers: [],
+          noToAddress: false,
+          description: 'Created on ' + moment().format('YYYY-MM-DD, HH:mm:ss'),
+          noSpamFilter: false,
+          directForward: false
+        },
+        email || {}
+      );
+      email.address = '';
+      email.filters = email.filters.map(f => f.id);
+      email.modifiers = email.modifiers.map(m => m.id);
+      this.onSubmit(email);
+    }
+    // Duplicate email (custom)
+    else if (email) {
+      this.setState({
+        showAdvanced: true,
+        loading: false,
+        email
       });
     }
-    // Load form as normal
+    // Load as normal
     else {
       this.setState({ loading: false });
     }
