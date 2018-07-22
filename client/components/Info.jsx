@@ -102,10 +102,10 @@ class PtorxInfo extends React.Component {
                 </a>
               ]
             : [
-                <a href="https://accounts.xyfir.com/app/#/login/13">
+                <a href="https://accounts.xyfir.com/login/service/13">
                   <ListItem primaryText="Login" />
                 </a>,
-                <a href="https://accounts.xyfir.com/app/#/register/13">
+                <a href="https://accounts.xyfir.com/register/service/13">
                   <ListItem primaryText="Register" />
                 </a>
               ]

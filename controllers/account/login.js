@@ -49,24 +49,8 @@ module.exports = async function(req, res) {
         xyfir_id: req.body.xid
       };
 
-      // Validate xyAccounts affiliate promo code
-      if (referral.type == 'promo') {
-        try {
-          const xaccResult2 = await request
-            .post(config.address.xacc + 'api/affiliate/signup')
-            .send({
-              service: 13,
-              serviceKey: config.keys.xacc,
-              promoCode: referral.promo
-            });
-
-          if (xaccResult2.body.error || xaccResult2.body.promo != 4)
-            referral = {};
-          else insert.credits += 50;
-        } catch (e) {}
-      }
       // Reward credits for referral
-      else if (referral.type == 'user') {
+      if (referral.type == 'user') {
         try {
           await credit(db, +referral.user, 25);
           insert.credits += 50;

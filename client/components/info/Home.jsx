@@ -88,7 +88,7 @@ export default class Home extends React.Component {
             raised
             className="try-free"
             onClick={() =>
-              (location.href = 'https://accounts.xyfir.com/app/#/register/13')
+              (location.href = 'https://accounts.xyfir.com/register/service/13')
             }
           >
             Sign Up

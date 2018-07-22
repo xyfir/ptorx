@@ -43,7 +43,7 @@ class App extends React.Component {
 
       // Access token is required
       if (!token && ENVIRONMENT != 'development') {
-        location.href = XACC + 'app/#/login/service/13';
+        location.href = XACC + '/login/service/13';
       }
 
       const state = {
@@ -66,7 +66,7 @@ class App extends React.Component {
         .query({ token })
         .then(res => {
           if (!res.body.loggedIn)
-            return (location.href = XACC + 'app/#/login/service/13');
+            return (location.href = XACC + '/login/service/13');
 
           state.account = res.body;
 
@@ -133,7 +133,7 @@ class App extends React.Component {
         .send(q)
         .end((err, res) => {
           if (err || res.body.error) {
-            location.href = XACC + 'app/#/login/service/13';
+            location.href = XACC + '/login/service/13';
           } else {
             localStorage.accessToken = res.body.accessToken;
             initialize();

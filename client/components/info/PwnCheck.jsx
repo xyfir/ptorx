@@ -76,7 +76,7 @@ export default class PwnCheck extends React.Component {
             className="protect-my-emails"
             onClick={() =>
               (location.href =
-                'https://accounts.xyfir.com/app/#/register/13' +
+                'https://accounts.xyfir.com/register/service/13' +
                 '?email=' +
                 this.state.email)
             }
@@ -152,7 +152,7 @@ export default class PwnCheck extends React.Component {
             className="protect-my-emails"
             onClick={() =>
               (location.href =
-                'https://accounts.xyfir.com/app/#/register/13' +
+                'https://accounts.xyfir.com/register/service/13' +
                 '?email=' +
                 this.state.email)
             }
@@ -224,7 +224,7 @@ export default class PwnCheck extends React.Component {
             className="protect-my-emails"
             onClick={() =>
               (location.href =
-                'https://accounts.xyfir.com/app/#/register/13' +
+                'https://accounts.xyfir.com/register/service/13' +
                 '?email=' +
                 this.state.email)
             }
