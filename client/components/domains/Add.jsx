@@ -42,7 +42,7 @@ export default class AddDomain extends React.Component {
       .send({ domain })
       .end((err, res) => {
         if (err || res.body.error) {
-          swal('Error', res.body.message, 'error');
+          swal('Error', res.body.message);
         } else if (res.body.requestKey) {
           this.setState({
             view: this.views.REQUEST_ACCESS,
@@ -173,7 +173,10 @@ export default class AddDomain extends React.Component {
 
                 <TableRow>
                   <TableColumn>CNAME</TableColumn>
-                  <TableColumn>email.{this.state.domain}</TableColumn>
+                  <TableColumn>
+                    email.
+                    {this.state.domain}
+                  </TableColumn>
                   <TableColumn>mailgun.org</TableColumn>
                 </TableRow>
               </TableBody>
