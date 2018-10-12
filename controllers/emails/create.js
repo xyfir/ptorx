@@ -47,7 +47,6 @@ module.exports = async function(req, res) {
       FROM users WHERE user_id = ?
     `,
       vars = [
-        req.session.uid,
         req.body.domain,
         req.body.domain,
         req.session.uid,
