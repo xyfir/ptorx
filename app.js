@@ -4,7 +4,6 @@ const SessionStore = require('express-mysql-session');
 const express = require('express');
 const session = require('express-session');
 const parser = require('body-parser');
-const admyn = require('admyn/server');
 const app = express();
 
 const config = require('./config');
@@ -37,24 +36,12 @@ app.use(
 app.use(parser.json({ limit: '26mb' }));
 app.use(parser.urlencoded({ extended: true, limit: '26mb' }));
 
-/* Admyn */
-app.use(
-  '/admyn-yCPnUcXcU10QRkwv',
-  function(req, res, next) {
-    if (!req.session.admin) return res.status(403).send();
-    req.admyn = { database: config.database.mysql };
-    next();
-  },
-  admyn()
-);
-
 // Express middleware / controllers
 app.get('/affiliate', (req, res) =>
   res.sendFile(__dirname + '/views/affiliate.html')
 );
 app.use('/static', express.static(__dirname + '/static'));
 app.get('/panel', (req, res) => res.sendFile(__dirname + '/views/panel.html'));
-app.get('/admin', (req, res) => res.sendFile(__dirname + '/views/admin.html'));
 app.get('/app', (req, res) => res.sendFile(__dirname + '/views/app.html'));
 app.use('/api', require('./controllers/'));
 app.get('/*', (req, res) => {
