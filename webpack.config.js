@@ -3,23 +3,7 @@ const webpack = require('webpack');
 const config = require('./config');
 const path = require('path');
 
-const plugins = [
-  new webpack.DefinePlugin({
-    'process.env': {
-      NODE_ENV: JSON.stringify(config.environment.type)
-    }
-  })
-];
-
-const isProd = config.environment.type == 'production';
-
-if (isProd) {
-  plugins.push(
-    new CompressionPlugin({
-      asset: '[path].gz'
-    })
-  );
-}
+const PROD = config.environment.type == 'production';
 
 module.exports = {
   mode: config.environment.type,
@@ -31,17 +15,13 @@ module.exports = {
   },
 
   output: {
-    chunkFilename: '[name]~[chunkhash]~chunk.js',
     publicPath: '/static/js/',
-    filename: '[name].js',
+    filename: PROD ? '[name].[hash].js' : '[name].js',
     path: path.resolve(__dirname, 'static/js')
   },
 
   resolve: {
     modules: [path.resolve(__dirname, 'client'), 'node_modules'],
-    alias: {
-      server: __dirname
-    },
     extensions: ['.js', '.jsx']
   },
 
@@ -61,7 +41,7 @@ module.exports = {
         options: {
           presets: [
             [
-              'env',
+              '@babel/preset-env',
               {
                 targets: {
                   browsers: [
@@ -73,12 +53,19 @@ module.exports = {
                 }
               }
             ],
-            'react'
+            '@babel/preset-react'
           ]
         }
       }
     ]
   },
 
-  plugins
+  plugins: [
+    new webpack.DefinePlugin({
+      'process.env': {
+        NODE_ENV: JSON.stringify(config.environment.type)
+      }
+    }),
+    PROD ? new CompressionPlugin({ filename: '[path].gz' }) : null
+  ].filter(p => p !== null)
 };
