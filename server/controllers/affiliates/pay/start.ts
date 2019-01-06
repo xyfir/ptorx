@@ -4,7 +4,7 @@ import * as CONFIG from 'constants/config';
 import { MySQL } from 'lib/MySQL';
 
 /*
-  POST /api/affiliates/pay
+  POST /api/6/affiliates/pay
   REQUIRED
     timestamp: string
   RETURN

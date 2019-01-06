@@ -1,7 +1,7 @@
 import { MySQL } from 'lib/MySQL';
 
 /**
- * DELETE /api/modifiers/:mod
+ * DELETE /api/6/modifiers/:mod
  * @param {object} req
  * @param {object} req.params
  * @param {number} req.params.mod

@@ -2,7 +2,7 @@ const deleteEmail = require('controllers/emails/delete');
 import { MySQL } from 'lib/MySQL';
 
 /*
-  DELETE api/domains/:domain/users/:user
+  DELETE /api/6/domains/:domain/users/:user
   RETURN
     { error: boolean, message?: string }
   DESCRIPTION
@@ -13,8 +13,6 @@ module.exports = async function(req, res) {
   const db = new MySQL();
 
   try {
-
-
     let result;
 
     // Remove self from domain

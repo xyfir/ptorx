@@ -2,7 +2,7 @@ const deleteEmail = require('lib/email/delete');
 import { MySQL } from 'lib/MySQL';
 
 /*
-  DELETE api/emails/:email
+  DELETE /api/6/emails/:email
   RETURN
     { error: boolean, message?: string }
   DESCRIPTION
@@ -13,7 +13,6 @@ module.exports = async function(req, res) {
   const db = new MySQL();
 
   try {
-
     await deleteEmail(db, +req.params.email, +req.session.uid);
     db.release();
     res.json({ error: false });

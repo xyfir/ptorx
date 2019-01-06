@@ -5,7 +5,7 @@ import { MySQL } from 'lib/MySQL';
 import axios from 'axios';
 
 /*
-  GET /api/account
+  GET /api/6/account
   REQUIRED
     token: string
   RETURN

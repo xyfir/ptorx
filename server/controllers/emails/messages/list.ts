@@ -1,7 +1,7 @@
 import { MySQL } from 'lib/MySQL';
 
 /*
-  GET /api/emails/:email/messages
+  GET /api/6/emails/:email/messages
   OPTIONAL
     type: number
   RETURN
@@ -19,7 +19,6 @@ module.exports = async function(req, res) {
   const db = new MySQL();
 
   try {
-
     const messages = await db.query(
       `
         SELECT

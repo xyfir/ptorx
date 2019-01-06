@@ -4,7 +4,7 @@ import * as CONFIG from 'constants/config';
 import { MySQL } from 'lib/MySQL';
 
 /*
-  POST /api/emails/:email/messages
+  POST /api/6/emails/:email/messages
   REQUIRED
     to: string, subject: string, content: string
   RETURN
@@ -16,7 +16,6 @@ module.exports = async function(req, res) {
   const db = new MySQL();
 
   try {
-
     const [row] = await db.query(
       `
         SELECT

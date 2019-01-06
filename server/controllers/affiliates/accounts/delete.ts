@@ -3,13 +3,12 @@ const deleteUser = require('lib/user/delete');
 import { MySQL } from 'lib/MySQL';
 
 /*
-  DELETE /api/affiliates/accounts/:id
+  DELETE /api/6/affiliates/accounts/:id
 */
 module.exports = async function(req, res) {
   const db = new MySQL();
 
   try {
-
     const affiliate = await authenticate(db, req);
 
     // Verify user was created by affiliate

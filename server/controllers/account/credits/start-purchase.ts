@@ -3,7 +3,7 @@ import * as CONFIG from 'constants/config';
 import { MySQL } from 'lib/MySQL';
 
 /**
- * `POST /api/account/credits/purchase`
+ * `POST /api/6/account/credits/purchase`
  * @param {object} req
  * @param {object} req.body
  * @param {string} req.body.type - `"normal|iap"`

@@ -2,7 +2,7 @@ import axios from 'axios';
 import { MySQL } from 'lib/MySQL';
 
 /*
-  POST api/domains/:domain/users
+  POST /api/6/domains/:domain/users
   REQUIRED
     key: string, label: string
   RETURN

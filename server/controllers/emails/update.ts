@@ -9,7 +9,7 @@ import * as CONFIG from 'constants/config';
 import { MySQL } from 'lib/MySQL';
 
 /*
-  PUT /api/emails/:email
+  PUT /api/6/emails/:email
   REQUIRED
     name: string, description: string, filters: string,
     modifiers: string, to: number
@@ -26,7 +26,6 @@ module.exports = async function(req, res) {
 
   try {
     validate(req.body);
-
 
     await requireCredits(db, +req.session.uid);
 

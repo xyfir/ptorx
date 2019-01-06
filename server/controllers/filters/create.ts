@@ -2,7 +2,7 @@ const validate = require('lib/filter/validate');
 import { MySQL } from 'lib/MySQL';
 
 /**
- * POST /api/filters
+ * POST /api/6/filters
  * @param {object} req
  * @param {RequestBody} req.body
  */

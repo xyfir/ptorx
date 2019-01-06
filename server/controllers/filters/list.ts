@@ -1,7 +1,7 @@
 import { MySQL } from 'lib/MySQL';
 
 /**
- * GET /api/filters
+ * GET /api/6/filters
  */
 /**
  * @typedef {object} ResponseBody

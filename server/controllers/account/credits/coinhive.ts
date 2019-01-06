@@ -40,7 +40,7 @@ async function getCoinhiveStats() {
 }
 
 /**
- * `GET /api/account/credits/coinhive`
+ * `GET /api/6/account/credits/coinhive`
  * @async
  */
 /**

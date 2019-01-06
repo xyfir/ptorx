@@ -27,8 +27,8 @@ app.get('/affiliate', (req, res) =>
 );
 app.use('/static', express.static(__dirname + '../web/dist'));
 app.get('/panel', (req, res) => res.sendFile(__dirname + '/views/panel.html'));
+app.use('/api/6', require('./controllers/'));
 app.get('/app', (req, res) => res.sendFile(__dirname + '/views/app.html'));
-app.use('/api', require('./controllers/'));
 app.get('/*', (req, res) => {
   if (!CONFIG.PROD) req.session.uid = 1;
   res.sendFile(__dirname + '/views/info.html');

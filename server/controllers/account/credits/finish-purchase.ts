@@ -3,7 +3,7 @@ import * as CONFIG from 'constants/config';
 import { MySQL } from 'lib/MySQL';
 
 /**
- * `GET /api/account/credits/purchase`
+ * `GET /api/6/account/credits/purchase`
  * @param {object} req
  * @param {object} req.query
  * @param {number} req.query.payment_id

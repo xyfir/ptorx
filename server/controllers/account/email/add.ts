@@ -1,7 +1,7 @@
 import { MySQL } from 'lib/MySQL';
 
 /*
-  POST /api/account/email/:email
+  POST /api/6/account/email/:email
   RETURN
     { id?: number, message?: string }
 */
@@ -9,7 +9,6 @@ module.exports = async function(req, res) {
   const db = new MySQL();
 
   try {
-
     const [row] = await db.query(
       `
         SELECT (

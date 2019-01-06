@@ -3,7 +3,7 @@ const validate = require('lib/modifier/validate');
 import { MySQL } from 'lib/MySQL';
 
 /*
-  PUT api/modifiers/:mod
+  PUT /api/6/modifiers/:mod
   REQUIRED
     type: number, name: string, description: string
   OPTIONAL
@@ -38,8 +38,6 @@ module.exports = async function(req, res) {
         req.params.mod,
         req.session.uid
       ];
-
-
 
     const result = await db.query(sql, vars);
 

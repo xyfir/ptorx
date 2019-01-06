@@ -3,7 +3,7 @@ import * as CONFIG from 'constants/config';
 import { MySQL } from 'lib/MySQL';
 
 /*
-  PUT api/domains/:domain/verify
+  PUT /api/6/domains/:domain/verify
   RETURN
     { error: boolean, message?: string }
   DESCRIPTION

@@ -3,7 +3,7 @@ const validate = require('lib/modifier/validate');
 import { MySQL } from 'lib/MySQL';
 
 /*
-  POST api/modifiers
+  POST /api/6/modifiers
   REQUIRED
     type: number, name: string, description: string
   OPTIONAL
@@ -24,8 +24,6 @@ module.exports = async function(req, res) {
   const db = new MySQL();
 
   try {
-
-
     validate(req.body);
 
     const sql = `

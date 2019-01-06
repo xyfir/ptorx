@@ -5,7 +5,7 @@ import * as CONFIG from 'constants/config';
 import { MySQL } from 'lib/MySQL';
 
 /*
-  POST /api/emails/:email/messages/:message
+  POST /api/6/emails/:email/messages/:message
   REQUIRED
     content: string
   RETURN

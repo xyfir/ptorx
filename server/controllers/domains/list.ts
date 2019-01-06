@@ -1,7 +1,7 @@
 import { MySQL } from 'lib/MySQL';
 
 /*
-  GET api/domains
+  GET /api/6/domains
   RETURN
     {
       error: boolean, message?: string,
@@ -16,7 +16,6 @@ module.exports = async function(req, res) {
   const db = new MySQL();
 
   try {
-
     const rows = await db.query(
       `
       SELECT

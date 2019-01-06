@@ -4,7 +4,7 @@ import { MySQL } from 'lib/MySQL';
 const uuid = require('uuid/v4');
 
 /*
-  POST /api/domains
+  POST /api/6/domains
   REQUIRED
     domain: string
   RETURN

@@ -1,7 +1,7 @@
 import { MySQL } from 'lib/MySQL';
 
 /*
-  GET api/emails/availability
+  GET /api/6/emails/availability
   REQUIRED
     address: string, domain: number
   RETURN
@@ -13,7 +13,6 @@ module.exports = async function(req, res) {
   const db = new MySQL();
 
   try {
-
     const rows = await db.query(
       'SELECT email_id FROM proxy_emails WHERE address = ? AND domain_id = ?',
       [req.query.address, req.query.domain]

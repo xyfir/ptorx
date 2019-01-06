@@ -7,7 +7,7 @@ import * as CONFIG from 'constants/config';
 import { MySQL } from 'lib/MySQL';
 
 /*
-  POST /api/receive/:email
+  POST /api/6/receive/:email
   REQUIRED
     from: string, // 'user@domain' OR 'Sender Name <user@domain>'
     sender: string, // Always 'user@domain'

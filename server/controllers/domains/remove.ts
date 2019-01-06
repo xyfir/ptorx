@@ -3,7 +3,7 @@ import * as CONFIG from 'constants/config';
 import { MySQL } from 'lib/MySQL';
 
 /*
-  DELETE api/domains/:domain
+  DELETE /api/6/domains/:domain
   RETURN
     { error: boolean, message?: string }
   DESCRIPTION

@@ -6,7 +6,7 @@ const cryptr = new Cryptr(CONFIG.ACCESS_TOKEN_KEY);
 import { MySQL } from 'lib/MySQL';
 
 /*
-  POST /api/account/login
+  POST /api/6/account/login
   REQUIRED
     xid: string, auth: string
   OPTIONAL

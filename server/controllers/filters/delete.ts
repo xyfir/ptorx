@@ -2,7 +2,7 @@ const requireCredits = require('lib/user/require-credits');
 import { MySQL } from 'lib/MySQL';
 
 /*
-  DELETE /api/filters/:filter
+  DELETE /api/6/filters/:filter
   RETURN
     { update?: number[] }
 */
@@ -10,7 +10,6 @@ module.exports = async function(req, res) {
   const db = new MySQL();
 
   try {
-
     await requireCredits(db, +req.session.uid);
 
     // Get filter

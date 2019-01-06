@@ -3,7 +3,7 @@ const moment = require('moment');
 import { MySQL } from 'lib/MySQL';
 
 /*
-  GET /api/affiliates
+  GET /api/6/affiliates
   RETURN
     {
       user_id: number, api_key: string, credits: number,
@@ -15,7 +15,6 @@ module.exports = async function(req, res) {
   const db = new MySQL();
 
   try {
-
     const affiliate = await getAffiliate(
       db,
       +req.session.uid,

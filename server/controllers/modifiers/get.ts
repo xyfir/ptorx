@@ -1,7 +1,7 @@
 import { MySQL } from 'lib/MySQL';
 
 /*
-  GET api/modifiers/:mod
+  GET /api/6/modifiers/:mod
   RETURN
     {
       error: boolean, message?: string,

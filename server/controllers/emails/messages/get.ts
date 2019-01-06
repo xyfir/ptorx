@@ -3,7 +3,7 @@ import * as CONFIG from 'constants/config';
 import { MySQL } from 'lib/MySQL';
 
 /*
-  GET api/emails/:email/messages/:message
+  GET /api/6/emails/:email/messages/:message
   RETURN
     {
       error: boolean, message?: string,

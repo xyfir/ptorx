@@ -3,7 +3,7 @@ const validate = require('lib/filter/validate');
 import { MySQL } from 'lib/MySQL';
 
 /*
-  PUT /api/filters/:filter
+  PUT /api/6/filters/:filter
   REQUIRED
     type: number, name: string, description: string, find: string
   OPTIONAL
@@ -17,7 +17,6 @@ module.exports = async function(req, res) {
   try {
     const valid = validate(req.body);
     if (valid != 'ok') throw valid;
-
 
     await requireCredits(db, +req.session.uid);
 

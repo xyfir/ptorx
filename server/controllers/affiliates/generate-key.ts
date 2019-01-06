@@ -2,7 +2,7 @@ import { MySQL } from 'lib/MySQL';
 const uuid = require('uuid/v4');
 
 /*
-  POST /api/affiliates/key
+  POST /api/6/affiliates/key
   RETURN
     { api_key: string }
 */
@@ -11,7 +11,6 @@ module.exports = async function(req, res) {
 
   try {
     const api_key = uuid();
-
 
     const result = await db.query(
       'UPDATE affiliates SET api_key = ? WHERE user_id = ?',

@@ -1,7 +1,7 @@
 import { MySQL } from 'lib/MySQL';
 
 /*
-  DELETE api/emails/:email/messages/:message
+  DELETE /api/6/emails/:email/messages/:message
   RETURN
     { error: boolean, message?: string }
   DESCRIPTION
@@ -11,7 +11,6 @@ module.exports = async function(req, res) {
   const db = new MySQL();
 
   try {
-
     await db.query(
       `
       DELETE FROM messages

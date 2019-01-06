@@ -4,7 +4,7 @@ import * as CONFIG from 'constants/config';
 import { MySQL } from 'lib/MySQL';
 
 /*
-  POST /api/receive/reply
+  POST /api/6/receive/reply
   REQUIRED
     sender: string, // Always 'user@domain'
     subject: string,
@@ -22,7 +22,6 @@ module.exports = async function(req, res) {
 
   try {
     const [messageId, domain] = req.body.recipient.split('--reply@');
-
 
     const [row] = await db.query(
       `

@@ -4,7 +4,7 @@ import * as CONFIG from 'constants/config';
 import { MySQL } from 'lib/MySQL';
 
 /*
-  POST /api/affiliates/accounts
+  POST /api/6/affiliates/accounts
   REQUIRED
     email: string, credits: number
   OPTIONAL

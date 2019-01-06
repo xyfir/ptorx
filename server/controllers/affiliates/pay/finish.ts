@@ -3,7 +3,7 @@ import * as CONFIG from 'constants/config';
 import { MySQL } from 'lib/MySQL';
 
 /*
-  GET /api/affiliates/pay
+  GET /api/6/affiliates/pay
   REQUIRED
     payment_id: number
   DESCRIPTION
