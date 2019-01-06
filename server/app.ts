@@ -1,42 +1,27 @@
-require('app-module-path').addPath(__dirname);
+import 'app-module-path/register';
 
-const SessionStore = require('express-mysql-session');
-const express = require('express');
-const session = require('express-session');
-const parser = require('body-parser');
-const app = express();
+import * as Session from 'express-session';
+import * as Express from 'express';
+import * as parser from 'body-parser';
+import * as CONFIG from 'constants/config';
+import * as Store from 'express-mysql-session';
 
-const config = require('./config');
+// @ts-ignore
+const SessionStore = Store(Session);
+const app = Express();
 
-app.listen(config.environment.port, () =>
-  console.log('~~Server running on port', config.environment.port)
-);
+app.listen(CONFIG.PORT, () => console.log('Listening on port', CONFIG.PORT));
 
-/* Sessions */
 app.use(
-  session({
-    secret: config.keys.session,
-    store: new SessionStore({
-      host: config.database.mysql.host,
-      port: config.database.mysql.port,
-      user: config.database.mysql.user,
-      password: config.database.mysql.password,
-      database: config.database.mysql.database,
-      useConnectionPooling: true
-    }),
-    saveUninitialized: true,
-    resave: true,
-    cookie: {
-      httpOnly: false
-    }
+  Session({
+    store: new SessionStore(CONFIG.MYSQL),
+    secret: CONFIG.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false
   })
 );
-
-/* Body Parser */
 app.use(parser.json({ limit: '26mb' }));
 app.use(parser.urlencoded({ extended: true, limit: '26mb' }));
-
-// Express middleware / controllers
 app.get('/affiliate', (req, res) =>
   res.sendFile(__dirname + '/views/affiliate.html')
 );
@@ -45,9 +30,8 @@ app.get('/panel', (req, res) => res.sendFile(__dirname + '/views/panel.html'));
 app.get('/app', (req, res) => res.sendFile(__dirname + '/views/app.html'));
 app.use('/api', require('./controllers/'));
 app.get('/*', (req, res) => {
-  if (config.environment.type == 'development') req.session.uid = 1;
-
+  if (!CONFIG.PROD) req.session.uid = 1;
   res.sendFile(__dirname + '/views/info.html');
 });
 
-if (config.environment.runCronJobs) require('jobs/cron/start')();
+if (CONFIG.CRON) require('jobs/cron/start')();
