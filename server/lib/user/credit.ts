@@ -2,7 +2,7 @@ const buildExpression = require('lib/mg-route/build-expression');
 const getProxyEmail = require('lib/email/get');
 const buildAction = require('lib/mg-route/build-action');
 const MailGun = require('mailgun-js');
-const config = require('config');
+import * as CONFIG from 'constants/config';
 
 /**
  * Adds credits to a users account and reactivates its proxy emails if needed.
@@ -66,11 +66,11 @@ module.exports = async function(db, user, amount) {
         });
 
         const mailgun = MailGun({
-          apiKey: config.keys.mailgun,
+          apiKey: CONFIG.MAILGUN_KEY,
           domain: email.address.split('@')[1]
         });
         const mailgunRes = await mailgun.routes().create({
-          description: 'Ptorx ' + config.environment.type,
+          description: 'Ptorx ' + CONFIG.PROD ? 'prod' : 'dev',
           expression,
           priority: email.spamFilter && !email.saveMail ? 3000 : 1000,
           action

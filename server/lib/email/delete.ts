@@ -1,5 +1,5 @@
 const MailGun = require('mailgun-js');
-const config = require('config');
+import * as CONFIG from 'constants/config';
 
 /**
  * @async
@@ -37,7 +37,7 @@ module.exports = async function(db, email, user) {
 
   if (row.mgRouteId) {
     const mailgun = MailGun({
-      apiKey: config.keys.mailgun,
+      apiKey: CONFIG.MAILGUN_KEY,
       domain: row.domain
     });
     await mailgun.routes(row.mgRouteId).delete();

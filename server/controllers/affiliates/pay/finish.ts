@@ -1,5 +1,5 @@
 const request = require('superagent');
-const CONFIG = require('config');
+import * as CONFIG from 'constants/config';
 const MySQL = require('lib/mysql');
 
 /*
@@ -14,12 +14,10 @@ module.exports = async function(req, res) {
 
   try {
     const { body: payment } = await request
-      .get(
-        `${CONFIG.addresses.xyPayments}/api/payments/${req.query.payment_id}`
-      )
+      .get(`${CONFIG.XYPAYMENTS_URL}/api/payments/${req.query.payment_id}`)
       .query({
-        seller_id: CONFIG.ids.xyPayments,
-        seller_key: CONFIG.keys.xyPayments
+        seller_id: CONFIG.XYPAYMENTS_ID,
+        seller_key: CONFIG.XYPAYMENTS_KEY
       });
 
     if (payment.fulfilled) throw 'Payment was already fulfilled';
@@ -50,12 +48,11 @@ module.exports = async function(req, res) {
     // Mark payment fulfilled
     await request
       .post(
-        `${CONFIG.addresses.xyPayments}/api/payments/` +
-          `${req.query.payment_id}/fulfill`
+        `${CONFIG.XYPAYMENTS_URL}/api/payments/${req.query.payment_id}/fulfill`
       )
       .send({
-        seller_id: CONFIG.ids.xyPayments,
-        seller_key: CONFIG.keys.xyPayments
+        seller_id: CONFIG.XYPAYMENTS_ID,
+        seller_key: CONFIG.XYPAYMENTS_KEY
       });
   } catch (err) {}
 

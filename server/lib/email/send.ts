@@ -1,6 +1,6 @@
 const mailcomposer = require('mailcomposer');
 const MailGun = require('mailgun-js');
-const config = require('config');
+import * as CONFIG from 'constants/config';
 
 /**
  * @typedef {object} SendEmailOptions
@@ -19,7 +19,7 @@ const config = require('config');
 module.exports = options =>
   new Promise((resolve, reject) => {
     const mailgun = MailGun({
-      apiKey: config.keys.mailgun,
+      apiKey: CONFIG.MAILGUN_KEY,
       domain: options.domain
     });
 

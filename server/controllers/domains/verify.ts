@@ -1,5 +1,5 @@
 const request = require('superagent');
-const config = require('config');
+import * as CONFIG from 'constants/config';
 const mysql = require('lib/mysql');
 
 /*
@@ -23,7 +23,7 @@ module.exports = async function(req, res) {
     if (!domain) throw 'Could not find domain';
 
     const mgRes = await request.put(
-      `${config.addresses.mailgun}domains/${domain.name}/verify`
+      `${CONFIG.MAILGUN_URL}/domains/${domain.name}/verify`
     );
 
     if (mgRes.body.domain.state == 'unverified')

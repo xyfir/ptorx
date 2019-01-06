@@ -1,5 +1,5 @@
 const request = require('superagent');
-const CONFIG = require('config');
+import * as CONFIG from 'constants/config';
 const MySQL = require('lib/mysql');
 
 /**
@@ -39,11 +39,11 @@ module.exports = async function(req, res) {
     })();
 
     const payment = await request
-      .post(`${CONFIG.addresses.xyPayments}/api/payments`)
+      .post(`${CONFIG.XYPAYMENTS_URL}/api/payments`)
       .send({
-        seller_id: CONFIG.ids.xyPayments,
-        seller_key: CONFIG.keys.xyPayments,
-        product_id: CONFIG.ids.products[req.body.package],
+        seller_id: CONFIG.XYPAYMENTS_ID,
+        seller_key: CONFIG.XYPAYMENTS_KEY,
+        product_id: CONFIG.XYPAYMENTS_PRODUCTS[req.body.package],
         methods,
         description: 'Ptorx Premium',
         info: {
@@ -52,9 +52,9 @@ module.exports = async function(req, res) {
           referral
         },
         email: user.email,
-        redirect_url:
-          `${CONFIG.addresses.ptorx.root}api/account/credits/purchase` +
-          `?payment_id=PAYMENT_ID`
+        redirect_url: `${
+          CONFIG.PTORX_URL
+        }/api/account/credits/purchase?payment_id=PAYMENT_ID`
       });
 
     res.status(200).json({ url: payment.body.url });

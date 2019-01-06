@@ -1,5 +1,5 @@
 const request = require('superagent');
-const config = require('config');
+import * as CONFIG from 'constants/config';
 const mysql = require('lib/mysql');
 const uuid = require('uuid/v4');
 
@@ -60,7 +60,7 @@ module.exports = async function(req, res) {
     else {
       // Add domain to MailGun
       const { body: mgRes } = await request
-        .post(config.addresses.mailgun + 'domains')
+        .post(`${CONFIG.MAILGUN_URL}/domains`)
         .type('form')
         .send({
           name: req.body.domain,

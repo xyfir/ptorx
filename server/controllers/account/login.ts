@@ -1,8 +1,8 @@
 const request = require('superagent');
 const credit = require('lib/user/credit');
 const Cryptr = require('cryptr');
-const config = require('config');
-const cryptr = new Cryptr(config.keys.accessToken);
+import * as CONFIG from 'constants/config';
+const cryptr = new Cryptr(CONFIG.ACCESS_TOKEN_KEY);
 const MySQL = require('lib/mysql');
 
 /*
@@ -22,9 +22,9 @@ module.exports = async function(req, res) {
   try {
     // Get user's data from xyAccounts
     const xaccResult = await request
-      .get(config.addresses.xacc + 'api/service/13/user')
+      .get(`${CONFIG.XYACCOUNTS_URL}/api/service/13/user`)
       .query({
-        key: config.keys.xacc,
+        key: CONFIG.XYACCOUNTS_KEY,
         xid: req.body.xid,
         token: req.body.auth
       });

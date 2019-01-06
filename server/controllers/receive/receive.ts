@@ -3,7 +3,7 @@ const saveMessage = require('lib/email/save-message');
 const chargeUser = require('lib/user/charge');
 const request = require('superagent');
 const MailGun = require('mailgun-js');
-const config = require('config');
+import * as CONFIG from 'constants/config';
 const MySQL = require('lib/mysql');
 
 /*
@@ -280,7 +280,7 @@ module.exports = async function(req, res) {
       credits++;
 
       const mailgun = MailGun({
-        apiKey: config.keys.mailgun,
+        apiKey: CONFIG.MAILGUN_KEY,
         domain: email.proxyDomain
       });
 
@@ -293,7 +293,7 @@ module.exports = async function(req, res) {
         for (let att of attachments) {
           // Download file as buffer
           const dl = await request
-            .get(`https://api:${config.keys.mailgun}@${att.url.substr(8)}`)
+            .get(`https://api:${CONFIG.MAILGUN_KEY}@${att.url.substr(8)}`)
             .buffer(true)
             .parse(request.parse['application/octet-stream']);
 

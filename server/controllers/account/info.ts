@@ -1,7 +1,7 @@
+import * as CONFIG from 'constants/config';
 const request = require('superagent');
 const Cryptr = require('cryptr');
-const config = require('config');
-const cryptr = new Cryptr(config.keys.accessToken);
+const cryptr = new Cryptr(CONFIG.ACCESS_TOKEN_KEY);
 const MySQL = require('lib/mysql');
 
 /*
@@ -49,9 +49,9 @@ module.exports = async function(req, res) {
 
       // Validate access token with Xyfir Accounts
       const xaccResult = await request
-        .get(config.addresses.xacc + 'api/service/13/user')
+        .get(`${CONFIG.XYACCOUNTS_URL}/api/service/13/user`)
         .query({
-          key: config.keys.xacc,
+          key: CONFIG.XYACCOUNTS_KEY,
           xid: rows[0].xyfir_id,
           token: token[1]
         });
@@ -62,7 +62,7 @@ module.exports = async function(req, res) {
       row = rows[0];
     }
     // Get info for dev user
-    else if (config.environment.type == 'development') {
+    else if (!CONFIG.PROD) {
       sql = `
         SELECT referral, admin, affiliate, credits, email_template
         FROM users WHERE user_id = 1

@@ -1,12 +1,12 @@
 const CompressionPlugin = require('compression-webpack-plugin');
 const webpack = require('webpack');
-const config = require('../server/config');
+const config = require('./constants/config');
 const path = require('path');
 
-const PROD = config.environment.type == 'production';
+const PROD = config.ENVIRONMENT == 'production';
 
 module.exports = {
-  mode: config.environment.type,
+  mode: config.ENVIRONMENT,
 
   entry: {
     Affiliate: './components/Affiliate.jsx',
@@ -63,7 +63,7 @@ module.exports = {
   plugins: [
     new webpack.DefinePlugin({
       'process.env': {
-        NODE_ENV: JSON.stringify(config.environment.type)
+        NODE_ENV: JSON.stringify(config.ENVIRONMENT)
       }
     }),
     PROD ? new CompressionPlugin({ filename: '[path].gz' }) : null

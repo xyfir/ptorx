@@ -6,7 +6,7 @@ const buildAction = require('lib/mg-route/build-action');
 const validate = require('lib/email/validate');
 const generate = require('lib/email/generate');
 const MailGun = require('mailgun-js');
-const config = require('config');
+import * as CONFIG from 'constants/config';
 const MySQL = require('lib/mysql');
 
 /*
@@ -148,11 +148,11 @@ module.exports = async function(req, res) {
         : { id, save: data.save_mail }
     );
 
-    const mailgun = MailGun({ apiKey: config.keys.mailgun, domain });
+    const mailgun = MailGun({ apiKey: CONFIG.MAILGUN_KEY, domain });
 
     // Create Mailgun route
     const mgRes = await mailgun.routes().create({
-      description: 'Ptorx ' + config.environment.type,
+      description: 'Ptorx ' + CONFIG.PROD ? 'prod' : 'dev',
       expression,
       priority: data.spam_filter && !data.save_mail ? 3000 : 1000,
       action

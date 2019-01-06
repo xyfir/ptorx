@@ -1,6 +1,6 @@
 const chargeUser = require('lib/user/charge');
 const MailGun = require('mailgun-js');
-const config = require('config');
+import * as CONFIG from 'constants/config';
 const MySQL = require('lib/mysql');
 
 /*
@@ -38,7 +38,7 @@ module.exports = async function(req, res) {
     db.release();
 
     const mailgun = MailGun({
-      apiKey: config.keys.mailgun,
+      apiKey: CONFIG.MAILGUN_KEY,
       domain: row.domain
     });
 

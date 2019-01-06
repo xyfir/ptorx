@@ -1,6 +1,6 @@
 const getAffiliate = require('lib/affiliates/get');
 const request = require('superagent');
-const CONFIG = require('config');
+import * as CONFIG from 'constants/config';
 const MySQL = require('lib/mysql');
 
 /*
@@ -29,10 +29,10 @@ module.exports = async function(req, res) {
     );
 
     const { body: payment } = await request
-      .post(`${CONFIG.addresses.xyPayments}/api/payments`)
+      .post(`${CONFIG.XYPAYMENTS_URL}/api/payments`)
       .send({
-        seller_id: CONFIG.ids.xyPayments,
-        seller_key: CONFIG.keys.xyPayments,
+        seller_id: CONFIG.XYPAYMENTS_ID,
+        seller_key: CONFIG.XYPAYMENTS_KEY,
         methods: ['card', 'crypto'],
         description: 'Ptorx Affiliate',
         info: {
@@ -42,9 +42,9 @@ module.exports = async function(req, res) {
           unpaid_credits: affiliate.unpaid_credits
         },
         email,
-        redirect_url:
-          `${CONFIG.addresses.ptorx.callback}api/affiliates/pay` +
-          `?payment_id=PAYMENT_ID`,
+        redirect_url: `${
+          CONFIG.PTORX_CALLBACK_URL
+        }/api/affiliates/pay?payment_id=PAYMENT_ID`,
         amount: affiliate.owed * 100
       });
 

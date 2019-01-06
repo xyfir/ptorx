@@ -1,5 +1,5 @@
 const request = require('superagent');
-const config = require('config');
+import * as CONFIG from 'constants/config';
 const mysql = require('lib/mysql');
 
 /*
@@ -38,7 +38,7 @@ module.exports = async function(req, res) {
     // Cannot load message with mailgun-js
     const { body: data } = await request
       .get(message.url)
-      .auth('api', config.keys.mailgun);
+      .auth('api', CONFIG.MAILGUN_KEY);
 
     res.json({
       ...message,

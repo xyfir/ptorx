@@ -1,5 +1,5 @@
 const MailGun = require('mailgun-js');
-const config = require('config');
+import * as CONFIG from 'constants/config';
 
 /**
  * Charges a user's account credits. If not enough credits are available it
@@ -48,7 +48,7 @@ module.exports = async function(db, user, amount) {
     // Delete MailGun routes
     for (let email of emails) {
       const mailgun = MailGun({
-        apiKey: config.keys.mailgun,
+        apiKey: CONFIG.MAILGUN_KEY,
         domain: email.domain
       });
       try {

@@ -1,4 +1,4 @@
-const config = require('config');
+import * as CONFIG from 'constants/config';
 
 /**
  * @typedef {object} BuildActionOptions
@@ -15,8 +15,8 @@ const config = require('config');
  */
 module.exports = function(options) {
   // Receive routes need their own unique domain in dev
-  // When in prod it is the same as config.addresses.ptorx.root
-  const url = config.addresses.ptorx.callback + 'api/receive/' + options.id;
+  // When in prod it is the same as CONFIG.PTORX_URL
+  const url = `${CONFIG.PTORX_CALLBACK_URL}/api/receive/${options.id}`;
 
   if (options.address) return `forward("${options.address},${url}")`;
   else if (options.save) return `store(notify="${url}")`;

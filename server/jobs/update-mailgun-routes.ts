@@ -2,7 +2,7 @@ const MailGun = require('mailgun-js');
 const config = require('../config');
 
 (async function() {
-  const mailgun = MailGun({ apiKey: config.keys.mailgun });
+  const mailgun = MailGun({ apiKey: CONFIG.MAILGUN_KEY });
 
   try {
     const { items: routes } = await mailgun.routes().list();

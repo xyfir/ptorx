@@ -1,8 +1,8 @@
-const config = require('config');
+import * as CONFIG from 'constants/config';
 
 /*
   GET api/account/logout
 */
 module.exports = function(req, res) {
-  req.session.destroy(err => res.redirect(config.addresses.ptorx.root));
+  req.session.destroy(() => res.redirect(CONFIG.PTORX_URL));
 };

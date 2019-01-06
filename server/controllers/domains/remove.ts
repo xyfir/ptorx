@@ -1,5 +1,5 @@
 const request = require('superagent');
-const config = require('config');
+import * as CONFIG from 'constants/config';
 const mysql = require('lib/mysql');
 
 /*
@@ -21,9 +21,7 @@ module.exports = async function(req, res) {
 
     if (!domain) throw 'Could not find domain';
 
-    const mgRes = await request.delete(
-      `${config.addresses.mailgun}domains/${domain.domain}`
-    );
+    await request.delete(`${CONFIG.MAILGUN_URL}/domains/${domain.domain}`);
 
     await db.query('DELETE FROM domains WHERE id = ?', [req.params.domain]);
     db.release();

@@ -1,6 +1,6 @@
 const authenticate = require('lib/affiliates/authenticate');
 const request = require('superagent');
-const config = require('config');
+import * as CONFIG from 'constants/config';
 const MySQL = require('lib/mysql');
 
 /*
@@ -22,9 +22,9 @@ module.exports = async function(req, res) {
 
     // Call xyAccounts to create account
     const { body: xyAccRes } = await request
-      .post(`${config.addresses.xacc}api/service/13/verified`)
+      .post(`${CONFIG.XYACCOUNTS_URL}/api/service/13/verified`)
       .send({
-        key: config.keys.xacc,
+        key: CONFIG.XYACCOUNTS_KEY,
         email
       });
     if (xyAccRes.error) throw 'Could not create Xyfir user';
