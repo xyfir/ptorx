@@ -15,7 +15,6 @@ module.exports = async function(req, res) {
   const db = new MySQL();
 
   try {
-
     const [modifier] = await db.query(
       `
       SELECT
@@ -48,6 +47,6 @@ module.exports = async function(req, res) {
     res.json(modifier);
   } catch (err) {
     db.release();
-    res.json({ error: true, message: string });
+    res.json({ error: true, message: err });
   }
 };
