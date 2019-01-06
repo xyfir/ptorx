@@ -1,8 +1,8 @@
 import * as CONFIG from 'constants/config';
-const request = require('superagent');
 const Cryptr = require('cryptr');
 const cryptr = new Cryptr(CONFIG.ACCESS_TOKEN_KEY);
 import { MySQL } from 'lib/MySQL';
+import axios from 'axios';
 
 /*
   GET /api/account
@@ -48,15 +48,17 @@ module.exports = async function(req, res) {
       if (!rows.length) throw 'User does not exist';
 
       // Validate access token with Xyfir Accounts
-      const xaccResult = await request
-        .get(`${CONFIG.XYACCOUNTS_URL}/api/service/13/user`)
-        .query({
-          key: CONFIG.XYACCOUNTS_KEY,
-          xid: rows[0].xyfir_id,
-          token: token[1]
-        });
-
-      if (xaccResult.body.error) throw 'Invalid token 2';
+      const xaccResult = await axios.get(
+        `${CONFIG.XYACCOUNTS_URL}/api/service/13/user`,
+        {
+          params: {
+            key: CONFIG.XYACCOUNTS_KEY,
+            xid: rows[0].xyfir_id,
+            token: token[1]
+          }
+        }
+      );
+      if (xaccResult.data.error) throw 'Invalid token 2';
 
       uid = token[0];
       row = rows[0];

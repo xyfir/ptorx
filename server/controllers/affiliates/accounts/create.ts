@@ -1,5 +1,5 @@
 const authenticate = require('lib/affiliates/authenticate');
-const request = require('superagent');
+import axios from 'axios';
 import * as CONFIG from 'constants/config';
 import { MySQL } from 'lib/MySQL';
 
@@ -17,16 +17,13 @@ module.exports = async function(req, res) {
   const db = new MySQL();
 
   try {
-
     const affiliate = await authenticate(db, req);
 
     // Call xyAccounts to create account
-    const { body: xyAccRes } = await request
-      .post(`${CONFIG.XYACCOUNTS_URL}/api/service/13/verified`)
-      .send({
-        key: CONFIG.XYACCOUNTS_KEY,
-        email
-      });
+    const { data: xyAccRes } = await axios.post(
+      `${CONFIG.XYACCOUNTS_URL}/api/service/13/verified`,
+      { key: CONFIG.XYACCOUNTS_KEY, email }
+    );
     if (xyAccRes.error) throw 'Could not create Xyfir user';
 
     // Create user on Ptorx
@@ -37,8 +34,7 @@ module.exports = async function(req, res) {
     });
     if (!dbRes.affectedRows) throw 'Could not create Ptorx user';
 
-    /** @type {number} */
-    const user_id = dbRes.insertId;
+    const user_id: number = dbRes.insertId;
 
     // Add email as primary email
     await db.query(`INSERT INTO primary_emails SET ? `, {

@@ -1,4 +1,4 @@
-const request = require('superagent');
+import axios from 'axios';
 import * as CONFIG from 'constants/config';
 import { MySQL } from 'lib/MySQL';
 const uuid = require('uuid/v4');
@@ -29,7 +29,6 @@ module.exports = async function(req, res) {
   const db = new MySQL();
 
   try {
-
     const [row] = await db.query(
       `SELECT id AS domainId FROM domains WHERE domain = ?`,
       [req.body.domain, req.session.uid]
@@ -59,14 +58,14 @@ module.exports = async function(req, res) {
     // Domain does not exist; user must verify ownership
     else {
       // Add domain to MailGun
-      const { body: mgRes } = await request
-        .post(`${CONFIG.MAILGUN_URL}/domains`)
-        .type('form')
-        .send({
+      const { data: mgRes } = await axios.post(
+        `${CONFIG.MAILGUN_URL}/domains`,
+        {
           name: req.body.domain,
           spam_action: 'tag',
           wildcard: false
-        });
+        }
+      );
 
       // Get domainkey
       const key = mgRes.sending_dns_records.find(r =>

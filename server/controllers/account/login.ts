@@ -1,4 +1,4 @@
-const request = require('superagent');
+import axios from 'axios';
 const credit = require('lib/user/credit');
 const Cryptr = require('cryptr');
 import * as CONFIG from 'constants/config';
@@ -21,17 +21,17 @@ module.exports = async function(req, res) {
 
   try {
     // Get user's data from xyAccounts
-    const xaccResult = await request
-      .get(`${CONFIG.XYACCOUNTS_URL}/api/service/13/user`)
-      .query({
-        key: CONFIG.XYACCOUNTS_KEY,
-        xid: req.body.xid,
-        token: req.body.auth
-      });
-
-    if (xaccResult.body.error) throw '-';
-
-
+    const xaccResult = await axios.get(
+      `${CONFIG.XYACCOUNTS_URL}/api/service/13/user`,
+      {
+        params: {
+          key: CONFIG.XYACCOUNTS_KEY,
+          xid: req.body.xid,
+          token: req.body.auth
+        }
+      }
+    );
+    if (xaccResult.data.error) throw '-';
 
     // Get user data from db
     let sql = 'SELECT user_id, admin FROM users WHERE xyfir_id = ?',
@@ -44,8 +44,9 @@ module.exports = async function(req, res) {
 
       sql = `INSERT INTO users SET ?`;
       const insert = {
-        email: xaccResult.body.email,
+        email: xaccResult.data.email,
         credits: 50,
+        referral: '{}',
         xyfir_id: req.body.xid
       };
 
@@ -77,14 +78,14 @@ module.exports = async function(req, res) {
       res.json({
         error: false,
         accessToken: cryptr.encrypt(
-          result.insertId + '-' + xaccResult.body.accessToken
+          result.insertId + '-' + xaccResult.data.accessToken
         )
       });
     }
     // Normal login: update user's data
     else {
       sql = `UPDATE users SET email = ? WHERE user_id = ?`;
-      vars = [xaccResult.body.email, rows[0].user_id];
+      vars = [xaccResult.data.email, rows[0].user_id];
 
       const result = await db.query(sql, vars);
       db.release();
@@ -97,7 +98,7 @@ module.exports = async function(req, res) {
       res.json({
         error: false,
         accessToken: cryptr.encrypt(
-          rows[0].user_id + '-' + xaccResult.body.accessToken
+          rows[0].user_id + '-' + xaccResult.data.accessToken
         )
       });
     }

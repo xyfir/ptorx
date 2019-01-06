@@ -1,4 +1,4 @@
-const request = require('superagent');
+import axios from 'axios';
 import * as CONFIG from 'constants/config';
 import { MySQL } from 'lib/MySQL';
 
@@ -14,7 +14,6 @@ module.exports = async function(req, res) {
   const db = new MySQL();
 
   try {
-
     const [domain] = await db.query(
       'SELECT id, domain AS name FROM domains WHERE id = ?',
       [req.params.domain]
@@ -22,11 +21,10 @@ module.exports = async function(req, res) {
 
     if (!domain) throw 'Could not find domain';
 
-    const mgRes = await request.put(
+    const mgRes = await axios.put(
       `${CONFIG.MAILGUN_URL}/domains/${domain.name}/verify`
     );
-
-    if (mgRes.body.domain.state == 'unverified')
+    if (mgRes.data.domain.state == 'unverified')
       throw 'Could not verify domain';
 
     await db.query('UPDATE domains SET verified = 1 WHERE id = ?', [domain.id]);

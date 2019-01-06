@@ -1,7 +1,7 @@
 const escapeRegExp = require('escape-string-regexp');
 const saveMessage = require('lib/email/save-message');
 const chargeUser = require('lib/user/charge');
-const request = require('superagent');
+import axios from 'axios';
 const MailGun = require('mailgun-js');
 import * as CONFIG from 'constants/config';
 import { MySQL } from 'lib/MySQL';
@@ -271,6 +271,7 @@ module.exports = async function(req, res) {
     // Message should be redirected
     else if (data.to) {
       const message = {
+        attachment: [],
         subject: email.subject,
         text: email['body-plain'],
         from: email.recipient,
@@ -288,19 +289,17 @@ module.exports = async function(req, res) {
       if (email.attachments) {
         const attachments = JSON.parse(email.attachments);
 
-        if (attachments.length) message.attachment = [];
-
         for (let att of attachments) {
           // Download file as buffer
-          const dl = await request
-            .get(`https://api:${CONFIG.MAILGUN_KEY}@${att.url.substr(8)}`)
-            .buffer(true)
-            .parse(request.parse['application/octet-stream']);
+          const dl = await axios.get(
+            `https://api:${CONFIG.MAILGUN_KEY}@${att.url.substr(8)}`,
+            { responseType: 'arraybuffer' }
+          );
 
           // Create attachment via MailGun.Attachment
           message.attachment.push(
             new mailgun.Attachment({
-              data: dl.body,
+              data: dl.data,
               filename: att.name,
               contentType: att['content-type']
             })

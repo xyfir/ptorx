@@ -1,4 +1,4 @@
-const request = require('superagent');
+import axios from 'axios';
 import * as CONFIG from 'constants/config';
 import { MySQL } from 'lib/MySQL';
 
@@ -17,7 +17,6 @@ module.exports = async function(req, res) {
   const db = new MySQL();
 
   try {
-
     const [message] = await db.query(
       `
       SELECT
@@ -36,9 +35,9 @@ module.exports = async function(req, res) {
     if (!message) throw 'Could not find message';
 
     // Cannot load message with mailgun-js
-    const { body: data } = await request
-      .get(message.url)
-      .auth('api', CONFIG.MAILGUN_KEY);
+    const { data } = await axios.get(message.url, {
+      auth: { username: 'api', password: CONFIG.MAILGUN_KEY }
+    });
 
     res.json({
       ...message,

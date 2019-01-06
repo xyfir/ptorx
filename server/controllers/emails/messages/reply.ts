@@ -1,6 +1,6 @@
 const chargeUser = require('lib/user/charge');
 const MailGun = require('mailgun-js');
-const request = require('superagent');
+import axios from 'axios';
 import * as CONFIG from 'constants/config';
 import { MySQL } from 'lib/MySQL';
 
@@ -17,7 +17,6 @@ module.exports = async function(req, res) {
   const db = new MySQL();
 
   try {
-
     const [row] = await db.query(
       `
         SELECT
@@ -39,9 +38,9 @@ module.exports = async function(req, res) {
 
     // Get original messages' data
     // Cannot load message with mailgun-js
-    const { body: message } = await request
-      .get(row.msgUrl)
-      .auth('api', CONFIG.MAILGUN_KEY);
+    const { data: message } = await axios.get(row.msgUrl, {
+      auth: { username: 'api', password: CONFIG.MAILGUN_KEY }
+    });
 
     const mailgun = MailGun({
       apiKey: CONFIG.MAILGUN_KEY,

@@ -1,4 +1,4 @@
-const request = require('superagent');
+import axios from 'axios';
 import * as CONFIG from 'constants/config';
 import { MySQL } from 'lib/MySQL';
 
@@ -13,7 +13,6 @@ module.exports = async function(req, res) {
   const db = new MySQL();
 
   try {
-
     const [domain] = await db.query(
       'SELECT domain FROM domains WHERE id = ? AND user_id = ?',
       [req.params.domain, req.session.uid]
@@ -21,7 +20,7 @@ module.exports = async function(req, res) {
 
     if (!domain) throw 'Could not find domain';
 
-    await request.delete(`${CONFIG.MAILGUN_URL}/domains/${domain.domain}`);
+    await axios.delete(`${CONFIG.MAILGUN_URL}/domains/${domain.domain}`);
 
     await db.query('DELETE FROM domains WHERE id = ?', [req.params.domain]);
     db.release();

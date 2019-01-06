@@ -1,4 +1,4 @@
-const request = require('superagent');
+import axios from 'axios';
 import { MySQL } from 'lib/MySQL';
 
 /*
@@ -14,7 +14,6 @@ module.exports = async function(req, res) {
   const db = new MySQL();
 
   try {
-
     const result = await db.query(
       `
       UPDATE domain_users SET

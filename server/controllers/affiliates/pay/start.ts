@@ -1,5 +1,5 @@
 const getAffiliate = require('lib/affiliates/get');
-const request = require('superagent');
+import axios from 'axios';
 import * as CONFIG from 'constants/config';
 import { MySQL } from 'lib/MySQL';
 
@@ -16,7 +16,6 @@ module.exports = async function(req, res) {
   const db = new MySQL();
 
   try {
-
     const affiliate = await getAffiliate(
       db,
       +req.session.uid,
@@ -28,9 +27,9 @@ module.exports = async function(req, res) {
       [req.session.uid]
     );
 
-    const { body: payment } = await request
-      .post(`${CONFIG.XYPAYMENTS_URL}/api/payments`)
-      .send({
+    const { data: payment } = await axios.post(
+      `${CONFIG.XYPAYMENTS_URL}/api/payments`,
+      {
         seller_id: CONFIG.XYPAYMENTS_ID,
         seller_key: CONFIG.XYPAYMENTS_KEY,
         methods: ['card', 'crypto'],
@@ -46,7 +45,8 @@ module.exports = async function(req, res) {
           CONFIG.PTORX_CALLBACK_URL
         }/api/affiliates/pay?payment_id=PAYMENT_ID`,
         amount: affiliate.owed * 100
-      });
+      }
+    );
 
     res.status(200).json({ url: payment.url });
   } catch (err) {

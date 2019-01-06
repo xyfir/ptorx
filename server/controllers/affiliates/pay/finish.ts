@@ -1,4 +1,4 @@
-const request = require('superagent');
+import axios from 'axios';
 import * as CONFIG from 'constants/config';
 import { MySQL } from 'lib/MySQL';
 
@@ -13,18 +13,19 @@ module.exports = async function(req, res) {
   const db = new MySQL();
 
   try {
-    const { body: payment } = await request
-      .get(`${CONFIG.XYPAYMENTS_URL}/api/payments/${req.query.payment_id}`)
-      .query({
-        seller_id: CONFIG.XYPAYMENTS_ID,
-        seller_key: CONFIG.XYPAYMENTS_KEY
-      });
+    const { data: payment } = await axios.get(
+      `${CONFIG.XYPAYMENTS_URL}/api/payments/${req.query.payment_id}`,
+      {
+        params: {
+          seller_id: CONFIG.XYPAYMENTS_ID,
+          seller_key: CONFIG.XYPAYMENTS_KEY
+        }
+      }
+    );
 
     if (payment.fulfilled) throw 'Payment was already fulfilled';
     if (payment.paid === null) throw 'Payment was not paid';
     if (payment.info.user_id != req.session.uid) throw 'Wrong user';
-
-
 
     /**
      * The total amount of credits paid for by affiliate
@@ -46,14 +47,10 @@ module.exports = async function(req, res) {
     );
 
     // Mark payment fulfilled
-    await request
-      .post(
-        `${CONFIG.XYPAYMENTS_URL}/api/payments/${req.query.payment_id}/fulfill`
-      )
-      .send({
-        seller_id: CONFIG.XYPAYMENTS_ID,
-        seller_key: CONFIG.XYPAYMENTS_KEY
-      });
+    await axios.post(
+      `${CONFIG.XYPAYMENTS_URL}/api/payments/${req.query.payment_id}/fulfill`,
+      { seller_id: CONFIG.XYPAYMENTS_ID, seller_key: CONFIG.XYPAYMENTS_KEY }
+    );
   } catch (err) {}
 
   db.release();
