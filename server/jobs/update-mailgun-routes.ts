@@ -1,5 +1,5 @@
 const MailGun = require('mailgun-js');
-const config = require('../config');
+import * as CONFIG from 'constants/config';
 
 (async function() {
   const mailgun = MailGun({ apiKey: CONFIG.MAILGUN_KEY });
