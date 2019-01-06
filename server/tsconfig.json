@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "sourceMap": true,
+    "baseUrl": "./",
+    "rootDir": "./",
+    "newLine": "LF",
+    "target": "es2018",
+    "module": "commonjs",
+    "outDir": "./dist",
+    "watch": true
+  },
+  "exclude": ["node_modules", "dist"]
+}
