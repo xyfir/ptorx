@@ -1,6 +1,6 @@
 const CompressionPlugin = require('compression-webpack-plugin');
 const webpack = require('webpack');
-const config = require('./config');
+const config = require('../server/config');
 const path = require('path');
 
 const PROD = config.environment.type == 'production';
@@ -9,19 +9,19 @@ module.exports = {
   mode: config.environment.type,
 
   entry: {
-    Affiliate: './client/components/Affiliate.jsx',
-    Info: './client/components/Info.jsx',
-    App: './client/components/App.jsx'
+    Affiliate: './components/Affiliate.jsx',
+    Info: './components/Info.jsx',
+    App: './components/App.jsx'
   },
 
   output: {
     publicPath: '/static/js/',
     filename: PROD ? '[name].[hash].js' : '[name].js',
-    path: path.resolve(__dirname, 'static/js')
+    path: path.resolve(__dirname, 'dist/js')
   },
 
   resolve: {
-    modules: [path.resolve(__dirname, 'client'), 'node_modules'],
+    modules: [__dirname, 'node_modules'],
     extensions: ['.js', '.jsx']
   },
 
@@ -31,11 +31,11 @@ module.exports = {
         test: /\.jsx?$/,
         loader: 'babel-loader',
         include: [
-          path.resolve(__dirname, 'client/actions'),
-          path.resolve(__dirname, 'client/components'),
-          path.resolve(__dirname, 'client/constants'),
-          path.resolve(__dirname, 'client/lib'),
-          path.resolve(__dirname, 'client/reducers')
+          path.resolve(__dirname, 'actions'),
+          path.resolve(__dirname, 'components'),
+          path.resolve(__dirname, 'constants'),
+          path.resolve(__dirname, 'lib'),
+          path.resolve(__dirname, 'reducers')
         ],
         exclude: /node_modules/,
         options: {

@@ -1,0 +1,31 @@
+{
+  "name": "@xyfir/ptorx-server",
+  "version": "6.0.0",
+  "description": "Ptorx server",
+  "main": "app.js",
+  "scripts": {},
+  "author": "Xyfir, LLC <contact@xyfir.com> (https://www.xyfir.com)",
+  "license": "UNLICENSED",
+  "prettier": {
+    "singleQuote": true
+  },
+  "dependencies": {
+    "@xyfir/blog": "^0.2.1",
+    "app-module-path": "^2.2.0",
+    "basic-auth": "^2.0.1",
+    "body-parser": "^1.18.3",
+    "cryptr": "^4.0.2",
+    "escape-string-regexp": "^1.0.5",
+    "express": "^4.16.4",
+    "express-mysql-session": "^2.1.0",
+    "express-session": "^1.15.6",
+    "mailcomposer": "^4.0.2",
+    "mailgun-js": "^0.22.0",
+    "moment": "^2.23.0",
+    "multer": "^1.4.1",
+    "mysql": "^2.16.0",
+    "rword": "^3.0.0",
+    "superagent": "^4.1.0",
+    "uuid": "^3.3.2"
+  }
+}

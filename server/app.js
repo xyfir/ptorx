@@ -40,7 +40,7 @@ app.use(parser.urlencoded({ extended: true, limit: '26mb' }));
 app.get('/affiliate', (req, res) =>
   res.sendFile(__dirname + '/views/affiliate.html')
 );
-app.use('/static', express.static(__dirname + '/static'));
+app.use('/static', express.static(__dirname + '../web/dist'));
 app.get('/panel', (req, res) => res.sendFile(__dirname + '/views/panel.html'));
 app.get('/app', (req, res) => res.sendFile(__dirname + '/views/app.html'));
 app.use('/api', require('./controllers/'));
