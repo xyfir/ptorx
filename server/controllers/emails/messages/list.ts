@@ -1,4 +1,4 @@
-const mysql = require('lib/mysql');
+import { MySQL } from 'lib/MySQL';
 
 /*
   GET /api/emails/:email/messages
@@ -16,10 +16,10 @@ const mysql = require('lib/mysql');
     Returns accepted, rejected, or spam messages based on req.query.type
 */
 module.exports = async function(req, res) {
-  const db = new mysql();
+  const db = new MySQL();
 
   try {
-    await db.getConnection();
+
     const messages = await db.query(
       `
         SELECT

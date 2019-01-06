@@ -6,7 +6,7 @@ const buildAction = require('lib/mg-route/build-action');
 const validate = require('lib/email/validate');
 const MailGun = require('mailgun-js');
 import * as CONFIG from 'constants/config';
-const MySQL = require('lib/mysql');
+import { MySQL } from 'lib/MySQL';
 
 /*
   PUT /api/emails/:email
@@ -27,7 +27,7 @@ module.exports = async function(req, res) {
   try {
     validate(req.body);
 
-    await db.getConnection();
+
     await requireCredits(db, +req.session.uid);
 
     let sql = `

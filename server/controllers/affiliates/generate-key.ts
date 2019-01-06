@@ -1,4 +1,4 @@
-const MySQL = require('lib/mysql');
+import { MySQL } from 'lib/MySQL';
 const uuid = require('uuid/v4');
 
 /*
@@ -12,7 +12,7 @@ module.exports = async function(req, res) {
   try {
     const api_key = uuid();
 
-    await db.getConnection();
+
     const result = await db.query(
       'UPDATE affiliates SET api_key = ? WHERE user_id = ?',
       [api_key, req.session.uid]

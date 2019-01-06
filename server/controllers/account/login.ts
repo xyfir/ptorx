@@ -3,7 +3,7 @@ const credit = require('lib/user/credit');
 const Cryptr = require('cryptr');
 import * as CONFIG from 'constants/config';
 const cryptr = new Cryptr(CONFIG.ACCESS_TOKEN_KEY);
-const MySQL = require('lib/mysql');
+import { MySQL } from 'lib/MySQL';
 
 /*
   POST /api/account/login
@@ -31,7 +31,7 @@ module.exports = async function(req, res) {
 
     if (xaccResult.body.error) throw '-';
 
-    await db.getConnection();
+
 
     // Get user data from db
     let sql = 'SELECT user_id, admin FROM users WHERE xyfir_id = ?',

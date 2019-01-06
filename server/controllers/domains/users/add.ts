@@ -1,5 +1,5 @@
 const request = require('superagent');
-const mysql = require('lib/mysql');
+import { MySQL } from 'lib/MySQL';
 
 /*
   POST api/domains/:domain/users
@@ -11,10 +11,10 @@ const mysql = require('lib/mysql');
     Completes process of adding another Ptorx user to a domain
 */
 module.exports = async function(req, res) {
-  const db = new mysql();
+  const db = new MySQL();
 
   try {
-    await db.getConnection();
+
     const result = await db.query(
       `
       UPDATE domain_users SET

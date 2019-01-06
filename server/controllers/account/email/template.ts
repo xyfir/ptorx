@@ -1,4 +1,4 @@
-const MySQL = require('lib/mysql');
+import { MySQL } from 'lib/MySQL';
 
 /*
   PUT /api/account/email/template
@@ -11,7 +11,7 @@ module.exports = async function(req, res) {
   const db = new MySQL();
 
   try {
-    await db.getConnection();
+
     const result = await db.query(
       `UPDATE users SET email_template = ? WHERE user_id = ?`,
       [req.body.id, req.session.uid]

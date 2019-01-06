@@ -1,6 +1,6 @@
 const request = require('superagent');
 import * as CONFIG from 'constants/config';
-const MySQL = require('lib/mysql');
+import { MySQL } from 'lib/MySQL';
 
 /**
  * `GET /api/account/credits/purchase`
@@ -24,7 +24,7 @@ module.exports = async function(req, res) {
     if (payment.body.info.user_id != req.session.uid) throw 'Wrong user';
 
     // Update user's account
-    await db.getConnection();
+
     await db.query(
       `
         UPDATE users SET credits = ?, referral = ?

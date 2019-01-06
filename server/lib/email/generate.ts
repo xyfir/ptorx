@@ -3,7 +3,7 @@ const { rword } = require('rword');
 /**
  * Generates an available proxy email address.
  * @async
- * @param {object} db - A connected instance of `lib/mysql`.
+ * @param {object} db - A connected instance of `lib/MySQL`.
  * @param {number} domain
  * @return {string}
  */

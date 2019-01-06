@@ -1,6 +1,6 @@
 const buildData = require('lib/modifier/build-data');
 const validate = require('lib/modifier/validate');
-const mysql = require('lib/mysql');
+import { MySQL } from 'lib/MySQL';
 
 /*
   POST api/modifiers
@@ -21,10 +21,10 @@ const mysql = require('lib/mysql');
     Create a new modifier
 */
 module.exports = async function(req, res) {
-  const db = new mysql();
+  const db = new MySQL();
 
   try {
-    await db.getConnection();
+
 
     validate(req.body);
 

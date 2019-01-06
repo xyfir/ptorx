@@ -1,4 +1,4 @@
-const MySQL = require('lib/mysql');
+import { MySQL } from 'lib/MySQL';
 
 /**
  * DELETE /api/account/email/:email

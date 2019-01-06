@@ -1,6 +1,6 @@
 const request = require('superagent');
 import * as CONFIG from 'constants/config';
-const MySQL = require('lib/mysql');
+import { MySQL } from 'lib/MySQL';
 
 /**
  * `POST /api/account/credits/purchase`
@@ -18,7 +18,7 @@ module.exports = async function(req, res) {
   const db = new MySQL();
 
   try {
-    await db.getConnection();
+
     const [user] = await db.query(
       'SELECT email, referral FROM users WHERE user_id = ?',
       [req.session.uid]

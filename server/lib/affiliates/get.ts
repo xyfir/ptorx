@@ -1,5 +1,5 @@
 const moment = require('moment');
-const MySQL = require('lib/mysql');
+import { MySQL } from 'lib/MySQL';
 
 /**
  * @typedef {object} Affiliate

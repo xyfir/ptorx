@@ -1,6 +1,6 @@
 const requireCredits = require('lib/user/require-credits');
 const validate = require('lib/filter/validate');
-const MySQL = require('lib/mysql');
+import { MySQL } from 'lib/MySQL';
 
 /*
   PUT /api/filters/:filter
@@ -18,7 +18,7 @@ module.exports = async function(req, res) {
     const valid = validate(req.body);
     if (valid != 'ok') throw valid;
 
-    await db.getConnection();
+
     await requireCredits(db, +req.session.uid);
 
     const [filter] = await db.query(

@@ -1,6 +1,6 @@
 const request = require('superagent');
 import * as CONFIG from 'constants/config';
-const mysql = require('lib/mysql');
+import { MySQL } from 'lib/MySQL';
 
 /*
   PUT api/domains/:domain/verify
@@ -11,10 +11,10 @@ const mysql = require('lib/mysql');
     as verified on Ptorx if MailGun verifies the records.
 */
 module.exports = async function(req, res) {
-  const db = new mysql();
+  const db = new MySQL();
 
   try {
-    await db.getConnection();
+
     const [domain] = await db.query(
       'SELECT id, domain AS name FROM domains WHERE id = ?',
       [req.params.domain]

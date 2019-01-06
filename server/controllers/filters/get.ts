@@ -1,11 +1,11 @@
-const mysql = require('lib/mysql');
+import { MySQL } from 'lib/MySQL';
 
 /*
   GET api/filters/:filter
   RETURN
     {
       error: boolean, message?: string,
-      
+
       id: number, name: string, description: string, type: number,
       find: string, acceptOnMatch: boolean, regex: boolean,
       linkedTo: [{
@@ -16,10 +16,10 @@ const mysql = require('lib/mysql');
     Returns data for a specific filter
 */
 module.exports = async function(req, res) {
-  const db = new mysql();
+  const db = new MySQL();
 
   try {
-    await db.getConnection();
+
     const [filter] = await db.query(
       `
       SELECT

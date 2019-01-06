@@ -1,6 +1,6 @@
 const request = require('superagent');
 import * as CONFIG from 'constants/config';
-const mysql = require('lib/mysql');
+import { MySQL } from 'lib/MySQL';
 
 /*
   GET api/emails/:email/messages/:message
@@ -14,10 +14,10 @@ const mysql = require('lib/mysql');
     Return message content
 */
 module.exports = async function(req, res) {
-  const db = new mysql();
+  const db = new MySQL();
 
   try {
-    await db.getConnection();
+
     const [message] = await db.query(
       `
       SELECT

@@ -1,7 +1,7 @@
 const chargeUser = require('lib/user/charge');
 const MailGun = require('mailgun-js');
 import * as CONFIG from 'constants/config';
-const MySQL = require('lib/mysql');
+import { MySQL } from 'lib/MySQL';
 
 /*
   POST /api/receive/reply
@@ -23,7 +23,7 @@ module.exports = async function(req, res) {
   try {
     const [messageId, domain] = req.body.recipient.split('--reply@');
 
-    await db.getConnection();
+
     const [row] = await db.query(
       `
         SELECT

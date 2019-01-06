@@ -1,10 +1,10 @@
-const mysql = require('lib/mysql');
+import { MySQL } from 'lib/MySQL';
 
 module.exports = async function() {
-  const db = new mysql();
+  const db = new MySQL();
 
   try {
-    await db.getConnection();
+
 
     // Messages expire from MailGun after 3 days
     // These messages can no longer be accessed from the Ptorx app

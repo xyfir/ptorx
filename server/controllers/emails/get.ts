@@ -1,5 +1,5 @@
 const getProxyEmail = require('lib/email/get');
-const MySQL = require('lib/mysql');
+import { MySQL } from 'lib/MySQL';
 
 /*
   GET /api/emails/:email
@@ -10,7 +10,7 @@ module.exports = async function(req, res) {
   const db = new MySQL();
 
   try {
-    await db.getConnection();
+
     const email = await getProxyEmail(db, {
       user: +req.session.uid,
       email: +req.params.email

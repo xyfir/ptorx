@@ -1,5 +1,5 @@
 const deleteEmail = require('controllers/emails/delete');
-const mysql = require('lib/mysql');
+import { MySQL } from 'lib/MySQL';
 
 /*
   DELETE api/domains/:domain/users/:user
@@ -10,10 +10,10 @@ const mysql = require('lib/mysql');
     to remove a user from the domain.
 */
 module.exports = async function(req, res) {
-  const db = new mysql();
+  const db = new MySQL();
 
   try {
-    await db.getConnection();
+
 
     let result;
 

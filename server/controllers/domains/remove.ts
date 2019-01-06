@@ -1,6 +1,6 @@
 const request = require('superagent');
 import * as CONFIG from 'constants/config';
-const mysql = require('lib/mysql');
+import { MySQL } from 'lib/MySQL';
 
 /*
   DELETE api/domains/:domain
@@ -10,10 +10,10 @@ const mysql = require('lib/mysql');
     Remove a domain from Ptorx
 */
 module.exports = async function(req, res) {
-  const db = new mysql();
+  const db = new MySQL();
 
   try {
-    await db.getConnection();
+
     const [domain] = await db.query(
       'SELECT domain FROM domains WHERE id = ? AND user_id = ?',
       [req.params.domain, req.session.uid]

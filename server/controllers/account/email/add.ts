@@ -1,4 +1,4 @@
-const MySQL = require('lib/mysql');
+import { MySQL } from 'lib/MySQL';
 
 /*
   POST /api/account/email/:email
@@ -9,7 +9,7 @@ module.exports = async function(req, res) {
   const db = new MySQL();
 
   try {
-    await db.getConnection();
+
     const [row] = await db.query(
       `
         SELECT (

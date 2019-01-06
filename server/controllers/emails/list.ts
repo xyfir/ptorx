@@ -1,4 +1,4 @@
-const mysql = require('lib/mysql');
+import { MySQL } from 'lib/MySQL';
 
 /*
   GET api/emails
@@ -13,10 +13,10 @@ const mysql = require('lib/mysql');
     Returns basic information for all REDIRECT emails linked to account
 */
 module.exports = async function(req, res) {
-  const db = new mysql();
+  const db = new MySQL();
 
   try {
-    await db.getConnection();
+
     const emails = await db.query(
       `
       SELECT

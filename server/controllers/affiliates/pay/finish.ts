@@ -1,6 +1,6 @@
 const request = require('superagent');
 import * as CONFIG from 'constants/config';
-const MySQL = require('lib/mysql');
+import { MySQL } from 'lib/MySQL';
 
 /*
   GET /api/affiliates/pay
@@ -24,7 +24,7 @@ module.exports = async function(req, res) {
     if (payment.paid === null) throw 'Payment was not paid';
     if (payment.info.user_id != req.session.uid) throw 'Wrong user';
 
-    await db.getConnection();
+
 
     /**
      * The total amount of credits paid for by affiliate

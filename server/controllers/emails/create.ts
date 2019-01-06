@@ -7,7 +7,7 @@ const validate = require('lib/email/validate');
 const generate = require('lib/email/generate');
 const MailGun = require('mailgun-js');
 import * as CONFIG from 'constants/config';
-const MySQL = require('lib/mysql');
+import { MySQL } from 'lib/MySQL';
 
 /*
   POST /api/emails
@@ -28,7 +28,7 @@ module.exports = async function(req, res) {
   try {
     validate(req.body);
 
-    await db.getConnection();
+
     await requireCredits(db, +req.session.uid);
 
     // Load data needed for extended validation

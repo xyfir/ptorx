@@ -2,7 +2,7 @@ const chargeUser = require('lib/user/charge');
 const MailGun = require('mailgun-js');
 const request = require('superagent');
 import * as CONFIG from 'constants/config';
-const MySQL = require('lib/mysql');
+import { MySQL } from 'lib/MySQL';
 
 /*
   POST /api/emails/:email/messages/:message
@@ -17,7 +17,7 @@ module.exports = async function(req, res) {
   const db = new MySQL();
 
   try {
-    await db.getConnection();
+
     const [row] = await db.query(
       `
         SELECT

@@ -1,11 +1,11 @@
-const mysql = require('lib/mysql');
+import { MySQL } from 'lib/MySQL';
 
 /*
   GET api/domains/:domain
   RETURN
     {
       error: boolean, message?: string,
-      
+
       id?: number, domain?: string, verified?: boolean, added?: date-string,
       global: boolean, isCreator?: boolean,
       domainKey?: {
@@ -19,10 +19,10 @@ const mysql = require('lib/mysql');
     Returns full info for domain and info for verified users
 */
 module.exports = async function(req, res) {
-  const db = new mysql();
+  const db = new MySQL();
 
   try {
-    await db.getConnection();
+
     const [domain] = await db.query(
       `
       SELECT

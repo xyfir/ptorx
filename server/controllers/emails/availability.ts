@@ -1,4 +1,4 @@
-const MySQL = require('lib/mysql');
+import { MySQL } from 'lib/MySQL';
 
 /*
   GET api/emails/availability
@@ -13,7 +13,7 @@ module.exports = async function(req, res) {
   const db = new MySQL();
 
   try {
-    await db.getConnection();
+
     const rows = await db.query(
       'SELECT email_id FROM proxy_emails WHERE address = ? AND domain_id = ?',
       [req.query.address, req.query.domain]

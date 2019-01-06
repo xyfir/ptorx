@@ -1,4 +1,4 @@
-const mysql = require('lib/mysql');
+import { MySQL } from 'lib/MySQL';
 const uuid = require('uuid/v4');
 
 /**
@@ -9,8 +9,7 @@ const uuid = require('uuid/v4');
  * @return {string} The saved message's id.
  */
 module.exports = async function(req, type) {
-  const db = new mysql();
-  await db.getConnection();
+  const db = new MySQL();
 
   let tries = 0,
     id = '';

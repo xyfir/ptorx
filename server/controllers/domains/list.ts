@@ -1,4 +1,4 @@
-const mysql = require('lib/mysql');
+import { MySQL } from 'lib/MySQL';
 
 /*
   GET api/domains
@@ -13,10 +13,10 @@ const mysql = require('lib/mysql');
     Returns all domains that the user is authorized to use
 */
 module.exports = async function(req, res) {
-  const db = new mysql();
+  const db = new MySQL();
 
   try {
-    await db.getConnection();
+
     const rows = await db.query(
       `
       SELECT

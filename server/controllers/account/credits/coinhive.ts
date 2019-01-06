@@ -1,7 +1,7 @@
 const request = require('superagent');
 const credit = require('lib/user/credit');
 import * as CONFIG from 'constants/config';
-const MySQL = require('lib/mysql');
+import { MySQL } from 'lib/MySQL';
 
 const COST_PER_CREDIT = 0.0005; // in USD
 const COINHIVE = 'https://api.coinhive.com';

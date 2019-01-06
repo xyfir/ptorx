@@ -1,6 +1,6 @@
 const buildData = require('lib/modifier/build-data');
 const validate = require('lib/modifier/validate');
-const mysql = require('lib/mysql');
+import { MySQL } from 'lib/MySQL';
 
 /*
   PUT api/modifiers/:mod
@@ -21,7 +21,7 @@ const mysql = require('lib/mysql');
     Update a modifier's data
 */
 module.exports = async function(req, res) {
-  const db = new mysql();
+  const db = new MySQL();
 
   try {
     validate(req.body);
@@ -39,7 +39,7 @@ module.exports = async function(req, res) {
         req.session.uid
       ];
 
-    await db.getConnection();
+
 
     const result = await db.query(sql, vars);
 

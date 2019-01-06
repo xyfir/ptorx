@@ -2,7 +2,7 @@ import * as CONFIG from 'constants/config';
 const request = require('superagent');
 const Cryptr = require('cryptr');
 const cryptr = new Cryptr(CONFIG.ACCESS_TOKEN_KEY);
-const MySQL = require('lib/mysql');
+import { MySQL } from 'lib/MySQL';
 
 /*
   GET /api/account

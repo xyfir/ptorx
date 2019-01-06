@@ -1,12 +1,12 @@
 const deleteUser = require('lib/user/delete');
-const MySQL = require('lib/mysql');
+import { MySQL } from 'lib/MySQL';
 
 module.exports = async function() {
   const db = new MySQL();
 
   try {
     // Load all affilates who haven't made a payment in over 32 days
-    await db.getConnection();
+
     const affiliates = await db.query(`
       SELECT user_id AS id, last_payment
       FROM affiliates

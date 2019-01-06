@@ -1,4 +1,4 @@
-const mysql = require('lib/mysql');
+import { MySQL } from 'lib/MySQL';
 
 /*
   GET api/modifiers
@@ -11,10 +11,10 @@ const mysql = require('lib/mysql');
     Returns basic information for all modifiers linked to account
 */
 module.exports = async function(req, res) {
-  const db = new mysql();
+  const db = new MySQL();
 
   try {
-    await db.getConnection();
+
 
     const sql = `
       SELECT

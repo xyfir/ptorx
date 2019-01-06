@@ -1,6 +1,6 @@
 const authenticate = require('lib/affiliates/authenticate');
 const deleteUser = require('lib/user/delete');
-const MySQL = require('lib/mysql');
+import { MySQL } from 'lib/MySQL';
 
 /*
   DELETE /api/affiliates/accounts/:id
@@ -9,7 +9,7 @@ module.exports = async function(req, res) {
   const db = new MySQL();
 
   try {
-    await db.getConnection();
+
     const affiliate = await authenticate(db, req);
 
     // Verify user was created by affiliate

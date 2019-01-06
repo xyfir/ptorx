@@ -1,4 +1,4 @@
-const mysql = require('lib/mysql');
+import { MySQL } from 'lib/MySQL';
 
 /*
   DELETE api/emails/:email/messages/:message
@@ -8,10 +8,10 @@ const mysql = require('lib/mysql');
     Delete message from Ptorx
 */
 module.exports = async function(req, res) {
-  const db = new mysql();
+  const db = new MySQL();
 
   try {
-    await db.getConnection();
+
     await db.query(
       `
       DELETE FROM messages

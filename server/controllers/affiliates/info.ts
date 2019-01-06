@@ -1,6 +1,6 @@
 const getAffiliate = require('lib/affiliates/get');
 const moment = require('moment');
-const MySQL = require('lib/mysql');
+import { MySQL } from 'lib/MySQL';
 
 /*
   GET /api/affiliates
@@ -15,7 +15,7 @@ module.exports = async function(req, res) {
   const db = new MySQL();
 
   try {
-    await db.getConnection();
+
     const affiliate = await getAffiliate(
       db,
       +req.session.uid,

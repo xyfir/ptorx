@@ -1,5 +1,5 @@
 const requireCredits = require('lib/user/require-credits');
-const MySQL = require('lib/mysql');
+import { MySQL } from 'lib/MySQL';
 
 /*
   DELETE /api/filters/:filter
@@ -10,7 +10,7 @@ module.exports = async function(req, res) {
   const db = new MySQL();
 
   try {
-    await db.getConnection();
+
     await requireCredits(db, +req.session.uid);
 
     // Get filter

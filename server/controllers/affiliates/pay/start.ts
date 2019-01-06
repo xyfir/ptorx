@@ -1,7 +1,7 @@
 const getAffiliate = require('lib/affiliates/get');
 const request = require('superagent');
 import * as CONFIG from 'constants/config';
-const MySQL = require('lib/mysql');
+import { MySQL } from 'lib/MySQL';
 
 /*
   POST /api/affiliates/pay
@@ -16,7 +16,7 @@ module.exports = async function(req, res) {
   const db = new MySQL();
 
   try {
-    await db.getConnection();
+
     const affiliate = await getAffiliate(
       db,
       +req.session.uid,

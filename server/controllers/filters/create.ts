@@ -1,5 +1,5 @@
 const validate = require('lib/filter/validate');
-const MySQL = require('lib/mysql');
+import { MySQL } from 'lib/MySQL';
 
 /**
  * POST /api/filters

@@ -1,6 +1,6 @@
 const request = require('superagent');
 import * as CONFIG from 'constants/config';
-const mysql = require('lib/mysql');
+import { MySQL } from 'lib/MySQL';
 const uuid = require('uuid/v4');
 
 /*
@@ -26,10 +26,10 @@ const uuid = require('uuid/v4');
     request key for user to request access to domain with.
 */
 module.exports = async function(req, res) {
-  const db = new mysql();
+  const db = new MySQL();
 
   try {
-    await db.getConnection();
+
     const [row] = await db.query(
       `SELECT id AS domainId FROM domains WHERE domain = ?`,
       [req.body.domain, req.session.uid]
