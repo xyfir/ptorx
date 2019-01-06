@@ -57,6 +57,6 @@ module.exports = async function(req, res) {
     res.status(200).json({ url: payment.data.url });
   } catch (err) {
     db.release();
-    res.status(400).json({ message: err });
+    res.status(400).json({ error: err });
   }
 };

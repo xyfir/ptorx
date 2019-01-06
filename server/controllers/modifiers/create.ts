@@ -16,7 +16,7 @@ import { MySQL } from 'lib/MySQL';
     CONCATENATE
       add: string, to: string, separator: string
   RETURN
-    { error: boolean, message?: string, id?: number }
+    { id?: number }
   DESCRIPTION
     Create a new modifier
 */
@@ -41,9 +41,9 @@ module.exports = async function(req, res) {
     if (!result.affectedRows) throw 'An unknown error occured';
 
     db.release();
-    res.json({ error: false, id: result.insertId });
+    res.status(200).json({ id: result.insertId });
   } catch (err) {
     db.release();
-    res.json({ error: true, message: err });
+    res.status(400).json({ error: err });
   }
 };

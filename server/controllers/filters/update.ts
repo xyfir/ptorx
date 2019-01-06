@@ -9,7 +9,7 @@ import { MySQL } from 'lib/MySQL';
   OPTIONAL
     acceptOnMatch: boolean, useRegex: boolean
   RETURN
-    { message?: string, update?: number[] }
+    { update?: number[] }
 */
 module.exports = async function(req, res) {
   const db = new MySQL();
@@ -68,7 +68,7 @@ module.exports = async function(req, res) {
 
     res.status(200).json({ update });
   } catch (err) {
-    res.status(400).json({ message: err });
+    res.status(400).json({ error: err });
   }
 
   db.release();

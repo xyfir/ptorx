@@ -4,7 +4,7 @@ import { MySQL } from 'lib/MySQL';
   GET /api/6/filters/:filter
   RETURN
     {
-      error: boolean, message?: string,
+
 
       id: number, name: string, description: string, type: number,
       find: string, acceptOnMatch: boolean, regex: boolean,
@@ -32,9 +32,8 @@ module.exports = async function(req, res) {
 
     if (!filter) throw 'Could not find filter';
 
-    (filter.error = false),
-      (filter.regex = !!+filter.regex),
-      (filter.acceptOnMatch = !!+filter.acceptOnMatch);
+    filter.regex = !!+filter.regex;
+    filter.acceptOnMatch = !!+filter.acceptOnMatch;
 
     filter.linkedTo = await db.query(
       `
@@ -51,9 +50,9 @@ module.exports = async function(req, res) {
     );
     db.release();
 
-    res.json(filter);
+    res.status(200).json(filter);
   } catch (err) {
     db.release();
-    res.json({ error: true, message: err });
+    res.status(400).json({ error: err });
   }
 };

@@ -4,8 +4,6 @@ import { MySQL } from 'lib/MySQL';
   PUT /api/6/account/email/template
   OPTIONAL
     id: number
-  RETURN
-    { message?: string }
 */
 module.exports = async function(req, res) {
   const db = new MySQL();
@@ -19,7 +17,7 @@ module.exports = async function(req, res) {
 
     res.status(200).json({});
   } catch (err) {
-    res.status(400).json({ message: err });
+    res.status(400).json({ error: err });
   }
 
   db.release();

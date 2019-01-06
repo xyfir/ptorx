@@ -2,8 +2,6 @@ import { MySQL } from 'lib/MySQL';
 
 /*
   DELETE /api/6/emails/:email/messages/:message
-  RETURN
-    { error: boolean, message?: string }
   DESCRIPTION
     Delete message from Ptorx
 */
@@ -23,9 +21,9 @@ module.exports = async function(req, res) {
     );
     db.release();
 
-    res.json({ error: false });
+    res.status(200).json({});
   } catch (err) {
     db.release();
-    res.json({ error: true, message: err.toString() });
+    res.status(400).json({ error: err });
   }
 };

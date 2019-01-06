@@ -4,7 +4,7 @@ import { MySQL } from 'lib/MySQL';
   GET /api/6/domains
   RETURN
     {
-      error: boolean, message?: string,
+
       domains?: [{
         id: number, domain: string, isCreator: boolean
       }]
@@ -33,9 +33,9 @@ module.exports = async function(req, res) {
 
     if (!rows.length) throw 'No domains';
 
-    res.json({ error: false, domains: rows });
+    res.status(200).json({ domains: rows });
   } catch (err) {
     db.release();
-    res.json({ error: true, message: err, domains: [] });
+    res.status(400).json({ error: err });
   }
 };

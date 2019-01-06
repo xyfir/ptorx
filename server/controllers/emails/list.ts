@@ -4,7 +4,7 @@ import { MySQL } from 'lib/MySQL';
   GET /api/6/emails
   RETURN
     {
-      error: boolean, message?: string,
+
       emails: [{
         id: number, name: string, description: string, address: string
       }]
@@ -30,9 +30,9 @@ module.exports = async function(req, res) {
     );
     db.release();
 
-    res.json({ error: false, emails });
+    res.status(200).json({ emails });
   } catch (err) {
     db.release();
-    res.json({ error: true, message: err, emails: [] });
+    res.status(400).json({ error: err });
   }
 };

@@ -6,7 +6,7 @@ import { MySQL } from 'lib/MySQL';
     type: number
   RETURN
     {
-      error: boolean, message?: string,
+
       messages: [{
         id: string, received: number, subject: string
       }]
@@ -35,9 +35,9 @@ module.exports = async function(req, res) {
     );
     db.release();
 
-    res.json({ error: false, messages });
+    res.status(200).json({ messages });
   } catch (err) {
     db.release();
-    res.json({ error: true, message: err, messages: [] });
+    res.status(400).json({ error: err });
   }
 };

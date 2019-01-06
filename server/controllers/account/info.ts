@@ -91,7 +91,7 @@ module.exports = async function(req, res) {
     req.session.uid = uid;
     req.session.admin = !!row.admin;
 
-    res.json({
+    res.status(200).json({
       loggedIn: true,
       uid,
       emails,
@@ -103,6 +103,6 @@ module.exports = async function(req, res) {
   } catch (err) {
     db.release();
     req.session.destroy();
-    res.json({ loggedIn: false });
+    res.status(200).json({ loggedIn: false });
   }
 };

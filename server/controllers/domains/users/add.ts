@@ -5,8 +5,6 @@ import { MySQL } from 'lib/MySQL';
   POST /api/6/domains/:domain/users
   REQUIRED
     key: string, label: string
-  RETURN
-    { error: boolean, message?: string }
   DESCRIPTION
     Completes process of adding another Ptorx user to a domain
 */
@@ -34,9 +32,9 @@ module.exports = async function(req, res) {
 
     if (!result.affectedRows) throw 'Could not add user to domain';
 
-    res.json({ error: false });
+    res.status(200).json({});
   } catch (err) {
     db.release();
-    res.json({ error: true, message: err });
+    res.status(400).json({ error: err });
   }
 };

@@ -4,8 +4,6 @@ import { MySQL } from 'lib/MySQL';
 
 /*
   DELETE /api/6/domains/:domain
-  RETURN
-    { error: boolean, message?: string }
   DESCRIPTION
     Remove a domain from Ptorx
 */
@@ -25,9 +23,9 @@ module.exports = async function(req, res) {
     await db.query('DELETE FROM domains WHERE id = ?', [req.params.domain]);
     db.release();
 
-    res.json({ error: false });
+    res.status(200).json({});
   } catch (err) {
     db.release();
-    res.json({ error: true, message: err });
+    res.status(400).json({ error: err });
   }
 };

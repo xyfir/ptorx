@@ -9,7 +9,7 @@ const uuid = require('uuid/v4');
     domain: string
   RETURN
     {
-      error: boolean, message?: string,
+
 
       // Domain already exists and user must request access
       requestKey?: string,
@@ -53,7 +53,7 @@ module.exports = async function(req, res) {
       );
 
       db.release();
-      res.json({ error: false, requestKey: key });
+      res.status(200).json({ requestKey: key });
     }
     // Domain does not exist; user must verify ownership
     else {
@@ -89,10 +89,10 @@ module.exports = async function(req, res) {
       });
 
       db.release();
-      res.json({ error: false, domainId, domainKey: key });
+      res.status(200).json({ domainId, domainKey: key });
     }
   } catch (err) {
     db.release();
-    res.json({ error: true, message: err });
+    res.status(400).json({ error: err });
   }
 };

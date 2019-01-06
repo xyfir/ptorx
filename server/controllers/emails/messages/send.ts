@@ -8,7 +8,7 @@ import { MySQL } from 'lib/MySQL';
   REQUIRED
     to: string, subject: string, content: string
   RETURN
-    { message?: string, credits?: number }
+    { credits?: number }
   DESCRIPTION
     Sends an email from a REDIRECT email
 */
@@ -51,6 +51,6 @@ module.exports = async function(req, res) {
     res.status(200).json({ credits });
   } catch (err) {
     db.release();
-    res.status(400).json({ message: err });
+    res.status(400).json({ error: err });
   }
 };

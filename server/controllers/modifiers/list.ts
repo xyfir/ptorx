@@ -23,9 +23,9 @@ module.exports = async function(req, res) {
       vars = [req.session.uid],
       modifiers = await db.query(sql, vars);
 
-    res.json({ modifiers });
+    res.status(200).json({ modifiers });
   } catch (err) {
     db.release();
-    res.json({ modifiers: [] });
+    res.status(400).json({ error: err });
   }
 };

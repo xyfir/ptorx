@@ -4,7 +4,7 @@ import { MySQL } from 'lib/MySQL';
   GET /api/6/domains/:domain
   RETURN
     {
-      error: boolean, message?: string,
+
 
       id?: number, domain?: string, verified?: boolean, added?: date-string,
       global: boolean, isCreator?: boolean,
@@ -34,12 +34,11 @@ module.exports = async function(req, res) {
 
     if (!domain) throw 'Could not find domain';
 
-    (domain.isCreator = domain.user_id == req.session.uid),
-      (domain.error = false);
+    domain.isCreator = domain.user_id == req.session.uid;
 
     if (!domain.isCreator) {
       db.release();
-      return res.json(domain);
+      return res.status(200).json(domain);
     }
 
     if (domain.domainKey) domain.domainKey = JSON.parse(domain.domainKey);
@@ -55,9 +54,9 @@ module.exports = async function(req, res) {
     );
     db.release();
 
-    res.json(domain);
+    res.status(200).json(domain);
   } catch (err) {
     db.release();
-    res.json({ error: true, message: err });
+    res.status(400).json({ error: err });
   }
 };

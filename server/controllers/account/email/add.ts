@@ -3,7 +3,7 @@ import { MySQL } from 'lib/MySQL';
 /*
   POST /api/6/account/email/:email
   RETURN
-    { id?: number, message?: string }
+    { id?: number }
 */
 module.exports = async function(req, res) {
   const db = new MySQL();
@@ -33,7 +33,7 @@ module.exports = async function(req, res) {
 
     res.status(200).json({ id: result.insertId });
   } catch (err) {
-    res.status(400).json({ message: err });
+    res.status(400).json({ error: err });
   }
 
   db.release();

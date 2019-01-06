@@ -39,7 +39,7 @@ module.exports = async function(req, res) {
 
     res.status(200).json({ id: result.insertId });
   } catch (err) {
-    res.status(400).json({ message: err });
+    res.status(400).json({ error: err });
   }
   db.release();
 };

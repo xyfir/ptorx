@@ -18,7 +18,7 @@ import { MySQL } from 'lib/MySQL';
     saveMail: boolean, noSpamFilter: boolean, noToAddress: boolean,
     directForward: boolean
   RETURN
-    { message?: string, id?: number }
+    { id?: number }
   DESCRIPTION
     Creates a redirect email, its MailGun inbound route, any used links filters/modifiers
 */
@@ -190,7 +190,7 @@ module.exports = async function(req, res) {
 
     res.status(200).json({ id });
   } catch (err) {
-    res.status(400).json({ message: err });
+    res.status(400).json({ error: err });
   }
 
   db.release();

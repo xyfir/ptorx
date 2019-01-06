@@ -6,7 +6,7 @@ import { MySQL } from 'lib/MySQL';
   GET /api/6/emails/:email/messages/:message
   RETURN
     {
-      error: boolean, message?: string,
+
       headers?: [[ header: string, value: string ]], received?: number,
       from?: string, subject?: string, text?: string, html?: string
     }
@@ -39,17 +39,16 @@ module.exports = async function(req, res) {
       auth: { username: 'api', password: CONFIG.MAILGUN_KEY }
     });
 
-    res.json({
+    res.status(200).json({
       ...message,
       text: data['body-plain'],
       html: data['body-html'],
-      error: false,
       headers: data['message-headers'],
       from: data.from,
       subject: data.subject
     });
   } catch (err) {
     db.release();
-    res.json({ error: true, message: err.toString() });
+    res.status(400).json({ error: err });
   }
 };

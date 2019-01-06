@@ -8,7 +8,7 @@ import { MySQL } from 'lib/MySQL';
   REQUIRED
     timestamp: string
   RETURN
-    { message?: string, url?: string }
+    { url?: string }
   DESCRIPTION
     Initialize payment with xyPayments
 */
@@ -51,6 +51,6 @@ module.exports = async function(req, res) {
     res.status(200).json({ url: payment.url });
   } catch (err) {
     db.release();
-    res.status(400).json({ message: err });
+    res.status(400).json({ error: err });
   }
 };

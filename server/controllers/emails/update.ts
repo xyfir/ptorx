@@ -16,8 +16,6 @@ import { MySQL } from 'lib/MySQL';
   OPTIONAL
     saveMail: boolean, noSpamFilter: boolean, noToAddress: boolean,
     directForward: boolean
-  RETURN
-    { error: boolean, message?: string }
   DESCRIPTION
     Updates a redirect email, linked entries, and MailGun route
 */
@@ -150,9 +148,9 @@ module.exports = async function(req, res) {
     }
 
     db.release();
-    res.json({ error: false });
+    res.status(200).json({});
   } catch (err) {
     db.release();
-    res.json({ error: true, message: err });
+    res.status(400).json({ error: err });
   }
 };

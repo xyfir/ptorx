@@ -16,7 +16,7 @@ import { MySQL } from 'lib/MySQL';
     CONCATENATE
       add: string, to: string, separator: string
   RETURN
-    { error: boolean, message: string }
+    { message: string }
   DESCRIPTION
     Update a modifier's data
 */
@@ -51,9 +51,9 @@ module.exports = async function(req, res) {
     const rows = await db.query(sql, vars);
     db.release();
 
-    res.json({ error: false, message: '' });
+    res.status(200).json({ message: '' });
   } catch (err) {
     db.release();
-    res.json({ error: true, message: err });
+    res.status(400).json({ error: err });
   }
 };

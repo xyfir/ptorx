@@ -5,7 +5,7 @@ import { MySQL } from 'lib/MySQL';
   REQUIRED
     address: string, domain: number
   RETURN
-    { error: boolean, message?: string, available?: boolean }
+    { available?: boolean }
   DESCRIPTION
     Checks whether an email address is available
 */
@@ -19,9 +19,9 @@ module.exports = async function(req, res) {
     );
     db.release();
 
-    res.json({ error: false, available: !rows.length });
+    res.status(200).json({ available: !rows.length });
   } catch (err) {
     db.release();
-    res.json({ error: true, message: err });
+    res.status(400).json({ error: err });
   }
 };

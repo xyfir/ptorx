@@ -9,7 +9,7 @@ import { MySQL } from 'lib/MySQL';
   REQUIRED
     content: string
   RETURN
-    { message?: string, credits?: number }
+    { credits?: number }
   DESCRIPTION
     Send reply to a stored message
 */
@@ -58,6 +58,6 @@ module.exports = async function(req, res) {
     res.status(200).json({ credits });
   } catch (err) {
     db.release();
-    res.status(400).json({ message: err });
+    res.status(400).json({ error: err });
   }
 };

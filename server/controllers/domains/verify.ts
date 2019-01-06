@@ -4,8 +4,6 @@ import { MySQL } from 'lib/MySQL';
 
 /*
   PUT /api/6/domains/:domain/verify
-  RETURN
-    { error: boolean, message?: string }
   DESCRIPTION
     Requests that MailGun verify the domain's DNS records and marks the domain
     as verified on Ptorx if MailGun verifies the records.
@@ -30,9 +28,9 @@ module.exports = async function(req, res) {
     await db.query('UPDATE domains SET verified = 1 WHERE id = ?', [domain.id]);
     db.release();
 
-    res.json({ error: false });
+    res.status(200).json({});
   } catch (err) {
     db.release();
-    res.json({ error: true, message: err });
+    res.status(400).json({ error: err });
   }
 };

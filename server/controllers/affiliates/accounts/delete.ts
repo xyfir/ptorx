@@ -23,6 +23,6 @@ module.exports = async function(req, res) {
     res.status(200).json({});
   } catch (err) {
     db.release();
-    res.status(400).json({ message: err.toString() });
+    res.status(400).json({ error: err });
   }
 };

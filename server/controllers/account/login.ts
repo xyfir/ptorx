@@ -12,7 +12,7 @@ import { MySQL } from 'lib/MySQL';
   OPTIONAL
     referral: object
   RETURN
-    { error: boolean, accessToken?: string }
+    { accessToken?: string }
   DESCRIPTION
     Register or login user
 */
@@ -75,8 +75,7 @@ module.exports = async function(req, res) {
       req.session.uid = result.insertId;
       req.session.admin = false;
 
-      res.json({
-        error: false,
+      res.status(200).json({
         accessToken: cryptr.encrypt(
           result.insertId + '-' + xaccResult.data.accessToken
         )
@@ -95,8 +94,7 @@ module.exports = async function(req, res) {
       req.session.uid = rows[0].user_id;
       req.session.admin = !!rows[0].admin;
 
-      res.json({
-        error: false,
+      res.status(200).json({
         accessToken: cryptr.encrypt(
           rows[0].user_id + '-' + xaccResult.data.accessToken
         )
@@ -104,6 +102,6 @@ module.exports = async function(req, res) {
     }
   } catch (err) {
     db.release();
-    res.json({ error: true });
+    res.status(400).json({});
   }
 };

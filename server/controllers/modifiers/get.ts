@@ -4,7 +4,7 @@ import { MySQL } from 'lib/MySQL';
   GET /api/6/modifiers/:mod
   RETURN
     {
-      error: boolean, message?: string,
+
       id: number, name: string, description: string, type: number
       data: json-string, linkedTo: [{ id: number, address: string }]
     }
@@ -24,10 +24,7 @@ module.exports = async function(req, res) {
     `,
       [req.params.mod, req.session.uid]
     );
-
     if (!modifier) throw 'Could not find modifier';
-
-    modifier.error = false;
 
     modifier.linkedTo = await db.query(
       `
@@ -44,9 +41,9 @@ module.exports = async function(req, res) {
     );
     db.release();
 
-    res.json(modifier);
+    res.status(200).json(modifier);
   } catch (err) {
     db.release();
-    res.json({ error: true, message: err });
+    res.status(400).json({ error: err });
   }
 };

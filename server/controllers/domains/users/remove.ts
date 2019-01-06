@@ -3,8 +3,6 @@ import { MySQL } from 'lib/MySQL';
 
 /*
   DELETE /api/6/domains/:domain/users/:user
-  RETURN
-    { error: boolean, message?: string }
   DESCRIPTION
     Allows a user to remove a domain from their account or a domain creator
     to remove a user from the domain.
@@ -54,9 +52,9 @@ module.exports = async function(req, res) {
       );
     }
 
-    res.json({ error: false });
+    res.status(200).json({});
   } catch (err) {
     db.release();
-    res.json({ error: true, message: err });
+    res.status(400).json({ error: err });
   }
 };
