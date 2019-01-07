@@ -3,7 +3,7 @@ import axios from 'axios';
 import * as CONFIG from 'constants/config';
 import { MySQL } from 'lib/MySQL';
 
-export async function createAccountAsAffiliate(req, res) {
+export async function addAccountAsAffiliate(req, res) {
   const { email, note = '', credits } = req.body;
   const db = new MySQL();
 

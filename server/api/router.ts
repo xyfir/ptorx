@@ -17,7 +17,7 @@ export const router = Express.Router();
 router.get('/affiliates', c.getAffiliateInfo);
 router.post('/affiliates/key', c.generateAffiliateKey);
 
-router.post('/affiliates/accounts', c.createAccountAsAffiliate);
+router.post('/affiliates/accounts', c.addAccountAsAffiliate);
 router.delete('/affiliates/accounts/:id', c.deleteAccountAsAffiliate);
 
 router.get('/affiliates/pay', c.finishAffiliatePayment);
