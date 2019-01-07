@@ -50,7 +50,7 @@ export async function editFilter(req, res) {
       const emails = rows.map(email => email.id);
 
       if (
-        // Determine if MailGun routes need to be updated
+        // Determine if Mailgun routes need to be updated
         ([1, 2, 3, 6].indexOf(filter.type) > -1 && !!+filter.acceptOnMatch) ||
         ([1, 2, 3, 6].indexOf(+req.body.type) > -1 && req.body.acceptOnMatch)
       )

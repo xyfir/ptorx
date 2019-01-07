@@ -1,5 +1,5 @@
 import { chargeUser } from 'lib/user/charge';
-import * as MailGun from 'mailgun-js';
+import * as Mailgun from 'mailgun-js';
 import * as CONFIG from 'constants/config';
 import { MySQL } from 'lib/MySQL';
 import axios from 'axios';
@@ -33,7 +33,7 @@ export async function replyToMessage(req, res) {
       auth: { username: 'api', password: CONFIG.MAILGUN_KEY }
     });
 
-    const mailgun = MailGun({
+    const mailgun = Mailgun({
       apiKey: CONFIG.MAILGUN_KEY,
       domain: row.domain
     });

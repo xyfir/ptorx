@@ -1,4 +1,4 @@
-import * as MailGun from 'mailgun-js';
+import * as Mailgun from 'mailgun-js';
 import * as CONFIG from 'constants/config';
 
 /**
@@ -36,7 +36,7 @@ export async function deleteProxyEmail(db, email, user) {
   );
 
   if (row.mgRouteId) {
-    const mailgun = MailGun({
+    const mailgun = Mailgun({
       apiKey: CONFIG.MAILGUN_KEY,
       domain: row.domain
     });

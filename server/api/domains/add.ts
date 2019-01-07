@@ -35,7 +35,7 @@ export async function addDomain(req, res) {
     }
     // Domain does not exist; user must verify ownership
     else {
-      // Add domain to MailGun
+      // Add domain to Mailgun
       const { data: mgRes } = await axios.post(
         `${CONFIG.MAILGUN_URL}/domains`,
         {

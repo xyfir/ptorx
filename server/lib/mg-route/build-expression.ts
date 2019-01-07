@@ -12,7 +12,7 @@ export async function buildMailgunRouteExpression(db, data) {
 
   if (!data.filters.length || data.saveMail) return expression;
 
-  // Only accept_on_match filters are ran on MailGun
+  // Only accept_on_match filters are ran on Mailgun
   const sql = `
       SELECT
         type, find, use_regex AS regex

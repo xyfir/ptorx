@@ -4,7 +4,7 @@ export async function deleteExpiredMessages() {
   const db = new MySQL();
 
   try {
-    // Messages expire from MailGun after 3 days
+    // Messages expire from Mailgun after 3 days
     // These messages can no longer be accessed from the Ptorx app
     await db.query(`
       UPDATE messages

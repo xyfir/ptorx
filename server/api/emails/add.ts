@@ -5,7 +5,7 @@ import { buildMailgunRouteAction } from 'lib/mg-route/build-action';
 import { generateProxyAddress } from 'lib/email/generate';
 import { validateProxyEmail } from 'lib/email/validate';
 import { requireCredits } from 'lib/user/require-credits';
-import * as MailGun from 'mailgun-js';
+import * as Mailgun from 'mailgun-js';
 import * as CONFIG from 'constants/config';
 import { MySQL } from 'lib/MySQL';
 
@@ -125,7 +125,7 @@ export async function addProxyEmail(req, res) {
 
     const id = dbRes.insertId;
 
-    // Build MailGun route expression(s)
+    // Build Mailgun route expression(s)
     const expression = await buildMailgunRouteExpression(db, {
       saveMail: data.save_mail,
       address: data.address + '@' + domain,
@@ -139,7 +139,7 @@ export async function addProxyEmail(req, res) {
         : { id, save: data.save_mail }
     );
 
-    const mailgun = MailGun({ apiKey: CONFIG.MAILGUN_KEY, domain });
+    const mailgun = Mailgun({ apiKey: CONFIG.MAILGUN_KEY, domain });
 
     // Create Mailgun route
     // @ts-ignore
@@ -150,7 +150,7 @@ export async function addProxyEmail(req, res) {
       action
     });
 
-    // Save MailGun route ID to proxy email
+    // Save Mailgun route ID to proxy email
     sql = `
       UPDATE proxy_emails SET mg_route_id = ?
       WHERE email_id = ?

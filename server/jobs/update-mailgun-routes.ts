@@ -1,8 +1,8 @@
-import * as MailGun from 'mailgun-js';
+import * as Mailgun from 'mailgun-js';
 import * as CONFIG from 'constants/config';
 
 (async function() {
-  const mailgun = MailGun({ apiKey: CONFIG.MAILGUN_KEY });
+  const mailgun = Mailgun({ apiKey: CONFIG.MAILGUN_KEY });
 
   try {
     const { items: routes } = await mailgun.routes().list();

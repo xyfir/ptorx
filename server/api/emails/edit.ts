@@ -4,7 +4,7 @@ import { validateProxyEmailFilters } from 'lib/email/validate-filters';
 import { buildMailgunRouteAction } from 'lib/mg-route/build-action';
 import { validateProxyEmail } from 'lib/email/validate';
 import { requireCredits } from 'lib/user/require-credits';
-import * as MailGun from 'mailgun-js';
+import * as Mailgun from 'mailgun-js';
 import * as CONFIG from 'constants/config';
 import { MySQL } from 'lib/MySQL';
 
@@ -95,12 +95,12 @@ export async function editProxyEmail(req, res) {
         : { id: req.params.email, save: saveMail }
     );
 
-    const mailgun = MailGun({
+    const mailgun = Mailgun({
       apiKey: CONFIG.MAILGUN_KEY,
       domain
     });
 
-    // Update MailGun route
+    // Update Mailgun route
     // @ts-ignore
     await mailgun.routes(mgRouteId).update({
       description: 'Ptorx ' + CONFIG.PROD ? 'prod' : 'dev',

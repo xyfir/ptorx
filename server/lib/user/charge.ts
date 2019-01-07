@@ -1,4 +1,4 @@
-import * as MailGun from 'mailgun-js';
+import * as Mailgun from 'mailgun-js';
 import * as CONFIG from 'constants/config';
 
 /**
@@ -45,9 +45,9 @@ export async function chargeUser(db, user, amount) {
     /** @type {number[]} */
     const ids = [];
 
-    // Delete MailGun routes
+    // Delete Mailgun routes
     for (let email of emails) {
-      const mailgun = MailGun({
+      const mailgun = Mailgun({
         apiKey: CONFIG.MAILGUN_KEY,
         domain: email.domain
       });

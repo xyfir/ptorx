@@ -1,5 +1,5 @@
 import { chargeUser } from 'lib/user/charge';
-import * as MailGun from 'mailgun-js';
+import * as Mailgun from 'mailgun-js';
 import * as CONFIG from 'constants/config';
 import { MySQL } from 'lib/MySQL';
 
@@ -27,7 +27,7 @@ export async function sendMessage(req, res) {
     const credits = await chargeUser(db, +req.session.uid, 1);
     db.release();
 
-    const mailgun = MailGun({
+    const mailgun = Mailgun({
       apiKey: CONFIG.MAILGUN_KEY,
       domain: row.domain
     });

@@ -1,7 +1,7 @@
 import { deleteProxyEmail } from 'lib/email/delete';
 
 /**
- * Delete a user from Ptorx, and all of their email routes on MailGun.
+ * Delete a user from Ptorx, and all of their email routes on Mailgun.
  * @param {object} db
  * @param {number} user
  */

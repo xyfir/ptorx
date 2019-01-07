@@ -1,7 +1,7 @@
 import * as escapeRegExp from 'escape-string-regexp';
 import { saveMessage } from 'lib/email/save-message';
 import { chargeUser } from 'lib/user/charge';
-import * as MailGun from 'mailgun-js';
+import * as Mailgun from 'mailgun-js';
 import * as CONFIG from 'constants/config';
 import { MySQL } from 'lib/MySQL';
 import axios from 'axios';
@@ -59,7 +59,7 @@ export async function receiveMail(req, res) {
     Object.assign(data, rows[0]);
 
     // Grab all filters
-    // pass is set to 1 if MailGun already validated
+    // pass is set to 1 if Mailgun already validated
     data.filters = rows = await db.query(
       `
         SELECT
@@ -104,7 +104,7 @@ export async function receiveMail(req, res) {
 
     // Loop through filters
     data.filters.forEach((filter, i) => {
-      // MailGun already validated filter
+      // Mailgun already validated filter
       if (filter.pass) return;
 
       // Escape regex if filter is not using regex
@@ -262,7 +262,7 @@ export async function receiveMail(req, res) {
       };
       credits++;
 
-      const mailgun = MailGun({
+      const mailgun = Mailgun({
         apiKey: CONFIG.MAILGUN_KEY,
         domain: email.proxyDomain
       });
@@ -278,7 +278,7 @@ export async function receiveMail(req, res) {
             { responseType: 'arraybuffer' }
           );
 
-          // Create attachment via MailGun.Attachment
+          // Create attachment via Mailgun.Attachment
           message.attachment.push(
             new mailgun.Attachment({
               data: dl.data,

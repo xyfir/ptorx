@@ -1,5 +1,5 @@
 import * as mailcomposer from 'mailcomposer';
-import * as MailGun from 'mailgun-js';
+import * as Mailgun from 'mailgun-js';
 import * as CONFIG from 'constants/config';
 
 /**
@@ -14,11 +14,11 @@ import * as CONFIG from 'constants/config';
  * Sends an email.
  * @async
  * @param {SendEmailOptions} options
- * @return {object} MailGun response
+ * @return {object} Mailgun response
  */
 export const sendEmail = options =>
   new Promise((resolve, reject) => {
-    const mailgun = MailGun({
+    const mailgun = Mailgun({
       apiKey: CONFIG.MAILGUN_KEY,
       domain: options.domain
     });

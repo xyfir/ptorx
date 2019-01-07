@@ -1,7 +1,7 @@
 import { buildMailgunRouteExpression } from 'lib/mg-route/build-expression';
 import { buildMailgunRouteAction } from 'lib/mg-route/build-action';
 import { getProxyEmail } from 'lib/email/get';
-import * as MailGun from 'mailgun-js';
+import * as Mailgun from 'mailgun-js';
 import * as CONFIG from 'constants/config';
 
 /**
@@ -47,7 +47,7 @@ export async function creditUser(db, user, amount) {
     /** @type {EmailRoutePair[]} */
     const ids = [];
 
-    // Create MailGun routes
+    // Create Mailgun routes
     for (let email_ of emails) {
       try {
         const email = await getProxyEmail(db, {
@@ -65,7 +65,7 @@ export async function creditUser(db, user, amount) {
           filters: email.filters.map(f => f.id)
         });
 
-        const mailgun = MailGun({
+        const mailgun = Mailgun({
           apiKey: CONFIG.MAILGUN_KEY,
           domain: email.address.split('@')[1]
         });
