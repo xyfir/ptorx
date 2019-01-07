@@ -6,7 +6,7 @@ import * as Express from 'express';
 import * as parser from 'body-parser';
 import * as CONFIG from 'constants/config';
 import * as Store from 'express-mysql-session';
-import { router } from 'controllers/router';
+import { router } from 'api/router';
 
 // @ts-ignore
 const SessionStore = Store(Session);
