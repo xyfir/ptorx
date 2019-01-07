@@ -2,16 +2,7 @@ const requireCredits = require('lib/user/require-credits');
 const validate = require('lib/filter/validate');
 import { MySQL } from 'lib/MySQL';
 
-/*
-  PUT /api/6/filters/:filter
-  REQUIRED
-    type: number, name: string, description: string, find: string
-  OPTIONAL
-    acceptOnMatch: boolean, useRegex: boolean
-  RETURN
-    { update?: number[] }
-*/
-module.exports = async function(req, res) {
+export async function editFilter(req, res) {
   const db = new MySQL();
 
   try {
@@ -72,4 +63,4 @@ module.exports = async function(req, res) {
   }
 
   db.release();
-};
+}

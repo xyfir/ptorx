@@ -1,16 +1,11 @@
-const getProxyEmail = require('lib/email/get');
+const _getProxyEmail = require('lib/email/get');
 import { MySQL } from 'lib/MySQL';
 
-/*
-  GET /api/6/emails/:email
-  RETURN
-    { ...ProxyEmail }
-*/
-module.exports = async function(req, res) {
+export async function getProxyEmail(req, res) {
   const db = new MySQL();
 
   try {
-    const email = await getProxyEmail(db, {
+    const email = await _getProxyEmail(db, {
       user: +req.session.uid,
       email: +req.params.email
     });
@@ -20,4 +15,4 @@ module.exports = async function(req, res) {
     db.release();
     res.status(400).json({ error: err });
   }
-};
+}

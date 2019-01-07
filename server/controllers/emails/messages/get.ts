@@ -2,18 +2,7 @@ import axios from 'axios';
 import * as CONFIG from 'constants/config';
 import { MySQL } from 'lib/MySQL';
 
-/*
-  GET /api/6/emails/:email/messages/:message
-  RETURN
-    {
-
-      headers?: [[ header: string, value: string ]], received?: number,
-      from?: string, subject?: string, text?: string, html?: string
-    }
-  DESCRIPTION
-    Return message content
-*/
-module.exports = async function(req, res) {
+export async function getMessage(req, res) {
   const db = new MySQL();
 
   try {
@@ -51,4 +40,4 @@ module.exports = async function(req, res) {
     db.release();
     res.status(400).json({ error: err });
   }
-};
+}

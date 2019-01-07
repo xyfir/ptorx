@@ -1,12 +1,6 @@
 import { MySQL } from 'lib/MySQL';
 
-/**
- * DELETE /api/6/account/email/:email
- * @param {object} req
- * @param {object} req.params
- * @param {number} req.params.email
- */
-module.exports = async function(req, res) {
+export async function deletePrimaryEmail(req, res) {
   const db = new MySQL();
   try {
     await db.query(
@@ -18,4 +12,4 @@ module.exports = async function(req, res) {
     res.status(400).json({ error: err });
   }
   db.release();
-};
+}

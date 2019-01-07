@@ -22,7 +22,7 @@
  * @prop {LinkedFilter[]} filters
  * @prop {LinkedModifier[]} modifiers
  */
-module.exports = async function(db, opt) {
+export async function getProxyEmail(db, opt) {
   const [row] = await db.query(
     `
       SELECT
@@ -75,4 +75,4 @@ module.exports = async function(db, opt) {
   );
 
   return email;
-};
+}

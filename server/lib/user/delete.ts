@@ -5,7 +5,7 @@ const deleteEmail = require('lib/email/delete');
  * @param {object} db
  * @param {number} user
  */
-module.exports = async function(db, user) {
+export async function deleteUser(db, user) {
   const emails = await db.query(
     'SELECT email_id AS id FROM proxy_emails WHERE user_id = ?',
     [user]
@@ -18,4 +18,4 @@ module.exports = async function(db, user) {
   }
 
   await db.query('DELETE FROM users WHERE user_id = ?', user);
-};
+}

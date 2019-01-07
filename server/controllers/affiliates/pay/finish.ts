@@ -2,14 +2,7 @@ import axios from 'axios';
 import * as CONFIG from 'constants/config';
 import { MySQL } from 'lib/MySQL';
 
-/*
-  GET /api/6/affiliates/pay
-  REQUIRED
-    payment_id: number
-  DESCRIPTION
-    Finish purchase and redirect user
-*/
-module.exports = async function(req, res) {
+export async function finishAffiliatePayment(req, res) {
   const db = new MySQL();
 
   try {
@@ -55,4 +48,4 @@ module.exports = async function(req, res) {
 
   db.release();
   res.redirect('/affiliate');
-};
+}

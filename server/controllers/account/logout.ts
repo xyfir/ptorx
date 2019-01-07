@@ -1,8 +1,5 @@
 import * as CONFIG from 'constants/config';
 
-/*
-  GET /api/6/account/logout
-*/
-module.exports = function(req, res) {
+export function logout(req, res) {
   req.session.destroy(() => res.redirect(CONFIG.PTORX_URL));
-};
+}

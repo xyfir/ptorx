@@ -3,21 +3,7 @@ const MailGun = require('mailgun-js');
 import * as CONFIG from 'constants/config';
 import { MySQL } from 'lib/MySQL';
 
-/*
-  POST /api/6/receive/reply
-  REQUIRED
-    sender: string, // Always 'user@domain'
-    subject: string,
-    recipient: string, // 'message_id--reply@ptorx-domain'
-    body-plain: string,
-  OPTIONAL
-    body-html: string
-  RETURNS
-    HTTP STATUS - 200: Success, 406: Error
-  DESCRIPTION
-    Reply from a proxy address to the message's original sender
-*/
-module.exports = async function(req, res) {
+export async function receiveReply(req, res) {
   const db = new MySQL();
 
   try {
@@ -75,4 +61,4 @@ module.exports = async function(req, res) {
     db.release();
     res.status(406).send();
   }
-};
+}

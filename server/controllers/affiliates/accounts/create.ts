@@ -3,16 +3,7 @@ import axios from 'axios';
 import * as CONFIG from 'constants/config';
 import { MySQL } from 'lib/MySQL';
 
-/*
-  POST /api/6/affiliates/accounts
-  REQUIRED
-    email: string, credits: number
-  OPTIONAL
-    note: string
-  RETURN
-    { user_id: number }
-*/
-module.exports = async function(req, res) {
+export async function createAccountAsAffiliate(req, res) {
   const { email, note = '', credits } = req.body;
   const db = new MySQL();
 
@@ -56,4 +47,4 @@ module.exports = async function(req, res) {
     db.release();
     res.status(400).json({ error: err });
   }
-};
+}

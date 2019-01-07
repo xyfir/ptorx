@@ -1,7 +1,7 @@
 const deleteUser = require('lib/user/delete');
 import { MySQL } from 'lib/MySQL';
 
-module.exports = async function() {
+export async function deleteUnpaidAffiliateAccounts() {
   const db = new MySQL();
 
   try {
@@ -36,4 +36,4 @@ module.exports = async function() {
     console.log('[cron] delete-unpaid-affiliate-accounts', err);
     db.release();
   }
-};
+}

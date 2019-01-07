@@ -3,7 +3,7 @@
  * @param {object} mod
  * @returns {string} A normal or JSON string.
  */
-module.exports = function(mod) {
+export function buildModifierData(mod) {
   switch (+mod.type) {
     case 1:
       return String(mod.key);
@@ -40,4 +40,4 @@ module.exports = function(mod) {
     case 8:
       return JSON.stringify({ target: mod.target, value: mod.value });
   }
-};
+}

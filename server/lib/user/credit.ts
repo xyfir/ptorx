@@ -12,7 +12,7 @@ import * as CONFIG from 'constants/config';
  * @param {number} amount
  * @return {number} The user's total credits after addition.
  */
-module.exports = async function(db, user, amount) {
+export async function creditUser(db, user, amount) {
   // Get user's current amount of credits
   const rows = await db.query('SELECT credits FROM users WHERE user_id = ?', [
     user
@@ -93,4 +93,4 @@ module.exports = async function(db, user, amount) {
   }
 
   return credits;
-};
+}

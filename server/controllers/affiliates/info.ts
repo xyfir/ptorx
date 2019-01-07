@@ -2,16 +2,7 @@ const getAffiliate = require('lib/affiliates/get');
 const moment = require('moment');
 import { MySQL } from 'lib/MySQL';
 
-/*
-  GET /api/6/affiliates
-  RETURN
-    {
-      user_id: number, api_key: string, credits: number,
-      discount: number, last_payment: string, owed: number,
-      timestamp: string, unpaid_credits: number
-    }
-*/
-module.exports = async function(req, res) {
+export async function getAffiliateInfo(req, res) {
   const db = new MySQL();
 
   try {
@@ -26,4 +17,4 @@ module.exports = async function(req, res) {
     db.release();
     res.status(400).json({ error: err });
   }
-};
+}

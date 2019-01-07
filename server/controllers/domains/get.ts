@@ -1,24 +1,6 @@
 import { MySQL } from 'lib/MySQL';
 
-/*
-  GET /api/6/domains/:domain
-  RETURN
-    {
-
-
-      id?: number, domain?: string, verified?: boolean, added?: date-string,
-      global: boolean, isCreator?: boolean,
-      domainKey?: {
-        name: string, value: string
-      }
-      users?: [{
-        id: string, label: string, requestKey: string, added: date-string
-      }]
-    }
-  DESCRIPTION
-    Returns full info for domain and info for verified users
-*/
-module.exports = async function(req, res) {
+export async function getDomain(req, res) {
   const db = new MySQL();
 
   try {
@@ -59,4 +41,4 @@ module.exports = async function(req, res) {
     db.release();
     res.status(400).json({ error: err });
   }
-};
+}

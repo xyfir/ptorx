@@ -5,18 +5,7 @@ import * as CONFIG from 'constants/config';
 const cryptr = new Cryptr(CONFIG.ACCESS_TOKEN_KEY);
 import { MySQL } from 'lib/MySQL';
 
-/*
-  POST /api/6/account/login
-  REQUIRED
-    xid: string, auth: string
-  OPTIONAL
-    referral: object
-  RETURN
-    { accessToken?: string }
-  DESCRIPTION
-    Register or login user
-*/
-module.exports = async function(req, res) {
+export async function login(req, res) {
   const db = new MySQL();
 
   try {
@@ -104,4 +93,4 @@ module.exports = async function(req, res) {
     db.release();
     res.status(400).json({});
   }
-};
+}

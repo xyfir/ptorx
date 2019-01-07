@@ -1,5 +1,4 @@
 const moment = require('moment');
-import { MySQL } from 'lib/MySQL';
 
 /**
  * @typedef {object} Affiliate
@@ -19,7 +18,7 @@ import { MySQL } from 'lib/MySQL';
  * @param {string} timestamp
  * @return {Affiliate}
  */
-module.exports = async function(db, user, timestamp) {
+export async function getAffiliateInfo(db, user, timestamp) {
   const [affiliate] = await db.query(
     'SELECT * FROM affiliates WHERE user_id = ?',
     [user]
@@ -42,4 +41,4 @@ module.exports = async function(db, user, timestamp) {
   affiliate.owed = +(unpaid_credits * (0.0006 - affiliate.discount)).toFixed(2);
 
   return affiliate;
-};
+}

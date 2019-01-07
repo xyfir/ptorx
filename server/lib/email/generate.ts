@@ -7,7 +7,7 @@ const { rword } = require('rword');
  * @param {number} domain
  * @return {string}
  */
-module.exports = async function(db, domain) {
+export async function generateProxyAddress(db, domain) {
   const sql = `
     SELECT email_id FROM proxy_emails WHERE address = ? AND domain_id = ?
   `;
@@ -20,4 +20,4 @@ module.exports = async function(db, domain) {
     const rows = await db.query(sql, [email, domain]);
     if (!rows.length) return email;
   }
-};
+}

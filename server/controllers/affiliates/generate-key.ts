@@ -1,12 +1,7 @@
 import { MySQL } from 'lib/MySQL';
 const uuid = require('uuid/v4');
 
-/*
-  POST /api/6/affiliates/key
-  RETURN
-    { api_key: string }
-*/
-module.exports = async function(req, res) {
+export async function generateAffiliateKey(req, res) {
   const db = new MySQL();
 
   try {
@@ -24,4 +19,4 @@ module.exports = async function(req, res) {
     db.release();
     res.status(400).json({ error: err });
   }
-};
+}

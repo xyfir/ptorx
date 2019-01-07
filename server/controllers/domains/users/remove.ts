@@ -1,13 +1,7 @@
 const deleteEmail = require('controllers/emails/delete');
 import { MySQL } from 'lib/MySQL';
 
-/*
-  DELETE /api/6/domains/:domain/users/:user
-  DESCRIPTION
-    Allows a user to remove a domain from their account or a domain creator
-    to remove a user from the domain.
-*/
-module.exports = async function(req, res) {
+export async function deleteDomainUser(req, res) {
   const db = new MySQL();
 
   try {
@@ -57,4 +51,4 @@ module.exports = async function(req, res) {
     db.release();
     res.status(400).json({ error: err });
   }
-};
+}

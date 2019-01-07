@@ -1,11 +1,6 @@
 import { MySQL } from 'lib/MySQL';
 
-/*
-  PUT /api/6/account/email/template
-  OPTIONAL
-    id: number
-*/
-module.exports = async function(req, res) {
+export async function setEmailTemplate(req, res) {
   const db = new MySQL();
 
   try {
@@ -21,4 +16,4 @@ module.exports = async function(req, res) {
   }
 
   db.release();
-};
+}

@@ -3,29 +3,7 @@ import * as CONFIG from 'constants/config';
 import { MySQL } from 'lib/MySQL';
 const uuid = require('uuid/v4');
 
-/*
-  POST /api/6/domains
-  REQUIRED
-    domain: string
-  RETURN
-    {
-
-
-      // Domain already exists and user must request access
-      requestKey?: string,
-
-      // Domain is new and user must verify ownership
-      domainId?:string,
-      domainKey?: {
-        name: string, value: string
-      }
-    }
-  DESCRIPTION
-    Depending on whether the domain already exists in Ptorx's database or not,
-    either begins process of adding domain to Ptorx and MailGun, or generates
-    request key for user to request access to domain with.
-*/
-module.exports = async function(req, res) {
+export async function addDomain(req, res) {
   const db = new MySQL();
 
   try {
@@ -95,4 +73,4 @@ module.exports = async function(req, res) {
     db.release();
     res.status(400).json({ error: err });
   }
-};
+}

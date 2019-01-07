@@ -39,17 +39,7 @@ async function getCoinhiveStats() {
   return stats;
 }
 
-/**
- * `GET /api/6/account/credits/coinhive`
- * @async
- */
-/**
- * @typedef {object} ResponseBody
- * @prop {number} earned - Amount of credits the user has earned
- * @prop {string} message
- * @prop {number} [credits] - Amount of credits the user currently has
- */
-module.exports = async function(req, res) {
+export async function getCoinhiveCredits(req, res) {
   const db = new MySQL();
 
   try {
@@ -101,4 +91,4 @@ module.exports = async function(req, res) {
   }
 
   db.release();
-};
+}

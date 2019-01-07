@@ -3,16 +3,7 @@ import axios from 'axios';
 import * as CONFIG from 'constants/config';
 import { MySQL } from 'lib/MySQL';
 
-/*
-  POST /api/6/affiliates/pay
-  REQUIRED
-    timestamp: string
-  RETURN
-    { url?: string }
-  DESCRIPTION
-    Initialize payment with xyPayments
-*/
-module.exports = async function(req, res) {
+export async function startAffiliatePayment(req, res) {
   const db = new MySQL();
 
   try {
@@ -53,4 +44,4 @@ module.exports = async function(req, res) {
     db.release();
     res.status(400).json({ error: err });
   }
-};
+}

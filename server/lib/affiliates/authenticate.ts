@@ -12,7 +12,7 @@ const auth = require('basic-auth');
  * @throws {string}
  * @return {BasicAuthResult}
  */
-module.exports = async function(db, req) {
+export async function authenticate(db, req) {
   const cred = auth(req);
   const rows = await db.query(
     'SELECT user_id FROM affiliates WHERE user_id = ? AND api_key = ?',
@@ -24,4 +24,4 @@ module.exports = async function(db, req) {
     id: +cred.name,
     key: cred.pass
   };
-};
+}

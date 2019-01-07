@@ -4,27 +4,7 @@ const cryptr = new Cryptr(CONFIG.ACCESS_TOKEN_KEY);
 import { MySQL } from 'lib/MySQL';
 import axios from 'axios';
 
-/*
-  GET /api/6/account
-  REQUIRED
-    token: string
-  RETURN
-    {
-      loggedIn: boolean, uid?: number, affiliate?: boolean, credits?: number,
-      email_template?: number,
-      referral?: {
-        type?: string, [type]?: string|number, data?: object,
-        hasMadePurchase?: boolean
-      },
-      emails?: [{
-        id: number, address: string
-      }]
-    }
-  DESCRIPTION
-    Creates a new session using access token
-    Returns account info
-*/
-module.exports = async function(req, res) {
+export async function getAccountInfo(req, res) {
   const db = new MySQL();
 
   try {
@@ -105,4 +85,4 @@ module.exports = async function(req, res) {
     req.session.destroy();
     res.status(200).json({ loggedIn: false });
   }
-};
+}

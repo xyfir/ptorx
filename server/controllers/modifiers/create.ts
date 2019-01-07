@@ -2,25 +2,7 @@ const buildData = require('lib/modifier/build-data');
 const validate = require('lib/modifier/validate');
 import { MySQL } from 'lib/MySQL';
 
-/*
-  POST /api/6/modifiers
-  REQUIRED
-    type: number, name: string, description: string
-  OPTIONAL
-    REPLACE
-      value: string, with: string, regex: boolean
-    TAG
-      prepend: string, value: string
-    SUBJECT
-      subject: string
-    CONCATENATE
-      add: string, to: string, separator: string
-  RETURN
-    { id?: number }
-  DESCRIPTION
-    Create a new modifier
-*/
-module.exports = async function(req, res) {
+export async function addModifier(req, res) {
   const db = new MySQL();
 
   try {
@@ -46,4 +28,4 @@ module.exports = async function(req, res) {
     db.release();
     res.status(400).json({ error: err });
   }
-};
+}

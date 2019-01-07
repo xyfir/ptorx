@@ -7,7 +7,12 @@
  * @param {boolean} directForward
  * @param {object} db
  */
-module.exports = async function(filters, uid, directForward, db) {
+export async function validateProxyEmailFilters(
+  filters,
+  uid,
+  directForward,
+  db
+) {
   // No filters to validate
   if (!filters.length) return;
 
@@ -38,4 +43,4 @@ module.exports = async function(filters, uid, directForward, db) {
 
     types.push(row.type);
   }
-};
+}

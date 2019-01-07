@@ -14,7 +14,7 @@ import { MySQL } from 'lib/MySQL';
  * @prop {string} name
  * @prop {string} description
  */
-module.exports = async function(req, res) {
+export async function getFilters(req, res) {
   const db = new MySQL();
   try {
     const filters = await db.query(
@@ -29,4 +29,4 @@ module.exports = async function(req, res) {
     res.status(400).json({ error: err });
   }
   db.release();
-};
+}

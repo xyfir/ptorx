@@ -1,18 +1,6 @@
 import { MySQL } from 'lib/MySQL';
 
-/*
-  GET /api/6/domains
-  RETURN
-    {
-
-      domains?: [{
-        id: number, domain: string, isCreator: boolean
-      }]
-    }
-  DESCRIPTION
-    Returns all domains that the user is authorized to use
-*/
-module.exports = async function(req, res) {
+export async function getDomains(req, res) {
   const db = new MySQL();
 
   try {
@@ -38,4 +26,4 @@ module.exports = async function(req, res) {
     db.release();
     res.status(400).json({ error: err });
   }
-};
+}

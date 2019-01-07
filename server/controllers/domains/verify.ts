@@ -2,13 +2,7 @@ import axios from 'axios';
 import * as CONFIG from 'constants/config';
 import { MySQL } from 'lib/MySQL';
 
-/*
-  PUT /api/6/domains/:domain/verify
-  DESCRIPTION
-    Requests that MailGun verify the domain's DNS records and marks the domain
-    as verified on Ptorx if MailGun verifies the records.
-*/
-module.exports = async function(req, res) {
+export async function verifyDomain(req, res) {
   const db = new MySQL();
 
   try {
@@ -33,4 +27,4 @@ module.exports = async function(req, res) {
     db.release();
     res.status(400).json({ error: err });
   }
-};
+}

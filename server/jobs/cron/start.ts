@@ -1,7 +1,4 @@
-/**
- * Sets tasks to run at appropriate times.
- */
-module.exports = function() {
+export function startCronJobs() {
   // Delete expired messages
   // Run every hour
   setInterval(require('jobs/cron/delete-expired-messages'), 3600 * 1000);
@@ -12,4 +9,4 @@ module.exports = function() {
     require('jobs/cron/delete-unpaid-affiliate-accounts'),
     86400 * 1000
   );
-};
+}

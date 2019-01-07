@@ -6,25 +6,7 @@ const MailGun = require('mailgun-js');
 import * as CONFIG from 'constants/config';
 import { MySQL } from 'lib/MySQL';
 
-/*
-  POST /api/6/receive/:email
-  REQUIRED
-    from: string, // 'user@domain' OR 'Sender Name <user@domain>'
-    sender: string, // Always 'user@domain'
-    subject: string,
-    recipient: string, // 'user@ptorx-domain'
-    body-plain: string,
-    message-headers: json-string // [['header', 'value']]
-  OPTIONAL
-    body-html: string, message-url: string, attachments: json-string
-  RETURNS
-    HTTP STATUS - 200: Success, 406: Error
-  DESCRIPTION
-    Receive emails from MailGun
-    Messages are ran through any filters that weren't or can't be run on MailGun
-    Messages are then modified via modifiers
-*/
-module.exports = async function(req, res) {
+export async function receiveMail(req, res) {
   const db = new MySQL();
 
   try {
@@ -342,4 +324,4 @@ module.exports = async function(req, res) {
   }
 
   db.release();
-};
+}

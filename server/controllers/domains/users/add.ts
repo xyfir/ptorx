@@ -1,25 +1,18 @@
 import axios from 'axios';
 import { MySQL } from 'lib/MySQL';
 
-/*
-  POST /api/6/domains/:domain/users
-  REQUIRED
-    key: string, label: string
-  DESCRIPTION
-    Completes process of adding another Ptorx user to a domain
-*/
-module.exports = async function(req, res) {
+export async function addDomainUser(req, res) {
   const db = new MySQL();
 
   try {
     const result = await db.query(
       `
-      UPDATE domain_users SET
-        label = ?, added = NOW(), authorized = 1
-      WHERE
-        domain_id = ? AND request_key = ? AND
-        (SELECT user_id FROM domains WHERE id = ?) = ?
-    `,
+        UPDATE domain_users SET
+          label = ?, added = NOW(), authorized = 1
+        WHERE
+          domain_id = ? AND request_key = ? AND
+          (SELECT user_id FROM domains WHERE id = ?) = ?
+      `,
       [
         req.body.label,
         req.params.domain,
@@ -37,4 +30,4 @@ module.exports = async function(req, res) {
     db.release();
     res.status(400).json({ error: err });
   }
-};
+}

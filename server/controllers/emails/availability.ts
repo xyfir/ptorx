@@ -1,15 +1,6 @@
 import { MySQL } from 'lib/MySQL';
 
-/*
-  GET /api/6/emails/availability
-  REQUIRED
-    address: string, domain: number
-  RETURN
-    { available?: boolean }
-  DESCRIPTION
-    Checks whether an email address is available
-*/
-module.exports = async function(req, res) {
+export async function getProxyEmailAvailability(req, res) {
   const db = new MySQL();
 
   try {
@@ -24,4 +15,4 @@ module.exports = async function(req, res) {
     db.release();
     res.status(400).json({ error: err });
   }
-};
+}

@@ -1,12 +1,7 @@
 const requireCredits = require('lib/user/require-credits');
 import { MySQL } from 'lib/MySQL';
 
-/*
-  DELETE /api/6/filters/:filter
-  RETURN
-    { update?: number[] }
-*/
-module.exports = async function(req, res) {
+export async function deleteFilter(req, res) {
   const db = new MySQL();
 
   try {
@@ -45,4 +40,4 @@ module.exports = async function(req, res) {
   }
 
   db.release();
-};
+}

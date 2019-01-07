@@ -3,7 +3,7 @@
  * an error message on invalid data.
  * @param {object} email
  */
-module.exports = function(email) {
+export function validateProxyEmail(email) {
   if (!(email.name || '').match(/^.{1,40}$/)) throw 'Invalid name';
   if ((email.description || '').length > 150)
     throw 'Description character limit hit';
@@ -11,4 +11,4 @@ module.exports = function(email) {
     throw 'Invalid email address characters or length';
   if (email.directForward && (email.noToAddress || email.saveMail))
     throw 'Cannot use "no redirect" or "save mail" with "direct forward"';
-};
+}

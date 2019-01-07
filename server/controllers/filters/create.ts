@@ -20,7 +20,7 @@ import { MySQL } from 'lib/MySQL';
  * @prop {string} [message]
  * @prop {number} [id]
  */
-module.exports = async function(req, res) {
+export async function addFilter(req, res) {
   const db = new MySQL();
   try {
     const error = validate(req.body);
@@ -42,4 +42,4 @@ module.exports = async function(req, res) {
     res.status(400).json({ error: err });
   }
   db.release();
-};
+}

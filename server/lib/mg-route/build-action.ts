@@ -7,13 +7,12 @@ import * as CONFIG from 'constants/config';
  * @prop {boolean} [save] - Whether the mail should be saved or not.
  * @prop {number} id - A proxy email id.
  */
-
 /**
  * Build the `action` field for the proxy email's Mailgun route.
  * @param {BuildActionOptions} options
  * @return {string}
  */
-module.exports = function(options) {
+export function buildMailgunRouteAction(options) {
   // Receive routes need their own unique domain in dev
   // When in prod it is the same as CONFIG.PTORX_URL
   const url = `${CONFIG.PTORX_CALLBACK_URL}/api/receive/${options.id}`;
@@ -21,4 +20,4 @@ module.exports = function(options) {
   if (options.address) return `forward("${options.address},${url}")`;
   else if (options.save) return `store(notify="${url}")`;
   else return `forward("${url}")`;
-};
+}

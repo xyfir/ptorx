@@ -3,16 +3,7 @@ const MailGun = require('mailgun-js');
 import * as CONFIG from 'constants/config';
 import { MySQL } from 'lib/MySQL';
 
-/*
-  POST /api/6/emails/:email/messages
-  REQUIRED
-    to: string, subject: string, content: string
-  RETURN
-    { credits?: number }
-  DESCRIPTION
-    Sends an email from a REDIRECT email
-*/
-module.exports = async function(req, res) {
+export async function sendMessage(req, res) {
   const db = new MySQL();
 
   try {
@@ -53,4 +44,4 @@ module.exports = async function(req, res) {
     db.release();
     res.status(400).json({ error: err });
   }
-};
+}

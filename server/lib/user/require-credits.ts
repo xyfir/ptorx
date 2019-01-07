@@ -8,7 +8,7 @@
  * @return {number} The user's credits.
  * @throws {string}
  */
-module.exports = async function(db, user) {
+export async function requireCredits(db, user) {
   const [row] = await db.query('SELECT credits FROM users WHERE user_id = ?', [
     user
   ]);
@@ -19,4 +19,4 @@ module.exports = async function(db, user) {
     throw 'This action is free, but requires that your account have credits';
 
   return credits;
-};
+}

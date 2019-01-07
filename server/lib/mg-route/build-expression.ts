@@ -7,7 +7,7 @@ const escapeRegExp = require('escape-string-regexp');
  * @param {object} data
  * @return {string}
  */
-module.exports = async function(db, data) {
+export async function buildMailgunRouteExpression(db, data) {
   let expression = `match_recipient("^${data.address}$")`;
 
   if (!data.filters.length || data.saveMail) return expression;
@@ -47,4 +47,4 @@ module.exports = async function(db, data) {
     .join('');
 
   return expression;
-};
+}

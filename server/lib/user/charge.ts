@@ -12,7 +12,7 @@ import * as CONFIG from 'constants/config';
  * @return {number} The user's remaining credits after charge.
  * @throws {string}
  */
-module.exports = async function(db, user, amount) {
+export async function chargeUser(db, user, amount) {
   const rows = await db.query('SELECT credits FROM users WHERE user_id = ?', [
     user
   ]);
@@ -64,4 +64,4 @@ module.exports = async function(db, user, amount) {
   }
 
   return credits;
-};
+}

@@ -1,20 +1,8 @@
-import axios from 'axios';
 import * as CONFIG from 'constants/config';
 import { MySQL } from 'lib/MySQL';
+import axios from 'axios';
 
-/**
- * `POST /api/6/account/credits/purchase`
- * @param {object} req
- * @param {object} req.body
- * @param {string} req.body.type - `"normal|iap"`
- * @param {number} req.body.package - `1|2|3`
- */
-/**
- * @typedef {object} ResponseBody
- * @prop {string} [message]
- * @prop {string} [url]
- */
-module.exports = async function(req, res) {
+export async function startCreditsPurchase(req, res) {
   const db = new MySQL();
 
   try {
@@ -59,4 +47,4 @@ module.exports = async function(req, res) {
     db.release();
     res.status(400).json({ error: err });
   }
-};
+}

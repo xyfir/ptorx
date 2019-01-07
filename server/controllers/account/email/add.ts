@@ -1,11 +1,6 @@
 import { MySQL } from 'lib/MySQL';
 
-/*
-  POST /api/6/account/email/:email
-  RETURN
-    { id?: number }
-*/
-module.exports = async function(req, res) {
+export async function addPrimaryEmail(req, res) {
   const db = new MySQL();
 
   try {
@@ -37,4 +32,4 @@ module.exports = async function(req, res) {
   }
 
   db.release();
-};
+}

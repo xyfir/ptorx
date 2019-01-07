@@ -8,7 +8,7 @@ import * as CONFIG from 'constants/config';
  * @param {number} user
  * @throws {string}
  */
-module.exports = async function(db, email, user) {
+export async function deleteProxyEmail(db, email, user) {
   const [row] = await db.query(
     `
       SELECT
@@ -48,4 +48,4 @@ module.exports = async function(db, email, user) {
   // linked filters and modifiers
   await db.query('DELETE FROM linked_filters WHERE email_id = ?', [email]);
   await db.query('DELETE FROM linked_modifiers WHERE email_id = ?', [email]);
-};
+}

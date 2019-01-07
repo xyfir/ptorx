@@ -1,17 +1,6 @@
 import { MySQL } from 'lib/MySQL';
 
-/*
-  GET /api/6/modifiers/:mod
-  RETURN
-    {
-
-      id: number, name: string, description: string, type: number
-      data: json-string, linkedTo: [{ id: number, address: string }]
-    }
-  DESCRIPTION
-    Returns data and linkedTo for a specific modifier
-*/
-module.exports = async function(req, res) {
+export async function getModifier(req, res) {
   const db = new MySQL();
 
   try {
@@ -46,4 +35,4 @@ module.exports = async function(req, res) {
     db.release();
     res.status(400).json({ error: err });
   }
-};
+}

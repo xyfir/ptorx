@@ -1,11 +1,6 @@
 import { MySQL } from 'lib/MySQL';
 
-/*
-  DELETE /api/6/emails/:email/messages/:message
-  DESCRIPTION
-    Delete message from Ptorx
-*/
-module.exports = async function(req, res) {
+export async function deleteMessage(req, res) {
   const db = new MySQL();
 
   try {
@@ -26,4 +21,4 @@ module.exports = async function(req, res) {
     db.release();
     res.status(400).json({ error: err });
   }
-};
+}

@@ -1,21 +1,6 @@
 import { MySQL } from 'lib/MySQL';
 
-/*
-  GET /api/6/filters/:filter
-  RETURN
-    {
-
-
-      id: number, name: string, description: string, type: number,
-      find: string, acceptOnMatch: boolean, regex: boolean,
-      linkedTo: [{
-        id: number, address: string
-      }]
-    }
-  DESCRIPTION
-    Returns data for a specific filter
-*/
-module.exports = async function(req, res) {
+export async function getFilter(req, res) {
   const db = new MySQL();
 
   try {
@@ -55,4 +40,4 @@ module.exports = async function(req, res) {
     db.release();
     res.status(400).json({ error: err });
   }
-};
+}

@@ -1,14 +1,8 @@
-import axios from 'axios';
 import * as CONFIG from 'constants/config';
 import { MySQL } from 'lib/MySQL';
+import axios from 'axios';
 
-/**
- * `GET /api/6/account/credits/purchase`
- * @param {object} req
- * @param {object} req.query
- * @param {number} req.query.payment_id
- */
-module.exports = async function(req, res) {
+export async function finishCreditsPurchase(req, res) {
   const db = new MySQL();
 
   try {
@@ -53,4 +47,4 @@ module.exports = async function(req, res) {
 
   db.release();
   res.redirect('/app/');
-};
+}

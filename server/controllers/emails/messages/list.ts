@@ -1,21 +1,6 @@
 import { MySQL } from 'lib/MySQL';
 
-/*
-  GET /api/6/emails/:email/messages
-  OPTIONAL
-    type: number
-  RETURN
-    {
-
-      messages: [{
-        id: string, received: number, subject: string
-      }]
-    }
-  DESCRIPTION
-    Return basic data on any stored messages for :email
-    Returns accepted, rejected, or spam messages based on req.query.type
-*/
-module.exports = async function(req, res) {
+export async function getMessages(req, res) {
   const db = new MySQL();
 
   try {
@@ -40,4 +25,4 @@ module.exports = async function(req, res) {
     db.release();
     res.status(400).json({ error: err });
   }
-};
+}

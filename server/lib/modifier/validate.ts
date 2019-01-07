@@ -2,7 +2,7 @@
  * Validates a modifier provided by the user. Throws error if invalid.
  * @param {object} mod
  */
-module.exports = function(mod) {
+export function validateModifier(mod) {
   if (!mod.type) throw 'Invalid type';
 
   if (!(mod.name || '').match(/^[\w\d -]{1,40}$/))
@@ -48,4 +48,4 @@ module.exports = function(mod) {
     default:
       throw 'Invalid type';
   }
-};
+}

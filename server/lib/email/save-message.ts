@@ -8,7 +8,7 @@ const uuid = require('uuid/v4');
  * @param {number} type - `0` = accepted, `1` = rejected, `2` = spam
  * @return {string} The saved message's id.
  */
-module.exports = async function(req, type) {
+export async function saveMessage(req, type) {
   const db = new MySQL();
 
   let tries = 0,
@@ -42,4 +42,4 @@ module.exports = async function(req, type) {
   db.release();
 
   return id;
-};
+}

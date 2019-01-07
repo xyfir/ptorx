@@ -1,11 +1,9 @@
 import { MySQL } from 'lib/MySQL';
 
-module.exports = async function() {
+export async function deleteExpiredMessages() {
   const db = new MySQL();
 
   try {
-
-
     // Messages expire from MailGun after 3 days
     // These messages can no longer be accessed from the Ptorx app
     await db.query(`
@@ -24,4 +22,4 @@ module.exports = async function() {
   } catch (err) {
     db.release();
   }
-};
+}

@@ -9,20 +9,7 @@ const MailGun = require('mailgun-js');
 import * as CONFIG from 'constants/config';
 import { MySQL } from 'lib/MySQL';
 
-/*
-  POST /api/6/emails
-  REQUIRED
-    name: string, description: string, address: string, domain: number,
-    filters: string | number[], modifiers: string | number[], to: number
-  OPTIONAL
-    saveMail: boolean, noSpamFilter: boolean, noToAddress: boolean,
-    directForward: boolean
-  RETURN
-    { id?: number }
-  DESCRIPTION
-    Creates a redirect email, its MailGun inbound route, any used links filters/modifiers
-*/
-module.exports = async function(req, res) {
+export async function addProxyEmail(req, res) {
   const db = new MySQL();
 
   try {
@@ -194,4 +181,4 @@ module.exports = async function(req, res) {
   }
 
   db.release();
-};
+}

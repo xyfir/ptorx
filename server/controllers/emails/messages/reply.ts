@@ -4,16 +4,7 @@ import axios from 'axios';
 import * as CONFIG from 'constants/config';
 import { MySQL } from 'lib/MySQL';
 
-/*
-  POST /api/6/emails/:email/messages/:message
-  REQUIRED
-    content: string
-  RETURN
-    { credits?: number }
-  DESCRIPTION
-    Send reply to a stored message
-*/
-module.exports = async function(req, res) {
+export async function replyToMessage(req, res) {
   const db = new MySQL();
 
   try {
@@ -60,4 +51,4 @@ module.exports = async function(req, res) {
     db.release();
     res.status(400).json({ error: err });
   }
-};
+}

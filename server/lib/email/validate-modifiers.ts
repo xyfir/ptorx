@@ -6,7 +6,12 @@
  * @param {boolean} directForward
  * @param {object} db
  */
-module.exports = async function(modifiers, uid, directForward, db) {
+export async function validateProxyEmailModifiers(
+  modifiers,
+  uid,
+  directForward,
+  db
+) {
   // No modifiers to validate
   if (!modifiers.length) return;
 
@@ -22,4 +27,4 @@ module.exports = async function(modifiers, uid, directForward, db) {
 
   if (rows.length != modifiers.length)
     throw 'One or more modifiers provided do not exist';
-};
+}

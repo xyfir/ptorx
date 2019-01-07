@@ -16,7 +16,7 @@ import * as CONFIG from 'constants/config';
  * @param {SendEmailOptions} options
  * @return {object} MailGun response
  */
-module.exports = options =>
+export const sendEmail = options =>
   new Promise((resolve, reject) => {
     const mailgun = MailGun({
       apiKey: CONFIG.MAILGUN_KEY,

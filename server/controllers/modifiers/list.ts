@@ -1,16 +1,6 @@
 import { MySQL } from 'lib/MySQL';
 
-/*
-  GET /api/6/modifiers
-  RETURN
-    { modifiers: [{
-      id: number, name: string, description: string, type: number,
-      global: boolean, uid: number
-    }] }
-  DESCRIPTION
-    Returns basic information for all modifiers linked to account
-*/
-module.exports = async function(req, res) {
+export async function getModifiers(req, res) {
   const db = new MySQL();
 
   try {
@@ -28,4 +18,4 @@ module.exports = async function(req, res) {
     db.release();
     res.status(400).json({ error: err });
   }
-};
+}
