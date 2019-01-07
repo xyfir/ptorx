@@ -25,3 +25,12 @@ ALTER TABLE `proxy_emails` DROP FOREIGN KEY `fk__redirect_emails__domain_id`; AL
 ALTER TABLE `ptorx`.`proxy_emails` DROP INDEX `fk__redirect_emails__domain_id`, ADD INDEX `fk__proxy_emails__domain_id` (`domain_id`) USING BTREE;
 ALTER TABLE `ptorx`.`proxy_emails` DROP INDEX `fk_email`, ADD INDEX `fk__proxy_emails__primary_email_id` (`primary_email_id`) USING BTREE;
 ALTER TABLE `ptorx`.`proxy_emails` DROP INDEX `fk_user`, ADD INDEX `fk__proxy_emails__user_id` (`user_id`) USING BTREE;
+-- create cron_jobs
+CREATE TABLE `cron_jobs` (
+ `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+ `name` varchar(100) NOT NULL,
+ `lastRun` datetime DEFAULT NULL,
+ `minutesInterval` mediumint(11) unsigned NOT NULL,
+ PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4;
+INSERT INTO `cron_jobs` (`id`, `name`, `lastRun`, `minutesInterval`) VALUES (NULL, 'delete-unpaid-affiliate-accounts', NULL, '60'), (NULL, 'delete-expired-messages', NULL, '60')

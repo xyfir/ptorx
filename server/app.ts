@@ -1,12 +1,12 @@
 import 'app-module-path/register';
 
-import { startCronJobs } from 'jobs/cron/start';
 import * as Session from 'express-session';
 import * as Express from 'express';
 import * as parser from 'body-parser';
 import * as CONFIG from 'constants/config';
 import * as Store from 'express-mysql-session';
 import { router } from 'api/router';
+import { cron } from 'jobs/cron';
 
 // @ts-ignore
 const SessionStore = Store(Session);
@@ -36,4 +36,4 @@ app.get('/*', (req, res) => {
   res.sendFile(__dirname + '/views/info.html');
 });
 
-if (CONFIG.CRON) startCronJobs();
+if (CONFIG.CRON) cron();
