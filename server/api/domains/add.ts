@@ -1,7 +1,7 @@
-import axios from 'axios';
 import * as CONFIG from 'constants/config';
 import { MySQL } from 'lib/MySQL';
-const uuid = require('uuid/v4');
+import * as uuid from 'uuid/v4';
+import axios from 'axios';
 
 export async function addDomain(req, res) {
   const db = new MySQL();

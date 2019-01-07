@@ -1,12 +1,12 @@
-const requireCredits = require('lib/user/require-credits');
-const validate = require('lib/filter/validate');
+import { requireCredits } from 'lib/user/require-credits';
+import { validateFilter } from 'lib/filter/validate';
 import { MySQL } from 'lib/MySQL';
 
 export async function editFilter(req, res) {
   const db = new MySQL();
 
   try {
-    const valid = validate(req.body);
+    const valid = validateFilter(req.body);
     if (valid != 'ok') throw valid;
 
     await requireCredits(db, +req.session.uid);

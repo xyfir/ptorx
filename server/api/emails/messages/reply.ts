@@ -1,8 +1,8 @@
-const chargeUser = require('lib/user/charge');
-const MailGun = require('mailgun-js');
-import axios from 'axios';
+import { chargeUser } from 'lib/user/charge';
+import * as MailGun from 'mailgun-js';
 import * as CONFIG from 'constants/config';
 import { MySQL } from 'lib/MySQL';
+import axios from 'axios';
 
 export async function replyToMessage(req, res) {
   const db = new MySQL();

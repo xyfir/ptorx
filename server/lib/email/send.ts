@@ -1,5 +1,5 @@
-const mailcomposer = require('mailcomposer');
-const MailGun = require('mailgun-js');
+import * as mailcomposer from 'mailcomposer';
+import * as MailGun from 'mailgun-js';
 import * as CONFIG from 'constants/config';
 
 /**
@@ -26,6 +26,7 @@ export const sendEmail = options =>
     mailcomposer(options).build((err, message) =>
       mailgun
         .messages()
+        // @ts-ignore
         .sendMime(
           { to: options.to, message: message.toString('ascii') },
           (err, body) => (err ? reject(err) : resolve(body))

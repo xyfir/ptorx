@@ -1,4 +1,4 @@
-const getAffiliate = require('lib/affiliates/get');
+import { getAffiliateInfo } from 'lib/affiliates/get';
 import axios from 'axios';
 import * as CONFIG from 'constants/config';
 import { MySQL } from 'lib/MySQL';
@@ -7,7 +7,7 @@ export async function startAffiliatePayment(req, res) {
   const db = new MySQL();
 
   try {
-    const affiliate = await getAffiliate(
+    const affiliate = await getAffiliateInfo(
       db,
       +req.session.uid,
       req.body.timestamp

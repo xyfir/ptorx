@@ -1,22 +1,22 @@
-const buildData = require('lib/modifier/build-data');
-const validate = require('lib/modifier/validate');
+import { buildModifierData } from 'lib/modifier/build-data';
+import { validateModifier } from 'lib/modifier/validate';
 import { MySQL } from 'lib/MySQL';
 
 export async function editModifier(req, res) {
   const db = new MySQL();
 
   try {
-    validate(req.body);
+    validateModifier(req.body);
 
     let sql = `
-      UPDATE modifiers SET name = ?, description = ?, type = ?, data = ?
-      WHERE modifier_id = ? AND user_id = ?
-    `,
+        UPDATE modifiers SET name = ?, description = ?, type = ?, data = ?
+        WHERE modifier_id = ? AND user_id = ?
+      `,
       vars = [
         req.body.name,
         req.body.description,
         req.body.type,
-        buildData(req.body),
+        buildModifierData(req.body),
         req.params.mod,
         req.session.uid
       ];

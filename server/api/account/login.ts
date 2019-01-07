@@ -1,9 +1,10 @@
-import axios from 'axios';
-const credit = require('lib/user/credit');
-const Cryptr = require('cryptr');
+import { creditUser } from 'lib/user/credit';
 import * as CONFIG from 'constants/config';
-const cryptr = new Cryptr(CONFIG.ACCESS_TOKEN_KEY);
 import { MySQL } from 'lib/MySQL';
+import axios from 'axios';
+
+const Cryptr = require('cryptr');
+const cryptr = new Cryptr(CONFIG.ACCESS_TOKEN_KEY);
 
 export async function login(req, res) {
   const db = new MySQL();
@@ -42,7 +43,7 @@ export async function login(req, res) {
       // Reward credits for referral
       if (referral.type == 'user') {
         try {
-          await credit(db, +referral.user, 25);
+          await creditUser(db, +referral.user, 25);
           insert.credits += 50;
         } catch (err) {}
       }

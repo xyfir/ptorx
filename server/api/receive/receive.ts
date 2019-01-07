@@ -1,10 +1,10 @@
-const escapeRegExp = require('escape-string-regexp');
-const saveMessage = require('lib/email/save-message');
-const chargeUser = require('lib/user/charge');
-import axios from 'axios';
-const MailGun = require('mailgun-js');
+import * as escapeRegExp from 'escape-string-regexp';
+import { saveMessage } from 'lib/email/save-message';
+import { chargeUser } from 'lib/user/charge';
+import * as MailGun from 'mailgun-js';
 import * as CONFIG from 'constants/config';
 import { MySQL } from 'lib/MySQL';
+import axios from 'axios';
 
 export async function receiveMail(req, res) {
   const db = new MySQL();

@@ -1,12 +1,12 @@
+import { deleteUnpaidAffiliateAccounts } from 'jobs/cron/delete-unpaid-affiliate-accounts';
+import { deleteExpiredMessages } from 'jobs/cron/delete-expired-messages';
+
 export function startCronJobs() {
   // Delete expired messages
   // Run every hour
-  setInterval(require('jobs/cron/delete-expired-messages'), 3600 * 1000);
+  setInterval(deleteExpiredMessages, 3600 * 1000);
 
   // Delete unpaid affiliate-created accounts
   // Run once a day
-  setInterval(
-    require('jobs/cron/delete-unpaid-affiliate-accounts'),
-    86400 * 1000
-  );
+  setInterval(deleteUnpaidAffiliateAccounts, 86400 * 1000);
 }

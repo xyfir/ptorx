@@ -1,5 +1,5 @@
 import { MySQL } from 'lib/MySQL';
-const uuid = require('uuid/v4');
+import * as uuid from 'uuid/v4';
 
 /**
  * Saves an incoming message.

@@ -1,8 +1,9 @@
 import * as CONFIG from 'constants/config';
-const Cryptr = require('cryptr');
-const cryptr = new Cryptr(CONFIG.ACCESS_TOKEN_KEY);
 import { MySQL } from 'lib/MySQL';
 import axios from 'axios';
+
+const Cryptr = require('cryptr');
+const cryptr = new Cryptr(CONFIG.ACCESS_TOKEN_KEY);
 
 export async function getAccountInfo(req, res) {
   const db = new MySQL();

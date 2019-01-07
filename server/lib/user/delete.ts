@@ -1,4 +1,4 @@
-const deleteEmail = require('lib/email/delete');
+import { deleteProxyEmail } from 'lib/email/delete';
 
 /**
  * Delete a user from Ptorx, and all of their email routes on MailGun.
@@ -13,7 +13,7 @@ export async function deleteUser(db, user) {
 
   for (let email of emails) {
     try {
-      await deleteEmail(db, email.id, user);
+      await deleteProxyEmail(db, email.id, user);
     } catch (err) {}
   }
 

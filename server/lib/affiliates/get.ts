@@ -1,4 +1,4 @@
-const moment = require('moment');
+import * as moment from 'moment';
 
 /**
  * @typedef {object} Affiliate

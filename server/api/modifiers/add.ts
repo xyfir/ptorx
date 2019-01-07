@@ -1,18 +1,18 @@
-const buildData = require('lib/modifier/build-data');
-const validate = require('lib/modifier/validate');
+import { buildModifierData } from 'lib/modifier/build-data';
+import { validateModifier } from 'lib/modifier/validate';
 import { MySQL } from 'lib/MySQL';
 
 export async function addModifier(req, res) {
   const db = new MySQL();
 
   try {
-    validate(req.body);
+    validateModifier(req.body);
 
     const sql = `
       INSERT INTO modifiers SET ?
     `,
       insert = {
-        data: buildData(req.body),
+        data: buildModifierData(req.body),
         user_id: req.session.uid,
         name: req.body.name,
         description: req.body.description,

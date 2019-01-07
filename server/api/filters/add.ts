@@ -1,4 +1,4 @@
-const validate = require('lib/filter/validate');
+import { validateFilter } from 'lib/filter/validate';
 import { MySQL } from 'lib/MySQL';
 
 /**
@@ -23,7 +23,7 @@ import { MySQL } from 'lib/MySQL';
 export async function addFilter(req, res) {
   const db = new MySQL();
   try {
-    const error = validate(req.body);
+    const error = validateFilter(req.body);
     if (error != 'ok') throw error;
 
     const result = await db.query('INSERT INTO filters SET ?', {

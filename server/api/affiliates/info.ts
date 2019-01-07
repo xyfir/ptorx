@@ -1,12 +1,12 @@
-const getAffiliate = require('lib/affiliates/get');
-const moment = require('moment');
+import { getAffiliateInfo as _getAffiliateInfo } from 'lib/affiliates/get';
+import * as moment from 'moment';
 import { MySQL } from 'lib/MySQL';
 
 export async function getAffiliateInfo(req, res) {
   const db = new MySQL();
 
   try {
-    const affiliate = await getAffiliate(
+    const affiliate = await _getAffiliateInfo(
       db,
       +req.session.uid,
       moment().format('YYYY-MM-DD HH:mm:ss')

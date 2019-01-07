@@ -1,5 +1,5 @@
-const authenticate = require('lib/affiliates/authenticate');
-const deleteUser = require('lib/user/delete');
+import { authenticate } from 'lib/affiliates/authenticate';
+import { deleteUser } from 'lib/user/delete';
 import { MySQL } from 'lib/MySQL';
 
 export async function deleteAccountAsAffiliate(req, res) {

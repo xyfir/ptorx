@@ -1,4 +1,4 @@
-const credit = require('lib/user/credit');
+import { creditUser } from 'lib/user/credit';
 import * as CONFIG from 'constants/config';
 import { MySQL } from 'lib/MySQL';
 import axios from 'axios';
@@ -82,7 +82,7 @@ export async function getCoinhiveCredits(req, res) {
       );
       if (!response.data.success) throw response.data.error;
 
-      credits = await credit(db, +req.session.uid, reward);
+      credits = await creditUser(db, +req.session.uid, reward);
     }
 
     res.status(200).json({ earned, credits });

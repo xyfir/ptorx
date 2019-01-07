@@ -1,4 +1,4 @@
-const { rword } = require('rword');
+import { rword } from 'rword';
 
 /**
  * Generates an available proxy email address.

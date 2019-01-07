@@ -1,4 +1,4 @@
-const MailGun = require('mailgun-js');
+import * as MailGun from 'mailgun-js';
 import * as CONFIG from 'constants/config';
 
 /**

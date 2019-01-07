@@ -1,4 +1,4 @@
-const auth = require('basic-auth');
+import * as auth from 'basic-auth';
 
 /**
  * @typedef {object} BasicAuthResult

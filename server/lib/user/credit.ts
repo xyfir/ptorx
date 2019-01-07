@@ -1,7 +1,7 @@
-const buildExpression = require('lib/mg-route/build-expression');
-const getProxyEmail = require('lib/email/get');
-const buildAction = require('lib/mg-route/build-action');
-const MailGun = require('mailgun-js');
+import { buildMailgunRouteExpression } from 'lib/mg-route/build-expression';
+import { buildMailgunRouteAction } from 'lib/mg-route/build-action';
+import { getProxyEmail } from 'lib/email/get';
+import * as MailGun from 'mailgun-js';
 import * as CONFIG from 'constants/config';
 
 /**
@@ -54,12 +54,12 @@ export async function creditUser(db, user, amount) {
           email: email_.id,
           user
         });
-        const action = buildAction(
+        const action = buildMailgunRouteAction(
           email.directForward
             ? { id: email.id, address: email.toEmail }
             : { id: email.id, save: email.saveMail }
         );
-        const expression = await buildExpression(db, {
+        const expression = await buildMailgunRouteExpression(db, {
           saveMail: email.saveMail,
           address: email.address,
           filters: email.filters.map(f => f.id)
@@ -69,6 +69,7 @@ export async function creditUser(db, user, amount) {
           apiKey: CONFIG.MAILGUN_KEY,
           domain: email.address.split('@')[1]
         });
+        // @ts-ignore
         const mailgunRes = await mailgun.routes().create({
           description: 'Ptorx ' + CONFIG.PROD ? 'prod' : 'dev',
           expression,

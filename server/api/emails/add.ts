@@ -1,11 +1,11 @@
-const validateModifiers = require('lib/email/validate-modifiers');
-const buildExpression = require('lib/mg-route/build-expression');
-const validateFilters = require('lib/email/validate-filters');
-const requireCredits = require('lib/user/require-credits');
-const buildAction = require('lib/mg-route/build-action');
-const validate = require('lib/email/validate');
-const generate = require('lib/email/generate');
-const MailGun = require('mailgun-js');
+import { validateProxyEmailModifiers } from 'lib/email/validate-modifiers';
+import { buildMailgunRouteExpression } from 'lib/mg-route/build-expression';
+import { validateProxyEmailFilters } from 'lib/email/validate-filters';
+import { buildMailgunRouteAction } from 'lib/mg-route/build-action';
+import { generateProxyAddress } from 'lib/email/generate';
+import { validateProxyEmail } from 'lib/email/validate';
+import { requireCredits } from 'lib/user/require-credits';
+import * as MailGun from 'mailgun-js';
 import * as CONFIG from 'constants/config';
 import { MySQL } from 'lib/MySQL';
 
@@ -13,7 +13,7 @@ export async function addProxyEmail(req, res) {
   const db = new MySQL();
 
   try {
-    validate(req.body);
+    validateProxyEmail(req.body);
 
     await requireCredits(db, +req.session.uid);
 
@@ -48,7 +48,7 @@ export async function addProxyEmail(req, res) {
 
     // Generate an available address
     if (req.body.address == '') {
-      address = await generate(db, req.body.domain);
+      address = await generateProxyAddress(db, req.body.domain);
     }
     // Make sure address exists
     else {
@@ -101,8 +101,13 @@ export async function addProxyEmail(req, res) {
             .map(Number)
         : req.body.filters || [];
 
-    await validateFilters(filters, req.session.uid, data.direct_forward, db);
-    await validateModifiers(
+    await validateProxyEmailFilters(
+      filters,
+      req.session.uid,
+      data.direct_forward,
+      db
+    );
+    await validateProxyEmailModifiers(
       modifiers,
       req.session.uid,
       data.direct_forward,
@@ -121,14 +126,14 @@ export async function addProxyEmail(req, res) {
     const id = dbRes.insertId;
 
     // Build MailGun route expression(s)
-    const expression = await buildExpression(db, {
+    const expression = await buildMailgunRouteExpression(db, {
       saveMail: data.save_mail,
       address: data.address + '@' + domain,
       filters
     });
 
     // Build Mailgun route action(s)
-    const action = buildAction(
+    const action = buildMailgunRouteAction(
       req.body.directForward
         ? { id, address: rows[0].address }
         : { id, save: data.save_mail }
@@ -137,6 +142,7 @@ export async function addProxyEmail(req, res) {
     const mailgun = MailGun({ apiKey: CONFIG.MAILGUN_KEY, domain });
 
     // Create Mailgun route
+    // @ts-ignore
     const mgRes = await mailgun.routes().create({
       description: 'Ptorx ' + CONFIG.PROD ? 'prod' : 'dev',
       expression,

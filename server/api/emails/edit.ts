@@ -1,10 +1,10 @@
-const validateModifiers = require('lib/email/validate-modifiers');
-const buildExpression = require('lib/mg-route/build-expression');
-const validateFilters = require('lib/email/validate-filters');
-const requireCredits = require('lib/user/require-credits');
-const buildAction = require('lib/mg-route/build-action');
-const validate = require('lib/email/validate');
-const MailGun = require('mailgun-js');
+import { validateProxyEmailModifiers } from 'lib/email/validate-modifiers';
+import { buildMailgunRouteExpression } from 'lib/mg-route/build-expression';
+import { validateProxyEmailFilters } from 'lib/email/validate-filters';
+import { buildMailgunRouteAction } from 'lib/mg-route/build-action';
+import { validateProxyEmail } from 'lib/email/validate';
+import { requireCredits } from 'lib/user/require-credits';
+import * as MailGun from 'mailgun-js';
 import * as CONFIG from 'constants/config';
 import { MySQL } from 'lib/MySQL';
 
@@ -12,7 +12,7 @@ export async function editProxyEmail(req, res) {
   const db = new MySQL();
 
   try {
-    validate(req.body);
+    validateProxyEmail(req.body);
 
     await requireCredits(db, +req.session.uid);
 
@@ -45,13 +45,18 @@ export async function editProxyEmail(req, res) {
       ? req.body.filters.split(',').map(Number)
       : [];
 
-    await validateModifiers(
+    await validateProxyEmailModifiers(
       modifiers,
       req.session.uid,
       req.body.directForward,
       db
     );
-    await validateFilters(filters, req.session.uid, req.body.directForward, db);
+    await validateProxyEmailFilters(
+      filters,
+      req.session.uid,
+      req.body.directForward,
+      db
+    );
 
     const saveMail = req.body.saveMail || !req.body.to;
 
@@ -77,14 +82,14 @@ export async function editProxyEmail(req, res) {
     if (!dbRes.affectedRows) throw 'An unknown error occured';
 
     // Build Mailgun route expression(s)
-    const expression = await buildExpression(db, {
+    const expression = await buildMailgunRouteExpression(db, {
       address,
       filters,
       saveMail
     });
 
     // Build Mailgun route action(s)
-    const action = buildAction(
+    const action = buildMailgunRouteAction(
       req.body.directForward
         ? { id: req.params.email, address: toEmail }
         : { id: req.params.email, save: saveMail }
@@ -96,6 +101,7 @@ export async function editProxyEmail(req, res) {
     });
 
     // Update MailGun route
+    // @ts-ignore
     await mailgun.routes(mgRouteId).update({
       description: 'Ptorx ' + CONFIG.PROD ? 'prod' : 'dev',
       expression,

@@ -1,4 +1,4 @@
-const deleteUser = require('lib/user/delete');
+import { deleteUser } from 'lib/user/delete';
 import { MySQL } from 'lib/MySQL';
 
 export async function deleteUnpaidAffiliateAccounts() {

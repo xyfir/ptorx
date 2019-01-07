@@ -1,5 +1,5 @@
-const chargeUser = require('lib/user/charge');
-const MailGun = require('mailgun-js');
+import { chargeUser } from 'lib/user/charge';
+import * as MailGun from 'mailgun-js';
 import * as CONFIG from 'constants/config';
 import { MySQL } from 'lib/MySQL';
 

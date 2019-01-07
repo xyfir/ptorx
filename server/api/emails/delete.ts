@@ -1,11 +1,11 @@
-const deleteEmail = require('lib/email/delete');
+import { deleteProxyEmail as _deleteProxyEmail } from 'lib/email/delete';
 import { MySQL } from 'lib/MySQL';
 
 export async function deleteProxyEmail(req, res) {
   const db = new MySQL();
 
   try {
-    await deleteEmail(db, +req.params.email, +req.session.uid);
+    await _deleteProxyEmail(db, +req.params.email, +req.session.uid);
     db.release();
     res.status(200).json({});
   } catch (err) {

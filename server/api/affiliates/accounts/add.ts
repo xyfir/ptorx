@@ -1,7 +1,7 @@
-const authenticate = require('lib/affiliates/authenticate');
-import axios from 'axios';
+import { authenticate } from 'lib/affiliates/authenticate';
 import * as CONFIG from 'constants/config';
 import { MySQL } from 'lib/MySQL';
+import axios from 'axios';
 
 export async function addAccountAsAffiliate(req, res) {
   const { email, note = '', credits } = req.body;

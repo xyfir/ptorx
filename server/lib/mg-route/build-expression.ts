@@ -1,4 +1,4 @@
-const escapeRegExp = require('escape-string-regexp');
+import * as escapeRegExp from 'escape-string-regexp';
 
 /**
  * Build the `match expression` field for the proxy email's Mailgun route.
@@ -14,12 +14,12 @@ export async function buildMailgunRouteExpression(db, data) {
 
   // Only accept_on_match filters are ran on MailGun
   const sql = `
-    SELECT
-      type, find, use_regex AS regex
-    FROM filters WHERE
-      filter_id IN (?) AND accept_on_match = 1
-      AND type IN (1, 2, 3, 6)
-  `,
+      SELECT
+        type, find, use_regex AS regex
+      FROM filters WHERE
+        filter_id IN (?) AND accept_on_match = 1
+        AND type IN (1, 2, 3, 6)
+    `,
     rows = await db.query(sql, [data.filters]);
 
   expression += rows

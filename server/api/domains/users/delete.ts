@@ -1,4 +1,4 @@
-const deleteEmail = require('controllers/emails/delete');
+import { deleteProxyEmail } from 'api/emails/delete';
 import { MySQL } from 'lib/MySQL';
 
 export async function deleteDomainUser(req, res) {
@@ -40,7 +40,7 @@ export async function deleteDomainUser(req, res) {
 
     // Delete emails
     for (let email of emails) {
-      await deleteEmail(
+      await deleteProxyEmail(
         { params: { email: email.id }, session: { uid: req.params.user } },
         { json: () => 1 }
       );
