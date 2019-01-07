@@ -1,6 +1,6 @@
 import { SelectField, TextField, Checkbox, Button, Paper } from 'react-md';
 import PropTypes from 'prop-types';
-import React from 'react';
+import * as React from 'react';
 
 // Constants
 import { creatableModifierTypes } from 'constants/types';

@@ -1,13 +1,13 @@
 import { TextField, Button, FontIcon } from 'react-md';
-import request from 'superagent';
-import React from 'react';
+import * as React from 'react';
+import { api } from 'lib/api';
 
 export default class PwnCheck extends React.Component {
   constructor(props) {
     super(props);
 
-    (this.i = {}),
-      (this.state = { step: 1, breaches: [], email: '', isPtorx: false });
+    this.i = {};
+    this.state = { step: 1, breaches: [], email: '', isPtorx: false };
   }
 
   onCheckEmail() {
@@ -18,17 +18,12 @@ export default class PwnCheck extends React.Component {
 
     this.setState({ email });
 
-    // ** Check if name + domain is a Ptorx email
-
-    request
-      .get('https://haveibeenpwned.com/api/v2/breachedaccount/' + email)
-      .query({
-        includeUnverified: true
+    api
+      .get(`https://haveibeenpwned.com/api/v2/breachedaccount/${email}`, {
+        params: { includeUnverified: true }
       })
-      .end((err, res) => {
-        if (err) this.setState({ step: 2 });
-        else this.setState({ step: 2, breaches: res.body });
-      });
+      .then(res => this.setState({ step: 2, breaches: res.data }))
+      .catch(() => this.setState({ step: 2 }));
   }
 
   render() {

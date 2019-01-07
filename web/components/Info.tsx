@@ -1,7 +1,7 @@
 import { ListItem, Toolbar, Divider, Drawer, Button } from 'react-md';
 import { render } from 'react-dom';
-import request from 'superagent';
-import React from 'react';
+import * as React from 'react';
+import { api } from 'lib/api';
 import Blog from '@xyfir/blog';
 
 // Components
@@ -25,12 +25,9 @@ class PtorxInfo extends React.Component {
 
     for (let k in q) localStorage[k] = q[k];
 
-    request
-      .get('/api/account')
-      .query({ token: localStorage.accessToken || '' })
-      .end(
-        (err, res) => !err && this.setState({ loggedIn: res.body.loggedIn })
-      );
+    api
+      .get('/account', { params: { token: localStorage.accessToken || '' } })
+      .then(res => this.setState({ loggedIn: res.data.loggedIn }));
   }
 
   render() {

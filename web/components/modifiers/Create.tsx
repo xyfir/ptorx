@@ -1,6 +1,6 @@
-import request from 'superagent';
-import React from 'react';
-import swal from 'sweetalert';
+import { api } from 'lib/api';
+import * as React from 'react';
+import * as swal from 'sweetalert';
 
 // Components
 import Form from 'components/modifiers/Form';
@@ -18,27 +18,23 @@ export default class CreateModifier extends React.Component {
    * @param {object} data
    */
   onCreate(modifier, data) {
-    request
-      .post('/api/modifiers')
-      .send(Object.assign({}, modifier, data))
-      .end((err, res) => {
-        if (err || res.body.error) {
-          swal('Error', res.body.message, 'error');
-        } else {
-          // Add to state.modifiers
-          modifier.id = res.body.id;
-          modifier.data = data;
-          this.props.dispatch(addModifier(modifier));
+    api
+      .post('/modifiers', Object.assign({}, modifier, data))
+      .then(res => {
+        // Add to state.modifiers
+        modifier.id = res.data.id;
+        modifier.data = data;
+        this.props.dispatch(addModifier(modifier));
 
-          if (this.props.onCreate) {
-            this.props.onCreate(res.body.id);
-          } else {
-            location.hash =
-              '#/modifiers/list?q=' + encodeURIComponent(modifier.name);
-            swal('Success', `Modifier '${modifier.name}' created`, 'success');
-          }
+        if (this.props.onCreate) {
+          this.props.onCreate(res.data.id);
+        } else {
+          location.hash =
+            '#/modifiers/list?q=' + encodeURIComponent(modifier.name);
+          swal('Success', `Modifier '${modifier.name}' created`, 'success');
         }
-      });
+      })
+      .catch(err => swal('Error', err.response.data.error, 'error'));
   }
 
   render() {

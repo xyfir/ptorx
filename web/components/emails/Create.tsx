@@ -1,7 +1,7 @@
-import request from 'superagent';
-import moment from 'moment';
-import React from 'react';
-import swal from 'sweetalert';
+import { api } from 'lib/api';
+import * as moment from 'moment';
+import * as React from 'react';
+import * as swal from 'sweetalert';
 
 // Components
 import Form from 'components/emails/Form';
@@ -32,9 +32,8 @@ export default class CreateEmail extends React.Component {
       email.domain = App.state.domains.find(d => d.domain == domain).id;
 
       try {
-        const res = await request.get(`/api/emails/${copy}`);
-        if (res.body.error) throw res.body;
-        email = Object.assign({}, email, res.body);
+        const res = await api.get(`/emails/${copy}`);
+        email = Object.assign({}, email, res.data);
       } catch (err) {
         email = null;
       }
@@ -77,20 +76,15 @@ export default class CreateEmail extends React.Component {
   }
 
   onSubmit(data) {
-    request
-      .post('/api/emails')
-      .send(data)
-      .end((err, res) => {
-        if (err || res.body.error) {
-          swal('Error', res.body.message, 'error');
-        } else {
-          // Clear emails so they're loaded again
-          this.props.App.dispatch(loadEmails([]));
-          location.hash = '#/emails/list?q=' + encodeURIComponent(data.name);
-
-          swal('Success', `Email '${data.name}' created`, 'success');
-        }
-      });
+    api
+      .post('/emails', data)
+      .then(() => {
+        // Clear emails so they're loaded again
+        this.props.App.dispatch(loadEmails([]));
+        location.hash = '#/emails/list?q=' + encodeURIComponent(data.name);
+        swal('Success', `Email '${data.name}' created`, 'success');
+      })
+      .catch(err => swal('Error', err.response.data.error, 'error'));
   }
 
   render() {

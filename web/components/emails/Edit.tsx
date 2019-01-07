@@ -1,8 +1,8 @@
 import { Button } from 'react-md';
-import request from 'superagent';
-import React from 'react';
+import { api } from 'lib/api';
+import * as React from 'react';
 import copy from 'copyr';
-import swal from 'sweetalert';
+import * as swal from 'sweetalert';
 
 // Components
 import Navigation from 'components/emails/Navigation';
@@ -29,29 +29,24 @@ export default class EditEmail extends React.Component {
 
     if (!email) location.href = '#/emails/list';
 
-    request.get('/api/emails/' + this.state.id).end((err, res) => {
-      if (err || res.body.error)
-        return swal('Error', 'Could not load data', 'error');
-
-      this.setState(Object.assign({ loading: false }, res.body));
-    });
+    api
+      .get(`/emails/${this.state.id}`)
+      .then(res => {
+        this.setState(Object.assign({ loading: false }, res.data));
+      })
+      .catch(() => swal('Error', 'Could not load data', 'error'));
   }
 
-  /** @param {object} data */
   onSubmit(data) {
     const { App } = this.props;
-
-    request
-      .put('/api/emails/' + this.state.id)
-      .send(data)
-      .end((err, res) => {
-        if (err || res.body.error)
-          return swal('Error', res.body.message, 'error');
-
+    api
+      .put(`/emails/${this.state.id}`, data)
+      .then(() => {
         App.dispatch(loadEmails([]));
         location.hash = '#/emails/list';
         swal('Success', `Email '${data.name}' updated`, 'success');
-      });
+      })
+      .catch(err => swal('Error', err.response.data.error, 'error'));
   }
 
   render() {

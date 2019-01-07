@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 
 // Constants
 import pages from 'constants/landing-pages';

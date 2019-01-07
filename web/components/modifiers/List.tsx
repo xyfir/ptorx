@@ -1,6 +1,6 @@
-import request from 'superagent';
-import React from 'react';
-import swal from 'sweetalert';
+import { api } from 'lib/api';
+import * as React from 'react';
+import * as swal from 'sweetalert';
 
 // Action creators
 import { loadModifiers, deleteModifier } from 'actions/modifiers';
@@ -32,17 +32,12 @@ export default class ModifierList extends React.Component {
     };
 
     if (props.data.modifiers.length == 0) {
-      request
-        .get('/api/modifiers')
-        .end((err, res) =>
-          this.props.dispatch(loadModifiers(res.body.modifiers))
-        );
+      api
+        .get('/modifiers')
+        .then(res => this.props.dispatch(loadModifiers(res.data.modifiers)));
     }
   }
 
-  /**
-   * Delete the selected m.
-   */
   async onDelete() {
     const id = this.state.selected;
     this.setState({ selected: 0 });
@@ -56,19 +51,15 @@ export default class ModifierList extends React.Component {
 
     if (!confirm) return;
 
-    request
-      .delete('/api/modifiers/' + id)
+    api
+      .delete(`/modifiers/${id}`)
       .then(res => {
-        if (res.body.error) throw 'Could not delete modifier';
-
+        if (res.data.error) throw 'Could not delete modifier';
         this.props.dispatch(deleteModifier(id));
       })
-      .catch(err => swal('Error', err.toString(), 'error'));
+      .catch(err => swal('Error', err.response.data.error, 'error'));
   }
 
-  /**
-   * Open the 'EditModifier' view.
-   */
   onEdit() {
     location.hash = '#/modifiers/edit/' + this.state.selected;
   }

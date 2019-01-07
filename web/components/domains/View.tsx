@@ -1,7 +1,7 @@
-import request from 'superagent';
-import React from 'react';
+import { api } from 'lib/api';
+import * as React from 'react';
 import copy from 'copyr';
-import swal from 'sweetalert';
+import * as swal from 'sweetalert';
 
 // Action creators
 import { removeDomain } from 'actions/domains';
@@ -34,23 +34,20 @@ export default class ViewDomain extends React.Component {
    */
   onRemoveFromAccount() {
     swal({
-      button: 'Yes',
       title: 'Are you sure?',
       text: 'Any proxy emails linked to this domain will be deleted.',
       icon: 'warning'
     })
       .then(() =>
-        request.delete(
-          `/api/domains/${this.state.id}/users/${this.props.data.account.uid}`
+        api.delete(
+          `/domains/${this.state.id}/users/${this.props.data.account.uid}`
         )
       )
-      .then(res => {
-        if (res.body.error) throw res.body.message;
-
+      .then(() => {
         location.hash = '#/domains';
         location.reload();
       })
-      .catch(err => swal('Error', err.toString(), 'error'));
+      .catch(err => swal('Error', err.response.data.error, 'error'));
   }
 
   /**
@@ -58,80 +55,63 @@ export default class ViewDomain extends React.Component {
    */
   onRemoveFromPtorx() {
     swal({
-      button: 'Yes',
       title: 'Are you sure?',
       text: 'Any proxy emails linked to this domain will be deleted.',
       icon: 'warning'
     })
-      .then(() => request.delete(`/api/domains/${this.state.id}`))
-      .then(res => {
-        if (res.body.error) throw res.body.message;
-
+      .then(() => api.delete(`/domains/${this.state.id}`))
+      .then(() => {
         location.hash = '#/domains';
         location.reload();
       })
-      .catch(err => swal('Error', err.toString(), 'error'));
+      .catch(err => swal('Error', err.response.data.error, 'error'));
   }
 
   /**
    * Let creator remove a user from their domain.
-   * @param {number} id
    */
-  onRemoveUser(id) {
+  onRemoveUser(id: number) {
     swal({
-      button: 'Yes',
       title: 'Are you sure?',
       text: 'Any proxy emails the user has with this domain will be deleted.',
       icon: 'warning'
     })
-      .then(() => request.delete(`/api/domains/${this.state.id}/users/${id}`))
-      .then(res => {
-        if (res.body.error) throw res.body.message;
-
-        this._loadDomain();
-      })
-      .catch(err => swal('Error', err.toString(), 'error'));
+      .then(() => api.delete(`/domains/${this.state.id}/users/${id}`))
+      .then(() => this._loadDomain())
+      .catch(err => swal('Error', err.response.data.error, 'error'));
   }
 
   /**
    * Authorize a user to use domain via request key.
    */
   onAddUser() {
-    request
-      .post(`/api/domains/${this.state.id}/users`)
-      .send({
+    api
+      .post(`/domains/${this.state.id}/users`, {
         key: this.refs.requestKey.value,
         label: this.refs.label.value
       })
-      .end(
-        (err, res) =>
-          err || res.body.error
-            ? swal('Error', res.body.message, 'error')
-            : this._loadDomain()
-      );
+      .then(() => this._loadDomain())
+      .catch(err => swal('Error', err.response.data.error, 'error'));
   }
 
   /**
    * Check if the domain's DNS records have been set correctly.
    */
   onVerify() {
-    request
-      .put(`/api/domains/${this.state.id}/verify`)
-      .end(
-        (err, res) =>
-          err || res.body.error
-            ? swal('Error', res.body.message, 'error')
-            : this.setState({ verified: true })
-      );
+    api
+      .put(`/domains/${this.state.id}/verify`)
+      .then(() => this.setState({ verified: true }))
+      .catch(err => swal('Error', err.response.data.error, 'error'));
   }
 
   _loadDomain() {
-    request.get('/api/domains/' + this.state.id).end((err, res) => {
-      if (err || res.body.error) return (location.hash = '#/domains');
-
-      res.body.loading = false;
-      this.setState(res.body);
-    });
+    api
+      .get(`/domains/${this.state.id}`)
+      .then(res => {
+        res.data.loading = false;
+        this.setState(res.data);
+      })
+      .catch(err => (location.hash = '#/domains'));
   }
 
   render() {

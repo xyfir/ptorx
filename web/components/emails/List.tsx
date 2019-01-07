@@ -1,8 +1,8 @@
 import { DialogContainer, ListItem, FontIcon, Button, List } from 'react-md';
-import request from 'superagent';
-import React from 'react';
+import { api } from 'lib/api';
+import * as React from 'react';
 import copy from 'copyr';
-import swal from 'sweetalert';
+import * as swal from 'sweetalert';
 
 // Action creators
 import { loadEmails, deleteEmail } from 'actions/emails';
@@ -26,13 +26,10 @@ export default class EmailList extends React.Component {
   }
 
   componentDidMount() {
-    if (this.props.data.emails.length == 0) {
-      request
-        .get('/api/emails')
-        .end(
-          (err, res) => !err && this.props.dispatch(loadEmails(res.body.emails))
-        );
-    }
+    if (this.props.data.emails.length) return;
+    api
+      .get('/emails')
+      .then(res => this.props.dispatch(loadEmails(res.data.emails)));
   }
 
   /**
@@ -60,14 +57,10 @@ export default class EmailList extends React.Component {
 
     if (!confirm) return;
 
-    request
-      .delete('/api/emails/' + id)
-      .then(res => {
-        if (res.body.error) throw 'Could not delete email';
-
-        this.props.dispatch(deleteEmail(id));
-      })
-      .catch(err => swal('Error', err.toString(), 'error'));
+    api
+      .delete(`/emails/${id}`)
+      .then(() => this.props.dispatch(deleteEmail(id)))
+      .catch(err => swal('Error', err.response.data.error, 'error'));
   }
 
   /**

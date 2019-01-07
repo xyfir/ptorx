@@ -1,7 +1,7 @@
 import { Button, Slider, Divider } from 'react-md';
-import request from 'superagent';
-import React from 'react';
-import copy from 'copyr';
+import * as React from 'react';
+import * as copy from 'copyr';
+import { api } from 'lib/api';
 
 // Actions
 import { updateCredits } from 'actions/account';
@@ -104,14 +104,12 @@ export default class EarnCredits extends React.Component {
     this.interval2 = setInterval(() => this._checkEarnings(), 60 * 1000);
   }
 
-  _checkEarnings() {
-    request.get(`/api/account/credits/coinhive`).end((err, res) => {
-      if (err) return;
-      const { earned, credits } = res.body;
-      this.setState({ earned });
-      if (typeof credits == 'number')
-        this.props.App.dispatch(updateCredits(credits));
-    });
+  async _checkEarnings() {
+    const res = await api.get(`/account/credits/coinhive`);
+    const { earned, credits } = res.data;
+    this.setState({ earned });
+    if (typeof credits == 'number')
+      this.props.App.dispatch(updateCredits(credits));
   }
 
   render() {

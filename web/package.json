@@ -21,16 +21,17 @@
   },
   "dependencies": {
     "@xyfir/blog": "^0.2.1",
+    "axios": "^0.18.0",
     "copyr": "^1.0.5",
     "fs-extra": "^7.0.1",
     "fuse.js": "^3.3.0",
     "marked": "^0.6.0",
     "moment": "^2.23.0",
     "prop-types": "^15.6.2",
+    "qs": "^6.6.0",
     "react": "^16.7.0",
     "react-dom": "^16.7.0",
     "react-md": "^1.9.2",
-    "superagent": "^4.1.0",
     "sweetalert": "^2.1.2"
   },
   "devDependencies": {
@@ -39,12 +40,16 @@
     "@babel/preset-env": "^7.2.3",
     "@babel/preset-react": "^7.0.0",
     "@babel/preset-typescript": "^7.1.0",
+    "@types/marked": "^0.6.0",
+    "@types/qs": "^6.5.1",
+    "@types/react": "^16.7.18",
+    "@types/react-dom": "^16.0.11",
     "babel-loader": "^8.0.5",
     "compression-webpack-plugin": "^2.0.0",
     "node-sass": "^4.11.0",
     "typescript": "^3.2.2",
     "webpack": "^4.28.3",
-    "webpack-cli": "^3.2.0",
+    "webpack-cli": "^3.2.1",
     "webpack-dev-server": "^3.1.14"
   }
 }

@@ -1,5 +1,5 @@
-import request from 'superagent';
-import React from 'react';
+import { api } from 'lib/api';
+import * as React from 'react';
 
 // react-md
 import ListItem from 'react-md/lib/Lists/ListItem';

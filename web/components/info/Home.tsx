@@ -1,5 +1,5 @@
 import { FontIcon, Button } from 'react-md';
-import React from 'react';
+import * as React from 'react';
 
 // Components
 import HowItWorks from 'components/info/HowItWorks';

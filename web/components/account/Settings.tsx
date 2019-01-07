@@ -1,27 +1,19 @@
 import { SelectField, Paper } from 'react-md';
-import request from 'superagent';
-import React from 'react';
-
-// Actions
 import { setEmailTemplate } from 'actions/account';
-
-// Constants
 import * as VIEWS from 'constants/views';
+import * as React from 'react';
+import { api } from 'lib/api';
 
 export default class AccountSettings extends React.Component {
   constructor(props) {
     super(props);
   }
 
-  /** @param {number} id */
-  onSetEmailTemplate(id) {
-    request
-      .put('/api/account/email/template')
-      .send({ id })
-      .end(err => {
-        if (err) return;
-        this.props.App.dispatch(setEmailTemplate(id));
-      });
+  onSetEmailTemplate(id: number) {
+    api
+      .put('/account/email/template', { id })
+      .then(() => this.props.App.dispatch(setEmailTemplate(id)))
+      .catch(err => swal('Error', err.response.data.error, 'error'));
   }
 
   render() {

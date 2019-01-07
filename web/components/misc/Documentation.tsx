@@ -1,6 +1,6 @@
-import request from 'superagent';
+import { api } from 'lib/api';
 import marked from 'marked';
-import React from 'react';
+import * as React from 'react';
 
 // Modules
 import query from 'lib/parse-query-string';
@@ -13,12 +13,12 @@ export default class Documentation extends React.Component {
   }
 
   componentDidMount() {
-    request
+    api
       .get(
         `https://api.github.com/repos/Xyfir/Documentation/contents/` +
           `ptorx/${this.props.file.split('?')[0]}.md`
       )
-      .end((err, res) => this.setState({ content: res.body.content }));
+      .then(res => this.setState({ content: res.data.content }));
   }
 
   componentDidUpdate() {

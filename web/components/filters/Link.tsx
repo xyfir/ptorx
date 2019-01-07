@@ -1,6 +1,6 @@
 import { List, ListItem } from 'react-md';
 import PropTypes from 'prop-types';
-import React from 'react';
+import * as React from 'react';
 
 // Components
 import Search from 'components/misc/Search';

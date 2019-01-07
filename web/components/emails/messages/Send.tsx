@@ -1,7 +1,7 @@
 import { TextField, Button, Paper } from 'react-md';
-import request from 'superagent';
-import React from 'react';
-import swal from 'sweetalert';
+import * as React from 'react';
+import * as swal from 'sweetalert';
+import { api } from 'lib/api';
 
 // Components
 import Navigation from 'components/emails/Navigation';
@@ -19,20 +19,18 @@ export default class SendMessage extends React.Component {
   onSend() {
     const { App } = this.props;
 
-    request
-      .post(`/api/emails/${this.state.id}/messages/`)
-      .send({
+    api
+      .post(`/emails/${this.state.id}/messages/`, {
         to: this._to.value,
         subject: this._subject.value,
         content: this._message.value
       })
-      .end((err, res) => {
-        if (err) return swal('Error', res.body.message, 'error');
-
-        App.dispatch(updateCredits(res.body.credits));
+      .then(res => {
+        App.dispatch(updateCredits(res.data.credits));
         swal('Success', `Message sent to ${this._to.value}`, 'success');
         location.hash = `#/emails/messages/${this.state.id}/list`;
-      });
+      })
+      .catch(err => swal('Error', err.response.data.error, 'error'));
   }
 
   render() {

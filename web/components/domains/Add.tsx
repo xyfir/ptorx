@@ -1,7 +1,7 @@
-import request from 'superagent';
-import React from 'react';
+import { api } from 'lib/api';
+import * as React from 'react';
 import copy from 'copyr';
-import swal from 'sweetalert';
+import * as swal from 'sweetalert';
 
 // Action creators
 import { addDomain } from 'actions/domains';
@@ -20,50 +20,48 @@ export default class AddDomain extends React.Component {
   constructor(props) {
     super(props);
 
-    (this.views = {
+    this.views = {
       ADD: 'add',
       VERIFY_DOMAIN: 'verify',
       REQUEST_ACCESS: 'request'
-    }),
-      (this.state = {
-        view: this.views.ADD,
-        requestKey: '',
-        domainId: 0,
-        domainKey: {},
-        domain: ''
-      });
+    };
+    this.state = {
+      view: this.views.ADD,
+      requestKey: '',
+      domainId: 0,
+      domainKey: {},
+      domain: ''
+    };
   }
 
   onAdd() {
     const domain = this.refs.domain.value;
 
-    request
-      .post('/api/domains')
-      .send({ domain })
-      .end((err, res) => {
-        if (err || res.body.error) {
-          swal('Error', res.body.message);
-        } else if (res.body.requestKey) {
+    api
+      .post('/domains', { domain })
+      .then(res => {
+        if (res.data.requestKey) {
           this.setState({
             view: this.views.REQUEST_ACCESS,
-            requestKey: res.body.requestKey
+            requestKey: res.data.requestKey
           });
-        } else if (res.body.domainId) {
+        } else if (res.data.domainId) {
           this.setState({
             view: this.views.VERIFY_DOMAIN,
             domain,
-            domainId: res.body.domainId,
-            domainKey: res.body.domainKey
+            domainId: res.data.domainId,
+            domainKey: res.data.domainKey
           });
           this.props.dispatch(
             addDomain({
-              id: res.body.domainId,
+              id: res.data.domainId,
               domain,
               isCreator: true
             })
           );
         }
-      });
+      })
+      .catch(err => swal('Error', err.response.data.error, 'error'));
   }
 
   render() {

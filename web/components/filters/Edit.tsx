@@ -1,11 +1,7 @@
-import request from 'superagent';
-import React from 'react';
-import swal from 'sweetalert';
-
-// Action creators
 import { editFilter } from 'actions/filters';
-
-// Components
+import * as React from 'react';
+import * as swal from 'sweetalert';
+import { api } from 'lib/api';
 import Form from 'components/filters/Form';
 
 export default class EditFilter extends React.Component {
@@ -19,60 +15,53 @@ export default class EditFilter extends React.Component {
       loading: true
     };
 
-    request.get('/api/filters/' + this.state.id).end((err, res) => {
-      if (err || res.body.error) {
-        swal('Error', 'Could not load data', 'error');
-      } else {
-        delete res.body.error;
+    api
+      .get(`/filters/${this.state.id}`)
+      .then(res => {
+        delete res.data.error;
+        this.props.dispatch(
+          editFilter(
+            Object.assign(
+              {},
+              this.props.data.filters.find(f => f.id == this.state.id),
+              res.data
+            )
+          )
+        );
+        this.setState({ loading: false });
+      })
+      .catch(err => swal('Error', err.response.data.error, 'error'));
+  }
+
+  onUpdate(data) {
+    api
+      .put(`/filters/${this.state.id}`, data)
+      .then(res => {
+        data.id = this.state.id;
 
         this.props.dispatch(
           editFilter(
             Object.assign(
               {},
               this.props.data.filters.find(f => f.id == this.state.id),
-              res.body
+              data
             )
           )
         );
 
-        this.setState({ loading: false });
-      }
-    });
-  }
+        location.hash = '#/filters/list';
+        swal('Success', `Filter '${data.name}' updated`, 'success');
 
-  onUpdate(data) {
-    request
-      .put('/api/filters/' + this.state.id)
-      .send(data)
-      .end((err, res) => {
-        if (err || res.body.error) {
-          swal('Error', res.body.message, 'error');
-        } else {
-          data.id = this.state.id;
-
-          this.props.dispatch(
-            editFilter(
-              Object.assign(
-                {},
-                this.props.data.filters.find(f => f.id == this.state.id),
-                data
-              )
-            )
+        // Filter was linked to emails that we must now trigger updates on
+        if (res.data.update !== undefined) {
+          this._updateEmails(
+            this.state.id,
+            this.props.data.emails,
+            res.data.update
           );
-
-          location.hash = '#/filters/list';
-          swal('Success', `Filter '${data.name}' updated`, 'success');
-
-          // Filter was linked to emails that we must now trigger updates on
-          if (res.body.update !== undefined) {
-            this._updateEmails(
-              this.state.id,
-              this.props.data.emails,
-              res.body.update
-            );
-          }
         }
-      });
+      })
+      .catch(err => swal('Error', err.response.data.error, 'error'));
   }
 
   _updateEmails(id, emails, update, index = 0) {
@@ -83,21 +72,17 @@ export default class EditFilter extends React.Component {
 
     // All emails need to be loaded
     if (email === undefined) {
-      request
-        .get('/api/emails')
-        .end((err, res) =>
-          this._updateEmails(id, res.body.emails, update, index)
-        );
+      api
+        .get('/emails')
+        .then(res => this._updateEmails(id, res.data.emails, update, index));
     }
     // Full email data needs to be loaded
     else if (email.toEmail === undefined) {
-      request.get('/api/emails/' + email.id).end((err, res) => {
-        email = Object.assign(email, res.body);
-
+      api.get(`/emails/${email.id}`).then(res => {
+        email = Object.assign(email, res.data);
         emails.forEach((e, i) => {
           if (e.id == email.id) emails[i] = email;
         });
-
         this._updateEmails(id, emails, update, index);
       });
     }
@@ -106,9 +91,8 @@ export default class EditFilter extends React.Component {
       const modifiers = email.modifiers.map(mod => mod.id).join(',');
       const filters = email.filters.map(f => f.id).join(',');
 
-      request
-        .put('/api/emails/' + email.id)
-        .send({
+      api
+        .put(`/emails/${email.id}`, {
           modifiers,
           filters,
           to: email.toEmail,
@@ -118,12 +102,12 @@ export default class EditFilter extends React.Component {
           noToAddress: email.address == '',
           noSpamFilter: !email.spamFilter
         })
-        .end(() => this._updateEmails(id, emails, update, index + 1));
+        .then(() => this._updateEmails(id, emails, update, index + 1));
     }
   }
 
   render() {
-    if (this.state.loading) return <div />;
+    if (this.state.loading) return null;
 
     const filter = this.props.data.filters.find(f => f.id == this.state.id);
 

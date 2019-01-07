@@ -1,7 +1,7 @@
 import { Slider, Button, Paper } from 'react-md';
-import request from 'superagent';
-import React from 'react';
-import swal from 'sweetalert';
+import * as React from 'react';
+import * as swal from 'sweetalert';
+import { api } from 'lib/api';
 
 export default class PurchaseCredits extends React.Component {
   constructor(props) {
@@ -14,16 +14,17 @@ export default class PurchaseCredits extends React.Component {
     this.onSlide(1);
   }
 
-  /** @param {string} type - `'iap|normal'` */
-  onPurchase(type) {
-    request
-      .post('/api/account/credits/purchase')
-      .send({ type, package: this.state.package })
-      .end((err, res) => {
-        if (err || res.body.error)
-          return swal('Error', res.body.message, 'error');
-        location.href = res.body.url;
+  async onPurchase(type: 'iap' | 'normal') {
+    let res: AxiosResponse;
+    try {
+      res = await api.post('/account/credits/purchase', {
+        type,
+        package: this.state.package
       });
+      location.href = res.data.url;
+    } catch (err) {
+      swal('Error', res.data.error, 'error');
+    }
   }
 
   /** @param {number} tier */

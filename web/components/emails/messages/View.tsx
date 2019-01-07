@@ -1,8 +1,8 @@
 import { TextField, Button, Paper } from 'react-md';
-import request from 'superagent';
-import moment from 'moment';
-import React from 'react';
-import swal from 'sweetalert';
+import { api } from 'lib/api';
+import * as moment from 'moment';
+import * as React from 'react';
+import * as swal from 'sweetalert';
 
 // Components
 import Navigation from 'components/emails/Navigation';
@@ -27,27 +27,23 @@ export default class ViewMessage extends React.Component {
 
     if (query(location.hash).reply) this.state.showReplyForm = true;
 
-    request
-      .get(`/api/emails/${this.state.id}/messages/${this.state.message}`)
-      .end((err, res) => {
-        if (err || res.body.error)
-          swal('Error', 'Could not load message', 'error');
-        else this.setState({ loading: false, content: res.body });
-      });
+    api
+      .get(`/emails/${this.state.id}/messages/${this.state.message}`)
+      .then(res => this.setState({ loading: false, content: res.data }))
+      .catch(err => swal('Error', err.response.data.error, 'error'));
   }
 
   onReply() {
     const { App } = this.props;
-
-    request
-      .post(`/api/emails/${this.state.id}/messages/${this.state.message}`)
-      .send({ content: this._message.value })
-      .end((err, res) => {
-        if (err) return swal('Error', res.body.message, 'error');
-
+    api
+      .post(`/emails/${this.state.id}/messages/${this.state.message}`, {
+        content: this._message.value
+      })
+      .then(res => {
         swal('Success', 'Reply sent.', 'success');
-        App.dispatch(updateCredits(res.body.credits));
-      });
+        App.dispatch(updateCredits(res.data.credits));
+      })
+      .catch(err => swal('Error', err.response.data.error, 'error'));
   }
 
   render() {

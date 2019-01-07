@@ -8,7 +8,7 @@ import {
   FontIcon,
   Subheader
 } from 'react-md';
-import React from 'react';
+import * as React from 'react';
 
 export default class AppNavigation extends React.Component {
   constructor(props) {
@@ -22,7 +22,7 @@ export default class AppNavigation extends React.Component {
    */
   onLogout() {
     delete localStorage.accessToken;
-    location.href = '/api/account/logout';
+    location.href = '/api/6/account/logout';
   }
 
   /** @return {JSX.Element[]} */

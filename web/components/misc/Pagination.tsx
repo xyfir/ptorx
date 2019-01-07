@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 
 // react-md
 import Button from 'react-md/lib/Buttons/Button';

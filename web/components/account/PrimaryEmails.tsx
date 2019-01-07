@@ -1,15 +1,8 @@
-import {
-  TextField,
-  ListItem,
-  Button,
-  Paper,
-  List,
-  DialogContainer
-} from 'react-md';
-import request from 'superagent';
-import React from 'react';
-import copy from 'copyr';
-import swal from 'sweetalert';
+import { TextField, ListItem, Button, List, DialogContainer } from 'react-md';
+import * as React from 'react';
+import * as copy from 'copyr';
+import * as swal from 'sweetalert';
+import { api } from 'lib/api';
 
 // Action creators
 import { deleteEmail, addEmail } from 'actions/account';
@@ -21,40 +14,37 @@ export default class PrimaryEmails extends React.Component {
     this.state = { selectedEmail: {} };
   }
 
-  onAddEmail() {
+  async onAddEmail() {
     const email = this._email.value;
 
-    request.post('/api/account/email/' + email).end((err, res) => {
-      if (err || res.body.error) {
-        swal('Error', res.body.message, 'error');
-      } else {
-        this.props.dispatch(addEmail(res.body.id, email));
-        this._email.getField().value = '';
-      }
-    });
+    let res: AxiosResponse;
+    try {
+      res = await api.post(`/account/email/${email}`);
+      this.props.dispatch(addEmail(res.data.id, email));
+      this._email.getField().value = '';
+    } catch (err) {
+      swal('Error', res.data.error, 'error');
+    }
   }
 
   async onDeleteEmail() {
-    const { id } = this.state.selectedEmail;
-
     const confirm = await swal({
       button: 'Yes',
       title: 'Are you sure?',
       text: 'Any proxy emails linked to this address will be deleted.',
       icon: 'warning'
     });
-
     if (!confirm) return;
 
-    request
-      .delete('/api/account/email/' + id)
-      .then(res => {
-        if (res.body.error) throw res.body.message;
-
-        this.setState({ selectedEmail: {} });
-        this.props.dispatch(deleteEmail(id));
-      })
-      .catch(err => swal('Error', err.toString(), 'error'));
+    const { id } = this.state.selectedEmail;
+    let res: AxiosResponse;
+    try {
+      res = await api.delete(`/account/email/${id}`);
+      this.setState({ selectedEmail: {} });
+      this.props.dispatch(deleteEmail(id));
+    } catch (err) {
+      swal('Error', res.data.error, 'error');
+    }
   }
 
   render() {

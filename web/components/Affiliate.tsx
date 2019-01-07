@@ -1,38 +1,45 @@
-import { TextField, Button, Paper } from 'react-md';
+import { TextField, Button } from 'react-md';
 import { render } from 'react-dom';
-import request from 'superagent';
-import React from 'react';
-import swal from 'sweetalert';
+import { api } from 'lib/api';
+import * as React from 'react';
+import * as swal from 'sweetalert';
 
 class Affiliate extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {};
-
-    request.get('/api/affiliates').end((err, res) => {
-      if (err) location.href = '/app';
-      else this.setState(res.body);
-    });
   }
 
-  onPay() {
-    request
-      .post('/api/affiliates/pay')
-      .send({
+  async componentDidMount() {
+    try {
+      const res = await api.get('/affiliates');
+      this.setState(res.data);
+    } catch (err) {
+      location.href = '/app';
+    }
+  }
+
+  async onPay() {
+    let res: AxiosResponse;
+    try {
+      res = await api.post('/affiliates/pay', {
         timestamp: this.state.timestamp
-      })
-      .end((err, res) => {
-        if (err) return swal('Error', res.body.message, 'error');
-        location.href = res.body.url;
       });
+      location.href = res.data.url;
+    } catch (err) {
+      swal('Error', res.data.error, 'error');
+    }
   }
 
-  onGenerateKey() {
-    request.post('/api/affiliates/key').end((err, res) => {
-      if (err) swal('Error', res.body.message, 'error');
-      else this.setState({ api_key: res.body.api_key });
-    });
+  async onGenerateKey() {
+    let res: AxiosResponse;
+    try {
+      res = await api.post('/affiliates/key');
+      this.setState({ api_key: res.data.api_key });
+    } catch (err) {
+      swal('Error', res.data.error, 'error');
+    }
   }
 
   render() {

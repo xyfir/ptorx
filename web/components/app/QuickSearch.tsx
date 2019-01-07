@@ -1,6 +1,6 @@
 import { ListItem, FontIcon, Button, List } from 'react-md';
-import request from 'superagent';
-import React from 'react';
+import { api } from 'lib/api';
+import * as React from 'react';
 
 // Constants
 import { modifierTypes, filterTypes } from 'constants/types';

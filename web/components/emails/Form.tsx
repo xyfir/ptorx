@@ -12,10 +12,9 @@ import {
   Tab
 } from 'react-md';
 import PropTypes from 'prop-types';
-import request from 'superagent';
-import moment from 'moment';
-import React from 'react';
-import swal from 'sweetalert';
+import { api } from 'lib/api';
+import * as moment from 'moment';
+import * as React from 'react';
 
 // Components
 import LinkModifier from 'components/modifiers/Link';
@@ -41,9 +40,8 @@ export default class EmailForm extends React.Component {
 
   /**
    * Checks if an email address on the selected domain is available.
-   * @param {number} [domain]
    */
-  onCheckAddress(domain = this._domain.state.value) {
+  onCheckAddress(domain: number = this._domain.state.value) {
     clearInterval(this.timeout);
 
     this.timeout = setTimeout(() => {
@@ -51,13 +49,9 @@ export default class EmailForm extends React.Component {
 
       if (!address) return this.setState({ addressAvailable: true });
 
-      request
-        .get('/api/emails/availability')
-        .query({ domain, address })
-        .end(
-          (err, res) =>
-            !err && this.setState({ addressAvailable: res.body.available })
-        );
+      api
+        .get('/emails/availability', { params: { domain, address } })
+        .then(res => this.setState({ addressAvailable: res.data.available }));
     }, 250);
   }
 

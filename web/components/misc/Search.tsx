@@ -1,5 +1,5 @@
 import { MenuButton, TextField, Subheader, ListItem, Paper } from 'react-md';
-import React from 'react';
+import * as React from 'react';
 
 // Constants
 import { filterTypes, modifierTypes } from 'constants/types';

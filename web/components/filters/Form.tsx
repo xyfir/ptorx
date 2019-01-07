@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React from 'react';
+import * as React from 'react';
 
 // react-md
 import SelectField from 'react-md/lib/SelectFields';

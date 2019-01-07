@@ -1,6 +1,6 @@
-import request from 'superagent';
-import React from 'react';
-import swal from 'sweetalert';
+import { api } from 'lib/api';
+import * as React from 'react';
+import * as swal from 'sweetalert';
 
 // Components
 import Form from 'components/modifiers/Form';
@@ -14,22 +14,21 @@ export default class UpdateModifier extends React.Component {
 
     this.state = { id: location.hash.split('/')[3], loading: true };
 
-    request.get('/api/modifiers/' + this.state.id).end((err, res) => {
-      if (err || res.body.err) {
-        swal('Error', 'Could not load data', 'error');
-      } else {
-        delete res.body.error;
-        res.body.data =
-          res.body.data.substr(0, 1) == '{'
-            ? JSON.parse(res.body.data)
-            : res.body.data;
+    api
+      .get(`/modifiers/${this.state.id}`)
+      .then(res => {
+        delete res.data.error;
+        res.data.data =
+          res.data.data.substr(0, 1) == '{'
+            ? JSON.parse(res.data.data)
+            : res.data.data;
 
         this.props.dispatch(
           editModifier(
             Object.assign(
               {},
               this.props.data.modifiers.find(mod => mod.id == this.state.id),
-              res.body
+              res.data
             )
           )
         );
@@ -39,8 +38,8 @@ export default class UpdateModifier extends React.Component {
           type: this.props.data.modifiers.find(mod => mod.id == this.state.id)
             .type
         });
-      }
-    });
+      })
+      .catch(err => swal('Error', err.response.data.error, 'error'));
   }
 
   /**
@@ -48,34 +47,30 @@ export default class UpdateModifier extends React.Component {
    * @param {object} data
    */
   onUpdate(modifier, data) {
-    request
-      .put('/api/modifiers/' + this.state.id)
-      .send(Object.assign({}, modifier, data))
-      .end((err, res) => {
-        if (err || res.body.error) {
-          swal('Error', res.body.message, 'error');
-        } else {
-          modifier.id = this.state.id;
-          modifier.data = data;
+    api
+      .put(`/modifiers/${this.state.id}`, Object.assign({}, modifier, data))
+      .then(res => {
+        modifier.id = this.state.id;
+        modifier.data = data;
 
-          this.props.dispatch(
-            editModifier(
-              Object.assign(
-                {},
-                this.props.data.modifiers.find(m => m.id == this.state.id),
-                modifier
-              )
+        this.props.dispatch(
+          editModifier(
+            Object.assign(
+              {},
+              this.props.data.modifiers.find(m => m.id == this.state.id),
+              modifier
             )
-          );
+          )
+        );
 
-          location.hash = '#/modifiers/list';
-          swal('Success', `Modifier '${modifier.name}' updated`, 'success');
-        }
-      });
+        location.hash = '#/modifiers/list';
+        swal('Success', `Modifier '${modifier.name}' updated`, 'success');
+      })
+      .catch(err => swal('Error', err.response.data.error, 'error'));
   }
 
   render() {
-    if (this.state.loading) return <div />;
+    if (this.state.loading) return null;
 
     const mod = this.props.data.modifiers.find(mod => mod.id == this.state.id);
 

@@ -1,8 +1,8 @@
 import { Button, DialogContainer } from 'react-md';
 import { render } from 'react-dom';
-import request from 'superagent';
-import React from 'react';
-import swal from 'sweetalert';
+import { api } from 'lib/api';
+import * as React from 'react';
+import * as swal from 'sweetalert';
 
 // Components
 import Documentation from 'components/misc/Documentation';
@@ -34,7 +34,7 @@ class App extends React.Component {
     store.subscribe(state => this.setState(state));
     if (LOG_STATE) store.subscribe(state => console.log(state));
 
-    const initialize = () => {
+    const initialize = async () => {
       // Access token is generated upon a successful login
       // Used to create new session without forcing login each time
       const token = localStorage.accessToken || '';
@@ -59,27 +59,27 @@ class App extends React.Component {
         view: CREATE_REDIRECT_EMAIL
       };
 
-      request
-        .get('/api/account')
-        .query({ token })
+      api
+        .get('/account', { params: { token } })
         .then(res => {
-          if (!res.body.loggedIn)
-            return (location.href = XACC + '/login/service/13');
+          if (!res.data.loggedIn) {
+            location.href = `${XACC}/login/service/13`;
+            return;
+          }
 
-          state.account = res.body;
-
+          state.account = res.data;
           return Promise.all([
-            request.get('/api/emails'),
-            request.get('/api/domains'),
-            request.get('/api/filters'),
-            request.get('/api/modifiers')
+            api.get('/emails'),
+            api.get('/domains'),
+            api.get('/filters'),
+            api.get('/modifiers')
           ]);
         })
         .then(res => {
-          state.emails = res[0].body.emails;
-          state.domains = res[1].body.domains;
-          state.filters = res[2].body.filters;
-          state.modifiers = res[3].body.modifiers;
+          state.emails = res[0].data.emails;
+          state.domains = res[1].data.domains;
+          state.filters = res[2].data.filters;
+          state.modifiers = res[3].data.modifiers;
 
           // Push initial state to store
           store.dispatch({
@@ -100,7 +100,7 @@ class App extends React.Component {
             store.dispatch(changeView(getView(state)));
           };
         })
-        .catch(err => swal('Error', err, 'error'));
+        .catch(err => swal('Error', err.response.data.error, 'error'));
     };
 
     const q = query(location.hash);
@@ -126,18 +126,14 @@ class App extends React.Component {
         q.referral = referral;
       }
 
-      request
-        .post('/api/account/login')
-        .send(q)
-        .end((err, res) => {
-          if (err || res.body.error) {
-            location.href = XACC + '/login/service/13';
-          } else {
-            localStorage.accessToken = res.body.accessToken;
-            initialize();
-            location.hash = location.hash.split('?')[0];
-          }
-        });
+      api
+        .post('/account/login', q)
+        .then(res => {
+          localStorage.accessToken = res.data.accessToken;
+          initialize();
+          location.hash = location.hash.split('?')[0];
+        })
+        .catch(() => (location.href = `${XACC}/login/service/13`));
     } else {
       initialize();
     }

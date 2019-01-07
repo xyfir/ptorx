@@ -1,7 +1,7 @@
 import { List, Button, DialogContainer, ListItem } from 'react-md';
-import request from 'superagent';
-import React from 'react';
-import swal from 'sweetalert';
+import { api } from 'lib/api';
+import * as React from 'react';
+import * as swal from 'sweetalert';
 
 // Action creators
 import { loadFilters, deleteFilter } from 'actions/filters';
@@ -28,9 +28,9 @@ export default class FilterList extends React.Component {
     };
 
     if (props.data.filters.length == 0) {
-      request
-        .get('/api/filters')
-        .end((err, res) => this.props.dispatch(loadFilters(res.body.filters)));
+      api
+        .get('/filters')
+        .then(res => this.props.dispatch(loadFilters(res.data.filters)));
     }
 
     this._removeFilter = this._removeFilter.bind(this);
@@ -49,21 +49,18 @@ export default class FilterList extends React.Component {
       text: 'This filter will be removed from any emails it is linked to.',
       icon: 'warning'
     });
-
     if (!confirm) return;
 
-    request
-      .delete('/api/filters/' + id)
+    api
+      .delete(`/filters/${id}`)
       .then(res => {
-        if (res.body.error) throw 'Could not delete filter';
-
         this.props.dispatch(deleteFilter(id));
 
         // Filter was linked to emails that we must now trigger updates on
-        if (res.body.update)
-          this._removeFilter(id, this.props.data.emails, res.body.update);
+        if (res.data.update)
+          this._removeFilter(id, this.props.data.emails, res.data.update);
       })
-      .catch(err => swal('Error', err.toString(), 'error'));
+      .catch(err => swal('Error', err.response.data.error, 'error'));
   }
 
   /**
@@ -101,16 +98,14 @@ export default class FilterList extends React.Component {
 
     // All emails need to be loaded
     if (email === undefined) {
-      request
-        .get('/api/emails')
-        .end((err, res) =>
-          this._removeFilter(id, res.body.emails, update, index)
-        );
+      api
+        .get('/emails')
+        .then(res => this._removeFilter(id, res.data.emails, update, index));
     }
     // Full email data needs to be loaded
     else if (email.toEmail === undefined) {
-      request.get('/api/emails/' + email.id).end((err, res) => {
-        Object.assign(email, res);
+      api.get(`/emails/${email.id}`).then(res => {
+        Object.assign(email, res.data);
 
         emails.forEach((e, i) => {
           if (e.id == email.id) emails[i] = email;
@@ -127,9 +122,8 @@ export default class FilterList extends React.Component {
         .join(',');
       const modifiers = email.modifiers.map(mod => mod.id).join(',');
 
-      request
-        .put('/api/emails/' + email.id)
-        .send({
+      api
+        .put(`/emails/${email.id}`, {
           name: email.name,
           description: email.description,
           to: email.toEmail,
@@ -139,7 +133,7 @@ export default class FilterList extends React.Component {
           modifiers,
           noToAddress: +(email.address == '')
         })
-        .end((err, res) => this._removeFilter(id, emails, update, index + 1));
+        .then(() => this._removeFilter(id, emails, update, index + 1));
     }
   }
 

@@ -1,6 +1,6 @@
-import request from 'superagent';
-import React from 'react';
-import swal from 'sweetalert';
+import * as React from 'react';
+import * as swal from 'sweetalert';
+import { api } from 'lib/api';
 
 // Components
 import Navigation from 'components/emails/Navigation';
@@ -46,30 +46,22 @@ export default class MessageList extends React.Component {
       text: 'This action cannot be undone',
       icon: 'warning'
     })
-      .then(() =>
-        request.delete(`/api/emails/${this.state.emailId}/messages/${id}`)
-      )
-      .then(res => {
-        if (res.body.error) throw 'Could not delete message';
-
+      .then(() => api.delete(`/emails/${this.state.emailId}/messages/${id}`))
+      .then(() => {
         this.setState({ selected: '' });
         this.props.dispatch(deleteMessage(id));
       })
-      .catch(err => swal('Error', err.toString(), 'error'));
+      .catch(err => swal('Error', err.response.data.error, 'error'));
   }
 
-  /**
-   * Load messages of `type`.
-   * @param {number} type
-   */
-  _loadMessages(type) {
-    request
-      .get(`/api/emails/${this.state.emailId}/messages`)
-      .query({ type })
-      .end((err, res) => {
-        this.props.dispatch(loadMessages(res.body.messages));
+  _loadMessages(type: number) {
+    api
+      .get(`/emails/${this.state.emailId}/messages`, { params: { type } })
+      .then(res => {
+        this.props.dispatch(loadMessages(res.data.errors));
         this.setState({ loading: false });
-      });
+      })
+      .catch(err => swal('Error', err.response.data.error, 'error'));
   }
 
   render() {
