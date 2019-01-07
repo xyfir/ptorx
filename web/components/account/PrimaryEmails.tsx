@@ -7,7 +7,7 @@ import { api } from 'lib/api';
 // Action creators
 import { deleteEmail, addEmail } from 'actions/account';
 
-export default class PrimaryEmails extends React.Component {
+export class PrimaryEmails extends React.Component {
   constructor(props) {
     super(props);
 

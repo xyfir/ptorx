@@ -10,7 +10,7 @@ import {
 } from 'react-md';
 import * as React from 'react';
 
-export default class AppNavigation extends React.Component {
+export class AppNavigation extends React.Component {
   constructor(props) {
     super(props);
 

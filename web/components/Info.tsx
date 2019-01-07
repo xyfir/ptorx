@@ -1,17 +1,13 @@
 import { ListItem, Toolbar, Divider, Drawer, Button } from 'react-md';
+import { Documentation } from 'components/misc/Documentation';
+import { LandingPage } from 'components/info/LandingPage';
+import { parseQuery } from 'lib/parse-query-string';
+import { Features } from 'components/info/Features';
 import { render } from 'react-dom';
 import * as React from 'react';
+import * as Blog from '@xyfir/blog';
+import { Home } from 'components/info/Home';
 import { api } from 'lib/api';
-import Blog from '@xyfir/blog';
-
-// Components
-import Documentation from 'components/misc/Documentation';
-import LandingPage from 'components/info/LandingPage';
-import Features from 'components/info/Features';
-import Home from 'components/info/Home';
-
-// Modules
-import query from 'lib/parse-query-string';
 
 class PtorxInfo extends React.Component {
   constructor(props) {
@@ -21,7 +17,7 @@ class PtorxInfo extends React.Component {
   }
 
   componentDidMount() {
-    const q = query(location.href); // in hash or search
+    const q = parseQuery(location.href); // in hash or search
 
     for (let k in q) localStorage[k] = q[k];
 

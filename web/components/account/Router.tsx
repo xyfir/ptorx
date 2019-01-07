@@ -1,15 +1,15 @@
 import * as React from 'react';
 
 // Components
-import PurchaseCredits from 'components/account/credits/Purchase';
-import PrimaryEmails from 'components/account/PrimaryEmails';
-import EarnCredits from 'components/account/credits/Earn';
-import Settings from 'components/account/Settings';
+import { PurchaseCredits } from 'components/account/credits/Purchase';
+import { AccountSettings } from 'components/account/Settings';
+import { PrimaryEmails } from 'components/account/PrimaryEmails';
+import { EarnCredits } from 'components/account/credits/Earn';
 
 // Constants
 import * as VIEWS from 'constants/views';
 
-export default props => {
+export const AccountRouter = props => {
   switch (props.App.state.view) {
     case VIEWS.PURCHASE_CREDITS:
       return <PurchaseCredits {...props} />;
@@ -18,6 +18,6 @@ export default props => {
     case VIEWS.EARN_CREDITS:
       return <EarnCredits {...props} />;
     case VIEWS.SETTINGS:
-      return <Settings {...props} />;
+      return <AccountSettings {...props} />;
   }
 };

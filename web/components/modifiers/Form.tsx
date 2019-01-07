@@ -1,11 +1,18 @@
 import { SelectField, TextField, Checkbox, Button, Paper } from 'react-md';
-import PropTypes from 'prop-types';
+import { creatableModifierTypes } from 'constants/types';
 import * as React from 'react';
 
-// Constants
-import { creatableModifierTypes } from 'constants/types';
+export class ModifierForm extends React.Component {
+  static defaultProps = {
+    modifier: {
+      type: 0,
+      data: '',
+      name: '',
+      linkedTo: [],
+      description: ''
+    }
+  };
 
-export default class ModifierForm extends React.Component {
   constructor(props) {
     super(props);
 
@@ -97,7 +104,7 @@ export default class ModifierForm extends React.Component {
                 ref={i => (this._replace = i)}
                 type="text"
                 label="Replace"
-                helpText="The value which replaces &quot;Find&quot;"
+                helpText='The value which replaces "Find"'
                 defaultValue={mod.data.with}
               />
 
@@ -195,7 +202,7 @@ export default class ModifierForm extends React.Component {
                 ref={i => (this._separator = i)}
                 type="text"
                 label="Separator"
-                helpText="Separates &quot;Add&quot; and &quot;To&quot;"
+                helpText='Separates "Add" and "To"'
                 defaultValue={mod.data.separator}
               />
 
@@ -315,18 +322,3 @@ export default class ModifierForm extends React.Component {
     );
   }
 }
-
-ModifierForm.propTypes = {
-  modifier: PropTypes.object,
-  onSubmit: PropTypes.func.isRequired
-};
-
-ModifierForm.defaultProps = {
-  modifier: {
-    type: 0,
-    data: '',
-    name: '',
-    linkedTo: [],
-    description: ''
-  }
-};

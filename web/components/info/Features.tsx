@@ -1,9 +1,7 @@
 import * as React from 'react';
+import { Paper } from 'react-md';
 
-// react-md
-import Paper from 'react-md/lib/Papers';
-
-export default () => (
+export const Features = () => (
   <div className="features">
     <h2>Features</h2>
 

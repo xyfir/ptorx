@@ -1,22 +1,20 @@
-import { api } from 'lib/api';
-import * as React from 'react';
-import copy from 'copyr';
-import * as swal from 'sweetalert';
-
-// Action creators
 import { removeDomain } from 'actions/domains';
+import * as React from 'react';
+import * as copy from 'copyr';
+import * as swal from 'sweetalert';
+import { api } from 'lib/api';
+import {
+  TableColumn,
+  TableHeader,
+  DataTable,
+  TableBody,
+  TextField,
+  TableRow,
+  Button,
+  Paper
+} from 'react-md';
 
-// react-md
-import TableColumn from 'react-md/lib/DataTables/TableColumn';
-import TableHeader from 'react-md/lib/DataTables/TableHeader';
-import DataTable from 'react-md/lib/DataTables/DataTable';
-import TableBody from 'react-md/lib/DataTables/TableBody';
-import TextField from 'react-md/lib/TextFields';
-import TableRow from 'react-md/lib/DataTables/TableRow';
-import Button from 'react-md/lib/Buttons/Button';
-import Paper from 'react-md/lib/Papers';
-
-export default class ViewDomain extends React.Component {
+export class ViewDomain extends React.Component {
   constructor(props) {
     super(props);
 

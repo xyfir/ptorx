@@ -1,14 +1,10 @@
-import { api } from 'lib/api';
+import { addFilter } from 'actions/filters';
+import { FilterForm } from 'components/filters/Form';
 import * as React from 'react';
 import * as swal from 'sweetalert';
+import { api } from 'lib/api';
 
-// Components
-import Form from 'components/filters/Form';
-
-// Action creators
-import { addFilter } from 'actions/filters';
-
-export default class CreateFilter extends React.Component {
+export class CreateFilter extends React.Component {
   constructor(props) {
     super(props);
   }
@@ -30,6 +26,6 @@ export default class CreateFilter extends React.Component {
   }
 
   render() {
-    return <Form onSubmit={d => this.onCreate(d)} />;
+    return <FilterForm onSubmit={d => this.onCreate(d)} />;
   }
 }

@@ -1,12 +1,7 @@
-import { api } from 'lib/api';
+import { ListItem, Button, List } from 'react-md';
 import * as React from 'react';
 
-// react-md
-import ListItem from 'react-md/lib/Lists/ListItem';
-import Button from 'react-md/lib/Buttons/Button';
-import List from 'react-md/lib/Lists/List';
-
-export default props => (
+export const DomainList = props => (
   <div className="domains">
     <Button
       floating

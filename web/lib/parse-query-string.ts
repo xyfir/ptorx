@@ -1,9 +1,7 @@
 /**
  * Parses the provided query string into an object.
- * @param {string} qs
- * @return {object}
  */
-export default function(qs) {
+export function parseQuery(qs: string): any {
   const query = {};
   qs = qs.split('?')[1];
 
@@ -11,7 +9,6 @@ export default function(qs) {
 
   qs.split('&').forEach(q => {
     const [key, value] = q.split('=');
-
     query[key] = value === undefined ? '' : decodeURIComponent(value);
   });
 

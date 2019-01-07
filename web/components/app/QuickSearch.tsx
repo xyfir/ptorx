@@ -1,15 +1,8 @@
-import { ListItem, FontIcon, Button, List } from 'react-md';
-import { api } from 'lib/api';
-import * as React from 'react';
-
-// Constants
 import { modifierTypes, filterTypes } from 'constants/types';
-
-// Modules
-import findMatches from 'lib/find-matching';
-
-// Components
-import Search from 'components/misc/Search';
+import { ListItem, Button, List } from 'react-md';
+import { findMatching } from 'lib/find-matching';
+import { Search } from 'components/misc/Search';
+import * as React from 'react';
 
 const ShowMoreButton = props =>
   props.total <= props.limit ? null : (
@@ -18,7 +11,7 @@ const ShowMoreButton = props =>
     </Button>
   );
 
-export default class QuickSearch extends React.Component {
+export class QuickSearch extends React.Component {
   constructor(props) {
     super(props);
 
@@ -152,10 +145,10 @@ export default class QuickSearch extends React.Component {
     const { emails, filters, domains, modifiers } = this.props.App.state;
     const { search } = this.state;
     const matches = {
-      emails: findMatches(emails, search),
-      filters: findMatches(filters, search),
-      domains: findMatches(domains, search),
-      modifiers: findMatches(modifiers.filter(m => !m.global), search)
+      emails: findMatching(emails, search),
+      filters: findMatching(filters, search),
+      domains: findMatching(domains, search),
+      modifiers: findMatching(modifiers.filter(m => !m.global), search)
     };
 
     return (

@@ -1,12 +1,9 @@
-// Constants
 import * as VIEWS from 'constants/views';
 
 /**
  * Return the application's `state.view`.
- * @param {object} state
- * @return {string}
  */
-export default function(state) {
+export function getView(): string {
   // Hash is empty or not set
   if (location.hash.length < 2)
     return localStorage.defaultView || VIEWS.CREATE_REDIRECT_EMAIL;

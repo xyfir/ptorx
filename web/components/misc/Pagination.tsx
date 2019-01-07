@@ -1,9 +1,7 @@
+import { Button } from 'react-md';
 import * as React from 'react';
 
-// react-md
-import Button from 'react-md/lib/Buttons/Button';
-
-export default class LocalPagination extends React.Component {
+export class LocalPagination extends React.Component {
   constructor(props) {
     super(props);
   }

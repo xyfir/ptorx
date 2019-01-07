@@ -1,6 +1,6 @@
 import { LOAD_EMAILS, DELETE_EMAIL } from 'constants/actions';
 
-export default function(state, action) {
+export function emailsReducer(state, action) {
   switch (action.type) {
     case LOAD_EMAILS:
       return action.emails;

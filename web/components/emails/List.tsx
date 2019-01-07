@@ -1,20 +1,14 @@
 import { DialogContainer, ListItem, FontIcon, Button, List } from 'react-md';
-import { api } from 'lib/api';
-import * as React from 'react';
-import copy from 'copyr';
-import * as swal from 'sweetalert';
-
-// Action creators
 import { loadEmails, deleteEmail } from 'actions/emails';
+import { findMatching } from 'lib/find-matching';
+import { Pagination } from 'components/misc/Pagination';
+import { Search } from 'components/misc/Search';
+import * as React from 'react';
+import * as swal from 'sweetalert';
+import * as copy from 'copyr';
+import { api } from 'lib/api';
 
-// Modules
-import findMatches from 'lib/find-matching';
-
-// Components
-import Pagination from 'components/misc/Pagination';
-import Search from 'components/misc/Search';
-
-export default class EmailList extends React.Component {
+export class EmailList extends React.Component {
   constructor(props) {
     super(props);
 
@@ -97,7 +91,7 @@ export default class EmailList extends React.Component {
         <Search onSearch={v => this.setState({ search: v })} type="email" />
 
         <List className="proxy-emails-list section md-paper md-paper--1">
-          {findMatches(this.props.data.emails, this.state.search)
+          {findMatching(this.props.data.emails, this.state.search)
             .splice((this.state.page - 1) * 25, 25)
             .map(email => (
               <ListItem

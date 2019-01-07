@@ -5,7 +5,7 @@ import {
   DELETE_PRIMARY_EMAIL
 } from 'constants/actions';
 
-export default function(state, action) {
+export function accountReducer(state, action) {
   switch (action.type) {
     case UPDATE_CREDITS:
       return Object.assign({}, state, { credits: action.credits });

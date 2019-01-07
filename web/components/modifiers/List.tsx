@@ -1,27 +1,14 @@
-import { api } from 'lib/api';
+import { ListItem, Button, Dialog, List } from 'react-md';
+import { loadModifiers, deleteModifier } from 'actions/modifiers';
+import { modifierTypes } from 'constants/types';
+import { findMatching } from 'lib/find-matching';
+import { Pagination } from 'components/misc/Pagination';
+import { Search } from 'components/misc/Search';
 import * as React from 'react';
 import * as swal from 'sweetalert';
+import { api } from 'lib/api';
 
-// Action creators
-import { loadModifiers, deleteModifier } from 'actions/modifiers';
-
-// Constants
-import { modifierTypes } from 'constants/types';
-
-// Modules
-import findMatches from 'lib/find-matching';
-
-// Components
-import Pagination from 'components/misc/Pagination';
-import Search from 'components/misc/Search';
-
-// react-md
-import ListItem from 'react-md/lib/Lists/ListItem';
-import Button from 'react-md/lib/Buttons/Button';
-import Dialog from 'react-md/lib/Dialogs';
-import List from 'react-md/lib/Lists/List';
-
-export default class ModifierList extends React.Component {
+export class ModifierList extends React.Component {
   constructor(props) {
     super(props);
 
@@ -80,7 +67,7 @@ export default class ModifierList extends React.Component {
         <Search onSearch={v => this.setState({ search: v })} type="modifier" />
 
         <List className="modifiers-list section md-paper md-paper--1">
-          {findMatches(this.props.data.modifiers, this.state.search)
+          {findMatching(this.props.data.modifiers, this.state.search)
             .filter(mod => !mod.global)
             .splice((this.state.page - 1) * 25, 25)
             .map(m => (

@@ -1,13 +1,9 @@
 import { MenuButton, TextField, Subheader, ListItem, Paper } from 'react-md';
+import { filterTypes, modifierTypes } from 'constants/types';
+import { parseQuery } from 'lib/parse-query-string';
 import * as React from 'react';
 
-// Constants
-import { filterTypes, modifierTypes } from 'constants/types';
-
-// Modules
-import query from 'lib/parse-query-string';
-
-export default class Search extends React.Component {
+export class Search extends React.Component {
   constructor(props) {
     super(props);
 
@@ -17,7 +13,7 @@ export default class Search extends React.Component {
   componentDidMount() {
     this._search.focus();
 
-    const { q } = query(location.hash);
+    const { q } = parseQuery(location.hash);
 
     if (q) this.props.onSearch({ query: q, type: this.state.select });
   }
@@ -38,9 +34,9 @@ export default class Search extends React.Component {
       this.props.type == 'filter'
         ? filterTypes
         : this.props.type == 'modifier'
-          ? modifierTypes
-          : null;
-    const { q } = query(location.hash);
+        ? modifierTypes
+        : null;
+    const { q } = parseQuery(location.hash);
 
     return (
       <Paper zDepth={1} className="search section flex">

@@ -1,38 +1,30 @@
-import { Button, DialogContainer } from 'react-md';
-import { render } from 'react-dom';
-import { api } from 'lib/api';
-import * as React from 'react';
-import * as swal from 'sweetalert';
-
-// Components
-import Documentation from 'components/misc/Documentation';
-import QuickSearch from 'components/app/QuickSearch';
-import Navigation from 'components/app/Navigation';
-import Modifiers from 'components/modifiers/Router';
-import Domains from 'components/domains/Domains';
-import Account from 'components/account/Router';
-import Filters from 'components/filters/Router';
-import Emails from 'components/emails/Router';
-
-// Modules
-import getView from 'lib/get-view';
-import query from 'lib/parse-query-string';
-import store from 'lib/store';
-
-// Actions
-import { changeView, hideWelcome } from 'actions/index';
-
-// Constants
 import { XACC, LOG_STATE, ENVIRONMENT } from 'constants/config';
+import { changeView, hideWelcome } from 'actions/index';
+import { Button, DialogContainer } from 'react-md';
 import { CREATE_REDIRECT_EMAIL } from 'constants/views';
 import { INITIALIZE_STATE } from 'constants/actions';
+import { ModifiersRouter } from 'components/modifiers/Router';
+import { Documentation } from 'components/misc/Documentation';
+import { AppNavigation } from 'components/app/Navigation';
+import { DomainsRouter } from 'components/domains/Domains';
+import { AccountRouter } from 'components/account/Router';
+import { FiltersRouter } from 'components/filters/Router';
+import { EmailsRouter } from 'components/emails/Router';
+import { QuickSearch } from 'components/app/QuickSearch';
+import { parseQuery } from 'lib/parse-query-string';
+import { getView } from 'lib/get-view';
+import { render } from 'react-dom';
+import * as React from 'react';
+import * as swal from 'sweetalert';
+import { Store } from 'lib/store';
+import { api } from 'lib/api';
 
 class App extends React.Component {
   constructor(props) {
     super(props);
 
-    store.subscribe(state => this.setState(state));
-    if (LOG_STATE) store.subscribe(state => console.log(state));
+    Store.subscribe(state => this.setState(state));
+    if (LOG_STATE) Store.subscribe(state => console.log(state));
 
     const initialize = async () => {
       // Access token is generated upon a successful login
@@ -82,14 +74,14 @@ class App extends React.Component {
           state.modifiers = res[3].data.modifiers;
 
           // Push initial state to store
-          store.dispatch({
+          Store.dispatch({
             type: INITIALIZE_STATE,
             state
           });
           this.state = state;
 
           // Set state based on current url hash
-          store.dispatch(changeView(getView(state)));
+          Store.dispatch(changeView(getView(state)));
 
           // Update state according to url hash
           window.onhashchange = () => {
@@ -97,13 +89,13 @@ class App extends React.Component {
             // `#${route}` -> `#/${route}`
             if (location.hash.indexOf('#/') != 0)
               return (location.hash = '#/' + location.hash.substr(1));
-            store.dispatch(changeView(getView(state)));
+            Store.dispatch(changeView(getView(state)));
           };
         })
         .catch(err => swal('Error', err.response.data.error, 'error'));
     };
 
-    const q = query(location.hash);
+    const q = parseQuery(location.hash);
 
     // PhoneGap app opens to ptorx.com/panel/#?phonegap=1
     if (q.phonegap) {
@@ -140,12 +132,12 @@ class App extends React.Component {
   }
 
   onHideWelcome() {
-    store.dispatch(hideWelcome());
+    Store.dispatch(hideWelcome());
     localStorage.hasRun = true;
   }
 
   dispatch(action) {
-    return store.dispatch(action);
+    return Store.dispatch(action);
   }
 
   render() {
@@ -156,7 +148,7 @@ class App extends React.Component {
     const view = (() => {
       const props = {
         data: this.state,
-        dispatch: store.dispatch,
+        dispatch: Store.dispatch,
         App: this // eventually remove other props and just use App
       };
 
@@ -164,15 +156,15 @@ class App extends React.Component {
         case 'QUICK_SEARCH':
           return <QuickSearch {...props} />;
         case 'MODIFIERS':
-          return <Modifiers {...props} />;
+          return <ModifiersRouter {...props} />;
         case 'DOMAINS':
-          return <Domains {...props} />;
+          return <DomainsRouter {...props} />;
         case 'ACCOUNT':
-          return <Account {...props} />;
+          return <AccountRouter {...props} />;
         case 'FILTERS':
-          return <Filters {...props} />;
+          return <FiltersRouter {...props} />;
         case 'EMAILS':
-          return <Emails {...props} />;
+          return <EmailsRouter {...props} />;
         case 'DOCS':
           return <Documentation file={location.hash.split('/')[2]} />;
       }
@@ -180,7 +172,7 @@ class App extends React.Component {
 
     return (
       <div className="ptorx">
-        <Navigation App={this} />
+        <AppNavigation App={this} />
 
         <div className="main md-toolbar-relative">{view}</div>
 

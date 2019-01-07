@@ -9,7 +9,7 @@ import { updateCredits } from 'actions/account';
 // Constants
 import { COINHIVE_KEY } from 'constants/config';
 
-export default class EarnCredits extends React.Component {
+export class EarnCredits extends React.Component {
   constructor(props) {
     super(props);
 

@@ -1,23 +1,15 @@
 import { List, Button, DialogContainer, ListItem } from 'react-md';
-import { api } from 'lib/api';
+import { loadFilters, deleteFilter } from 'actions/filters';
+import { findMatching } from 'lib/find-matching';
+import { filterTypes } from 'constants/types';
+import { Pagination } from 'components/misc/Pagination';
+import { loadEmails } from 'actions/emails';
+import { Search } from 'components/misc/Search';
 import * as React from 'react';
 import * as swal from 'sweetalert';
+import { api } from 'lib/api';
 
-// Action creators
-import { loadFilters, deleteFilter } from 'actions/filters';
-import { loadEmails } from 'actions/emails';
-
-// Constants
-import { filterTypes } from 'constants/types';
-
-// Modules
-import findMatches from 'lib/find-matching';
-
-// Components
-import Pagination from 'components/misc/Pagination';
-import Search from 'components/misc/Search';
-
-export default class FilterList extends React.Component {
+export class FilterList extends React.Component {
   constructor(props) {
     super(props);
 
@@ -153,7 +145,7 @@ export default class FilterList extends React.Component {
         <Search onSearch={v => this.setState({ search: v })} type="filter" />
 
         <List className="filters-list section md-paper md-paper--1">
-          {findMatches(this.props.data.filters, this.state.search)
+          {findMatching(this.props.data.filters, this.state.search)
             .filter(filter => !filter.global)
             .splice((this.state.page - 1) * 25, 25)
             .map(f => (

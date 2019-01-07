@@ -1,4 +1,4 @@
-import Fuse from 'fuse.js';
+import * as Fuse from 'fuse.js';
 
 /**
  * Finds matching modifiers or filters.
@@ -9,7 +9,7 @@ import Fuse from 'fuse.js';
  * `search` but are present in `ignore` are not returned.
  * @returns {object[]}
  */
-export default function(items, search, ignore = []) {
+export function findMatching(items, search, ignore = []) {
   items = items.filter(item => {
     // Is ignored
     if (ignore.findIndex(i => i.id == item.id) > -1) return false;

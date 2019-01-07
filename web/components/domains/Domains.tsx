@@ -1,17 +1,15 @@
+import { ViewDomain } from 'components/domains/View';
+import { DomainList } from 'components/domains/List';
+import { AddDomain } from 'components/domains/Add';
 import * as React from 'react';
 
-// Components
-import View from 'components/domains/View';
-import List from 'components/domains/List';
-import Add from 'components/domains/Add';
-
-export default props => {
+export const DomainsRouter = props => {
   switch (props.data.view.split('/')[1]) {
     case 'VIEW':
-      return <View {...props} />;
+      return <ViewDomain {...props} />;
     case 'LIST':
-      return <List {...props} />;
+      return <DomainList {...props} />;
     case 'ADD':
-      return <Add {...props} />;
+      return <AddDomain {...props} />;
   }
 };

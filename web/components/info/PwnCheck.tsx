@@ -2,7 +2,7 @@ import { TextField, Button, FontIcon } from 'react-md';
 import * as React from 'react';
 import { api } from 'lib/api';
 
-export default class PwnCheck extends React.Component {
+export class PwnCheck extends React.Component {
   constructor(props) {
     super(props);
 

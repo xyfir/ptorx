@@ -1,18 +1,12 @@
-import { api } from 'lib/api';
+import { parseQuery } from 'lib/parse-query-string';
+import { loadEmails } from 'actions/emails';
+import { EmailForm } from 'components/emails/Form';
 import * as moment from 'moment';
 import * as React from 'react';
 import * as swal from 'sweetalert';
+import { api } from 'lib/api';
 
-// Components
-import Form from 'components/emails/Form';
-
-// Action creators
-import { loadEmails } from 'actions/emails';
-
-// Modules
-import query from 'lib/parse-query-string';
-
-export default class CreateEmail extends React.Component {
+export class CreateEmail extends React.Component {
   constructor(props) {
     super(props);
 
@@ -21,7 +15,7 @@ export default class CreateEmail extends React.Component {
 
   async componentDidMount() {
     const { App } = this.props;
-    const q = query(location.hash);
+    const q = parseQuery(location.hash);
 
     const copy = +q.duplicate || +App.state.account.email_template;
     let email = App.state.emails.find(e => e.id == copy);
@@ -92,7 +86,7 @@ export default class CreateEmail extends React.Component {
 
     return (
       <div className="email-create">
-        <Form
+        <EmailForm
           {...this.props}
           email={this.state.email}
           create={true}

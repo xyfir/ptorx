@@ -5,7 +5,7 @@ import {
   EDIT_MODIFIER
 } from 'constants/actions';
 
-export default function(state, action) {
+export function modifiersReducer(state, action) {
   switch (action.type) {
     case LOAD_MODIFIERS:
       return action.modifiers;
@@ -15,19 +15,15 @@ export default function(state, action) {
 
     case EDIT_MODIFIER:
       return (() => {
-        let temp = state.slice(0);
-
+        const temp = state.slice(0);
         temp.forEach((mod, i) => {
           if (action.data.id == mod.id) temp[i] = action.data;
         });
-
         return temp;
-      }).call();
+      })();
 
     case DELETE_MODIFIER:
-      return state.filter(mod => {
-        return mod.id != action.id;
-      });
+      return state.filter(mod => mod.id != action.id);
 
     default:
       return state;

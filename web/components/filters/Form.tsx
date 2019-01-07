@@ -1,17 +1,20 @@
-import PropTypes from 'prop-types';
+import { SelectField, TextField, Checkbox, Button, Paper } from 'react-md';
+import { filterTypes } from 'constants/types';
 import * as React from 'react';
 
-// react-md
-import SelectField from 'react-md/lib/SelectFields';
-import TextField from 'react-md/lib/TextFields';
-import Checkbox from 'react-md/lib/SelectionControls/Checkbox';
-import Button from 'react-md/lib/Buttons/Button';
-import Paper from 'react-md/lib/Papers';
+export class FilterForm extends React.Component {
+  static defaultProps = {
+    filter: {
+      type: 0,
+      find: '',
+      name: '',
+      regex: false,
+      linkedTo: [],
+      description: '',
+      acceptOnMatch: true
+    }
+  };
 
-// Constants
-import { filterTypes } from 'constants/types';
-
-export default class FilterForm extends React.Component {
   constructor(props) {
     super(props);
 
@@ -150,34 +153,3 @@ export default class FilterForm extends React.Component {
     );
   }
 }
-
-FilterForm.propTypes = {
-  filter: PropTypes.objectOf(
-    PropTypes.any /*{
-    type: PropTypes.number,
-    name: PropTypes.string,
-    find: PropTypes.string,
-    regex: PropTypes.bool,
-    linkedTo: PropTypes.arrayOf(
-      PropTypes.objectOf({
-        id: PropTypes.number, address: PropTypes.string
-      })
-    ),
-    description: PropTypes.string,
-    acceptOnMatch: PropTypes.bool
-  }*/
-  ),
-  onSubmit: PropTypes.func.isRequired
-};
-
-FilterForm.defaultProps = {
-  filter: {
-    type: 0,
-    find: '',
-    name: '',
-    regex: false,
-    linkedTo: [],
-    description: '',
-    acceptOnMatch: true
-  }
-};

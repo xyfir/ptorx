@@ -1,8 +1,6 @@
 import { FontIcon, Button } from 'react-md';
+import { HowItWorks } from 'components/info/HowItWorks';
 import * as React from 'react';
-
-// Components
-import HowItWorks from 'components/info/HowItWorks';
 
 const LearnMore = ({ page }) => (
   <a href={page}>
@@ -10,7 +8,7 @@ const LearnMore = ({ page }) => (
   </a>
 );
 
-export default class Home extends React.Component {
+export class Home extends React.Component {
   constructor(props) {
     super(props);
 

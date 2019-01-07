@@ -1,19 +1,13 @@
 import { TextField, Button, Paper } from 'react-md';
-import { api } from 'lib/api';
+import { EmailNavigation } from 'components/emails/Navigation';
+import { updateCredits } from 'actions/account';
+import { parseQuery } from 'lib/parse-query-string';
 import * as moment from 'moment';
 import * as React from 'react';
 import * as swal from 'sweetalert';
+import { api } from 'lib/api';
 
-// Components
-import Navigation from 'components/emails/Navigation';
-
-// Modules
-import query from 'lib/parse-query-string';
-
-// Actions
-import { updateCredits } from 'actions/account';
-
-export default class ViewMessage extends React.Component {
+export class ViewMessage extends React.Component {
   constructor(props) {
     super(props);
 
@@ -25,7 +19,7 @@ export default class ViewMessage extends React.Component {
       showReplyForm: false
     };
 
-    if (query(location.hash).reply) this.state.showReplyForm = true;
+    if (parseQuery(location.hash).reply) this.state.showReplyForm = true;
 
     api
       .get(`/emails/${this.state.id}/messages/${this.state.message}`)
@@ -51,7 +45,7 @@ export default class ViewMessage extends React.Component {
 
     return (
       <div className="view-message">
-        <Navigation email={this.state.id} />
+        <EmailNavigation email={this.state.id} />
 
         <Paper zDepth={1} component="section" className="message flex section">
           <div className="info">

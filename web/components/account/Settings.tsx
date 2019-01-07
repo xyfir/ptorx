@@ -4,7 +4,7 @@ import * as VIEWS from 'constants/views';
 import * as React from 'react';
 import { api } from 'lib/api';
 
-export default class AccountSettings extends React.Component {
+export class AccountSettings extends React.Component {
   constructor(props) {
     super(props);
   }

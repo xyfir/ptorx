@@ -3,7 +3,7 @@ import * as React from 'react';
 import * as swal from 'sweetalert';
 import { api } from 'lib/api';
 
-export default class PurchaseCredits extends React.Component {
+export class PurchaseCredits extends React.Component {
   constructor(props) {
     super(props);
 

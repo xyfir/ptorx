@@ -1,19 +1,13 @@
-import { Button } from 'react-md';
-import { api } from 'lib/api';
-import * as React from 'react';
-import copy from 'copyr';
-import * as swal from 'sweetalert';
-
-// Components
-import Navigation from 'components/emails/Navigation';
-
-// Components
-import Form from 'components/emails/Form';
-
-// Action creators
+import { EmailNavigation } from 'components/emails/Navigation';
 import { loadEmails } from 'actions/emails';
+import { EmailForm } from 'components/emails/Form';
+import { Button } from 'react-md';
+import * as React from 'react';
+import * as swal from 'sweetalert';
+import * as copy from 'copyr';
+import { api } from 'lib/api';
 
-export default class EditEmail extends React.Component {
+export class EditEmail extends React.Component {
   constructor(props) {
     super(props);
 
@@ -55,7 +49,7 @@ export default class EditEmail extends React.Component {
 
     return (
       <div className="edit-email">
-        <Navigation email={email.id} />
+        <EmailNavigation email={email.id} />
 
         <div className="address">
           <span>{email.address}</span>
@@ -69,7 +63,11 @@ export default class EditEmail extends React.Component {
           />
         </div>
 
-        <Form {...this.props} email={email} onSubmit={d => this.onSubmit(d)} />
+        <EmailForm
+          {...this.props}
+          email={email}
+          onSubmit={d => this.onSubmit(d)}
+        />
       </div>
     );
   }

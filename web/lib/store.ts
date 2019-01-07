@@ -1,12 +1,12 @@
-import reducer from 'reducers/index';
+import { stateReducer } from 'reducers/index';
 
 const listeners = [];
 let state = {};
 
-export default class Store {
+export class Store {
   /** @param {object} action */
   static dispatch(action) {
-    state = reducer(state, action);
+    state = stateReducer(state, action);
     for (let listener of listeners) listener(state);
   }
 

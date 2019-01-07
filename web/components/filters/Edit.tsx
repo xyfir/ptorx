@@ -1,10 +1,10 @@
+import { FilterForm } from 'components/filters/Form';
 import { editFilter } from 'actions/filters';
 import * as React from 'react';
 import * as swal from 'sweetalert';
 import { api } from 'lib/api';
-import Form from 'components/filters/Form';
 
-export default class EditFilter extends React.Component {
+export class EditFilter extends React.Component {
   constructor(props) {
     super(props);
 
@@ -111,6 +111,6 @@ export default class EditFilter extends React.Component {
 
     const filter = this.props.data.filters.find(f => f.id == this.state.id);
 
-    return <Form filter={filter} onSubmit={d => this.onUpdate(d)} />;
+    return <FilterForm filter={filter} onSubmit={d => this.onUpdate(d)} />;
   }
 }

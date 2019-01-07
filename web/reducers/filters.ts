@@ -5,7 +5,7 @@ import {
   EDIT_FILTER
 } from 'constants/actions';
 
-export default function(state, action) {
+export function filtersReducer(state, action) {
   switch (action.type) {
     case LOAD_FILTERS:
       return action.filters;
@@ -16,13 +16,11 @@ export default function(state, action) {
     case EDIT_FILTER:
       return (() => {
         let temp = state.slice(0);
-
         temp.forEach((f, i) => {
           if (action.data.id == f.id) temp[i] = action.data;
         });
-
         return temp;
-      }).call();
+      })();
 
     case DELETE_FILTER:
       return state.filter(f => {

@@ -1,7 +1,7 @@
 import { Button } from 'react-md';
 import * as React from 'react';
 
-export default class HowItWorks extends React.Component {
+export class HowItWorks extends React.Component {
   constructor(props) {
     super(props);
 

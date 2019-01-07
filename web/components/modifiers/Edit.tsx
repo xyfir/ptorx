@@ -1,14 +1,10 @@
-import { api } from 'lib/api';
+import { ModifierForm } from 'components/modifiers/Form';
+import { editModifier } from 'actions/modifiers';
 import * as React from 'react';
 import * as swal from 'sweetalert';
+import { api } from 'lib/api';
 
-// Components
-import Form from 'components/modifiers/Form';
-
-// Action creators
-import { editModifier } from 'actions/modifiers';
-
-export default class UpdateModifier extends React.Component {
+export class UpdateModifier extends React.Component {
   constructor(props) {
     super(props);
 
@@ -74,6 +70,8 @@ export default class UpdateModifier extends React.Component {
 
     const mod = this.props.data.modifiers.find(mod => mod.id == this.state.id);
 
-    return <Form modifier={mod} onSubmit={(m, d) => this.onUpdate(m, d)} />;
+    return (
+      <ModifierForm modifier={mod} onSubmit={(m, d) => this.onUpdate(m, d)} />
+    );
   }
 }

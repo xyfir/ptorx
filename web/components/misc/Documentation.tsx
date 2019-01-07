@@ -1,11 +1,9 @@
-import { api } from 'lib/api';
-import marked from 'marked';
+import { parseQuery } from 'lib/parse-query-string';
+import * as marked from 'marked';
 import * as React from 'react';
+import { api } from 'lib/api';
 
-// Modules
-import query from 'lib/parse-query-string';
-
-export default class Documentation extends React.Component {
+export class Documentation extends React.Component {
   constructor(props) {
     super(props);
 
@@ -26,7 +24,7 @@ export default class Documentation extends React.Component {
 
     this.setState({ loading: false });
 
-    const { section } = query(location.hash);
+    const { section } = parseQuery(location.hash);
 
     if (section) {
       // Doesn't work without delay. No idea why

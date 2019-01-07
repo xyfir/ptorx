@@ -1,20 +1,19 @@
 import * as React from 'react';
 
-// Components
-import Messages from 'components/emails/messages/Router';
-import Create from 'components/emails/Create';
-import Edit from 'components/emails/Edit';
-import List from 'components/emails/List';
+import { MessagesRouter } from 'components/emails/messages/Router';
+import { CreateEmail } from 'components/emails/Create';
+import { EditEmail } from 'components/emails/Edit';
+import { EmailList } from 'components/emails/List';
 
-export default props => {
+export const EmailsRouter = props => {
   switch (props.App.state.view.split('/')[1]) {
     case 'MESSAGES':
-      return <Messages {...props} />;
+      return <MessagesRouter {...props} />;
     case 'CREATE':
-      return <Create {...props} />;
+      return <CreateEmail {...props} />;
     case 'EDIT':
-      return <Edit {...props} />;
+      return <EditEmail {...props} />;
     case 'LIST':
-      return <List {...props} />;
+      return <EmailList {...props} />;
   }
 };

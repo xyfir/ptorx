@@ -1,15 +1,11 @@
 import { TextField, Button, Paper } from 'react-md';
+import { EmailNavigation } from 'components/emails/Navigation';
+import { updateCredits } from 'actions/account';
 import * as React from 'react';
 import * as swal from 'sweetalert';
 import { api } from 'lib/api';
 
-// Components
-import Navigation from 'components/emails/Navigation';
-
-// Actions
-import { updateCredits } from 'actions/account';
-
-export default class SendMessage extends React.Component {
+export class SendMessage extends React.Component {
   constructor(props) {
     super(props);
 
@@ -36,7 +32,7 @@ export default class SendMessage extends React.Component {
   render() {
     return (
       <div className="message-send">
-        <Navigation email={this.state.id} />
+        <EmailNavigation email={this.state.id} />
 
         <Paper zDepth={1} component="section" className="section flex">
           <TextField

@@ -1,20 +1,14 @@
+import { LANDING_PAGES } from 'constants/landing-pages';
+import { HowItWorks } from 'components/info/HowItWorks';
+import { PwnCheck } from 'components/info/PwnCheck';
+import { Button } from 'react-md';
 import * as React from 'react';
 
-// Constants
-import pages from 'constants/landing-pages';
-
-// react-md
-import Button from 'react-md/lib/Buttons/Button';
-
-// Components
-import HowItWorks from 'components/info/HowItWorks';
-import PwnCheck from 'components/info/PwnCheck';
-
-export default class LandingPage extends React.Component {
+export class LandingPage extends React.Component {
   constructor(props) {
     super(props);
 
-    document.title = pages[props.page].title + ' - Ptorx';
+    document.title = LANDING_PAGES[props.page].title + ' - Ptorx';
   }
 
   render() {
@@ -23,9 +17,9 @@ export default class LandingPage extends React.Component {
     return (
       <div className={'landing-page ' + page}>
         <header>
-          <h2>{pages[page].title}</h2>
+          <h2>{LANDING_PAGES[page].title}</h2>
 
-          <p>{pages[page].description}</p>
+          <p>{LANDING_PAGES[page].description}</p>
 
           <HowItWorks />
         </header>
@@ -54,7 +48,7 @@ export default class LandingPage extends React.Component {
         <section className="more-info">
           <p>
             <strong>Ptorx has lots of features</strong>, and is used for much
-            more than just {pages[page].featuresMessage}. Check our
+            more than just {LANDING_PAGES[page].featuresMessage}. Check our
             <strong>
               <a href="features"> features list </a>
             </strong>

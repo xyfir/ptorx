@@ -1,29 +1,40 @@
+import { filterTypes, modifierTypes } from 'constants/types';
+import { LinkModifier } from 'components/modifiers/Link';
+import { LinkFilter } from 'components/filters/Link';
+import * as moment from 'moment';
+import * as React from 'react';
+import { api } from 'lib/api';
 import {
+  DialogContainer,
   TabsContainer,
   SelectField,
   TextField,
   Checkbox,
   ListItem,
   Button,
-  DialogContainer,
   Paper,
   List,
   Tabs,
   Tab
 } from 'react-md';
-import PropTypes from 'prop-types';
-import { api } from 'lib/api';
-import * as moment from 'moment';
-import * as React from 'react';
 
-// Components
-import LinkModifier from 'components/modifiers/Link';
-import LinkFilter from 'components/filters/Link';
+export class EmailForm extends React.Component {
+  static defaultProps = {
+    email: {
+      name: '',
+      description: '',
+      toEmail: '',
+      spamFilter: true,
+      saveMail: false,
+      directForward: false,
+      noToAddress: false,
+      filters: [],
+      modifiers: [],
+      domain: 1
+    },
+    create: false
+  };
 
-// Constants
-import { filterTypes, modifierTypes } from 'constants/types';
-
-export default class EmailForm extends React.Component {
   constructor(props) {
     super(props);
 
@@ -453,28 +464,3 @@ export default class EmailForm extends React.Component {
     );
   }
 }
-
-EmailForm.propTypes = {
-  App: PropTypes.object.isRequired,
-  data: PropTypes.object.isRequired,
-  email: PropTypes.object,
-  create: PropTypes.bool,
-  dispatch: PropTypes.func.isRequired,
-  onSubmit: PropTypes.func.isRequired
-};
-
-EmailForm.defaultProps = {
-  email: {
-    name: '',
-    description: '',
-    toEmail: '',
-    spamFilter: true,
-    saveMail: false,
-    directForward: false,
-    noToAddress: false,
-    filters: [],
-    modifiers: [],
-    domain: 1
-  },
-  create: false
-};

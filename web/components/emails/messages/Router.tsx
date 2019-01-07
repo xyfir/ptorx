@@ -1,17 +1,15 @@
+import { SendMessage } from 'components/emails/messages/Send';
+import { ViewMessage } from 'components/emails/messages/View';
+import { MessageList } from 'components/emails/messages/List';
 import * as React from 'react';
 
-// Components
-import Send from 'components/emails/messages/Send';
-import View from 'components/emails/messages/View';
-import List from 'components/emails/messages/List';
-
-export default props => {
+export const MessagesRouter = props => {
   switch (props.App.state.view.split('/')[2]) {
     case 'SEND':
-      return <Send {...props} />;
+      return <SendMessage {...props} />;
     case 'VIEW':
-      return <View {...props} />;
+      return <ViewMessage {...props} />;
     case 'LIST':
-      return <List {...props} />;
+      return <MessageList {...props} />;
   }
 };

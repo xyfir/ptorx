@@ -1,23 +1,12 @@
+import { SelectField, ListItem, Dialog, List } from 'react-md';
+import { loadMessages, deleteMessage } from 'actions/messages';
+import { EmailNavigation } from 'components/emails/Navigation';
+import { messageTypes } from 'constants/types';
 import * as React from 'react';
 import * as swal from 'sweetalert';
 import { api } from 'lib/api';
 
-// Components
-import Navigation from 'components/emails/Navigation';
-
-// react-md
-import SelectField from 'react-md/lib/SelectFields';
-import ListItem from 'react-md/lib/Lists/ListItem';
-import Dialog from 'react-md/lib/Dialogs';
-import List from 'react-md/lib/Lists/List';
-
-// Action creators
-import { loadMessages, deleteMessage } from 'actions/messages';
-
-// Constants
-import { messageTypes } from 'constants/types';
-
-export default class MessageList extends React.Component {
+export class MessageList extends React.Component {
   constructor(props) {
     super(props);
 
@@ -72,7 +61,7 @@ export default class MessageList extends React.Component {
 
     return (
       <div className="messages flex">
-        <Navigation email={emailId} />
+        <EmailNavigation email={emailId} />
 
         <SelectField
           id="select--type"

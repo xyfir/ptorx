@@ -1,17 +1,15 @@
+import { CreateFilter } from 'components/filters/Create';
+import { EditFilter } from 'components/filters/Edit';
+import { FilterList } from 'components/filters/List';
 import * as React from 'react';
 
-// Components
-import Create from './Create';
-import Edit from './Edit';
-import List from './List';
-
-export default props => {
+export const FiltersRouter = props => {
   switch (props.App.state.view.split('/')[1]) {
     case 'CREATE':
-      return <Create {...props} />;
+      return <CreateFilter {...props} />;
     case 'EDIT':
-      return <Edit {...props} />;
+      return <EditFilter {...props} />;
     case 'LIST':
-      return <List {...props} />;
+      return <FilterList {...props} />;
   }
 };

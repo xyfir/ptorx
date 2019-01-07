@@ -1,17 +1,10 @@
 import { ListItem, List } from 'react-md';
-import PropTypes from 'prop-types';
+import { modifierTypes } from 'constants/types';
+import { findMatching } from 'lib/find-matching';
+import { Search } from 'components/misc/Search';
 import * as React from 'react';
 
-// Components
-import Search from 'components/misc/Search';
-
-// Constants
-import { modifierTypes } from 'constants/types';
-
-// Modules
-import findMatches from 'lib/find-matching';
-
-export default class LinkModifier extends React.Component {
+export class LinkModifier extends React.Component {
   constructor(props) {
     super(props);
 
@@ -26,7 +19,7 @@ export default class LinkModifier extends React.Component {
         <Search onSearch={v => this.setState({ search: v })} type="modifier" />
 
         <List className="modifiers-list section md-paper md-paper--1">
-          {findMatches(
+          {findMatching(
             this.props.data.modifiers,
             this.state.search,
             this.props.ignore
@@ -45,10 +38,3 @@ export default class LinkModifier extends React.Component {
     );
   }
 }
-
-LinkModifier.propTypes = {
-  data: PropTypes.object.isRequired,
-  onAdd: PropTypes.func.isRequired,
-  ignore: PropTypes.arrayOf(PropTypes.object).isRequired,
-  dispatch: PropTypes.func.isRequired
-};

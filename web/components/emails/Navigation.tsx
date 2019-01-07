@@ -1,7 +1,7 @@
 import { Button } from 'react-md';
 import * as React from 'react';
 
-export default ({ email }) => (
+export const EmailNavigation = ({ email }) => (
   <nav className="navbar">
     <Button
       flat

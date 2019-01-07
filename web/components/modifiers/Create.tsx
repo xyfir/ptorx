@@ -1,14 +1,10 @@
-import { api } from 'lib/api';
+import { ModifierForm } from 'components/modifiers/Form';
+import { addModifier } from 'actions/modifiers';
 import * as React from 'react';
 import * as swal from 'sweetalert';
+import { api } from 'lib/api';
 
-// Components
-import Form from 'components/modifiers/Form';
-
-// Action creators
-import { addModifier } from 'actions/modifiers';
-
-export default class CreateModifier extends React.Component {
+export class CreateModifier extends React.Component {
   constructor(props) {
     super(props);
   }
@@ -38,6 +34,6 @@ export default class CreateModifier extends React.Component {
   }
 
   render() {
-    return <Form onSubmit={(m, d) => this.onCreate(m, d)} />;
+    return <ModifierForm onSubmit={(m, d) => this.onCreate(m, d)} />;
   }
 }
