@@ -9,26 +9,27 @@ module.exports = {
   mode: config.ENVIRONMENT,
 
   entry: {
-    Affiliate: './components/Affiliate.jsx',
-    Info: './components/Info.jsx',
-    App: './components/App.jsx'
+    Affiliate: './components/Affiliate.tsx',
+    Info: './components/Info.tsx',
+    App: './components/App.tsx'
   },
 
   output: {
     publicPath: '/static/js/',
     filename: PROD ? '[name].[hash].js' : '[name].js',
+    pathinfo: false,
     path: path.resolve(__dirname, 'dist/js')
   },
 
   resolve: {
     modules: [__dirname, 'node_modules'],
-    extensions: ['.js', '.jsx']
+    extensions: ['.ts', '.tsx', '.js', '.jsx']
   },
 
   module: {
     rules: [
       {
-        test: /\.jsx?$/,
+        test: /\.(js|jsx|ts|tsx)$/,
         loader: 'babel-loader',
         include: [
           path.resolve(__dirname, 'actions'),
@@ -40,6 +41,7 @@ module.exports = {
         exclude: /node_modules/,
         options: {
           presets: [
+            ['@babel/preset-typescript', { isTSX: true, allExtensions: true }],
             [
               '@babel/preset-env',
               {
@@ -54,7 +56,8 @@ module.exports = {
               }
             ],
             '@babel/preset-react'
-          ]
+          ],
+          plugins: ['@babel/plugin-proposal-class-properties']
         }
       }
     ]
@@ -67,5 +70,21 @@ module.exports = {
       }
     }),
     PROD ? new CompressionPlugin({ filename: '[path].gz' }) : null
-  ].filter(p => p !== null)
+  ].filter(p => p !== null),
+
+  devtool: 'inline-source-map',
+
+  watchOptions: {
+    aggregateTimeout: 500,
+    ignored: ['node_modules', 'dist']
+  },
+
+  devServer: {
+    historyApiFallback: true,
+    /** @todo remove this eventually */
+    disableHostCheck: true,
+    contentBase: path.join(__dirname, 'dist'),
+    port: 20070,
+    hot: true
+  }
 };

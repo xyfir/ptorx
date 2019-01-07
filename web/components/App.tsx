@@ -1,5 +1,3 @@
-import '@babel/polyfill';
-
 import { Button, DialogContainer } from 'react-md';
 import { render } from 'react-dom';
 import request from 'superagent';
