@@ -12,7 +12,7 @@ module.exports = {
   entry: './lib/index.ts',
 
   output: {
-    publicPath: '/static/js/',
+    publicPath: '/static/',
     filename: PROD ? '[name].[hash].js' : '[name].js',
     pathinfo: false,
     path: path.resolve(__dirname, 'dist')
