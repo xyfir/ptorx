@@ -30,6 +30,7 @@
     "qs": "^6.6.0",
     "react": "^16.7.0",
     "react-dom": "^16.7.0",
+    "react-hot-loader": "^4.6.3",
     "react-md": "^1.9.2",
     "sweetalert": "^2.1.2"
   },

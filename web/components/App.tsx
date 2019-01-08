@@ -17,6 +17,7 @@ import { render } from 'react-dom';
 import * as React from 'react';
 import * as swal from 'sweetalert';
 import { Store } from 'lib/store';
+import { hot } from 'react-hot-loader';
 import { api } from 'lib/api';
 
 class App extends React.Component {
@@ -216,4 +217,4 @@ class App extends React.Component {
   }
 }
 
-render(<App />, document.getElementById('content'));
+render(hot(module)(App), document.getElementById('content'));

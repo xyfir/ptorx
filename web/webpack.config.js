@@ -57,7 +57,10 @@ module.exports = {
             ],
             '@babel/preset-react'
           ],
-          plugins: ['@babel/plugin-proposal-class-properties']
+          plugins: [
+            '@babel/plugin-proposal-class-properties',
+            'react-hot-loader/babel'
+          ]
         }
       }
     ]
@@ -69,7 +72,8 @@ module.exports = {
         NODE_ENV: JSON.stringify(config.ENVIRONMENT)
       }
     }),
-    PROD ? new CompressionPlugin({ filename: '[path].gz' }) : null
+    PROD ? new CompressionPlugin({ filename: '[path].gz' }) : null,
+    PROD ? null : new webpack.HotModuleReplacementPlugin()
   ].filter(p => p !== null),
 
   devtool: 'inline-source-map',
