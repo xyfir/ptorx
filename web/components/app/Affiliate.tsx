@@ -1,10 +1,9 @@
 import { TextField, Button } from 'react-md';
-import { render } from 'react-dom';
-import { api } from 'lib/api';
 import * as React from 'react';
 import * as swal from 'sweetalert';
+import { api } from 'lib/api';
 
-class Affiliate extends React.Component {
+export class Affiliate extends React.Component {
   constructor(props) {
     super(props);
 
@@ -92,5 +91,3 @@ class Affiliate extends React.Component {
     );
   }
 }
-
-render(<Affiliate />, document.getElementById('content'));

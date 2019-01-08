@@ -3,13 +3,12 @@ import { Documentation } from 'components/misc/Documentation';
 import { LandingPage } from 'components/info/LandingPage';
 import { parseQuery } from 'lib/parse-query-string';
 import { Features } from 'components/info/Features';
-import { render } from 'react-dom';
 import * as React from 'react';
 import * as Blog from '@xyfir/blog';
 import { Home } from 'components/info/Home';
 import { api } from 'lib/api';
 
-class PtorxInfo extends React.Component {
+export class Info extends React.Component {
   constructor(props) {
     super(props);
 
@@ -136,5 +135,3 @@ class PtorxInfo extends React.Component {
     );
   }
 }
-
-render(<PtorxInfo />, document.getElementById('content'));
