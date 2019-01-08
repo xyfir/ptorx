@@ -23,6 +23,21 @@ app.use(
     saveUninitialized: false
   })
 );
+if (!CONFIG.PROD) {
+  app.use((req, res, next) => {
+    req.session.uid = 1;
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header(
+      'Access-Control-Allow-Methods',
+      'GET, POST, OPTIONS, PUT, DELETE'
+    );
+    res.header(
+      'Access-Control-Allow-Headers',
+      'Origin, X-Requested-With, Content-Type, Accept'
+    );
+    next();
+  });
+}
 app.use(parser.json({ limit: '26mb' }));
 app.use(parser.urlencoded({ extended: true, limit: '26mb' }));
 app.get('/affiliate', (req, res) =>
@@ -30,9 +45,8 @@ app.get('/affiliate', (req, res) =>
 );
 app.use('/static', Express.static(__dirname + '../web/dist'));
 app.use('/api/6', router);
-app.get('/*', (req, res) => {
-  if (!CONFIG.PROD) req.session.uid = 1;
-  res.sendFile(path.resolve(CONFIG.DIRECTORIES.CLIENT, 'dist', 'index.html'));
-});
+app.get('/*', (req, res) =>
+  res.sendFile(path.resolve(CONFIG.DIRECTORIES.CLIENT, 'dist', 'index.html'))
+);
 
 if (CONFIG.CRON) cron();
