@@ -5,4 +5,8 @@
 @import 'info.scss';
 @import 'markdown.scss';
 @import 'affiliate.scss';
-@import '../node_modules/@xyfir/blog/dist/blog.css';
+
+@import '~@xyfir/blog/dist/blog.css';
+
+$material-icons-font-path: '~material-icons/iconfont/';
+@import '~material-icons/iconfont/material-icons.scss';
