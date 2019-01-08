@@ -59,6 +59,26 @@ module.exports = {
             'react-hot-loader/babel'
           ]
         }
+      },
+      {
+        test: /\.s?css$/,
+        use: [
+          'style-loader',
+          'css-loader',
+          {
+            loader: 'sass-loader',
+            options: { outputStyle: PROD ? 'compressed' : 'expanded' }
+          }
+        ]
+      },
+      {
+        test: /\.(png|woff|woff2|eot|ttf|svg)$/,
+        use: [
+          {
+            loader: 'file-loader',
+            options: { publicPath: '/static' }
+          }
+        ]
       }
     ]
   },

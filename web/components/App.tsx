@@ -1,3 +1,4 @@
+import 'styles/styles.scss';
 import 'typeface-roboto';
 
 import { XACC, LOG_STATE, ENVIRONMENT } from 'constants/config';
