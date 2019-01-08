@@ -1,3 +1,5 @@
+import 'typeface-roboto';
+
 import { XACC, LOG_STATE, ENVIRONMENT } from 'constants/config';
 import { changeView, hideWelcome } from 'actions/index';
 import { Button, DialogContainer } from 'react-md';
