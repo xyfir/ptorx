@@ -1,8 +1,8 @@
 import { ListItem, Button, Dialog, List } from 'react-md';
 import { loadModifiers, deleteModifier } from 'actions/modifiers';
+import { LocalPagination } from 'components/misc/Pagination';
 import { modifierTypes } from 'constants/types';
 import { findMatching } from 'lib/find-matching';
-import { Pagination } from 'components/misc/Pagination';
 import { Search } from 'components/misc/Search';
 import * as React from 'react';
 import * as swal from 'sweetalert';
@@ -82,7 +82,7 @@ export class ModifierList extends React.Component {
             ))}
         </List>
 
-        <Pagination
+        <LocalPagination
           itemsPerPage={25}
           onGoTo={p => this.setState({ page: p })}
           items={this.props.data.modifiers.length}

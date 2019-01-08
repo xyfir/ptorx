@@ -1,8 +1,8 @@
 import { List, Button, DialogContainer, ListItem } from 'react-md';
 import { loadFilters, deleteFilter } from 'actions/filters';
+import { LocalPagination } from 'components/misc/Pagination';
 import { findMatching } from 'lib/find-matching';
 import { filterTypes } from 'constants/types';
-import { Pagination } from 'components/misc/Pagination';
 import { loadEmails } from 'actions/emails';
 import { Search } from 'components/misc/Search';
 import * as React from 'react';
@@ -160,7 +160,7 @@ export class FilterList extends React.Component {
             ))}
         </List>
 
-        <Pagination
+        <LocalPagination
           itemsPerPage={25}
           onGoTo={p => this.setState({ page: p })}
           items={this.props.data.filters.length}
