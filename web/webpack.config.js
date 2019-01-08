@@ -45,9 +45,9 @@ module.exports = {
                 targets: {
                   browsers: [
                     'last 2 Chrome versions',
-                    'last 2 Firefox versions',
-                    'last 2 iOS versions',
-                    'last 2 Android versions'
+                    'last 2 Firefox versions'
+                    // 'last 1 iOS versions',
+                    // 'last 1 Android versions'
                   ]
                 }
               }
