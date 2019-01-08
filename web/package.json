@@ -32,7 +32,8 @@
     "react-dom": "^16.7.0",
     "react-hot-loader": "^4.6.3",
     "react-md": "^1.9.2",
-    "sweetalert": "^2.1.2"
+    "sweetalert": "^2.1.2",
+    "typeface-roboto": "0.0.54"
   },
   "devDependencies": {
     "@babel/core": "^7.2.2",
@@ -46,6 +47,7 @@
     "@types/react-dom": "^16.0.11",
     "babel-loader": "^8.0.5",
     "compression-webpack-plugin": "^2.0.0",
+    "html-webpack-plugin": "^3.2.0",
     "node-sass": "^4.11.0",
     "typescript": "^3.2.2",
     "webpack": "^4.28.3",

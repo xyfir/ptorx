@@ -1,4 +1,5 @@
 const CompressionPlugin = require('compression-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 const webpack = require('webpack');
 const config = require('./constants/config');
 const path = require('path');
@@ -8,17 +9,13 @@ const PROD = config.ENVIRONMENT == 'production';
 module.exports = {
   mode: config.ENVIRONMENT,
 
-  entry: {
-    Affiliate: './components/Affiliate.tsx',
-    Info: './components/Info.tsx',
-    App: './components/App.tsx'
-  },
+  entry: './components/App.tsx',
 
   output: {
     publicPath: '/static/js/',
     filename: PROD ? '[name].[hash].js' : '[name].js',
     pathinfo: false,
-    path: path.resolve(__dirname, 'dist/js')
+    path: path.resolve(__dirname, 'dist')
   },
 
   resolve: {
@@ -71,6 +68,11 @@ module.exports = {
       'process.env': {
         NODE_ENV: JSON.stringify(config.ENVIRONMENT)
       }
+    }),
+    new HtmlWebpackPlugin({
+      title: 'Send & Receive Mail Anonymously with Ptorx',
+      minify: PROD,
+      template: 'template.html'
     }),
     PROD ? new CompressionPlugin({ filename: '[path].gz' }) : null,
     PROD ? null : new webpack.HotModuleReplacementPlugin()
