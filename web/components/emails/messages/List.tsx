@@ -1,4 +1,4 @@
-import { SelectField, ListItem, Dialog, List } from 'react-md';
+import { SelectField, ListItem, DialogContainer, List } from 'react-md';
 import { loadMessages, deleteMessage } from 'actions/messages';
 import { EmailNavigation } from 'components/emails/Navigation';
 import { messageTypes } from 'constants/types';
@@ -89,7 +89,7 @@ export class MessageList extends React.Component {
           <h3>This inbox is empty.</h3>
         )}
 
-        <Dialog
+        <DialogContainer
           id="selected-message"
           title={selected && messages.find(m => m.id == selected).subject}
           onHide={() => this.setState({ selected: '' })}
@@ -110,7 +110,7 @@ export class MessageList extends React.Component {
             />
             <ListItem primaryText="Delete" onClick={() => this.onDelete()} />
           </List>
-        </Dialog>
+        </DialogContainer>
       </div>
     );
   }

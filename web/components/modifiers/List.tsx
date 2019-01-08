@@ -1,4 +1,4 @@
-import { ListItem, Button, Dialog, List } from 'react-md';
+import { ListItem, Button, DialogContainer, List } from 'react-md';
 import { loadModifiers, deleteModifier } from 'actions/modifiers';
 import { LocalPagination } from 'components/misc/Pagination';
 import { modifierTypes } from 'constants/types';
@@ -89,7 +89,7 @@ export class ModifierList extends React.Component {
           page={this.state.page}
         />
 
-        <Dialog
+        <DialogContainer
           id="selected-modifier"
           title={
             !this.state.selected
@@ -104,7 +104,7 @@ export class ModifierList extends React.Component {
             <ListItem primaryText="Edit" onClick={() => this.onEdit()} />
             <ListItem primaryText="Delete" onClick={() => this.onDelete()} />
           </List>
-        </Dialog>
+        </DialogContainer>
       </div>
     );
   }
