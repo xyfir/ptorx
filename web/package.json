@@ -2,7 +2,7 @@
   "name": "@xyfir/ptorx-web",
   "version": "6.0.0",
   "description": "Ptorx web application",
-  "main": "app.js",
+  "main": "",
   "scripts": {
     "watch": "webpack-cli --watch",
     "start": "webpack-dev-server",

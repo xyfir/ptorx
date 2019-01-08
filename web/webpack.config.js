@@ -9,7 +9,7 @@ const PROD = config.ENVIRONMENT == 'production';
 module.exports = {
   mode: config.ENVIRONMENT,
 
-  entry: './components/App.tsx',
+  entry: './lib/index.ts',
 
   output: {
     publicPath: '/static/js/',

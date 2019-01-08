@@ -1,6 +1,3 @@
-import 'styles/styles.scss';
-import 'typeface-roboto';
-
 import { XACC, LOG_STATE, ENVIRONMENT } from 'constants/config';
 import { changeView, hideWelcome } from 'actions/index';
 import { Button, DialogContainer } from 'react-md';
@@ -16,14 +13,13 @@ import { EmailsRouter } from 'components/emails/Router';
 import { QuickSearch } from 'components/app/QuickSearch';
 import { parseQuery } from 'lib/parse-query-string';
 import { getView } from 'lib/get-view';
-import { render } from 'react-dom';
 import * as React from 'react';
 import * as swal from 'sweetalert';
 import { Store } from 'lib/store';
 import { hot } from 'react-hot-loader';
 import { api } from 'lib/api';
 
-class App extends React.Component {
+class _App extends React.Component {
   constructor(props) {
     super(props);
 
@@ -220,4 +216,4 @@ class App extends React.Component {
   }
 }
 
-render(hot(module)(App), document.getElementById('content'));
+export const App = hot(module)(_App);
