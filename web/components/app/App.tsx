@@ -1,7 +1,5 @@
-import { RouteComponentProps, Switch, Route, Link } from 'react-router-dom';
 import { XACC, LOG_STATE, ENVIRONMENT } from 'constants/config';
 import { Button, DialogContainer } from 'react-md';
-import { CREATE_REDIRECT_EMAIL } from 'constants/views';
 import { INITIALIZE_STATE } from 'constants/actions';
 import { ModifiersRouter } from 'components/modifiers/Router';
 import { Documentation } from 'components/misc/Documentation';
@@ -17,6 +15,13 @@ import * as swal from 'sweetalert';
 import { Store } from 'lib/store';
 import { api } from 'lib/api';
 import * as qs from 'qs';
+import {
+  RouteComponentProps,
+  Redirect,
+  Switch,
+  Route,
+  Link
+} from 'react-router-dom';
 
 export class App extends React.Component<{}, RouteComponentProps> {
   constructor(props) {
@@ -45,8 +50,7 @@ export class App extends React.Component<{}, RouteComponentProps> {
           credits: 0,
           emails: [],
           uid: 0
-        },
-        view: CREATE_REDIRECT_EMAIL
+        }
       };
 
       api
@@ -166,6 +170,7 @@ export class App extends React.Component<{}, RouteComponentProps> {
                 <Documentation file={p.match.params.file} {...props} {...p} />
               )}
             />
+            <Redirect from="/" to="/app/emails/create" />
           </Switch>
         </div>
 

@@ -1,6 +1,5 @@
 import { SelectField, Paper } from 'react-md';
 import { setEmailTemplate } from 'actions/account';
-import * as VIEWS from 'constants/views';
 import * as React from 'react';
 import { api } from 'lib/api';
 
@@ -31,30 +30,6 @@ export class AccountSettings extends React.Component {
             Choose the page that the Ptorx application will go to when it first
             launches.
           </p>
-
-          <SelectField
-            id="select--default-page"
-            label="Page"
-            onChange={v => (localStorage.defaultView = v)}
-            className="md-full-width"
-            menuItems={[
-              {
-                label: 'Quick Search',
-                value: VIEWS.QUICK_SEARCH
-              },
-              {
-                label: 'Email-Only Search',
-                value: VIEWS.LIST_REDIRECT_EMAILS
-              },
-              {
-                label: 'Create Proxy Email',
-                value: VIEWS.CREATE_REDIRECT_EMAIL
-              }
-            ]}
-            defaultValue={
-              localStorage.defaultView || VIEWS.CREATE_REDIRECT_EMAIL
-            }
-          />
         </Paper>
 
         <Paper
