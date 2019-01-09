@@ -40,9 +40,6 @@ if (!CONFIG.PROD) {
 }
 app.use(parser.json({ limit: '26mb' }));
 app.use(parser.urlencoded({ extended: true, limit: '26mb' }));
-app.get('/affiliate', (req, res) =>
-  res.sendFile(__dirname + '/views/affiliate.html')
-);
 app.use('/static', Express.static(__dirname + '../web/dist'));
 app.use('/api/6', router);
 app.get('/*', (req, res) =>
