@@ -1,23 +1,27 @@
-import * as React from 'react';
-
-// Components
+import { RouteComponentProps, Switch, Route } from 'react-router-dom';
 import { PurchaseCredits } from 'components/account/credits/Purchase';
 import { AccountSettings } from 'components/account/Settings';
 import { PrimaryEmails } from 'components/account/PrimaryEmails';
 import { EarnCredits } from 'components/account/credits/Earn';
+import * as React from 'react';
 
-// Constants
-import * as VIEWS from 'constants/views';
-
-export const AccountRouter = props => {
-  switch (props.App.state.view) {
-    case VIEWS.PURCHASE_CREDITS:
-      return <PurchaseCredits {...props} />;
-    case VIEWS.PRIMARY_EMAILS:
-      return <PrimaryEmails {...props} />;
-    case VIEWS.EARN_CREDITS:
-      return <EarnCredits {...props} />;
-    case VIEWS.SETTINGS:
-      return <AccountSettings {...props} />;
-  }
-};
+export const AccountRouter = (props: RouteComponentProps) => (
+  <Switch>
+    <Route
+      path={`${props.match.path}/credits/purchase`}
+      render={p => <PurchaseCredits {...props} {...p} />}
+    />
+    <Route
+      path={`${props.match.path}/credits/earn`}
+      render={p => <EarnCredits {...props} {...p} />}
+    />
+    <Route
+      path={`${props.match.path}/settings`}
+      render={p => <AccountSettings {...props} {...p} />}
+    />
+    <Route
+      path={`${props.match.path}/primary-emails`}
+      render={p => <PrimaryEmails {...props} {...p} />}
+    />
+  </Switch>
+);

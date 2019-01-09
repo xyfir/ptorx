@@ -147,8 +147,7 @@ export class AppNavigation extends React.Component {
               id="menu--create-item"
               menuItems={[
                 <Subheader primaryText="Create a new:" />,
-                !App.state.account.emails.length ||
-                App.state.view == 'EMAILS/CREATE' ? (
+                !App.state.account.emails.length ? (
                   <a />
                 ) : (
                   <a href="#/emails/create?instant=1">

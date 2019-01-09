@@ -4,7 +4,7 @@ import * as React from 'react';
 import * as swal from 'sweetalert';
 import { api } from 'lib/api';
 
-export class UpdateModifier extends React.Component {
+export class EditModifier extends React.Component {
   constructor(props) {
     super(props);
 

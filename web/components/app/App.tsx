@@ -1,3 +1,4 @@
+import { RouteComponentProps, Switch, Route } from 'react-router-dom';
 import { XACC, LOG_STATE, ENVIRONMENT } from 'constants/config';
 import { changeView, hideWelcome } from 'actions/index';
 import { Button, DialogContainer } from 'react-md';
@@ -6,20 +7,19 @@ import { INITIALIZE_STATE } from 'constants/actions';
 import { ModifiersRouter } from 'components/modifiers/Router';
 import { Documentation } from 'components/misc/Documentation';
 import { AppNavigation } from 'components/app/Navigation';
-import { DomainsRouter } from 'components/domains/Domains';
+import { DomainsRouter } from 'components/domains/Router';
 import { AccountRouter } from 'components/account/Router';
 import { FiltersRouter } from 'components/filters/Router';
 import { EmailsRouter } from 'components/emails/Router';
 import { QuickSearch } from 'components/app/QuickSearch';
 import { parseQuery } from 'lib/parse-query-string';
-import { getView } from 'lib/get-view';
 import * as React from 'react';
 import * as swal from 'sweetalert';
 import { Store } from 'lib/store';
 import { hot } from 'react-hot-loader';
 import { api } from 'lib/api';
 
-class _App extends React.Component {
+class _App extends React.Component<{}, RouteComponentProps> {
   constructor(props) {
     super(props);
 
@@ -79,18 +79,6 @@ class _App extends React.Component {
             state
           });
           this.state = state;
-
-          // Set state based on current url hash
-          Store.dispatch(changeView(getView(state)));
-
-          // Update state according to url hash
-          window.onhashchange = () => {
-            // Force old hash route format to new one
-            // `#${route}` -> `#/${route}`
-            if (location.hash.indexOf('#/') != 0)
-              return (location.hash = '#/' + location.hash.substr(1));
-            Store.dispatch(changeView(getView(state)));
-          };
         })
         .catch(err => swal('Error', err.response.data.error, 'error'));
     };
@@ -144,37 +132,51 @@ class _App extends React.Component {
     if (!this.state) return null;
 
     const { account, welcome } = this.state;
-
-    const view = (() => {
-      const props = {
-        data: this.state,
-        dispatch: Store.dispatch,
-        App: this // eventually remove other props and just use App
-      };
-
-      switch (this.state.view.split('/')[0]) {
-        case 'QUICK_SEARCH':
-          return <QuickSearch {...props} />;
-        case 'MODIFIERS':
-          return <ModifiersRouter {...props} />;
-        case 'DOMAINS':
-          return <DomainsRouter {...props} />;
-        case 'ACCOUNT':
-          return <AccountRouter {...props} />;
-        case 'FILTERS':
-          return <FiltersRouter {...props} />;
-        case 'EMAILS':
-          return <EmailsRouter {...props} />;
-        case 'DOCS':
-          return <Documentation file={location.hash.split('/')[2]} />;
-      }
-    })();
+    const { match } = this.props;
+    const props = {
+      data: this.state,
+      dispatch: Store.dispatch,
+      App: this // eventually remove other props and just use App
+    };
 
     return (
       <div className="ptorx">
         <AppNavigation App={this} />
 
-        <div className="main md-toolbar-relative">{view}</div>
+        <div className="main md-toolbar-relative">
+          <Switch>
+            <Route
+              path={`${match.path}/quick-search`}
+              render={p => <QuickSearch {...props} {...p} />}
+            />
+            <Route
+              path={`${match.path}/modifiers`}
+              render={p => <ModifiersRouter {...props} {...p} />}
+            />
+            <Route
+              path={`${match.path}/domains`}
+              render={p => <DomainsRouter {...props} {...p} />}
+            />
+            <Route
+              path={`${match.path}/account`}
+              render={p => <AccountRouter {...props} {...p} />}
+            />
+            <Route
+              path={`${match.path}/filters`}
+              render={p => <FiltersRouter {...props} {...p} />}
+            />
+            <Route
+              path={`${match.path}/emails`}
+              render={p => <EmailsRouter {...props} {...p} />}
+            />
+            <Route
+              path={`${match.path}/docs/:file(tos|help|privacy)`}
+              render={p => (
+                <Documentation file={p.match.params.file} {...props} {...p} />
+              )}
+            />
+          </Switch>
+        </div>
 
         <DialogContainer
           id="welcome-dialog"
