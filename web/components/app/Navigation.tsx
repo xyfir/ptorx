@@ -46,7 +46,7 @@ export class AppNavigation extends React.Component {
           primaryText="Modifiers"
         />
       </Link>,
-      <Link to="/app/domains">
+      <Link to="/app/domains/list">
         <ListItem
           leftIcon={<FontIcon>domain</FontIcon>}
           primaryText="Domains"
@@ -177,7 +177,7 @@ export class AppNavigation extends React.Component {
                     primaryText="Modifier"
                   />
                 </Link>,
-                <Link to="/app/domains/add">
+                <Link to="/app/domains/create">
                   <ListItem
                     leftIcon={<FontIcon>domain</FontIcon>}
                     primaryText="Domain"

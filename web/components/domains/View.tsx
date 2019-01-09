@@ -42,7 +42,7 @@ export class ViewDomain extends React.Component<RouteComponentProps> {
           `/domains/${this.state.id}/users/${this.props.data.account.uid}`
         )
       )
-      .then(() => this.props.history.push('/app/domains'))
+      .then(() => this.props.history.push('/app/domains/list'))
       .catch(err => swal('Error', err.response.data.error, 'error'));
   }
 
@@ -56,7 +56,7 @@ export class ViewDomain extends React.Component<RouteComponentProps> {
       icon: 'warning'
     })
       .then(() => api.delete(`/domains/${this.state.id}`))
-      .then(() => this.props.history.push('/app/domains'))
+      .then(() => this.props.history.push('/app/domains/list'))
       .catch(err => swal('Error', err.response.data.error, 'error'));
   }
 
@@ -104,7 +104,7 @@ export class ViewDomain extends React.Component<RouteComponentProps> {
         res.data.loading = false;
         this.setState(res.data);
       })
-      .catch(() => this.props.history.push('/app/domains'));
+      .catch(() => this.props.history.push('/app/domains/list'));
   }
 
   render() {

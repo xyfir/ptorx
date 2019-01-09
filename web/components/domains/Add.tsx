@@ -210,7 +210,7 @@ export class AddDomain extends React.Component {
               domain's status on Ptorx and to check if the records are valid.
             </p>
 
-            <Link to={`/app/domains/${this.state.domainId}`}>
+            <Link to={`/app/domains/view/${this.state.domainId}`}>
               <Button primary raised>
                 View Domain
               </Button>
