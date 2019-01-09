@@ -1,6 +1,7 @@
 import { SelectField, TextField, Checkbox, Button, Paper } from 'react-md';
 import { filterTypes } from 'constants/types';
 import * as React from 'react';
+import { Link } from 'react-router-dom';
 
 export class FilterForm extends React.Component {
   static defaultProps = {
@@ -142,9 +143,9 @@ export class FilterForm extends React.Component {
 
             <div className="linked-emails">
               {filter.linkedTo.map(email => (
-                <a key={email.id} href={`#/emails/edit/${email.id}`}>
+                <Link key={email.id} to={`/app/emails/edit/${email.id}`}>
                   {email.address}
-                </a>
+                </Link>
               ))}
             </div>
           </Paper>

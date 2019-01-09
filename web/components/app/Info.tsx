@@ -1,12 +1,12 @@
 import { ListItem, Toolbar, Divider, Drawer, Button } from 'react-md';
+import { Switch, Route, Link } from 'react-router-dom';
 import { Documentation } from 'components/misc/Documentation';
-import { Switch, Route } from 'react-router-dom';
 import { LandingPage } from 'components/info/LandingPage';
-import { parseQuery } from 'lib/parse-query-string';
 import { Features } from 'components/info/Features';
 import * as React from 'react';
 import { Home } from 'components/info/Home';
 import { api } from 'lib/api';
+import * as qs from 'qs';
 
 export class Info extends React.Component<
   {},
@@ -19,10 +19,8 @@ export class Info extends React.Component<
   }
 
   componentDidMount() {
-    const q = parseQuery(location.href); // in hash or search
-
+    const q = qs.parse(location.search);
     for (let k in q) localStorage[k] = q[k];
-
     api
       .get('/account', { params: { token: localStorage.accessToken || '' } })
       .then(res => this.setState({ loggedIn: res.data.loggedIn }));
@@ -35,11 +33,7 @@ export class Info extends React.Component<
           colored
           fixed
           actions={[
-            <Button
-              icon
-              iconChildren="home"
-              onClick={() => (location.href = '../')}
-            />
+            <Button to="/" icon iconChildren="home" component={Link} />
           ]}
           title="Ptorx"
           nav={
@@ -56,9 +50,9 @@ export class Info extends React.Component<
           autoclose={true}
           navItems={(this.state.loggedIn
             ? [
-                <a href="/app/">
+                <Link to="/app">
                   <ListItem primaryText="App" />
-                </a>
+                </Link>
               ]
             : [
                 <a href="https://accounts.xyfir.com/login/service/13">
@@ -71,12 +65,12 @@ export class Info extends React.Component<
           ).concat([
             <Divider />,
 
-            <a href="/features">
+            <Link to="/features">
               <ListItem primaryText="Feature List" />
-            </a>,
-            <a href="/docs">
+            </Link>,
+            <Link to="/docs">
               <ListItem primaryText="Help Docs" />
-            </a>
+            </Link>
           ])}
           visible={this.state.drawer}
           header={

@@ -1,4 +1,5 @@
 import { DialogContainer, ListItem, FontIcon, Button, List } from 'react-md';
+import { RouteComponentProps, Link } from 'react-router-dom';
 import { loadEmails, deleteEmail } from 'actions/emails';
 import { LocalPagination } from 'components/misc/Pagination';
 import { findMatching } from 'lib/find-matching';
@@ -8,7 +9,7 @@ import * as swal from 'sweetalert';
 import * as copy from 'copyr';
 import { api } from 'lib/api';
 
-export class EmailList extends React.Component {
+export class EmailList extends React.Component<RouteComponentProps> {
   constructor(props) {
     super(props);
 
@@ -30,7 +31,9 @@ export class EmailList extends React.Component {
    * Load 'CreateEmail' view with email's values loaded in.
    */
   onDuplicate() {
-    location.hash = '#/emails/create?duplicate=' + this.state.selected;
+    this.props.history.push(
+      `/app/emails/create?duplicate=${this.state.selected}`
+    );
   }
 
   /**
@@ -57,16 +60,10 @@ export class EmailList extends React.Component {
       .catch(err => swal('Error', err.response.data.error, 'error'));
   }
 
-  /**
-   * Open the 'EditEmail' view.
-   */
   onEdit() {
-    location.hash = '#/emails/edit/' + this.state.selected;
+    this.props.history.push(`/app/emails/edit/${this.state.selected}`);
   }
 
-  /**
-   * Copies the proxy email's address to the clipboard.
-   */
   onCopy() {
     const email = this.props.data.emails.find(e => e.id == this.state.selected)
       .address;
@@ -78,15 +75,16 @@ export class EmailList extends React.Component {
   render() {
     return (
       <div className="emails">
-        <Button
-          floating
-          fixed
-          primary
-          tooltipPosition="left"
-          tooltipLabel="Create new proxy email"
-          iconChildren="add"
-          onClick={() => (location.hash = '#/emails/create')}
-        />
+        <Link to="/app/emails/create">
+          <Button
+            floating
+            fixed
+            primary
+            tooltipPosition="left"
+            tooltipLabel="Create new proxy email"
+            iconChildren="add"
+          />
+        </Link>
 
         <Search onSearch={v => this.setState({ search: v })} type="email" />
 

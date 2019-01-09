@@ -1,17 +1,18 @@
+import { RouteComponentProps } from 'react-router-dom';
 import { FilterForm } from 'components/filters/Form';
 import { editFilter } from 'actions/filters';
 import * as React from 'react';
 import * as swal from 'sweetalert';
 import { api } from 'lib/api';
 
-export class EditFilter extends React.Component {
+export class EditFilter extends React.Component<RouteComponentProps> {
   constructor(props) {
     super(props);
 
     this._updateEmails = this._updateEmails.bind(this);
 
     this.state = {
-      id: location.hash.split('/')[3],
+      id: +this.props.match.params.filter,
       loading: true
     };
 
@@ -49,7 +50,7 @@ export class EditFilter extends React.Component {
           )
         );
 
-        location.hash = '#/filters/list';
+        this.props.history.push('/app/filters/list');
         swal('Success', `Filter '${data.name}' updated`, 'success');
 
         // Filter was linked to emails that we must now trigger updates on

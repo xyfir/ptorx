@@ -1,14 +1,15 @@
+import * as React from 'react';
+import { Link } from 'react-router-dom';
 import {
-  ListItem,
-  Toolbar,
   MenuButton,
+  Subheader,
+  ListItem,
+  FontIcon,
+  Toolbar,
   Divider,
   Drawer,
-  Button,
-  FontIcon,
-  Subheader
+  Button
 } from 'react-md';
-import * as React from 'react';
 
 export class AppNavigation extends React.Component {
   constructor(props) {
@@ -30,27 +31,27 @@ export class AppNavigation extends React.Component {
     const { App } = this.props;
 
     return [
-      <a href="#/emails/list">
+      <Link to="/app/emails/list">
         <ListItem leftIcon={<FontIcon>email</FontIcon>} primaryText="Emails" />
-      </a>,
-      <a href="#/filters/list">
+      </Link>,
+      <Link to="/app/filters/list">
         <ListItem
           leftIcon={<FontIcon>filter_list</FontIcon>}
           primaryText="Filters"
         />
-      </a>,
-      <a href="#/modifiers/list">
+      </Link>,
+      <Link to="/app/modifiers/list">
         <ListItem
           leftIcon={<FontIcon>code</FontIcon>}
           primaryText="Modifiers"
         />
-      </a>,
-      <a href="#/domains">
+      </Link>,
+      <Link to="/app/domains">
         <ListItem
           leftIcon={<FontIcon>domain</FontIcon>}
           primaryText="Domains"
         />
-      </a>,
+      </Link>,
 
       <Divider />,
 
@@ -58,28 +59,28 @@ export class AppNavigation extends React.Component {
         leftIcon={<FontIcon>account_box</FontIcon>}
         primaryText="My Account"
         nestedItems={[
-          <a href="#/account/settings">
+          <Link to="/app/account/settings">
             <ListItem
               leftIcon={<FontIcon>settings</FontIcon>}
               primaryText="Settings"
             />
-          </a>,
+          </Link>,
           App.state.account.affiliate ? (
-            <a href="/affiliate">
+            <Link to="/affiliate">
               <ListItem
                 leftIcon={<FontIcon>attach_money</FontIcon>}
                 primaryText="Affiliate"
               />
-            </a>
+            </Link>
           ) : (
             <a />
           ),
-          <a href="#/account/primary-emails">
+          <Link to="/app/account/primary-emails">
             <ListItem
               leftIcon={<FontIcon>email</FontIcon>}
               primaryText="Primary Emails"
             />
-          </a>,
+          </Link>,
           <ListItem
             onClick={() => this.onLogout()}
             leftIcon={<FontIcon>close</FontIcon>}
@@ -92,39 +93,39 @@ export class AppNavigation extends React.Component {
         leftIcon={<FontIcon>info</FontIcon>}
         primaryText="Documentation"
         nestedItems={[
-          <a href="#/docs/help">
+          <Link to="/app/docs/help">
             <ListItem leftIcon={<FontIcon>help</FontIcon>} primaryText="Help" />
-          </a>,
-          <a href="#/docs/privacy">
+          </Link>,
+          <Link to="/app/docs/privacy">
             <ListItem
               leftIcon={<FontIcon>security</FontIcon>}
               primaryText="Privacy Policy"
             />
-          </a>,
-          <a href="#/docs/tos">
+          </Link>,
+          <Link to="/app/docs/tos">
             <ListItem
               leftIcon={<FontIcon>gavel</FontIcon>}
               primaryText="Terms of Service"
             />
-          </a>
+          </Link>
         ]}
       />,
 
       <Divider />,
 
       <Subheader primaryText={`${App.state.account.credits} credits`} />,
-      <a href="#/account/credits/purchase">
+      <Link to="/app/account/credits/purchase">
         <ListItem
           leftIcon={<FontIcon>credit_card</FontIcon>}
           primaryText="Purchase Credits"
         />
-      </a>,
-      <a href="#/account/credits/earn">
+      </Link>,
+      <Link to="/app/account/credits/earn">
         <ListItem
           leftIcon={<FontIcon>money_off</FontIcon>}
           primaryText="Earn Credits"
         />
-      </a>
+      </Link>
     ];
   }
 
@@ -138,9 +139,10 @@ export class AppNavigation extends React.Component {
           fixed
           actions={[
             <Button
+              to="/app/quick-search"
               icon
               iconChildren="search"
-              onClick={() => (location.hash = '#/quick-search')}
+              component={Link}
             />,
             <MenuButton
               icon
@@ -150,37 +152,37 @@ export class AppNavigation extends React.Component {
                 !App.state.account.emails.length ? (
                   <a />
                 ) : (
-                  <a href="#/emails/create?instant=1">
+                  <Link to="/app/emails/create?instant=1">
                     <ListItem
                       leftIcon={<FontIcon>email</FontIcon>}
                       primaryText="Email (Instant)"
                     />
-                  </a>
+                  </Link>
                 ),
-                <a href="#/emails/create">
+                <Link to="/app/emails/create">
                   <ListItem
                     leftIcon={<FontIcon>email</FontIcon>}
                     primaryText="Email (Custom)"
                   />
-                </a>,
-                <a href="#/filters/create">
+                </Link>,
+                <Link to="/app/filters/create">
                   <ListItem
                     leftIcon={<FontIcon>filter_list</FontIcon>}
                     primaryText="Filter"
                   />
-                </a>,
-                <a href="#/modifiers/create">
+                </Link>,
+                <Link to="/app/modifiers/create">
                   <ListItem
                     leftIcon={<FontIcon>code</FontIcon>}
                     primaryText="Modifier"
                   />
-                </a>,
-                <a href="#/domains/add">
+                </Link>,
+                <Link to="/app/domains/add">
                   <ListItem
                     leftIcon={<FontIcon>domain</FontIcon>}
                     primaryText="Domain"
                   />
-                </a>
+                </Link>
               ]}
               iconChildren="add"
             />

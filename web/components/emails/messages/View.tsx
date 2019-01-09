@@ -1,25 +1,25 @@
 import { TextField, Button, Paper } from 'react-md';
 import { EmailNavigation } from 'components/emails/Navigation';
 import { updateCredits } from 'actions/account';
-import { parseQuery } from 'lib/parse-query-string';
 import * as moment from 'moment';
 import * as React from 'react';
 import * as swal from 'sweetalert';
 import { api } from 'lib/api';
+import * as qs from 'qs';
 
 export class ViewMessage extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      id: location.hash.split('/')[3],
-      message: location.hash.split('/')[5],
+      id: +this.props.match.params.email,
+      message: +this.props.match.params.message,
       loading: true,
       content: {},
       showReplyForm: false
     };
 
-    if (parseQuery(location.hash).reply) this.state.showReplyForm = true;
+    if (qs.parse(location.search).reply) this.state.showReplyForm = true;
 
     api
       .get(`/emails/${this.state.id}/messages/${this.state.message}`)

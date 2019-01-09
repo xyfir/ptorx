@@ -1,12 +1,13 @@
-import { parseQuery } from 'lib/parse-query-string';
+import { RouteComponentProps } from 'react-router-dom';
 import { loadEmails } from 'actions/emails';
 import { EmailForm } from 'components/emails/Form';
 import * as moment from 'moment';
 import * as React from 'react';
 import * as swal from 'sweetalert';
 import { api } from 'lib/api';
+import * as qs from 'qs';
 
-export class CreateEmail extends React.Component {
+export class CreateEmail extends React.Component<RouteComponentProps> {
   constructor(props) {
     super(props);
 
@@ -15,7 +16,7 @@ export class CreateEmail extends React.Component {
 
   async componentDidMount() {
     const { App } = this.props;
-    const q = parseQuery(location.hash);
+    const q = qs.parse(location.search);
 
     const copy = +q.duplicate || +App.state.account.email_template;
     let email = App.state.emails.find(e => e.id == copy);
@@ -75,7 +76,9 @@ export class CreateEmail extends React.Component {
       .then(() => {
         // Clear emails so they're loaded again
         this.props.App.dispatch(loadEmails([]));
-        location.hash = '#/emails/list?q=' + encodeURIComponent(data.name);
+        this.props.history.push(
+          `/app/emails/list?q=${encodeURIComponent(data.name)}`
+        );
         swal('Success', `Email '${data.name}' created`, 'success');
       })
       .catch(err => swal('Error', err.response.data.error, 'error'));

@@ -1,6 +1,7 @@
 import { Slider, Button, Paper } from 'react-md';
 import * as React from 'react';
 import * as swal from 'sweetalert';
+import { Link } from 'react-router-dom';
 import { api } from 'lib/api';
 
 export class PurchaseCredits extends React.Component {
@@ -74,7 +75,7 @@ export class PurchaseCredits extends React.Component {
         <div className="info">
           <p>
             Credits allow you to send, receive, reply to, and redirect mail. See
-            the <a href="#/docs/help?section=credits">Help Docs</a> for more
+            the <Link to="/app/docs/help#credits">Help Docs</Link> for more
             information about how they work.
           </p>
           <p>

@@ -3,6 +3,7 @@ import { HowItWorks } from 'components/info/HowItWorks';
 import { PwnCheck } from 'components/info/PwnCheck';
 import { Button } from 'react-md';
 import * as React from 'react';
+import { Link } from 'react-router-dom';
 
 export class LandingPage extends React.Component {
   constructor(props) {
@@ -25,16 +26,11 @@ export class LandingPage extends React.Component {
         </header>
 
         <section className="try-for-free">
-          <Button
-            raised
-            secondary
-            className="try-free"
-            onClick={() =>
-              (location.href = 'https://accounts.xyfir.com/register/service/13')
-            }
-          >
-            Sign Up
-          </Button>
+          <a href="https://accounts.xyfir.com/register/service/13">
+            <Button raised secondary className="try-free">
+              Sign Up
+            </Button>
+          </a>
 
           <p>
             All that's needed to use Ptorx for free is a valid email to create a
@@ -50,7 +46,7 @@ export class LandingPage extends React.Component {
             <strong>Ptorx has lots of features</strong>, and is used for much
             more than just {LANDING_PAGES[page].featuresMessage}. Check our
             <strong>
-              <a href="features"> features list </a>
+              <Link to="/features"> features list </Link>
             </strong>
             to learn about all we can do!
           </p>
@@ -58,7 +54,7 @@ export class LandingPage extends React.Component {
           <p>
             <strong>Confused? Have questions?</strong> Browse through our
             <strong>
-              <a href="docs"> Help Docs </a>
+              <Link to="/docs"> Help Docs </Link>
             </strong>
             or
             <strong>

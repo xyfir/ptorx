@@ -1,28 +1,23 @@
 import { Button } from 'react-md';
 import * as React from 'react';
+import { Link } from 'react-router-dom';
 
 export const EmailNavigation = ({ email }) => (
   <nav className="navbar">
-    <Button
-      flat
-      primary
-      onClick={() => (location.hash = `#/emails/edit/${email}`)}
-    >
-      Email
-    </Button>
-    <Button
-      flat
-      primary
-      onClick={() => (location.hash = `#/emails/messages/${email}/list`)}
-    >
-      Inbox
-    </Button>
-    <Button
-      flat
-      primary
-      onClick={() => (location.hash = `#/emails/messages/${email}/send`)}
-    >
-      Send
-    </Button>
+    <Link to={`/app/emails/edit/${email}`}>
+      <Button flat primary>
+        Email
+      </Button>
+    </Link>
+    <Link to={`/app/emails/messages/${email}/list`}>
+      <Button flat primary>
+        Inbox
+      </Button>
+    </Link>
+    <Link to={`/app/emails/messages/${email}/send`}>
+      <Button flat primary>
+        Send
+      </Button>
+    </Link>
   </nav>
 );

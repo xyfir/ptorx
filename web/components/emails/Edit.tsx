@@ -1,3 +1,4 @@
+import { RouteComponentProps } from 'react-router-dom';
 import { EmailNavigation } from 'components/emails/Navigation';
 import { loadEmails } from 'actions/emails';
 import { EmailForm } from 'components/emails/Form';
@@ -7,21 +8,21 @@ import * as swal from 'sweetalert';
 import * as copy from 'copyr';
 import { api } from 'lib/api';
 
-export class EditEmail extends React.Component {
+export class EditEmail extends React.Component<RouteComponentProps> {
   constructor(props) {
     super(props);
 
     this.state = {
-      id: location.hash.split('/')[3],
+      id: +this.props.match.params.email,
       loading: true
     };
   }
 
   componentDidMount() {
-    const { App } = this.props;
+    const { App, history } = this.props;
     const email = App.state.emails.find(e => e.id == this.state.id);
 
-    if (!email) location.href = '#/emails/list';
+    if (!email) return history.push('/app/emails/list');
 
     api
       .get(`/emails/${this.state.id}`)
@@ -32,12 +33,12 @@ export class EditEmail extends React.Component {
   }
 
   onSubmit(data) {
-    const { App } = this.props;
+    const { App, history } = this.props;
     api
       .put(`/emails/${this.state.id}`, data)
       .then(() => {
         App.dispatch(loadEmails([]));
-        location.hash = '#/emails/list';
+        history.push('/app/emails/list');
         swal('Success', `Email '${data.name}' updated`, 'success');
       })
       .catch(err => swal('Error', err.response.data.error, 'error'));

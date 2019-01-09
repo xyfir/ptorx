@@ -7,12 +7,12 @@ import * as React from 'react';
 export const DomainsRouter = (props: RouteComponentProps) => (
   <Switch>
     <Route
-      path={`${props.match.path}/:domain`}
-      render={p => <ViewDomain {...props} {...p} />}
-    />
-    <Route
       path={`${props.match.path}/add`}
       render={p => <AddDomain {...props} {...p} />}
+    />
+    <Route
+      path={`${props.match.path}/:domain`}
+      render={p => <ViewDomain {...props} {...p} />}
     />
     <Route
       path={props.match.path}

@@ -1,4 +1,5 @@
 import { List, Button, DialogContainer, ListItem } from 'react-md';
+import { RouteComponentProps, Link } from 'react-router-dom';
 import { loadFilters, deleteFilter } from 'actions/filters';
 import { LocalPagination } from 'components/misc/Pagination';
 import { findMatching } from 'lib/find-matching';
@@ -9,7 +10,7 @@ import * as React from 'react';
 import * as swal from 'sweetalert';
 import { api } from 'lib/api';
 
-export class FilterList extends React.Component {
+export class FilterList extends React.Component<RouteComponentProps> {
   constructor(props) {
     super(props);
 
@@ -55,11 +56,8 @@ export class FilterList extends React.Component {
       .catch(err => swal('Error', err.response.data.error, 'error'));
   }
 
-  /**
-   * Open the 'EditFilter' view.
-   */
   onEdit() {
-    location.hash = '#/filters/edit/' + this.state.selected;
+    this.props.history.push(`/app/filters/edit/${this.state.selected}`);
   }
 
   /**
@@ -132,15 +130,16 @@ export class FilterList extends React.Component {
   render() {
     return (
       <div className="filters">
-        <Button
-          floating
-          fixed
-          primary
-          tooltipPosition="left"
-          tooltipLabel="Create new filter"
-          iconChildren="add"
-          onClick={() => (location.hash = '#/filters/create')}
-        />
+        <Link to="/app/filters/create">
+          <Button
+            floating
+            fixed
+            primary
+            tooltipPosition="left"
+            tooltipLabel="Create new filter"
+            iconChildren="add"
+          />
+        </Link>
 
         <Search onSearch={v => this.setState({ search: v })} type="filter" />
 

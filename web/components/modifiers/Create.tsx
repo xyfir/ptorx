@@ -1,19 +1,16 @@
+import { RouteComponentProps } from 'react-router-dom';
 import { ModifierForm } from 'components/modifiers/Form';
 import { addModifier } from 'actions/modifiers';
 import * as React from 'react';
 import * as swal from 'sweetalert';
 import { api } from 'lib/api';
 
-export class CreateModifier extends React.Component {
+export class CreateModifier extends React.Component<RouteComponentProps> {
   constructor(props) {
     super(props);
   }
 
-  /**
-   * @param {object} modifier
-   * @param {object} data
-   */
-  onCreate(modifier, data) {
+  onCreate(modifier: any, data: any) {
     api
       .post('/modifiers', Object.assign({}, modifier, data))
       .then(res => {
@@ -22,13 +19,12 @@ export class CreateModifier extends React.Component {
         modifier.data = data;
         this.props.dispatch(addModifier(modifier));
 
-        if (this.props.onCreate) {
-          this.props.onCreate(res.data.id);
-        } else {
-          location.hash =
-            '#/modifiers/list?q=' + encodeURIComponent(modifier.name);
-          swal('Success', `Modifier '${modifier.name}' created`, 'success');
-        }
+        if (this.props.onCreate) return this.props.onCreate(res.data.id);
+
+        this.props.history.push(
+          `/app/modifiers/list?q=${encodeURIComponent(modifier.name)}`
+        );
+        swal('Success', `Modifier '${modifier.name}' created`, 'success');
       })
       .catch(err => swal('Error', err.response.data.error, 'error'));
   }

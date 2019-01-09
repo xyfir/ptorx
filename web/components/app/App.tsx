@@ -1,6 +1,5 @@
-import { RouteComponentProps, Switch, Route } from 'react-router-dom';
+import { RouteComponentProps, Switch, Route, Link } from 'react-router-dom';
 import { XACC, LOG_STATE, ENVIRONMENT } from 'constants/config';
-import { changeView, hideWelcome } from 'actions/index';
 import { Button, DialogContainer } from 'react-md';
 import { CREATE_REDIRECT_EMAIL } from 'constants/views';
 import { INITIALIZE_STATE } from 'constants/actions';
@@ -12,12 +11,13 @@ import { AccountRouter } from 'components/account/Router';
 import { FiltersRouter } from 'components/filters/Router';
 import { EmailsRouter } from 'components/emails/Router';
 import { QuickSearch } from 'components/app/QuickSearch';
-import { parseQuery } from 'lib/parse-query-string';
+import { hideWelcome } from 'actions/index';
 import * as React from 'react';
 import * as swal from 'sweetalert';
 import { Store } from 'lib/store';
 import { hot } from 'react-hot-loader';
 import { api } from 'lib/api';
+import * as qs from 'qs';
 
 class _App extends React.Component<{}, RouteComponentProps> {
   constructor(props) {
@@ -32,9 +32,8 @@ class _App extends React.Component<{}, RouteComponentProps> {
       const token = localStorage.accessToken || '';
 
       // Access token is required
-      if (!token && ENVIRONMENT != 'development') {
-        location.href = XACC + '/login/service/13';
-      }
+      if (!token && ENVIRONMENT != 'development')
+        return (location.href = `${XACC}/login/service/13`);
 
       const state = {
         modifiers: [],
@@ -54,10 +53,8 @@ class _App extends React.Component<{}, RouteComponentProps> {
       api
         .get('/account', { params: { token } })
         .then(res => {
-          if (!res.data.loggedIn) {
-            location.href = `${XACC}/login/service/13`;
-            return;
-          }
+          if (!res.data.loggedIn)
+            return (location.href = `${XACC}/login/service/13`);
 
           state.account = res.data;
           return Promise.all([
@@ -74,22 +71,17 @@ class _App extends React.Component<{}, RouteComponentProps> {
           state.modifiers = res[3].data.modifiers;
 
           // Push initial state to store
-          Store.dispatch({
-            type: INITIALIZE_STATE,
-            state
-          });
-          this.state = state;
+          Store.dispatch({ type: INITIALIZE_STATE, state });
         })
         .catch(err => swal('Error', err.response.data.error, 'error'));
     };
 
-    const q = parseQuery(location.hash);
+    const q = qs.parse(location.search);
 
-    // PhoneGap app opens to ptorx.com/panel/#?phonegap=1
     if (q.phonegap) {
       localStorage.isPhoneGap = true;
       initialize();
-      location.hash = '';
+      location.search = '';
     }
     // Attempt to login using XID/AUTH or skip to initialize()
     else if (q.xid && q.auth) {
@@ -111,7 +103,7 @@ class _App extends React.Component<{}, RouteComponentProps> {
         .then(res => {
           localStorage.accessToken = res.data.accessToken;
           initialize();
-          location.hash = location.hash.split('?')[0];
+          location.search = '';
         })
         .catch(() => (location.href = `${XACC}/login/service/13`));
     } else {
@@ -134,8 +126,8 @@ class _App extends React.Component<{}, RouteComponentProps> {
     const { account, welcome } = this.state;
     const { match } = this.props;
     const props = {
-      data: this.state,
       dispatch: Store.dispatch,
+      data: this.state,
       App: this // eventually remove other props and just use App
     };
 
@@ -200,14 +192,15 @@ class _App extends React.Component<{}, RouteComponentProps> {
             enabled again and everything will work as before.
           </p>
           <p>
-            Credits can be <a href="#/account/credits/purchase">purchased</a>,
-            or <a href="#/account/credits/earn">earned</a>, and are also
-            rewarded when you <a href="#/account/credits/earn">refer</a> other
-            users to Ptorx!
+            Credits can be{' '}
+            <Link to="/app/account/credits/purchase">purchased</Link>, or{' '}
+            <Link to="/app/account/credits/earn">earned</Link>, and are also
+            rewarded when you <Link to="/app/account/credits/earn">refer</Link>{' '}
+            other users to Ptorx!
           </p>
           <p>
             If you're ever feeling confused, open the app menu and check out the{' '}
-            <a href="#/docs/help">Help Docs</a>!
+            <Link to="/app/docs/help">Help Docs</Link>!
           </p>
           <Button primary raised onClick={() => this.onHideWelcome()}>
             Got it, thanks!

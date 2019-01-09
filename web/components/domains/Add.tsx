@@ -2,6 +2,7 @@ import { addDomain } from 'actions/domains';
 import * as React from 'react';
 import * as copy from 'copyr';
 import * as swal from 'sweetalert';
+import { Link } from 'react-router-dom';
 import { api } from 'lib/api';
 import {
   TableColumn,
@@ -209,15 +210,11 @@ export class AddDomain extends React.Component {
               domain's status on Ptorx and to check if the records are valid.
             </p>
 
-            <Button
-              primary
-              raised
-              onClick={() =>
-                (location.hash = '#/domains/' + this.state.domainId)
-              }
-            >
-              View Domain
-            </Button>
+            <Link to={`/app/domains/${this.state.domainId}`}>
+              <Button primary raised>
+                View Domain
+              </Button>
+            </Link>
           </Paper>
         );
     }

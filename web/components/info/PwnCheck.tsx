@@ -2,6 +2,19 @@ import { TextField, Button, FontIcon } from 'react-md';
 import * as React from 'react';
 import { api } from 'lib/api';
 
+const ProtectMyEmail = ({ email }: { email: string }) => (
+  <a href={`https://accounts.xyfir.com/register/service/13?email=${email}`}>
+    <Button
+      raised
+      primary
+      iconChildren="verified_user"
+      className="protect-my-emails"
+    >
+      Protect My Emails
+    </Button>
+  </a>
+);
+
 export class PwnCheck extends React.Component {
   constructor(props) {
     super(props);
@@ -64,20 +77,7 @@ export class PwnCheck extends React.Component {
             </a>
           </span>
 
-          <Button
-            raised
-            primary
-            iconChildren="verified_user"
-            className="protect-my-emails"
-            onClick={() =>
-              (location.href =
-                'https://accounts.xyfir.com/register/service/13' +
-                '?email=' +
-                this.state.email)
-            }
-          >
-            Protect My Emails
-          </Button>
+          <ProtectMyEmail email={this.state.email} />
 
           <ul className="breaches">
             {this.state.breaches.map(breach => (
@@ -140,20 +140,7 @@ export class PwnCheck extends React.Component {
             ending up in 'people search' websites.
           </p>
 
-          <Button
-            raised
-            primary
-            iconChildren="verified_user"
-            className="protect-my-emails"
-            onClick={() =>
-              (location.href =
-                'https://accounts.xyfir.com/register/service/13' +
-                '?email=' +
-                this.state.email)
-            }
-          >
-            Protect My Emails
-          </Button>
+          <ProtectMyEmail email={this.state.email} />
         </section>
       );
     else
@@ -212,20 +199,7 @@ export class PwnCheck extends React.Component {
             ending up in 'people search' websites.
           </p>
 
-          <Button
-            raised
-            primary
-            iconChildren="verified_user"
-            className="protect-my-emails"
-            onClick={() =>
-              (location.href =
-                'https://accounts.xyfir.com/register/service/13' +
-                '?email=' +
-                this.state.email)
-            }
-          >
-            Protect My Emails
-          </Button>
+          <ProtectMyEmail email={this.state.email} />
         </section>
       );
   }

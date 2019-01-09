@@ -1,6 +1,7 @@
 import { SelectField, TextField, Checkbox, Button, Paper } from 'react-md';
 import { creatableModifierTypes } from 'constants/types';
 import * as React from 'react';
+import { Link } from 'react-router-dom';
 
 export class ModifierForm extends React.Component {
   static defaultProps = {
@@ -305,9 +306,9 @@ export class ModifierForm extends React.Component {
 
             <div className="linked-emails">
               {mod.linkedTo.map(email => (
-                <a key={email.id} href={`#/emails/edit/${email.id}`}>
+                <Link key={email.id} to={`/app/emails/edit/${email.id}`}>
                   {email.address}
-                </a>
+                </Link>
               ))}
             </div>
           </Paper>

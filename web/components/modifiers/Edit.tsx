@@ -1,14 +1,15 @@
+import { RouteComponentProps } from 'react-router-dom';
 import { ModifierForm } from 'components/modifiers/Form';
 import { editModifier } from 'actions/modifiers';
 import * as React from 'react';
 import * as swal from 'sweetalert';
 import { api } from 'lib/api';
 
-export class EditModifier extends React.Component {
+export class EditModifier extends React.Component<RouteComponentProps> {
   constructor(props) {
     super(props);
 
-    this.state = { id: location.hash.split('/')[3], loading: true };
+    this.state = { id: +this.props.match.params.modifier, loading: true };
 
     api
       .get(`/modifiers/${this.state.id}`)
@@ -59,7 +60,7 @@ export class EditModifier extends React.Component {
           )
         );
 
-        location.hash = '#/modifiers/list';
+        this.props.history.push('/app/modifiers/list');
         swal('Success', `Modifier '${modifier.name}' updated`, 'success');
       })
       .catch(err => swal('Error', err.response.data.error, 'error'));

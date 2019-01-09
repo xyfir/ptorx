@@ -3,12 +3,23 @@ import { ListItem, Button, List } from 'react-md';
 import { findMatching } from 'lib/find-matching';
 import { Search } from 'components/misc/Search';
 import * as React from 'react';
+import { Link } from 'react-router-dom';
 
-const ShowMoreButton = props =>
-  props.total <= props.limit ? null : (
-    <Button flat primary onClick={() => (location.hash = props.link)}>
-      Show {props.total - props.limit} More
-    </Button>
+const ShowMoreButton = ({
+  total,
+  limit,
+  link
+}: {
+  total: number;
+  limit: number;
+  link: string;
+}) =>
+  total <= limit ? null : (
+    <Link to={link}>
+      <Button flat primary>
+        Show {total - limit} More
+      </Button>
+    </Link>
   );
 
 export class QuickSearch extends React.Component {
@@ -18,8 +29,7 @@ export class QuickSearch extends React.Component {
     this.state = { search: { query: '' } };
   }
 
-  /** @param {object[]} emails */
-  _renderEmails(emails) {
+  _renderEmails(emails: any[]) {
     const q = this.state.search.query;
 
     return (
@@ -27,7 +37,7 @@ export class QuickSearch extends React.Component {
         <header>
           <h1>Emails</h1>
           <ShowMoreButton
-            link={`#/emails/list?q=${encodeURIComponent(q)}`}
+            link={`/app/emails/list?q=${encodeURIComponent(q)}`}
             limit={7}
             total={emails.length}
           />
@@ -35,22 +45,21 @@ export class QuickSearch extends React.Component {
 
         <List className="proxy-emails-list section md-paper md-paper--1">
           {emails.slice(0, 7).map(email => (
-            <a href={`#/emails/edit/${email.id}`} key={email.id}>
+            <Link to={`/app/emails/edit/${email.id}`} key={email.id}>
               <ListItem
                 threeLines
                 className="email"
                 primaryText={email.name}
                 secondaryText={email.address + '\n' + email.description}
               />
-            </a>
+            </Link>
           ))}
         </List>
       </section>
     );
   }
 
-  /** @param {object[]} filters */
-  _renderFilters(filters) {
+  _renderFilters(filters: any[]) {
     const q = this.state.search.query;
 
     return (
@@ -58,7 +67,7 @@ export class QuickSearch extends React.Component {
         <header>
           <h1>Filters</h1>
           <ShowMoreButton
-            link={`#/filters/list?q=${encodeURIComponent(q)}`}
+            link={`/app/filters/list?q=${encodeURIComponent(q)}`}
             limit={5}
             total={filters.length}
           />
@@ -66,7 +75,7 @@ export class QuickSearch extends React.Component {
 
         <List className="filters-list section md-paper md-paper--1">
           {filters.slice(0, 5).map(filter => (
-            <a href={`#/filters/edit/${filter.id}`} key={filter.id}>
+            <Link to={`/app/filters/edit/${filter.id}`} key={filter.id}>
               <ListItem
                 threeLines
                 className="filter"
@@ -75,15 +84,14 @@ export class QuickSearch extends React.Component {
                   filterTypes[filter.type] + '\n' + filter.description
                 }
               />
-            </a>
+            </Link>
           ))}
         </List>
       </section>
     );
   }
 
-  /** @param {object[]} domains */
-  _renderDomains(domains) {
+  _renderDomains(domains: any[]) {
     const q = this.state.search.query;
 
     return (
@@ -91,7 +99,7 @@ export class QuickSearch extends React.Component {
         <header>
           <h1>Domains</h1>
           <ShowMoreButton
-            link={`#/domains/list?q=${encodeURIComponent(q)}`}
+            link={`/app/domains/list?q=${encodeURIComponent(q)}`}
             limit={3}
             total={domains.length}
           />
@@ -99,17 +107,16 @@ export class QuickSearch extends React.Component {
 
         <List className="domains-list section md-paper md-paper--1">
           {domains.slice(0, 3).map(domain => (
-            <a href={'#/domains/' + domain.id} key={domain.id}>
+            <Link to={`/app/domains/${domain.id}`} key={domain.id}>
               <ListItem primaryText={domain.domain} />
-            </a>
+            </Link>
           ))}
         </List>
       </section>
     );
   }
 
-  /** @param {object[]} modifiers */
-  _renderModifiers(modifiers) {
+  _renderModifiers(modifiers: any[]) {
     const q = this.state.search.query;
 
     return (
@@ -117,7 +124,7 @@ export class QuickSearch extends React.Component {
         <header>
           <h1>Modifiers</h1>
           <ShowMoreButton
-            link={`#/modifiers/list?q=${encodeURIComponent(q)}`}
+            link={`/app/modifiers/list?q=${encodeURIComponent(q)}`}
             limit={5}
             total={modifiers.length}
           />
@@ -125,7 +132,7 @@ export class QuickSearch extends React.Component {
 
         <List className="modifiers-list section md-paper md-paper--1">
           {modifiers.slice(0, 5).map(modifier => (
-            <a href={`#/modifiers/edit/${modifier.id}`} key={modifier.id}>
+            <Link to={`/app/modifiers/edit/${modifier.id}`} key={modifier.id}>
               <ListItem
                 threeLines
                 className="modifier"
@@ -134,7 +141,7 @@ export class QuickSearch extends React.Component {
                   modifierTypes[modifier.type] + '\n' + modifier.description
                 }
               />
-            </a>
+            </Link>
           ))}
         </List>
       </section>

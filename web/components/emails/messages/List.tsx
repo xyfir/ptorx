@@ -4,6 +4,7 @@ import { EmailNavigation } from 'components/emails/Navigation';
 import { messageTypes } from 'constants/types';
 import * as React from 'react';
 import * as swal from 'sweetalert';
+import { Link } from 'react-router-dom';
 import { api } from 'lib/api';
 
 export class MessageList extends React.Component {
@@ -11,7 +12,7 @@ export class MessageList extends React.Component {
     super(props);
 
     this.state = {
-      emailId: +location.hash.split('/')[3],
+      emailId: +this.props.match.params.email,
       loading: true,
       type: 0
     };
@@ -96,18 +97,14 @@ export class MessageList extends React.Component {
           visible={!!selected}
         >
           <List>
-            <ListItem
-              primaryText="View"
-              onClick={() =>
-                (location.hash = `#/emails/messages/${emailId}/view/${selected}`)
-              }
-            />
-            <ListItem
-              primaryText="Reply"
-              onClick={() =>
-                (location.hash = `#/emails/messages/${emailId}/view/${selected}?reply=1`)
-              }
-            />
+            <Link to={`/app/emails/messages/${emailId}/view/${selected}`}>
+              <ListItem primaryText="View" />
+            </Link>
+            <Link
+              to={`/app/emails/messages/${emailId}/view/${selected}?reply=1`}
+            >
+              <ListItem primaryText="Reply" />
+            </Link>
             <ListItem primaryText="Delete" onClick={() => this.onDelete()} />
           </List>
         </DialogContainer>

@@ -1,9 +1,10 @@
+import { RouteComponentProps } from 'react-router-dom';
 import { TextField, Button } from 'react-md';
 import * as React from 'react';
 import * as swal from 'sweetalert';
 import { api } from 'lib/api';
 
-export class Affiliate extends React.Component {
+export class Affiliate extends React.Component<RouteComponentProps> {
   constructor(props) {
     super(props);
 
@@ -15,7 +16,7 @@ export class Affiliate extends React.Component {
       const res = await api.get('/affiliates');
       this.setState(res.data);
     } catch (err) {
-      location.href = '/app';
+      this.props.history.push('/app');
     }
   }
 

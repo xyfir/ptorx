@@ -1,5 +1,6 @@
 import { ListItem, Button, DialogContainer, List } from 'react-md';
 import { loadModifiers, deleteModifier } from 'actions/modifiers';
+import { RouteComponentProps, Link } from 'react-router-dom';
 import { LocalPagination } from 'components/misc/Pagination';
 import { modifierTypes } from 'constants/types';
 import { findMatching } from 'lib/find-matching';
@@ -8,7 +9,7 @@ import * as React from 'react';
 import * as swal from 'sweetalert';
 import { api } from 'lib/api';
 
-export class ModifierList extends React.Component {
+export class ModifierList extends React.Component<RouteComponentProps> {
   constructor(props) {
     super(props);
 
@@ -48,21 +49,22 @@ export class ModifierList extends React.Component {
   }
 
   onEdit() {
-    location.hash = '#/modifiers/edit/' + this.state.selected;
+    this.props.history.push(`/app/modifiers/edit/${this.state.selected}`);
   }
 
   render() {
     return (
       <div className="modifiers">
-        <Button
-          floating
-          fixed
-          primary
-          tooltipPosition="left"
-          tooltipLabel="Create new modifier"
-          iconChildren="add"
-          onClick={() => (location.hash = '#/modifiers/create')}
-        />
+        <Link to="/app/modifiers/create">
+          <Button
+            floating
+            fixed
+            primary
+            tooltipPosition="left"
+            tooltipLabel="Create new modifier"
+            iconChildren="add"
+          />
+        </Link>
 
         <Search onSearch={v => this.setState({ search: v })} type="modifier" />
 

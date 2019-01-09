@@ -1,3 +1,4 @@
+import { RouteComponentProps } from 'react-router-dom';
 import { removeDomain } from 'actions/domains';
 import * as React from 'react';
 import * as copy from 'copyr';
@@ -14,11 +15,11 @@ import {
   Paper
 } from 'react-md';
 
-export class ViewDomain extends React.Component {
+export class ViewDomain extends React.Component<RouteComponentProps> {
   constructor(props) {
     super(props);
 
-    this.state = { id: +location.hash.split('/')[2], loading: true };
+    this.state = { id: +this.props.match.params.domain, loading: true };
 
     this._loadDomain = this._loadDomain.bind(this);
   }
@@ -41,10 +42,7 @@ export class ViewDomain extends React.Component {
           `/domains/${this.state.id}/users/${this.props.data.account.uid}`
         )
       )
-      .then(() => {
-        location.hash = '#/domains';
-        location.reload();
-      })
+      .then(() => this.props.history.push('/app/domains'))
       .catch(err => swal('Error', err.response.data.error, 'error'));
   }
 
@@ -58,10 +56,7 @@ export class ViewDomain extends React.Component {
       icon: 'warning'
     })
       .then(() => api.delete(`/domains/${this.state.id}`))
-      .then(() => {
-        location.hash = '#/domains';
-        location.reload();
-      })
+      .then(() => this.props.history.push('/app/domains'))
       .catch(err => swal('Error', err.response.data.error, 'error'));
   }
 
@@ -109,7 +104,7 @@ export class ViewDomain extends React.Component {
         res.data.loading = false;
         this.setState(res.data);
       })
-      .catch(err => (location.hash = '#/domains'));
+      .catch(() => this.props.history.push('/app/domains'));
   }
 
   render() {

@@ -1,11 +1,12 @@
 import { FontIcon, Button } from 'react-md';
 import { HowItWorks } from 'components/info/HowItWorks';
 import * as React from 'react';
+import { Link } from 'react-router-dom';
 
 const LearnMore = ({ page }) => (
-  <a href={page}>
+  <Link to={page}>
     <FontIcon primary>info</FontIcon>Learn More
-  </a>
+  </Link>
 );
 
 export class Home extends React.Component {
@@ -81,16 +82,11 @@ export class Home extends React.Component {
         </section>
 
         <section className="try-free">
-          <Button
-            secondary
-            raised
-            className="try-free"
-            onClick={() =>
-              (location.href = 'https://accounts.xyfir.com/register/service/13')
-            }
-          >
-            Sign Up
-          </Button>
+          <a href="https://accounts.xyfir.com/register/service/13">
+            <Button secondary raised className="try-free">
+              Sign Up
+            </Button>
+          </a>
 
           <p>
             All that's needed to start using Ptorx for free is a valid email to
@@ -109,11 +105,11 @@ export class Home extends React.Component {
             offer a Google Chrome extension as well as mobile applications.
           </p>
 
-          <a href="/app/">
+          <Link to="/app">
             <Button secondary raised>
               Web
             </Button>
-          </a>
+          </Link>
           <a href="https://goo.gl/UESGjB">
             <Button secondary raised>
               Chrome
