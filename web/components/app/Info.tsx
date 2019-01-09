@@ -1,14 +1,17 @@
 import { ListItem, Toolbar, Divider, Drawer, Button } from 'react-md';
 import { Documentation } from 'components/misc/Documentation';
+import { Switch, Route } from 'react-router-dom';
 import { LandingPage } from 'components/info/LandingPage';
 import { parseQuery } from 'lib/parse-query-string';
 import { Features } from 'components/info/Features';
 import * as React from 'react';
-import * as Blog from '@xyfir/blog';
 import { Home } from 'components/info/Home';
 import { api } from 'lib/api';
 
-export class Info extends React.Component {
+export class Info extends React.Component<
+  {},
+  { drawer: boolean; loggedIn: boolean }
+> {
   constructor(props) {
     super(props);
 
@@ -26,42 +29,6 @@ export class Info extends React.Component {
   }
 
   render() {
-    const view = (() => {
-      const paths = location.pathname.split('/');
-
-      switch (paths[1]) {
-        case 'safe-and-secure-emails':
-        case 'stop-unwanted-mail':
-        case 'anonymous-emails':
-          return <LandingPage page={paths[1]} pwnCheck={true} />;
-        case 'temporary-emails':
-        case 'email-forwarding':
-          return <LandingPage page={paths[1]} />;
-        case 'features':
-          return <Features />;
-        case 'blog':
-          return (
-            <Blog
-              post={paths.length == 6 ? paths.slice(2).join('/') : null}
-              groups={['ptorx']}
-              repository="Xyfir/blog-posts"
-              linkFormat="/blog/{{post.id}}"
-              titleFormat={['Blog – Ptorx', '{{post.title}} – Blog – Ptorx']}
-              descriptionFormat={[
-                'Read about email security and privacy on the Ptorx blog.',
-                '{{post.description}}'
-              ]}
-            />
-          );
-        case 'docs':
-          return <Documentation file="help" />;
-        case '':
-          return <Home />;
-        default:
-          return <h2 className="status-404">Page Not Found</h2>;
-      }
-    })();
-
     return (
       <div className="ptorx-info">
         <Toolbar
@@ -109,9 +76,6 @@ export class Info extends React.Component {
             </a>,
             <a href="/docs">
               <ListItem primaryText="Help Docs" />
-            </a>,
-            <a href="/blog/">
-              <ListItem primaryText="Blog" />
             </a>
           ])}
           visible={this.state.drawer}
@@ -130,7 +94,33 @@ export class Info extends React.Component {
           type={Drawer.DrawerTypes.TEMPORARY}
         />
 
-        <div className="main md-toolbar-relative">{view}</div>
+        <div className="main md-toolbar-relative">
+          <Switch>
+            <Route
+              path="/:path(safe-and-secure-emails|stop-unwanted-mail|anonymous-emails)"
+              render={p => (
+                <LandingPage
+                  pwnCheck={true}
+                  page={p.match.params.path}
+                  {...p}
+                />
+              )}
+            />
+            <Route
+              path="/:path(temporary-emails|email-forwarding)"
+              render={p => <LandingPage page={p.match.params.path} {...p} />}
+            />
+            <Route path="/features" render={p => <Features {...p} />} />
+            <Route
+              path="/docs"
+              render={p => <Documentation {...p} file="help" />}
+            />
+            <Route exact path="/" render={p => <Home {...p} />} />
+            <Route
+              render={() => <h2 className="status-404">Page Not Found</h2>}
+            />
+          </Switch>
+        </div>
       </div>
     );
   }

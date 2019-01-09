@@ -269,20 +269,3 @@ section.pwn-check {
 .status-404 {
   text-align: center;
 }
-
-div.xyfir-blog {
-  padding: 1em;
-
-  * {
-    text-align: left;
-  }
-
-  > ul.posts a,
-  > article h1 {
-    line-height: 1em;
-  }
-
-  a {
-    color: $md-primary-color !important;
-  }
-}
