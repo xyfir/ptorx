@@ -1,17 +1,17 @@
+import { MySQL } from 'lib/MySQL';
 import { rword } from 'rword';
 
 /**
  * Generates an available proxy email address.
- * @async
- * @param {object} db - A connected instance of `lib/MySQL`.
- * @param {number} domain
- * @return {string}
  */
-export async function generateProxyAddress(db, domain) {
+export async function generateProxyAddress(
+  db: MySQL,
+  domain: number
+): Promise<string> {
   const sql = `
     SELECT email_id FROM proxy_emails WHERE address = ? AND domain_id = ?
   `;
-  let email = rword.generateFromPool(1);
+  let email = rword.generateFromPool(1) as string;
 
   while (true) {
     email += Date.now()
