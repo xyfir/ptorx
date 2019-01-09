@@ -40,6 +40,7 @@ export async function deleteProxyEmail(db, email, user) {
       apiKey: CONFIG.MAILGUN_KEY,
       domain: row.domain
     });
+    // @ts-ignore
     await mailgun.routes(row.mgRouteId).delete();
   }
 

@@ -3,7 +3,7 @@ import * as path from 'path';
 
 addPath(path.resolve(__dirname, '../'));
 
-import { deleteUser } from 'lib/user/delete';
+import { deleteUser } from 'lib/users/delete';
 import { MySQL } from 'lib/MySQL';
 
 (async function() {

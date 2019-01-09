@@ -1,4 +1,4 @@
-import { creditUser } from 'lib/user/credit';
+import { creditUser } from 'lib/users/credit';
 import * as CONFIG from 'constants/config';
 import { MySQL } from 'lib/MySQL';
 import axios from 'axios';

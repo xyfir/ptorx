@@ -1,4 +1,4 @@
-import { validateFilter } from 'lib/filter/validate';
+import { validateFilter } from 'lib/filters/validate';
 import { MySQL } from 'lib/MySQL';
 
 /**

@@ -1,6 +1,6 @@
-import { buildMailgunRouteExpression } from 'lib/mg-route/build-expression';
-import { buildMailgunRouteAction } from 'lib/mg-route/build-action';
-import { getProxyEmail } from 'lib/email/get';
+import { buildMailgunRouteExpression } from 'lib/mg-routes/build-expression';
+import { buildMailgunRouteAction } from 'lib/mg-routes/build-action';
+import { getProxyEmail } from 'lib/emails/get';
 import * as Mailgun from 'mailgun-js';
 import * as CONFIG from 'constants/config';
 

@@ -1,6 +1,6 @@
 import * as escapeRegExp from 'escape-string-regexp';
-import { saveMessage } from 'lib/email/save-message';
-import { chargeUser } from 'lib/user/charge';
+import { saveMessage } from 'lib/emails/save-message';
+import { chargeUser } from 'lib/users/charge';
 import * as Mailgun from 'mailgun-js';
 import * as CONFIG from 'constants/config';
 import { MySQL } from 'lib/MySQL';

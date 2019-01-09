@@ -1,5 +1,5 @@
 import { authenticate } from 'lib/affiliates/authenticate';
-import { deleteUser } from 'lib/user/delete';
+import { deleteUser } from 'lib/users/delete';
 import { MySQL } from 'lib/MySQL';
 
 export async function deleteAccountAsAffiliate(req, res) {

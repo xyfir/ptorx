@@ -1,9 +1,9 @@
-import { validateProxyEmailModifiers } from 'lib/email/validate-modifiers';
-import { buildMailgunRouteExpression } from 'lib/mg-route/build-expression';
-import { validateProxyEmailFilters } from 'lib/email/validate-filters';
-import { buildMailgunRouteAction } from 'lib/mg-route/build-action';
-import { validateProxyEmail } from 'lib/email/validate';
-import { requireCredits } from 'lib/user/require-credits';
+import { validateProxyEmailModifiers } from 'lib/emails/validate-modifiers';
+import { buildMailgunRouteExpression } from 'lib/mg-routes/build-expression';
+import { validateProxyEmailFilters } from 'lib/emails/validate-filters';
+import { buildMailgunRouteAction } from 'lib/mg-routes/build-action';
+import { validateProxyEmail } from 'lib/emails/validate';
+import { requireCredits } from 'lib/users/require-credits';
 import * as Mailgun from 'mailgun-js';
 import * as CONFIG from 'constants/config';
 import { MySQL } from 'lib/MySQL';

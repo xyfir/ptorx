@@ -1,4 +1,4 @@
-import { chargeUser } from 'lib/user/charge';
+import { chargeUser } from 'lib/users/charge';
 import * as Mailgun from 'mailgun-js';
 import * as CONFIG from 'constants/config';
 import { MySQL } from 'lib/MySQL';

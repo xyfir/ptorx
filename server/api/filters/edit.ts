@@ -1,5 +1,5 @@
-import { requireCredits } from 'lib/user/require-credits';
-import { validateFilter } from 'lib/filter/validate';
+import { requireCredits } from 'lib/users/require-credits';
+import { validateFilter } from 'lib/filters/validate';
 import { MySQL } from 'lib/MySQL';
 
 export async function editFilter(req, res) {

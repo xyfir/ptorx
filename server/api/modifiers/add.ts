@@ -1,5 +1,5 @@
-import { buildModifierData } from 'lib/modifier/build-data';
-import { validateModifier } from 'lib/modifier/validate';
+import { buildModifierData } from 'lib/modifiers/build-data';
+import { validateModifier } from 'lib/modifiers/validate';
 import { MySQL } from 'lib/MySQL';
 
 export async function addModifier(req, res) {

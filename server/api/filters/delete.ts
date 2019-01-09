@@ -1,4 +1,4 @@
-import { requireCredits } from 'lib/user/require-credits';
+import { requireCredits } from 'lib/users/require-credits';
 import { MySQL } from 'lib/MySQL';
 
 export async function deleteFilter(req, res) {

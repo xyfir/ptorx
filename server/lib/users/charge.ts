@@ -52,6 +52,7 @@ export async function chargeUser(db, user, amount) {
         domain: email.domain
       });
       try {
+        // @ts-ignore
         await mailgun.routes(email.mgRouteId).delete();
         ids.push(email.id);
       } catch (err) {}

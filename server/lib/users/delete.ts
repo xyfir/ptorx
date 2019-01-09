@@ -1,4 +1,4 @@
-import { deleteProxyEmail } from 'lib/email/delete';
+import { deleteProxyEmail } from 'lib/emails/delete';
 
 /**
  * Delete a user from Ptorx, and all of their email routes on Mailgun.
