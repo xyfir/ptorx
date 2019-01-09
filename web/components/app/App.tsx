@@ -15,11 +15,10 @@ import { hideWelcome } from 'actions/index';
 import * as React from 'react';
 import * as swal from 'sweetalert';
 import { Store } from 'lib/store';
-import { hot } from 'react-hot-loader';
 import { api } from 'lib/api';
 import * as qs from 'qs';
 
-class _App extends React.Component<{}, RouteComponentProps> {
+export class App extends React.Component<{}, RouteComponentProps> {
   constructor(props) {
     super(props);
 
@@ -210,5 +209,3 @@ class _App extends React.Component<{}, RouteComponentProps> {
     );
   }
 }
-
-export const App = hot(module)(_App);
