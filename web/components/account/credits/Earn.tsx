@@ -1,13 +1,8 @@
 import { Button, Slider, Divider } from 'react-md';
+import { COINHIVE_KEY } from 'constants/config';
 import * as React from 'react';
 import * as copy from 'copyr';
 import { api } from 'lib/api';
-
-// Actions
-import { updateCredits } from 'actions/account';
-
-// Constants
-import { COINHIVE_KEY } from 'constants/config';
 
 export class EarnCredits extends React.Component {
   constructor(props) {
@@ -108,8 +103,7 @@ export class EarnCredits extends React.Component {
     const res = await api.get(`/account/credits/coinhive`);
     const { earned, credits } = res.data;
     this.setState({ earned });
-    if (typeof credits == 'number')
-      this.props.App.dispatch(updateCredits(credits));
+    // ** update credits
   }
 
   render() {

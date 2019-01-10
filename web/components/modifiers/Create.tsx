@@ -1,6 +1,5 @@
 import { RouteComponentProps } from 'react-router-dom';
 import { ModifierForm } from 'components/modifiers/Form';
-import { addModifier } from 'actions/modifiers';
 import * as React from 'react';
 import * as swal from 'sweetalert';
 import { api } from 'lib/api';
@@ -17,7 +16,7 @@ export class CreateModifier extends React.Component<RouteComponentProps> {
         // Add to state.modifiers
         modifier.id = res.data.id;
         modifier.data = data;
-        this.props.dispatch(addModifier(modifier));
+        // ** (addModifier(modifier));
 
         if (this.props.onCreate) return this.props.onCreate(res.data.id);
 

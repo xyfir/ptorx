@@ -4,9 +4,6 @@ import * as copy from 'copyr';
 import * as swal from 'sweetalert';
 import { api } from 'lib/api';
 
-// Action creators
-import { deleteEmail, addEmail } from 'actions/account';
-
 export class PrimaryEmails extends React.Component {
   constructor(props) {
     super(props);
@@ -20,7 +17,7 @@ export class PrimaryEmails extends React.Component {
     let res: AxiosResponse;
     try {
       res = await api.post(`/account/email/${email}`);
-      this.props.dispatch(addEmail(res.data.id, email));
+      // ** addEmail(res.data.id, email)
       this._email.getField().value = '';
     } catch (err) {
       swal('Error', res.data.error, 'error');
@@ -41,7 +38,7 @@ export class PrimaryEmails extends React.Component {
     try {
       res = await api.delete(`/account/email/${id}`);
       this.setState({ selectedEmail: {} });
-      this.props.dispatch(deleteEmail(id));
+      // ** deleteEmail(id)
     } catch (err) {
       swal('Error', res.data.error, 'error');
     }

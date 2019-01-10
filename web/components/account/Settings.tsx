@@ -1,5 +1,4 @@
 import { SelectField, Paper } from 'react-md';
-import { setEmailTemplate } from 'actions/account';
 import * as React from 'react';
 import { api } from 'lib/api';
 
@@ -11,7 +10,7 @@ export class AccountSettings extends React.Component {
   onSetEmailTemplate(id: number) {
     api
       .put('/account/email/template', { id })
-      .then(() => this.props.App.dispatch(setEmailTemplate(id)))
+      // ** .then(() => (setEmailTemplate(id)))
       .catch(err => swal('Error', err.response.data.error, 'error'));
   }
 

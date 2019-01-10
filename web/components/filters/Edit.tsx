@@ -1,6 +1,5 @@
 import { RouteComponentProps } from 'react-router-dom';
 import { FilterForm } from 'components/filters/Form';
-import { editFilter } from 'actions/filters';
 import * as React from 'react';
 import * as swal from 'sweetalert';
 import { api } from 'lib/api';
@@ -20,15 +19,13 @@ export class EditFilter extends React.Component<RouteComponentProps> {
       .get(`/filters/${this.state.id}`)
       .then(res => {
         delete res.data.error;
-        this.props.dispatch(
-          editFilter(
-            Object.assign(
-              {},
-              this.props.data.filters.find(f => f.id == this.state.id),
-              res.data
-            )
-          )
-        );
+        // ** editFilter(
+        //   Object.assign(
+        //     {},
+        //     this.props.data.filters.find(f => f.id == this.state.id),
+        //     res.data
+        //   )
+        // )
         this.setState({ loading: false });
       })
       .catch(err => swal('Error', err.response.data.error, 'error'));
@@ -40,15 +37,13 @@ export class EditFilter extends React.Component<RouteComponentProps> {
       .then(res => {
         data.id = this.state.id;
 
-        this.props.dispatch(
-          editFilter(
-            Object.assign(
-              {},
-              this.props.data.filters.find(f => f.id == this.state.id),
-              data
-            )
-          )
-        );
+        // ** editFilter(
+        //   Object.assign(
+        //     {},
+        //     this.props.data.filters.find(f => f.id == this.state.id),
+        //     data
+        //   )
+        // )
 
         this.props.history.push('/app/filters/list');
         swal('Success', `Filter '${data.name}' updated`, 'success');

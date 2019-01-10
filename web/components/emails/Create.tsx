@@ -1,5 +1,4 @@
 import { RouteComponentProps } from 'react-router-dom';
-import { loadEmails } from 'actions/emails';
 import { EmailForm } from 'components/emails/Form';
 import * as moment from 'moment';
 import * as React from 'react';
@@ -75,7 +74,7 @@ export class CreateEmail extends React.Component<RouteComponentProps> {
       .post('/emails', data)
       .then(() => {
         // Clear emails so they're loaded again
-        this.props.App.dispatch(loadEmails([]));
+        // ** (loadEmails([]));
         this.props.history.push(
           `/app/emails/list?q=${encodeURIComponent(data.name)}`
         );

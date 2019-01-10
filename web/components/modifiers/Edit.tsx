@@ -1,6 +1,5 @@
 import { RouteComponentProps } from 'react-router-dom';
 import { ModifierForm } from 'components/modifiers/Form';
-import { editModifier } from 'actions/modifiers';
 import * as React from 'react';
 import * as swal from 'sweetalert';
 import { api } from 'lib/api';
@@ -20,15 +19,13 @@ export class EditModifier extends React.Component<RouteComponentProps> {
             ? JSON.parse(res.data.data)
             : res.data.data;
 
-        this.props.dispatch(
-          editModifier(
-            Object.assign(
-              {},
-              this.props.data.modifiers.find(mod => mod.id == this.state.id),
-              res.data
-            )
-          )
-        );
+        //  ** editModifier(
+        //   Object.assign(
+        //     {},
+        //     this.props.data.modifiers.find(mod => mod.id == this.state.id),
+        //     res.data
+        //   )
+        // )
 
         this.setState({
           loading: false,
@@ -50,15 +47,13 @@ export class EditModifier extends React.Component<RouteComponentProps> {
         modifier.id = this.state.id;
         modifier.data = data;
 
-        this.props.dispatch(
-          editModifier(
-            Object.assign(
-              {},
-              this.props.data.modifiers.find(m => m.id == this.state.id),
-              modifier
-            )
-          )
-        );
+        // ** editModifier(
+        //   Object.assign(
+        //     {},
+        //     this.props.data.modifiers.find(m => m.id == this.state.id),
+        //     modifier
+        //   )
+        // )
 
         this.props.history.push('/app/modifiers/list');
         swal('Success', `Modifier '${modifier.name}' updated`, 'success');

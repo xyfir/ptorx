@@ -1,5 +1,4 @@
 import { RouteComponentProps } from 'react-router-dom';
-import { removeDomain } from 'actions/domains';
 import * as React from 'react';
 import * as copy from 'copyr';
 import * as swal from 'sweetalert';
@@ -28,9 +27,6 @@ export class ViewDomain extends React.Component<RouteComponentProps> {
     this._loadDomain();
   }
 
-  /**
-   * Let domain user remove domain from their account.
-   */
   onRemoveFromAccount() {
     swal({
       title: 'Are you sure?',
@@ -46,9 +42,6 @@ export class ViewDomain extends React.Component<RouteComponentProps> {
       .catch(err => swal('Error', err.response.data.error, 'error'));
   }
 
-  /**
-   * Let creator remove domain from Ptorx.
-   */
   onRemoveFromPtorx() {
     swal({
       title: 'Are you sure?',
@@ -60,9 +53,6 @@ export class ViewDomain extends React.Component<RouteComponentProps> {
       .catch(err => swal('Error', err.response.data.error, 'error'));
   }
 
-  /**
-   * Let creator remove a user from their domain.
-   */
   onRemoveUser(id: number) {
     swal({
       title: 'Are you sure?',
@@ -74,9 +64,6 @@ export class ViewDomain extends React.Component<RouteComponentProps> {
       .catch(err => swal('Error', err.response.data.error, 'error'));
   }
 
-  /**
-   * Authorize a user to use domain via request key.
-   */
   onAddUser() {
     api
       .post(`/domains/${this.state.id}/users`, {
@@ -87,9 +74,6 @@ export class ViewDomain extends React.Component<RouteComponentProps> {
       .catch(err => swal('Error', err.response.data.error, 'error'));
   }
 
-  /**
-   * Check if the domain's DNS records have been set correctly.
-   */
   onVerify() {
     api
       .put(`/domains/${this.state.id}/verify`)

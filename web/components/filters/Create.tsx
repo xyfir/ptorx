@@ -1,6 +1,5 @@
 import { RouteComponentProps } from 'react-router-dom';
 import { FilterForm } from 'components/filters/Form';
-import { addFilter } from 'actions/filters';
 import * as React from 'react';
 import * as swal from 'sweetalert';
 import { api } from 'lib/api';
@@ -16,7 +15,7 @@ export class CreateFilter extends React.Component<RouteComponentProps> {
       .then(res => {
         // Add to state.filters
         data.id = res.data.id;
-        this.props.dispatch(addFilter(data));
+        // ** (addFilter(data));
 
         if (this.props.onCreate) return this.props.onCreate(data.id);
 

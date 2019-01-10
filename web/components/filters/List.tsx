@@ -1,10 +1,8 @@
 import { List, Button, DialogContainer, ListItem } from 'react-md';
 import { RouteComponentProps, Link } from 'react-router-dom';
-import { loadFilters, deleteFilter } from 'actions/filters';
 import { LocalPagination } from 'components/misc/Pagination';
 import { findMatching } from 'lib/find-matching';
 import { filterTypes } from 'constants/types';
-import { loadEmails } from 'actions/emails';
 import { Search } from 'components/misc/Search';
 import * as React from 'react';
 import * as swal from 'sweetalert';
@@ -21,9 +19,8 @@ export class FilterList extends React.Component<RouteComponentProps> {
     };
 
     if (props.data.filters.length == 0) {
-      api
-        .get('/filters')
-        .then(res => this.props.dispatch(loadFilters(res.data.filters)));
+      api.get('/filters');
+      // ** .then(res => (loadFilters(res.data.filters)));
     }
 
     this._removeFilter = this._removeFilter.bind(this);
@@ -47,7 +44,7 @@ export class FilterList extends React.Component<RouteComponentProps> {
     api
       .delete(`/filters/${id}`)
       .then(res => {
-        this.props.dispatch(deleteFilter(id));
+        // ** (deleteFilter(id));
 
         // Filter was linked to emails that we must now trigger updates on
         if (res.data.update)
@@ -79,7 +76,7 @@ export class FilterList extends React.Component<RouteComponentProps> {
         });
       });
 
-      this.props.dispatch(loadEmails(emails));
+      // ** (loadEmails(emails));
       return;
     }
 

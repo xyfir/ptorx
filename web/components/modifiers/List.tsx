@@ -1,5 +1,4 @@
 import { ListItem, Button, DialogContainer, List } from 'react-md';
-import { loadModifiers, deleteModifier } from 'actions/modifiers';
 import { RouteComponentProps, Link } from 'react-router-dom';
 import { LocalPagination } from 'components/misc/Pagination';
 import { modifierTypes } from 'constants/types';
@@ -20,9 +19,8 @@ export class ModifierList extends React.Component<RouteComponentProps> {
     };
 
     if (props.data.modifiers.length == 0) {
-      api
-        .get('/modifiers')
-        .then(res => this.props.dispatch(loadModifiers(res.data.modifiers)));
+      api.get('/modifiers');
+      // ** .then(res => (loadModifiers(res.data.modifiers)));
     }
   }
 
@@ -43,7 +41,7 @@ export class ModifierList extends React.Component<RouteComponentProps> {
       .delete(`/modifiers/${id}`)
       .then(res => {
         if (res.data.error) throw 'Could not delete modifier';
-        this.props.dispatch(deleteModifier(id));
+        // ** (deleteModifier(id));
       })
       .catch(err => swal('Error', err.response.data.error, 'error'));
   }

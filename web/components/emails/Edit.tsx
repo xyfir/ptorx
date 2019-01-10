@@ -1,6 +1,5 @@
 import { RouteComponentProps } from 'react-router-dom';
 import { EmailNavigation } from 'components/emails/Navigation';
-import { loadEmails } from 'actions/emails';
 import { EmailForm } from 'components/emails/Form';
 import { Button } from 'react-md';
 import * as React from 'react';
@@ -37,7 +36,7 @@ export class EditEmail extends React.Component<RouteComponentProps> {
     api
       .put(`/emails/${this.state.id}`, data)
       .then(() => {
-        App.dispatch(loadEmails([]));
+        // ** (loadEmails([]));
         history.push('/app/emails/list');
         swal('Success', `Email '${data.name}' updated`, 'success');
       })

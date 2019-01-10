@@ -1,6 +1,5 @@
 import { TextField, Button, Paper } from 'react-md';
 import { EmailNavigation } from 'components/emails/Navigation';
-import { updateCredits } from 'actions/account';
 import * as moment from 'moment';
 import * as React from 'react';
 import * as swal from 'sweetalert';
@@ -35,7 +34,7 @@ export class ViewMessage extends React.Component {
       })
       .then(res => {
         swal('Success', 'Reply sent.', 'success');
-        App.dispatch(updateCredits(res.data.credits));
+        // ** (updateCredits(res.data.credits));
       })
       .catch(err => swal('Error', err.response.data.error, 'error'));
   }

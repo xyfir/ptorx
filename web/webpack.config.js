@@ -29,11 +29,9 @@ module.exports = {
         test: /\.(js|jsx|ts|tsx)$/,
         loader: 'babel-loader',
         include: [
-          path.resolve(__dirname, 'actions'),
           path.resolve(__dirname, 'components'),
           path.resolve(__dirname, 'constants'),
-          path.resolve(__dirname, 'lib'),
-          path.resolve(__dirname, 'reducers')
+          path.resolve(__dirname, 'lib')
         ],
         exclude: /node_modules/,
         options: {

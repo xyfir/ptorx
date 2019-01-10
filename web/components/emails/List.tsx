@@ -1,6 +1,5 @@
 import { DialogContainer, ListItem, FontIcon, Button, List } from 'react-md';
 import { RouteComponentProps, Link } from 'react-router-dom';
-import { loadEmails, deleteEmail } from 'actions/emails';
 import { LocalPagination } from 'components/misc/Pagination';
 import { findMatching } from 'lib/find-matching';
 import { Search } from 'components/misc/Search';
@@ -22,9 +21,8 @@ export class EmailList extends React.Component<RouteComponentProps> {
 
   componentDidMount() {
     if (this.props.data.emails.length) return;
-    api
-      .get('/emails')
-      .then(res => this.props.dispatch(loadEmails(res.data.emails)));
+    api.get('/emails');
+    // ** .then(res => (loadEmails(res.data.emails)));
   }
 
   /**
@@ -56,7 +54,7 @@ export class EmailList extends React.Component<RouteComponentProps> {
 
     api
       .delete(`/emails/${id}`)
-      .then(() => this.props.dispatch(deleteEmail(id)))
+      // ** .then(() => (deleteEmail(id)))
       .catch(err => swal('Error', err.response.data.error, 'error'));
   }
 

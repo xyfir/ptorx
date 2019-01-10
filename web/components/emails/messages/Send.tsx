@@ -1,7 +1,6 @@
 import { TextField, Button, Paper } from 'react-md';
 import { RouteComponentProps } from 'react-router-dom';
 import { EmailNavigation } from 'components/emails/Navigation';
-import { updateCredits } from 'actions/account';
 import * as React from 'react';
 import * as swal from 'sweetalert';
 import { api } from 'lib/api';
@@ -22,7 +21,7 @@ export class SendMessage extends React.Component<RouteComponentProps> {
         content: this._message.value
       })
       .then(res => {
-        App.dispatch(updateCredits(res.data.credits));
+        // ** (updateCredits(res.data.credits));
         swal('Success', `Message sent to ${this._to.value}`, 'success');
         this.props.history.push(`/app/emails/messages/${this.state.id}/list`);
       })

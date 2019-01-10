@@ -1,4 +1,3 @@
-import { addDomain } from 'actions/domains';
 import * as React from 'react';
 import * as copy from 'copyr';
 import * as swal from 'sweetalert';
@@ -51,13 +50,11 @@ export class AddDomain extends React.Component {
             domainId: res.data.domainId,
             domainKey: res.data.domainKey
           });
-          this.props.dispatch(
-            addDomain({
-              id: res.data.domainId,
-              domain,
-              isCreator: true
-            })
-          );
+          // ** addDomain({
+          //   id: res.data.domainId,
+          //   domain,
+          //   isCreator: true
+          // })
         }
       })
       .catch(err => swal('Error', err.response.data.error, 'error'));

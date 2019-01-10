@@ -1,5 +1,4 @@
 import { SelectField, ListItem, DialogContainer, List } from 'react-md';
-import { loadMessages, deleteMessage } from 'actions/messages';
 import { EmailNavigation } from 'components/emails/Navigation';
 import { messageTypes } from 'constants/types';
 import * as React from 'react';
@@ -18,7 +17,6 @@ export class MessageList extends React.Component {
     };
 
     this._loadMessages = this._loadMessages.bind(this);
-
     this._loadMessages(this.state.type);
   }
 
@@ -39,7 +37,7 @@ export class MessageList extends React.Component {
       .then(() => api.delete(`/emails/${this.state.emailId}/messages/${id}`))
       .then(() => {
         this.setState({ selected: '' });
-        this.props.dispatch(deleteMessage(id));
+        // ** (deleteMessage(id));
       })
       .catch(err => swal('Error', err.response.data.error, 'error'));
   }
@@ -48,7 +46,7 @@ export class MessageList extends React.Component {
     api
       .get(`/emails/${this.state.emailId}/messages`, { params: { type } })
       .then(res => {
-        this.props.dispatch(loadMessages(res.data.errors));
+        // ** (loadMessages(res.data.errors));
         this.setState({ loading: false });
       })
       .catch(err => swal('Error', err.response.data.error, 'error'));
