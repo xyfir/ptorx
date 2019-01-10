@@ -1,8 +1,8 @@
 import { DialogContainer, ListItem, FontIcon, Button, List } from 'react-md';
 import { RouteComponentProps, Link } from 'react-router-dom';
-import { LocalPagination } from 'components/misc/Pagination';
+import { LocalPagination } from 'components/common/Pagination';
 import { findMatching } from 'lib/find-matching';
-import { Search } from 'components/misc/Search';
+import { Search } from 'components/common/Search';
 import * as React from 'react';
 import { Ptorx } from 'typings/ptorx';
 import * as swal from 'sweetalert';

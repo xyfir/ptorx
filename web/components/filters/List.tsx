@@ -1,9 +1,9 @@
 import { List, Button, DialogContainer, ListItem } from 'react-md';
 import { RouteComponentProps, Link } from 'react-router-dom';
-import { LocalPagination } from 'components/misc/Pagination';
+import { LocalPagination } from 'components/common/Pagination';
 import { findMatching } from 'lib/find-matching';
 import { filterTypes } from 'constants/types';
-import { Search } from 'components/misc/Search';
+import { Search } from 'components/common/Search';
 import * as React from 'react';
 import * as swal from 'sweetalert';
 import { api } from 'lib/api';

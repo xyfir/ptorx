@@ -1,7 +1,7 @@
 import { List, ListItem } from 'react-md';
 import { findMatching } from 'lib/find-matching';
 import { filterTypes } from 'constants/types';
-import { Search } from 'components/misc/Search';
+import { Search } from 'components/common/Search';
 import * as React from 'react';
 
 export class LinkFilter extends React.Component {

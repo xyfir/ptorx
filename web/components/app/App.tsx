@@ -1,7 +1,7 @@
 import { RouteComponentProps, Redirect, Switch, Route } from 'react-router-dom';
 import { XYACCOUNTS_URL, ENVIRONMENT } from 'constants/config';
 import { ModifiersRouter } from 'components/modifiers/Router';
-import { Documentation } from 'components/misc/Documentation';
+import { Documentation } from 'components/common/Documentation';
 import { AppNavigation } from 'components/app/Navigation';
 import { DomainsRouter } from 'components/domains/Router';
 import { AccountRouter } from 'components/account/Router';

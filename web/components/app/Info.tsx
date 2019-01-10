@@ -1,6 +1,6 @@
 import { ListItem, Toolbar, Divider, Drawer, Button } from 'react-md';
 import { Switch, Route, Link } from 'react-router-dom';
-import { Documentation } from 'components/misc/Documentation';
+import { Documentation } from 'components/common/Documentation';
 import { LandingPage } from 'components/info/LandingPage';
 import { Features } from 'components/info/Features';
 import * as React from 'react';

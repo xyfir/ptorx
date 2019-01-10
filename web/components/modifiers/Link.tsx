@@ -1,7 +1,7 @@
 import { ListItem, List } from 'react-md';
 import { modifierTypes } from 'constants/types';
 import { findMatching } from 'lib/find-matching';
-import { Search } from 'components/misc/Search';
+import { Search } from 'components/common/Search';
 import * as React from 'react';
 
 export class LinkModifier extends React.Component {

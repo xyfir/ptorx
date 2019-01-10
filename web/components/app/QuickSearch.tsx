@@ -1,7 +1,7 @@
 import { modifierTypes, filterTypes } from 'constants/types';
 import { ListItem, Button, List } from 'react-md';
 import { findMatching } from 'lib/find-matching';
-import { Search } from 'components/misc/Search';
+import { Search } from 'components/common/Search';
 import * as React from 'react';
 import { Link } from 'react-router-dom';
 
