@@ -1,5 +1,5 @@
 import { RouteComponentProps, Redirect, Switch, Route } from 'react-router-dom';
-import { XACC, ENVIRONMENT } from 'constants/config';
+import { XYACCOUNTS_URL, ENVIRONMENT } from 'constants/config';
 import { ModifiersRouter } from 'components/modifiers/Router';
 import { Documentation } from 'components/misc/Documentation';
 import { AppNavigation } from 'components/app/Navigation';
