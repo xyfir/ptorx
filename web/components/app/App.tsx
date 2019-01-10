@@ -1,5 +1,4 @@
 import { XACC, LOG_STATE, ENVIRONMENT } from 'constants/config';
-import { Button, DialogContainer } from 'react-md';
 import { INITIALIZE_STATE } from 'constants/actions';
 import { ModifiersRouter } from 'components/modifiers/Router';
 import { Documentation } from 'components/misc/Documentation';
@@ -9,7 +8,7 @@ import { AccountRouter } from 'components/account/Router';
 import { FiltersRouter } from 'components/filters/Router';
 import { EmailsRouter } from 'components/emails/Router';
 import { QuickSearch } from 'components/app/QuickSearch';
-import { hideWelcome } from 'actions/index';
+import { Welcome } from 'components/app/Welcome';
 import * as React from 'react';
 import * as swal from 'sweetalert';
 import { Store } from 'lib/store';
@@ -23,7 +22,7 @@ import {
   Link
 } from 'react-router-dom';
 
-export class App extends React.Component<{}, RouteComponentProps> {
+export class App extends React.Component<RouteComponentProps> {
   constructor(props) {
     super(props);
 
@@ -42,7 +41,6 @@ export class App extends React.Component<{}, RouteComponentProps> {
       const state = {
         modifiers: [],
         messages: [],
-        welcome: !localStorage.hasRun,
         filters: [],
         domains: [],
         emails: [],
@@ -114,11 +112,6 @@ export class App extends React.Component<{}, RouteComponentProps> {
     }
   }
 
-  onHideWelcome() {
-    Store.dispatch(hideWelcome());
-    localStorage.hasRun = true;
-  }
-
   dispatch(action) {
     return Store.dispatch(action);
   }
@@ -174,42 +167,7 @@ export class App extends React.Component<{}, RouteComponentProps> {
           </Switch>
         </div>
 
-        <DialogContainer
-          id="welcome-dialog"
-          onHide={() => this.onHideWelcome()}
-          visible={welcome}
-        >
-          <h2>What are credits?</h2>
-          <p>
-            Before you get started with Ptorx, it's important to take just a
-            second to learn what credits are and how they work. Simply put:
-            credits allow you to send and receive mail. This also includes
-            redirecting incoming mail to your primary addresses and replying to
-            received mail.
-          </p>
-          <p>
-            You have <strong>{account.credits} credits</strong> available.
-            Whenever you send or receive mail your credits will decrease,
-            usually by one or two credits per action. When your credits reach 0,
-            your proxy emails are <em>disabled</em>, meaning they'll no longer
-            work! Once you receive credits afterwards, your proxy emails will be
-            enabled again and everything will work as before.
-          </p>
-          <p>
-            Credits can be{' '}
-            <Link to="/app/account/credits/purchase">purchased</Link>, or{' '}
-            <Link to="/app/account/credits/earn">earned</Link>, and are also
-            rewarded when you <Link to="/app/account/credits/earn">refer</Link>{' '}
-            other users to Ptorx!
-          </p>
-          <p>
-            If you're ever feeling confused, open the app menu and check out the{' '}
-            <Link to="/app/docs/help">Help Docs</Link>!
-          </p>
-          <Button primary raised onClick={() => this.onHideWelcome()}>
-            Got it, thanks!
-          </Button>
-        </DialogContainer>
+        <Welcome />
       </div>
     );
   }

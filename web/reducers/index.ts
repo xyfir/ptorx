@@ -1,5 +1,5 @@
-import { INITIALIZE_STATE, HIDE_WELCOME } from 'constants/actions';
 import { modifiersReducer } from 'reducers/modifiers';
+import { INITIALIZE_STATE } from 'constants/actions';
 import { messagesReducer } from 'reducers/messages';
 import { filtersReducer } from 'reducers/filters';
 import { accountReducer } from 'reducers/account';
@@ -13,7 +13,6 @@ export function stateReducer(state, action) {
   return {
     modifiers: modifiersReducer(state.modifiers, action),
     messages: messagesReducer(state.messages, action),
-    welcome: action.type == HIDE_WELCOME ? false : state.welcome,
     filters: filtersReducer(state.filters, action),
     account: accountReducer(state.account, action),
     domains: domainsReducer(state.domains, action),
