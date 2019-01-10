@@ -1,5 +1,5 @@
 import { RouteComponentProps } from 'react-router-dom';
-import { EmailForm } from 'components/emails/Form';
+import { EmailForm } from 'components/proxy-emails/Form';
 import * as moment from 'moment';
 import * as React from 'react';
 import * as swal from 'sweetalert';
@@ -26,7 +26,7 @@ export class CreateEmail extends React.Component<RouteComponentProps> {
       email.domain = App.state.domains.find(d => d.domain == domain).id;
 
       try {
-        const res = await api.get(`/emails/${copy}`);
+        const res = await api.get(`/proxy-emails/${copy}`);
         email = Object.assign({}, email, res.data);
       } catch (err) {
         email = null;
@@ -71,12 +71,12 @@ export class CreateEmail extends React.Component<RouteComponentProps> {
 
   onSubmit(data) {
     api
-      .post('/emails', data)
+      .post('/proxy-emails', data)
       .then(() => {
         // Clear emails so they're loaded again
         // ** (loadEmails([]));
         this.props.history.push(
-          `/app/emails/list?q=${encodeURIComponent(data.name)}`
+          `/app/proxy-emails/list?q=${encodeURIComponent(data.name)}`
         );
         swal('Success', `Email '${data.name}' created`, 'success');
       })

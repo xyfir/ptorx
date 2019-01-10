@@ -26,18 +26,18 @@ export * from './domains/list';
 export * from './domains/remove';
 export * from './domains/verify';
 
-export * from './emails/messages/delete';
-export * from './emails/messages/get';
-export * from './emails/messages/list';
-export * from './emails/messages/reply';
-export * from './emails/messages/send';
+export * from './proxy-emails/messages/delete';
+export * from './proxy-emails/messages/get';
+export * from './proxy-emails/messages/list';
+export * from './proxy-emails/messages/reply';
+export * from './proxy-emails/messages/send';
 
-export * from './emails/availability';
-export * from './emails/add';
-export * from './emails/delete';
-export * from './emails/get';
-export * from './emails/list';
-export * from './emails/edit';
+export * from './proxy-emails/availability';
+export * from './proxy-emails/add';
+export * from './proxy-emails/delete';
+export * from './proxy-emails/get';
+export * from './proxy-emails/list';
+export * from './proxy-emails/edit';
 
 export * from './filters/add';
 export * from './filters/delete';

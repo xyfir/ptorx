@@ -1,8 +1,8 @@
 import { RouteComponentProps, Switch, Route } from 'react-router-dom';
-import { MessagesRouter } from 'components/emails/messages/Router';
-import { CreateEmail } from 'components/emails/Create';
-import { EditEmail } from 'components/emails/Edit';
-import { EmailList } from 'components/emails/List';
+import { MessagesRouter } from 'components/proxy-emails/messages/Router';
+import { CreateEmail } from 'components/proxy-emails/Create';
+import { EditEmail } from 'components/proxy-emails/Edit';
+import { EmailList } from 'components/proxy-emails/List';
 import * as React from 'react';
 
 export const EmailsRouter = (props: RouteComponentProps) => (

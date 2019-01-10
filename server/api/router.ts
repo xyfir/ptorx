@@ -27,21 +27,21 @@ router.post('/receive/reply', c.receiveReply);
 router.post('/receive/:email', upload.any(), c.receiveMail);
 
 router
-  .route('/emails')
+  .route('/proxy-emails')
   .get(c.getProxyEmails)
   .post(c.addProxyEmail);
-router.get('/emails/availability', c.getProxyEmailAvailability);
+router.get('/proxy-emails/availability', c.getProxyEmailAvailability);
 router
-  .route('/emails/:email')
+  .route('/proxy-emails/:email')
   .get(c.getProxyEmail)
   .put(c.editProxyEmail)
   .delete(c.deleteProxyEmail);
 router
-  .route('/emails/:email/messages')
+  .route('/proxy-emails/:email/messages')
   .get(c.getMessages)
   .post(c.sendMessage);
 router
-  .route('/emails/:email/messages/:message')
+  .route('/proxy-emails/:email/messages/:message')
   .get(c.getMessage)
   .post(c.replyToMessage)
   .delete(c.deleteMessage);

@@ -1,5 +1,5 @@
 import { TextField, Button, Paper } from 'react-md';
-import { EmailNavigation } from 'components/emails/Navigation';
+import { EmailNavigation } from 'components/proxy-emails/Navigation';
 import * as moment from 'moment';
 import * as React from 'react';
 import * as swal from 'sweetalert';
@@ -21,7 +21,7 @@ export class ViewMessage extends React.Component {
     if (qs.parse(location.search).reply) this.state.showReplyForm = true;
 
     api
-      .get(`/emails/${this.state.id}/messages/${this.state.message}`)
+      .get(`/proxy-emails/${this.state.id}/messages/${this.state.message}`)
       .then(res => this.setState({ loading: false, content: res.data }))
       .catch(err => swal('Error', err.response.data.error, 'error'));
   }
@@ -29,7 +29,7 @@ export class ViewMessage extends React.Component {
   onReply() {
     const { App } = this.props;
     api
-      .post(`/emails/${this.state.id}/messages/${this.state.message}`, {
+      .post(`/proxy-emails/${this.state.id}/messages/${this.state.message}`, {
         content: this._message.value
       })
       .then(res => {

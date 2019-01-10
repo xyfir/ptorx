@@ -1,3 +1,4 @@
+import { AppContext } from 'lib/AppContext';
 import * as React from 'react';
 import { Link } from 'react-router-dom';
 import {
@@ -11,28 +12,40 @@ import {
   Button
 } from 'react-md';
 
-export class AppNavigation extends React.Component {
+interface AppNavigationState {
+  drawer: boolean;
+}
+
+export class AppNavigation extends React.Component<{}, AppNavigationState> {
+  static contextType = AppContext;
+  context!: React.ContextType<typeof AppContext>;
+
+  state: AppNavigationState = { drawer: false };
+
   constructor(props) {
     super(props);
-
-    this.state = { drawer: false };
   }
 
-  /**
-   * Delete access token and redirect to logout.
-   */
   onLogout() {
     delete localStorage.accessToken;
     location.href = '/api/6/account/logout';
   }
 
-  /** @return {JSX.Element[]} */
   _renderDrawerNavItems() {
-    const { App } = this.props;
+    const { account } = this.context;
 
     return [
-      <Link to="/app/emails/list">
-        <ListItem leftIcon={<FontIcon>email</FontIcon>} primaryText="Emails" />
+      <Link to="/app/proxy-emails/list">
+        <ListItem
+          leftIcon={<FontIcon>email</FontIcon>}
+          primaryText="Proxy Emails"
+        />
+      </Link>,
+      <Link to="/app/primary-emails">
+        <ListItem
+          leftIcon={<FontIcon>email</FontIcon>}
+          primaryText="Primary Emails"
+        />
       </Link>,
       <Link to="/app/filters/list">
         <ListItem
@@ -65,7 +78,7 @@ export class AppNavigation extends React.Component {
               primaryText="Settings"
             />
           </Link>,
-          App.state.account.affiliate ? (
+          account.affiliate ? (
             <Link to="/affiliate">
               <ListItem
                 leftIcon={<FontIcon>attach_money</FontIcon>}
@@ -75,12 +88,6 @@ export class AppNavigation extends React.Component {
           ) : (
             <a />
           ),
-          <Link to="/app/account/primary-emails">
-            <ListItem
-              leftIcon={<FontIcon>email</FontIcon>}
-              primaryText="Primary Emails"
-            />
-          </Link>,
           <ListItem
             onClick={() => this.onLogout()}
             leftIcon={<FontIcon>close</FontIcon>}
@@ -113,7 +120,7 @@ export class AppNavigation extends React.Component {
 
       <Divider />,
 
-      <Subheader primaryText={`${App.state.account.credits} credits`} />,
+      <Subheader primaryText={`${account.credits} credits`} />,
       <Link to="/app/account/credits/purchase">
         <ListItem
           leftIcon={<FontIcon>credit_card</FontIcon>}
@@ -130,8 +137,6 @@ export class AppNavigation extends React.Component {
   }
 
   render() {
-    const { App } = this.props;
-
     return (
       <React.Fragment>
         <Toolbar
@@ -149,17 +154,13 @@ export class AppNavigation extends React.Component {
               id="menu--create-item"
               menuItems={[
                 <Subheader primaryText="Create a new:" />,
-                !App.state.account.emails.length ? (
-                  <a />
-                ) : (
-                  <Link to="/app/emails/create?instant=1">
-                    <ListItem
-                      leftIcon={<FontIcon>email</FontIcon>}
-                      primaryText="Email (Instant)"
-                    />
-                  </Link>
-                ),
-                <Link to="/app/emails/create">
+                <Link to="/app/proxy-emails/create?instant=1">
+                  <ListItem
+                    leftIcon={<FontIcon>email</FontIcon>}
+                    primaryText="Email (Instant)"
+                  />
+                </Link>,
+                <Link to="/app/proxy-emails/create">
                   <ListItem
                     leftIcon={<FontIcon>email</FontIcon>}
                     primaryText="Email (Custom)"

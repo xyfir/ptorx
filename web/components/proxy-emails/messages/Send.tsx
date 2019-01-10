@@ -1,6 +1,6 @@
 import { TextField, Button, Paper } from 'react-md';
 import { RouteComponentProps } from 'react-router-dom';
-import { EmailNavigation } from 'components/emails/Navigation';
+import { EmailNavigation } from 'components/proxy-emails/Navigation';
 import * as React from 'react';
 import * as swal from 'sweetalert';
 import { api } from 'lib/api';
@@ -15,7 +15,7 @@ export class SendMessage extends React.Component<RouteComponentProps> {
     const { App } = this.props;
 
     api
-      .post(`/emails/${this.state.id}/messages/`, {
+      .post(`/proxy-emails/${this.state.id}/messages/`, {
         to: this._to.value,
         subject: this._subject.value,
         content: this._message.value
@@ -23,7 +23,7 @@ export class SendMessage extends React.Component<RouteComponentProps> {
       .then(res => {
         // ** (updateCredits(res.data.credits));
         swal('Success', `Message sent to ${this._to.value}`, 'success');
-        this.props.history.push(`/app/emails/messages/${this.state.id}/list`);
+        this.props.history.push(`/app/proxy-emails/messages/${this.state.id}/list`);
       })
       .catch(err => swal('Error', err.response.data.error, 'error'));
   }

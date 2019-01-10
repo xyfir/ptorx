@@ -40,7 +40,7 @@ export class EmailList extends React.Component<
 
   onDuplicate() {
     this.props.history.push(
-      `/app/emails/create?duplicate=${this.state.selected}`
+      `/app/proxy-emails/create?duplicate=${this.state.selected}`
     );
   }
 
@@ -57,13 +57,13 @@ export class EmailList extends React.Component<
     if (!confirm) return;
 
     await api
-      .delete(`/emails/${this.state.selected}`)
+      .delete(`/proxy-emails/${this.state.selected}`)
       .then(() => this.load())
       .catch(err => swal('Error', err.response.data.error, 'error'));
   }
 
   onEdit() {
-    this.props.history.push(`/app/emails/edit/${this.state.selected}`);
+    this.props.history.push(`/app/proxy-emails/edit/${this.state.selected}`);
   }
 
   onCopy() {
@@ -74,7 +74,7 @@ export class EmailList extends React.Component<
   }
 
   async load() {
-    const res = await api.get('/emails');
+    const res = await api.get('/proxy-emails');
     this.setState({ proxyEmails: res.data.emails });
   }
 
@@ -83,7 +83,7 @@ export class EmailList extends React.Component<
 
     return (
       <div className="emails">
-        <Link to="/app/emails/create">
+        <Link to="/app/proxy-emails/create">
           <Button
             floating
             fixed

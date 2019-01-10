@@ -69,12 +69,12 @@ export class EditFilter extends React.Component<RouteComponentProps> {
     // All emails need to be loaded
     if (email === undefined) {
       api
-        .get('/emails')
+        .get('/proxy-emails')
         .then(res => this._updateEmails(id, res.data.emails, update, index));
     }
     // Full email data needs to be loaded
     else if (email.toEmail === undefined) {
-      api.get(`/emails/${email.id}`).then(res => {
+      api.get(`/proxy-emails/${email.id}`).then(res => {
         email = Object.assign(email, res.data);
         emails.forEach((e, i) => {
           if (e.id == email.id) emails[i] = email;
@@ -88,7 +88,7 @@ export class EditFilter extends React.Component<RouteComponentProps> {
       const filters = email.filters.map(f => f.id).join(',');
 
       api
-        .put(`/emails/${email.id}`, {
+        .put(`/proxy-emails/${email.id}`, {
           modifiers,
           filters,
           to: email.toEmail,

@@ -1,4 +1,4 @@
-import { getProxyEmail as _getProxyEmail } from 'lib/emails/get';
+import { getProxyEmail as _getProxyEmail } from 'lib/proxy-emails/get';
 import { MySQL } from 'lib/MySQL';
 
 export async function getProxyEmail(req, res) {

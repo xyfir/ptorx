@@ -37,7 +37,7 @@ export class QuickSearch extends React.Component {
         <header>
           <h1>Emails</h1>
           <ShowMoreButton
-            link={`/app/emails/list?q=${encodeURIComponent(q)}`}
+            link={`/app/proxy-emails/list?q=${encodeURIComponent(q)}`}
             limit={7}
             total={emails.length}
           />
@@ -45,7 +45,7 @@ export class QuickSearch extends React.Component {
 
         <List className="proxy-emails-list section md-paper md-paper--1">
           {emails.slice(0, 7).map(email => (
-            <Link to={`/app/emails/edit/${email.id}`} key={email.id}>
+            <Link to={`/app/proxy-emails/edit/${email.id}`} key={email.id}>
               <ListItem
                 threeLines
                 className="email"

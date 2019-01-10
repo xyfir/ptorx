@@ -1,7 +1,6 @@
 import { RouteComponentProps, Switch, Route } from 'react-router-dom';
 import { PurchaseCredits } from 'components/account/credits/Purchase';
 import { AccountSettings } from 'components/account/Settings';
-import { PrimaryEmails } from 'components/account/PrimaryEmails';
 import { EarnCredits } from 'components/account/credits/Earn';
 import * as React from 'react';
 
@@ -18,10 +17,6 @@ export const AccountRouter = (props: RouteComponentProps) => (
     <Route
       path={`${props.match.path}/settings`}
       render={p => <AccountSettings {...props} {...p} />}
-    />
-    <Route
-      path={`${props.match.path}/primary-emails`}
-      render={p => <PrimaryEmails {...props} {...p} />}
     />
   </Switch>
 );

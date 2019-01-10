@@ -1,4 +1,4 @@
-import { deleteProxyEmail as _deleteProxyEmail } from 'lib/emails/delete';
+import { deleteProxyEmail as _deleteProxyEmail } from 'lib/proxy-emails/delete';
 import { MySQL } from 'lib/MySQL';
 
 export async function deleteProxyEmail(req, res) {

@@ -1,12 +1,13 @@
 import { RouteComponentProps, Redirect, Switch, Route } from 'react-router-dom';
 import { XYACCOUNTS_URL, ENVIRONMENT } from 'constants/config';
 import { ModifiersRouter } from 'components/modifiers/Router';
+import { PrimaryEmails } from 'components/primary-emails/PrimaryEmails';
 import { Documentation } from 'components/common/Documentation';
 import { AppNavigation } from 'components/app/Navigation';
 import { DomainsRouter } from 'components/domains/Router';
 import { AccountRouter } from 'components/account/Router';
 import { FiltersRouter } from 'components/filters/Router';
-import { EmailsRouter } from 'components/emails/Router';
+import { EmailsRouter } from 'components/proxy-emails/Router';
 import { QuickSearch } from 'components/app/QuickSearch';
 import { AppContext } from 'lib/AppContext';
 import { Welcome } from 'components/app/Welcome';
@@ -100,7 +101,11 @@ export class App extends React.Component<RouteComponentProps, AppState> {
                 render={p => <FiltersRouter {...p} />}
               />
               <Route
-                path={`${match.path}/emails`}
+                path={`${match.path}/primary-emails`}
+                render={p => <PrimaryEmails {...p} />}
+              />
+              <Route
+                path={`${match.path}/proxy-emails`}
                 render={p => <EmailsRouter {...p} />}
               />
               <Route
@@ -109,7 +114,7 @@ export class App extends React.Component<RouteComponentProps, AppState> {
                   <Documentation file={p.match.params.file} {...p} />
                 )}
               />
-              <Redirect from="/" to="/app/emails/create" />
+              <Redirect from="/" to="/app/proxy-emails/create" />
             </Switch>
           </div>
 

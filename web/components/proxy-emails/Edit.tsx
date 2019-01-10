@@ -1,6 +1,6 @@
 import { RouteComponentProps } from 'react-router-dom';
-import { EmailNavigation } from 'components/emails/Navigation';
-import { EmailForm } from 'components/emails/Form';
+import { EmailNavigation } from 'components/proxy-emails/Navigation';
+import { EmailForm } from 'components/proxy-emails/Form';
 import { Button } from 'react-md';
 import * as React from 'react';
 import * as swal from 'sweetalert';
@@ -21,10 +21,10 @@ export class EditEmail extends React.Component<RouteComponentProps> {
     const { App, history } = this.props;
     const email = App.state.emails.find(e => e.id == this.state.id);
 
-    if (!email) return history.push('/app/emails/list');
+    if (!email) return history.push('/app/proxy-emails/list');
 
     api
-      .get(`/emails/${this.state.id}`)
+      .get(`/proxy-emails/${this.state.id}`)
       .then(res => {
         this.setState(Object.assign({ loading: false }, res.data));
       })
@@ -34,10 +34,10 @@ export class EditEmail extends React.Component<RouteComponentProps> {
   onSubmit(data) {
     const { App, history } = this.props;
     api
-      .put(`/emails/${this.state.id}`, data)
+      .put(`/proxy-emails/${this.state.id}`, data)
       .then(() => {
         // ** (loadEmails([]));
-        history.push('/app/emails/list');
+        history.push('/app/proxy-emails/list');
         swal('Success', `Email '${data.name}' updated`, 'success');
       })
       .catch(err => swal('Error', err.response.data.error, 'error'));

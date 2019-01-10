@@ -1,7 +1,7 @@
 import { RouteComponentProps, Switch, Route } from 'react-router-dom';
-import { SendMessage } from 'components/emails/messages/Send';
-import { ViewMessage } from 'components/emails/messages/View';
-import { MessageList } from 'components/emails/messages/List';
+import { SendMessage } from 'components/proxy-emails/messages/Send';
+import { ViewMessage } from 'components/proxy-emails/messages/View';
+import { MessageList } from 'components/proxy-emails/messages/List';
 import * as React from 'react';
 
 export const MessagesRouter = (props: RouteComponentProps) => (

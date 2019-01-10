@@ -86,12 +86,12 @@ export class FilterList extends React.Component<RouteComponentProps> {
     // All emails need to be loaded
     if (email === undefined) {
       api
-        .get('/emails')
+        .get('/proxy-emails')
         .then(res => this._removeFilter(id, res.data.emails, update, index));
     }
     // Full email data needs to be loaded
     else if (email.toEmail === undefined) {
-      api.get(`/emails/${email.id}`).then(res => {
+      api.get(`/proxy-emails/${email.id}`).then(res => {
         Object.assign(email, res.data);
 
         emails.forEach((e, i) => {
@@ -110,7 +110,7 @@ export class FilterList extends React.Component<RouteComponentProps> {
       const modifiers = email.modifiers.map(mod => mod.id).join(',');
 
       api
-        .put(`/emails/${email.id}`, {
+        .put(`/proxy-emails/${email.id}`, {
           name: email.name,
           description: email.description,
           to: email.toEmail,

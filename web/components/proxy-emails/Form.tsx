@@ -61,7 +61,7 @@ export class EmailForm extends React.Component {
       if (!address) return this.setState({ addressAvailable: true });
 
       api
-        .get('/emails/availability', { params: { domain, address } })
+        .get('/proxy-emails/availability', { params: { domain, address } })
         .then(res => this.setState({ addressAvailable: res.data.available }));
     }, 250);
   }

@@ -1,5 +1,5 @@
 import { SelectField, ListItem, DialogContainer, List } from 'react-md';
-import { EmailNavigation } from 'components/emails/Navigation';
+import { EmailNavigation } from 'components/proxy-emails/Navigation';
 import { messageTypes } from 'constants/types';
 import * as React from 'react';
 import * as swal from 'sweetalert';
@@ -34,7 +34,7 @@ export class MessageList extends React.Component {
       text: 'This action cannot be undone',
       icon: 'warning'
     })
-      .then(() => api.delete(`/emails/${this.state.emailId}/messages/${id}`))
+      .then(() => api.delete(`/proxy-emails/${this.state.emailId}/messages/${id}`))
       .then(() => {
         this.setState({ selected: '' });
         // ** (deleteMessage(id));
@@ -44,7 +44,7 @@ export class MessageList extends React.Component {
 
   _loadMessages(type: number) {
     api
-      .get(`/emails/${this.state.emailId}/messages`, { params: { type } })
+      .get(`/proxy-emails/${this.state.emailId}/messages`, { params: { type } })
       .then(res => {
         // ** (loadMessages(res.data.errors));
         this.setState({ loading: false });
@@ -95,11 +95,11 @@ export class MessageList extends React.Component {
           visible={!!selected}
         >
           <List>
-            <Link to={`/app/emails/messages/${emailId}/view/${selected}`}>
+            <Link to={`/app/proxy-emails/messages/${emailId}/view/${selected}`}>
               <ListItem primaryText="View" />
             </Link>
             <Link
-              to={`/app/emails/messages/${emailId}/view/${selected}?reply=1`}
+              to={`/app/proxy-emails/messages/${emailId}/view/${selected}?reply=1`}
             >
               <ListItem primaryText="Reply" />
             </Link>
