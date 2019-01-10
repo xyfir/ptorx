@@ -9,6 +9,9 @@
     "module": "commonjs",
     "outDir": "./dist",
     "watch": true,
+    "paths": {
+      "typings/*": ["../typings/*"]
+    },
     "jsx": "react"
   },
   "exclude": ["node_modules", "dist"]
