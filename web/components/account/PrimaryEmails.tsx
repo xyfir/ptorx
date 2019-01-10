@@ -1,30 +1,50 @@
-import { TextField, ListItem, Button, List, DialogContainer } from 'react-md';
 import * as React from 'react';
 import * as copy from 'copyr';
 import * as swal from 'sweetalert';
+import { Ptorx } from 'typings/ptorx';
 import { api } from 'lib/api';
+import {
+  DialogContainer,
+  TextField,
+  ListItem,
+  Button,
+  Paper,
+  List
+} from 'react-md';
 
-export class PrimaryEmails extends React.Component {
+interface PrimaryEmailsState {
+  primaryEmails: Ptorx.PrimaryEmailList;
+  primaryEmail?: Ptorx.ProxyEmailList[0];
+  address: string;
+}
+
+export class PrimaryEmails extends React.Component<{}, PrimaryEmailsState> {
+  state: PrimaryEmailsState = {
+    primaryEmails: [],
+    primaryEmail: null,
+    address: 'user@example.com'
+  };
+
   constructor(props) {
     super(props);
-
-    this.state = { selectedEmail: {} };
   }
 
-  async onAddEmail() {
-    const email = this._email.value;
+  componentDidMount() {
+    this.load();
+  }
 
-    let res: AxiosResponse;
+  async onAdd() {
     try {
-      res = await api.post(`/account/email/${email}`);
-      // ** addEmail(res.data.id, email)
-      this._email.getField().value = '';
+      const res = await api.post('/primary-emails', {
+        email: this.state.address
+      });
+      await this.load();
     } catch (err) {
-      swal('Error', res.data.error, 'error');
+      swal('Error', err.response.data.error, 'error');
     }
   }
 
-  async onDeleteEmail() {
+  async onDelete() {
     const confirm = await swal({
       button: 'Yes',
       title: 'Are you sure?',
@@ -33,19 +53,24 @@ export class PrimaryEmails extends React.Component {
     });
     if (!confirm) return;
 
-    const { id } = this.state.selectedEmail;
-    let res: AxiosResponse;
     try {
-      res = await api.delete(`/account/email/${id}`);
-      this.setState({ selectedEmail: {} });
-      // ** deleteEmail(id)
+      const res = await api.delete(
+        `/primary-emails/${this.state.primaryEmail.id}`
+      );
+      this.setState({ primaryEmail: null });
+      this.load();
     } catch (err) {
-      swal('Error', res.data.error, 'error');
+      swal('Error', err.response.data.error, 'error');
     }
   }
 
+  async load() {
+    const res = await api.get('/primary-emails');
+    this.setState({ primaryEmails: res.data });
+  }
+
   render() {
-    const { account } = this.props.App.state;
+    const { primaryEmails, primaryEmail, address } = this.state;
 
     return (
       <Paper
@@ -61,39 +86,37 @@ export class PrimaryEmails extends React.Component {
 
         <div className="add">
           <TextField
-            id="email--email"
-            ref={i => (this._email = i)}
+            id="email"
             type="email"
             label="Email"
+            value={address}
+            onChange={v => this.setState({ address: v })}
           />
-          <Button icon iconChildren="add" onClick={() => this.onAddEmail()} />
+          <Button icon iconChildren="add" onClick={() => this.onAdd()} />
         </div>
 
         <List>
-          {account.emails.map(email => (
+          {primaryEmails.map(e => (
             <ListItem
-              key={email.id}
-              onClick={() => this.setState({ selectedEmail: email })}
-              primaryText={email.address}
+              key={e.id}
+              onClick={() => this.setState({ primaryEmail: e })}
+              primaryText={e.address}
             />
           ))}
         </List>
 
         <DialogContainer
           id="selected-email"
-          title={this.state.selectedEmail.address}
-          onHide={() => this.setState({ selectedEmail: {} })}
-          visible={!!this.state.selectedEmail.id}
+          title={(primaryEmail || {}).address}
+          onHide={() => this.setState({ primaryEmail: null })}
+          visible={primaryEmail !== null}
         >
           <List>
             <ListItem
               primaryText="Copy"
-              onClick={() => copy(this.state.selectedEmail.address)}
+              onClick={() => copy((primaryEmail || {}).address)}
             />
-            <ListItem
-              primaryText="Delete"
-              onClick={() => this.onDeleteEmail()}
-            />
+            <ListItem primaryText="Delete" onClick={() => this.onDelete()} />
           </List>
         </DialogContainer>
       </Paper>
