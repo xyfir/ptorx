@@ -4,57 +4,61 @@ import { LocalPagination } from 'components/misc/Pagination';
 import { findMatching } from 'lib/find-matching';
 import { Search } from 'components/misc/Search';
 import * as React from 'react';
+import { Ptorx } from 'typings/ptorx';
 import * as swal from 'sweetalert';
 import * as copy from 'copyr';
 import { api } from 'lib/api';
 
-export class EmailList extends React.Component<RouteComponentProps> {
+interface EmailListState {
+  proxyEmails: Ptorx.ProxyEmailList;
+  selected: number;
+  search: {
+    query: string;
+    type: number;
+  };
+  page: number;
+}
+
+export class EmailList extends React.Component<
+  RouteComponentProps,
+  EmailListState
+> {
+  state: EmailListState = {
+    proxyEmails: [],
+    selected: 0,
+    search: { query: '', type: 0 },
+    page: 1
+  };
+
   constructor(props) {
     super(props);
-
-    this.state = {
-      selected: 0,
-      page: 1,
-      search: { query: '', type: 0 }
-    };
   }
 
   componentDidMount() {
-    if (this.props.data.emails.length) return;
-    api.get('/emails');
-    // ** .then(res => (loadEmails(res.data.emails)));
+    this.load();
   }
 
-  /**
-   * Load 'CreateEmail' view with email's values loaded in.
-   */
   onDuplicate() {
     this.props.history.push(
       `/app/emails/create?duplicate=${this.state.selected}`
     );
   }
 
-  /**
-   * Opens confirmation dialogue and allows user to delete a proxy email.
-   */
   async onDelete() {
-    const id = this.state.selected;
     this.setState({ selected: 0 });
 
     const confirm = await swal({
       buttons: true,
       title: 'Are you sure?',
       text:
-        'You will no longer receive emails sent to this address. \
-        You will not be able to recreate this address.',
+        'You will no longer receive mail sent to this address. You will not be able to recreate this address.',
       icon: 'warning'
     });
-
     if (!confirm) return;
 
-    api
-      .delete(`/emails/${id}`)
-      // ** .then(() => (deleteEmail(id)))
+    await api
+      .delete(`/emails/${this.state.selected}`)
+      .then(() => this.load())
       .catch(err => swal('Error', err.response.data.error, 'error'));
   }
 
@@ -63,14 +67,20 @@ export class EmailList extends React.Component<RouteComponentProps> {
   }
 
   onCopy() {
-    const email = this.props.data.emails.find(e => e.id == this.state.selected)
-      .address;
-
-    copy(email);
+    const { proxyEmails, selected } = this.state;
+    const { address } = proxyEmails.find(e => e.id == selected);
+    copy(address);
     this.setState({ selected: 0 });
   }
 
+  async load() {
+    const res = await api.get('/emails');
+    this.setState({ proxyEmails: res.data.emails });
+  }
+
   render() {
+    const { proxyEmails, selected, search, page } = this.state;
+
     return (
       <div className="emails">
         <Link to="/app/emails/create">
@@ -87,8 +97,8 @@ export class EmailList extends React.Component<RouteComponentProps> {
         <Search onSearch={v => this.setState({ search: v })} type="email" />
 
         <List className="proxy-emails-list section md-paper md-paper--1">
-          {findMatching(this.props.data.emails, this.state.search)
-            .splice((this.state.page - 1) * 25, 25)
+          {findMatching(proxyEmails, search)
+            .splice((page - 1) * 25, 25)
             .map(email => (
               <ListItem
                 threeLines
@@ -104,20 +114,17 @@ export class EmailList extends React.Component<RouteComponentProps> {
         <LocalPagination
           itemsPerPage={25}
           onGoTo={p => this.setState({ page: p })}
-          items={this.props.data.emails.length}
-          page={this.state.page}
+          items={proxyEmails.length}
+          page={page}
         />
 
         <DialogContainer
           id="selected-email"
           title={
-            !this.state.selected
-              ? ''
-              : this.props.data.emails.find(e => e.id == this.state.selected)
-                  .address
+            !selected ? '' : proxyEmails.find(e => e.id == selected).address
           }
           onHide={() => this.setState({ selected: 0 })}
-          visible={!!this.state.selected}
+          visible={!!selected}
         >
           <List>
             <ListItem
