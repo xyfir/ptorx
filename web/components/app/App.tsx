@@ -8,24 +8,25 @@ import { AccountRouter } from 'components/account/Router';
 import { FiltersRouter } from 'components/filters/Router';
 import { EmailsRouter } from 'components/emails/Router';
 import { QuickSearch } from 'components/app/QuickSearch';
+import { AppContext } from 'lib/AppContext';
 import { Welcome } from 'components/app/Welcome';
 import * as React from 'react';
+import { Ptorx } from 'typings/ptorx';
 import * as swal from 'sweetalert';
 import { api } from 'lib/api';
 import * as qs from 'qs';
 
 const LOGIN_URL = `${XYACCOUNTS_URL}/login/service/13`;
 
-export class App extends React.Component<RouteComponentProps> {
+interface AppState {
+  account?: Ptorx.Account;
+}
+
+export class App extends React.Component<RouteComponentProps, AppState> {
+  state: AppState = {};
+
   constructor(props) {
     super(props);
-    this.state = {
-      account: {
-        credits: 0,
-        emails: [],
-        uid: 0
-      }
-    };
   }
 
   async componentDidMount() {
@@ -68,48 +69,52 @@ export class App extends React.Component<RouteComponentProps> {
   }
 
   render() {
-    if (!this.state) return null;
+    if (!this.state.account) return null;
     const { match } = this.props;
 
     return (
       <div className="ptorx">
-        <AppNavigation App={this} />
+        <AppContext.Provider value={this.state}>
+          <AppNavigation App={this} />
 
-        <div className="main md-toolbar-relative">
-          <Switch>
-            <Route
-              path={`${match.path}/quick-search`}
-              render={p => <QuickSearch {...p} />}
-            />
-            <Route
-              path={`${match.path}/modifiers`}
-              render={p => <ModifiersRouter {...p} />}
-            />
-            <Route
-              path={`${match.path}/domains`}
-              render={p => <DomainsRouter {...p} />}
-            />
-            <Route
-              path={`${match.path}/account`}
-              render={p => <AccountRouter {...p} />}
-            />
-            <Route
-              path={`${match.path}/filters`}
-              render={p => <FiltersRouter {...p} />}
-            />
-            <Route
-              path={`${match.path}/emails`}
-              render={p => <EmailsRouter {...p} />}
-            />
-            <Route
-              path={`${match.path}/docs/:file(tos|help|privacy)`}
-              render={p => <Documentation file={p.match.params.file} {...p} />}
-            />
-            <Redirect from="/" to="/app/emails/create" />
-          </Switch>
-        </div>
+          <div className="main md-toolbar-relative">
+            <Switch>
+              <Route
+                path={`${match.path}/quick-search`}
+                render={p => <QuickSearch {...p} />}
+              />
+              <Route
+                path={`${match.path}/modifiers`}
+                render={p => <ModifiersRouter {...p} />}
+              />
+              <Route
+                path={`${match.path}/domains`}
+                render={p => <DomainsRouter {...p} />}
+              />
+              <Route
+                path={`${match.path}/account`}
+                render={p => <AccountRouter {...p} />}
+              />
+              <Route
+                path={`${match.path}/filters`}
+                render={p => <FiltersRouter {...p} />}
+              />
+              <Route
+                path={`${match.path}/emails`}
+                render={p => <EmailsRouter {...p} />}
+              />
+              <Route
+                path={`${match.path}/docs/:file(tos|help|privacy)`}
+                render={p => (
+                  <Documentation file={p.match.params.file} {...p} />
+                )}
+              />
+              <Redirect from="/" to="/app/emails/create" />
+            </Switch>
+          </div>
 
-        <Welcome />
+          <Welcome />
+        </AppContext.Provider>
       </div>
     );
   }
