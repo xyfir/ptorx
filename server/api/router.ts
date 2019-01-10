@@ -66,11 +66,11 @@ router
   .put(c.editModifier)
   .delete(c.deleteModifier);
 
+router.get('/primary-emails', c.getPrimaryEmails);
+router.post('/primary-emails', c.addPrimaryEmail);
+router.delete('/primary-emails/:email', c.deletePrimaryEmail);
+
 router.get('/account', c.getAccountInfo);
-router
-  .route('/account/email/:email')
-  .post(c.addPrimaryEmail)
-  .delete(c.deletePrimaryEmail);
 router.put('/account/email/template', c.setEmailTemplate);
 router.post('/account/login', c.login);
 router.get('/account/logout', c.logout);

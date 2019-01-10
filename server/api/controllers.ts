@@ -2,8 +2,6 @@ export * from './account/credits/coinhive';
 export * from './account/credits/purchase/finish';
 export * from './account/credits/purchase/start';
 
-export * from './account/email/add';
-export * from './account/email/delete';
 export * from './account/email/template';
 
 export * from './account/info';
@@ -52,6 +50,10 @@ export * from './modifiers/delete';
 export * from './modifiers/get';
 export * from './modifiers/list';
 export * from './modifiers/edit';
+
+export * from './primary-emails/add';
+export * from './primary-emails/delete';
+export * from './primary-emails/list';
 
 export * from './receive/receive';
 export * from './receive/reply';

@@ -1,4 +1,20 @@
 export namespace Ptorx {
+  export interface Account {
+    loggedIn: boolean;
+    uid: number;
+    referral: {
+      type?: string;
+      /**
+       * Whatever the value of `type` is
+       */
+      [type: string]: any;
+      hasMadePurchase?: boolean;
+    };
+    affiliate: boolean;
+    credits: number;
+    email_template?: number;
+  }
+
   export interface Domain {
     id: number;
     user_id: number;
@@ -148,8 +164,8 @@ export namespace Ptorx {
     global: boolean;
   }[];
 
-  export interface PrimaryEmail {
+  export type PrimaryEmailList = {
     id: number;
     address: string;
-  }
+  }[];
 }
