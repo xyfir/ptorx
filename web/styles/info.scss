@@ -60,28 +60,17 @@ div.home {
     }
   }
 
-  > section.try-free {
-    padding-top: 0;
-  }
-
-  > section.overview {
+  > section.overview > div {
+    border: solid 0.5em transparent;
     display: flex;
-    flex-wrap: wrap;
+    align-items: center;
+    flex-direction: column;
 
-    > div {
-      flex: 1;
-      border: solid 0.5em transparent;
+    > a {
       display: flex;
-      align-items: center;
-      flex-direction: column;
-      justify-content: space-between;
 
-      > a {
-        display: flex;
-
-        > i.md-icon {
-          padding-right: 0.2em;
-        }
+      > i.md-icon {
+        padding-right: 0.2em;
       }
     }
   }
