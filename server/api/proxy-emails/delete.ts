@@ -1,4 +1,4 @@
-import { deleteProxyEmail as _deleteProxyEmail } from 'lib/proxy-emails/delete';
+import { deleteProxyEmail } from 'lib/proxy-emails/delete';
 import { Request, Response } from 'express';
 import { MySQL } from 'lib/MySQL';
 
@@ -9,7 +9,7 @@ export async function api_deleteProxyEmail(
   const db = new MySQL();
 
   try {
-    await _deleteProxyEmail(db, +req.params.email, +req.session.uid);
+    await deleteProxyEmail(db, +req.params.email, +req.session.uid);
     db.release();
     res.status(200).json({});
   } catch (err) {

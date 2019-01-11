@@ -1,5 +1,5 @@
-import { getProxyEmail as _getProxyEmail } from 'lib/proxy-emails/get';
 import { Request, Response } from 'express';
+import { getProxyEmail } from 'lib/proxy-emails/get';
 import { MySQL } from 'lib/MySQL';
 
 export async function api_getProxyEmail(
@@ -9,7 +9,7 @@ export async function api_getProxyEmail(
   const db = new MySQL();
 
   try {
-    const email = await _getProxyEmail(db, {
+    const email = await getProxyEmail(db, {
       user: +req.session.uid,
       email: +req.params.email
     });
