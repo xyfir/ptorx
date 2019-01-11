@@ -16,14 +16,14 @@ export async function api_receiveReply(
     const [row] = await db.query(
       `
         SELECT
-          m.sender AS originalSender, pxe.user_id AS userId,
+          m.sender AS originalSender, pxe.userId AS userId,
           CONCAT(pxe.address, '@', d.domain) AS proxyAddress
         FROM
           messages AS m, domains AS d, proxy_emails AS pxe
         WHERE
           m.id = ? AND
-          pxe.email_id = m.email_id AND
-          d.id = pxe.domain_id
+          pxe.proxyEmailId = m.proxyEmailId AND
+          d.id = pxe.domainId
       `,
       [messageId]
     );

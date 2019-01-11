@@ -7,7 +7,7 @@ import { deleteProxyEmail } from 'lib/proxy-emails/delete';
  */
 export async function deleteUser(db, user) {
   const emails = await db.query(
-    'SELECT email_id AS id FROM proxy_emails WHERE user_id = ?',
+    'SELECT proxyEmailId AS id FROM proxy_emails WHERE userId = ?',
     [user]
   );
 
@@ -17,5 +17,5 @@ export async function deleteUser(db, user) {
     } catch (err) {}
   }
 
-  await db.query('DELETE FROM users WHERE user_id = ?', user);
+  await db.query('DELETE FROM users WHERE userId = ?', user);
 }

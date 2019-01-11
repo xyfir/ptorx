@@ -9,7 +9,7 @@ export async function api_getProxyEmailAvailability(
 
   try {
     const rows = await db.query(
-      'SELECT email_id FROM proxy_emails WHERE address = ? AND domain_id = ?',
+      'SELECT proxyEmailId FROM proxy_emails WHERE address = ? AND domainId = ?',
       [req.query.address, req.query.domain]
     );
     db.release();

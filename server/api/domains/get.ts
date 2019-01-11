@@ -11,7 +11,7 @@ export async function api_getDomain(
     const [domain] = await db.query(
       `
       SELECT
-        id, user_id, domain, domain_key AS domainKey, added, verified, global
+        id, userId, domain, domainKey AS domainKey, added, verified, global
       FROM domains
       WHERE id = ?
     `,
@@ -20,7 +20,7 @@ export async function api_getDomain(
 
     if (!domain) throw 'Could not find domain';
 
-    domain.isCreator = domain.user_id == req.session.uid;
+    domain.isCreator = domain.userId == req.session.uid;
 
     if (!domain.isCreator) {
       db.release();
@@ -31,9 +31,9 @@ export async function api_getDomain(
 
     domain.users = await db.query(
       `
-      SELECT user_id AS id, label, request_key AS requestKey, added
+      SELECT userId AS id, label, requestKey AS requestKey, added
       FROM domain_users
-      WHERE domain_id = ? AND user_id != ? AND authorized = 1
+      WHERE domainId = ? AND userId != ? AND authorized = 1
       ORDER BY added ASC
     `,
       [domain.id, req.session.uid]

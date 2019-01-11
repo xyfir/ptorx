@@ -10,9 +10,9 @@ export async function api_addPrimaryEmail(
     const [row] = await db.query(
       `
         SELECT (
-          SELECT COUNT(email_id) FROM primary_emails WHERE user_id = ?
+          SELECT COUNT(primaryEmailId) FROM primary_emails WHERE userId = ?
         ) AS emails, (
-          SELECT COUNT(email_id) FROM primary_emails WHERE user_id = ? AND address = ?
+          SELECT COUNT(primaryEmailId) FROM primary_emails WHERE userId = ? AND address = ?
         ) AS email_exists
       `,
       [req.session.uid, req.session.uid, req.body.email]
@@ -24,7 +24,7 @@ export async function api_addPrimaryEmail(
       throw 'Invalid email length. 6-320 characters required';
 
     const result = await db.query('INSERT INTO primary_emails SET ?', {
-      user_id: req.session.uid,
+      userId: req.session.uid,
       address: req.body.email
     });
     if (!result.affectedRows) throw 'Could not add email';

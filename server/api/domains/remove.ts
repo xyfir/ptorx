@@ -11,7 +11,7 @@ export async function api_deleteDomain(
 
   try {
     const [domain] = await db.query(
-      'SELECT domain FROM domains WHERE id = ? AND user_id = ?',
+      'SELECT domain FROM domains WHERE id = ? AND userId = ?',
       [req.params.domain, req.session.uid]
     );
 

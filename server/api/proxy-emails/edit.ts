@@ -22,14 +22,14 @@ export async function api_editProxyEmail(
 
     let sql = `
       SELECT
-        pxe.mg_route_id AS mgRouteId, pme.address AS toEmail, d.domain,
+        pxe.mgRouteId AS mgRouteId, pme.address AS toEmail, d.domain,
         CONCAT(pxe.address, '@', d.domain) AS address
       FROM
         proxy_emails AS pxe, domains AS d, primary_emails AS pme
       WHERE
-        pxe.email_id = ? AND
-        d.id = pxe.domain_id AND
-        pme.email_id = ? AND pme.user_id = ?
+        pxe.proxyEmailId = ? AND
+        d.id = pxe.domainId AND
+        pme.primaryEmailId = ? AND pme.userId = ?
     `,
       vars = [req.params.email, req.body.to, req.session.uid],
       rows = await db.query(sql, vars);
@@ -67,10 +67,10 @@ export async function api_editProxyEmail(
     // Update values in proxy_emails
     sql = `
       UPDATE proxy_emails SET
-        primary_email_id = ?, name = ?,
-        description = ?, save_mail = ?,
-        direct_forward = ?, spam_filter = ?
-      WHERE email_id = ?
+        primaryEmailId = ?, name = ?,
+        description = ?, saveMail = ?,
+        directForward = ?, spamFilter = ?
+      WHERE proxyEmailId = ?
     `;
     vars = [
       req.body.noToAddress ? 0 : req.body.to,
@@ -115,14 +115,14 @@ export async function api_editProxyEmail(
 
     // Delete all filters
     sql = `
-      DELETE FROM linked_filters WHERE email_id = ?
+      DELETE FROM links WHERE proxyEmailId = ?
     `;
     vars = [req.params.email];
     dbRes = await db.query(sql, vars);
 
     // Delete all modifiers since the order may have changed
     sql = `
-      DELETE FROM linked_modifiers WHERE email_id = ?
+      DELETE FROM links WHERE proxyEmailId = ?
     `;
     vars = [req.params.email];
     dbRes = await db.query(sql, vars);
@@ -130,8 +130,8 @@ export async function api_editProxyEmail(
     // Insert modifiers
     if (modifiers.length) {
       sql =
-        'INSERT INTO linked_modifiers ' +
-        '(modifier_id, email_id, order_number) VALUES ' +
+        'INSERT INTO links ' +
+        '(modifierId, proxyEmailId, orderIndex) VALUES ' +
         modifiers
           .map((m, i) => `('${m}', '${+req.params.email}', '${i}')`)
           .join(', ');
@@ -141,7 +141,7 @@ export async function api_editProxyEmail(
     // Insert filters
     if (filters.length) {
       sql =
-        'INSERT INTO linked_filters (filter_id, email_id) VALUES ' +
+        'INSERT INTO links (filterId, proxyEmailId) VALUES ' +
         filters.map(f => `('${f}', '${+req.params.email}')`).join(', ');
       dbRes = await db.query(sql);
     }

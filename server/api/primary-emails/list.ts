@@ -8,7 +8,7 @@ export async function api_getPrimaryEmails(
   const db = new MySQL();
   try {
     const emails = await db.query(
-      'SELECT email_id AS id, address FROM primary_emails WHERE user_id = ?',
+      'SELECT primaryEmailId AS id, address FROM primary_emails WHERE userId = ?',
       [req.session.uid]
     );
     res.status(200).json(emails);

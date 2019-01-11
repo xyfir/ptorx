@@ -9,7 +9,7 @@ export async function generateProxyAddress(
   domain: number
 ): Promise<string> {
   const sql = `
-    SELECT email_id FROM proxy_emails WHERE address = ? AND domain_id = ?
+    SELECT proxyEmailId FROM proxy_emails WHERE address = ? AND domainId = ?
   `;
   let email = rword.generateFromPool(1) as string;
 

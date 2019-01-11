@@ -15,13 +15,13 @@ export async function api_replyToMessage(
     const [row] = await db.query(
       `
         SELECT
-          pxe.address, d.domain, m.message_url AS msgUrl
+          pxe.address, d.domain, m.url AS msgUrl
         FROM
           messages AS m, domains AS d, proxy_emails AS pxe, users AS u
         WHERE
-          m.id = ? AND pxe.email_id = ? AND u.user_id = ? AND
-          m.received + 255600 > UNIX_TIMESTAMP() AND pxe.user_id = u.user_id AND
-          m.email_id = pxe.email_id AND d.id = pxe.domain_id
+          m.id = ? AND pxe.proxyEmailId = ? AND u.userId = ? AND
+          m.received + 255600 > UNIX_TIMESTAMP() AND pxe.userId = u.userId AND
+          m.proxyEmailId = pxe.proxyEmailId AND d.id = pxe.domainId
       `,
       [req.params.message, req.params.email, req.session.uid]
     );

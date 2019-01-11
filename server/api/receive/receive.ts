@@ -36,7 +36,7 @@ export async function api_receiveMail(
 
     // Get needed proxy email data
     const data = {
-      to: '', // will be empty string if primary_email_id = 0
+      to: '', // will be empty string if primaryEmailId = 0
       userId: 0,
       filters: [],
       modifiers: [],
@@ -44,18 +44,18 @@ export async function api_receiveMail(
       directForward: false
     };
 
-    // Grab primary_email_id address
+    // Grab primaryEmailId address
 
     let rows = await db.query(
       `
         SELECT
-          pme.address AS \`to\`, pxe.spam_filter AS spamFilter,
-          pxe.user_id AS userId, pxe.direct_forward AS directForward
+          pme.address AS \`to\`, pxe.spamFilter AS spamFilter,
+          pxe.userId AS userId, pxe.directForward AS directForward
         FROM
           primary_emails AS pme, proxy_emails AS pxe
         WHERE
-          pxe.email_id = ?
-          AND pme.email_id = pxe.primary_email_id
+          pxe.proxyEmailId = ?
+          AND pme.primaryEmailId = pxe.primaryEmailId
       `,
       [emailId]
     );
@@ -67,15 +67,15 @@ export async function api_receiveMail(
     data.filters = rows = await db.query(
       `
         SELECT
-          type, find, accept_on_match AS acceptOnMatch,
-          use_regex AS regex, IF(
+          type, find, acceptOnMatch AS acceptOnMatch,
+          useRegex AS regex, IF(
             ${save ? 0 : 1} = 1
-            AND accept_on_match = 1
+            AND acceptOnMatch = 1
             AND type IN (1, 2, 3, 6),
             1, 0
           ) AS pass
-        FROM filters WHERE filter_id IN (
-          SELECT filter_id FROM linked_filters WHERE email_id = ?
+        FROM filters WHERE filterId IN (
+          SELECT filterId FROM links WHERE proxyEmailId = ?
         )
       `,
       [emailId]
@@ -87,12 +87,12 @@ export async function api_receiveMail(
         SELECT
           modifiers.type, modifiers.data
         FROM
-          modifiers, linked_modifiers
+          modifiers, links
         WHERE
-          modifiers.modifier_id = linked_modifiers.modifier_id
-          AND linked_modifiers.email_id = ?
+          modifiers.modifierId = links.modifierId
+          AND links.proxyEmailId = ?
         ORDER BY
-          linked_modifiers.order_number
+          links.orderIndex
       `,
       [emailId]
     );

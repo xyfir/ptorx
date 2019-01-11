@@ -13,7 +13,7 @@ import * as CONFIG from 'constants/config';
  * @throws {string}
  */
 export async function chargeUser(db, user, amount) {
-  const rows = await db.query('SELECT credits FROM users WHERE user_id = ?', [
+  const rows = await db.query('SELECT credits FROM users WHERE userId = ?', [
     user
   ]);
   if (!rows.length) throw 'Could not find user';
@@ -22,7 +22,7 @@ export async function chargeUser(db, user, amount) {
   if (amount > credits) throw `No credits! Need ${amount}, have ${credits}.`;
   credits -= amount;
 
-  await db.query('UPDATE users SET credits = ? WHERE user_id = ?', [
+  await db.query('UPDATE users SET credits = ? WHERE userId = ?', [
     credits,
     user
   ]);
@@ -32,12 +32,12 @@ export async function chargeUser(db, user, amount) {
     const emails = await db.query(
       `
         SELECT
-          pxe.email_id AS id, pxe.mg_route_id AS mgRouteId, d.domain
+          pxe.proxyEmailId AS id, pxe.mgRouteId AS mgRouteId, d.domain
         FROM
           proxy_emails AS pxe, domains AS d
         WHERE
-          pxe.user_id = ? AND pxe.mg_route_id IS NOT NULL
-          AND d.id = pxe.domain_id
+          pxe.userId = ? AND pxe.mgRouteId IS NOT NULL
+          AND d.id = pxe.domainId
       `,
       [user]
     );
@@ -59,7 +59,7 @@ export async function chargeUser(db, user, amount) {
     }
 
     await db.query(
-      'UPDATE proxy_emails SET mg_route_id = NULL WHERE email_id IN (?)',
+      'UPDATE proxy_emails SET mgRouteId = NULL WHERE proxyEmailId IN (?)',
       [ids]
     );
   }

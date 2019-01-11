@@ -9,7 +9,7 @@
  * @throws {string}
  */
 export async function requireCredits(db, user) {
-  const [row] = await db.query('SELECT credits FROM users WHERE user_id = ?', [
+  const [row] = await db.query('SELECT credits FROM users WHERE userId = ?', [
     user
   ]);
   if (!row) throw 'Could not find user';

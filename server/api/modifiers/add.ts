@@ -17,7 +17,7 @@ export async function api_addModifier(
     `,
       insert = {
         data: buildModifierData(req.body),
-        user_id: req.session.uid,
+        userId: req.session.uid,
         name: req.body.name,
         description: req.body.description,
         type: req.body.type

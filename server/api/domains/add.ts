@@ -25,12 +25,12 @@ export async function api_addDomain(
       await db.query(
         `
           INSERT INTO domain_users SET ?
-          ON DUPLICATE KEY UPDATE request_key = '${key}'
+          ON DUPLICATE KEY UPDATE requestKey = '${key}'
         `,
         {
-          domain_id: row.domainId,
-          user_id: req.session.uid,
-          request_key: key
+          domainId: row.domainId,
+          userId: req.session.uid,
+          requestKey: key
         }
       );
 
@@ -57,16 +57,16 @@ export async function api_addDomain(
       // Add database, user, key to domains
       const dbRes = await db.query(`INSERT INTO domains SET ?`, {
         domain: req.body.domain,
-        user_id: req.session.uid,
-        domain_key: JSON.stringify({ name: key.name, value: key.value })
+        userId: req.session.uid,
+        domainKey: JSON.stringify({ name: key.name, value: key.value })
       });
 
       const domainId = dbRes.insertId;
 
       // Add user to domain_users
       await db.query(`INSERT INTO domain_users SET ?`, {
-        domain_id: domainId,
-        user_id: req.session.uid,
+        domainId: domainId,
+        userId: req.session.uid,
         authorized: true
       });
 

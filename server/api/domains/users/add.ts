@@ -13,8 +13,8 @@ export async function api_addDomainUser(
         UPDATE domain_users SET
           label = ?, added = NOW(), authorized = 1
         WHERE
-          domain_id = ? AND request_key = ? AND
-          (SELECT user_id FROM domains WHERE id = ?) = ?
+          domainId = ? AND requestKey = ? AND
+          (SELECT userId FROM domains WHERE id = ?) = ?
       `,
       [
         req.body.label,

@@ -15,9 +15,9 @@ export async function api_deleteFilter(
     const [filter] = await db.query(
       `
         SELECT
-          type, accept_on_match AS acceptOnMatch
+          type, acceptOnMatch AS acceptOnMatch
         FROM filters
-        WHERE filter_id = ? AND user_id = ?
+        WHERE filterId = ? AND userId = ?
       `,
       [req.params.filter, req.session.uid]
     );
@@ -25,7 +25,7 @@ export async function api_deleteFilter(
 
     // Get emails linked to the filter
     const rows = await db.query(
-      `SELECT email_id AS id FROM linked_filters WHERE filter_id = ?`,
+      `SELECT proxyEmailId AS id FROM links WHERE filterId = ?`,
       [req.params.filter]
     );
 
@@ -33,7 +33,7 @@ export async function api_deleteFilter(
     const update = rows.map(email => email.id);
 
     // Delete the filter
-    const result = await db.query('DELETE FROM filters WHERE filter_id = ?', [
+    const result = await db.query('DELETE FROM filters WHERE filterId = ?', [
       req.params.filter
     ]);
     if (!result.affectedRows) throw 'Could not delete filter';

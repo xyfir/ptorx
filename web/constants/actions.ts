@@ -19,6 +19,6 @@ export const LOAD_EMAILS = 'EMAILS/LOAD';
 export const ADD_DOMAIN = 'DOMAINS/ADD';
 
 export const DELETE_PRIMARY_EMAIL = 'ACCOUNT/DELETE_EMAIL';
-export const SET_EMAIL_TEMPLATE = 'ACCOUNT/SET_EMAIL_TEMPLATE';
+export const SET_emailTemplate = 'ACCOUNT/SET_emailTemplate';
 export const ADD_PRIMARY_EMAIL = 'ACCOUNT/ADD_EMAIL';
 export const UPDATE_CREDITS = 'ACCOUNT/UPDATE_CREDITS';

@@ -9,7 +9,7 @@ export async function api_setEmailTemplate(
 
   try {
     const result = await db.query(
-      `UPDATE users SET email_template = ? WHERE user_id = ?`,
+      `UPDATE users SET emailTemplate = ? WHERE userId = ?`,
       [req.body.id, req.session.uid]
     );
     if (!result.affectedRows) throw 'Could not set template';

@@ -14,7 +14,7 @@ export async function api_deleteModifier(
   const db = new MySQL();
   try {
     await db.query(
-      `DELETE FROM modifiers WHERE modifier_id = ? AND user_id = ?`,
+      `DELETE FROM modifiers WHERE modifierId = ? AND userId = ?`,
       [req.params.mod, req.session.uid]
     );
     res.status(200).json({});

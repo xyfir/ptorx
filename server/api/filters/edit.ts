@@ -17,8 +17,8 @@ export async function api_editFilter(
 
     const [filter] = await db.query(
       `
-        SELECT type, accept_on_match AS acceptOnMatch FROM filters
-        WHERE filter_id = ? AND user_id = ?
+        SELECT type, acceptOnMatch AS acceptOnMatch FROM filters
+        WHERE filterId = ? AND userId = ?
       `,
       [req.params.filter, req.session.uid]
     );
@@ -27,8 +27,8 @@ export async function api_editFilter(
     const result = await db.query(
       `
         UPDATE filters SET name = ?, description = ?, type = ?, find = ?,
-        accept_on_match = ?, use_regex = ?
-        WHERE filter_id = ?
+        acceptOnMatch = ?, useRegex = ?
+        WHERE filterId = ?
       `,
       [
         req.body.name,
@@ -43,7 +43,7 @@ export async function api_editFilter(
     if (!result.affectedRows) throw 'Could not update filter';
 
     const rows = await db.query(
-      `SELECT email_id AS id FROM linked_filters WHERE filter_id = ?`,
+      `SELECT proxyEmailId AS id FROM links WHERE filterId = ?`,
       [req.params.filter]
     );
 

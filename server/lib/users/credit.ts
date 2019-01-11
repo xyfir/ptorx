@@ -14,7 +14,7 @@ import * as CONFIG from 'constants/config';
  */
 export async function creditUser(db, user, amount) {
   // Get user's current amount of credits
-  const rows = await db.query('SELECT credits FROM users WHERE user_id = ?', [
+  const rows = await db.query('SELECT credits FROM users WHERE userId = ?', [
     user
   ]);
   if (!rows.length) throw 'Could not find user';
@@ -22,7 +22,7 @@ export async function creditUser(db, user, amount) {
   // Add credits to user's account
   const orginal = +rows[0].credits;
   const credits = orginal + amount;
-  await db.query('UPDATE users SET credits = ? WHERE user_id = ?', [
+  await db.query('UPDATE users SET credits = ? WHERE userId = ?', [
     credits,
     user
   ]);
@@ -32,9 +32,9 @@ export async function creditUser(db, user, amount) {
     // Load all unrouted proxy emails
     const emails = await db.query(
       `
-        SELECT email_id AS id
+        SELECT proxyEmailId AS id
         FROM proxy_emails
-        WHERE user_id = ? AND mg_route_id IS NULL
+        WHERE userId = ? AND mgRouteId IS NULL
       `,
       [user]
     );
@@ -84,9 +84,9 @@ export async function creditUser(db, user, amount) {
     // Add route id to emails
     if (ids.length) {
       const sql =
-        'INSERT INTO proxy_emails (email_id, mg_route_id) VALUES ' +
+        'INSERT INTO proxy_emails (proxyEmailId, mgRouteId) VALUES ' +
         ids.map(() => `(?, ?)`).join(', ') +
-        'ON DUPLICATE KEY UPDATE mg_route_id = VALUES(mg_route_id)';
+        'ON DUPLICATE KEY UPDATE mgRouteId = VALUES(mgRouteId)';
       const vars = [];
       ids.forEach(email => vars.push(email.id, email.mgRouteId));
       await db.query(sql, vars);

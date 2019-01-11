@@ -1,13 +1,16 @@
 import { Request, Response } from 'express';
 import { MySQL } from 'lib/MySQL';
 
-export async function api_getFilters(req: Request, res: Response): Promise<void> {
+export async function api_getFilters(
+  req: Request,
+  res: Response
+): Promise<void> {
   const db = new MySQL();
   try {
     const filters = await db.query(
       `
-        SELECT filter_id as id, name, description, type
-        FROM filters WHERE user_id = ?
+        SELECT filterId as id, name, description, type
+        FROM filters WHERE userId = ?
       `,
       [req.session.uid]
     );

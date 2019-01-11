@@ -12,12 +12,12 @@ export async function buildMailgunRouteExpression(db, data) {
 
   if (!data.filters.length || data.saveMail) return expression;
 
-  // Only accept_on_match filters are ran on Mailgun
+  // Only acceptOnMatch filters are ran on Mailgun
   const sql = `
       SELECT
-        type, find, use_regex AS regex
+        type, find, useRegex AS regex
       FROM filters WHERE
-        filter_id IN (?) AND accept_on_match = 1
+        filterId IN (?) AND acceptOnMatch = 1
         AND type IN (1, 2, 3, 6)
     `,
     rows = await db.query(sql, [data.filters]);

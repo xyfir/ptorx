@@ -17,15 +17,15 @@ export async function api_getAccountInfo(
 
     // Validate access token
     if (req.query.token) {
-      // [user_id, access_token]
+      // [userId, access_token]
       const token = cryptr.decrypt(req.query.token).split('-');
 
       // Invalid token
       if (!token[0] || !token[1]) throw 'Invalid token 1';
 
       sql = `
-        SELECT xyfir_id, referral, credits, email_template
-        FROM users WHERE user_id = ?
+        SELECT xyfirId, referral, credits, emailTemplate
+        FROM users WHERE userId = ?
       `;
       vars = [token[0]];
       rows = await db.query(sql, vars);
@@ -38,7 +38,7 @@ export async function api_getAccountInfo(
         {
           params: {
             key: CONFIG.XYACCOUNTS_KEY,
-            xid: rows[0].xyfir_id,
+            xid: rows[0].xyfirId,
             token: token[1]
           }
         }
@@ -51,8 +51,8 @@ export async function api_getAccountInfo(
     // Get info for dev user
     else if (!CONFIG.PROD) {
       sql = `
-        SELECT referral, credits, email_template
-        FROM users WHERE user_id = 1
+        SELECT referral, credits, emailTemplate
+        FROM users WHERE userId = 1
       `;
       rows = await db.query(sql);
 
@@ -65,7 +65,7 @@ export async function api_getAccountInfo(
     }
 
     sql = `
-      SELECT email_id as id, address FROM primary_emails WHERE user_id = ?
+      SELECT primaryEmailId AS id, address FROM primary_emails WHERE userId = ?
     `;
     vars = [uid];
 
@@ -81,7 +81,7 @@ export async function api_getAccountInfo(
       emails,
       referral: JSON.parse(row.referral),
       credits: row.credits,
-      email_template: row.email_template
+      emailTemplate: row.emailTemplate
     });
   } catch (err) {
     db.release();

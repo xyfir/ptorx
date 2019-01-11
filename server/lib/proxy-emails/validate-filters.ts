@@ -18,9 +18,9 @@ export async function validateProxyEmailFilters(
 
   // Validate that all filters exist and user has access to them
   const sql = `
-    SELECT type, accept_on_match AS acceptOnMatch
+    SELECT type, acceptOnMatch AS acceptOnMatch
     FROM filters
-    WHERE filter_id IN (?) AND user_id = ?
+    WHERE filterId IN (?) AND userId = ?
   `,
     vars = [filters, uid],
     rows = await db.query(sql, vars);

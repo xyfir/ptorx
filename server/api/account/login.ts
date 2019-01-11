@@ -25,7 +25,7 @@ export async function api_login(req: Request, res: Response): Promise<void> {
     if (xaccResult.data.error) throw '-';
 
     // Get user data from db
-    let sql = 'SELECT user_id FROM users WHERE xyfir_id = ?',
+    let sql = 'SELECT userId FROM users WHERE xyfirId = ?',
       vars = [req.body.xid],
       rows = await db.query(sql, vars);
 
@@ -38,7 +38,7 @@ export async function api_login(req: Request, res: Response): Promise<void> {
         email: xaccResult.data.email,
         credits: 50,
         referral: '{}',
-        xyfir_id: req.body.xid
+        xyfirId: req.body.xid
       };
 
       // Reward credits for referral
@@ -57,7 +57,7 @@ export async function api_login(req: Request, res: Response): Promise<void> {
       if (!result.affectedRows) throw '--';
 
       // Add user's account email to primary_emails
-      sql = `INSERT INTO primary_emails (user_id, address) VALUES (?, ?)`;
+      sql = `INSERT INTO primary_emails (userId, address) VALUES (?, ?)`;
       vars = [result.insertId, insert.email];
 
       await db.query(sql, vars);
@@ -73,19 +73,19 @@ export async function api_login(req: Request, res: Response): Promise<void> {
     }
     // Normal login: update user's data
     else {
-      sql = `UPDATE users SET email = ? WHERE user_id = ?`;
-      vars = [xaccResult.data.email, rows[0].user_id];
+      sql = `UPDATE users SET email = ? WHERE userId = ?`;
+      vars = [xaccResult.data.email, rows[0].userId];
 
       const result = await db.query(sql, vars);
       db.release();
 
       if (!result.affectedRows) throw '---';
 
-      req.session.uid = rows[0].user_id;
+      req.session.uid = rows[0].userId;
 
       res.status(200).json({
         accessToken: cryptr.encrypt(
-          rows[0].user_id + '-' + xaccResult.data.accessToken
+          rows[0].userId + '-' + xaccResult.data.accessToken
         )
       });
     }

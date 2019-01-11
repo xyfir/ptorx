@@ -26,15 +26,15 @@ export async function getProxyEmail(db, opt) {
   const [row] = await db.query(
     `
       SELECT
-        pxe.email_id AS id, pxe.name, pxe.description, pxe.save_mail AS saveMail,
+        pxe.proxyEmailId AS id, pxe.name, pxe.description, pxe.saveMail AS saveMail,
         CONCAT(pxe.address, '@', d.domain) AS address, pme.address AS toEmail,
-        pxe.spam_filter AS spamFilter, pxe.direct_forward AS directForward
+        pxe.spamFilter AS spamFilter, pxe.directForward AS directForward
       FROM
         proxy_emails AS pxe, primary_emails AS pme, domains AS d
       WHERE
-        pxe.email_id = ? AND pxe.user_id = ? AND
-        pme.email_id = pxe.primary_email_id AND
-        d.id = pxe.domain_id
+        pxe.proxyEmailId = ? AND pxe.userId = ? AND
+        pme.primaryEmailId = pxe.primaryEmailId AND
+        d.id = pxe.domainId
     `,
     [opt.email, opt.user]
   );
@@ -50,9 +50,9 @@ export async function getProxyEmail(db, opt) {
   // Grab basic info for all filters linked to email
   email.filters = await db.query(
     `
-      SELECT filter_id AS id, name, description, type
-      FROM filters WHERE filter_id IN (
-        SELECT filter_id FROM linked_filters WHERE email_id = ?
+      SELECT filterId AS id, name, description, type
+      FROM filters WHERE filterId IN (
+        SELECT filterId FROM links WHERE proxyEmailId = ?
       )
     `,
     [opt.email]
@@ -62,14 +62,14 @@ export async function getProxyEmail(db, opt) {
   email.modifiers = await db.query(
     `
       SELECT
-        modifiers.modifier_id AS id, modifiers.name,
+        modifiers.modifierId AS id, modifiers.name,
         modifiers.description, modifiers.type
       FROM
-        modifiers, linked_modifiers
+        modifiers, links
       WHERE
-        modifiers.modifier_id = linked_modifiers.modifier_id
-        AND linked_modifiers.email_id = ?
-      ORDER BY linked_modifiers.order_number
+        modifiers.modifierId = links.modifierId
+        AND links.proxyEmailId = ?
+      ORDER BY links.orderIndex
     `,
     [opt.email]
   );

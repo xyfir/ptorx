@@ -11,12 +11,12 @@ export namespace Ptorx {
       hasMadePurchase?: boolean;
     };
     credits: number;
-    email_template?: number;
+    emailTemplate?: number;
   }
 
   export interface Domain {
     id: number;
-    user_id: number;
+    userId: number;
     /**
      * @example `"sandbox86b2c.mailgun.org"`
      */

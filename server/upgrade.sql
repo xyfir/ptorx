@@ -33,8 +33,66 @@ CREATE TABLE `cron_jobs` (
  `minutesInterval` mediumint(11) unsigned NOT NULL,
  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4;
-INSERT INTO `cron_jobs` (`id`, `name`, `lastRun`, `minutesInterval`) VALUES (NULL, 'delete-unpaid-affiliate-accounts', NULL, '60'), (NULL, 'delete-expired-messages', NULL, '60')
+INSERT INTO `cron_jobs` (`id`, `name`, `lastRun`, `minutesInterval`) VALUES (NULL, 'delete-expired-messages', NULL, '60')
+-- remove affiliates/admins
 DROP TABLE `ptorx`.`affiliate_created_users`;
 DROP TABLE `ptorx`.`affiliates`;
 ALTER TABLE `users` DROP `affiliate`;
 ALTER TABLE `users` DROP `admin`;
+-- improve db columns naming
+ALTER TABLE `domains` CHANGE `user_id` `userId` INT(10) UNSIGNED NOT NULL;
+ALTER TABLE `domains` DROP FOREIGN KEY `fk__domains__user_id`; ALTER TABLE `domains` ADD CONSTRAINT `fk__domains__userId` FOREIGN KEY (`userId`) REFERENCES `users`(`user_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `ptorx`.`domains` DROP INDEX `fk__domains__user_id`, ADD INDEX `fk__domains__userId` (`userId`) USING BTREE;
+ALTER TABLE `domains` CHANGE `domain_key` `domainKey` MEDIUMTEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL;
+ALTER TABLE `domain_users` CHANGE `domain_id` `domainId` INT(10) UNSIGNED NOT NULL;
+ALTER TABLE `domain_users` DROP FOREIGN KEY `fk__domain_users__domain_id`; ALTER TABLE `domain_users` ADD CONSTRAINT `fk__domain_users__domainId` FOREIGN KEY (`domainId`) REFERENCES `domains`(`id`) ON DELETE CASCADE ON UPDATE CASCADE; ALTER TABLE `domain_users` DROP FOREIGN KEY `fk__domain_users__user_id`; ALTER TABLE `domain_users` ADD CONSTRAINT `fk__domain_users__userId` FOREIGN KEY (`user_id`) REFERENCES `users`(`user_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `domain_users` CHANGE `user_id` `userId` INT(10) UNSIGNED NOT NULL;
+ALTER TABLE `domain_users` CHANGE `request_key` `requestKey` VARCHAR(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL;
+ALTER TABLE `filters` CHANGE `user_id` `userId` INT(10) UNSIGNED NOT NULL;
+ALTER TABLE `filters` CHANGE `filter_id` `filterId` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+ALTER TABLE `filters` CHANGE `accept_on_match` `acceptOnMatch` TINYINT(1) NOT NULL, CHANGE `use_regex` `useRegex` TINYINT(1) NOT NULL;
+ALTER TABLE `ptorx`.`domain_users` DROP INDEX `domain_id`, ADD UNIQUE `domainId` (`domainId`, `userId`) USING BTREE;
+ALTER TABLE `ptorx`.`domain_users` DROP INDEX `fk__domain_users__user_id`, ADD INDEX `fk__domain_users__userId` (`userId`) USING BTREE;
+ALTER TABLE `filters` DROP FOREIGN KEY `fk__filters__user_id`; ALTER TABLE `filters` ADD CONSTRAINT `fk__filters__userId` FOREIGN KEY (`userId`) REFERENCES `users`(`user_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `ptorx`.`filters` DROP INDEX `fk__filters__user_id`, ADD INDEX `fk__filters__userId` (`userId`) USING BTREE;
+-- linked_filters, linked_modifiers -> links
+CREATE TABLE `links` (
+ `proxyEmailId` int(10) unsigned NOT NULL,
+ `orderIndex` tinyint(3) unsigned NOT NULL,
+ `primaryEmailId` int(10) unsigned DEFAULT NULL,
+ `modifierId` int(10) unsigned DEFAULT NULL,
+ `filterId` int(10) unsigned DEFAULT NULL,
+ KEY `fk__link__proxyEmailId` (`proxyEmailId`),
+ KEY `fk__link__primaryEmailId` (`primaryEmailId`),
+ KEY `fk__link__modifierId` (`modifierId`),
+ KEY `fk__link__filterId` (`filterId`),
+ CONSTRAINT `fk__link__filterId` FOREIGN KEY (`filterId`) REFERENCES `filters` (`filterId`) ON DELETE CASCADE ON UPDATE CASCADE,
+ CONSTRAINT `fk__link__modifierId` FOREIGN KEY (`modifierId`) REFERENCES `modifiers` (`modifier_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+ CONSTRAINT `fk__link__primaryEmailId` FOREIGN KEY (`primaryEmailId`) REFERENCES `primary_emails` (`email_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+ CONSTRAINT `fk__link__proxyEmailId` FOREIGN KEY (`proxyEmailId`) REFERENCES `proxy_emails` (`email_id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+INSERT INTO `links` (proxyEmailId, filterId) SELECT email_id, filter_id FROM linked_filters;
+INSERT INTO `links` (proxyEmailId, modifierId, orderIndex) SELECT email_id, modifier_id, order_number FROM linked_modifiers;
+DROP TABLE `ptorx`.`linked_filters`;
+DROP TABLE `ptorx`.`linked_modifiers`;
+DROP IF EXISTS TABLE `ptorx`.`linked_objects`;
+-- improve db columns naming
+ALTER TABLE `messages` CHANGE `email_id` `emailId` INT(10) UNSIGNED NOT NULL, CHANGE `message_url` `url` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL;
+ALTER TABLE `messages` CHANGE `emailId` `proxyEmailId` INT(10) UNSIGNED NOT NULL;
+ALTER TABLE `messages` DROP FOREIGN KEY `fk__messages__email_id`; ALTER TABLE `messages` ADD CONSTRAINT `fk__messages__proxyEmailId` FOREIGN KEY (`proxyEmailId`) REFERENCES `proxy_emails`(`email_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `ptorx`.`messages` DROP INDEX `fk__messages__email_id`, ADD INDEX `fk__messages__proxyEmailId` (`proxyEmailId`) USING BTREE;
+ALTER TABLE `modifiers` CHANGE `user_id` `userId` INT(10) UNSIGNED NOT NULL;
+ALTER TABLE `modifiers` CHANGE `modifier_id` `modifierId` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+ALTER TABLE `modifiers` DROP FOREIGN KEY `fk__modifiers__user_id`; ALTER TABLE `modifiers` ADD CONSTRAINT `fk__modifiers__userId` FOREIGN KEY (`userId`) REFERENCES `users`(`user_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `ptorx`.`modifiers` DROP INDEX `fk__modifiers__user_id`, ADD INDEX `fk__modifiers__userId` (`userId`) USING BTREE;
+ALTER TABLE `primary_emails` CHANGE `user_id` `userId` INT(10) UNSIGNED NOT NULL, CHANGE `email_id` `primaryEmailId` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+ALTER TABLE `primary_emails` DROP FOREIGN KEY `fk__primary_emails__user_id`; ALTER TABLE `primary_emails` ADD CONSTRAINT `fk__primary_emails__userId` FOREIGN KEY (`userId`) REFERENCES `users`(`user_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `ptorx`.`primary_emails` DROP INDEX `fk__primary_emails__user_id`, ADD INDEX `fk__primary_emails__userId` (`userId`) USING BTREE;
+ALTER TABLE `proxy_emails` CHANGE `email_id` `proxyEmailId` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT, CHANGE `user_id` `userId` INT(10) UNSIGNED NULL DEFAULT NULL, CHANGE `domain_id` `domainId` INT(10) UNSIGNED NOT NULL, CHANGE `primary_email_id` `primaryEmailId` INT(10) UNSIGNED NULL DEFAULT NULL, CHANGE `mg_route_id` `mgRouteId` VARCHAR(24) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL, CHANGE `spam_filter` `spamFilter` TINYINT(1) NOT NULL, CHANGE `save_mail` `saveMail` TINYINT(1) NOT NULL, CHANGE `direct_forward` `directForward` TINYINT(1) NOT NULL;
+ALTER TABLE `proxy_emails` DROP FOREIGN KEY `fk__proxy_emails__domain_id`; ALTER TABLE `proxy_emails` ADD CONSTRAINT `fk__proxy_emails__domainId` FOREIGN KEY (`domainId`) REFERENCES `domains`(`id`) ON DELETE CASCADE ON UPDATE CASCADE; ALTER TABLE `proxy_emails` DROP FOREIGN KEY `fk__proxy_emails__primary_email_id`; ALTER TABLE `proxy_emails` ADD CONSTRAINT `fk__proxy_emails__primaryEmailId` FOREIGN KEY (`primaryEmailId`) REFERENCES `primary_emails`(`primaryEmailId`) ON DELETE CASCADE ON UPDATE CASCADE; ALTER TABLE `proxy_emails` DROP FOREIGN KEY `fk__proxy_emails__user_id`; ALTER TABLE `proxy_emails` ADD CONSTRAINT `fk__proxy_emails__userId` FOREIGN KEY (`userId`) REFERENCES `users`(`user_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `ptorx`.`proxy_emails` DROP INDEX `fk__proxy_emails__domain_id`, ADD INDEX `fk__proxy_emails__domainId` (`domainId`) USING BTREE;
+ALTER TABLE `ptorx`.`proxy_emails` DROP INDEX `fk__proxy_emails__primary_email_id`, ADD INDEX `fk__proxy_emails__primaryEmailId` (`primaryEmailId`) USING BTREE;
+ALTER TABLE `ptorx`.`proxy_emails` DROP INDEX `fk__proxy_emails__user_id`, ADD INDEX `fk__proxy_emails__userId` (`userId`) USING BTREE;
+ALTER TABLE `users` CHANGE `user_id` `userId` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT, CHANGE `xyfir_id` `xyfirId` VARCHAR(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL, CHANGE `emails_created` `emailsCreated` INT(10) UNSIGNED NOT NULL, CHANGE `email_template` `emailTemplate` INT(10) UNSIGNED NULL DEFAULT NULL;
+ALTER TABLE `users` DROP FOREIGN KEY `fk__users__email_template`; ALTER TABLE `users` ADD CONSTRAINT `fk__users__emailTemplate` FOREIGN KEY (`emailTemplate`) REFERENCES `proxy_emails`(`proxyEmailId`) ON DELETE SET NULL ON UPDATE CASCADE;
+

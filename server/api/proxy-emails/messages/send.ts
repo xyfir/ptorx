@@ -18,10 +18,10 @@ export async function api_sendMessage(
         FROM
           domains AS d, proxy_emails AS pxe, users AS u, primary_emails AS pme
         WHERE
-          pxe.email_id = ? AND u.user_id = ? AND
-          pme.email_id = pxe.primary_email_id AND
-          pxe.user_id = u.user_id AND
-          d.id = pxe.domain_id
+          pxe.proxyEmailId = ? AND u.userId = ? AND
+          pme.proxyEmailId = pxe.primaryEmailId AND
+          pxe.userId = u.userId AND
+          d.id = pxe.domainId
       `,
       [req.params.email, req.session.uid]
     );

@@ -11,9 +11,9 @@ export async function api_getModifier(
     const [modifier] = await db.query(
       `
       SELECT
-        modifier_id AS id, name, description, type, data
+        modifierId AS id, name, description, type, data
       FROM modifiers
-      WHERE modifier_id = ? AND user_id = ?
+      WHERE modifierId = ? AND userId = ?
     `,
       [req.params.mod, req.session.uid]
     );
@@ -22,13 +22,13 @@ export async function api_getModifier(
     modifier.linkedTo = await db.query(
       `
     SELECT
-      email_id AS id, CONCAT(pxe.address, '@', d.domain) AS address
+      proxyEmailId AS id, CONCAT(pxe.address, '@', d.domain) AS address
     FROM
       proxy_emails AS pxe, domains AS d
     WHERE
-      pxe.email_id IN (
-        SELECT email_id FROM linked_modifiers WHERE modifier_id = ?
-      ) AND d.id = pxe.domain_id
+      pxe.proxyEmailId IN (
+        SELECT proxyEmailId FROM links WHERE modifierId = ?
+      ) AND d.id = pxe.domainId
     `,
       [req.params.mod]
     );

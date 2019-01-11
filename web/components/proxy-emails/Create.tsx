@@ -19,7 +19,7 @@ export class CreateEmail extends React.Component<RouteComponentProps> {
 
   async componentDidMount() {
     const q = qs.parse(location.search);
-    const copy = +q.duplicate || this.context.account.email_template;
+    const copy = +q.duplicate || this.context.account.emailTemplate;
     const { data: proxyEmails }: { data: Ptorx.ProxyEmailList } = await api.get(
       '/proxy-emails'
     );

@@ -14,7 +14,7 @@ export async function api_editModifier(
 
     let sql = `
         UPDATE modifiers SET name = ?, description = ?, type = ?, data = ?
-        WHERE modifier_id = ? AND user_id = ?
+        WHERE modifierId = ? AND userId = ?
       `,
       vars = [
         req.body.name,
@@ -30,7 +30,7 @@ export async function api_editModifier(
     if (!result.affectedRows) throw 'An unknown error occured';
 
     (sql = `
-      SELECT email_id as id FROM linked_modifiers WHERE modifier_id = ?
+      SELECT proxyEmailId as id FROM links WHERE modifierId = ?
     `),
       (vars = [req.params.mod]);
 

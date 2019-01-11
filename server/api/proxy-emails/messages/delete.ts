@@ -11,9 +11,9 @@ export async function api_deleteMessage(
     await db.query(
       `
       DELETE FROM messages
-      WHERE id = ? AND email_id = (
-        SELECT email_id FROM proxy_emails
-        WHERE email_id = ? AND user_id = ?
+      WHERE id = ? AND proxyEmailId = (
+        SELECT proxyEmailId FROM proxy_emails
+        WHERE proxyEmailId = ? AND userId = ?
       )
     `,
       [req.params.message, req.params.email, req.session.uid]

@@ -1,18 +1,21 @@
 import { Request, Response } from 'express';
 import { MySQL } from 'lib/MySQL';
 
-export async function api_getDomains(req: Request, res: Response): Promise<void> {
+export async function api_getDomains(
+  req: Request,
+  res: Response
+): Promise<void> {
   const db = new MySQL();
   try {
     const domains = await db.query(
       `
         SELECT
-          id, domain, (user_id = ?) AS isCreator, global
+          id, domain, (userId = ?) AS isCreator, global
         FROM domains
         WHERE
           global = 1 OR id IN (
-            SELECT domain_id FROM domain_users
-            WHERE user_id = ? AND authorized = 1
+            SELECT domainId FROM domain_users
+            WHERE userId = ? AND authorized = 1
           )
       `,
       [req.session.uid, req.session.uid]

@@ -11,10 +11,10 @@ export async function api_getFilter(
     const [filter] = await db.query(
       `
       SELECT
-        filter_id AS id, name, description, type, find,
-        accept_on_match as acceptOnMatch, use_regex AS regex
+        filterId AS id, name, description, type, find,
+        acceptOnMatch as acceptOnMatch, useRegex AS regex
       FROM filters
-      WHERE filter_id = ? AND user_id = ?
+      WHERE filterId = ? AND userId = ?
     `,
       [req.params.filter, req.session.uid]
     );
@@ -27,13 +27,13 @@ export async function api_getFilter(
     filter.linkedTo = await db.query(
       `
       SELECT
-        email_id AS id, CONCAT(pxe.address, '@', d.domain) AS address
+        proxyEmailId AS id, CONCAT(pxe.address, '@', d.domain) AS address
       FROM
         proxy_emails AS pxe, domains AS d
       WHERE
-        pxe.email_id IN (
-          SELECT email_id FROM linked_filters WHERE filter_id = ?
-        ) AND d.id = pxe.domain_id
+        pxe.proxyEmailId IN (
+          SELECT proxyEmailId FROM links WHERE filterId = ?
+        ) AND d.id = pxe.domainId
     `,
       [req.params.filter]
     );

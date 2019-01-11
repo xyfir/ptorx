@@ -24,17 +24,17 @@ export async function api_addProxyEmail(
     // Load data needed for extended validation
     let sql = `
       SELECT
-        emails_created AS emailsCreated,
+        emailsCreated AS emailsCreated,
         (
           SELECT domain FROM domains
           WHERE id = ? AND verified = 1 AND (
             global = 1 OR id IN(
-              SELECT domain_id FROM domain_users
-              WHERE domain_id = ? AND user_id = ? AND authorized = 1
+              SELECT domainId FROM domain_users
+              WHERE domainId = ? AND userId = ? AND authorized = 1
             )
           )
         ) AS domain
-      FROM users WHERE user_id = ?
+      FROM users WHERE userId = ?
     `,
       vars = [
         req.body.domain,
@@ -57,8 +57,8 @@ export async function api_addProxyEmail(
     // Make sure address exists
     else {
       sql = `
-        SELECT email_id FROM proxy_emails
-        WHERE address = ? AND domain_id = ?
+        SELECT proxyEmailId FROM proxy_emails
+        WHERE address = ? AND domainId = ?
       `;
       vars = [req.body.address, req.body.domain];
       rows = await db.query(sql, vars);
@@ -69,8 +69,8 @@ export async function api_addProxyEmail(
     }
 
     sql = `
-      SELECT email_id, address FROM primary_emails
-      WHERE email_id = ? AND user_id = ?
+      SELECT primaryEmailId, address FROM primary_emails
+      WHERE primaryEmailId = ? AND userId = ?
     `;
     vars = [req.body.to, req.session.uid];
     rows = await db.query(sql, vars);
@@ -80,13 +80,13 @@ export async function api_addProxyEmail(
       throw 'Could not find main email';
 
     const data = {
-      primary_email_id: req.body.noToAddress ? 0 : rows[0].email_id,
-      direct_forward: req.body.directForward,
+      primaryEmailId: req.body.noToAddress ? 0 : rows[0].primaryEmailId,
+      directForward: req.body.directForward,
       description: req.body.description,
-      spam_filter: !req.body.noSpamFilter,
-      save_mail: req.body.saveMail || req.body.noToAddress,
-      domain_id: req.body.domain,
-      user_id: req.session.uid,
+      spamFilter: !req.body.noSpamFilter,
+      saveMail: req.body.saveMail || req.body.noToAddress,
+      domainId: req.body.domain,
+      userId: req.session.uid,
       address,
       name: req.body.name
     };
@@ -108,13 +108,13 @@ export async function api_addProxyEmail(
     await validateProxyEmailFilters(
       filters,
       req.session.uid,
-      data.direct_forward,
+      data.directForward,
       db
     );
     await validateProxyEmailModifiers(
       modifiers,
       req.session.uid,
-      data.direct_forward,
+      data.directForward,
       db
     );
 
@@ -131,7 +131,7 @@ export async function api_addProxyEmail(
 
     // Build Mailgun route expression(s)
     const expression = await buildMailgunRouteExpression(db, {
-      saveMail: data.save_mail,
+      saveMail: data.saveMail,
       address: data.address + '@' + domain,
       filters
     });
@@ -140,7 +140,7 @@ export async function api_addProxyEmail(
     const action = buildMailgunRouteAction(
       req.body.directForward
         ? { id, address: rows[0].address }
-        : { id, save: data.save_mail }
+        : { id, save: data.saveMail }
     );
 
     const mailgun = Mailgun({ apiKey: CONFIG.MAILGUN_KEY, domain });
@@ -150,37 +150,37 @@ export async function api_addProxyEmail(
     const mgRes = await mailgun.routes().create({
       description: 'Ptorx ' + CONFIG.PROD ? 'prod' : 'dev',
       expression,
-      priority: data.spam_filter && !data.save_mail ? 3000 : 1000,
+      priority: data.spamFilter && !data.saveMail ? 3000 : 1000,
       action
     });
 
     // Save Mailgun route ID to proxy email
     sql = `
-      UPDATE proxy_emails SET mg_route_id = ?
-      WHERE email_id = ?
+      UPDATE proxy_emails SET mgRouteId = ?
+      WHERE proxyEmailId = ?
     `;
     vars = [mgRes.route.id, id];
     dbRes = await db.query(sql, vars);
 
     if (filters.length) {
       sql = // Link filters to email
-        'INSERT INTO linked_filters (filter_id, email_id) VALUES ' +
+        'INSERT INTO links (filterId, proxyEmailId) VALUES ' +
         filters.map(f => `('${f}', '${id}')`).join(', ');
       dbRes = await db.query(sql);
     }
 
     if (modifiers.length) {
       sql = // Link modifiers to email
-        'INSERT INTO linked_modifiers ' +
-        '(modifier_id, email_id, order_number) VALUES ' +
+        'INSERT INTO links ' +
+        '(modifierId, proxyEmailId, orderIndex) VALUES ' +
         modifiers.map((m, i) => `('${m}', '${id}', '${i}')`).join(', ');
       dbRes = await db.query(sql);
     }
 
-    // Increment emails_created
+    // Increment emailsCreated
     sql = `
-      UPDATE users SET emails_created = emails_created + 1
-      WHERE user_id = ?
+      UPDATE users SET emailsCreated = emailsCreated + 1
+      WHERE userId = ?
     `;
     vars = [req.session.uid];
     dbRes = await db.query(sql, vars);

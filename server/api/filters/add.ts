@@ -31,13 +31,13 @@ export async function api_addFilter(
     if (error != 'ok') throw error;
 
     const result = await db.query('INSERT INTO filters SET ?', {
-      user_id: req.session.uid,
+      userId: req.session.uid,
       name: req.body.name,
       description: req.body.description,
       type: req.body.type,
       find: req.body.find,
-      use_regex: !!+req.body.useRegex,
-      accept_on_match: !!+req.body.acceptOnMatch
+      useRegex: !!+req.body.useRegex,
+      acceptOnMatch: !!+req.body.acceptOnMatch
     });
     if (!result.affectedRows) throw 'Could not create filter';
 

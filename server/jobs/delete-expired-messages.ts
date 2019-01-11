@@ -8,8 +8,8 @@ export async function deleteExpiredMessages() {
     // These messages can no longer be accessed from the Ptorx app
     await db.query(`
       UPDATE messages
-      SET message_url = ''
-      WHERE received + 255600 < UNIX_TIMESTAMP() AND message_url != ''
+      SET url = ''
+      WHERE received + 255600 < UNIX_TIMESTAMP() AND url != ''
     `);
 
     // Messages can no longer be replied to from outside of the Ptorx app

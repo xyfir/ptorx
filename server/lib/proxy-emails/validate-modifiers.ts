@@ -19,8 +19,8 @@ export async function validateProxyEmailModifiers(
 
   // Validate that all modifiers exist and user has access to them
   const sql = `
-    SELECT type, modifier_id FROM modifiers
-    WHERE modifier_id IN (?) AND user_id IN (?)
+    SELECT type, modifierId FROM modifiers
+    WHERE modifierId IN (?) AND userId IN (?)
   `,
     vars = [modifiers, [uid, 0]],
     rows = await db.query(sql, vars);

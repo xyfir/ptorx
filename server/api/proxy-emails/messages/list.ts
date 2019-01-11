@@ -11,9 +11,9 @@ export async function api_getMessages(req: Request, res: Response): Promise<void
         FROM
           messages AS m, proxy_emails AS pxe
         WHERE
-          m.email_id = pxe.email_id AND m.type = ? AND
+          m.proxyEmailId = pxe.proxyEmailId AND m.type = ? AND
           m.received + 255600 > UNIX_TIMESTAMP() AND
-          pxe.email_id = ? AND pxe.user_id = ?
+          pxe.proxyEmailId = ? AND pxe.userId = ?
         ORDER BY m.received DESC
       `,
       [req.query.type, req.params.email, req.session.uid]

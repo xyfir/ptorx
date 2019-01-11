@@ -12,11 +12,11 @@ export async function deleteProxyEmail(db, email, user) {
   const [row] = await db.query(
     `
       SELECT
-        pxe.mg_route_id AS mgRouteId, d.domain
+        pxe.mgRouteId AS mgRouteId, d.domain
       FROM
         proxy_emails AS pxe, domains AS d
       WHERE
-        pxe.email_id = ? AND pxe.user_id = ? AND d.id = pxe.domain_id
+        pxe.proxyEmailId = ? AND pxe.userId = ? AND d.id = pxe.domainId
     `,
     [email, user]
   );
@@ -28,9 +28,9 @@ export async function deleteProxyEmail(db, email, user) {
   await db.query(
     `
       UPDATE proxy_emails SET
-        user_id = NULL, primary_email_id = NULL, name = NULL,
-        description = NULL, mg_route_id = NULL
-      WHERE email_id = ?
+        userId = NULL, primaryEmailId = NULL, name = NULL,
+        description = NULL, mgRouteId = NULL
+      WHERE proxyEmailId = ?
     `,
     [email]
   );
@@ -47,6 +47,6 @@ export async function deleteProxyEmail(db, email, user) {
   // Because proxy email is not actually getting deleted and thus won't
   // trigger a foreign key ON DELETE CASCADE we must manually remove the
   // linked filters and modifiers
-  await db.query('DELETE FROM linked_filters WHERE email_id = ?', [email]);
-  await db.query('DELETE FROM linked_modifiers WHERE email_id = ?', [email]);
+  await db.query('DELETE FROM links WHERE proxyEmailId = ?', [email]);
+  await db.query('DELETE FROM links WHERE proxyEmailId = ?', [email]);
 }

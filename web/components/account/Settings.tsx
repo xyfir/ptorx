@@ -15,7 +15,7 @@ export class AccountSettings extends React.Component<{}, AccountSettingsState> {
 
   state: AccountSettingsState = {
     primaryEmails: [],
-    emailTemplate: this.context.account.email_template
+    emailTemplate: this.context.account.emailTemplate
   };
 
   constructor(props) {

@@ -8,7 +8,7 @@ export async function api_deletePrimaryEmail(
   const db = new MySQL();
   try {
     await db.query(
-      `DELETE FROM primary_emails WHERE email_id = ? AND user_id = ?`,
+      `DELETE FROM primary_emails WHERE primaryEmailId = ? AND userId = ?`,
       [req.params.email, req.session.uid]
     );
     res.status(200).json({});

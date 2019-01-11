@@ -14,7 +14,7 @@ export async function api_deleteDomainUser(
     // Remove self from domain
     if (req.params.user == req.session.uid) {
       result = await db.query(
-        'DELETE FROM domain_users WHERE domain_id = ? AND user_id = ?',
+        'DELETE FROM domain_users WHERE domainId = ? AND userId = ?',
         [req.params.domain, req.params.user]
       );
     }
@@ -22,8 +22,8 @@ export async function api_deleteDomainUser(
     else {
       result = await db.query(
         `
-        DELETE FROM domain_users WHERE user_id = ? AND domain_id IN (
-          SELECT id FROM domains WHERE id = ? AND user_id = ?
+        DELETE FROM domain_users WHERE userId = ? AND domainId IN (
+          SELECT id FROM domains WHERE id = ? AND userId = ?
         )
       `,
         [req.params.user, req.params.domain, req.session.uid]
@@ -35,8 +35,8 @@ export async function api_deleteDomainUser(
     // Get all of user's proxy emails on this domain
     const emails = await db.query(
       `
-      SELECT email_id AS id FROM proxy_emails
-      WHERE user_id = ? AND domain_id = ?
+      SELECT proxyEmailId AS id FROM proxy_emails
+      WHERE userId = ? AND domainId = ?
     `,
       [req.params.user, req.params.domain]
     );
