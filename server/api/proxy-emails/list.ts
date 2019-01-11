@@ -1,8 +1,11 @@
+import { Request, Response } from 'express';
 import { MySQL } from 'lib/MySQL';
 
-export async function getProxyEmails(req, res) {
+export async function getProxyEmails(
+  req: Request,
+  res: Response
+): Promise<void> {
   const db = new MySQL();
-
   try {
     const emails = await db.query(
       `
@@ -16,11 +19,9 @@ export async function getProxyEmails(req, res) {
       `,
       [req.session.uid]
     );
-    db.release();
-
-    res.status(200).json({ emails });
+    res.status(200).json(emails);
   } catch (err) {
-    db.release();
     res.status(400).json({ error: err });
   }
+  db.release();
 }

@@ -1,8 +1,8 @@
+import { Request, Response } from 'express';
 import { MySQL } from 'lib/MySQL';
 
-export async function getMessages(req, res) {
+export async function getMessages(req: Request, res: Response): Promise<void> {
   const db = new MySQL();
-
   try {
     const messages = await db.query(
       `
@@ -18,11 +18,9 @@ export async function getMessages(req, res) {
       `,
       [req.query.type, req.params.email, req.session.uid]
     );
-    db.release();
-
-    res.status(200).json({ messages });
+    res.status(200).json(messages);
   } catch (err) {
-    db.release();
     res.status(400).json({ error: err });
   }
+  db.release();
 }
