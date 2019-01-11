@@ -20,7 +20,7 @@ export async function getAccountInfo(req, res) {
       if (!token[0] || !token[1]) throw 'Invalid token 1';
 
       sql = `
-        SELECT xyfir_id, referral, admin, affiliate, credits, email_template
+        SELECT xyfir_id, referral, credits, email_template
         FROM users WHERE user_id = ?
       `;
       vars = [token[0]];
@@ -47,7 +47,7 @@ export async function getAccountInfo(req, res) {
     // Get info for dev user
     else if (!CONFIG.PROD) {
       sql = `
-        SELECT referral, admin, affiliate, credits, email_template
+        SELECT referral, credits, email_template
         FROM users WHERE user_id = 1
       `;
       rows = await db.query(sql);
@@ -70,14 +70,12 @@ export async function getAccountInfo(req, res) {
 
     // Set session, return account info
     req.session.uid = uid;
-    req.session.admin = !!row.admin;
 
     res.status(200).json({
       loggedIn: true,
       uid,
       emails,
       referral: JSON.parse(row.referral),
-      affiliate: !!row.affiliate,
       credits: row.credits,
       email_template: row.email_template
     });

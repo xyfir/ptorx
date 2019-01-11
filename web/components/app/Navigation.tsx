@@ -78,16 +78,6 @@ export class AppNavigation extends React.Component<{}, AppNavigationState> {
               primaryText="Settings"
             />
           </Link>,
-          account.affiliate ? (
-            <Link to="/affiliate">
-              <ListItem
-                leftIcon={<FontIcon>attach_money</FontIcon>}
-                primaryText="Affiliate"
-              />
-            </Link>
-          ) : (
-            <a />
-          ),
           <ListItem
             onClick={() => this.onLogout()}
             leftIcon={<FontIcon>close</FontIcon>}

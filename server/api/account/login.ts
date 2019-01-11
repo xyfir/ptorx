@@ -24,7 +24,7 @@ export async function login(req, res) {
     if (xaccResult.data.error) throw '-';
 
     // Get user data from db
-    let sql = 'SELECT user_id, admin FROM users WHERE xyfir_id = ?',
+    let sql = 'SELECT user_id FROM users WHERE xyfir_id = ?',
       vars = [req.body.xid],
       rows = await db.query(sql, vars);
 
@@ -63,7 +63,6 @@ export async function login(req, res) {
       db.release();
 
       req.session.uid = result.insertId;
-      req.session.admin = false;
 
       res.status(200).json({
         accessToken: cryptr.encrypt(
@@ -82,7 +81,6 @@ export async function login(req, res) {
       if (!result.affectedRows) throw '---';
 
       req.session.uid = rows[0].user_id;
-      req.session.admin = !!rows[0].admin;
 
       res.status(200).json({
         accessToken: cryptr.encrypt(

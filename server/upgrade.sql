@@ -34,3 +34,7 @@ CREATE TABLE `cron_jobs` (
  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4;
 INSERT INTO `cron_jobs` (`id`, `name`, `lastRun`, `minutesInterval`) VALUES (NULL, 'delete-unpaid-affiliate-accounts', NULL, '60'), (NULL, 'delete-expired-messages', NULL, '60')
+DROP TABLE `ptorx`.`affiliate_created_users`;
+DROP TABLE `ptorx`.`affiliates`;
+ALTER TABLE `users` DROP `affiliate`;
+ALTER TABLE `users` DROP `admin`;

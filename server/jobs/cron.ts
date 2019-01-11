@@ -1,4 +1,3 @@
-import { deleteUnpaidAffiliateAccounts } from 'jobs/delete-unpaid-affiliate-accounts';
 import { deleteExpiredMessages } from 'jobs/delete-expired-messages';
 import { MySQL } from 'lib/MySQL';
 
@@ -22,9 +21,6 @@ export async function cron(): Promise<never> {
       console.log(new Date().toLocaleString(), `Running job ${job.name}`);
 
       switch (job.name) {
-        case 'delete-unpaid-affiliate-accounts':
-          await deleteUnpaidAffiliateAccounts();
-          break;
         case 'delete-expired-messages':
           await deleteExpiredMessages();
           break;

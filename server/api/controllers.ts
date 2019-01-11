@@ -7,15 +7,6 @@ export * from './account/info';
 export * from './account/login';
 export * from './account/logout';
 
-export * from './affiliates/accounts/add';
-export * from './affiliates/accounts/delete';
-
-export * from './affiliates/pay/finish';
-export * from './affiliates/pay/start';
-
-export * from './affiliates/generate-key';
-export * from './affiliates/info';
-
 export * from './domains/users/add';
 export * from './domains/users/delete';
 

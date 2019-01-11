@@ -10,7 +10,6 @@ export namespace Ptorx {
       [type: string]: any;
       hasMadePurchase?: boolean;
     };
-    affiliate: boolean;
     credits: number;
     email_template?: number;
   }
@@ -50,6 +49,7 @@ export namespace Ptorx {
 
   export interface ProxyEmail {
     id: number;
+    domainId: number;
     name: string;
     description: string;
     saveMail: boolean;

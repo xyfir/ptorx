@@ -14,15 +14,6 @@ const upload = multer({
 
 export const router = Express.Router();
 
-router.get('/affiliates', c.getAffiliateInfo);
-router.post('/affiliates/key', c.generateAffiliateKey);
-
-router.post('/affiliates/accounts', c.addAccountAsAffiliate);
-router.delete('/affiliates/accounts/:id', c.deleteAccountAsAffiliate);
-
-router.get('/affiliates/pay', c.finishAffiliatePayment);
-router.post('/affiliates/pay', c.startAffiliatePayment);
-
 router.post('/receive/reply', c.receiveReply);
 router.post('/receive/:email', upload.any(), c.receiveMail);
 
