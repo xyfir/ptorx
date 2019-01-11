@@ -18,11 +18,6 @@ export class EditEmail extends React.Component<RouteComponentProps> {
   }
 
   componentDidMount() {
-    const { App, history } = this.props;
-    const email = App.state.emails.find(e => e.id == this.state.id);
-
-    if (!email) return history.push('/app/proxy-emails/list');
-
     api
       .get(`/proxy-emails/${this.state.id}`)
       .then(res => {
@@ -32,7 +27,7 @@ export class EditEmail extends React.Component<RouteComponentProps> {
   }
 
   onSubmit(data) {
-    const { App, history } = this.props;
+    const { history } = this.props;
     api
       .put(`/proxy-emails/${this.state.id}`, data)
       .then(() => {

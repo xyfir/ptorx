@@ -76,7 +76,7 @@ export class App extends React.Component<RouteComponentProps, AppState> {
     return (
       <div className="ptorx">
         <AppContext.Provider value={this.state}>
-          <AppNavigation App={this} />
+          <AppNavigation />
 
           <div className="main md-toolbar-relative">
             <Switch>

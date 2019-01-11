@@ -27,7 +27,6 @@ export class ViewMessage extends React.Component {
   }
 
   onReply() {
-    const { App } = this.props;
     api
       .post(`/proxy-emails/${this.state.id}/messages/${this.state.message}`, {
         content: this._message.value

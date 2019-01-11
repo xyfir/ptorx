@@ -12,8 +12,6 @@ export class SendMessage extends React.Component<RouteComponentProps> {
   }
 
   onSend() {
-    const { App } = this.props;
-
     api
       .post(`/proxy-emails/${this.state.id}/messages/`, {
         to: this._to.value,
@@ -23,7 +21,9 @@ export class SendMessage extends React.Component<RouteComponentProps> {
       .then(res => {
         // ** (updateCredits(res.data.credits));
         swal('Success', `Message sent to ${this._to.value}`, 'success');
-        this.props.history.push(`/app/proxy-emails/messages/${this.state.id}/list`);
+        this.props.history.push(
+          `/app/proxy-emails/messages/${this.state.id}/list`
+        );
       })
       .catch(err => swal('Error', err.response.data.error, 'error'));
   }

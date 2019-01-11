@@ -1,22 +1,41 @@
 import { SelectField, Paper } from 'react-md';
+import { AppContext } from 'lib/AppContext';
 import * as React from 'react';
+import { Ptorx } from 'typings/ptorx';
 import { api } from 'lib/api';
 
-export class AccountSettings extends React.Component {
+interface AccountSettingsState {
+  emailTemplate?: number;
+  primaryEmails: Ptorx.PrimaryEmailList;
+}
+
+export class AccountSettings extends React.Component<{}, AccountSettingsState> {
+  static contextType = AppContext;
+  context!: React.ContextType<typeof AppContext>;
+
+  state: AccountSettingsState = {
+    primaryEmails: [],
+    emailTemplate: this.context.account.email_template
+  };
+
   constructor(props) {
     super(props);
+  }
+
+  async componentDidMount() {
+    const res = await api.get('/primary-emails');
+    this.setState({ primaryEmails: res.data });
   }
 
   onSetEmailTemplate(id: number) {
     api
       .put('/account/email/template', { id })
-      // ** .then(() => (setEmailTemplate(id)))
+      .then(() => this.setState({ emailTemplate: id }))
       .catch(err => swal('Error', err.response.data.error, 'error'));
   }
 
   render() {
-    const { App } = this.props;
-
+    const { primaryEmails, emailTemplate } = this.state;
     return (
       <div className="account-settings">
         <Paper
@@ -48,12 +67,9 @@ export class AccountSettings extends React.Component {
             onChange={v => this.onSetEmailTemplate(v)}
             className="md-full-width"
             menuItems={[{ value: null, label: 'None' }].concat(
-              App.state.emails.map(e => ({
-                value: e.id,
-                label: e.address
-              }))
+              primaryEmails.map(e => ({ value: e.id, label: e.address }))
             )}
-            defaultValue={App.state.account.email_template}
+            defaultValue={emailTemplate}
           />
         </Paper>
       </div>

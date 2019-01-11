@@ -1,33 +1,41 @@
 import { RouteComponentProps } from 'react-router-dom';
+import { AppContext } from 'lib/AppContext';
 import { EmailForm } from 'components/proxy-emails/Form';
 import * as moment from 'moment';
 import * as React from 'react';
 import * as swal from 'sweetalert';
+import { Ptorx } from 'typings/ptorx';
 import { api } from 'lib/api';
 import * as qs from 'qs';
 
 export class CreateEmail extends React.Component<RouteComponentProps> {
+  static contextType = AppContext;
+  context!: React.ContextType<typeof AppContext>;
+
   constructor(props) {
     super(props);
-
     this.state = { loading: true };
   }
 
   async componentDidMount() {
-    const { App } = this.props;
     const q = qs.parse(location.search);
-
-    const copy = +q.duplicate || +App.state.account.email_template;
-    let email = App.state.emails.find(e => e.id == copy);
+    const copy = +q.duplicate || this.context.account.email_template;
+    const { data: proxyEmails }: { data: Ptorx.ProxyEmailList } = await api.get(
+      '/proxy-emails'
+    );
 
     // Load data to prefill data
+    let email: Partial<Ptorx.ProxyEmail> = proxyEmails.find(e => e.id == copy);
     if (email) {
       const domain = email.address.split('@')[1];
-      email.domain = App.state.domains.find(d => d.domain == domain).id;
+      const { data: domains }: { data: Ptorx.DomainList } = await api.get(
+        '/domains'
+      );
+      email.domain = domains.find(d => d.domain == domain).id;
 
       try {
         const res = await api.get(`/proxy-emails/${copy}`);
-        email = Object.assign({}, email, res.data);
+        Object.assign(email, res.data);
       } catch (err) {
         email = null;
       }
@@ -35,9 +43,13 @@ export class CreateEmail extends React.Component<RouteComponentProps> {
 
     // Instantly create a new proxy email without showing form
     if (q.instant) {
+      const {
+        data: primaryEmails
+      }: { data: Ptorx.PrimaryEmailList } = await api.get('/primary-emails');
+
       email = Object.assign(
         {
-          to: App.state.account.emails[0].id,
+          to: (primaryEmails[0] || {}).id,
           name: 'Untitled Instant Proxy Email',
           domain: 1,
           filters: [],
