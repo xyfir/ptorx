@@ -1,4 +1,3 @@
-export * from './account/credits/coinhive';
 export * from './account/credits/purchase/finish';
 export * from './account/credits/purchase/start';
 

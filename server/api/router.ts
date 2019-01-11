@@ -77,7 +77,6 @@ router.get('/account/logout', c.logout);
 
 router.post('/account/credits/purchase', c.startCreditsPurchase);
 router.get('/account/credits/purchase', c.finishCreditsPurchase);
-router.get('/account/credits/coinhive', c.getCoinhiveCredits);
 
 router
   .route('/domains')
