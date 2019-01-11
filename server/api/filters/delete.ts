@@ -1,7 +1,7 @@
 import { requireCredits } from 'lib/users/require-credits';
 import { MySQL } from 'lib/MySQL';
 
-export async function deleteFilter(req, res) {
+export async function api_deleteFilter(req, res) {
   const db = new MySQL();
 
   try {

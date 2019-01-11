@@ -1,6 +1,6 @@
 import { MySQL } from 'lib/MySQL';
 
-export async function deleteMessage(req, res) {
+export async function api_deleteMessage(req, res) {
   const db = new MySQL();
 
   try {

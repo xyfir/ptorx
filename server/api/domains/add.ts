@@ -3,7 +3,7 @@ import { MySQL } from 'lib/MySQL';
 import * as uuid from 'uuid/v4';
 import axios from 'axios';
 
-export async function addDomain(req, res) {
+export async function api_addDomain(req, res) {
   const db = new MySQL();
 
   try {

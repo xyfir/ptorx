@@ -8,7 +8,7 @@ import * as Mailgun from 'mailgun-js';
 import * as CONFIG from 'constants/config';
 import { MySQL } from 'lib/MySQL';
 
-export async function editProxyEmail(req, res) {
+export async function api_editProxyEmail(req, res) {
   const db = new MySQL();
 
   try {

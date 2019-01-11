@@ -2,7 +2,7 @@ import { requireCredits } from 'lib/users/require-credits';
 import { validateFilter } from 'lib/filters/validate';
 import { MySQL } from 'lib/MySQL';
 
-export async function editFilter(req, res) {
+export async function api_editFilter(req, res) {
   const db = new MySQL();
 
   try {

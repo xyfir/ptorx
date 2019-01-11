@@ -1,7 +1,7 @@
 import { getProxyEmail as _getProxyEmail } from 'lib/proxy-emails/get';
 import { MySQL } from 'lib/MySQL';
 
-export async function getProxyEmail(req, res) {
+export async function api_getProxyEmail(req, res) {
   const db = new MySQL();
 
   try {

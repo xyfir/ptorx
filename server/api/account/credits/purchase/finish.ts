@@ -2,7 +2,7 @@ import * as CONFIG from 'constants/config';
 import { MySQL } from 'lib/MySQL';
 import axios from 'axios';
 
-export async function finishCreditsPurchase(req, res) {
+export async function api_finishCreditsPurchase(req, res) {
   const db = new MySQL();
 
   try {

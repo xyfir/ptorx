@@ -6,7 +6,7 @@ import * as CONFIG from 'constants/config';
 import { MySQL } from 'lib/MySQL';
 import axios from 'axios';
 
-export async function receiveMail(req, res) {
+export async function api_receiveMail(req, res) {
   const db = new MySQL();
 
   try {

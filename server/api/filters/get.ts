@@ -1,6 +1,6 @@
 import { MySQL } from 'lib/MySQL';
 
-export async function getFilter(req, res) {
+export async function api_getFilter(req, res) {
   const db = new MySQL();
 
   try {

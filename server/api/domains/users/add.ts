@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { MySQL } from 'lib/MySQL';
 
-export async function addDomainUser(req, res) {
+export async function api_addDomainUser(req, res) {
   const db = new MySQL();
 
   try {

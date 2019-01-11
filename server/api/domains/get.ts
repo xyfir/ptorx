@@ -1,6 +1,6 @@
 import { MySQL } from 'lib/MySQL';
 
-export async function getDomain(req, res) {
+export async function api_getDomain(req, res) {
   const db = new MySQL();
 
   try {

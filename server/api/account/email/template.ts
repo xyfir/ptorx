@@ -1,6 +1,6 @@
 import { MySQL } from 'lib/MySQL';
 
-export async function setEmailTemplate(req, res) {
+export async function api_setEmailTemplate(req, res) {
   const db = new MySQL();
 
   try {

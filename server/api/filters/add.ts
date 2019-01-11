@@ -20,7 +20,7 @@ import { MySQL } from 'lib/MySQL';
  * @prop {string} [message]
  * @prop {number} [id]
  */
-export async function addFilter(req, res) {
+export async function api_addFilter(req, res) {
   const db = new MySQL();
   try {
     const error = validateFilter(req.body);

@@ -2,7 +2,7 @@ import axios from 'axios';
 import * as CONFIG from 'constants/config';
 import { MySQL } from 'lib/MySQL';
 
-export async function getMessage(req, res) {
+export async function api_getMessage(req, res) {
   const db = new MySQL();
 
   try {

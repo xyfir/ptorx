@@ -1,6 +1,6 @@
 import { MySQL } from 'lib/MySQL';
 
-export async function getProxyEmailAvailability(req, res) {
+export async function api_getProxyEmailAvailability(req, res) {
   const db = new MySQL();
 
   try {

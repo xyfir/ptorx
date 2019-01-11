@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { MySQL } from 'lib/MySQL';
 
-export async function getMessages(req: Request, res: Response): Promise<void> {
+export async function api_getMessages(req: Request, res: Response): Promise<void> {
   const db = new MySQL();
   try {
     const messages = await db.query(

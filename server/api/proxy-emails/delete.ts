@@ -1,7 +1,7 @@
 import { deleteProxyEmail as _deleteProxyEmail } from 'lib/proxy-emails/delete';
 import { MySQL } from 'lib/MySQL';
 
-export async function deleteProxyEmail(req, res) {
+export async function api_deleteProxyEmail(req, res) {
   const db = new MySQL();
 
   try {

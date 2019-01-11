@@ -1,6 +1,6 @@
 import { MySQL } from 'lib/MySQL';
 
-export async function getModifier(req, res) {
+export async function api_getModifier(req, res) {
   const db = new MySQL();
 
   try {

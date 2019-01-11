@@ -6,7 +6,7 @@ import { MySQL } from 'lib/MySQL';
  * @param {object} req.params
  * @param {number} req.params.mod
  */
-export async function deleteModifier(req, res) {
+export async function api_deleteModifier(req, res) {
   const db = new MySQL();
   try {
     await db.query(

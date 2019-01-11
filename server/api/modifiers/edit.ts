@@ -2,7 +2,7 @@ import { buildModifierData } from 'lib/modifiers/build-data';
 import { validateModifier } from 'lib/modifiers/validate';
 import { MySQL } from 'lib/MySQL';
 
-export async function editModifier(req, res) {
+export async function api_editModifier(req, res) {
   const db = new MySQL();
 
   try {

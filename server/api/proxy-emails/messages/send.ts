@@ -3,7 +3,7 @@ import * as Mailgun from 'mailgun-js';
 import * as CONFIG from 'constants/config';
 import { MySQL } from 'lib/MySQL';
 
-export async function sendMessage(req, res) {
+export async function api_sendMessage(req, res) {
   const db = new MySQL();
 
   try {

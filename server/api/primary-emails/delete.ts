@@ -1,6 +1,6 @@
 import { MySQL } from 'lib/MySQL';
 
-export async function deletePrimaryEmail(req, res) {
+export async function api_deletePrimaryEmail(req, res) {
   const db = new MySQL();
   try {
     await db.query(

@@ -6,7 +6,7 @@ import axios from 'axios';
 const Cryptr = require('cryptr');
 const cryptr = new Cryptr(CONFIG.ACCESS_TOKEN_KEY);
 
-export async function login(req, res) {
+export async function api_login(req, res) {
   const db = new MySQL();
 
   try {

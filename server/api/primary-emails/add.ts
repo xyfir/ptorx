@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { MySQL } from 'lib/MySQL';
 
-export async function addPrimaryEmail(
+export async function api_addPrimaryEmail(
   req: Request,
   res: Response
 ): Promise<void> {
