@@ -15,23 +15,19 @@
   "dependencies": {
     "app-module-path": "^2.2.0",
     "axios": "^0.18.0",
-    "basic-auth": "^2.0.1",
     "body-parser": "^1.18.3",
     "cryptr": "^4.0.2",
     "escape-string-regexp": "^1.0.5",
     "express": "^4.16.4",
     "express-mysql-session": "^2.1.0",
     "express-session": "^1.15.6",
-    "mailcomposer": "^4.0.2",
     "mailgun-js": "^0.22.0",
-    "moment": "^2.23.0",
     "multer": "^1.4.1",
     "mysql": "^2.16.0",
     "rword": "^3.0.0",
     "uuid": "^3.3.2"
   },
   "devDependencies": {
-    "@types/basic-auth": "^1.1.2",
     "@types/body-parser": "^1.17.0",
     "@types/cryptr": "^4.0.0",
     "@types/escape-string-regexp": "^1.0.0",
