@@ -2,59 +2,34 @@ import { RouteComponentProps } from 'react-router-dom';
 import { ModifierForm } from 'components/modifiers/Form';
 import * as React from 'react';
 import * as swal from 'sweetalert';
+import { Ptorx } from 'typings/ptorx';
 import { api } from 'lib/api';
 
-export class EditModifier extends React.Component<RouteComponentProps> {
+interface EditModifierState {
+  modifier?: Ptorx.Modifier;
+}
+
+export class EditModifier extends React.Component<
+  RouteComponentProps,
+  EditModifierState
+> {
+  state: EditModifierState = { modifier: null };
+
   constructor(props) {
     super(props);
+  }
 
-    this.state = { id: +this.props.match.params.modifier, loading: true };
-
+  async componentDidMount() {
     api
-      .get(`/modifiers/${this.state.id}`)
-      .then(res => {
-        delete res.data.error;
-        res.data.data =
-          res.data.data.substr(0, 1) == '{'
-            ? JSON.parse(res.data.data)
-            : res.data.data;
-
-        //  ** editModifier(
-        //   Object.assign(
-        //     {},
-        //     this.props.data.modifiers.find(mod => mod.id == this.state.id),
-        //     res.data
-        //   )
-        // )
-
-        this.setState({
-          loading: false,
-          type: this.props.data.modifiers.find(mod => mod.id == this.state.id)
-            .type
-        });
-      })
+      .get(`/modifiers/${this.props.match.params.modifier}`)
+      .then(res => this.setState({ modifier: res.data }))
       .catch(err => swal('Error', err.response.data.error, 'error'));
   }
 
-  /**
-   * @param {object} modifier
-   * @param {object} data
-   */
-  onUpdate(modifier, data) {
+  onSubmit(modifier: Ptorx.Modifier) {
     api
-      .put(`/modifiers/${this.state.id}`, Object.assign({}, modifier, data))
+      .put(`/modifiers/${this.props.match.params.modifier}`, modifier)
       .then(res => {
-        modifier.id = this.state.id;
-        modifier.data = data;
-
-        // ** editModifier(
-        //   Object.assign(
-        //     {},
-        //     this.props.data.modifiers.find(m => m.id == this.state.id),
-        //     modifier
-        //   )
-        // )
-
         this.props.history.push('/app/modifiers/list');
         swal('Success', `Modifier '${modifier.name}' updated`, 'success');
       })
@@ -62,12 +37,12 @@ export class EditModifier extends React.Component<RouteComponentProps> {
   }
 
   render() {
-    if (this.state.loading) return null;
-
-    const mod = this.props.data.modifiers.find(mod => mod.id == this.state.id);
-
+    if (!this.state.modifier) return null;
     return (
-      <ModifierForm modifier={mod} onSubmit={(m, d) => this.onUpdate(m, d)} />
+      <ModifierForm
+        modifier={this.state.modifier}
+        onSubmit={d => this.onSubmit(d)}
+      />
     );
   }
 }

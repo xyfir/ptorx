@@ -1,32 +1,43 @@
 import { SelectField, ListItem, DialogContainer, List } from 'react-md';
+import { Link, RouteComponentProps } from 'react-router-dom';
 import { EmailNavigation } from 'components/proxy-emails/Navigation';
 import { messageTypes } from 'constants/types';
 import * as React from 'react';
+import { Ptorx } from 'typings/ptorx';
 import * as swal from 'sweetalert';
-import { Link } from 'react-router-dom';
 import { api } from 'lib/api';
 
-export class MessageList extends React.Component {
+interface MessageListState {
+  messages: Ptorx.MessageList;
+  message?: string;
+  type: number;
+}
+
+export class MessageList extends React.Component<
+  RouteComponentProps,
+  MessageListState
+> {
+  state: MessageListState = {
+    messages: [],
+    type: 0
+  };
+
   constructor(props) {
     super(props);
+  }
 
-    this.state = {
-      emailId: +this.props.match.params.email,
-      loading: true,
-      type: 0
-    };
-
-    this._loadMessages = this._loadMessages.bind(this);
-    this._loadMessages(this.state.type);
+  componentDidMount() {
+    this.load();
   }
 
   componentDidUpdate(prevProps, prevState) {
     const { type } = this.state;
-    if (type != prevState.type) this._loadMessages(type);
+    if (type != prevState.type) this.load();
   }
 
   onDelete() {
-    const id = this.state.selected;
+    const { message, type } = this.state;
+    const email = +this.props.match.params.email;
 
     swal({
       button: 'Yes',
@@ -34,29 +45,26 @@ export class MessageList extends React.Component {
       text: 'This action cannot be undone',
       icon: 'warning'
     })
-      .then(() => api.delete(`/proxy-emails/${this.state.emailId}/messages/${id}`))
+      .then(() => api.delete(`/proxy-emails/${email}/messages/${message}`))
       .then(() => {
-        this.setState({ selected: '' });
-        // ** (deleteMessage(id));
+        this.setState({ message: null });
+        this.load();
       })
       .catch(err => swal('Error', err.response.data.error, 'error'));
   }
 
-  _loadMessages(type: number) {
+  load() {
     api
-      .get(`/proxy-emails/${this.state.emailId}/messages`, { params: { type } })
-      .then(res => {
-        // ** (loadMessages(res.data.errors));
-        this.setState({ loading: false });
+      .get(`/proxy-emails/${+this.props.match.params.email}/messages`, {
+        params: { type: this.state.type }
       })
+      .then(res => this.setState({ messages: res.data }))
       .catch(err => swal('Error', err.response.data.error, 'error'));
   }
 
   render() {
-    if (this.state.loading) return null;
-
-    const { selected, emailId } = this.state;
-    const { messages } = this.props.data;
+    const { messages, message } = this.state;
+    const emailId = +this.props.match.params.email;
 
     return (
       <div className="messages flex">
@@ -75,12 +83,12 @@ export class MessageList extends React.Component {
 
         {messages.length ? (
           <List className="messages md-paper md-paper--1 section">
-            {messages.map(msg => (
+            {messages.map(m => (
               <ListItem
-                key={msg.id}
-                onClick={() => this.setState({ selected: msg.id })}
-                primaryText={msg.subject}
-                secondaryText={new Date(msg.received * 1000).toLocaleString()}
+                key={m.id}
+                onClick={() => this.setState({ message: m.id })}
+                primaryText={m.subject}
+                secondaryText={new Date(m.received * 1000).toLocaleString()}
               />
             ))}
           </List>
@@ -90,16 +98,16 @@ export class MessageList extends React.Component {
 
         <DialogContainer
           id="selected-message"
-          title={selected && messages.find(m => m.id == selected).subject}
-          onHide={() => this.setState({ selected: '' })}
-          visible={!!selected}
+          title={message && messages.find(m => m.id == message).subject}
+          onHide={() => this.setState({ message: null })}
+          visible={message !== null}
         >
           <List>
-            <Link to={`/app/proxy-emails/messages/${emailId}/view/${selected}`}>
+            <Link to={`/app/proxy-emails/messages/${emailId}/view/${message}`}>
               <ListItem primaryText="View" />
             </Link>
             <Link
-              to={`/app/proxy-emails/messages/${emailId}/view/${selected}?reply=1`}
+              to={`/app/proxy-emails/messages/${emailId}/view/${message}?reply=1`}
             >
               <ListItem primaryText="Reply" />
             </Link>

@@ -2,111 +2,44 @@ import { RouteComponentProps } from 'react-router-dom';
 import { FilterForm } from 'components/filters/Form';
 import * as React from 'react';
 import * as swal from 'sweetalert';
+import { Ptorx } from 'typings/ptorx';
 import { api } from 'lib/api';
 
-export class EditFilter extends React.Component<RouteComponentProps> {
+interface EditFilterState {
+  filter?: Ptorx.Filter;
+}
+
+export class EditFilter extends React.Component<
+  RouteComponentProps,
+  EditFilterState
+> {
+  state: EditFilterState = { filter: null };
+
   constructor(props) {
     super(props);
+  }
 
-    this._updateEmails = this._updateEmails.bind(this);
-
-    this.state = {
-      id: +this.props.match.params.filter,
-      loading: true
-    };
-
+  async componentDidMount() {
     api
-      .get(`/filters/${this.state.id}`)
-      .then(res => {
-        delete res.data.error;
-        // ** editFilter(
-        //   Object.assign(
-        //     {},
-        //     this.props.data.filters.find(f => f.id == this.state.id),
-        //     res.data
-        //   )
-        // )
-        this.setState({ loading: false });
-      })
+      .get(`/filters/${this.props.match.params.filter}`)
+      .then(res => this.setState({ filter: res.data }))
       .catch(err => swal('Error', err.response.data.error, 'error'));
   }
 
-  onUpdate(data) {
+  onSubmit(filter: Ptorx.Filter) {
     api
-      .put(`/filters/${this.state.id}`, data)
+      .put(`/filters/${this.props.match.params.filter}`, filter)
       .then(res => {
-        data.id = this.state.id;
-
-        // ** editFilter(
-        //   Object.assign(
-        //     {},
-        //     this.props.data.filters.find(f => f.id == this.state.id),
-        //     data
-        //   )
-        // )
-
         this.props.history.push('/app/filters/list');
-        swal('Success', `Filter '${data.name}' updated`, 'success');
-
-        // Filter was linked to emails that we must now trigger updates on
-        if (res.data.update !== undefined) {
-          this._updateEmails(
-            this.state.id,
-            this.props.data.emails,
-            res.data.update
-          );
-        }
+        swal('Success', `Filter '${filter.name}' updated`, 'success');
       })
       .catch(err => swal('Error', err.response.data.error, 'error'));
-  }
-
-  _updateEmails(id, emails, update, index = 0) {
-    if (update[index] === undefined) return;
-
-    // Get email object
-    let email = emails.find(e => e.id == update[index]);
-
-    // All emails need to be loaded
-    if (email === undefined) {
-      api
-        .get('/proxy-emails')
-        .then(res => this._updateEmails(id, res.data.emails, update, index));
-    }
-    // Full email data needs to be loaded
-    else if (email.toEmail === undefined) {
-      api.get(`/proxy-emails/${email.id}`).then(res => {
-        email = Object.assign(email, res.data);
-        emails.forEach((e, i) => {
-          if (e.id == email.id) emails[i] = email;
-        });
-        this._updateEmails(id, emails, update, index);
-      });
-    }
-    // Update email
-    else {
-      const modifiers = email.modifiers.map(mod => mod.id).join(',');
-      const filters = email.filters.map(f => f.id).join(',');
-
-      api
-        .put(`/proxy-emails/${email.id}`, {
-          modifiers,
-          filters,
-          to: email.toEmail,
-          name: email.name,
-          saveMail: email.saveMail,
-          description: email.description,
-          noToAddress: email.address == '',
-          noSpamFilter: !email.spamFilter
-        })
-        .then(() => this._updateEmails(id, emails, update, index + 1));
-    }
   }
 
   render() {
-    if (this.state.loading) return null;
-
-    const filter = this.props.data.filters.find(f => f.id == this.state.id);
-
-    return <FilterForm filter={filter} onSubmit={d => this.onUpdate(d)} />;
+    if (!this.state.filter) return null;
+    return (
+      <FilterForm filter={this.state.filter} onSubmit={d => this.onSubmit(d)} />
+    );
   }
 }

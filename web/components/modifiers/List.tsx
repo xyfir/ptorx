@@ -5,28 +5,37 @@ import { modifierTypes } from 'constants/types';
 import { findMatching } from 'lib/find-matching';
 import { Search } from 'components/common/Search';
 import * as React from 'react';
+import { Ptorx } from 'typings/ptorx';
 import * as swal from 'sweetalert';
 import { api } from 'lib/api';
 
-export class ModifierList extends React.Component<RouteComponentProps> {
+interface ModifierListState {
+  modifiers: Ptorx.ModifierList;
+  modifier: number;
+  search: { query: string; type: number };
+  page: number;
+}
+
+export class ModifierList extends React.Component<
+  RouteComponentProps,
+  ModifierListState
+> {
+  state: ModifierListState = {
+    modifier: 0,
+    search: { query: '', type: 0 },
+    page: 1
+  };
+
   constructor(props) {
     super(props);
+  }
 
-    this.state = {
-      selected: 0,
-      page: 1,
-      search: { query: '', type: 0 }
-    };
-
-    if (props.data.modifiers.length == 0) {
-      api.get('/modifiers');
-      // ** .then(res => (loadModifiers(res.data.modifiers)));
-    }
+  componentDidMount() {
+    this.load();
   }
 
   async onDelete() {
-    const id = this.state.selected;
-    this.setState({ selected: 0 });
+    const { modifier } = this.state;
 
     const confirm = await swal({
       buttons: true,
@@ -34,23 +43,28 @@ export class ModifierList extends React.Component<RouteComponentProps> {
       text: 'This modifier will be removed from any emails it is linked to.',
       icon: 'warning'
     });
-
     if (!confirm) return;
 
     api
-      .delete(`/modifiers/${id}`)
+      .delete(`/modifiers/${modifier}`)
       .then(res => {
-        if (res.data.error) throw 'Could not delete modifier';
-        // ** (deleteModifier(id));
+        this.setState({ modifier: 0 });
+        this.load();
       })
       .catch(err => swal('Error', err.response.data.error, 'error'));
   }
 
   onEdit() {
-    this.props.history.push(`/app/modifiers/edit/${this.state.selected}`);
+    this.props.history.push(`/app/modifiers/edit/${this.state.modifier}`);
+  }
+
+  async load() {
+    const res = await api.get('/modifiers');
+    this.setState({ modifiers: res.data });
   }
 
   render() {
+    const { modifiers, modifier, search, page } = this.state;
     return (
       <div className="modifiers">
         <Link to="/app/modifiers/create">
@@ -67,14 +81,14 @@ export class ModifierList extends React.Component<RouteComponentProps> {
         <Search onSearch={v => this.setState({ search: v })} type="modifier" />
 
         <List className="modifiers-list section md-paper md-paper--1">
-          {findMatching(this.props.data.modifiers, this.state.search)
-            .filter(mod => !mod.global)
-            .splice((this.state.page - 1) * 25, 25)
+          {findMatching(modifiers, search)
+            .filter(m => !m.global)
+            .splice((page - 1) * 25, 25)
             .map(m => (
               <ListItem
                 threeLines
                 key={m.id}
-                onClick={() => this.setState({ selected: m.id })}
+                onClick={() => this.setState({ modifier: m.id })}
                 className="modifier"
                 primaryText={m.name}
                 secondaryText={modifierTypes[m.type] + '\n' + m.description}
@@ -85,20 +99,15 @@ export class ModifierList extends React.Component<RouteComponentProps> {
         <LocalPagination
           itemsPerPage={25}
           onGoTo={p => this.setState({ page: p })}
-          items={this.props.data.modifiers.length}
-          page={this.state.page}
+          items={modifiers.length}
+          page={page}
         />
 
         <DialogContainer
           id="selected-modifier"
-          title={
-            !this.state.selected
-              ? ''
-              : this.props.data.modifiers.find(e => e.id == this.state.selected)
-                  .name
-          }
-          onHide={() => this.setState({ selected: 0 })}
-          visible={!!this.state.selected}
+          title={modifier && modifiers.find(m => m.id == modifier).name}
+          onHide={() => this.setState({ modifier: 0 })}
+          visible={!!modifier}
         >
           <List>
             <ListItem primaryText="Edit" onClick={() => this.onEdit()} />
