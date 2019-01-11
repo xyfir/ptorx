@@ -1,8 +1,12 @@
 import { buildModifierData } from 'lib/modifiers/build-data';
+import { Request, Response } from 'express';
 import { validateModifier } from 'lib/modifiers/validate';
 import { MySQL } from 'lib/MySQL';
 
-export async function api_addModifier(req, res) {
+export async function api_addModifier(
+  req: Request,
+  res: Response
+): Promise<void> {
   const db = new MySQL();
 
   try {

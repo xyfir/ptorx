@@ -1,8 +1,12 @@
+import { Request, Response } from 'express';
 import * as CONFIG from 'constants/config';
 import { MySQL } from 'lib/MySQL';
 import axios from 'axios';
 
-export async function api_finishCreditsPurchase(req, res) {
+export async function api_finishCreditsPurchase(
+  req: Request,
+  res: Response
+): Promise<void> {
   const db = new MySQL();
 
   try {

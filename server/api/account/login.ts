@@ -1,3 +1,4 @@
+import { Request, Response } from 'express';
 import { creditUser } from 'lib/users/credit';
 import * as CONFIG from 'constants/config';
 import { MySQL } from 'lib/MySQL';
@@ -6,7 +7,7 @@ import axios from 'axios';
 const Cryptr = require('cryptr');
 const cryptr = new Cryptr(CONFIG.ACCESS_TOKEN_KEY);
 
-export async function api_login(req, res) {
+export async function api_login(req: Request, res: Response): Promise<void> {
   const db = new MySQL();
 
   try {

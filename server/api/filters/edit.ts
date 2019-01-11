@@ -1,8 +1,12 @@
+import { Request, Response } from 'express';
 import { requireCredits } from 'lib/users/require-credits';
 import { validateFilter } from 'lib/filters/validate';
 import { MySQL } from 'lib/MySQL';
 
-export async function api_editFilter(req, res) {
+export async function api_editFilter(
+  req: Request,
+  res: Response
+): Promise<void> {
   const db = new MySQL();
 
   try {

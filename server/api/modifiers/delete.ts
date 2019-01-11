@@ -1,3 +1,4 @@
+import { Request, Response } from 'express';
 import { MySQL } from 'lib/MySQL';
 
 /**
@@ -6,7 +7,10 @@ import { MySQL } from 'lib/MySQL';
  * @param {object} req.params
  * @param {number} req.params.mod
  */
-export async function api_deleteModifier(req, res) {
+export async function api_deleteModifier(
+  req: Request,
+  res: Response
+): Promise<void> {
   const db = new MySQL();
   try {
     await db.query(

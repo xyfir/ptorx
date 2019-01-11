@@ -1,3 +1,4 @@
+import { Request, Response } from 'express';
 import { validateFilter } from 'lib/filters/validate';
 import { MySQL } from 'lib/MySQL';
 
@@ -20,7 +21,10 @@ import { MySQL } from 'lib/MySQL';
  * @prop {string} [message]
  * @prop {number} [id]
  */
-export async function api_addFilter(req, res) {
+export async function api_addFilter(
+  req: Request,
+  res: Response
+): Promise<void> {
   const db = new MySQL();
   try {
     const error = validateFilter(req.body);

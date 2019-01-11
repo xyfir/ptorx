@@ -1,7 +1,11 @@
-import { deleteProxyEmail } from 'api/proxy-emails/delete';
+import { api_deleteProxyEmail } from 'api/proxy-emails/delete';
+import { Request, Response } from 'express';
 import { MySQL } from 'lib/MySQL';
 
-export async function api_deleteDomainUser(req, res) {
+export async function api_deleteDomainUser(
+  req: Request,
+  res: Response
+): Promise<void> {
   const db = new MySQL();
 
   try {
@@ -40,7 +44,7 @@ export async function api_deleteDomainUser(req, res) {
 
     // Delete emails
     for (let email of emails) {
-      await deleteProxyEmail(
+      await api_deleteProxyEmail(
         { params: { email: email.id }, session: { uid: req.params.user } },
         { json: () => 1 }
       );

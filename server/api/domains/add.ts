@@ -1,9 +1,13 @@
+import { Request, Response } from 'express';
 import * as CONFIG from 'constants/config';
 import { MySQL } from 'lib/MySQL';
 import * as uuid from 'uuid/v4';
 import axios from 'axios';
 
-export async function api_addDomain(req, res) {
+export async function api_addDomain(
+  req: Request,
+  res: Response
+): Promise<void> {
   const db = new MySQL();
 
   try {

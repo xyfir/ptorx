@@ -1,6 +1,10 @@
+import { Request, Response } from 'express';
 import { MySQL } from 'lib/MySQL';
 
-export async function api_deleteMessage(req, res) {
+export async function api_deleteMessage(
+  req: Request,
+  res: Response
+): Promise<void> {
   const db = new MySQL();
 
   try {

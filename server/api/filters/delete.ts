@@ -1,7 +1,11 @@
+import { Request, Response } from 'express';
 import { requireCredits } from 'lib/users/require-credits';
 import { MySQL } from 'lib/MySQL';
 
-export async function api_deleteFilter(req, res) {
+export async function api_deleteFilter(
+  req: Request,
+  res: Response
+): Promise<void> {
   const db = new MySQL();
 
   try {

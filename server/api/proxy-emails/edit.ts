@@ -3,12 +3,16 @@ import { buildMailgunRouteExpression } from 'lib/mg-routes/build-expression';
 import { validateProxyEmailFilters } from 'lib/proxy-emails/validate-filters';
 import { buildMailgunRouteAction } from 'lib/mg-routes/build-action';
 import { validateProxyEmail } from 'lib/proxy-emails/validate';
+import { Request, Response } from 'express';
 import { requireCredits } from 'lib/users/require-credits';
 import * as Mailgun from 'mailgun-js';
 import * as CONFIG from 'constants/config';
 import { MySQL } from 'lib/MySQL';
 
-export async function api_editProxyEmail(req, res) {
+export async function api_editProxyEmail(
+  req: Request,
+  res: Response
+): Promise<void> {
   const db = new MySQL();
 
   try {

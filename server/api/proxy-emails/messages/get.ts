@@ -1,8 +1,12 @@
+import { Request, Response } from 'express';
 import axios from 'axios';
 import * as CONFIG from 'constants/config';
 import { MySQL } from 'lib/MySQL';
 
-export async function api_getMessage(req, res) {
+export async function api_getMessage(
+  req: Request,
+  res: Response
+): Promise<void> {
   const db = new MySQL();
 
   try {

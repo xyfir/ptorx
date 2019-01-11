@@ -1,10 +1,14 @@
+import { Request, Response } from 'express';
 import { chargeUser } from 'lib/users/charge';
 import * as Mailgun from 'mailgun-js';
 import * as CONFIG from 'constants/config';
 import { MySQL } from 'lib/MySQL';
 import axios from 'axios';
 
-export async function api_replyToMessage(req, res) {
+export async function api_replyToMessage(
+  req: Request,
+  res: Response
+): Promise<void> {
   const db = new MySQL();
 
   try {

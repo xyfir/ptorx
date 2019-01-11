@@ -1,3 +1,4 @@
+import { Request, Response } from 'express';
 import * as escapeRegExp from 'escape-string-regexp';
 import { saveMessage } from 'lib/proxy-emails/save-message';
 import { chargeUser } from 'lib/users/charge';
@@ -6,7 +7,10 @@ import * as CONFIG from 'constants/config';
 import { MySQL } from 'lib/MySQL';
 import axios from 'axios';
 
-export async function api_receiveMail(req, res) {
+export async function api_receiveMail(
+  req: Request,
+  res: Response
+): Promise<void> {
   const db = new MySQL();
 
   try {

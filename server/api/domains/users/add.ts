@@ -1,7 +1,10 @@
-import axios from 'axios';
+import { Request, Response } from 'express';
 import { MySQL } from 'lib/MySQL';
 
-export async function api_addDomainUser(req, res) {
+export async function api_addDomainUser(
+  req: Request,
+  res: Response
+): Promise<void> {
   const db = new MySQL();
 
   try {
