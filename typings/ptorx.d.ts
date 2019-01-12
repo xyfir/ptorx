@@ -48,29 +48,30 @@ export namespace Ptorx {
   }[];
 
   export interface ProxyEmail {
-    id: number;
+    proxyEmailId: number;
+    userId: number;
     domainId: number;
+    mgRouteId: string;
+    address: string;
     name: string;
     description: string;
+    /**
+     * @example `"2020-07-20 00:00:00"
+     */
+    created: string;
+    spamFilter: boolean;
     saveMail: boolean;
+    directForward: boolean;
+    //
     /**
      * @example `"ejection81@sandbox86b2c.mailgun.org"`
      */
-    address: string;
-    toEmail: string;
-    spamFilter: boolean;
-    directForward: boolean;
-    filters: {
-      id: number;
-      name: string;
-      description: string;
-      type: number;
-    }[];
-    modifiers: {
-      id: number;
-      name: string;
-      description: string;
-      type: number;
+    fullAddress: string;
+    links: {
+      orderIndex: number;
+      primaryEmailId?: number;
+      modifierId?: number;
+      filterId?: number;
     }[];
   }
 

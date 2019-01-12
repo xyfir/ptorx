@@ -50,10 +50,7 @@ export async function creditUser(db, user, amount) {
     // Create Mailgun routes
     for (let email_ of emails) {
       try {
-        const email = await getProxyEmail(db, {
-          email: email_.id,
-          user
-        });
+        const email = await getProxyEmail(email_.id, user);
         const action = buildMailgunRouteAction(
           email.directForward
             ? { id: email.id, address: email.toEmail }
