@@ -95,4 +95,7 @@ ALTER TABLE `ptorx`.`proxy_emails` DROP INDEX `fk__proxy_emails__primary_email_i
 ALTER TABLE `ptorx`.`proxy_emails` DROP INDEX `fk__proxy_emails__user_id`, ADD INDEX `fk__proxy_emails__userId` (`userId`) USING BTREE;
 ALTER TABLE `users` CHANGE `user_id` `userId` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT, CHANGE `xyfir_id` `xyfirId` VARCHAR(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL, CHANGE `emails_created` `emailsCreated` INT(10) UNSIGNED NOT NULL, CHANGE `email_template` `emailTemplate` INT(10) UNSIGNED NULL DEFAULT NULL;
 ALTER TABLE `users` DROP FOREIGN KEY `fk__users__email_template`; ALTER TABLE `users` ADD CONSTRAINT `fk__users__emailTemplate` FOREIGN KEY (`emailTemplate`) REFERENCES `proxy_emails`(`proxyEmailId`) ON DELETE SET NULL ON UPDATE CASCADE;
-
+-- drop proxy_emails.primary_email_id
+ALTER TABLE ptorx.proxy_emails DROP FOREIGN KEY fk__proxy_emails__primaryEmailId;
+ALTER TABLE `proxy_emails` DROP INDEX `fk__proxy_emails__primaryEmailId`;
+ALTER TABLE `proxy_emails` DROP `primaryEmailId`;
