@@ -1,48 +1,14 @@
 import { Request, Response } from 'express';
-import { MySQL } from 'lib/MySQL';
+import { getDomain } from 'lib/domains/get';
 
 export async function api_getDomain(
   req: Request,
   res: Response
 ): Promise<void> {
-  const db = new MySQL();
-
   try {
-    const [domain] = await db.query(
-      `
-      SELECT
-        id, userId, domain, domainKey AS domainKey, added, verified, global
-      FROM domains
-      WHERE id = ?
-    `,
-      [req.params.domain]
-    );
-
-    if (!domain) throw 'Could not find domain';
-
-    domain.isCreator = domain.userId == req.session.uid;
-
-    if (!domain.isCreator) {
-      db.release();
-      return res.status(200).json(domain);
-    }
-
-    if (domain.domainKey) domain.domainKey = JSON.parse(domain.domainKey);
-
-    domain.users = await db.query(
-      `
-      SELECT userId AS id, label, requestKey AS requestKey, added
-      FROM domain_users
-      WHERE domainId = ? AND userId != ? AND authorized = 1
-      ORDER BY added ASC
-    `,
-      [domain.id, req.session.uid]
-    );
-    db.release();
-
+    const domain = await getDomain(+req.params.domain, req.session.uid);
     res.status(200).json(domain);
   } catch (err) {
-    db.release();
     res.status(400).json({ error: err });
   }
 }

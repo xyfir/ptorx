@@ -28,7 +28,7 @@ export namespace Ptorx {
     added: string;
     verified: boolean;
     global: boolean;
-    isCreator: true;
+    isCreator: boolean;
     users: {
       id: number;
       label: number;
