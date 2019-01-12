@@ -27,7 +27,7 @@ export async function api_editFilter(
     const result = await db.query(
       `
         UPDATE filters SET name = ?, description = ?, type = ?, find = ?,
-        acceptOnMatch = ?, useRegex = ?
+        acceptOnMatch = ?, regex = ?
         WHERE filterId = ?
       `,
       [
@@ -36,7 +36,7 @@ export async function api_editFilter(
         req.body.type,
         req.body.find,
         !!+req.body.acceptOnMatch,
-        !!+req.body.useRegex,
+        !!+req.body.regex,
         req.params.filter
       ]
     );

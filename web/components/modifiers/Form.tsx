@@ -1,7 +1,6 @@
 import { SelectField, TextField, Checkbox, Button, Paper } from 'react-md';
 import { creatableModifierTypes } from 'constants/types';
 import * as React from 'react';
-import { Link } from 'react-router-dom';
 
 export class ModifierForm extends React.Component {
   static defaultProps = {
@@ -9,7 +8,6 @@ export class ModifierForm extends React.Component {
       type: 0,
       data: '',
       name: '',
-      linkedTo: [],
       description: ''
     }
   };
@@ -19,7 +17,7 @@ export class ModifierForm extends React.Component {
 
     this.state = {
       type: this.props.modifier.type,
-      useRegex: false
+      regex: false
     };
   }
 
@@ -34,7 +32,7 @@ export class ModifierForm extends React.Component {
     switch (modifier.type) {
       case 3:
         data = {
-          regex: this.state.useRegex,
+          regex: this.state.regex,
           value: this._find.value,
           with: this._replace.value,
           flags: this._regexFlags ? this._regexFlags.value : ''
@@ -112,11 +110,11 @@ export class ModifierForm extends React.Component {
               <Checkbox
                 id="checkbox--regex"
                 label="Regular Expression"
-                onChange={c => this.setState({ useRegex: c })}
+                onChange={c => this.setState({ regex: c })}
                 defaultChecked={mod.data.regex}
               />
 
-              {mod.data.regex || this.state.useRegex ? (
+              {mod.data.regex || this.state.regex ? (
                 <TextField
                   id="text--flags"
                   ref={i => (this._regexFlags = i)}
@@ -298,21 +296,6 @@ export class ModifierForm extends React.Component {
         </Paper>
 
         {form}
-
-        {mod.linkedTo.length ? (
-          <Paper zDepth={1} className="linked-emails section flex">
-            <h3>Linked To</h3>
-            <p>Below are emails that are currently utilizing this modifier.</p>
-
-            <div className="linked-emails">
-              {mod.linkedTo.map(email => (
-                <Link key={email.id} to={`/app/proxy-emails/edit/${email.id}`}>
-                  {email.address}
-                </Link>
-              ))}
-            </div>
-          </Paper>
-        ) : null}
 
         <section className="controls">
           <Button raised primary onClick={() => this.onSubmit()}>

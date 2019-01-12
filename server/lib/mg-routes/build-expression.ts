@@ -15,7 +15,7 @@ export async function buildMailgunRouteExpression(db, data) {
   // Only acceptOnMatch filters are ran on Mailgun
   const sql = `
       SELECT
-        type, find, useRegex AS regex
+        type, find, regex AS regex
       FROM filters WHERE
         filterId IN (?) AND acceptOnMatch = 1
         AND type IN (1, 2, 3, 6)

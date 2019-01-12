@@ -109,23 +109,13 @@ export namespace Ptorx {
   }[];
 
   export interface Filter {
-    id: number;
+    filterId: number;
     name: string;
     description: string;
     type: number;
     find: string;
     acceptOnMatch: boolean;
     regex: boolean;
-    /**
-     * Proxy emails
-     */
-    linkedTo: {
-      id: number;
-      /**
-       * @example `"ejection81@sandbox86b2c.mailgun.org"`
-       */
-      address: string;
-    }[];
   }
 
   export type FilterList = {
@@ -147,13 +137,6 @@ export namespace Ptorx {
     /**
      * Proxy emails
      */
-    linkedTo: {
-      id: number;
-      /**
-       * @example `"ejection81@sandbox86b2c.mailgun.org"`
-       */
-      address: string;
-    }[];
   }
 
   export type ModifierList = {

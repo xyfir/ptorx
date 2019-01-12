@@ -1,7 +1,6 @@
 import { SelectField, TextField, Checkbox, Button, Paper } from 'react-md';
 import { filterTypes } from 'constants/types';
 import * as React from 'react';
-import { Link } from 'react-router-dom';
 
 export class FilterForm extends React.Component {
   static defaultProps = {
@@ -10,7 +9,6 @@ export class FilterForm extends React.Component {
       find: '',
       name: '',
       regex: false,
-      linkedTo: [],
       description: '',
       acceptOnMatch: true
     }
@@ -26,7 +24,7 @@ export class FilterForm extends React.Component {
     const data = {
       type: this.state.type,
       name: this.refs.name.value,
-      useRegex: window['checkbox--regex'].checked,
+      regex: window['checkbox--regex'].checked,
       description: this.refs.description.value,
       acceptOnMatch: window['checkbox--accept-on-match'].checked
     };
@@ -131,25 +129,6 @@ export class FilterForm extends React.Component {
             Submit
           </Button>
         </Paper>
-
-        {filter.linkedTo.length ? (
-          <Paper
-            zDepth={1}
-            component="section"
-            className="linked-emails section flex"
-          >
-            <h3>Linked To</h3>
-            <p>Below are emails that are currently utilizing this filter.</p>
-
-            <div className="linked-emails">
-              {filter.linkedTo.map(email => (
-                <Link key={email.id} to={`/app/proxy-emails/edit/${email.id}`}>
-                  {email.address}
-                </Link>
-              ))}
-            </div>
-          </Paper>
-        ) : null}
       </div>
     );
   }

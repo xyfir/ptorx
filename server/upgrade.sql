@@ -99,3 +99,5 @@ ALTER TABLE `users` DROP FOREIGN KEY `fk__users__email_template`; ALTER TABLE `u
 ALTER TABLE ptorx.proxy_emails DROP FOREIGN KEY fk__proxy_emails__primaryEmailId;
 ALTER TABLE `proxy_emails` DROP INDEX `fk__proxy_emails__primaryEmailId`;
 ALTER TABLE `proxy_emails` DROP `primaryEmailId`;
+-- rename useRegex
+ALTER TABLE `filters` CHANGE `useRegex` `regex` TINYINT(1) NOT NULL;

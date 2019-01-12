@@ -13,7 +13,7 @@ import { MySQL } from 'lib/MySQL';
  * @prop {string} name
  * @prop {string} find
  * @prop {string} description
- * @prop {boolean} [useRegex]
+ * @prop {boolean} [regex]
  * @prop {boolean} [acceptOnMatch]
  */
 /**
@@ -36,7 +36,7 @@ export async function api_addFilter(
       description: req.body.description,
       type: req.body.type,
       find: req.body.find,
-      useRegex: !!+req.body.useRegex,
+      regex: !!+req.body.regex,
       acceptOnMatch: !!+req.body.acceptOnMatch
     });
     if (!result.affectedRows) throw 'Could not create filter';

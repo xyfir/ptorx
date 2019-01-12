@@ -53,8 +53,8 @@ export async function creditUser(db, user, amount) {
         const email = await getProxyEmail(email_.id, user);
         const action = buildMailgunRouteAction(
           email.directForward
-            ? { id: email.id, address: email.toEmail }
-            : { id: email.id, save: email.saveMail }
+            ? { id: email.proxyEmailId, address: email.toEmail }
+            : { id: email.proxyEmailId, save: email.saveMail }
         );
         const expression = await buildMailgunRouteExpression(db, {
           saveMail: email.saveMail,
@@ -74,7 +74,7 @@ export async function creditUser(db, user, amount) {
           action
         });
 
-        ids.push({ id: email.id, mgRouteId: mailgunRes.route.id });
+        ids.push({ id: email.proxyEmailId, mgRouteId: mailgunRes.route.id });
       } catch (err) {}
     }
 

@@ -68,7 +68,7 @@ export async function api_receiveMail(
       `
         SELECT
           type, find, acceptOnMatch AS acceptOnMatch,
-          useRegex AS regex, IF(
+          regex AS regex, IF(
             ${save ? 0 : 1} = 1
             AND acceptOnMatch = 1
             AND type IN (1, 2, 3, 6),
