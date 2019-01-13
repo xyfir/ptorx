@@ -103,3 +103,7 @@ ALTER TABLE `proxy_emails` DROP `primaryEmailId`;
 ALTER TABLE `filters` CHANGE `useRegex` `regex` TINYINT(1) NOT NULL;
 -- remove users.referral
 ALTER TABLE `users` DROP `referral`;
+-- update modifiers structure
+ALTER TABLE `modifiers` ADD `value` TEXT NULL DEFAULT NULL AFTER `data`, ADD `subject` TINYTEXT NULL DEFAULT NULL AFTER `value`, ADD `with` TINYTEXT NULL DEFAULT NULL AFTER `subject`, ADD `flags` VARCHAR(4) NULL DEFAULT NULL AFTER `with`, ADD `regex` BOOLEAN NULL DEFAULT NULL AFTER `flags`, ADD `prepend` BOOLEAN NULL DEFAULT NULL AFTER `regex`, ADD `target` BOOLEAN NULL DEFAULT NULL AFTER `prepend`;
+DELETE FROM `modifiers` WHERE type != 2;
+ALTER TABLE `modifiers` DROP `data`;

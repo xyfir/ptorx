@@ -122,13 +122,13 @@ export namespace Ptorx {
     name: string;
     description: string;
     type: number;
-    /**
-     * Based on `type`. Could be empty, a value, or a JSON string
-     */
-    data: string;
-    /**
-     * Proxy emails
-     */
+    value?: string;
+    subject?: string;
+    with?: string;
+    flags?: string;
+    regex?: boolean;
+    prepend?: boolean;
+    target?: boolean;
   }
 
   export type ModifierList = {

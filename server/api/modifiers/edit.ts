@@ -1,4 +1,3 @@
-import { buildModifierData } from 'lib/modifiers/build-data';
 import { Request, Response } from 'express';
 import { validateModifier } from 'lib/modifiers/validate';
 import { MySQL } from 'lib/MySQL';
@@ -13,14 +12,13 @@ export async function api_editModifier(
     validateModifier(req.body);
 
     let sql = `
-        UPDATE modifiers SET name = ?, description = ?, type = ?, data = ?
+        UPDATE modifiers SET name = ?, description = ?, type = ?
         WHERE modifierId = ? AND userId = ?
       `,
       vars = [
         req.body.name,
         req.body.description,
         req.body.type,
-        buildModifierData(req.body),
         req.params.mod,
         req.session.uid
       ];

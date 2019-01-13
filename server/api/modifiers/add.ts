@@ -1,4 +1,3 @@
-import { buildModifierData } from 'lib/modifiers/build-data';
 import { Request, Response } from 'express';
 import { validateModifier } from 'lib/modifiers/validate';
 import { MySQL } from 'lib/MySQL';
@@ -16,7 +15,6 @@ export async function api_addModifier(
       INSERT INTO modifiers SET ?
     `,
       insert = {
-        data: buildModifierData(req.body),
         userId: req.session.uid,
         name: req.body.name,
         description: req.body.description,
