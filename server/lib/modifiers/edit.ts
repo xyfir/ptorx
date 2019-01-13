@@ -65,11 +65,11 @@ export async function editModifier(
 
     const result = await db.query(
       `
-        UPDATE modifiers
+        UPDATE modifiers m
         SET
-          name = ?, type = ?, subject = ?, replacement = ?, flags = ?,
-          regex = ?, prepend = ?, target = ?, add = ?, to = ?, separator = ?,
-          find = ?, tag = ?, template = ?
+          m.name = ?, m.type = ?, m.subject = ?, m.replacement = ?, m.flags = ?,
+          m.regex = ?, m.prepend = ?, m.target = ?, m.add = ?, m.to = ?,
+          m.separator = ?, m.find = ?, m.tag = ?, m.template = ?
         WHERE modifierId = ? AND userId = ?
       `,
       [
