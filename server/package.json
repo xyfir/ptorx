@@ -43,6 +43,7 @@
     "@types/node": "^10.12.18",
     "@types/uuid": "^3.4.4",
     "jest": "^23.6.0",
+    "jest-extended": "^0.11.0",
     "typescript": "^3.2.2"
   }
 }

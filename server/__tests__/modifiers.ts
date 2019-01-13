@@ -1,7 +1,7 @@
 import { deleteModifier } from 'lib/modifiers/delete';
 import { addModifier } from 'lib/modifiers/add';
-import 'lib/tests/prepare';
 import { Ptorx } from 'typings/ptorx';
+import 'lib/tests/prepare';
 
 // ** create for all types
 // ** list
@@ -10,8 +10,8 @@ import { Ptorx } from 'typings/ptorx';
 test('create modifier 2', async () => {
   const modifier = await addModifier({ type: 2 }, 1234);
   expect(Object.keys(modifier).length).toBe(17);
-  expect(typeof modifier.modifierId).toBe('number');
-  expect(typeof modifier.created).toBe('number');
+  expect(modifier.modifierId).toBeNumber();
+  expect(modifier.created).toBeNumber();
   const _modifier: Ptorx.Modifier = {
     modifierId: modifier.modifierId,
     name: '',
