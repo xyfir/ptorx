@@ -13,13 +13,12 @@ export async function editModifier(
       `
         UPDATE modifiers
         SET
-          name = ?, description = ?, type = ?, value = ?, subject = ?, with = ?,
+          name = ?, type = ?, value = ?, subject = ?, with = ?,
           flags = ?, regex = ?, prepend = ?, target = ?
         WHERE modifierId = ? AND userId = ?
       `,
       [
         modifier.name,
-        modifier.description,
         modifier.type,
         modifier.value,
         modifier.subject,

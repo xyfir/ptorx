@@ -20,7 +20,7 @@ export async function api_replyToMessage(
           messages AS m, domains AS d, proxy_emails AS pxe, users AS u
         WHERE
           m.id = ? AND pxe.proxyEmailId = ? AND u.userId = ? AND
-          m.received + 255600 > UNIX_TIMESTAMP() AND pxe.userId = u.userId AND
+          m.created + 255600 > UNIX_TIMESTAMP() AND pxe.userId = u.userId AND
           m.proxyEmailId = pxe.proxyEmailId AND d.id = pxe.domainId
       `,
       [req.params.message, req.params.email, req.session.uid]

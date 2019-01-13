@@ -47,12 +47,11 @@ export class LinkFilter extends React.Component<
         <List className="filters-list section md-paper md-paper--1">
           {findMatching(filters, search, ignore).map(f => (
             <ListItem
-              threeLines
               key={f.id}
               onClick={() => onAdd(f.id)}
               className="filter"
               primaryText={f.name}
-              secondaryText={filterTypes[f.type] + '\n' + f.description}
+              secondaryText={filterTypes[f.type]}
             />
           ))}
         </List>

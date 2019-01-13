@@ -9,15 +9,9 @@ export namespace Ptorx {
   export interface Domain {
     id: number;
     userId: number;
-    /**
-     * @example `"sandbox86b2c.mailgun.org"`
-     */
     domain: string;
     domainKey: string;
-    /**
-     * @example `"2017-09-03 20:33:42"`
-     */
-    added: string;
+    created: number;
     verified: boolean;
     global: boolean;
     isCreator: boolean;
@@ -25,10 +19,7 @@ export namespace Ptorx {
       id: number;
       label: number;
       requestKey: number;
-      /**
-       * @example `"2017-09-03 20:33:42"`
-       */
-      added: string;
+      created: number;
     }[];
   }
 
@@ -46,11 +37,7 @@ export namespace Ptorx {
     mgRouteId: string;
     address: string;
     name: string;
-    description: string;
-    /**
-     * @example `"2020-07-20 00:00:00"
-     */
-    created: string;
+    created: number;
     spamFilter: boolean;
     saveMail: boolean;
     directForward: boolean;
@@ -70,7 +57,6 @@ export namespace Ptorx {
   export type ProxyEmailList = {
     id: number;
     name: string;
-    description: string;
     /**
      * @example `"ejection81@sandbox86b2c.mailgun.org"`
      */
@@ -79,8 +65,7 @@ export namespace Ptorx {
 
   export interface Message {
     url: string;
-    /** Unix timestamp */
-    received: number;
+    created: number;
     text: string;
     html: string;
     headers: Array<[string, string]>;
@@ -93,34 +78,29 @@ export namespace Ptorx {
      * @example `"cea27f3c-db20-485a-a41e-b197661207e1"`
      */
     id: string;
-    /**
-     * Unix timestamp
-     */
-    received: number;
+    created: number;
     subject: string;
   }[];
 
   export interface Filter {
     filterId: number;
     name: string;
-    description: string;
     type: number;
     find: string;
     acceptOnMatch: boolean;
     regex: boolean;
+    created: number;
   }
 
   export type FilterList = {
     id: number;
     name: string;
-    description: string;
     type: number;
   }[];
 
   export interface Modifier {
     modifierId: number;
     name: string;
-    description: string;
     type: number;
     value?: string;
     subject?: string;
@@ -129,13 +109,13 @@ export namespace Ptorx {
     regex?: boolean;
     prepend?: boolean;
     target?: boolean;
+    created: number;
   }
 
   export type ModifierList = {
     uid: number;
     id: number;
     name: string;
-    description: string;
     type: number;
     global: boolean;
   }[];
@@ -143,5 +123,6 @@ export namespace Ptorx {
   export type PrimaryEmailList = {
     id: number;
     address: string;
+    created: number;
   }[];
 }

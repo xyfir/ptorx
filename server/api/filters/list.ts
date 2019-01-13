@@ -9,7 +9,7 @@ export async function api_getFilters(
   try {
     const filters = await db.query(
       `
-        SELECT filterId as id, name, description, type
+        SELECT filterId as id, name, type
         FROM filters WHERE userId = ?
       `,
       [req.session.uid]

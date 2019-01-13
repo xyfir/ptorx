@@ -86,12 +86,11 @@ export class ModifierList extends React.Component<
             .splice((page - 1) * 25, 25)
             .map(m => (
               <ListItem
-                threeLines
                 key={m.id}
                 onClick={() => this.setState({ modifier: m.id })}
                 className="modifier"
                 primaryText={m.name}
-                secondaryText={modifierTypes[m.type] + '\n' + m.description}
+                secondaryText={modifierTypes[m.type]}
               />
             ))}
         </List>

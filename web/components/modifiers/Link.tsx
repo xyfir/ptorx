@@ -48,12 +48,11 @@ export class LinkModifier extends React.Component<
             this.props.ignore
           ).map(m => (
             <ListItem
-              threeLines
               key={m.id}
               onClick={() => this.props.onAdd(m.id)}
               className="modifier"
               primaryText={m.name}
-              secondaryText={modifierTypes[m.type] + '\n' + m.description}
+              secondaryText={modifierTypes[m.type]}
             />
           ))}
         </List>

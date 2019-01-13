@@ -4,11 +4,8 @@
  */
 export function validateModifier(mod) {
   if (!mod.type) throw 'Invalid type';
-
   if (!(mod.name || '').match(/^[\w\d -]{1,40}$/))
     throw 'Invalid name characters or length';
-
-  if ((mod.description || '').length > 150) throw 'Invalid description length';
 
   switch (+mod.type) {
     case 2:

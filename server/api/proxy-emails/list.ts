@@ -10,7 +10,7 @@ export async function api_getProxyEmails(
     const emails = await db.query(
       `
         SELECT
-          pxe.proxyEmailId AS id, pxe.name, pxe.description,
+          pxe.proxyEmailId AS id, pxe.name,
           CONCAT(pxe.address, '@', d.domain) AS address
         FROM
           proxy_emails AS pxe, domains AS d

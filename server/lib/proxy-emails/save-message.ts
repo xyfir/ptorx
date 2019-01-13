@@ -28,7 +28,7 @@ export async function saveMessage(req, type) {
           sender: req.body.sender,
           subject: req.body.subject,
           proxyEmailId: req.params.email,
-          received: req.body.timestamp,
+          created: req.body.timestamp,
           url: req.body['message-url']
         }
       );

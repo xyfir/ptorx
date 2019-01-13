@@ -7,8 +7,7 @@ export class ModifierForm extends React.Component {
     modifier: {
       type: 0,
       data: '',
-      name: '',
-      description: ''
+      name: ''
     }
   };
 
@@ -24,8 +23,7 @@ export class ModifierForm extends React.Component {
   onSubmit() {
     const modifier = {
       type: this.state.type,
-      name: this._name.value,
-      description: this._description.value
+      name: this._name.value
     };
     let data;
 
@@ -284,14 +282,6 @@ export class ModifierForm extends React.Component {
             type="text"
             label="Name"
             defaultValue={mod.name}
-          />
-
-          <TextField
-            id="text--description"
-            ref={i => (this._description = i)}
-            type="text"
-            label="Description"
-            defaultValue={mod.description}
           />
         </Paper>
 

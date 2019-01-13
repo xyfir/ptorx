@@ -8,6 +8,7 @@ import { Request, Response } from 'express';
 import { requireCredits } from 'lib/users/require-credits';
 import * as Mailgun from 'mailgun-js';
 import * as CONFIG from 'constants/config';
+import * as moment from 'moment';
 import { MySQL } from 'lib/MySQL';
 
 export async function api_addProxyEmail(
@@ -82,10 +83,10 @@ export async function api_addProxyEmail(
     const data = {
       primaryEmailId: req.body.noToAddress ? 0 : rows[0].primaryEmailId,
       directForward: req.body.directForward,
-      description: req.body.description,
       spamFilter: !req.body.noSpamFilter,
       saveMail: req.body.saveMail || req.body.noToAddress,
       domainId: req.body.domain,
+      created: moment().unix(),
       userId: req.session.uid,
       address,
       name: req.body.name

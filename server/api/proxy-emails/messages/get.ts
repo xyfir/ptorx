@@ -13,12 +13,12 @@ export async function api_getMessage(
     const [message] = await db.query(
       `
       SELECT
-        url AS url, received
+        url AS url, created
       FROM
         messages AS m, proxy_emails AS pxe
       WHERE
         m.id = ? AND pxe.proxyEmailId = ? AND pxe.userId = ? AND
-        m.received + 255600 > UNIX_TIMESTAMP() AND
+        m.created + 255600 > UNIX_TIMESTAMP() AND
         m.proxyEmailId = pxe.proxyEmailId
     `,
       [req.params.message, req.params.email, req.session.uid]

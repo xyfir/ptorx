@@ -26,13 +26,12 @@ export async function api_editFilter(
 
     const result = await db.query(
       `
-        UPDATE filters SET name = ?, description = ?, type = ?, find = ?,
+        UPDATE filters SET name = ?, type = ?, find = ?,
         acceptOnMatch = ?, regex = ?
         WHERE filterId = ?
       `,
       [
         req.body.name,
-        req.body.description,
         req.body.type,
         req.body.find,
         !!+req.body.acceptOnMatch,

@@ -56,7 +56,6 @@ export class CreateEmail extends React.Component<RouteComponentProps> {
           saveMail: false,
           modifiers: [],
           noToAddress: false,
-          description: 'Created on ' + moment().format('YYYY-MM-DD, HH:mm:ss'),
           noSpamFilter: false,
           directForward: false
         },

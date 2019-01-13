@@ -77,10 +77,9 @@ export class QuickSearch extends React.Component<{}, QuickSearchState> {
           {emails.slice(0, 7).map(e => (
             <Link to={`/app/proxy-emails/edit/${e.id}`} key={e.id}>
               <ListItem
-                threeLines
                 className="email"
                 primaryText={e.name}
-                secondaryText={e.address + '\n' + e.description}
+                secondaryText={e.address}
               />
             </Link>
           ))}
@@ -106,10 +105,9 @@ export class QuickSearch extends React.Component<{}, QuickSearchState> {
           {filters.slice(0, 5).map(f => (
             <Link to={`/app/filters/edit/${f.id}`} key={f.id}>
               <ListItem
-                threeLines
                 className="filter"
                 primaryText={f.name}
-                secondaryText={filterTypes[f.type] + '\n' + f.description}
+                secondaryText={filterTypes[f.type]}
               />
             </Link>
           ))}
@@ -159,10 +157,9 @@ export class QuickSearch extends React.Component<{}, QuickSearchState> {
           {modifiers.slice(0, 5).map(m => (
             <Link to={`/app/modifiers/edit/${m.id}`} key={m.id}>
               <ListItem
-                threeLines
                 className="modifier"
                 primaryText={m.name}
-                secondaryText={modifierTypes[m.type] + '\n' + m.description}
+                secondaryText={modifierTypes[m.type]}
               />
             </Link>
           ))}

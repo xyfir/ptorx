@@ -28,8 +28,7 @@ export async function deleteProxyEmail(db, email, user) {
   await db.query(
     `
       UPDATE proxy_emails SET
-        userId = NULL, primaryEmailId = NULL, name = NULL,
-        description = NULL, mgRouteId = NULL
+        userId = NULL, primaryEmailId = NULL, name = NULL, mgRouteId = NULL
       WHERE proxyEmailId = ?
     `,
     [email]

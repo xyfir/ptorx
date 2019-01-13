@@ -89,12 +89,11 @@ export class FilterList extends React.Component<
             .splice((page - 1) * 25, 25)
             .map(f => (
               <ListItem
-                threeLines
                 key={f.id}
                 onClick={() => this.setState({ filter: f.id })}
                 className="filter"
                 primaryText={f.name}
-                secondaryText={filterTypes[f.type] + '\n' + f.description}
+                secondaryText={filterTypes[f.type]}
               />
             ))}
         </List>

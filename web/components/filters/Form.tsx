@@ -9,7 +9,6 @@ export class FilterForm extends React.Component {
       find: '',
       name: '',
       regex: false,
-      description: '',
       acceptOnMatch: true
     }
   };
@@ -25,7 +24,6 @@ export class FilterForm extends React.Component {
       type: this.state.type,
       name: this.refs.name.value,
       regex: window['checkbox--regex'].checked,
-      description: this.refs.description.value,
       acceptOnMatch: window['checkbox--accept-on-match'].checked
     };
 
@@ -101,14 +99,6 @@ export class FilterForm extends React.Component {
             type="text"
             label="Name"
             defaultValue={filter.name}
-          />
-
-          <TextField
-            id="text--description"
-            ref="description"
-            type="text"
-            label="Description"
-            defaultValue={filter.description}
           />
 
           <Checkbox

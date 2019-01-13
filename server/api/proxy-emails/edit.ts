@@ -67,15 +67,13 @@ export async function api_editProxyEmail(
     // Update values in proxy_emails
     sql = `
       UPDATE proxy_emails SET
-        primaryEmailId = ?, name = ?,
-        description = ?, saveMail = ?,
+        primaryEmailId = ?, name = ?, saveMail = ?,
         directForward = ?, spamFilter = ?
       WHERE proxyEmailId = ?
     `;
     vars = [
       req.body.noToAddress ? 0 : req.body.to,
       req.body.name,
-      req.body.description,
       saveMail,
       req.body.directForward,
       !req.body.noSpamFilter,

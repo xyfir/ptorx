@@ -9,13 +9,13 @@ export async function deleteExpiredMessages() {
     await db.query(`
       UPDATE messages
       SET url = ''
-      WHERE received + 255600 < UNIX_TIMESTAMP() AND url != ''
+      WHERE created + 255600 < UNIX_TIMESTAMP() AND url != ''
     `);
 
     // Messages can no longer be replied to from outside of the Ptorx app
     // after 30 days
     await db.query(`
-      DELETE FROM messages WHERE received + 2592000 < UNIX_TIMESTAMP()
+      DELETE FROM messages WHERE created + 2592000 < UNIX_TIMESTAMP()
     `);
 
     db.release();

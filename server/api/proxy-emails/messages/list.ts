@@ -1,20 +1,23 @@
 import { Request, Response } from 'express';
 import { MySQL } from 'lib/MySQL';
 
-export async function api_getMessages(req: Request, res: Response): Promise<void> {
+export async function api_getMessages(
+  req: Request,
+  res: Response
+): Promise<void> {
   const db = new MySQL();
   try {
     const messages = await db.query(
       `
         SELECT
-          m.id, m.received, m.subject
+          m.id, m.created, m.subject
         FROM
           messages AS m, proxy_emails AS pxe
         WHERE
           m.proxyEmailId = pxe.proxyEmailId AND m.type = ? AND
-          m.received + 255600 > UNIX_TIMESTAMP() AND
+          m.created + 255600 > UNIX_TIMESTAMP() AND
           pxe.proxyEmailId = ? AND pxe.userId = ?
-        ORDER BY m.received DESC
+        ORDER BY m.created DESC
       `,
       [req.query.type, req.params.email, req.session.uid]
     );

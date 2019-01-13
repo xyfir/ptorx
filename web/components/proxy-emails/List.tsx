@@ -101,12 +101,11 @@ export class EmailList extends React.Component<
             .splice((page - 1) * 25, 25)
             .map(email => (
               <ListItem
-                threeLines
                 key={email.id}
                 onClick={() => this.setState({ selected: email.id })}
                 className="email"
                 primaryText={email.name}
-                secondaryText={email.address + '\n' + email.description}
+                secondaryText={email.address}
               />
             ))}
         </List>

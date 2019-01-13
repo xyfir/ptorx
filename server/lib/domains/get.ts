@@ -25,10 +25,10 @@ export async function getDomain(
 
     domain.users = await db.query(
       `
-        SELECT userId AS id, label, requestKey AS requestKey, added
+        SELECT userId AS id, label, requestKey AS requestKey, created
         FROM domain_users
         WHERE domainId = ? AND userId != ? AND authorized = 1
-        ORDER BY added ASC
+        ORDER BY created ASC
       `,
       [domain.id, userId]
     );

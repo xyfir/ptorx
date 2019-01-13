@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { validateModifier } from 'lib/modifiers/validate';
+import * as moment from 'moment';
 import { MySQL } from 'lib/MySQL';
 
 export async function api_addModifier(
@@ -17,8 +18,8 @@ export async function api_addModifier(
       insert = {
         userId: req.session.uid,
         name: req.body.name,
-        description: req.body.description,
-        type: req.body.type
+        type: req.body.type,
+        created: moment().unix()
       },
       result = await db.query(sql, insert);
 

@@ -88,7 +88,7 @@ export class MessageList extends React.Component<
                 key={m.id}
                 onClick={() => this.setState({ message: m.id })}
                 primaryText={m.subject}
-                secondaryText={new Date(m.received * 1000).toLocaleString()}
+                secondaryText={new Date(m.created * 1000).toLocaleString()}
               />
             ))}
           </List>

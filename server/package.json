@@ -22,6 +22,7 @@
     "express-mysql-session": "^2.1.0",
     "express-session": "^1.15.6",
     "mailgun-js": "^0.22.0",
+    "moment": "^2.23.0",
     "multer": "^1.4.1",
     "mysql": "^2.16.0",
     "rword": "^3.0.0",

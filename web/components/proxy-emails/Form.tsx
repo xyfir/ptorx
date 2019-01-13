@@ -20,7 +20,6 @@ export class EmailForm extends React.Component<EmailFormProps, EmailFormState> {
   static defaultProps = {
     email: {
       name: '',
-      description: '',
       toEmail: '',
       spamFilter: true,
       saveMail: false,
@@ -82,19 +81,6 @@ export class EmailForm extends React.Component<EmailFormProps, EmailFormState> {
             onChange={v => this.onChange('name', v)}
             helpText={'(optional) Give your email a name to find it easier'}
             maxLength={40}
-          />
-
-          <TextField
-            id="text--description"
-            type="text"
-            label="Description"
-            value={email.description}
-            onChange={v => this.onChange('description', v)}
-            helpText={
-              '(optional) Give your email a description to find it easier'
-            }
-            maxLength={150}
-            defaultValue={email.description}
           />
 
           {create ? (

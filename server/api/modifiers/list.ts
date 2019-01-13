@@ -10,7 +10,7 @@ export async function api_getModifiers(
     const modifiers = await db.query(
       `
         SELECT
-          userId AS uid, modifierId AS id, name, description, type,
+          userId AS uid, modifierId AS id, name, type,
           IF(userId = 0, 1, 0) AS global
         FROM modifiers WHERE userId = ? OR userId = 0
       `,
