@@ -1,43 +1,14 @@
 import { Request, Response } from 'express';
-import { validateModifier } from 'lib/modifiers/validate';
-import { MySQL } from 'lib/MySQL';
+import { editModifier } from 'lib/modifiers/edit';
 
 export async function api_editModifier(
   req: Request,
   res: Response
 ): Promise<void> {
-  const db = new MySQL();
-
   try {
-    validateModifier(req.body);
-
-    let sql = `
-        UPDATE modifiers SET name = ?, description = ?, type = ?
-        WHERE modifierId = ? AND userId = ?
-      `,
-      vars = [
-        req.body.name,
-        req.body.description,
-        req.body.type,
-        req.params.mod,
-        req.session.uid
-      ];
-
-    const result = await db.query(sql, vars);
-
-    if (!result.affectedRows) throw 'An unknown error occured';
-
-    (sql = `
-      SELECT proxyEmailId as id FROM links WHERE modifierId = ?
-    `),
-      (vars = [req.params.mod]);
-
-    const rows = await db.query(sql, vars);
-    db.release();
-
-    res.status(200).json({ message: '' });
+    const modifier = await editModifier(req.body, req.session.uid);
+    res.status(200).json(modifier);
   } catch (err) {
-    db.release();
     res.status(400).json({ error: err });
   }
 }

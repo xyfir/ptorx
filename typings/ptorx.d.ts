@@ -118,7 +118,7 @@ export namespace Ptorx {
   }[];
 
   export interface Modifier {
-    id: number;
+    modifierId: number;
     name: string;
     description: string;
     type: number;
