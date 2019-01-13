@@ -11,8 +11,9 @@ test('create modifier 2', async () => {
   expect(Object.keys(modifier).length).toBe(17);
   expect(modifier.modifierId).toBeNumber();
   expect(modifier.created).toBeNumber();
+  expect(modifier.userId).toBe(1234);
   const _modifier: Ptorx.Modifier = {
-    modifierId: modifier.modifierId,
+    ...modifier,
     name: 'name',
     type: 2,
     subject: null,
@@ -26,8 +27,7 @@ test('create modifier 2', async () => {
     separator: null,
     find: null,
     tag: null,
-    template: null,
-    created: modifier.created
+    template: null
   };
   expect(modifier).toMatchObject(_modifier);
 });
@@ -38,7 +38,7 @@ test('create modifier 3', async () => {
     1234
   );
   const _modifier: Ptorx.Modifier = {
-    modifierId: modifier.modifierId,
+    ...modifier,
     name: '',
     type: 3,
     subject: null,
@@ -52,8 +52,7 @@ test('create modifier 3', async () => {
     separator: null,
     find: 'Hello',
     tag: null,
-    template: null,
-    created: modifier.created
+    template: null
   };
   expect(modifier).toMatchObject(_modifier);
 });
@@ -61,7 +60,7 @@ test('create modifier 3', async () => {
 test('create modifier 4', async () => {
   const modifier = await addModifier({ type: 4, subject: 'subject' }, 1234);
   const _modifier: Ptorx.Modifier = {
-    modifierId: modifier.modifierId,
+    ...modifier,
     name: '',
     type: 4,
     subject: 'subject',
@@ -75,8 +74,7 @@ test('create modifier 4', async () => {
     separator: null,
     find: null,
     tag: null,
-    template: null,
-    created: modifier.created
+    template: null
   };
   expect(modifier).toMatchObject(_modifier);
 });
@@ -87,7 +85,7 @@ test('create modifier 5', async () => {
     1234
   );
   const _modifier: Ptorx.Modifier = {
-    modifierId: modifier.modifierId,
+    ...modifier,
     name: '',
     type: 5,
     subject: null,
@@ -101,8 +99,7 @@ test('create modifier 5', async () => {
     separator: null,
     find: null,
     tag: 'tag',
-    template: null,
-    created: modifier.created
+    template: null
   };
   expect(modifier).toMatchObject(_modifier);
 });
@@ -113,7 +110,7 @@ test('create modifier 6', async () => {
     1234
   );
   const _modifier: Ptorx.Modifier = {
-    modifierId: modifier.modifierId,
+    ...modifier,
     name: '',
     type: 6,
     subject: null,
@@ -127,8 +124,7 @@ test('create modifier 6', async () => {
     separator: ':',
     find: null,
     tag: null,
-    template: null,
-    created: modifier.created
+    template: null
   };
   expect(modifier).toMatchObject(_modifier);
 });
@@ -139,7 +135,7 @@ test('create modifier 8', async () => {
     1234
   );
   const _modifier: Ptorx.Modifier = {
-    modifierId: modifier.modifierId,
+    ...modifier,
     name: '',
     type: 8,
     subject: null,
@@ -153,8 +149,7 @@ test('create modifier 8', async () => {
     separator: null,
     find: null,
     tag: null,
-    template: 'Hello {{senderName}}',
-    created: modifier.created
+    template: 'Hello {{senderName}}'
   };
   expect(modifier).toMatchObject(_modifier);
 });
