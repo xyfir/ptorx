@@ -2,14 +2,6 @@ export namespace Ptorx {
   export interface Account {
     loggedIn: boolean;
     uid: number;
-    referral: {
-      type?: string;
-      /**
-       * Whatever the value of `type` is
-       */
-      [type: string]: any;
-      hasMadePurchase?: boolean;
-    };
     credits: number;
     emailTemplate?: number;
   }

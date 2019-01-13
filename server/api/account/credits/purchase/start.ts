@@ -10,15 +10,11 @@ export async function api_startCreditsPurchase(
   const db = new MySQL();
 
   try {
-    const [user] = await db.query(
-      'SELECT email, referral FROM users WHERE userId = ?',
-      [req.session.uid]
-    );
+    const [user] = await db.query('SELECT email FROM users WHERE userId = ?', [
+      req.session.uid
+    ]);
     if (!user) throw 'No user';
     db.release();
-
-    const referral = JSON.parse(user.referral);
-    referral.hasMadePurchase = true;
 
     const methods = (() => {
       switch (req.body.type) {
@@ -37,8 +33,7 @@ export async function api_startCreditsPurchase(
       description: 'Ptorx Premium',
       info: {
         credits: { 1: 8333, 2: 18181, 3: 50000 }[req.body.package],
-        userId: req.session.uid,
-        referral
+        userId: req.session.uid
       },
       email: user.email,
       redirect_url: `${

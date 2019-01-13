@@ -31,25 +31,12 @@ export async function api_login(req: Request, res: Response): Promise<void> {
 
     // First login: create user's account
     if (!rows.length) {
-      const referral = req.body.referral || {};
-
       sql = `INSERT INTO users SET ?`;
       const insert = {
         email: xaccResult.data.email,
         credits: 50,
-        referral: '{}',
         xyfirId: req.body.xid
       };
-
-      // Reward credits for referral
-      if (referral.type == 'user') {
-        try {
-          await creditUser(db, +referral.user, 25);
-          insert.credits += 50;
-        } catch (err) {}
-      }
-
-      insert.referral = JSON.stringify(referral);
 
       // Create user
       const result = await db.query(sql, insert);

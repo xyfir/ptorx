@@ -41,9 +41,7 @@ export class Welcome extends React.Component<{}, { welcome: boolean }> {
         <p>
           Credits can be{' '}
           <Link to="/app/account/credits/purchase">purchased</Link>, or{' '}
-          <Link to="/app/account/credits/earn">earned</Link>, and are also
-          rewarded when you <Link to="/app/account/credits/earn">refer</Link>{' '}
-          other users to Ptorx!
+          <Link to="/app/account/credits/earn">earned</Link>.
         </p>
         <p>
           If you're ever feeling confused, open the app menu and check out the{' '}

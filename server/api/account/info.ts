@@ -24,7 +24,7 @@ export async function api_getAccountInfo(
       if (!token[0] || !token[1]) throw 'Invalid token 1';
 
       sql = `
-        SELECT xyfirId, referral, credits, emailTemplate
+        SELECT xyfirId, credits, emailTemplate
         FROM users WHERE userId = ?
       `;
       vars = [token[0]];
@@ -50,12 +50,8 @@ export async function api_getAccountInfo(
     }
     // Get info for dev user
     else if (!CONFIG.PROD) {
-      sql = `
-        SELECT referral, credits, emailTemplate
-        FROM users WHERE userId = 1
-      `;
+      sql = 'SELECT credits, emailTemplate FROM users WHERE userId = 1';
       rows = await db.query(sql);
-
       uid = 1;
       row = rows[0];
     }
@@ -79,12 +75,12 @@ export async function api_getAccountInfo(
       loggedIn: true,
       uid,
       emails,
-      referral: JSON.parse(row.referral),
       credits: row.credits,
       emailTemplate: row.emailTemplate
     });
   } catch (err) {
     db.release();
+    // @ts-ignore
     req.session.destroy();
     res.status(200).json({ loggedIn: false });
   }

@@ -26,17 +26,10 @@ export async function api_finishCreditsPurchase(
 
     // Update user's account
 
-    await db.query(
-      `
-        UPDATE users SET credits = ?, referral = ?
-        WHERE userId = ?
-      `,
-      [
-        payment.data.info.credits,
-        JSON.stringify(payment.data.info.referral),
-        req.session.uid
-      ]
-    );
+    await db.query('UPDATE users SET credits = ? WHERE userId = ?', [
+      payment.data.info.credits,
+      req.session.uid
+    ]);
 
     // Mark payment fulfilled
     await axios.post(

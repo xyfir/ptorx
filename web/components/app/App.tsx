@@ -34,17 +34,6 @@ export class App extends React.Component<RouteComponentProps, AppState> {
     // Attempt to login using XID/AUTH or skip to initialize()
     const q = qs.parse(location.search);
     if (q.xid && q.auth) {
-      if (localStorage.r) {
-        const [type, value] = localStorage.r.split('~');
-        const referral = {
-          type,
-          [type]: value,
-          data: Object.assign({}, localStorage)
-        };
-        delete referral.data.accessToken, delete referral.data.r;
-        q.referral = referral;
-      }
-
       try {
         const res = await api.post('/account/login', q);
         localStorage.accessToken = res.data.accessToken;
