@@ -1,10 +1,8 @@
 import { deleteModifier } from 'lib/modifiers/delete';
+import { listModifiers } from 'lib/modifiers/list';
 import { addModifier } from 'lib/modifiers/add';
 import { Ptorx } from 'typings/ptorx';
 import 'lib/tests/prepare';
-
-// ** list
-// ** delete
 
 test('create modifier 2', async () => {
   const modifier = await addModifier({ type: 2, name: 'name' }, 1234);
@@ -153,3 +151,18 @@ test('create modifier 8', async () => {
   };
   expect(modifier).toMatchObject(_modifier);
 });
+
+test('list modifiers', async () => {
+  const modifiers = await listModifiers(1234);
+  expect(modifiers).toBeArrayOfSize(7);
+  expect(modifiers[0]).toContainAllKeys([
+    'modifierId',
+    'userId',
+    'name',
+    'type',
+    'created',
+    'global'
+  ] as Array<keyof Ptorx.ModifierList[0]>);
+});
+
+// ** delete
