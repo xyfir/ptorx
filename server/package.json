@@ -4,6 +4,7 @@
   "description": "Ptorx server",
   "main": "app.js",
   "scripts": {
+    "coverage": "npm run test -- --coverage",
     "build": "tsc -p ./",
     "start": "node dist/app",
     "test": "jest --detectOpenHandles --runInBand"
