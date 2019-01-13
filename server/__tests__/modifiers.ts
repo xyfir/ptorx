@@ -165,4 +165,13 @@ test('list modifiers', async () => {
   ] as Array<keyof Ptorx.ModifierList[0]>);
 });
 
-// ** delete
+test('delete modifier', async () => {
+  let modifiers = await listModifiers(1234);
+  const modifier = modifiers.find(m => !m.global);
+  await deleteModifier(modifier.modifierId, 1234);
+  modifiers = await listModifiers(1234);
+  expect(modifiers).toBeArrayOfSize(6);
+  expect(
+    modifiers.find(m => m.modifierId == modifier.modifierId)
+  ).toBeUndefined();
+});
