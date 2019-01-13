@@ -2,7 +2,7 @@ import { Ptorx } from 'typings/ptorx';
 import { MySQL } from 'lib/MySQL';
 
 export async function getModifier(
-  modifierId: number,
+  modifierId: Ptorx.Modifier['modifierId'],
   userId: number
 ): Promise<Ptorx.Modifier> {
   const db = new MySQL();

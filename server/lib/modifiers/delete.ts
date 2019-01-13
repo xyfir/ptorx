@@ -1,7 +1,8 @@
+import { Ptorx } from 'typings/ptorx';
 import { MySQL } from 'lib/MySQL';
 
 export async function deleteModifier(
-  modifierId: number,
+  modifierId: Ptorx.Modifier['modifierId'],
   userId: number
 ): Promise<void> {
   const db = new MySQL();
