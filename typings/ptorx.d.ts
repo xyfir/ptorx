@@ -101,14 +101,19 @@ export namespace Ptorx {
   export interface Modifier {
     modifierId: number;
     name: string;
-    type: number;
-    value?: string;
+    type: 2 | 3 | 4 | 5 | 6 | 8;
     subject?: string;
-    with?: string;
+    replacement?: string;
     flags?: string;
     regex?: boolean;
     prepend?: boolean;
     target?: boolean;
+    add?: "from" | "subject" | "senderName" | "domain" | "sender";
+    to?: "subject" | "body-html" | "body-plain";
+    separator?: string;
+    find?: string;
+    tag?: string;
+    template?: string;
     created: number;
   }
 

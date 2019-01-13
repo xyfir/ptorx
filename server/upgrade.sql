@@ -128,3 +128,13 @@ ALTER TABLE `proxy_emails` ADD `created2` INT UNSIGNED NOT NULL AFTER `created`;
 UPDATE `proxy_emails` SET created2 = UNIX_TIMESTAMP(created);
 ALTER TABLE `proxy_emails` DROP `created`;
 ALTER TABLE `proxy_emails` CHANGE `created2` `created` INT(10) UNSIGNED NOT NULL;
+-- increase name length
+ALTER TABLE `filters` CHANGE `name` `name` VARCHAR(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL;
+ALTER TABLE `modifiers` CHANGE `name` `name` VARCHAR(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL;
+ALTER TABLE `proxy_emails` CHANGE `name` `name` VARCHAR(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL;
+-- improve modifier structure
+ALTER TABLE `modifiers` ADD `add` VARCHAR(20) NULL DEFAULT NULL AFTER `target`, ADD `to` VARCHAR(20) NULL DEFAULT NULL AFTER `add`;
+ALTER TABLE `modifiers` ADD `separator` VARCHAR(10) NULL DEFAULT NULL AFTER `to`;
+ALTER TABLE `modifiers` DROP `value`;
+ALTER TABLE `modifiers` ADD `find` TEXT NULL DEFAULT NULL AFTER `separator`, ADD `tag` VARCHAR(100) NULL DEFAULT NULL AFTER `find`, ADD `template` TEXT NULL DEFAULT NULL AFTER `tag`;
+ALTER TABLE `modifiers` CHANGE `with` `replacement` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL;

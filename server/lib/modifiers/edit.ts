@@ -8,25 +8,85 @@ export async function editModifier(
 ): Promise<Ptorx.Modifier> {
   const db = new MySQL();
   try {
-    // ** validate
+    switch (modifier.type) {
+      case 2:
+        break;
+      case 3:
+        if (
+          typeof modifier.replacement != 'string' ||
+          typeof modifier.regex != 'boolean' ||
+          typeof modifier.flags != 'string' ||
+          typeof modifier.find != 'string'
+        )
+          throw 'Missing find/replacement/regex/flags values';
+        if (!/^[gimu]{0,4}$/.test(modifier.flags))
+          throw 'Invalid regular expression flags';
+        modifier.add = modifier.prepend = modifier.separator = modifier.subject = modifier.tag = modifier.target = modifier.template = modifier.to = null;
+        break;
+      case 4:
+        if (typeof modifier.subject != 'string') throw 'Missing subject';
+        modifier.add = modifier.find = modifier.flags = modifier.prepend = modifier.regex = modifier.replacement = modifier.separator = modifier.tag = modifier.target = modifier.template = modifier.to = null;
+        break;
+      case 5:
+        if (
+          typeof modifier.prepend != 'boolean' ||
+          typeof modifier.tag != 'string'
+        )
+          throw 'Missing tag/prepend';
+        modifier.add = modifier.find = modifier.flags = modifier.regex = modifier.replacement = modifier.separator = modifier.subject = modifier.target = modifier.template = modifier.to = null;
+        break;
+      case 6:
+        if (
+          modifier.add != 'senderName' &&
+          modifier.add != 'subject' &&
+          modifier.add != 'domain' &&
+          modifier.add != 'sender' &&
+          modifier.add != 'from'
+        )
+          throw 'Invalid "add" value';
+        if (
+          modifier.to != 'body-plain' &&
+          modifier.to != 'body-html' &&
+          modifier.to != 'subject'
+        )
+          throw 'Invalid "to" value';
+        if (typeof modifier.separator != 'string') throw 'Missing separator';
+        if (typeof modifier.prepend != 'boolean') throw 'Missing prepend';
+        modifier.find = modifier.flags = modifier.regex = modifier.replacement = modifier.subject = modifier.tag = modifier.target = modifier.template = null;
+        break;
+      case 8:
+        if (!modifier.target || !modifier.template)
+          throw 'Missing target/template';
+        modifier.add = modifier.find = modifier.flags = modifier.prepend = modifier.regex = modifier.replacement = modifier.separator = modifier.subject = modifier.tag = modifier.to = null;
+        break;
+      default:
+        throw 'Invalid type';
+    }
+
     const result = await db.query(
       `
         UPDATE modifiers
         SET
-          name = ?, type = ?, value = ?, subject = ?, with = ?,
-          flags = ?, regex = ?, prepend = ?, target = ?
+          name = ?, type = ?, subject = ?, replacement = ?, flags = ?,
+          regex = ?, prepend = ?, target = ?, add = ?, to = ?, separator = ?,
+          find = ?, tag = ?, template = ?
         WHERE modifierId = ? AND userId = ?
       `,
       [
         modifier.name,
         modifier.type,
-        modifier.value,
         modifier.subject,
-        modifier.with,
+        modifier.replacement,
         modifier.flags,
         modifier.regex,
         modifier.prepend,
         modifier.target,
+        modifier.add,
+        modifier.to,
+        modifier.separator,
+        modifier.find,
+        modifier.tag,
+        modifier.template,
         modifier.modifierId,
         userId
       ]
