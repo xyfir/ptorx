@@ -100,6 +100,7 @@ export namespace Ptorx {
 
   export interface Modifier {
     modifierId: number;
+    userId: number;
     name: string;
     type: 2 | 3 | 4 | 5 | 6 | 8;
     subject?: string;
@@ -118,10 +119,11 @@ export namespace Ptorx {
   }
 
   export type ModifierList = {
-    uid: number;
-    id: number;
-    name: string;
-    type: number;
+    modifierId: Ptorx.Modifier["modifierId"];
+    userId: Ptorx.Modifier["userId"];
+    name: Ptorx.Modifier["name"];
+    type: Ptorx.Modifier["type"];
+    created: Ptorx.Modifier["created"];
     global: boolean;
   }[];
 
