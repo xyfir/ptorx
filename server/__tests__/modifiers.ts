@@ -135,7 +135,7 @@ test('create modifier 6', async () => {
 
 test('create modifier 8', async () => {
   const modifier = await addModifier(
-    { type: 8, target: true, template: 'Hello {{senderName}}' },
+    { type: 8, target: 'subject', template: 'Hello {{senderName}}' },
     1234
   );
   const _modifier: Ptorx.Modifier = {
@@ -147,7 +147,7 @@ test('create modifier 8', async () => {
     flags: null,
     regex: null,
     prepend: null,
-    target: true,
+    target: 'subject',
     add: null,
     to: null,
     separator: null,

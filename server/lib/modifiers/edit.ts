@@ -55,8 +55,13 @@ export async function editModifier(
         modifier.find = modifier.flags = modifier.regex = modifier.replacement = modifier.subject = modifier.tag = modifier.target = modifier.template = null;
         break;
       case 8:
-        if (!modifier.target || !modifier.template)
-          throw 'Missing target/template';
+        if (
+          modifier.target != 'body-plain' &&
+          modifier.target != 'body-html' &&
+          modifier.target != 'subject'
+        )
+          throw 'Invalid "target" value';
+        if (typeof modifier.template != 'string') throw 'Missing template';
         modifier.add = modifier.find = modifier.flags = modifier.prepend = modifier.regex = modifier.replacement = modifier.separator = modifier.subject = modifier.tag = modifier.to = null;
         break;
       default:

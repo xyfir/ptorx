@@ -107,7 +107,7 @@ export namespace Ptorx {
     flags?: string;
     regex?: boolean;
     prepend?: boolean;
-    target?: boolean;
+    target?: "subject" | "body-html" | "body-plain";
     add?: "from" | "subject" | "senderName" | "domain" | "sender";
     to?: "subject" | "body-html" | "body-plain";
     separator?: string;
