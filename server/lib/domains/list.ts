@@ -4,7 +4,7 @@ import { MySQL } from 'lib/MySQL';
 export async function listDomains(userId: number): Promise<Ptorx.DomainList> {
   const db = new MySQL();
   try {
-    const domains = await db.query(
+    const domains: Ptorx.DomainList = await db.query(
       `
         SELECT
           id, domain, userId = ? AS isCreator, global, created
@@ -19,7 +19,11 @@ export async function listDomains(userId: number): Promise<Ptorx.DomainList> {
       [userId, userId]
     );
     db.release();
-    return domains;
+    return domains.map(d => {
+      d.isCreator = !!d.isCreator;
+      d.global = !!d.global;
+      return d;
+    });
   } catch (err) {
     db.release();
     throw err;
