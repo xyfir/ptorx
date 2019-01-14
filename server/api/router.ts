@@ -69,7 +69,7 @@ router.get('/account/logout', c.api_logout);
 router.post('/account/credits/purchase', c.api_startCreditsPurchase);
 router.get('/account/credits/purchase', c.api_finishCreditsPurchase);
 
-router.get('/domains', c.api_getDomains);
+router.get('/domains', c.api_listDomains);
 router.post('/domains', c.api_addDomain);
 router.post('/domains/request-access', c.api_requestDomainAccess);
 router.get('/domains/:domain', c.api_getDomain);
