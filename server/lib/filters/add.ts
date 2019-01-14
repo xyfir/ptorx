@@ -17,8 +17,8 @@ export async function addFilter(
     });
     if (!result.affectedRows) throw 'Could not create filter';
     db.release();
-    const _filter = await getFilter(filter.filterId, userId);
-    return await editFilter({ ...filter, ..._filter }, userId);
+    const _filter = await getFilter(result.insertId, userId);
+    return await editFilter({ ..._filter, ...filter }, userId);
   } catch (err) {
     db.release();
     throw err;
