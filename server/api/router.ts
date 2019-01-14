@@ -71,9 +71,11 @@ router.get('/account/credits/purchase', c.api_finishCreditsPurchase);
 
 router.get('/domains', c.api_listDomains);
 router.post('/domains', c.api_addDomain);
-router.post('/domains/request-access', c.api_requestDomainAccess);
+
+router.post('/domains/users', c.api_addDomainUser);
+router.put('/domains/:domain/users/:key', c.api_editDomainUser);
+router.delete('/domains/:domain/users/:key', c.api_deleteDomainUser);
+
 router.get('/domains/:domain', c.api_getDomain);
 router.delete('/domains/:domain', c.api_deleteDomain);
 router.post('/domains/:domain/verify', c.api_verifyDomain);
-router.post('/domains/:domain/users', c.api_addDomainUser);
-router.delete('/domains/:domain/users/:user', c.api_deleteDomainUser);

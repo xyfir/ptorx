@@ -7,7 +7,7 @@ export * from './account/info';
 export * from './account/login';
 export * from './account/logout';
 
-export * from './domains/users/add';
+export * from './domains/users/edit';
 export * from './domains/users/delete';
 
 export * from './domains/add';
@@ -15,7 +15,11 @@ export * from './domains/get';
 export * from './domains/list';
 export * from './domains/delete';
 export * from './domains/verify';
-export * from './domains/request-access';
+
+export * from './domains/users/add';
+export * from './domains/users/edit';
+export * from './domains/users/delete';
+export * from './domains/users/list';
 
 export * from './proxy-emails/messages/delete';
 export * from './proxy-emails/messages/get';
