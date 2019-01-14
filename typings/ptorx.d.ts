@@ -84,8 +84,9 @@ export namespace Ptorx {
 
   export interface Filter {
     filterId: number;
+    userId: number;
     name: string;
-    type: number;
+    type: 1 | 2 | 3 | 4 | 5 | 6;
     find: string;
     acceptOnMatch: boolean;
     regex: boolean;
@@ -96,6 +97,7 @@ export namespace Ptorx {
     id: number;
     name: string;
     type: number;
+    created: number;
   }[];
 
   export interface Modifier {

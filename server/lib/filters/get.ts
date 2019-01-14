@@ -2,7 +2,7 @@ import { MySQL } from 'lib/MySQL';
 import { Ptorx } from 'typings/ptorx';
 
 export async function getFilter(
-  filterId: number,
+  filterId: Ptorx.Filter['filterId'],
   userId: number
 ): Promise<Ptorx.Filter> {
   const db = new MySQL();
