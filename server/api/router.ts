@@ -39,7 +39,7 @@ router
 
 router
   .route('/filters')
-  .get(c.api_getFilters)
+  .get(c.api_listFilters)
   .post(c.api_addFilter);
 router
   .route('/filters/:filter')

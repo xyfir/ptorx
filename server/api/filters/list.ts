@@ -1,22 +1,14 @@
 import { Request, Response } from 'express';
-import { MySQL } from 'lib/MySQL';
+import { listFilters } from 'lib/filters/list';
 
-export async function api_getFilters(
+export async function api_listFilters(
   req: Request,
   res: Response
 ): Promise<void> {
-  const db = new MySQL();
   try {
-    const filters = await db.query(
-      `
-        SELECT filterId as id, name, type
-        FROM filters WHERE userId = ?
-      `,
-      [req.session.uid]
-    );
+    const filters = await listFilters(req.session.uid);
     res.status(200).json(filters);
   } catch (err) {
     res.status(400).json({ error: err });
   }
-  db.release();
 }
