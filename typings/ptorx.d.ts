@@ -24,10 +24,11 @@ export namespace Ptorx {
   }
 
   export type DomainList = {
-    id: number;
-    domain: string;
-    isCreator: boolean;
-    global: boolean;
+    id: Domain["id"];
+    domain: Domain["domain"];
+    isCreator: Domain["isCreator"];
+    global: Domain["global"];
+    created: Domain["created"];
   }[];
 
   export interface ProxyEmail {
@@ -94,10 +95,10 @@ export namespace Ptorx {
   }
 
   export type FilterList = {
-    filterId: number;
-    name: string;
-    type: number;
-    created: number;
+    filterId: Filter["filterId"];
+    name: Filter["name"];
+    type: Filter["type"];
+    created: Filter["created"];
   }[];
 
   export interface Modifier {
