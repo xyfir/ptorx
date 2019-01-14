@@ -1,3 +1,5 @@
+import { editDomainUser } from 'lib/domains/users/edit';
+import { addDomainUser } from 'lib/domains/users/add';
 import { editDomain } from 'lib/domains/edit';
 import { getDomain } from 'lib/domains/get';
 import * as moment from 'moment';
@@ -6,7 +8,6 @@ import { MySQL } from 'lib/MySQL';
 
 /**
  * @todo Generate data needed to verify the domain
- * @todo Add current user to domain_users as authorized
  */
 export async function addDomain(
   domain: Partial<Ptorx.Domain>,
@@ -21,6 +22,10 @@ export async function addDomain(
     });
     db.release();
     const _domain = await getDomain(result.insertId, userId);
+
+    const domainUser = await addDomainUser(_domain.domain, userId);
+    await editDomainUser({ ...domainUser, authorized: true }, userId);
+
     return await editDomain({ ..._domain, ...domain }, 1234);
   } catch (err) {
     db.release();
