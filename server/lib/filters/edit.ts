@@ -1,4 +1,3 @@
-import { requireCredits } from 'lib/users/require-credits';
 import { getFilter } from 'lib/filters/get';
 import { Ptorx } from 'typings/ptorx';
 import { MySQL } from 'lib/MySQL';
@@ -15,7 +14,6 @@ export async function editFilter(
     else if (filter.type == 6 && filter.find.indexOf(':::') === -1)
       throw 'Bad header filter';
 
-    await requireCredits(userId);
     const result = await db.query(
       `
         UPDATE filters SET
