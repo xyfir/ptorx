@@ -15,6 +15,7 @@ export * from './domains/get';
 export * from './domains/list';
 export * from './domains/remove';
 export * from './domains/verify';
+export * from './domains/request-access';
 
 export * from './proxy-emails/messages/delete';
 export * from './proxy-emails/messages/get';

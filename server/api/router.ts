@@ -69,14 +69,11 @@ router.get('/account/logout', c.api_logout);
 router.post('/account/credits/purchase', c.api_startCreditsPurchase);
 router.get('/account/credits/purchase', c.api_finishCreditsPurchase);
 
-router
-  .route('/domains')
-  .get(c.api_getDomains)
-  .post(c.api_addDomain);
-router
-  .route('/domains/:domain')
-  .get(c.api_getDomain)
-  .delete(c.api_deleteDomain);
-router.put('/domains/:domain/verify', c.api_verifyDomain);
+router.get('/domains', c.api_getDomains);
+router.post('/domains', c.api_addDomain);
+router.post('/domains/request-access', c.api_requestDomainAccess);
+router.get('/domains/:domain', c.api_getDomain);
+router.delete('/domains/:domain', c.api_deleteDomain);
+router.post('/domains/:domain/verify', c.api_verifyDomain);
 router.post('/domains/:domain/users', c.api_addDomainUser);
 router.delete('/domains/:domain/users/:user', c.api_deleteDomainUser);
