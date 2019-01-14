@@ -15,6 +15,8 @@ export async function getDomain(
     db.release();
     if (!domain) throw 'Could not find domain';
     domain.isCreator = !!domain.isCreator;
+    domain.verified = !!domain.verified;
+    domain.global = !!domain.global;
     return domain;
   } catch (err) {
     db.release();
