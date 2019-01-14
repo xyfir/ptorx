@@ -9,31 +9,12 @@ export async function getDomain(
 
   try {
     const [domain]: Ptorx.Domain[] = await db.query(
-      'SELECT * FROM domains WHERE id = ?',
-      [domainId]
+      'SELECT *, userId = ? AS isCreator FROM domains WHERE id = ?',
+      [userId, domainId]
     );
-    if (!domain) throw 'Could not find domain';
-
-    domain.isCreator = domain.userId == userId;
-
-    if (!domain.isCreator) {
-      db.release();
-      return domain;
-    }
-
-    if (domain.domainKey) domain.domainKey = JSON.parse(domain.domainKey);
-
-    domain.users = await db.query(
-      `
-        SELECT userId AS id, label, requestKey AS requestKey, created
-        FROM domain_users
-        WHERE domainId = ? AND userId != ? AND authorized = 1
-        ORDER BY created ASC
-      `,
-      [domain.id, userId]
-    );
-
     db.release();
+    if (!domain) throw 'Could not find domain';
+    domain.isCreator = !!domain.isCreator;
     return domain;
   } catch (err) {
     db.release();
