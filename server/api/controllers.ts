@@ -13,7 +13,7 @@ export * from './domains/users/delete';
 export * from './domains/add';
 export * from './domains/get';
 export * from './domains/list';
-export * from './domains/remove';
+export * from './domains/delete';
 export * from './domains/verify';
 export * from './domains/request-access';
 
