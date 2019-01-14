@@ -1,22 +1,25 @@
+import { MySQL } from 'lib/MySQL';
+
 /**
  * Charges a user's account credits. If not enough credits are available it
  *  fails. If all credits are used by the action then the user's emails are
  *  deactivated but the action will not fail.
- * @async
- * @param {object} db
- * @param {number} user
- * @return {number} The user's credits.
- * @throws {string}
  */
-export async function requireCredits(db, user) {
-  const [row] = await db.query('SELECT credits FROM users WHERE userId = ?', [
-    user
-  ]);
-  if (!row) throw 'Could not find user';
+export async function requireCredits(userId: number): Promise<number> {
+  const db = new MySQL();
+  try {
+    const [row] = await db.query('SELECT credits FROM users WHERE userId = ?', [
+      userId
+    ]);
+    if (!row) throw 'Could not find user';
 
-  const credits = +row.credits;
-  if (!credits)
-    throw 'This action is free, but requires that your account have credits';
+    const credits = +row.credits;
+    if (!credits) throw 'This action requires your account to have credits';
 
-  return credits;
+    db.release();
+    return credits;
+  } catch (err) {
+    db.release();
+    throw err;
+  }
 }
