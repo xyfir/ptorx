@@ -155,14 +155,15 @@ test('create modifier 8', async () => {
 test('list modifiers', async () => {
   const modifiers = await listModifiers(1234);
   expect(modifiers).toBeArrayOfSize(7);
-  expect(modifiers[0]).toContainAllKeys([
+  const keys: Array<keyof Ptorx.ModifierList[0]> = [
     'modifierId',
     'userId',
     'name',
     'type',
     'created',
     'global'
-  ] as Array<keyof Ptorx.ModifierList[0]>);
+  ];
+  expect(modifiers[0]).toContainAllKeys(keys);
 });
 
 test('delete modifier', async () => {

@@ -40,12 +40,13 @@ test('create filter 2', async () => {
 test('list filters', async () => {
   const filters = await listFilters(1234);
   expect(filters).toBeArrayOfSize(2);
-  expect(filters[0]).toContainAllKeys([
+  const keys: Array<keyof Ptorx.FilterList[0]> = [
     'filterId',
     'name',
     'type',
     'created'
-  ] as Array<keyof Ptorx.FilterList[0]>);
+  ];
+  expect(filters[0]).toContainAllKeys(keys);
 });
 
 test('delete filter', async () => {
