@@ -129,9 +129,12 @@ export namespace Ptorx {
     global: boolean;
   }[];
 
-  export type PrimaryEmailList = {
-    id: number;
+  export interface PrimaryEmail {
+    primaryEmailId: number;
+    userId: number;
     address: string;
     created: number;
-  }[];
+  }
+
+  export type PrimaryEmailList = PrimaryEmail[];
 }
