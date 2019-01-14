@@ -15,12 +15,6 @@ export namespace Ptorx {
     verified: boolean;
     global: boolean;
     isCreator: boolean;
-    users: {
-      id: number;
-      label: number;
-      requestKey: number;
-      created: number;
-    }[];
   }
 
   export type DomainList = {
@@ -29,6 +23,22 @@ export namespace Ptorx {
     isCreator: Domain["isCreator"];
     global: Domain["global"];
     created: Domain["created"];
+  }[];
+
+  export interface DomainUser {
+    domainId: number;
+    userId: number;
+    label: string;
+    requestKey: string;
+    created: number;
+    authorized: boolean;
+  }
+
+  export type DomainUserList = {
+    label: DomainUser["label"];
+    requestKey: DomainUser["requestKey"];
+    created: DomainUser["created"];
+    authorized: DomainUser["authorized"];
   }[];
 
   export interface ProxyEmail {
