@@ -94,7 +94,7 @@ export namespace Ptorx {
   }
 
   export type FilterList = {
-    id: number;
+    filterId: number;
     name: string;
     type: number;
     created: number;
