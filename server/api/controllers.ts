@@ -27,7 +27,7 @@ export * from './messages/list';
 export * from './messages/reply';
 export * from './messages/send';
 
-export * from './proxy-emails/availability';
+export * from './proxy-emails/check';
 export * from './proxy-emails/add';
 export * from './proxy-emails/delete';
 export * from './proxy-emails/get';

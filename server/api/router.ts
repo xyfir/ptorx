@@ -21,7 +21,7 @@ router
   .route('/proxy-emails')
   .get(c.api_listProxyEmails)
   .post(c.api_addProxyEmail);
-router.get('/proxy-emails/availability', c.api_getProxyEmailAvailability);
+router.post('/proxy-emails/check', c.api_checkProxyEmail);
 router
   .route('/proxy-emails/:email')
   .get(c.api_getProxyEmail)
