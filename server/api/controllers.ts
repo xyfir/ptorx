@@ -21,11 +21,11 @@ export * from './domains/users/edit';
 export * from './domains/users/delete';
 export * from './domains/users/list';
 
-export * from './proxy-emails/messages/delete';
-export * from './proxy-emails/messages/get';
-export * from './proxy-emails/messages/list';
-export * from './proxy-emails/messages/reply';
-export * from './proxy-emails/messages/send';
+export * from './messages/delete';
+export * from './messages/get';
+export * from './messages/list';
+export * from './messages/reply';
+export * from './messages/send';
 
 export * from './proxy-emails/availability';
 export * from './proxy-emails/add';
