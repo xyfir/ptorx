@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import * as escapeRegExp from 'escape-string-regexp';
-import { saveMessage } from 'lib/proxy-emails/save-message';
+import { saveMessage } from 'lib/messages/save';
 import { chargeUser } from 'lib/users/charge';
 import * as Mailgun from 'mailgun-js';
 import * as CONFIG from 'constants/config';
