@@ -29,7 +29,7 @@ router
   .delete(c.api_deleteProxyEmail);
 router
   .route('/proxy-emails/:email/messages')
-  .get(c.api_getMessages)
+  .get(c.api_listMessages)
   .post(c.api_sendMessage);
 router
   .route('/proxy-emails/:email/messages/:message')

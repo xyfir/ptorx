@@ -1,29 +1,14 @@
 import { Request, Response } from 'express';
-import { MySQL } from 'lib/MySQL';
+import { listMessages } from 'lib/messages/list';
 
-export async function api_getMessages(
+export async function api_listMessages(
   req: Request,
   res: Response
 ): Promise<void> {
-  const db = new MySQL();
   try {
-    const messages = await db.query(
-      `
-        SELECT
-          m.id, m.created, m.subject
-        FROM
-          messages AS m, proxy_emails AS pxe
-        WHERE
-          m.proxyEmailId = pxe.proxyEmailId AND m.type = ? AND
-          m.created + 255600 > UNIX_TIMESTAMP() AND
-          pxe.proxyEmailId = ? AND pxe.userId = ?
-        ORDER BY m.created DESC
-      `,
-      [req.query.type, req.params.email, req.session.uid]
-    );
+    const messages = await listMessages(req.session.uid);
     res.status(200).json(messages);
   } catch (err) {
     res.status(400).json({ error: err });
   }
-  db.release();
 }
