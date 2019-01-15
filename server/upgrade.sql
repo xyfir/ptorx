@@ -141,3 +141,5 @@ ALTER TABLE `modifiers` CHANGE `with` `replacement` TEXT CHARACTER SET utf8mb4 C
 ALTER TABLE `modifiers` CHANGE `target` `target` VARCHAR(10) NULL DEFAULT NULL, CHANGE `add` `add` VARCHAR(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL, CHANGE `to` `to` VARCHAR(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL;
 -- remove mgRouteId
 ALTER TABLE `proxy_emails` DROP `mgRouteId`;
+-- remove emailsCreated
+ALTER TABLE `users` DROP `emailsCreated`;
