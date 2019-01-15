@@ -45,18 +45,12 @@ export namespace Ptorx {
     proxyEmailId: number;
     userId: number;
     domainId: number;
-    mgRouteId: string;
     address: string;
     name: string;
     created: number;
     spamFilter: boolean;
     saveMail: boolean;
     directForward: boolean;
-    //
-    /**
-     * @example `"ejection81@sandbox86b2c.mailgun.org"`
-     */
-    fullAddress: string;
     links: {
       orderIndex: number;
       primaryEmailId?: number;

@@ -7,22 +7,13 @@ export async function getProxyEmail(
 ): Promise<Ptorx.ProxyEmail> {
   const db = new MySQL();
   try {
-    const [email]: Ptorx.ProxyEmail[] = await db.query(
-      `
-        SELECT
-          pxe.*, CONCAT(pxe.address, '@', d.domain) AS fullAddress
-        FROM
-          proxy_emails AS pxe, primary_emails AS pme, domains AS d
-        WHERE
-          pxe.proxyEmailId = ? AND pxe.userId = ? AND
-          pme.primaryEmailId = pxe.primaryEmailId AND
-          d.id = pxe.domainId
-      `,
+    const [proxyEmail]: Ptorx.ProxyEmail[] = await db.query(
+      'SELECT * FROM proxy_emails WHERE proxyEmailId = ? AND userId = ?',
       [proxyEmailId, userId]
     );
-    if (!email) throw 'Could not find email';
+    if (!proxyEmail) throw 'Could not find email';
 
-    email.links = await db.query(
+    proxyEmail.links = await db.query(
       `
         SELECT orderIndex, primaryEmailId, modifierId, filterId
         FROM links
@@ -30,12 +21,13 @@ export async function getProxyEmail(
       `,
       [proxyEmailId]
     );
-    email.saveMail = !!email.saveMail;
-    email.spamFilter = !!email.spamFilter;
-    email.directForward = !!email.directForward;
-
     db.release();
-    return email;
+
+    proxyEmail.saveMail = !!proxyEmail.saveMail;
+    proxyEmail.spamFilter = !!proxyEmail.spamFilter;
+    proxyEmail.directForward = !!proxyEmail.directForward;
+
+    return proxyEmail;
   } catch (err) {
     db.release();
     throw err;
