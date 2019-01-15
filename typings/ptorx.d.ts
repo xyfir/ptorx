@@ -73,23 +73,15 @@ export namespace Ptorx {
   }
 
   export interface Message {
-    url: string;
+    id: string;
+    proxyEmailId: Ptorx.ProxyEmail["proxyEmailId"];
     created: number;
-    text: string;
-    html: string;
-    headers: Array<[string, string]>;
-    from: string;
     subject: string;
+    sender: string;
+    type: 0 | 1 | 2;
   }
 
-  export type MessageList = {
-    /**
-     * @example `"cea27f3c-db20-485a-a41e-b197661207e1"`
-     */
-    id: string;
-    created: number;
-    subject: string;
-  }[];
+  export type MessageList = Message[];
 
   export interface Filter {
     filterId: number;

@@ -143,3 +143,5 @@ ALTER TABLE `modifiers` CHANGE `target` `target` VARCHAR(10) NULL DEFAULT NULL, 
 ALTER TABLE `proxy_emails` DROP `mgRouteId`;
 -- remove emailsCreated
 ALTER TABLE `users` DROP `emailsCreated`;
+-- remove messages.url
+ALTER TABLE `messages` DROP `url`;
