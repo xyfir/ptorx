@@ -78,6 +78,9 @@ export namespace Ptorx {
     created: number;
     subject: string;
     sender: string;
+    /**
+     * `0` = accepted, `1` = rejected, `2` = spam
+     */
     type: 0 | 1 | 2;
   }
 
