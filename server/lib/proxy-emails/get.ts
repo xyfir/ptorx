@@ -14,11 +14,7 @@ export async function getProxyEmail(
     if (!proxyEmail) throw 'Could not find email';
 
     proxyEmail.links = await db.query(
-      `
-        SELECT orderIndex, primaryEmailId, modifierId, filterId
-        FROM links
-        WHERE proxyEmailId = ?
-      `,
+      'SELECT * FROM links WHERE proxyEmailId = ?',
       [proxyEmailId]
     );
     db.release();

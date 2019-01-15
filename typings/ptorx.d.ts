@@ -44,19 +44,14 @@ export namespace Ptorx {
   export interface ProxyEmail {
     proxyEmailId: number;
     userId: number;
-    domainId: number;
+    domainId: Ptorx.Domain["id"];
     address: string;
     name: string;
     created: number;
     spamFilter: boolean;
     saveMail: boolean;
     directForward: boolean;
-    links: {
-      orderIndex: number;
-      primaryEmailId?: number;
-      modifierId?: number;
-      filterId?: number;
-    }[];
+    links: ProxyEmailLink[];
   }
 
   export type ProxyEmailList = {
@@ -68,6 +63,14 @@ export namespace Ptorx {
     address: string;
     created: number;
   }[];
+
+  export interface ProxyEmailLink {
+    proxyEmailId: Ptorx.ProxyEmail["proxyEmailId"];
+    orderIndex: number;
+    primaryEmailId?: Ptorx.PrimaryEmail["primaryEmailId"];
+    modifierId?: Ptorx.Modifier["modifierId"];
+    filterId?: Ptorx.Filter["filterId"];
+  }
 
   export interface Message {
     url: string;
