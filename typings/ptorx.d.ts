@@ -72,6 +72,7 @@ export namespace Ptorx {
      * @example `"ejection81@sandbox86b2c.mailgun.org"`
      */
     address: string;
+    created: number;
   }[];
 
   export interface Message {

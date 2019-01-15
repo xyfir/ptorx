@@ -19,7 +19,7 @@ router.post('/receive/:email', upload.any(), c.api_receiveMail);
 
 router
   .route('/proxy-emails')
-  .get(c.api_getProxyEmails)
+  .get(c.api_listProxyEmails)
   .post(c.api_addProxyEmail);
 router.get('/proxy-emails/availability', c.api_getProxyEmailAvailability);
 router
