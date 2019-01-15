@@ -55,7 +55,7 @@ export namespace Ptorx {
   }
 
   export type ProxyEmailList = {
-    id: number;
+    proxyEmailId: number;
     name: string;
     /**
      * @example `"ejection81@sandbox86b2c.mailgun.org"`
