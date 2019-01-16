@@ -6,7 +6,7 @@ export async function api_deleteProxyEmail(
   res: Response
 ): Promise<void> {
   try {
-    await deleteProxyEmail(+req.params.email, +req.session.uid);
+    await deleteProxyEmail(+req.query.proxyEmail, +req.session.uid);
     res.status(200).json({});
   } catch (err) {
     res.status(400).json({ error: err });

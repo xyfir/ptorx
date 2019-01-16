@@ -6,7 +6,7 @@ export async function api_deleteDomain(
   res: Response
 ): Promise<void> {
   try {
-    await deleteDomain(+req.params.domain, req.session.uid);
+    await deleteDomain(+req.query.domain, req.session.uid);
     res.status(200).json({});
   } catch (err) {
     res.status(400).json({ error: err });

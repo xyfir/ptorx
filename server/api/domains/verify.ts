@@ -6,7 +6,7 @@ export async function api_verifyDomain(
   res: Response
 ): Promise<void> {
   try {
-    await verifyDomain(+req.params.domain, req.session.uid);
+    await verifyDomain(+req.body.domainId, req.session.uid);
     res.status(200).json({});
   } catch (err) {
     res.status(400).json({ error: err });

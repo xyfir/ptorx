@@ -15,51 +15,32 @@ const upload = multer({
 export const router = Express.Router();
 
 router.post('/receive/reply', c.api_receiveReply);
-router.post('/receive/:email', upload.any(), c.api_receiveMail);
+router.post('/receive', upload.any(), c.api_receiveMail);
 
-router
-  .route('/proxy-emails')
-  .get(c.api_listProxyEmails)
-  .post(c.api_addProxyEmail);
+router.get('/proxy-emails', c.api_getProxyEmails);
+router.put('/proxy-emails', c.api_editProxyEmail);
+router.post('/proxy-emails', c.api_addProxyEmail);
+router.delete('/proxy-emails', c.api_deleteProxyEmail);
 router.post('/proxy-emails/check', c.api_checkProxyEmail);
-router
-  .route('/proxy-emails/:email')
-  .get(c.api_getProxyEmail)
-  .put(c.api_editProxyEmail)
-  .delete(c.api_deleteProxyEmail);
-router
-  .route('/proxy-emails/:email/messages')
-  .get(c.api_listMessages)
-  .post(c.api_sendMessage);
-router
-  .route('/proxy-emails/:email/messages/:message')
-  .get(c.api_getMessage)
-  .post(c.api_replyToMessage)
-  .delete(c.api_deleteMessage);
 
-router
-  .route('/filters')
-  .get(c.api_listFilters)
-  .post(c.api_addFilter);
-router
-  .route('/filters/:filter')
-  .get(c.api_getFilter)
-  .put(c.api_editFilter)
-  .delete(c.api_deleteFilter);
+router.get('/messages', c.api_getMessages);
+router.delete('/messages', c.api_deleteMessage);
+router.post('/messages/send', c.api_sendMessage);
+router.post('/messages/reply', c.api_replyToMessage);
 
-router
-  .route('/modifiers')
-  .get(c.api_listModifiers)
-  .post(c.api_addModifier);
-router
-  .route('/modifiers/:mod')
-  .get(c.api_getModifier)
-  .put(c.api_editModifier)
-  .delete(c.api_deleteModifier);
+router.get('/filters', c.api_getFilters);
+router.put('/filters', c.api_editFilter);
+router.post('/filters', c.api_addFilter);
+router.delete('/filters', c.api_deleteFilter);
 
-router.get('/primary-emails', c.api_getPrimaryEmails);
+router.get('/modifiers', c.api_getModifiers);
+router.put('/modifiers', c.api_editModifier);
+router.post('/modifiers', c.api_addModifier);
+router.delete('/modifiers', c.api_deleteModifier);
+
+router.get('/primary-emails', c.api_listPrimaryEmails);
 router.post('/primary-emails', c.api_addPrimaryEmail);
-router.delete('/primary-emails/:email', c.api_deletePrimaryEmail);
+router.delete('/primary-emails', c.api_deletePrimaryEmail);
 
 router.get('/account', c.api_getAccountInfo);
 router.put('/account/email/template', c.api_setEmailTemplate);
@@ -69,13 +50,11 @@ router.get('/account/logout', c.api_logout);
 router.post('/account/credits/purchase', c.api_startCreditsPurchase);
 router.get('/account/credits/purchase', c.api_finishCreditsPurchase);
 
-router.get('/domains', c.api_listDomains);
+router.get('/domains', c.api_getDomains);
 router.post('/domains', c.api_addDomain);
+router.delete('/domains', c.api_deleteDomain);
+router.post('/domains/verify', c.api_verifyDomain);
 
 router.post('/domains/users', c.api_addDomainUser);
-router.put('/domains/:domain/users/:key', c.api_editDomainUser);
-router.delete('/domains/:domain/users/:key', c.api_deleteDomainUser);
-
-router.get('/domains/:domain', c.api_getDomain);
-router.delete('/domains/:domain', c.api_deleteDomain);
-router.post('/domains/:domain/verify', c.api_verifyDomain);
+router.put('/domains/users', c.api_editDomainUser);
+router.delete('/domains/users', c.api_deleteDomainUser);

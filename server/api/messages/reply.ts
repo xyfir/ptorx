@@ -6,7 +6,7 @@ export async function api_replyToMessage(
   res: Response
 ): Promise<void> {
   try {
-    await replyToMessage(req.params.message, req.body.content, req.session.uid);
+    await replyToMessage(req.query.message, req.body.content, req.session.uid);
     res.status(200).json({});
   } catch (err) {
     res.status(400).json({ error: err });

@@ -6,7 +6,7 @@ export async function api_deleteFilter(
   res: Response
 ): Promise<void> {
   try {
-    await deleteFilter(+req.params.filter, req.session.uid);
+    await deleteFilter(+req.query.filter, req.session.uid);
     res.status(200).json({});
   } catch (err) {
     res.status(400).json({ error: err });

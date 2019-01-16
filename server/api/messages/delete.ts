@@ -6,7 +6,7 @@ export async function api_deleteMessage(
   res: Response
 ): Promise<void> {
   try {
-    await deleteMessage(req.params.message, req.session.uid);
+    await deleteMessage(req.query.message, req.session.uid);
     res.status(200).json({});
   } catch (err) {
     res.status(400).json({ error: err });

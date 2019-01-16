@@ -13,7 +13,7 @@ export async function api_receiveMail(
   const db = new MySQL();
 
   try {
-    const emailId = +req.params.email;
+    const emailId = +req.query.proxyEmail;
     const email = req.body;
     const save = !!email['message-url'];
 

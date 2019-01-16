@@ -6,7 +6,7 @@ export async function api_deletePrimaryEmail(
   res: Response
 ): Promise<void> {
   try {
-    await deletePrimaryEmail(+req.params.email, req.session.uid);
+    await deletePrimaryEmail(+req.query.primaryEmail, req.session.uid);
     res.status(200).json({});
   } catch (err) {
     res.status(400).json({ error: err });

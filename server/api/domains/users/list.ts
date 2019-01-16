@@ -7,7 +7,7 @@ export async function api_listDomainUsers(
 ): Promise<void> {
   try {
     const domainUsers = await listDomainUsers(
-      +req.params.domain,
+      +req.query.domain,
       req.session.uid
     );
     res.status(200).json(domainUsers);

@@ -1,7 +1,7 @@
 import { listPrimaryEmails } from 'lib/primary-emails/list';
 import { Request, Response } from 'express';
 
-export async function api_getPrimaryEmails(
+export async function api_listPrimaryEmails(
   req: Request,
   res: Response
 ): Promise<void> {
