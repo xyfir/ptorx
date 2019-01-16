@@ -6,7 +6,7 @@ import { MySQL } from 'lib/MySQL';
 import * as uuid from 'uuid/v4';
 
 export async function addMessage(
-  message: Ptorx.Message,
+  message: Partial<Ptorx.Message>,
   userId: number
 ): Promise<Ptorx.Message> {
   const db = new MySQL();
@@ -14,8 +14,8 @@ export async function addMessage(
     const id = uuid();
     const result = await db.query('INSERT INTO messages SET ?', {
       id,
-      userId,
-      created: moment().unix()
+      created: moment().unix(),
+      proxyEmailId: message.proxyEmailId
     });
     if (!result.affectedRows) throw 'Could not create message';
     const _message = await getMessage(id, userId);
