@@ -145,3 +145,6 @@ ALTER TABLE `proxy_emails` DROP `mgRouteId`;
 ALTER TABLE `users` DROP `emailsCreated`;
 -- remove messages.url
 ALTER TABLE `messages` DROP `url`;
+-- acceptOnMatch -> blacklist
+ALTER TABLE `filters` CHANGE `acceptOnMatch` `blacklist` TINYINT(1) NOT NULL;
+UPDATE `filters` SET blacklist = IF(blacklist = 0, 1, 0);

@@ -66,10 +66,10 @@ export async function api_receiveMail(
     data.filters = rows = await db.query(
       `
         SELECT
-          type, find, acceptOnMatch AS acceptOnMatch,
+          type, find, blacklist,
           regex AS regex, IF(
             ${save ? 0 : 1} = 1
-            AND acceptOnMatch = 1
+            AND blacklist = 0
             AND type IN (1, 2, 3, 6),
             1, 0
           ) AS pass
@@ -151,10 +151,10 @@ export async function api_receiveMail(
             data.filters[i].pass = true;
       }
 
-      // Flip value if reject on match
-      data.filters[i].pass = !!+filter.acceptOnMatch
-        ? !!data.filters[i].pass
-        : !data.filters[i].pass;
+      // Flip value if blacklist
+      data.filters[i].pass = filter.blacklist
+        ? !data.filters[i].pass
+        : !!data.filters[i].pass;
     });
 
     let textonly = false;

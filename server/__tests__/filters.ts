@@ -15,7 +15,7 @@ test('create filter 1', async () => {
     name: 'name',
     type: 1,
     find: '',
-    acceptOnMatch: false,
+    blacklist: false,
     regex: false
   };
   expect(filter).toMatchObject(_filter);
@@ -23,7 +23,7 @@ test('create filter 1', async () => {
 
 test('create filter 2', async () => {
   const filter = await addFilter(
-    { type: 2, find: 'find', acceptOnMatch: true, regex: true },
+    { type: 2, find: 'find', blacklist: true, regex: true },
     1234
   );
   const _filter: Ptorx.Filter = {
@@ -31,7 +31,7 @@ test('create filter 2', async () => {
     name: '',
     type: 2,
     find: 'find',
-    acceptOnMatch: true,
+    blacklist: true,
     regex: true
   };
   expect(filter).toMatchObject(_filter);

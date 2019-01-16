@@ -92,7 +92,7 @@ export namespace Ptorx {
     name: string;
     type: 1 | 2 | 3 | 4 | 5 | 6;
     find: string;
-    acceptOnMatch: boolean;
+    blacklist: boolean;
     regex: boolean;
     created: number;
   }

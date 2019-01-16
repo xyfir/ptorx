@@ -9,7 +9,7 @@ export class FilterForm extends React.Component {
       find: '',
       name: '',
       regex: false,
-      acceptOnMatch: true
+      blacklist: false
     }
   };
 
@@ -24,7 +24,7 @@ export class FilterForm extends React.Component {
       type: this.state.type,
       name: this.refs.name.value,
       regex: window['checkbox--regex'].checked,
-      acceptOnMatch: window['checkbox--accept-on-match'].checked
+      blacklist: window['checkbox--blacklist'].checked
     };
 
     // Only header filters have different values than others
@@ -102,9 +102,9 @@ export class FilterForm extends React.Component {
           />
 
           <Checkbox
-            id="checkbox--accept-on-match"
-            label="Accept on Match"
-            defaultChecked={filter.acceptOnMatch}
+            id="checkbox--blacklist"
+            label="Blacklist"
+            defaultChecked={filter.blacklist}
           />
 
           {form}

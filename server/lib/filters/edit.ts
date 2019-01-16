@@ -17,14 +17,14 @@ export async function editFilter(
     const result = await db.query(
       `
         UPDATE filters SET
-          name = ?, type = ?, find = ?, acceptOnMatch = ?, regex = ?
+          name = ?, type = ?, find = ?, blacklist = ?, regex = ?
         WHERE filterId = ? AND userId = ?
       `,
       [
         filter.name,
         filter.type,
         filter.find,
-        filter.acceptOnMatch,
+        filter.blacklist,
         filter.regex,
         filter.filterId,
         filter.userId

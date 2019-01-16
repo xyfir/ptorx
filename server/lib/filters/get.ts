@@ -14,7 +14,7 @@ export async function getFilter(
     if (!filter) throw 'Could not find filter';
 
     filter.regex = !!filter.regex;
-    filter.acceptOnMatch = !!filter.acceptOnMatch;
+    filter.blacklist = !!filter.blacklist;
 
     db.release();
     return filter;
