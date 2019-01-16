@@ -12,8 +12,8 @@ export async function editMessage(
       `
         UPDATE messages m SET m.subject = ?, m.sender = ?, m.type = ?
         WHERE m.id = ? AND m.proxyEmailId = (
-          SELECT pxe.proxyEmailId FROM proxy_emails
-          WHERE pxe.proxyEmailId = m.proxyEmailId pxe.userId = ?
+          SELECT pxe.proxyEmailId FROM proxy_emails pxe
+          WHERE pxe.proxyEmailId = m.proxyEmailId AND pxe.userId = ?
         )
       `,
       [message.subject, message.sender, message.type, message.id, userId]
