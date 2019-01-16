@@ -20,7 +20,7 @@ export async function deleteProxyEmail(
 
     // Because proxy email is not actually getting deleted and thus won't
     // trigger an ON DELETE CASCADE we must manually remove the links
-    await db.query('DELETE FROM links WHERE id = ?', [proxyEmailId]);
+    await db.query('DELETE FROM links WHERE proxyEmailId = ?', [proxyEmailId]);
     db.release();
   } catch (err) {
     db.release();

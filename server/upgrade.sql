@@ -153,3 +153,22 @@ ALTER TABLE `filters` CHANGE `filterId` `id` INT(10) UNSIGNED NOT NULL AUTO_INCR
 ALTER TABLE `modifiers` CHANGE `modifierId` `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `primary_emails` CHANGE `primaryEmailId` `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `proxy_emails` CHANGE `proxyEmailId` `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+-- string types for modifiers/messages/filters
+ALTER TABLE `messages` CHANGE `type` `type` VARCHAR(8) NOT NULL;
+UPDATE `messages` SET `type` = 'accepted' WHERE `type` = '0';
+UPDATE `messages` SET `type` = 'rejected' WHERE `type` = '1';
+UPDATE `messages` SET `type` = 'spam' WHERE `type` = '2';
+ALTER TABLE `filters` CHANGE `type` `type` VARCHAR(7) NOT NULL;
+UPDATE `filters` SET `type` = 'subject' WHERE `type` = '1';
+UPDATE `filters` SET `type` = 'address' WHERE `type` = '2';
+UPDATE `filters` SET `type` = 'domain' WHERE `type` = '3';
+UPDATE `filters` SET `type` = 'text' WHERE `type` = '4';
+UPDATE `filters` SET `type` = 'html' WHERE `type` = '5';
+UPDATE `filters` SET `type` = 'header' WHERE `type` = '6';
+ALTER TABLE `modifiers` CHANGE `type` `type` VARCHAR(9) NOT NULL;
+UPDATE `modifiers` SET `type` = 'text-only' WHERE `type` = '2';
+UPDATE `modifiers` SET `type` = 'replace' WHERE `type` = '3';
+UPDATE `modifiers` SET `type` = 'subject' WHERE `type` = '4';
+UPDATE `modifiers` SET `type` = 'tag' WHERE `type` = '5';
+UPDATE `modifiers` SET `type` = 'concat' WHERE `type` = '6';
+UPDATE `modifiers` SET `type` = 'builder' WHERE `type` = '8';

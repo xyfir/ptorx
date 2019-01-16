@@ -15,10 +15,10 @@ test('create message', async () => {
   );
   const message = await addMessage(
     {
-      proxyEmailId: proxyEmail.proxyEmailId,
+      proxyEmailId: proxyEmail.id,
       sender: 'sender@domain.com',
       subject: 'subject',
-      type: 0
+      type: 'accepted'
     },
     1234
   );
@@ -26,12 +26,12 @@ test('create message', async () => {
   expect(message.id).toBeString();
   expect(message.id).toBeTruthy();
   expect(message.created).toBeNumber();
-  expect(message.proxyEmailId).toBe(proxyEmail.proxyEmailId);
+  expect(message.proxyEmailId).toBe(proxyEmail.id);
   const _message: Ptorx.Message = {
     ...message,
     sender: 'sender@domain.com',
     subject: 'subject',
-    type: 0
+    type: 'accepted'
   };
   expect(message).toMatchObject(_message);
 });

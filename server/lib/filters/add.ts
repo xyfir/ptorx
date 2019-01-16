@@ -11,7 +11,7 @@ export async function addFilter(
   const db = new MySQL();
   try {
     const insert: Partial<Ptorx.Filter> = {
-      type: 1,
+      type: 'subject',
       userId,
       created: moment().unix()
     };

@@ -5,7 +5,7 @@ import { Ptorx } from 'typings/ptorx';
 import 'lib/tests/prepare';
 
 test('create filter 1', async () => {
-  const filter = await addFilter({ type: 1, name: 'name' }, 1234);
+  const filter = await addFilter({ type: 'subject', name: 'name' }, 1234);
   expect(Object.keys(filter).length).toBe(8);
   expect(filter.id).toBeNumber();
   expect(filter.created).toBeNumber();
@@ -13,7 +13,7 @@ test('create filter 1', async () => {
   const _filter: Ptorx.Filter = {
     ...filter,
     name: 'name',
-    type: 1,
+    type: 'subject',
     find: '',
     blacklist: false,
     regex: false
@@ -23,13 +23,13 @@ test('create filter 1', async () => {
 
 test('create filter 2', async () => {
   const filter = await addFilter(
-    { type: 2, find: 'find', blacklist: true, regex: true },
+    { type: 'address', find: 'find', blacklist: true, regex: true },
     1234
   );
   const _filter: Ptorx.Filter = {
     ...filter,
     name: '',
-    type: 2,
+    type: 'address',
     find: 'find',
     blacklist: true,
     regex: true

@@ -78,10 +78,7 @@ export namespace Ptorx {
     created: number;
     subject: string;
     sender: string;
-    /**
-     * `0` = accepted, `1` = rejected, `2` = spam
-     */
-    type: 0 | 1 | 2;
+    type: "accepted" | "rejected" | "spam";
   }
 
   export type MessageList = Message[];
@@ -90,7 +87,7 @@ export namespace Ptorx {
     id: number;
     userId: number;
     name: string;
-    type: 1 | 2 | 3 | 4 | 5 | 6;
+    type: "subject" | "address" | "domain" | "text" | "html" | "header";
     find: string;
     blacklist: boolean;
     regex: boolean;
@@ -108,7 +105,7 @@ export namespace Ptorx {
     id: number;
     userId: number;
     name: string;
-    type: 2 | 3 | 4 | 5 | 6 | 8;
+    type: "text-only" | "replace" | "subject" | "tag" | "concat" | "builder";
     subject?: string;
     replacement?: string;
     flags?: string;

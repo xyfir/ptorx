@@ -9,9 +9,9 @@ export async function editModifier(
   const db = new MySQL();
   try {
     switch (modifier.type) {
-      case 2:
+      case 'text-only':
         break;
-      case 3:
+      case 'replace':
         if (
           typeof modifier.replacement != 'string' ||
           typeof modifier.regex != 'boolean' ||
@@ -23,11 +23,11 @@ export async function editModifier(
           throw 'Invalid regular expression flags';
         modifier.add = modifier.prepend = modifier.separator = modifier.subject = modifier.tag = modifier.target = modifier.template = modifier.to = null;
         break;
-      case 4:
+      case 'subject':
         if (typeof modifier.subject != 'string') throw 'Missing subject';
         modifier.add = modifier.find = modifier.flags = modifier.prepend = modifier.regex = modifier.replacement = modifier.separator = modifier.tag = modifier.target = modifier.template = modifier.to = null;
         break;
-      case 5:
+      case 'tag':
         if (
           typeof modifier.prepend != 'boolean' ||
           typeof modifier.tag != 'string'
@@ -35,7 +35,7 @@ export async function editModifier(
           throw 'Missing tag/prepend';
         modifier.add = modifier.find = modifier.flags = modifier.regex = modifier.replacement = modifier.separator = modifier.subject = modifier.target = modifier.template = modifier.to = null;
         break;
-      case 6:
+      case 'concat':
         if (
           modifier.add != 'senderName' &&
           modifier.add != 'subject' &&
@@ -54,7 +54,7 @@ export async function editModifier(
         if (typeof modifier.prepend != 'boolean') throw 'Missing prepend';
         modifier.find = modifier.flags = modifier.regex = modifier.replacement = modifier.subject = modifier.tag = modifier.target = modifier.template = null;
         break;
-      case 8:
+      case 'builder':
         if (
           modifier.target != 'body-plain' &&
           modifier.target != 'body-html' &&

@@ -4,8 +4,8 @@ import { addModifier } from 'lib/modifiers/add';
 import { Ptorx } from 'typings/ptorx';
 import 'lib/tests/prepare';
 
-test('create modifier 2', async () => {
-  const modifier = await addModifier({ type: 2, name: 'name' }, 1234);
+test('create modifier: text-only', async () => {
+  const modifier = await addModifier({ type: 'text-only', name: 'name' }, 1234);
   expect(Object.keys(modifier).length).toBe(17);
   expect(modifier.id).toBeNumber();
   expect(modifier.created).toBeNumber();
@@ -13,7 +13,7 @@ test('create modifier 2', async () => {
   const _modifier: Ptorx.Modifier = {
     ...modifier,
     name: 'name',
-    type: 2,
+    type: 'text-only',
     subject: null,
     replacement: null,
     flags: null,
@@ -30,15 +30,21 @@ test('create modifier 2', async () => {
   expect(modifier).toMatchObject(_modifier);
 });
 
-test('create modifier 3', async () => {
+test('create modifier: replace', async () => {
   const modifier = await addModifier(
-    { type: 3, replacement: 'Bye', regex: false, flags: '', find: 'Hello' },
+    {
+      type: 'replace',
+      replacement: 'Bye',
+      regex: false,
+      flags: '',
+      find: 'Hello'
+    },
     1234
   );
   const _modifier: Ptorx.Modifier = {
     ...modifier,
     name: '',
-    type: 3,
+    type: 'replace',
     subject: null,
     replacement: 'Bye',
     flags: '',
@@ -55,12 +61,15 @@ test('create modifier 3', async () => {
   expect(modifier).toMatchObject(_modifier);
 });
 
-test('create modifier 4', async () => {
-  const modifier = await addModifier({ type: 4, subject: 'subject' }, 1234);
+test('create modifier: subject', async () => {
+  const modifier = await addModifier(
+    { type: 'subject', subject: 'subject' },
+    1234
+  );
   const _modifier: Ptorx.Modifier = {
     ...modifier,
     name: '',
-    type: 4,
+    type: 'subject',
     subject: 'subject',
     replacement: null,
     flags: null,
@@ -77,15 +86,15 @@ test('create modifier 4', async () => {
   expect(modifier).toMatchObject(_modifier);
 });
 
-test('create modifier 5', async () => {
+test('create modifier: tag', async () => {
   const modifier = await addModifier(
-    { type: 5, prepend: true, tag: 'tag' },
+    { type: 'tag', prepend: true, tag: 'tag' },
     1234
   );
   const _modifier: Ptorx.Modifier = {
     ...modifier,
     name: '',
-    type: 5,
+    type: 'tag',
     subject: null,
     replacement: null,
     flags: null,
@@ -102,15 +111,21 @@ test('create modifier 5', async () => {
   expect(modifier).toMatchObject(_modifier);
 });
 
-test('create modifier 6', async () => {
+test('create modifier: concat', async () => {
   const modifier = await addModifier(
-    { type: 6, add: 'domain', to: 'subject', separator: ':', prepend: true },
+    {
+      type: 'concat',
+      add: 'domain',
+      to: 'subject',
+      separator: ':',
+      prepend: true
+    },
     1234
   );
   const _modifier: Ptorx.Modifier = {
     ...modifier,
     name: '',
-    type: 6,
+    type: 'concat',
     subject: null,
     replacement: null,
     flags: null,
@@ -127,15 +142,15 @@ test('create modifier 6', async () => {
   expect(modifier).toMatchObject(_modifier);
 });
 
-test('create modifier 8', async () => {
+test('create modifier: builder', async () => {
   const modifier = await addModifier(
-    { type: 8, target: 'subject', template: 'Hello {{senderName}}' },
+    { type: 'builder', target: 'subject', template: 'Hello {{senderName}}' },
     1234
   );
   const _modifier: Ptorx.Modifier = {
     ...modifier,
     name: '',
-    type: 8,
+    type: 'builder',
     subject: null,
     replacement: null,
     flags: null,

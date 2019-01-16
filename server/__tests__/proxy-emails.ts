@@ -75,8 +75,8 @@ test('edit proxy email links', async () => {
   );
   const proxyEmails = await listProxyEmails(1234);
   const proxyEmail = await getProxyEmail(proxyEmails[0].id, 1234);
-  const modifier = await addModifier({ type: 2, name: 'name' }, 1234);
-  const filter = await addFilter({ type: 1, name: 'name' }, 1234);
+  const modifier = await addModifier({ type: 'text-only', name: 'name' }, 1234);
+  const filter = await addFilter({ type: 'subject', name: 'name' }, 1234);
 
   const _proxyEmail = await editProxyEmail(
     {
