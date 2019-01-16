@@ -61,7 +61,7 @@ export async function api_getAccountInfo(
     }
 
     sql = `
-      SELECT primaryEmailId AS id, address FROM primary_emails WHERE userId = ?
+      SELECT id, address FROM primary_emails WHERE userId = ?
     `;
     vars = [uid];
 

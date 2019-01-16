@@ -9,7 +9,7 @@ export async function listModifiers(
     const modifiers: Ptorx.ModifierList = await db.query(
       `
         SELECT
-          modifierId, userId, name, type, created,
+          id, userId, name, type, created,
           IF(userId = 0, 1, 0) AS global
         FROM modifiers
         WHERE userId = ? OR userId = 0

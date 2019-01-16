@@ -16,7 +16,7 @@ test('create custom proxy email', async () => {
     1234
   );
   expect(Object.keys(proxyEmail).length).toBe(10);
-  expect(proxyEmail.proxyEmailId).toBeNumber();
+  expect(proxyEmail.id).toBeNumber();
   expect(proxyEmail.created).toBeNumber();
   expect(proxyEmail.userId).toBe(1234);
   const _proxyEmail: Ptorx.ProxyEmail = {
@@ -62,7 +62,7 @@ test('list proxy emails', async () => {
   const keys: Array<keyof Ptorx.ProxyEmailList[0]> = [
     'address',
     'created',
-    'proxyEmailId',
+    'id',
     'name'
   ];
   expect(proxyEmails[0]).toContainAllKeys(keys);
@@ -74,7 +74,7 @@ test('edit proxy email links', async () => {
     1234
   );
   const proxyEmails = await listProxyEmails(1234);
-  const proxyEmail = await getProxyEmail(proxyEmails[0].proxyEmailId, 1234);
+  const proxyEmail = await getProxyEmail(proxyEmails[0].id, 1234);
   const modifier = await addModifier({ type: 2, name: 'name' }, 1234);
   const filter = await addFilter({ type: 1, name: 'name' }, 1234);
 
@@ -84,18 +84,18 @@ test('edit proxy email links', async () => {
       links: [
         {
           orderIndex: 1,
-          proxyEmailId: proxyEmail.proxyEmailId,
-          filterId: filter.filterId
+          proxyEmailId: proxyEmail.id,
+          filterId: filter.id
         },
         {
           orderIndex: 2,
-          proxyEmailId: proxyEmail.proxyEmailId,
-          modifierId: modifier.modifierId
+          proxyEmailId: proxyEmail.id,
+          modifierId: modifier.id
         },
         {
           orderIndex: 3,
-          proxyEmailId: proxyEmail.proxyEmailId,
-          primaryEmailId: primaryEmail.primaryEmailId
+          proxyEmailId: proxyEmail.id,
+          primaryEmailId: primaryEmail.id
         }
       ]
     },
@@ -104,22 +104,22 @@ test('edit proxy email links', async () => {
   const links: Ptorx.ProxyEmailLink[] = [
     {
       orderIndex: 1,
-      proxyEmailId: proxyEmail.proxyEmailId,
-      filterId: filter.filterId,
+      proxyEmailId: proxyEmail.id,
+      filterId: filter.id,
       modifierId: null,
       primaryEmailId: null
     },
     {
       orderIndex: 2,
-      proxyEmailId: proxyEmail.proxyEmailId,
-      modifierId: modifier.modifierId,
+      proxyEmailId: proxyEmail.id,
+      modifierId: modifier.id,
       filterId: null,
       primaryEmailId: null
     },
     {
       orderIndex: 3,
-      proxyEmailId: proxyEmail.proxyEmailId,
-      primaryEmailId: primaryEmail.primaryEmailId,
+      proxyEmailId: proxyEmail.id,
+      primaryEmailId: primaryEmail.id,
       filterId: null,
       modifierId: null
     }
@@ -130,12 +130,10 @@ test('edit proxy email links', async () => {
 test('delete proxy email', async () => {
   let proxyEmails = await listProxyEmails(1234);
   const [proxyEmail] = proxyEmails;
-  await deleteProxyEmail(proxyEmail.proxyEmailId, 1234);
+  await deleteProxyEmail(proxyEmail.id, 1234);
   proxyEmails = await listProxyEmails(1234);
   expect(proxyEmails).toBeArrayOfSize(1);
-  expect(
-    proxyEmails.find(e => e.proxyEmailId == proxyEmail.proxyEmailId)
-  ).toBeUndefined();
+  expect(proxyEmails.find(e => e.id == proxyEmail.id)).toBeUndefined();
 
   // Fully delete proxy emails
   const db = new MySQL();

@@ -148,3 +148,8 @@ ALTER TABLE `messages` DROP `url`;
 -- acceptOnMatch -> blacklist
 ALTER TABLE `filters` CHANGE `acceptOnMatch` `blacklist` TINYINT(1) NOT NULL;
 UPDATE `filters` SET blacklist = IF(blacklist = 0, 1, 0);
+-- objects.objectId -> id
+ALTER TABLE `filters` CHANGE `filterId` `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+ALTER TABLE `modifiers` CHANGE `modifierId` `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+ALTER TABLE `primary_emails` CHANGE `primaryEmailId` `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+ALTER TABLE `proxy_emails` CHANGE `proxyEmailId` `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT;

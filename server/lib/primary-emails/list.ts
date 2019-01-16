@@ -8,7 +8,7 @@ export async function listPrimaryEmails(
   try {
     const primaryEmails = await db.query(
       `
-        SELECT primaryEmailId, userId, address, created
+        SELECT id, userId, address, created
         FROM primary_emails WHERE userId = ?
       `,
       [userId]

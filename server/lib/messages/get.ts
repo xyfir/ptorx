@@ -10,7 +10,7 @@ export async function getMessage(
     const [message]: Ptorx.Message[] = await db.query(
       `
         SELECT m.* FROM messages m
-        INNER JOIN proxy_emails pxe ON m.proxyEmailId = pxe.proxyEmailId
+        INNER JOIN proxy_emails pxe ON m.proxyEmailId = pxe.id
         WHERE m.id = ? AND pxe.userId = ?
       `,
       [messageId, userId]

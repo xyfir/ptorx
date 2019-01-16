@@ -9,7 +9,7 @@ export async function listProxyEmails(
     const emails = await db.query(
       `
         SELECT
-          pxe.proxyEmailId, pxe.name, pxe.created,
+          pxe.id, pxe.name, pxe.created,
           CONCAT(pxe.address, '@', d.domain) AS address
         FROM proxy_emails pxe
         LEFT JOIN domains d ON d.id = pxe.domainId

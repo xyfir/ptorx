@@ -22,7 +22,7 @@ export async function api_receiveReply(
           messages AS m, domains AS d, proxy_emails AS pxe
         WHERE
           m.id = ? AND
-          pxe.proxyEmailId = m.proxyEmailId AND
+          pxe.id = m.proxyEmailId AND
           d.id = pxe.domainId
       `,
       [messageId]

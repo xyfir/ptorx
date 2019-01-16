@@ -42,7 +42,7 @@ export namespace Ptorx {
   }[];
 
   export interface ProxyEmail {
-    proxyEmailId: number;
+    id: number;
     userId: number;
     domainId: Ptorx.Domain["id"];
     address: string;
@@ -55,7 +55,7 @@ export namespace Ptorx {
   }
 
   export type ProxyEmailList = {
-    proxyEmailId: number;
+    id: number;
     name: string;
     /**
      * @example `"ejection81@sandbox86b2c.mailgun.org"`
@@ -65,16 +65,16 @@ export namespace Ptorx {
   }[];
 
   export interface ProxyEmailLink {
-    proxyEmailId: Ptorx.ProxyEmail["proxyEmailId"];
+    proxyEmailId: Ptorx.ProxyEmail["id"];
     orderIndex: number;
-    primaryEmailId?: Ptorx.PrimaryEmail["primaryEmailId"];
-    modifierId?: Ptorx.Modifier["modifierId"];
-    filterId?: Ptorx.Filter["filterId"];
+    primaryEmailId?: Ptorx.PrimaryEmail["id"];
+    modifierId?: Ptorx.Modifier["id"];
+    filterId?: Ptorx.Filter["id"];
   }
 
   export interface Message {
     id: string;
-    proxyEmailId: Ptorx.ProxyEmail["proxyEmailId"];
+    proxyEmailId: Ptorx.ProxyEmail["id"];
     created: number;
     subject: string;
     sender: string;
@@ -87,7 +87,7 @@ export namespace Ptorx {
   export type MessageList = Message[];
 
   export interface Filter {
-    filterId: number;
+    id: number;
     userId: number;
     name: string;
     type: 1 | 2 | 3 | 4 | 5 | 6;
@@ -98,14 +98,14 @@ export namespace Ptorx {
   }
 
   export type FilterList = {
-    filterId: Filter["filterId"];
+    id: Filter["id"];
     name: Filter["name"];
     type: Filter["type"];
     created: Filter["created"];
   }[];
 
   export interface Modifier {
-    modifierId: number;
+    id: number;
     userId: number;
     name: string;
     type: 2 | 3 | 4 | 5 | 6 | 8;
@@ -125,7 +125,7 @@ export namespace Ptorx {
   }
 
   export type ModifierList = {
-    modifierId: Ptorx.Modifier["modifierId"];
+    id: Ptorx.Modifier["id"];
     userId: Ptorx.Modifier["userId"];
     name: Ptorx.Modifier["name"];
     type: Ptorx.Modifier["type"];
@@ -134,7 +134,7 @@ export namespace Ptorx {
   }[];
 
   export interface PrimaryEmail {
-    primaryEmailId: number;
+    id: number;
     userId: number;
     address: string;
     created: number;

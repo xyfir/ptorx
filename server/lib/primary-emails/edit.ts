@@ -11,12 +11,12 @@ export async function editPrimaryEmail(
     await db.query(
       `
         UPDATE primary_emails SET address = ?
-        WHERE primaryEmailId = ? AND userId = ?
+        WHERE id = ? AND userId = ?
       `,
-      [primaryEmail.address, primaryEmail.primaryEmailId, userId]
+      [primaryEmail.address, primaryEmail.id, userId]
     );
     db.release();
-    return await getPrimaryEmail(primaryEmail.primaryEmailId, userId);
+    return await getPrimaryEmail(primaryEmail.id, userId);
   } catch (err) {
     db.release();
     throw err;

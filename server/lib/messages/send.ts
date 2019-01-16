@@ -7,7 +7,7 @@ import { Ptorx } from 'typings/ptorx';
  */
 export async function sendMessage(
   data: {
-    proxyEmailId: Ptorx.ProxyEmail['proxyEmailId'];
+    proxyEmailId: Ptorx.ProxyEmail['id'];
     content: string;
     subject: string;
     to: string;

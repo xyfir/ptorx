@@ -16,23 +16,21 @@ export async function editProxyEmail(
       `
         UPDATE proxy_emails
         SET name = ?, saveMail = ?, directForward = ?, spamFilter = ?
-        WHERE proxyEmailId = ? AND userId = ?
+        WHERE id = ? AND userId = ?
       `,
       [
         proxyEmail.name,
         proxyEmail.saveMail,
         proxyEmail.directForward,
         proxyEmail.spamFilter,
-        proxyEmail.proxyEmailId,
+        proxyEmail.id,
         userId
       ]
     );
     if (!result.affectedRows) throw 'Could not update proxy email';
 
     // Remove links from proxy email and add new ones if needed
-    await db.query('DELETE FROM links WHERE proxyEmailId = ?', [
-      proxyEmail.proxyEmailId
-    ]);
+    await db.query('DELETE FROM links WHERE proxyEmailId = ?', [proxyEmail.id]);
     if (proxyEmail.links.length) {
       await db.query(
         `
@@ -42,7 +40,7 @@ export async function editProxyEmail(
         `,
         proxyEmail.links
           .map(l => [
-            proxyEmail.proxyEmailId,
+            proxyEmail.id,
             l.orderIndex,
             l.primaryEmailId,
             l.modifierId,
@@ -55,7 +53,7 @@ export async function editProxyEmail(
     }
 
     db.release();
-    return await getProxyEmail(proxyEmail.proxyEmailId, userId);
+    return await getProxyEmail(proxyEmail.id, userId);
   } catch (err) {
     db.release();
     throw err;

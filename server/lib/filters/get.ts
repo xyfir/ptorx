@@ -2,13 +2,13 @@ import { MySQL } from 'lib/MySQL';
 import { Ptorx } from 'typings/ptorx';
 
 export async function getFilter(
-  filterId: Ptorx.Filter['filterId'],
+  filterId: Ptorx.Filter['id'],
   userId: number
 ): Promise<Ptorx.Filter> {
   const db = new MySQL();
   try {
     const [filter]: Ptorx.Filter[] = await db.query(
-      'SELECT * FROM filters WHERE filterId = ? AND userId = ?',
+      'SELECT * FROM filters WHERE id = ? AND userId = ?',
       [filterId, userId]
     );
     if (!filter) throw 'Could not find filter';

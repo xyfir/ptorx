@@ -8,7 +8,7 @@ export async function listMessages(userId: number): Promise<Ptorx.MessageList> {
       `
         SELECT id, proxyEmailId, created, subject, sender, type
         FROM messages WHERE proxyEmailId IN (
-          SELECT proxyEmailId FROM proxy_emails WHERE userId = ?
+          SELECT id FROM proxy_emails WHERE userId = ?
         )
         ORDER BY created DESC
       `,

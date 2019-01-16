@@ -6,7 +6,7 @@ export async function listFilters(userId: number): Promise<Ptorx.FilterList> {
   try {
     const filters = await db.query(
       `
-        SELECT filterId, name, type, created
+        SELECT id, name, type, created
         FROM filters WHERE userId = ?
         ORDER BY created DESC
       `,

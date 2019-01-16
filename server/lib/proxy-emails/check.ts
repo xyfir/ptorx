@@ -8,7 +8,7 @@ export async function checkProxyEmail(
   const db = new MySQL();
   try {
     const rows = await db.query(
-      'SELECT proxyEmailId FROM proxy_emails WHERE address = ? AND domainId = ?',
+      'SELECT id FROM proxy_emails WHERE address = ? AND domainId = ?',
       [address, domainId]
     );
     db.release();

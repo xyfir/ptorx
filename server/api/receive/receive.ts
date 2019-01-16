@@ -52,9 +52,7 @@ export async function api_receiveMail(
           pxe.userId AS userId, pxe.directForward AS directForward
         FROM
           primary_emails AS pme, proxy_emails AS pxe
-        WHERE
-          pxe.proxyEmailId = ?
-          AND pme.primaryEmailId = pxe.primaryEmailId
+        WHERE pxe.id = ? AND pme.id = pxe.primaryEmailId
       `,
       [emailId]
     );
@@ -73,7 +71,7 @@ export async function api_receiveMail(
             AND type IN (1, 2, 3, 6),
             1, 0
           ) AS pass
-        FROM filters WHERE filterId IN (
+        FROM filters WHERE id IN (
           SELECT filterId FROM links WHERE proxyEmailId = ?
         )
       `,
@@ -88,7 +86,7 @@ export async function api_receiveMail(
         FROM
           modifiers, links
         WHERE
-          modifiers.modifierId = links.modifierId
+          modifiers.id = links.modifierId
           AND links.proxyEmailId = ?
         ORDER BY
           links.orderIndex

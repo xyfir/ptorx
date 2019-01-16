@@ -8,7 +8,7 @@ export async function getProxyEmail(
   const db = new MySQL();
   try {
     const [proxyEmail]: Ptorx.ProxyEmail[] = await db.query(
-      'SELECT * FROM proxy_emails WHERE proxyEmailId = ? AND userId = ?',
+      'SELECT * FROM proxy_emails WHERE id = ? AND userId = ?',
       [proxyEmailId, userId]
     );
     if (!proxyEmail) throw 'Could not find email';

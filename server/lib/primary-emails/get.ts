@@ -2,15 +2,15 @@ import { Ptorx } from 'typings/ptorx';
 import { MySQL } from 'lib/MySQL';
 
 export async function getPrimaryEmail(
-  primaryEmailId: Ptorx.PrimaryEmail['primaryEmailId'],
+  primaryEmailId: Ptorx.PrimaryEmail['id'],
   userId: number
 ): Promise<Ptorx.PrimaryEmail> {
   const db = new MySQL();
   try {
     const [primaryEmail] = await db.query(
       `
-        SELECT primaryEmailId, userId, address, created
-        FROM primary_emails WHERE primaryEmailId = ? AND userId = ?
+        SELECT id, userId, address, created
+        FROM primary_emails WHERE id = ? AND userId = ?
       `,
       [primaryEmailId, userId]
     );

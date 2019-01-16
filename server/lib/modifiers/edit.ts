@@ -75,7 +75,7 @@ export async function editModifier(
           m.name = ?, m.type = ?, m.subject = ?, m.replacement = ?, m.flags = ?,
           m.regex = ?, m.prepend = ?, m.target = ?, m.add = ?, m.to = ?,
           m.separator = ?, m.find = ?, m.tag = ?, m.template = ?
-        WHERE modifierId = ? AND userId = ?
+        WHERE m.id = ? AND m.userId = ?
       `,
       [
         modifier.name,
@@ -92,14 +92,14 @@ export async function editModifier(
         modifier.find,
         modifier.tag,
         modifier.template,
-        modifier.modifierId,
+        modifier.id,
         userId
       ]
     );
     if (!result.affectedRows) throw 'Could not edit modifier';
 
     db.release();
-    return await getModifier(modifier.modifierId, userId);
+    return await getModifier(modifier.id, userId);
   } catch (err) {
     db.release();
     throw err;

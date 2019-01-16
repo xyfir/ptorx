@@ -24,12 +24,12 @@ export async function deleteDomainUser(
       [domainUser.userId, domainId, userId]
     );
 
-    const proxyEmails: { proxyEmailId: number }[] = await db.query(
-      'SELECT proxyEmailId FROM proxy_emails WHERE userId = ? AND domainId = ?',
+    const proxyEmails: { id: Ptorx.ProxyEmail['id'] }[] = await db.query(
+      'SELECT id FROM proxy_emails WHERE userId = ? AND domainId = ?',
       [domainUser.userId, domainId]
     );
     for (let proxyEmail of proxyEmails) {
-      await deleteProxyEmail(proxyEmail.proxyEmailId, domainUser.userId);
+      await deleteProxyEmail(proxyEmail.id, domainUser.userId);
     }
     db.release();
   } catch (err) {

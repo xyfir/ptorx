@@ -18,7 +18,7 @@ export async function editFilter(
       `
         UPDATE filters SET
           name = ?, type = ?, find = ?, blacklist = ?, regex = ?
-        WHERE filterId = ? AND userId = ?
+        WHERE id = ? AND userId = ?
       `,
       [
         filter.name,
@@ -26,14 +26,14 @@ export async function editFilter(
         filter.find,
         filter.blacklist,
         filter.regex,
-        filter.filterId,
+        filter.id,
         filter.userId
       ]
     );
     if (!result.affectedRows) throw 'Could not update filter';
 
     db.release();
-    return getFilter(filter.filterId, userId);
+    return getFilter(filter.id, userId);
   } catch (err) {
     db.release();
     throw err;

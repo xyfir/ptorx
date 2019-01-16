@@ -10,7 +10,7 @@ test('create primary email', async () => {
     1234
   );
   expect(Object.keys(primaryEmail).length).toBe(4);
-  expect(primaryEmail.primaryEmailId).toBeNumber();
+  expect(primaryEmail.id).toBeNumber();
   expect(primaryEmail.created).toBeNumber();
   expect(primaryEmail.userId).toBe(1234);
   const _primaryEmail: Ptorx.PrimaryEmail = {
@@ -24,7 +24,7 @@ test('list primary emails', async () => {
   const primaryEmails = await listPrimaryEmails(1234);
   expect(primaryEmails).toBeArrayOfSize(1);
   const keys: Array<keyof Ptorx.PrimaryEmailList[0]> = [
-    'primaryEmailId',
+    'id',
     'userId',
     'address',
     'created'
@@ -35,10 +35,8 @@ test('list primary emails', async () => {
 test('delete primary emails', async () => {
   let primaryEmails = await listPrimaryEmails(1234);
   const [primaryEmail] = primaryEmails;
-  await deletePrimaryEmail(primaryEmail.primaryEmailId, 1234);
+  await deletePrimaryEmail(primaryEmail.id, 1234);
   primaryEmails = await listPrimaryEmails(1234);
   expect(primaryEmails).toBeArrayOfSize(0);
-  expect(
-    primaryEmails.find(m => m.primaryEmailId == primaryEmail.primaryEmailId)
-  ).toBeUndefined();
+  expect(primaryEmails.find(m => m.id == primaryEmail.id)).toBeUndefined();
 });

@@ -2,13 +2,13 @@ import { Ptorx } from 'typings/ptorx';
 import { MySQL } from 'lib/MySQL';
 
 export async function getModifier(
-  modifierId: Ptorx.Modifier['modifierId'],
+  modifierId: Ptorx.Modifier['id'],
   userId: number
 ): Promise<Ptorx.Modifier> {
   const db = new MySQL();
   try {
     const [modifier] = await db.query(
-      'SELECT * FROM modifiers WHERE modifierId = ? AND userId = ?',
+      'SELECT * FROM modifiers WHERE id = ? AND userId = ?',
       [modifierId, userId]
     );
     if (!modifier) throw 'Could not find modifier';

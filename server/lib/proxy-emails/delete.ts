@@ -2,7 +2,7 @@ import { Ptorx } from 'typings/ptorx';
 import { MySQL } from 'lib/MySQL';
 
 export async function deleteProxyEmail(
-  proxyEmailId: Ptorx.ProxyEmail['proxyEmailId'],
+  proxyEmailId: Ptorx.ProxyEmail['id'],
   userId: number
 ): Promise<void> {
   const db = new MySQL();
@@ -12,7 +12,7 @@ export async function deleteProxyEmail(
     const result = await db.query(
       `
         UPDATE proxy_emails SET userId = NULL, name = NULL
-        WHERE proxyEmailId = ? AND userId
+        WHERE id = ? AND userId
       `,
       [proxyEmailId, userId]
     );
@@ -20,7 +20,7 @@ export async function deleteProxyEmail(
 
     // Because proxy email is not actually getting deleted and thus won't
     // trigger an ON DELETE CASCADE we must manually remove the links
-    await db.query('DELETE FROM links WHERE proxyEmailId = ?', [proxyEmailId]);
+    await db.query('DELETE FROM links WHERE id = ?', [proxyEmailId]);
     db.release();
   } catch (err) {
     db.release();

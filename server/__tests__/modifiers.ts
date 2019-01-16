@@ -7,7 +7,7 @@ import 'lib/tests/prepare';
 test('create modifier 2', async () => {
   const modifier = await addModifier({ type: 2, name: 'name' }, 1234);
   expect(Object.keys(modifier).length).toBe(17);
-  expect(modifier.modifierId).toBeNumber();
+  expect(modifier.id).toBeNumber();
   expect(modifier.created).toBeNumber();
   expect(modifier.userId).toBe(1234);
   const _modifier: Ptorx.Modifier = {
@@ -156,7 +156,7 @@ test('list modifiers', async () => {
   const modifiers = await listModifiers(1234);
   expect(modifiers).toBeArrayOfSize(7);
   const keys: Array<keyof Ptorx.ModifierList[0]> = [
-    'modifierId',
+    'id',
     'userId',
     'name',
     'type',
@@ -169,10 +169,8 @@ test('list modifiers', async () => {
 test('delete modifier', async () => {
   let modifiers = await listModifiers(1234);
   const modifier = modifiers.find(m => !m.global);
-  await deleteModifier(modifier.modifierId, 1234);
+  await deleteModifier(modifier.id, 1234);
   modifiers = await listModifiers(1234);
   expect(modifiers).toBeArrayOfSize(6);
-  expect(
-    modifiers.find(m => m.modifierId == modifier.modifierId)
-  ).toBeUndefined();
+  expect(modifiers.find(m => m.id == modifier.id)).toBeUndefined();
 });
