@@ -1,5 +1,4 @@
 import { Request, Response } from 'express';
-import { creditUser } from 'lib/users/credit';
 import * as CONFIG from 'constants/config';
 import { MySQL } from 'lib/MySQL';
 import axios from 'axios';

@@ -29,7 +29,7 @@ export async function deleteDomainUser(
       [domainUser.userId, domainId]
     );
     for (let proxyEmail of proxyEmails) {
-      await deleteProxyEmail(db, proxyEmail.proxyEmailId, domainUser.userId);
+      await deleteProxyEmail(proxyEmail.proxyEmailId, domainUser.userId);
     }
     db.release();
   } catch (err) {

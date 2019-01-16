@@ -28,7 +28,7 @@ export async function api_receiveReply(
       [messageId]
     );
 
-    await chargeUser(db, row.userId, 2);
+    // await chargeUser(db, row.userId, 2);
     db.release();
 
     const mailgun = Mailgun({

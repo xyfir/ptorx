@@ -1,6 +1,5 @@
 import { Request, Response } from 'express';
 import * as escapeRegExp from 'escape-string-regexp';
-import { saveMessage } from 'lib/messages/save';
 import { chargeUser } from 'lib/users/charge';
 import * as Mailgun from 'mailgun-js';
 import * as CONFIG from 'constants/config';
@@ -247,12 +246,12 @@ export async function api_receiveMail(
     }
     // Save mail as spam and quit
     else if (data.spamFilter && isEmailSpam) {
-      await saveMessage(req, 2);
+      // await saveMessage(req, 2);
     }
     // Ignore if not all of the filters passed
     else if (data.filters.findIndex(f => !f.pass) > -1) {
       // Optionally save as a rejected message
-      if (save) saveMessage(req, 1);
+      // if (save) saveMessage(req, 1);
     }
     // Message should be redirected
     else if (data.to) {
@@ -309,8 +308,8 @@ export async function api_receiveMail(
 
       // Optionally save message to messages table
       if (save) {
-        const messageId = await saveMessage(req, 0);
-        message['h:Reply-To'] = `${messageId}--reply@${email.proxyDomain}`;
+        // const messageId = await saveMessage(req, 0);
+        // message['h:Reply-To'] = `${messageId}--reply@${email.proxyDomain}`;
       }
 
       // Forward message to user's primary email
@@ -318,10 +317,10 @@ export async function api_receiveMail(
     }
     // Message must be saved as accepted since it's not being redirected
     else {
-      saveMessage(req, 0);
+      // saveMessage(req, 0);
     }
 
-    await chargeUser(db, data.userId, credits);
+    await chargeUser(data.userId, credits);
     res.status(200).send();
   } catch (err) {
     res.status(406).send();
