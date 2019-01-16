@@ -10,10 +10,11 @@ export async function addModifier(
 ): Promise<Ptorx.Modifier> {
   const db = new MySQL();
   try {
-    const result = await db.query('INSERT INTO modifiers SET ?', {
+    const insert: Partial<Ptorx.Modifier> = {
       userId,
       created: moment().unix()
-    });
+    };
+    const result = await db.query('INSERT INTO modifiers SET ?', insert);
     if (!result.affectedRows) throw 'Could not add modifier';
 
     const _modifier = await getModifier(result.insertId, userId);

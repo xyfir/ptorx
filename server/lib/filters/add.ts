@@ -10,11 +10,12 @@ export async function addFilter(
 ): Promise<Ptorx.Filter> {
   const db = new MySQL();
   try {
-    const result = await db.query('INSERT INTO filters SET ?', {
+    const insert: Partial<Ptorx.Filter> = {
       type: 1,
       userId,
       created: moment().unix()
-    });
+    };
+    const result = await db.query('INSERT INTO filters SET ?', insert);
     if (!result.affectedRows) throw 'Could not create filter';
     db.release();
     const _filter = await getFilter(result.insertId, userId);

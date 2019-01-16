@@ -11,14 +11,14 @@ export async function addMessage(
 ): Promise<Ptorx.Message> {
   const db = new MySQL();
   try {
-    const id = uuid();
-    const result = await db.query('INSERT INTO messages SET ?', {
-      id,
+    const insert: Partial<Ptorx.Message> = {
+      id: uuid(),
       created: moment().unix(),
       proxyEmailId: message.proxyEmailId
-    });
+    };
+    const result = await db.query('INSERT INTO messages SET ?', insert);
     if (!result.affectedRows) throw 'Could not create message';
-    const _message = await getMessage(id, userId);
+    const _message = await getMessage(insert.id, userId);
     return await editMessage({ ..._message, ...message }, userId);
   } catch (err) {
     db.release();

@@ -10,10 +10,11 @@ export async function addPrimaryEmail(
 ): Promise<Ptorx.PrimaryEmail> {
   const db = new MySQL();
   try {
-    const result = await db.query('INSERT INTO primary_emails SET ?', {
+    const insert: Partial<Ptorx.PrimaryEmail> = {
       userId,
       created: moment().unix()
-    });
+    };
+    const result = await db.query('INSERT INTO primary_emails SET ?', insert);
     if (!result.affectedRows) throw 'Could not add primary email';
     db.release();
     const _primaryEmail = await getPrimaryEmail(result.insertId, userId);

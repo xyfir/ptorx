@@ -20,17 +20,21 @@ export async function addDomainUser(
       [domain]
     );
 
-    const key = uuid();
+    const insert: Partial<Ptorx.DomainUser> = {
+      requestKey: uuid(),
+      domainId,
+      userId
+    };
     await db.query(
       `
         INSERT INTO domain_users SET ?
-        ON DUPLICATE KEY UPDATE requestKey = '${key}'
+        ON DUPLICATE KEY UPDATE requestKey = '${insert.requestKey}'
       `,
-      { requestKey: key, domainId, userId }
+      insert
     );
 
     db.release();
-    return await getDomainUser(domainId, key, domainUserId);
+    return await getDomainUser(domainId, insert.requestKey, domainUserId);
   } catch (err) {
     db.release();
     throw err;

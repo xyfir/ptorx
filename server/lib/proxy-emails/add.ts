@@ -40,12 +40,13 @@ export async function addProxyEmail(
       if (!available) throw 'Email is already in use';
     }
 
-    const result = await db.query('INSERT INTO proxy_emails SET ?', {
+    const insert: Partial<Ptorx.ProxyEmail> = {
       userId,
       created: moment().unix(),
       address: proxyEmail.address,
       domainId: proxyEmail.domainId
-    });
+    };
+    const result = await db.query('INSERT INTO proxy_emails SET ?', insert);
     const _proxyEmail = await getProxyEmail(result.insertId, userId);
 
     db.release();
