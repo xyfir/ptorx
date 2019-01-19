@@ -1,5 +1,5 @@
+import { createTransport, SendMailOptions } from 'nodemailer';
 import { getPrimaryEmail } from 'lib/primary-emails/get';
-import { createTransport } from 'nodemailer';
 import * as escapeRegExp from 'escape-string-regexp';
 import { getProxyEmail } from 'lib/proxy-emails/get';
 import { simpleParser } from 'mailparser';
@@ -105,10 +105,40 @@ const server = new SMTPServer({
     // A proxy email is sending out mail, no further action needed
     if (session.ptorx.from.proxyEmailId) return callback();
 
-    const message = await simpleParser(stream);
+    const original = await simpleParser(stream);
 
     // @ts-ignore
     if (stream.sizeExceeded) return callback(new Error('Message too big'));
+
+    const modified: SendMailOptions = {
+      disableFileAccess: true,
+      disableUrlAccess: true,
+      /** @todo Remove after DefinitelyTyped#32291 is solved */
+      // @ts-ignore
+      attachments: original.attachments.map(a => ({
+        contentDisposition: a.contentDisposition,
+        contentType: a.contentType,
+        // headers also shared but needs conversion
+        filename: a.filename,
+        content: a.content,
+        cid: a.cid
+      })),
+      subject: original.subject,
+      headers: original.headerLines.map(h => ({
+        key: h.key,
+        value: h.line.substr(h.key.length + 2)
+      })),
+      sender: original.from.value[0],
+      html: original.html === false ? undefined : (original.html as string),
+      from: original.from.value[0],
+      text: original.text,
+      date: original.date,
+      to: session.ptorx.to.map(t => t.address)
+      // replyTo: undefined,
+      // dkim: undefined,
+      // envelope: undefined,
+      // inReplyTo: undefined,
+    };
 
     for (let recipient of session.ptorx.to) {
       // Ignore if not for Ptorx
@@ -132,23 +162,23 @@ const server = new SMTPServer({
           const regex = new RegExp(filter.find);
           switch (filter.type) {
             case 'subject':
-              pass = regex.test(message.subject);
+              pass = regex.test(original.subject);
               break;
             case 'address':
               pass = regex.test(recipient.address);
               break;
             case 'text':
-              pass = regex.test(message.text);
+              pass = regex.test(original.text);
               break;
             case 'html':
               pass =
-                message.html === false
+                original.html === false
                   ? false
-                  : regex.test(message.html as string);
+                  : regex.test(original.html as string);
               break;
             case 'header':
               pass =
-                message.headerLines.map(h => regex.test(h.line)).filter(h => h)
+                original.headerLines.map(h => regex.test(h.line)).filter(h => h)
                   .length > 0;
               break;
           }
@@ -173,33 +203,10 @@ const server = new SMTPServer({
           );
           const transporter = createTransport({ sendmail: true });
           await transporter.sendMail({
-            disableFileAccess: true,
-            disableUrlAccess: true,
-            /** @todo Remove after DefinitelyTyped#32291 is solved */
-            // @ts-ignore
-            attachments: message.attachments.map(a => ({
-              contentDisposition: a.contentDisposition,
-              contentType: a.contentType,
-              // headers also shared but needs conversion
-              filename: a.filename,
-              content: a.content,
-              cid: a.cid
-            })),
-            subject: message.subject,
-            headers: message.headerLines.map(h => ({
-              key: h.key,
-              value: h.line.substr(h.key.length + 2)
-            })),
+            ...modified,
             sender: recipient.address,
-            html: message.html === false ? undefined : (message.html as string),
             from: recipient.address,
-            text: message.text,
-            date: message.date,
             to: primaryEmail.address
-            // replyTo: undefined,
-            // dkim: undefined,
-            // envelope: undefined,
-            // inReplyTo: undefined,
           });
 
           // ** Save modified message to database if needed
