@@ -1,16 +1,5 @@
 import * as Express from 'express';
-import * as multer from 'multer';
 import * as c from './controllers';
-
-const upload = multer({
-  storage: multer.memoryStorage(),
-  limits: {
-    // @ts-ignore
-    fieldSize: '26mb',
-    files: 10,
-    fileSize: 26000000
-  }
-});
 
 export const router = Express.Router();
 
