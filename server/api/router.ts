@@ -14,9 +14,6 @@ const upload = multer({
 
 export const router = Express.Router();
 
-router.post('/receive/reply', c.api_receiveReply);
-router.post('/receive', upload.any(), c.api_receiveMail);
-
 router.get('/proxy-emails', c.api_getProxyEmails);
 router.put('/proxy-emails', c.api_editProxyEmail);
 router.post('/proxy-emails', c.api_addProxyEmail);
