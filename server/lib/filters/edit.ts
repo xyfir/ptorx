@@ -11,7 +11,7 @@ export async function editFilter(
     if (!filter.type) throw 'Invalid type';
     else if (typeof filter.name != 'string') throw 'Missing name';
     else if (typeof filter.find != 'string') throw 'Missing "find"';
-    else if (filter.type == 'header' && filter.find.indexOf(':::') === -1)
+    else if (filter.type == 'header' && filter.find.indexOf(':') === -1)
       throw 'Bad header filter';
 
     const result = await db.query(
