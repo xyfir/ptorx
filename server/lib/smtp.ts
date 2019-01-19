@@ -158,7 +158,7 @@ const server = new SMTPServer({
 
           // Stop waterfall if filter did not pass
           if (pass) {
-            // ** save mail if needed
+            // ** Save 'rejected' message to database if needed
             break;
           }
         }
@@ -167,10 +167,46 @@ const server = new SMTPServer({
         }
         // Forward mail
         else if (link.primaryEmailId) {
+          const primaryEmail = await getPrimaryEmail(
+            link.primaryEmailId,
+            recipient.userId
+          );
+          const transporter = createTransport({ sendmail: true });
+          await transporter.sendMail({
+            disableFileAccess: true,
+            disableUrlAccess: true,
+            /** @todo Remove after DefinitelyTyped#32291 is solved */
+            // @ts-ignore
+            attachments: message.attachments.map(a => ({
+              contentDisposition: a.contentDisposition,
+              contentType: a.contentType,
+              // headers also shared but needs conversion
+              filename: a.filename,
+              content: a.content,
+              cid: a.cid
+            })),
+            subject: message.subject,
+            headers: message.headerLines.map(h => ({
+              key: h.key,
+              value: h.line.substr(h.key.length + 2)
+            })),
+            sender: recipient.address,
+            html: message.html === false ? undefined : (message.html as string),
+            from: recipient.address,
+            text: message.text,
+            date: message.date,
+            to: primaryEmail.address
+            // replyTo: undefined,
+            // dkim: undefined,
+            // envelope: undefined,
+            // inReplyTo: undefined,
+          });
+
+          // ** Save modified message to database if needed
         }
       }
 
-      // ** Save to database if needed
+      // ** Save original message to database if needed
     }
 
     callback();
