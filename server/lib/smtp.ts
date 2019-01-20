@@ -19,11 +19,7 @@ interface AddressInfo {
 
 declare module 'smtp-server' {
   interface SMTPServerSession {
-    ptorx: {
-      action: 'send' | 'receive';
-      from: AddressInfo;
-      to: AddressInfo[];
-    };
+    to: AddressInfo[];
   }
 }
 
@@ -77,35 +73,16 @@ const server = new SMTPServer({
   logger: true,
   authMethods: [],
   authOptional: true,
-  async onMailFrom(address, session, callback) {
-    try {
-      const from = await getAddressInfo(address.address);
-
-      if (from.proxyEmailId && session.remoteAddress != '127.0.0.1')
-        return callback(new Error('You are not authorized to send mail'));
-
-      session.ptorx = {
-        action: from.proxyEmailId ? 'send' : 'receive',
-        from,
-        to: []
-      };
-      callback();
-    } catch (err) {
-      callback(err);
-    }
-  },
   async onRcptTo(address, session, callback) {
     try {
-      session.ptorx.to.push(await getAddressInfo(address.address));
+      session.to = session.to || [];
+      session.to.push(await getAddressInfo(address.address));
       callback();
     } catch (err) {
       callback(err);
     }
   },
   async onData(stream, session, callback) {
-    // A proxy email is sending out mail, no further action needed
-    if (session.ptorx.from.proxyEmailId) return callback();
-
     const original = await simpleParser(stream);
 
     // @ts-ignore
@@ -141,7 +118,7 @@ const server = new SMTPServer({
       // inReplyTo: undefined,
     };
 
-    for (let recipient of session.ptorx.to) {
+    for (let recipient of session.to) {
       // Ignore if not for Ptorx
       if (!recipient.proxyEmailId) continue;
 
@@ -242,7 +219,7 @@ const server = new SMTPServer({
                   typeof modified.html == 'string' ? modified.html : ''
                 )
                 .replace(/{{text}}/g, modified.text as string)
-                .replace(/{{sender}}/g, session.ptorx.from.address)
+                .replace(/{{sender}}/g, modified.from as string)
                 .replace(/{{subject}}/g, modified.subject)
                 .replace(
                   /{{header\('(.+)', '(.+)'\)}}/g,
