@@ -4,6 +4,7 @@ import * as escapeRegExp from 'escape-string-regexp';
 import { getProxyEmail } from 'lib/proxy-emails/get';
 import { simpleParser } from 'mailparser';
 import { getModifier } from 'lib/modifiers/get';
+import { addMessage } from 'lib/messages/add';
 import { SMTPServer } from 'smtp-server';
 import { getFilter } from 'lib/filters/get';
 import { Ptorx } from 'typings/ptorx';
@@ -128,12 +129,12 @@ const server = new SMTPServer({
         key: h.key,
         value: h.line.substr(h.key.length + 2)
       })),
-      sender: original.from.value[0],
-      html: original.html === false ? undefined : (original.html as string),
-      from: original.from.value[0],
+      sender: original.from.text,
+      html: typeof original.html == 'string' ? original.html : undefined,
+      from: original.from.text,
       text: original.text,
       date: original.date,
-      to: session.ptorx.to.map(t => t.address)
+      to: original.to.text
       // replyTo: undefined,
       // dkim: undefined,
       // envelope: undefined,
@@ -187,10 +188,7 @@ const server = new SMTPServer({
           if (filter.blacklist) pass = !pass;
 
           // Stop waterfall if filter did not pass
-          if (pass) {
-            // ** Save 'rejected' message to database if needed
-            break;
-          }
+          if (!pass) break;
         }
         // Modify mail
         else if (link.modifierId) {
@@ -270,12 +268,30 @@ const server = new SMTPServer({
             from: recipient.address,
             to: primaryEmail.address
           });
-
-          // ** Save modified message to database if needed
         }
       }
 
-      // ** Save original message to database if needed
+      // Save message
+      if (proxyEmail.saveMail) {
+        await addMessage(
+          {
+            attachments: original.attachments.map(a => ({
+              filename: a.filename,
+              contentType: a.contentType,
+              content: a.content,
+              size: a.content.byteLength
+            })),
+            from: original.from.text,
+            headers: original.headerLines.map(h => h.line),
+            html: typeof original.html == 'string' ? original.html : undefined,
+            proxyEmailId: proxyEmail.id,
+            subject: original.subject,
+            text: original.text,
+            to: original.to.text
+          },
+          proxyEmail.userId
+        );
+      }
     }
 
     callback();
