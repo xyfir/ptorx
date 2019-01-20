@@ -13,6 +13,7 @@ router.get('/messages', c.api_getMessages);
 router.delete('/messages', c.api_deleteMessage);
 router.post('/messages/send', c.api_sendMessage);
 router.post('/messages/reply', c.api_replyToMessage);
+router.get('/messages/attachment', c.api_getMessageAttachmentBin);
 
 router.get('/filters', c.api_getFilters);
 router.put('/filters', c.api_editFilter);

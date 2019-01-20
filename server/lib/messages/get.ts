@@ -33,3 +33,26 @@ export async function getMessage(
     throw err;
   }
 }
+
+export async function getMessageAttachmentBin(
+  messageAttachmentId: Ptorx.Message['attachments'][0]['id'],
+  userId: number
+): Promise<Buffer> {
+  const db = new MySQL();
+  try {
+    const [row] = await db.query(
+      `
+        SELECT ma.content
+        FROM message_attachments ma
+        LEFT JOIN messages m ON m.id = ma.messageId
+        LEFT JOIN proxy_emails pxe ON pxe.id = m.proxyEmailId
+        WHERE ma.id = ? AND pxe.userId = ?
+      `,
+      [messageAttachmentId, userId]
+    );
+    return row.content;
+  } catch (err) {
+    db.release();
+    throw err;
+  }
+}

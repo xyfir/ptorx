@@ -7,6 +7,7 @@ import { addMessage } from 'lib/messages/add';
 import { Ptorx } from 'typings/ptorx';
 import { MySQL } from 'lib/MySQL';
 import 'lib/tests/prepare';
+import { getMessage, getMessageAttachmentBin } from 'lib/messages/get';
 
 test('create message', async () => {
   const proxyEmail = await addProxyEmail(
@@ -68,6 +69,13 @@ test('list message', async () => {
     'from'
   ];
   expect(messages[0]).toContainAllKeys(keys);
+});
+
+test('get message attachment binary', async () => {
+  const messages = await listMessages(1234);
+  const message = await getMessage(messages[0].id, 1234);
+  const buffer = await getMessageAttachmentBin(message.attachments[0].id, 1234);
+  expect(buffer.toString()).toBe('Hello World');
 });
 
 test('send message', async () => {
