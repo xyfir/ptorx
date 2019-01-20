@@ -73,15 +73,41 @@ export namespace Ptorx {
   }
 
   export interface Message {
-    id: string;
+    id: number;
     proxyEmailId: Ptorx.ProxyEmail["id"];
     created: number;
+    key: string;
     subject: string;
-    sender: string;
-    type: "accepted" | "rejected" | "spam";
+    /**
+     * @example `'"User" <user@example.com>, user@domain.com'`
+     */
+    from: string;
+    /**
+     * @example `'"User" <user@example.com>, user@domain.com'`
+     */
+    to: string;
+    text: string;
+    html?: string;
+    /**
+     * @example `['Content-Type: text/html; charset="utf-8"']`
+     */
+    headers: string[];
+    attachments: {
+      id?: number;
+      filename?: string;
+      contentType: string;
+      size: number;
+      content?: Blob | Buffer;
+    }[];
   }
 
-  export type MessageList = Message[];
+  export type MessageList = {
+    id: Message["id"];
+    proxyEmailId: Message["proxyEmailId"];
+    created: Message["created"];
+    subject: Message["subject"];
+    from: Message["from"];
+  }[];
 
   export interface Filter {
     id: number;

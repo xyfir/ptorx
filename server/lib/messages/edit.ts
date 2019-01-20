@@ -10,15 +10,45 @@ export async function editMessage(
   try {
     const result = await db.query(
       `
-        UPDATE messages m SET m.subject = ?, m.sender = ?, m.type = ?
-        WHERE m.id = ? AND m.proxyEmailId = (
-          SELECT pxe.id FROM proxy_emails pxe
-          WHERE pxe.id = m.proxyEmailId AND pxe.userId = ?
-        )
+        UPDATE messages m SET
+          m.subject = ?, m.from = ?, m.to = ?, m.text = ?, m.html = ?,
+          m.headers = ?
+        WHERE
+          m.id = ? AND m.proxyEmailId = (
+            SELECT pxe.id FROM proxy_emails pxe
+            WHERE pxe.id = m.proxyEmailId AND pxe.userId = ?
+          )
       `,
-      [message.subject, message.sender, message.type, message.id, userId]
+      [
+        message.subject,
+        message.from,
+        message.to,
+        message.text,
+        message.html,
+        JSON.stringify(message.headers),
+        message.id,
+        userId
+      ]
     );
     if (!result.affectedRows) throw 'Could not edit message';
+
+    await db.query('DELETE FROM message_attachments WHERE messageId = ?', [
+      message.id
+    ]);
+    await db.query(
+      `
+        INSERT INTO message_attachments
+          (messageId, filename, contentType, size, content)
+          VALUES ${message.attachments.map(a => `(?, ?, ?, ?, ?)`).join(', ')}
+      `,
+      message.attachments
+        .map(a => [message.id, a.filename, a.contentType, a.size, a.content])
+        /** @todo remove @ts-ignore eventually */
+        // @ts-ignore
+        .flat()
+    );
+    // ** attachments
+
     return await getMessage(message.id, userId);
   } catch (err) {
     db.release();

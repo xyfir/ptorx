@@ -16,22 +16,43 @@ test('create message', async () => {
   const message = await addMessage(
     {
       proxyEmailId: proxyEmail.id,
-      sender: 'sender@domain.com',
       subject: 'subject',
-      type: 'accepted'
+      from: 'sender@domain.com',
+      to: 'test@ptorx.com',
+      text: 'Hello World',
+      html: '<div>Hello World</div>',
+      headers: ['Content-Type: text/html; charset="utf-8"'],
+      attachments: [
+        {
+          contentType: 'text/html',
+          filename: 'file.html',
+          content: Buffer.from('Hello World'),
+          size: 1
+        }
+      ]
     },
     1234
   );
-  expect(Object.keys(message).length).toBe(6);
-  expect(message.id).toBeString();
-  expect(message.id).toBeTruthy();
+  expect(Object.keys(message).length).toBe(11);
+  expect(message.id).toBeNumber();
   expect(message.created).toBeNumber();
-  expect(message.proxyEmailId).toBe(proxyEmail.id);
   const _message: Ptorx.Message = {
     ...message,
-    sender: 'sender@domain.com',
+    proxyEmailId: proxyEmail.id,
     subject: 'subject',
-    type: 'accepted'
+    from: 'sender@domain.com',
+    to: 'test@ptorx.com',
+    text: 'Hello World',
+    html: '<div>Hello World</div>',
+    headers: ['Content-Type: text/html; charset="utf-8"'],
+    attachments: [
+      {
+        contentType: 'text/html',
+        filename: 'file.html',
+        size: 1,
+        id: message.attachments[0].id
+      }
+    ]
   };
   expect(message).toMatchObject(_message);
 });
@@ -40,12 +61,11 @@ test('list message', async () => {
   const messages = await listMessages(1234);
   expect(messages).toBeArrayOfSize(1);
   const keys: Array<keyof Ptorx.MessageList[0]> = [
-    'created',
     'id',
     'proxyEmailId',
-    'sender',
+    'created',
     'subject',
-    'type'
+    'from'
   ];
   expect(messages[0]).toContainAllKeys(keys);
 });

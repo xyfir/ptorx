@@ -7,7 +7,7 @@ export async function getMessage(
 ): Promise<Ptorx.Message> {
   const db = new MySQL();
   try {
-    const [message]: Ptorx.Message[] = await db.query(
+    const [message] = await db.query(
       `
         SELECT m.* FROM messages m
         INNER JOIN proxy_emails pxe ON m.proxyEmailId = pxe.id
@@ -16,6 +16,16 @@ export async function getMessage(
       [messageId, userId]
     );
     if (!message) throw 'Could not find message';
+
+    message.headers = JSON.parse(message.headers || '[]');
+    message.attachments = await db.query(
+      `
+        SELECT id, filename, contentType, size
+        FROM message_attachments WHERE messageId = ?
+      `,
+      [messageId]
+    );
+
     db.release();
     return message;
   } catch (err) {

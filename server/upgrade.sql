@@ -172,3 +172,22 @@ UPDATE `modifiers` SET `type` = 'subject' WHERE `type` = '4';
 UPDATE `modifiers` SET `type` = 'tag' WHERE `type` = '5';
 UPDATE `modifiers` SET `type` = 'concat' WHERE `type` = '6';
 UPDATE `modifiers` SET `type` = 'builder' WHERE `type` = '8';
+-- change message structure
+ALTER TABLE `messages` DROP `type`;
+ALTER TABLE `messages` CHANGE `sender` `from` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL;
+ALTER TABLE `messages` ADD `to` TEXT NOT NULL AFTER `from`, ADD `text` MEDIUMTEXT NOT NULL AFTER `to`, ADD `html` MEDIUMTEXT NULL DEFAULT NULL AFTER `text`, ADD `headers` TEXT NOT NULL AFTER `html`;
+ALTER TABLE `messages` DROP PRIMARY KEY;
+ALTER TABLE `messages` CHANGE `id` `key` VARCHAR(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL;
+ALTER TABLE `messages` ADD `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT FIRST, ADD PRIMARY KEY (`id`);
+-- add message_attachments
+CREATE TABLE `message_attachments` (
+ `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+ `messageId` bigint(20) unsigned NOT NULL,
+ `filename` tinytext COLLATE utf8mb4_unicode_ci,
+ `contentType` varchar(25) COLLATE utf8mb4_unicode_ci NOT NULL,
+ `size` int(10) unsigned NOT NULL,
+ `content` longblob NOT NULL,
+ PRIMARY KEY (`id`),
+ KEY `fk__message_attachments__messageId` (`messageId`),
+ CONSTRAINT `fk__message_attachments__messageId` FOREIGN KEY (`messageId`) REFERENCES `messages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
