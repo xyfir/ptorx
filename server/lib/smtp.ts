@@ -7,6 +7,7 @@ import { getModifier } from 'lib/modifiers/get';
 import { getMessage } from 'lib/messages/get';
 import { addMessage } from 'lib/messages/add';
 import { SMTPServer } from 'smtp-server';
+import { chargeUser } from 'lib//users/charge';
 import { getDomain } from 'lib/domains/get';
 import { getFilter } from 'lib/filters/get';
 import { Ptorx } from 'typings/ptorx';
@@ -141,11 +142,6 @@ const server = new SMTPServer({
       // Ignore if not for Ptorx
       if (!recipient.proxyEmailId && !recipient.message) continue;
 
-      const proxyEmail = await getProxyEmail(
-        recipient.proxyEmailId,
-        recipient.userId
-      );
-
       // Handle reply to a stored message
       if (recipient.message) {
         const proxyEmail = await getProxyEmail(
@@ -164,8 +160,16 @@ const server = new SMTPServer({
           text: original.text,
           to: recipient.message.from
         });
+
+        await chargeUser(proxyEmail.userId, 2);
         continue;
       }
+
+      const proxyEmail = await getProxyEmail(
+        recipient.proxyEmailId,
+        recipient.userId
+      );
+      await chargeUser(proxyEmail.userId, 1);
 
       // Save message
       let savedMessage: Ptorx.Message;
@@ -313,6 +317,7 @@ const server = new SMTPServer({
             from: recipient.address,
             to: primaryEmail.address
           });
+          await chargeUser(proxyEmail.userId, 1);
         }
       }
     }
