@@ -113,7 +113,7 @@ export namespace Ptorx {
     id: number;
     userId: number;
     name: string;
-    type: "subject" | "address" | "domain" | "text" | "html" | "header";
+    type: "subject" | "address" | "text" | "html" | "header";
     find: string;
     blacklist: boolean;
     regex: boolean;
@@ -137,9 +137,9 @@ export namespace Ptorx {
     flags?: string;
     regex?: boolean;
     prepend?: boolean;
-    target?: "subject" | "body-html" | "body-plain";
-    add?: "from" | "subject" | "senderName" | "domain" | "sender";
-    to?: "subject" | "body-html" | "body-plain";
+    target?: "subject" | "html" | "text";
+    add?: "from" | "subject";
+    to?: "subject" | "html" | "text";
     separator?: string;
     find?: string;
     tag?: string;

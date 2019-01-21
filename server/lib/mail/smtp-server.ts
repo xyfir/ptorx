@@ -59,14 +59,14 @@ async function getAddressInfo(address: string): Promise<AddressInfo> {
         userId: Ptorx.ProxyEmail['userId'];
       }[] = await db.query(
         `
-        SELECT pxe.id AS proxyEmailId, pxe.userId, d.id AS domainId
-        FROM domains d
-        LEFT JOIN proxy_emails pxe ON
-          pxe.domainId = d.id AND pxe.address = ? AND
-          pxe.userId IS NOT NULL
-        WHERE
-          d.domain = ? AND d.verified = ?
-      `,
+          SELECT pxe.id AS proxyEmailId, pxe.userId, d.id AS domainId
+          FROM domains d
+          LEFT JOIN proxy_emails pxe ON
+            pxe.domainId = d.id AND pxe.address = ? AND
+            pxe.userId IS NOT NULL
+          WHERE
+            d.domain = ? AND d.verified = ?
+        `,
         [user, domain, true]
       );
       db.release();
