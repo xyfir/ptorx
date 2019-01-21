@@ -1,19 +1,18 @@
 import { createTransport, SendMailOptions } from 'nodemailer';
 import { getPrimaryEmail } from 'lib/primary-emails/get';
-import * as escapeRegExp from 'escape-string-regexp';
 import { getProxyEmail } from 'lib/proxy-emails/get';
 import { simpleParser } from 'mailparser';
-import { getModifier } from 'lib/modifiers/get';
+import { chargeUser } from 'lib/users/charge';
 import { getMessage } from 'lib/messages/get';
-import { addMessage } from 'lib/messages/add';
+import { filterMail } from 'lib/mail/filter';
+import { modifyMail } from 'lib/mail/modify';
 import { SMTPServer } from 'smtp-server';
-import { chargeUser } from 'lib//users/charge';
 import { getDomain } from 'lib/domains/get';
-import { getFilter } from 'lib/filters/get';
+import { saveMail } from 'lib/mail/save';
 import { Ptorx } from 'typings/ptorx';
 import { MySQL } from 'lib/MySQL';
 
-interface AddressInfo {
+export interface AddressInfo {
   proxyEmailId?: Ptorx.ProxyEmail['id'];
   domainId?: number;
   message?: Ptorx.Message;
@@ -134,7 +133,6 @@ const server = new SMTPServer({
       to: original.to.text
       // replyTo: undefined,
       // dkim: undefined,
-      // envelope: undefined,
       // inReplyTo: undefined,
     };
 
@@ -171,133 +169,24 @@ const server = new SMTPServer({
       );
       await chargeUser(proxyEmail.userId, 1);
 
-      // Save message
-      let savedMessage: Ptorx.Message;
-      if (proxyEmail.saveMail) {
-        savedMessage = await addMessage(
-          {
-            attachments: original.attachments.map(a => ({
-              filename: a.filename,
-              contentType: a.contentType,
-              content: a.content,
-              size: a.content.byteLength
-            })),
-            from: original.from.text,
-            headers: original.headerLines.map(h => h.line),
-            html: typeof original.html == 'string' ? original.html : undefined,
-            proxyEmailId: proxyEmail.id,
-            subject: original.subject,
-            text: original.text,
-            to: original.to.text
-          },
-          proxyEmail.userId
-        );
-      }
+      const savedMessage = proxyEmail.saveMail
+        ? await saveMail(original, proxyEmail)
+        : null;
 
       for (let link of proxyEmail.links) {
         // Filter mail
         if (link.filterId) {
-          const filter = await getFilter(link.filterId, recipient.userId);
-          let pass = false;
-
-          // Escape regex if filter is not using regex
-          if (!filter.regex && filter.type != 'header')
-            filter.find = escapeRegExp(filter.find);
-
-          const regex = new RegExp(filter.find);
-          switch (filter.type) {
-            case 'subject':
-              pass = regex.test(original.subject);
-              break;
-            case 'address':
-              pass = regex.test(recipient.address);
-              break;
-            case 'text':
-              pass = regex.test(original.text);
-              break;
-            case 'html':
-              pass =
-                original.html === false
-                  ? false
-                  : regex.test(original.html as string);
-              break;
-            case 'header':
-              pass =
-                original.headerLines.map(h => regex.test(h.line)).filter(h => h)
-                  .length > 0;
-              break;
-          }
-
-          // Flip value if blacklist
-          if (filter.blacklist) pass = !pass;
-
           // Stop waterfall if filter did not pass
+          const pass = await filterMail(
+            original,
+            link.filterId,
+            recipient.userId
+          );
           if (!pass) break;
         }
         // Modify mail
         else if (link.modifierId) {
-          const modifier = await getModifier(link.modifierId, recipient.userId);
-          switch (modifier.type) {
-            case 'text-only':
-              delete modified.html;
-              break;
-            case 'replace':
-              // Escape search if not regular expression
-              modifier.find = !modifier.regex
-                ? escapeRegExp(modifier.find)
-                : modifier.replacement;
-              // Escape '$' if not regular expression
-              modifier.replacement = !modifier.regex
-                ? modifier.replacement.replace(/\$/g, '$$')
-                : modifier.replacement;
-              // Replace text in body text and html
-              modified.text = (modified.text as string).replace(
-                new RegExp(modifier.find, modifier.flags),
-                modifier.replacement
-              );
-              modified.html =
-                modified.html &&
-                (modified.html as string).replace(
-                  new RegExp(modifier.find, modifier.flags),
-                  modifier.replacement
-                );
-              break;
-            case 'subject':
-              modified.subject = modifier.subject;
-              break;
-            case 'tag':
-              modified.subject = modifier.prepend
-                ? modifier.tag + modified.subject
-                : modified.subject + modifier.tag;
-              break;
-            case 'concat':
-              modified[modifier.to] = modifier.prepend
-                ? modified[modifier.add] +
-                  modifier.separator +
-                  modified[modifier.to]
-                : modified[modifier.to] +
-                  modifier.separator +
-                  modified[modifier.add];
-              break;
-            case 'builder':
-              modified[modifier.target] = modifier.template
-                .replace(
-                  /{{html}}/g,
-                  typeof modified.html == 'string' ? modified.html : ''
-                )
-                .replace(/{{text}}/g, modified.text as string)
-                .replace(/{{sender}}/g, modified.from as string)
-                .replace(/{{subject}}/g, modified.subject)
-                .replace(
-                  /{{header\('(.+)', '(.+)'\)}}/g,
-                  (m, p1: string, p2: string): string => {
-                    const header = original.headerLines.find(h => h.key == p1);
-                    return header
-                      ? header.line.substr(header.key.length + 2)
-                      : p2;
-                  }
-                );
-          }
+          await modifyMail(modified, link.modifierId, recipient.userId);
         }
         // Forward mail
         else if (link.primaryEmailId) {
@@ -309,7 +198,7 @@ const server = new SMTPServer({
           await transporter.sendMail({
             ...modified,
             replyTo: savedMessage
-              ? `${proxyEmail.userId}--${savedMessage.id}--${
+              ? `${recipient.userId}--${savedMessage.id}--${
                   savedMessage.key
                 }--reply@${recipient.address.split('@')[1]}`
               : undefined,
@@ -317,7 +206,7 @@ const server = new SMTPServer({
             from: recipient.address,
             to: primaryEmail.address
           });
-          await chargeUser(proxyEmail.userId, 1);
+          await chargeUser(recipient.userId, 1);
         }
       }
     }
@@ -327,30 +216,4 @@ const server = new SMTPServer({
 });
 
 server.on('error', console.error);
-
 server.listen(2071);
-
-export const smtp = async () => {
-  try {
-    const transporter = createTransport({
-      host: '127.0.0.1',
-      port: 2071,
-      secure: false,
-      tls: {
-        rejectUnauthorized: false
-      }
-    });
-    const info = await transporter.sendMail({
-      // from: '"Me" <ejection81@test.ptorx.com>',
-      // to: 'foo@example',
-      from: '"You" <foo@example.com>',
-      to: 'ejection81@test.ptorx.com',
-      subject: 'Hi',
-      text: 'Hello world?',
-      html: '<b>Hello world?</b>'
-    });
-    console.log(info);
-  } catch (err) {
-    console.error(err);
-  }
-};

@@ -8,7 +8,7 @@ import * as Store from 'express-mysql-session';
 import { router } from 'api/router';
 import * as path from 'path';
 import { cron } from 'jobs/cron';
-import { smtp } from 'lib/smtp';
+import 'lib/mail/smtp-server';
 
 // @ts-ignore
 const SessionStore = Store(Session);
@@ -48,5 +48,3 @@ app.get('/*', (req, res) =>
 );
 
 if (CONFIG.CRON) cron();
-
-smtp();
