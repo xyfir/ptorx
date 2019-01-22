@@ -164,4 +164,12 @@ export namespace Ptorx {
   }
 
   export type PrimaryEmailList = PrimaryEmail[];
+
+  export interface Recipient {
+    proxyEmailId?: Ptorx.ProxyEmail["id"];
+    domainId?: number;
+    message?: Ptorx.Message;
+    address: string;
+    userId?: number;
+  }
 }

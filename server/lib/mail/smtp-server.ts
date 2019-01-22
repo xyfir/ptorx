@@ -1,86 +1,24 @@
 import { createTransport, SendMailOptions } from 'nodemailer';
 import { getPrimaryEmail } from 'lib/primary-emails/get';
 import { getProxyEmail } from 'lib/proxy-emails/get';
+import { getRecipient } from 'lib/mail/get-recipient';
 import { simpleParser } from 'mailparser';
 import { chargeUser } from 'lib/users/charge';
-import { getMessage } from 'lib/messages/get';
 import { filterMail } from 'lib/mail/filter';
 import { modifyMail } from 'lib/mail/modify';
 import { SMTPServer } from 'smtp-server';
 import { getDomain } from 'lib/domains/get';
 import { saveMail } from 'lib/mail/save';
 import { Ptorx } from 'typings/ptorx';
-import { MySQL } from 'lib/MySQL';
-
-export interface AddressInfo {
-  proxyEmailId?: Ptorx.ProxyEmail['id'];
-  domainId?: number;
-  message?: Ptorx.Message;
-  address: string;
-  userId?: number;
-}
 
 declare module 'smtp-server' {
   interface SMTPServerSession {
-    to: AddressInfo[];
+    recipients: Ptorx.Recipient[];
   }
 }
-
 declare module 'mailparser' {
   interface ParsedMail {
-    headerLines: {
-      key: string;
-      line: string;
-    }[];
-  }
-}
-
-async function getAddressInfo(address: string): Promise<AddressInfo> {
-  const [user, domain] = address.split('@');
-  const db = new MySQL();
-  try {
-    // Reply-To address
-    if (user.endsWith('--reply')) {
-      try {
-        const [userId, messageId, messageKey] = user.split('--');
-        const message = await getMessage(+messageId, +userId);
-        if (message.key != messageKey) throw new Error('Message key mismatch');
-        return { address, message, userId: +userId };
-      } catch (err) {
-        // ** Send email response explaining problem
-        throw new Error('Bad message reply address');
-      }
-    }
-    // Check if proxy address
-    else {
-      const [row]: {
-        proxyEmailId: Ptorx.ProxyEmail['id'];
-        domainId: Ptorx.ProxyEmail['domainId'];
-        userId: Ptorx.ProxyEmail['userId'];
-      }[] = await db.query(
-        `
-          SELECT pxe.id AS proxyEmailId, pxe.userId, d.id AS domainId
-          FROM domains d
-          LEFT JOIN proxy_emails pxe ON
-            pxe.domainId = d.id AND pxe.address = ? AND
-            pxe.userId IS NOT NULL
-          WHERE
-            d.domain = ? AND d.verified = ?
-        `,
-        [user, domain, true]
-      );
-      db.release();
-
-      // Not a verified Ptorx domain
-      if (!row) return { address };
-      // Not an active proxy email on verified Ptorx domain
-      if (!row.proxyEmailId) throw new Error('User does not exist on domain');
-      // Valid, active proxy email
-      return { ...row, address };
-    }
-  } catch (err) {
-    db.release();
-    throw err;
+    headerLines: { key: string; line: string }[];
   }
 }
 
@@ -94,8 +32,8 @@ const server = new SMTPServer({
   authOptional: true,
   async onRcptTo(address, session, callback) {
     try {
-      session.to = session.to || [];
-      session.to.push(await getAddressInfo(address.address));
+      session.recipients = session.recipients || [];
+      session.recipients.push(await getRecipient(address.address));
       callback();
     } catch (err) {
       callback(err);
@@ -103,8 +41,6 @@ const server = new SMTPServer({
   },
   async onData(stream, session, callback) {
     const original = await simpleParser(stream);
-
-    // @ts-ignore
     if (stream.sizeExceeded) return callback(new Error('Message too big'));
 
     const modified: SendMailOptions = {
@@ -133,10 +69,10 @@ const server = new SMTPServer({
       to: original.to.text
       // replyTo: undefined,
       // dkim: undefined,
-      // inReplyTo: undefined,
+      // inReplyTo: undefined
     };
 
-    for (let recipient of session.to) {
+    for (let recipient of session.recipients) {
       // Ignore if not for Ptorx
       if (!recipient.proxyEmailId && !recipient.message) continue;
 
