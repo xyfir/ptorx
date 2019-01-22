@@ -4,40 +4,35 @@ import { getFilter } from 'lib/filters/get';
 import { Ptorx } from 'typings/ptorx';
 
 export async function filterMail(
-  original: ParsedMail,
+  mail: ParsedMail,
   filterId: Ptorx.Filter['id'],
   userId: Ptorx.Filter['userId']
 ): Promise<boolean> {
   const filter = await getFilter(filterId, userId);
   let pass = false;
 
-  // Escape regex if filter is not using regex
-  if (!filter.regex && filter.type != 'header')
-    filter.find = escapeRegExp(filter.find);
+  if (!filter.regex) filter.find = escapeRegExp(filter.find);
 
   const regex = new RegExp(filter.find);
   switch (filter.type) {
     case 'subject':
-      pass = regex.test(original.subject);
+      pass = regex.test(mail.subject);
       break;
     case 'address':
-      pass = regex.test(original.from.text);
+      pass = regex.test(mail.from.text);
       break;
     case 'text':
-      pass = regex.test(original.text);
+      pass = regex.test(mail.text);
       break;
     case 'html':
-      pass =
-        original.html === false ? false : regex.test(original.html as string);
+      pass = mail.html === false ? false : regex.test(mail.html as string);
       break;
     case 'header':
       pass =
-        original.headerLines.map(h => regex.test(h.line)).filter(h => h)
-          .length > 0;
+        mail.headerLines.map(h => regex.test(h.line)).filter(h => h).length > 0;
       break;
   }
 
-  // Flip value if blacklist
   if (filter.blacklist) pass = !pass;
 
   return pass;
