@@ -36,18 +36,12 @@ export async function editModifier(
         modifier.add = modifier.find = modifier.flags = modifier.regex = modifier.replacement = modifier.separator = modifier.subject = modifier.target = modifier.template = modifier.to = null;
         break;
       case 'concat':
-        if (
-          modifier.add != 'senderName' &&
-          modifier.add != 'subject' &&
-          modifier.add != 'domain' &&
-          modifier.add != 'sender' &&
-          modifier.add != 'from'
-        )
+        if (modifier.add != 'subject' && modifier.add != 'from')
           throw 'Invalid "add" value';
         if (
-          modifier.to != 'body-plain' &&
-          modifier.to != 'body-html' &&
-          modifier.to != 'subject'
+          modifier.to != 'subject' &&
+          modifier.to != 'html' &&
+          modifier.to != 'text'
         )
           throw 'Invalid "to" value';
         if (typeof modifier.separator != 'string') throw 'Missing separator';
@@ -56,8 +50,8 @@ export async function editModifier(
         break;
       case 'builder':
         if (
-          modifier.target != 'body-plain' &&
-          modifier.target != 'body-html' &&
+          modifier.target != 'text' &&
+          modifier.target != 'html' &&
           modifier.target != 'subject'
         )
           throw 'Invalid "target" value';

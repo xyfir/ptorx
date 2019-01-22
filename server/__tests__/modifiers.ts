@@ -115,7 +115,7 @@ test('create modifier: concat', async () => {
   const modifier = await addModifier(
     {
       type: 'concat',
-      add: 'domain',
+      add: 'from',
       to: 'subject',
       separator: ':',
       prepend: true
@@ -132,7 +132,7 @@ test('create modifier: concat', async () => {
     regex: null,
     prepend: true,
     target: null,
-    add: 'domain',
+    add: 'from',
     to: 'subject',
     separator: ':',
     find: null,
