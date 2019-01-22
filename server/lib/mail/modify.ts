@@ -4,14 +4,14 @@ import { getModifier } from 'lib/modifiers/get';
 import { Ptorx } from 'typings/ptorx';
 
 export async function modifyMail(
-  modified: SendMailOptions,
+  mail: SendMailOptions,
   modifierId: Ptorx.Modifier['id'],
   userId: Ptorx.Modifier['userId']
 ): Promise<void> {
   const modifier = await getModifier(modifierId, userId);
   switch (modifier.type) {
     case 'text-only':
-      delete modified.html;
+      delete mail.html;
       break;
     case 'replace':
       // Escape search if not regular expression
@@ -23,43 +23,40 @@ export async function modifyMail(
         ? modifier.replacement.replace(/\$/g, '$$')
         : modifier.replacement;
       // Replace text in body text and html
-      modified.text = (modified.text as string).replace(
+      mail.text = (mail.text as string).replace(
         new RegExp(modifier.find, modifier.flags),
         modifier.replacement
       );
-      modified.html =
-        modified.html &&
-        (modified.html as string).replace(
+      mail.html =
+        mail.html &&
+        (mail.html as string).replace(
           new RegExp(modifier.find, modifier.flags),
           modifier.replacement
         );
       break;
     case 'subject':
-      modified.subject = modifier.subject;
+      mail.subject = modifier.subject;
       break;
     case 'tag':
-      modified.subject = modifier.prepend
-        ? modifier.tag + modified.subject
-        : modified.subject + modifier.tag;
+      mail.subject = modifier.prepend
+        ? modifier.tag + mail.subject
+        : mail.subject + modifier.tag;
       break;
     case 'concat':
-      modified[modifier.to] = modifier.prepend
-        ? modified[modifier.add] + modifier.separator + modified[modifier.to]
-        : modified[modifier.to] + modifier.separator + modified[modifier.add];
+      mail[modifier.to] = modifier.prepend
+        ? mail[modifier.add] + modifier.separator + mail[modifier.to]
+        : mail[modifier.to] + modifier.separator + mail[modifier.add];
       break;
     case 'builder':
-      modified[modifier.target] = modifier.template
-        .replace(
-          /{{html}}/g,
-          typeof modified.html == 'string' ? modified.html : ''
-        )
-        .replace(/{{text}}/g, modified.text as string)
-        .replace(/{{sender}}/g, modified.from as string)
-        .replace(/{{subject}}/g, modified.subject)
+      mail[modifier.target] = modifier.template
+        .replace(/{{html}}/g, typeof mail.html == 'string' ? mail.html : '')
+        .replace(/{{text}}/g, mail.text as string)
+        .replace(/{{from}}/g, mail.from as string)
+        .replace(/{{subject}}/g, mail.subject)
         .replace(
           /{{header\('(.+)', '(.+)'\)}}/g,
           (m, p1: string, p2: string): string => {
-            const headers = modified.headers as Array<{
+            const headers = mail.headers as Array<{
               key: string;
               value: string;
             }>;
