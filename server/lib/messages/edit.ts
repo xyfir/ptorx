@@ -35,19 +35,20 @@ export async function editMessage(
     await db.query('DELETE FROM message_attachments WHERE messageId = ?', [
       message.id
     ]);
-    await db.query(
-      `
-        INSERT INTO message_attachments
-          (messageId, filename, contentType, size, content)
-          VALUES ${message.attachments.map(a => `(?, ?, ?, ?, ?)`).join(', ')}
-      `,
-      message.attachments
-        .map(a => [message.id, a.filename, a.contentType, a.size, a.content])
-        /** @todo remove @ts-ignore eventually */
-        // @ts-ignore
-        .flat()
-    );
-    // ** attachments
+
+    if (message.attachments.length)
+      await db.query(
+        `
+          INSERT INTO message_attachments
+            (messageId, filename, contentType, size, content)
+            VALUES ${message.attachments.map(a => `(?, ?, ?, ?, ?)`).join(', ')}
+        `,
+        message.attachments
+          .map(a => [message.id, a.filename, a.contentType, a.size, a.content])
+          /** @todo remove @ts-ignore eventually */
+          // @ts-ignore
+          .flat()
+      );
 
     return await getMessage(message.id, userId);
   } catch (err) {
