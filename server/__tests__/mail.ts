@@ -1,9 +1,13 @@
 import { listProxyEmails } from 'lib/proxy-emails/list';
+import { SendMailOptions } from 'nodemailer';
 import { getProxyEmail } from 'lib/proxy-emails/get';
 import { addProxyEmail } from 'lib/proxy-emails/add';
 import { getRecipient } from 'lib/mail/get-recipient';
+import { editModifier } from 'lib/modifiers/edit';
+import { addModifier } from 'lib/modifiers/add';
 import { editFilter } from 'lib/filters/edit';
 import { addMessage } from 'lib/messages/add';
+import { modifyMail } from 'lib/mail/modify';
 import { filterMail } from 'lib/mail/filter';
 import { ParsedMail } from 'mailparser';
 import { addFilter } from 'lib/filters/add';
@@ -184,4 +188,61 @@ test('filter mail', async () => {
   );
   expect(await filterMail(match, filter.id, 1234)).toBeTrue();
   expect(await filterMail(noMatch, filter.id, 1234)).toBeFalse();
+});
+
+test('modify mail', async () => {
+  const mail: SendMailOptions = {
+    attachments: [],
+    headers: [{ key: 'Header', value: 'Value' }],
+    subject: 'Hi there',
+    sender: 'user@example.com',
+    html: '<div>Hello <b>world</b>!</div>',
+    from: 'user@example.com',
+    text: 'Hello world!',
+    to: 'user@ptorx.com'
+  };
+
+  let modifier = await addModifier(
+    {
+      type: 'replace',
+      find: 'world',
+      replacement: 'universe',
+      regex: false,
+      flags: ''
+    },
+    1234
+  );
+  await modifyMail(mail, modifier.id, 1234);
+  expect(mail.text).toBe('Hello universe!');
+  expect(mail.html).toBe('<div>Hello <b>universe</b>!</div>');
+
+  modifier = await editModifier(
+    { ...modifier, type: 'subject', subject: 'subject' },
+    1234
+  );
+  await modifyMail(mail, modifier.id, 1234);
+  expect(mail.subject).toBe('subject');
+
+  modifier = await editModifier(
+    { ...modifier, type: 'tag', prepend: true, tag: 'tag: ' },
+    1234
+  );
+  await modifyMail(mail, modifier.id, 1234);
+  expect(mail.subject).toBe('tag: subject');
+
+  modifier = await editModifier(
+    {
+      ...modifier,
+      type: 'builder',
+      target: 'text',
+      template: '{{from}}\n\n{{text}}'
+    },
+    1234
+  );
+  await modifyMail(mail, modifier.id, 1234);
+  expect(mail.text).toBe('user@example.com\n\nHello universe!');
+
+  modifier = await editModifier({ ...modifier, type: 'text-only' }, 1234);
+  await modifyMail(mail, modifier.id, 1234);
+  expect(mail.html).toBeUndefined();
 });
