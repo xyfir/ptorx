@@ -2,7 +2,11 @@ import { listProxyEmails } from 'lib/proxy-emails/list';
 import { getProxyEmail } from 'lib/proxy-emails/get';
 import { addProxyEmail } from 'lib/proxy-emails/add';
 import { getRecipient } from 'lib/mail/get-recipient';
+import { editFilter } from 'lib/filters/edit';
 import { addMessage } from 'lib/messages/add';
+import { filterMail } from 'lib/mail/filter';
+import { ParsedMail } from 'mailparser';
+import { addFilter } from 'lib/filters/add';
 import { saveMail } from 'lib/mail/save';
 import { Ptorx } from 'typings/ptorx';
 import 'lib/tests/prepare';
@@ -95,4 +99,89 @@ test('save mail', async () => {
     text: 'Hello'
   };
   expect(message).toMatchObject(_message);
+});
+
+test('filter mail', async () => {
+  const match: ParsedMail = {
+    attachments: [],
+    from: {
+      html: '',
+      text: 'match@example.com',
+      value: []
+    },
+    headerLines: [{ key: 'Match', line: 'Match: Test' }],
+    html: '<div>Match</div>',
+    subject: 'Match',
+    text: 'Match',
+    to: {
+      html: '',
+      text: 'match@ptorx.com',
+      value: []
+    },
+    textAsHtml: '',
+    headers: new Map()
+  };
+  const noMatch: ParsedMail = {
+    attachments: [],
+    from: {
+      html: '',
+      text: 'no@domain.com',
+      value: []
+    },
+    headerLines: [{ key: 'No', line: 'No: Test' }],
+    html: '<div>No</div>',
+    subject: 'No',
+    text: 'No',
+    to: {
+      html: '',
+      text: 'no@ptorx.com',
+      value: []
+    },
+    textAsHtml: '',
+    headers: new Map()
+  };
+
+  let filter = await addFilter({ type: 'subject', find: 'Match' }, 1234);
+  expect(await filterMail(match, filter.id, 1234)).toBeTrue();
+  expect(await filterMail(noMatch, filter.id, 1234)).toBeFalse();
+
+  filter = await editFilter(
+    {
+      ...filter,
+      type: 'address',
+      find: '^match@example\\.com$',
+      regex: true,
+      blacklist: true
+    },
+    1234
+  );
+  expect(await filterMail(match, filter.id, 1234)).toBeFalse();
+  expect(await filterMail(noMatch, filter.id, 1234)).toBeTrue();
+
+  filter = await editFilter(
+    {
+      ...filter,
+      type: 'text',
+      find: 'Match',
+      regex: false,
+      blacklist: false
+    },
+    1234
+  );
+  expect(await filterMail(match, filter.id, 1234)).toBeTrue();
+  expect(await filterMail(noMatch, filter.id, 1234)).toBeFalse();
+
+  filter = await editFilter(
+    { ...filter, type: 'html', find: '<div>Match</div>' },
+    1234
+  );
+  expect(await filterMail(match, filter.id, 1234)).toBeTrue();
+  expect(await filterMail(noMatch, filter.id, 1234)).toBeFalse();
+
+  filter = await editFilter(
+    { ...filter, type: 'header', find: 'Match: Test' },
+    1234
+  );
+  expect(await filterMail(match, filter.id, 1234)).toBeTrue();
+  expect(await filterMail(noMatch, filter.id, 1234)).toBeFalse();
 });
