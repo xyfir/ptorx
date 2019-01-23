@@ -1,14 +1,12 @@
-import { Request, Response } from 'express';
+import { NextFunction, Response, Request } from 'express';
 import { deleteProxyEmail } from 'lib/proxy-emails/delete';
 
-export async function api_deleteProxyEmail(
+export function api_deleteProxyEmail(
   req: Request,
-  res: Response
-): Promise<void> {
-  try {
-    await deleteProxyEmail(+req.query.proxyEmail, +req.session.uid);
-    res.status(200).json({});
-  } catch (err) {
-    res.status(400).json({ error: err });
-  }
+  res: Response,
+  next: NextFunction
+): void {
+  deleteProxyEmail(+req.query.proxyEmail, +req.session.uid)
+    .then(() => res.status(200).json({}))
+    .catch(next);
 }

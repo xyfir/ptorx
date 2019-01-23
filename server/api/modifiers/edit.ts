@@ -1,14 +1,12 @@
-import { Request, Response } from 'express';
+import { NextFunction, Response, Request } from 'express';
 import { editModifier } from 'lib/modifiers/edit';
 
-export async function api_editModifier(
+export function api_editModifier(
   req: Request,
-  res: Response
-): Promise<void> {
-  try {
-    const modifier = await editModifier(req.body, req.session.uid);
-    res.status(200).json(modifier);
-  } catch (err) {
-    res.status(400).json({ error: err });
-  }
+  res: Response,
+  next: NextFunction
+): void {
+  editModifier(req.body, req.session.uid)
+    .then(modifier => res.status(200).json(modifier))
+    .catch(next);
 }

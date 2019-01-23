@@ -1,14 +1,12 @@
 import { listPrimaryEmails } from 'lib/primary-emails/list';
-import { Request, Response } from 'express';
+import { NextFunction, Response, Request } from 'express';
 
-export async function api_listPrimaryEmails(
+export function api_listPrimaryEmails(
   req: Request,
-  res: Response
-): Promise<void> {
-  try {
-    const emails = await listPrimaryEmails(req.session.uid);
-    res.status(200).json(emails);
-  } catch (err) {
-    res.status(400).json({ error: err });
-  }
+  res: Response,
+  next: NextFunction
+): void {
+  listPrimaryEmails(req.session.uid)
+    .then(primaryEmails => res.status(200).json(primaryEmails))
+    .catch(next);
 }

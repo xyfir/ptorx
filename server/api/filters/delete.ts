@@ -1,14 +1,12 @@
-import { Request, Response } from 'express';
+import { NextFunction, Response, Request } from 'express';
 import { deleteFilter } from 'lib/filters/delete';
 
-export async function api_deleteFilter(
+export function api_deleteFilter(
   req: Request,
-  res: Response
-): Promise<void> {
-  try {
-    await deleteFilter(+req.query.filter, req.session.uid);
-    res.status(200).json({});
-  } catch (err) {
-    res.status(400).json({ error: err });
-  }
+  res: Response,
+  next: NextFunction
+): void {
+  deleteFilter(+req.query.filter, req.session.uid)
+    .then(() => res.status(200).json({}))
+    .catch(next);
 }

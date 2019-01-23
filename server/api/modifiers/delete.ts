@@ -1,14 +1,12 @@
-import { Request, Response } from 'express';
+import { NextFunction, Response, Request } from 'express';
 import { deleteModifier } from 'lib/modifiers/delete';
 
-export async function api_deleteModifier(
+export function api_deleteModifier(
   req: Request,
-  res: Response
-): Promise<void> {
-  try {
-    await deleteModifier(+req.query.modifier, req.session.uid);
-    res.status(200).json({});
-  } catch (err) {
-    res.status(400).json({ error: err });
-  }
+  res: Response,
+  next: NextFunction
+): void {
+  deleteModifier(+req.query.modifier, req.session.uid)
+    .then(() => res.status(200).json({}))
+    .catch(next);
 }

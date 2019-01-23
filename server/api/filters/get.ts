@@ -1,18 +1,18 @@
-import { Request, Response } from 'express';
+import { NextFunction, Response, Request } from 'express';
 import { listFilters } from 'lib/filters/list';
 import { getFilter } from 'lib/filters/get';
 
-export async function api_getFilters(
+export function api_getFilters(
   req: Request,
-  res: Response
-): Promise<void> {
-  try {
-    const filter = +req.query.filter;
-    const response = filter
-      ? await getFilter(filter, req.session.uid)
-      : await listFilters(req.session.uid);
-    res.status(200).json(response);
-  } catch (err) {
-    res.status(400).json({ error: err });
-  }
+  res: Response,
+  next: NextFunction
+): void {
+  const filterId = +req.query.filter;
+  filterId
+    ? getFilter(filterId, req.session.uid)
+        .then(filter => res.status(200).json(filter))
+        .catch(next)
+    : listFilters(req.session.uid)
+        .then(filters => res.status(200).json(filters))
+        .catch(next);
 }

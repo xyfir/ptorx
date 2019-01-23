@@ -1,18 +1,18 @@
-import { Request, Response } from 'express';
+import { NextFunction, Response, Request } from 'express';
 import { listModifiers } from 'lib/modifiers/list';
 import { getModifier } from 'lib/modifiers/get';
 
-export async function api_getModifiers(
+export function api_getModifiers(
   req: Request,
-  res: Response
-): Promise<void> {
-  try {
-    const modifier = +req.query.modifier;
-    const response = modifier
-      ? await getModifier(modifier, req.session.uid)
-      : await listModifiers(req.session.uid);
-    res.status(200).json(response);
-  } catch (err) {
-    res.status(400).json({ error: err });
-  }
+  res: Response,
+  next: NextFunction
+): void {
+  const modifierId = +req.query.modifier;
+  modifierId
+    ? getModifier(modifierId, req.session.uid)
+        .then(modifier => res.status(200).json(modifier))
+        .catch(next)
+    : listModifiers(req.session.uid)
+        .then(modifiers => res.status(200).json(modifiers))
+        .catch(next);
 }
