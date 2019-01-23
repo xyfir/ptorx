@@ -20,7 +20,6 @@ export async function getProxyEmail(
     db.release();
 
     proxyEmail.saveMail = !!proxyEmail.saveMail;
-    proxyEmail.spamFilter = !!proxyEmail.spamFilter;
     proxyEmail.directForward = !!proxyEmail.directForward;
 
     return proxyEmail;

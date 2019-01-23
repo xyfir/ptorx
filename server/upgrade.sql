@@ -206,3 +206,5 @@ ALTER TABLE `proxy_emails` DROP INDEX `fk__proxy_emails__userId`;
 ALTER TABLE `proxy_emails` CHANGE `userId` `userId` INT(10) UNSIGNED NOT NULL;
 ALTER TABLE `proxy_emails` ADD CONSTRAINT `fk__proxy_emails__userId` FOREIGN KEY (`userId`) REFERENCES `users`(`userId`) ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE `deleted_proxy_emails` ADD UNIQUE( `domainId`, `address`);
+-- remove proxy_emails.spamFilter
+ALTER TABLE `proxy_emails` DROP `spamFilter`;

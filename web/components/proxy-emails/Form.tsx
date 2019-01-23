@@ -21,7 +21,6 @@ export class EmailForm extends React.Component<EmailFormProps, EmailFormState> {
     email: {
       name: '',
       toEmail: '',
-      spamFilter: true,
       saveMail: false,
       directForward: false,
       noToAddress: false,
@@ -147,13 +146,6 @@ export class EmailForm extends React.Component<EmailFormProps, EmailFormState> {
           component="section"
           className="advanced-settings checkboxes section"
         >
-          <Checkbox
-            id="checkbox--spam-filter"
-            name="spam-filter"
-            label="Spam Filter"
-            defaultChecked={email.spamFilter}
-          />
-
           <Checkbox
             id="checkbox--save-mail"
             name="save-mail"

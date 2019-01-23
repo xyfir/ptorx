@@ -56,7 +56,6 @@ export class CreateEmail extends React.Component<RouteComponentProps> {
           saveMail: false,
           modifiers: [],
           noToAddress: false,
-          noSpamFilter: false,
           directForward: false
         },
         email || {}

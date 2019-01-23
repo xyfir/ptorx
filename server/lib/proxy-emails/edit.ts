@@ -15,14 +15,13 @@ export async function editProxyEmail(
     const result = await db.query(
       `
         UPDATE proxy_emails
-        SET name = ?, saveMail = ?, directForward = ?, spamFilter = ?
+        SET name = ?, saveMail = ?, directForward = ?
         WHERE id = ? AND userId = ?
       `,
       [
         proxyEmail.name,
         proxyEmail.saveMail,
         proxyEmail.directForward,
-        proxyEmail.spamFilter,
         proxyEmail.id,
         userId
       ]

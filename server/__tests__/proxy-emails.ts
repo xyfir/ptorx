@@ -14,7 +14,7 @@ test('create custom proxy email', async () => {
     { address: 'test', domainId: 1, name: 'name' },
     1234
   );
-  expect(Object.keys(proxyEmail).length).toBe(10);
+  expect(Object.keys(proxyEmail).length).toBe(9);
   expect(proxyEmail.id).toBeNumber();
   expect(proxyEmail.created).toBeNumber();
   expect(proxyEmail.userId).toBe(1234);
@@ -25,7 +25,6 @@ test('create custom proxy email', async () => {
     domainId: 1,
     directForward: false,
     saveMail: false,
-    spamFilter: false,
     links: []
   };
   expect(proxyEmail).toMatchObject(_proxyEmail);
@@ -38,8 +37,7 @@ test('create random proxy email', async () => {
       name: '',
       domainId: 1,
       directForward: true,
-      saveMail: true,
-      spamFilter: true
+      saveMail: true
     },
     1234
   );
@@ -49,8 +47,7 @@ test('create random proxy email', async () => {
     name: '',
     domainId: 1,
     directForward: true,
-    saveMail: true,
-    spamFilter: true
+    saveMail: true
   };
   expect(proxyEmail).toMatchObject(_proxyEmail);
 });
