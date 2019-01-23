@@ -1,7 +1,8 @@
+import { SendMailOptions, createTransport } from 'nodemailer';
+import { ParsedMail, simpleParser } from 'mailparser';
 import { listProxyEmails } from 'lib/proxy-emails/list';
-import { SendMailOptions } from 'nodemailer';
-import { getProxyEmail } from 'lib/proxy-emails/get';
 import { addProxyEmail } from 'lib/proxy-emails/add';
+import { getProxyEmail } from 'lib/proxy-emails/get';
 import { getRecipient } from 'lib/mail/get-recipient';
 import { editModifier } from 'lib/modifiers/edit';
 import { addModifier } from 'lib/modifiers/add';
@@ -9,10 +10,11 @@ import { editFilter } from 'lib/filters/edit';
 import { addMessage } from 'lib/messages/add';
 import { modifyMail } from 'lib/mail/modify';
 import { filterMail } from 'lib/mail/filter';
-import { ParsedMail } from 'mailparser';
+import { SMTPServer } from 'smtp-server';
 import { addFilter } from 'lib/filters/add';
 import { saveMail } from 'lib/mail/save';
 import { Ptorx } from 'typings/ptorx';
+import 'lib/mail/smtp-server';
 import 'lib/tests/prepare';
 
 test('get recipient: non-ptorx email', async () => {
@@ -245,4 +247,43 @@ test('modify mail', async () => {
   modifier = await editModifier({ ...modifier, type: 'text-only' }, 1234);
   await modifyMail(mail, modifier.id, 1234);
   expect(mail.html).toBeUndefined();
+});
+
+test('smtp server', async () => {
+  expect.assertions(6);
+
+  const server = new SMTPServer({
+    authMethods: [],
+    authOptional: true,
+    async onData(stream, session, callback) {
+      const message = await simpleParser(stream);
+      expect(message.from.text).toBe('ejection81@test.ptorx.com');
+      expect(message.to.text).toBe('test@example.com');
+      expect(message.subject).toBe('Hi');
+      expect(message.text).toBe('Hello world?');
+      expect(message.html).toBe('<b>Hello world?</b>');
+      callback();
+    }
+  });
+  server.on('error', e => {
+    throw e;
+  });
+  server.listen(2072);
+
+  const transporter = createTransport({
+    host: '127.0.0.1',
+    port: 2071,
+    secure: false,
+    tls: { rejectUnauthorized: false }
+  });
+  // foo@example.com -> ejection81@test.ptorx.com -> test@example.com
+  await expect(
+    transporter.sendMail({
+      from: '"You" <foo@example.com>',
+      to: 'ejection81@test.ptorx.com',
+      subject: 'Hi',
+      text: 'Hello world?',
+      html: '<b>Hello world?</b>'
+    })
+  ).not.toReject();
 });
