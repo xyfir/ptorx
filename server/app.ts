@@ -46,5 +46,20 @@ app.use('/api/6', router);
 app.get('/*', (req, res) =>
   res.sendFile(path.resolve(CONFIG.DIRECTORIES.CLIENT, 'dist', 'index.html'))
 );
+app.use(
+  (
+    err: string | Error,
+    req: Express.Request,
+    res: Express.Response,
+    next: Express.NextFunction
+  ) => {
+    if (typeof err == 'string') {
+      res.status(400).json({ error: err });
+    } else {
+      console.error(err.stack);
+      res.status(500).json({ error: 'Something went wrong...' });
+    }
+  }
+);
 
 if (CONFIG.CRON) cron();
