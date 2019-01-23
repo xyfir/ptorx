@@ -22,6 +22,16 @@ declare module 'mailparser' {
   }
 }
 
+const transporter =
+  typeof test != 'undefined'
+    ? createTransport({
+        host: '127.0.0.1',
+        port: 2072,
+        secure: false,
+        tls: { rejectUnauthorized: false }
+      })
+    : createTransport({ sendmail: true });
+
 const server = new SMTPServer({
   // secure: true,
   // key: fs.readFileSync('private.key'),
@@ -57,10 +67,13 @@ const server = new SMTPServer({
         cid: a.cid
       })),
       subject: original.subject,
-      headers: original.headerLines.map(h => ({
-        key: h.key,
-        value: h.line.substr(h.key.length + 2)
-      })),
+      headers: original.headerLines
+        .map(h => ({
+          key: h.key,
+          value: h.line.substr(h.key.length + 2)
+        }))
+        // Prevent duplicate Content-Types which can cause parsing issues
+        .filter(h => h.key != 'content-type'),
       sender: original.from.text,
       html: typeof original.html == 'string' ? original.html : undefined,
       from: original.from.text,
@@ -85,7 +98,6 @@ const server = new SMTPServer({
         const domain = await getDomain(proxyEmail.domainId, proxyEmail.userId);
 
         const fullAddress = `${proxyEmail.address}@${domain.domain}`;
-        const transporter = createTransport({ sendmail: true });
         await transporter.sendMail({
           subject: original.subject,
           sender: fullAddress,
@@ -130,7 +142,6 @@ const server = new SMTPServer({
             link.primaryEmailId,
             recipient.userId
           );
-          const transporter = createTransport({ sendmail: true });
           await transporter.sendMail({
             ...modified,
             replyTo: savedMessage
