@@ -5,7 +5,6 @@ import { listMessages } from 'lib/messages/list';
 import { sendMessage } from 'lib/messages/send';
 import { addMessage } from 'lib/messages/add';
 import { Ptorx } from 'typings/ptorx';
-import { MySQL } from 'lib/MySQL';
 import 'lib/tests/prepare';
 import { getMessage, getMessageAttachmentBin } from 'lib/messages/get';
 
@@ -104,9 +103,4 @@ test('delete message', async () => {
   await deleteMessage(message.id, 1234);
   messages = await listMessages(1234);
   expect(messages).toBeArrayOfSize(0);
-
-  // Fully delete proxy email
-  const db = new MySQL();
-  await db.query('DELETE FROM proxy_emails ORDER BY created DESC LIMIT 1');
-  db.release();
 });

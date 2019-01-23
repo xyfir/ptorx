@@ -191,3 +191,18 @@ CREATE TABLE `message_attachments` (
  KEY `fk__message_attachments__messageId` (`messageId`),
  CONSTRAINT `fk__message_attachments__messageId` FOREIGN KEY (`messageId`) REFERENCES `messages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+-- add deleted_proxy_emails
+CREATE TABLE `deleted_proxy_emails` (
+ `domainId` int(10) unsigned NOT NULL,
+ `address` varchar(64) COLLATE utf8mb4_unicode_ci NOT NULL,
+ KEY `fk__deleted_proxy_emails__domainId` (`domainId`),
+ CONSTRAINT `fk__deleted_proxy_emails__domainId` FOREIGN KEY (`domainId`) REFERENCES `domains` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+INSERT INTO deleted_proxy_emails (domainId, address) SELECT domainId, address FROM proxy_emails WHERE userId IS NULL;
+DELETE FROM proxy_emails WHERE userId IS NULL;
+DELETE FROM proxy_emails WHERE userId = 0;
+ALTER TABLE ptorx.proxy_emails DROP FOREIGN KEY fk__proxy_emails__userId;
+ALTER TABLE `proxy_emails` DROP INDEX `fk__proxy_emails__userId`;
+ALTER TABLE `proxy_emails` CHANGE `userId` `userId` INT(10) UNSIGNED NOT NULL;
+ALTER TABLE `proxy_emails` ADD CONSTRAINT `fk__proxy_emails__userId` FOREIGN KEY (`userId`) REFERENCES `users`(`userId`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `deleted_proxy_emails` ADD UNIQUE( `domainId`, `address`);

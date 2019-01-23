@@ -7,12 +7,18 @@ export async function checkProxyEmail(
 ): Promise<{ available: boolean }> {
   const db = new MySQL();
   try {
-    const rows = await db.query(
-      'SELECT id FROM proxy_emails WHERE address = ? AND domainId = ?',
-      [address, domainId]
+    const rows: { inTable: number }[] = await db.query(
+      `
+        SELECT COUNT(id) AS inTable FROM proxy_emails
+        WHERE address = ? AND domainId = ?
+        UNION
+        SELECT COUNT(domainId) AS inTable FROM deleted_proxy_emails
+        WHERE address = ? AND domainId = ?
+      `,
+      [address, domainId, address, domainId]
     );
     db.release();
-    return { available: !rows.length };
+    return { available: rows.findIndex(r => !!r.inTable) == -1 };
   } catch (err) {
     db.release();
     throw err;

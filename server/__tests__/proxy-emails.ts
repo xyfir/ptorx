@@ -7,7 +7,6 @@ import { getProxyEmail } from 'lib/proxy-emails/get';
 import { addModifier } from 'lib/modifiers/add';
 import { addFilter } from 'lib/filters/add';
 import { Ptorx } from 'typings/ptorx';
-import { MySQL } from 'lib/MySQL';
 import 'lib/tests/prepare';
 
 test('create custom proxy email', async () => {
@@ -134,9 +133,4 @@ test('delete proxy email', async () => {
   proxyEmails = await listProxyEmails(1234);
   expect(proxyEmails).toBeArrayOfSize(1);
   expect(proxyEmails.find(e => e.id == proxyEmail.id)).toBeUndefined();
-
-  // Fully delete proxy emails
-  const db = new MySQL();
-  await db.query('DELETE FROM proxy_emails ORDER BY created DESC LIMIT 2');
-  db.release();
 });
