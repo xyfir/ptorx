@@ -1,5 +1,5 @@
-import { createTransport, SendMailOptions } from 'nodemailer';
 import { getPrimaryEmail } from 'lib/primary-emails/get';
+import { SendMailOptions } from 'nodemailer';
 import { getProxyEmail } from 'lib/proxy-emails/get';
 import { getRecipient } from 'lib/mail/get-recipient';
 import { simpleParser } from 'mailparser';
@@ -9,6 +9,8 @@ import { modifyMail } from 'lib/mail/modify';
 import { SMTPServer } from 'smtp-server';
 import { getDomain } from 'lib/domains/get';
 import { saveMail } from 'lib/mail/save';
+import { sendMail } from 'lib/mail/send';
+import * as CONFIG from 'constants/config';
 import { Ptorx } from 'typings/ptorx';
 
 declare module 'smtp-server' {
@@ -22,23 +24,12 @@ declare module 'mailparser' {
   }
 }
 
-const transporter =
-  typeof test != 'undefined'
-    ? createTransport({
-        host: '127.0.0.1',
-        port: 2072,
-        secure: false,
-        tls: { rejectUnauthorized: false }
-      })
-    : createTransport({ sendmail: true });
-
 const server = new SMTPServer({
   // secure: true,
   // key: fs.readFileSync('private.key'),
   // cert: fs.readFileSync('server.crt'),
   size: 25000000,
-  logger: true,
-  authMethods: [],
+  logger: !CONFIG.PROD,
   authOptional: true,
   async onRcptTo(address, session, callback) {
     try {
@@ -54,8 +45,6 @@ const server = new SMTPServer({
     if (stream.sizeExceeded) return callback(new Error('Message too big'));
 
     const modified: SendMailOptions = {
-      disableFileAccess: true,
-      disableUrlAccess: true,
       /** @todo Remove after DefinitelyTyped#32291 is solved */
       // @ts-ignore
       attachments: original.attachments.map(a => ({
@@ -81,7 +70,6 @@ const server = new SMTPServer({
       date: original.date,
       to: original.to.text
       // replyTo: undefined,
-      // dkim: undefined,
       // inReplyTo: undefined
     };
 
@@ -98,7 +86,7 @@ const server = new SMTPServer({
         const domain = await getDomain(proxyEmail.domainId, proxyEmail.userId);
 
         const fullAddress = `${proxyEmail.address}@${domain.domain}`;
-        await transporter.sendMail({
+        await sendMail(domain.id, {
           subject: original.subject,
           sender: fullAddress,
           from: fullAddress,
@@ -142,7 +130,7 @@ const server = new SMTPServer({
             link.primaryEmailId,
             recipient.userId
           );
-          await transporter.sendMail({
+          await sendMail(proxyEmail.domainId, {
             ...modified,
             replyTo: savedMessage
               ? `${recipient.userId}--${savedMessage.id}--${
