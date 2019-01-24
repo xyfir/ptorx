@@ -253,7 +253,6 @@ test('smtp server', async () => {
   expect.assertions(6);
 
   const server = new SMTPServer({
-    authMethods: [],
     authOptional: true,
     async onData(stream, session, callback) {
       const message = await simpleParser(stream);

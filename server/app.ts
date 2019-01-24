@@ -44,7 +44,7 @@ app.use(parser.urlencoded({ extended: true, limit: '26mb' }));
 app.use('/static', Express.static(__dirname + '../web/dist'));
 app.use('/api/6', router);
 app.get('/*', (req, res) =>
-  res.sendFile(path.resolve(CONFIG.DIRECTORIES.CLIENT, 'dist', 'index.html'))
+  res.sendFile(path.resolve(CONFIG.DIRECTORIES.WEB, 'dist', 'index.html'))
 );
 app.use(
   (
