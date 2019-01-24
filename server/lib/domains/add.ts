@@ -25,7 +25,11 @@ export async function addDomain(
       userId,
       domain: domain.domain,
       privateKey: forge.pki.privateKeyToPem(keypair.privateKey),
-      publicKey: forge.pki.publicKeyToPem(keypair.publicKey),
+      publicKey: `v=DKIM1; k=rsa; p=${forge.pki
+        .publicKeyToPem(keypair.publicKey)
+        .split('-----')[2]
+        .split('\n')
+        .join('')}`,
       selector:
         (rword.generateFromPool(1) as string) +
         Date.now()
