@@ -1,29 +1,30 @@
+import { getDomainAuth, getDomain } from 'lib/domains/get';
 import { listDomainUsers } from 'lib/domains/users/list';
 import { addDomainUser } from 'lib/domains/users/add';
 import { verifyDomain } from 'lib/domains/verify';
 import { deleteDomain } from 'lib/domains/delete';
 import { listDomains } from 'lib/domains/list';
 import { addDomain } from 'lib/domains/add';
-import { getDomain } from 'lib/domains/get';
 import { Ptorx } from 'typings/ptorx';
 import 'lib/tests/prepare';
 
-test('create domain 1', async () => {
+test('create domain', async () => {
   const domain = await addDomain({ domain: 'example.com' }, 1234);
-  expect(Object.keys(domain).length).toBe(8);
+  expect(Object.keys(domain).length).toBe(9);
   expect(domain.id).toBeNumber();
   expect(domain.created).toBeNumber();
   expect(domain.userId).toBe(1234);
+  expect(domain.publicKey).toMatch(/PUBLIC KEY/);
+  expect(domain.selector).toMatch(/^[a-z]{3,10}\d{2}$/);
   const _domain: Ptorx.Domain = {
     ...domain,
     domain: 'example.com',
-    domainKey: '',
     global: false,
     isCreator: true,
     verified: false
   };
   expect(domain).toMatchObject(_domain);
-});
+}, 10000);
 
 test('list domains', async () => {
   const domains = await listDomains(1234);
@@ -36,6 +37,19 @@ test('list domains', async () => {
     'isCreator'
   ];
   expect(domains[0]).toContainAllKeys(keys);
+});
+
+test('get domain auth', async () => {
+  const [domain] = await listDomains(1234);
+  const auth = await getDomainAuth(domain.id);
+  const keys: Array<keyof Ptorx.DomainAuth> = [
+    'domain',
+    'privateKey',
+    'publicKey',
+    'selector'
+  ];
+  expect(auth).toContainAllKeys(keys);
+  expect(auth.privateKey).toMatch(/RSA PRIVATE KEY/);
 });
 
 test('verify domain', async () => {

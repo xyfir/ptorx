@@ -10,16 +10,10 @@ export async function editDomain(
   try {
     const result = await db.query(
       `
-        UPDATE domains SET domainKey = ?, verified = ?, global = ?
+        UPDATE domains SET verified = ?, global = ?
         WHERE id = ? AND userId = ?
       `,
-      [
-        domain.domainKey,
-        domain.verified,
-        domain.global,
-        domain.id,
-        domain.userId
-      ]
+      [domain.verified, domain.global, domain.id, userId]
     );
     if (!result.affectedRows) throw 'Could not update domain';
 

@@ -10,7 +10,9 @@ export namespace Ptorx {
     id: number;
     userId: number;
     domain: string;
-    domainKey: string;
+    publicKey: string;
+    privateKey?: string;
+    selector: string;
     created: number;
     verified: boolean;
     global: boolean;
@@ -24,6 +26,13 @@ export namespace Ptorx {
     global: Domain["global"];
     created: Domain["created"];
   }[];
+
+  export interface DomainAuth {
+    domain: Ptorx.Domain["domain"];
+    publicKey: Ptorx.Domain["publicKey"];
+    privateKey: Ptorx.Domain["privateKey"];
+    selector: Ptorx.Domain["selector"];
+  }
 
   export interface DomainUser {
     domainId: number;
