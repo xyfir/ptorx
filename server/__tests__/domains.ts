@@ -24,7 +24,7 @@ test('create domain', async () => {
     verified: false
   };
   expect(domain).toMatchObject(_domain);
-}, 10000);
+}, 15000);
 
 test('list domains', async () => {
   const domains = await listDomains(1234);
@@ -55,9 +55,9 @@ test('get domain auth', async () => {
 test('verify domain', async () => {
   const domains = await listDomains(1234);
   const domain = await domains.find(d => !d.global);
-  await verifyDomain(domain.id, 1234);
-  const _domain = await getDomain(domain.id, 1234);
-  expect(_domain.verified).toBeTrue();
+  await expect(verifyDomain(domain.id, 1234)).rejects.toBe(
+    'Domain could not be verified'
+  );
 });
 
 test('add domain user', async () => {
