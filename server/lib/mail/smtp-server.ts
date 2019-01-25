@@ -1,13 +1,12 @@
-import { SMTPServer, SMTPServerOptions } from 'smtp-server';
 import { getPrimaryEmail } from 'lib/primary-emails/get';
 import { SendMailOptions } from 'nodemailer';
 import { getProxyEmail } from 'lib/proxy-emails/get';
 import { getRecipient } from 'lib/mail/get-recipient';
 import { simpleParser } from 'mailparser';
-import { readFileSync } from 'fs';
 import { chargeUser } from 'lib/users/charge';
 import { filterMail } from 'lib/mail/filter';
 import { modifyMail } from 'lib/mail/modify';
+import { SMTPServer } from 'smtp-server';
 import { getDomain } from 'lib/domains/get';
 import { saveMail } from 'lib/mail/save';
 import { sendMail } from 'lib/mail/send';
@@ -25,15 +24,8 @@ declare module 'mailparser' {
   }
 }
 
-const options: SMTPServerOptions = CONFIG.PROD
-  ? {
-      key: readFileSync(CONFIG.FILES.TLS_KEY),
-      cert: readFileSync(CONFIG.FILES.TLS_CERT),
-      secure: true
-    }
-  : { logger: true };
 const server = new SMTPServer({
-  ...options,
+  ...CONFIG.SMTP_SERVER_OPTIONS,
   authOptional: true,
   size: 25000000,
   async onRcptTo(address, session, callback) {
