@@ -156,4 +156,4 @@ const server = new SMTPServer({
 });
 
 server.on('error', console.error);
-server.listen(2071);
+server.listen(CONFIG.SMTP_PORT);

@@ -7,7 +7,7 @@ const transporter =
   typeof test != 'undefined'
     ? createTransport({
         host: '127.0.0.1',
-        port: 2072,
+        port: CONFIG.TEST_SMTP_PORT,
         secure: false,
         tls: { rejectUnauthorized: false }
       })

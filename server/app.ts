@@ -14,7 +14,7 @@ import 'lib/mail/smtp-server';
 const SessionStore = Store(Session);
 const app = Express();
 
-app.listen(CONFIG.PORT, () => console.log('Listening on port', CONFIG.PORT));
+app.listen(CONFIG.API_PORT, () => console.log('Listening on', CONFIG.API_PORT));
 
 app.use(
   Session({

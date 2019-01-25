@@ -13,6 +13,7 @@ import { filterMail } from 'lib/mail/filter';
 import { SMTPServer } from 'smtp-server';
 import { addFilter } from 'lib/filters/add';
 import { saveMail } from 'lib/mail/save';
+import * as CONFIG from 'constants/config';
 import { Ptorx } from 'typings/ptorx';
 import 'lib/mail/smtp-server';
 import 'lib/tests/prepare';
@@ -267,11 +268,11 @@ test('smtp server', async () => {
   server.on('error', e => {
     throw e;
   });
-  server.listen(2072);
+  server.listen(CONFIG.TEST_SMTP_PORT);
 
   const transporter = createTransport({
     host: '127.0.0.1',
-    port: 2071,
+    port: CONFIG.SMTP_PORT,
     secure: false,
     tls: { rejectUnauthorized: false }
   });
