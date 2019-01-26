@@ -28,7 +28,7 @@ export async function addDomain(
       publicKey: `v=DKIM1; k=rsa; p=${forge.pki
         .publicKeyToPem(keypair.publicKey)
         .split('-----')[2]
-        .split('\n')
+        .split('\r\n')
         .join('')}`,
       selector:
         (rword.generateFromPool(1) as string) +
@@ -45,7 +45,7 @@ export async function addDomain(
     const domainUser = await addDomainUser(_domain.domain, userId);
     await editDomainUser({ ...domainUser, authorized: true }, userId);
 
-    return await editDomain({ ..._domain, ...domain }, 1234);
+    return await editDomain({ ..._domain, ...domain }, userId);
   } catch (err) {
     db.release();
     throw err;
