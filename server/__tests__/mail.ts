@@ -254,14 +254,25 @@ test('modify mail', async () => {
 });
 
 test('smtp server', async () => {
-  expect.assertions(6);
+  expect.assertions(8);
 
   const server = new SMTPServer({
     authOptional: true,
     async onData(stream, session, callback) {
       const message = await simpleParser(stream);
-      expect(message.from.text).toBe('ejection81@test.ptorx.com');
-      expect(message.to.text).toBe('test@example.com');
+
+      // Envelope from/to should have changed
+      expect(
+        session.envelope.mailFrom !== false
+          ? session.envelope.mailFrom.address
+          : ''
+      ).toBe('ejection81@test.ptorx.com');
+      expect(session.envelope.rcptTo[0].address).toBe('test@example.com');
+
+      // Headers from/to should be unchanged
+      expect(message.from.text).toBe('You <foo@example.com>');
+      expect(message.to.text).toBe('ejection81@test.ptorx.com');
+
       expect(message.subject).toBe('Hi');
       expect(message.text).toBe('Hello world?');
       expect(message.html).toBe('<b>Hello world?</b>');
@@ -282,7 +293,7 @@ test('smtp server', async () => {
   // foo@example.com -> ejection81@test.ptorx.com -> test@example.com
   await expect(
     transporter.sendMail({
-      from: '"You" <foo@example.com>',
+      from: 'You <foo@example.com>',
       to: 'ejection81@test.ptorx.com',
       subject: 'Hi',
       text: 'Hello world?',

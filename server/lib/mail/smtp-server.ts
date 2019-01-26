@@ -23,7 +23,7 @@ const server = new SMTPServer({
   authOptional: true,
   size: 25000000,
   async onData(stream, session, callback) {
-    const original = await simpleParser(stream);
+    const incoming = await simpleParser(stream);
     if (stream.sizeExceeded) return callback(new Error('Message too big'));
 
     for (let { address } of session.envelope.rcptTo) {
@@ -42,11 +42,11 @@ const server = new SMTPServer({
 
         const fullAddress = `${proxyEmail.address}@${domain.domain}`;
         await sendMail(domain.id, {
-          subject: original.subject,
+          subject: incoming.subject,
           sender: fullAddress,
           from: fullAddress,
-          html: typeof original.html == 'string' ? original.html : undefined,
-          text: original.text,
+          html: typeof incoming.html == 'string' ? incoming.html : undefined,
+          text: incoming.text,
           to: recipient.message.from
         });
 
@@ -54,10 +54,10 @@ const server = new SMTPServer({
         continue;
       }
 
-      const modified: SendMailOptions = {
+      const outgoing: SendMailOptions = {
         /** @todo Remove after DefinitelyTyped#32291 is solved */
         // @ts-ignore
-        attachments: original.attachments.map(a => ({
+        attachments: incoming.attachments.map(a => ({
           contentDisposition: a.contentDisposition,
           contentType: a.contentType,
           // headers also shared but needs conversion
@@ -65,20 +65,20 @@ const server = new SMTPServer({
           content: a.content,
           cid: a.cid
         })),
-        subject: original.subject,
-        headers: original.headerLines
+        subject: incoming.subject,
+        headers: incoming.headerLines
           .map(h => ({
             key: h.key,
             value: h.line.substr(h.key.length + 2)
           }))
           // Prevent duplicate Content-Types which can cause parsing issues
           .filter(h => h.key != 'content-type'),
-        sender: original.from.text,
-        html: typeof original.html == 'string' ? original.html : undefined,
-        from: original.from.text,
-        text: original.text,
-        date: original.date,
-        to: original.to.text
+        sender: incoming.from.text,
+        html: typeof incoming.html == 'string' ? incoming.html : undefined,
+        from: incoming.from.text,
+        text: incoming.text,
+        date: incoming.date,
+        to: incoming.to.text
       };
 
       const proxyEmail = await getProxyEmail(
@@ -88,7 +88,7 @@ const server = new SMTPServer({
       await chargeUser(proxyEmail.userId, 1);
 
       const savedMessage = proxyEmail.saveMail
-        ? await saveMail(original, proxyEmail)
+        ? await saveMail(incoming, proxyEmail)
         : null;
 
       for (let link of proxyEmail.links) {
@@ -96,7 +96,7 @@ const server = new SMTPServer({
         if (link.filterId) {
           // Stop waterfall if filter did not pass
           const pass = await filterMail(
-            original,
+            incoming,
             link.filterId,
             recipient.userId
           );
@@ -104,7 +104,7 @@ const server = new SMTPServer({
         }
         // Modify mail
         else if (link.modifierId) {
-          await modifyMail(modified, link.modifierId, recipient.userId);
+          await modifyMail(outgoing, link.modifierId, recipient.userId);
         }
         // Forward mail
         else if (link.primaryEmailId) {
@@ -113,15 +113,16 @@ const server = new SMTPServer({
             recipient.userId
           );
           await sendMail(proxyEmail.domainId, {
-            ...modified,
+            ...outgoing,
+            envelope: {
+              from: recipient.address,
+              to: primaryEmail.address
+            },
             replyTo: savedMessage
               ? `${recipient.userId}--${savedMessage.id}--${
                   savedMessage.key
                 }--reply@${recipient.address.split('@')[1]}`
-              : undefined,
-            sender: recipient.address,
-            from: recipient.address,
-            to: primaryEmail.address
+              : undefined
           });
           await chargeUser(recipient.userId, 1);
         }
