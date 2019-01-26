@@ -26,33 +26,6 @@ const server = new SMTPServer({
     const original = await simpleParser(stream);
     if (stream.sizeExceeded) return callback(new Error('Message too big'));
 
-    const modified: SendMailOptions = {
-      /** @todo Remove after DefinitelyTyped#32291 is solved */
-      // @ts-ignore
-      attachments: original.attachments.map(a => ({
-        contentDisposition: a.contentDisposition,
-        contentType: a.contentType,
-        // headers also shared but needs conversion
-        filename: a.filename,
-        content: a.content,
-        cid: a.cid
-      })),
-      subject: original.subject,
-      headers: original.headerLines
-        .map(h => ({
-          key: h.key,
-          value: h.line.substr(h.key.length + 2)
-        }))
-        // Prevent duplicate Content-Types which can cause parsing issues
-        .filter(h => h.key != 'content-type'),
-      sender: original.from.text,
-      html: typeof original.html == 'string' ? original.html : undefined,
-      from: original.from.text,
-      text: original.text,
-      date: original.date,
-      to: original.to.text
-    };
-
     for (let { address } of session.envelope.rcptTo) {
       const recipient = await getRecipient(address);
 
@@ -80,6 +53,33 @@ const server = new SMTPServer({
         await chargeUser(proxyEmail.userId, 2);
         continue;
       }
+
+      const modified: SendMailOptions = {
+        /** @todo Remove after DefinitelyTyped#32291 is solved */
+        // @ts-ignore
+        attachments: original.attachments.map(a => ({
+          contentDisposition: a.contentDisposition,
+          contentType: a.contentType,
+          // headers also shared but needs conversion
+          filename: a.filename,
+          content: a.content,
+          cid: a.cid
+        })),
+        subject: original.subject,
+        headers: original.headerLines
+          .map(h => ({
+            key: h.key,
+            value: h.line.substr(h.key.length + 2)
+          }))
+          // Prevent duplicate Content-Types which can cause parsing issues
+          .filter(h => h.key != 'content-type'),
+        sender: original.from.text,
+        html: typeof original.html == 'string' ? original.html : undefined,
+        from: original.from.text,
+        text: original.text,
+        date: original.date,
+        to: original.to.text
+      };
 
       const proxyEmail = await getProxyEmail(
         recipient.proxyEmailId,
