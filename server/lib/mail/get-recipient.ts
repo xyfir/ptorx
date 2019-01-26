@@ -47,6 +47,6 @@ export async function getRecipient(address: string): Promise<Ptorx.Recipient> {
     }
   } catch (err) {
     db.release();
-    throw err;
+    return { address };
   }
 }

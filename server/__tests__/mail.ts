@@ -39,8 +39,11 @@ test('get recipient: proxy email', async () => {
   expect(recipient).toMatchObject(_recipient);
 });
 
-test('get recipient: bad address on proxy domain', () =>
-  expect(getRecipient('doesnotexist@ptorx.com')).toReject());
+test('get recipient: bad address on proxy domain', async () => {
+  const recipient = await getRecipient('doesnotexist@ptorx.com');
+  const _recipient: Ptorx.Recipient = { address: 'doesnotexist@ptorx.com' };
+  expect(recipient).toMatchObject(_recipient);
+});
 
 test('get recipient: reply to message', async () => {
   const [proxyEmail] = await listProxyEmails(1234);
