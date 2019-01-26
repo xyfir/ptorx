@@ -11,13 +11,7 @@ import { getDomain } from 'lib/domains/get';
 import { saveMail } from 'lib/mail/save';
 import { sendMail } from 'lib/mail/send';
 import * as CONFIG from 'constants/config';
-import { Ptorx } from 'typings/ptorx';
 
-declare module 'smtp-server' {
-  interface SMTPServerSession {
-    recipients: Ptorx.Recipient[];
-  }
-}
 declare module 'mailparser' {
   interface ParsedMail {
     headerLines: { key: string; line: string }[];
@@ -28,15 +22,6 @@ const server = new SMTPServer({
   ...CONFIG.SMTP_SERVER_OPTIONS,
   authOptional: true,
   size: 25000000,
-  async onRcptTo(address, session, callback) {
-    try {
-      session.recipients = session.recipients || [];
-      session.recipients.push(await getRecipient(address.address));
-      callback();
-    } catch (err) {
-      callback(err);
-    }
-  },
   async onData(stream, session, callback) {
     const original = await simpleParser(stream);
     if (stream.sizeExceeded) return callback(new Error('Message too big'));
@@ -66,11 +51,11 @@ const server = new SMTPServer({
       text: original.text,
       date: original.date,
       to: original.to.text
-      // replyTo: undefined,
-      // inReplyTo: undefined
     };
 
-    for (let recipient of session.recipients) {
+    for (let { address } of session.envelope.rcptTo) {
+      const recipient = await getRecipient(address);
+
       // Ignore if not for Ptorx
       if (!recipient.proxyEmailId && !recipient.message) continue;
 
