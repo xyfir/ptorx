@@ -211,5 +211,10 @@ ALTER TABLE `proxy_emails` DROP `spamFilter`;
 -- update dkim columns in domains
 ALTER TABLE `domains` DROP `domainKey`;
 ALTER TABLE `domains` ADD `publicKey` TEXT NOT NULL AFTER `domain`, ADD `privateKey` TEXT NOT NULL AFTER `publicKey`, ADD `selector` VARCHAR(12) NOT NULL AFTER `privateKey`;
+
+-----
+
 -- remove directForward
 ALTER TABLE `proxy_emails` DROP `directForward`;
+-- add replyTo
+ALTER TABLE `messages` ADD `replyTo` TEXT NULL DEFAULT NULL AFTER `headers`;

@@ -99,6 +99,7 @@ export namespace Ptorx {
      * @example `['Content-Type: text/html; charset="utf-8"']`
      */
     headers: string[];
+    replyTo?: string;
     attachments: {
       id?: number;
       filename?: string;

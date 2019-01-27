@@ -12,7 +12,7 @@ export async function editMessage(
       `
         UPDATE messages m SET
           m.subject = ?, m.from = ?, m.to = ?, m.text = ?, m.html = ?,
-          m.headers = ?
+          m.headers = ?, m.replyTo = ?
         WHERE
           m.id = ? AND m.proxyEmailId = (
             SELECT pxe.id FROM proxy_emails pxe
@@ -26,6 +26,7 @@ export async function editMessage(
         message.text,
         message.html,
         JSON.stringify(message.headers),
+        message.replyTo,
         message.id,
         userId
       ]

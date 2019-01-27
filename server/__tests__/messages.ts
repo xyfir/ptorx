@@ -36,7 +36,7 @@ test('create message', async () => {
     },
     1234
   );
-  expect(Object.keys(message).length).toBe(11);
+  expect(Object.keys(message).length).toBe(12);
   expect(message.id).toBeNumber();
   expect(message.created).toBeNumber();
   const _message: Ptorx.Message = {
@@ -55,7 +55,8 @@ test('create message', async () => {
         size: 1,
         id: message.attachments[0].id
       }
-    ]
+    ],
+    replyTo: null
   };
   expect(message).toMatchObject(_message);
 });
