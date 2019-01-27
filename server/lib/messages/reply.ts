@@ -14,7 +14,7 @@ export async function replyToMessage(
         proxyEmailId: message.proxyEmailId,
         subject: message.subject,
         content,
-        to: message.from
+        to: message.replyTo || message.from
       },
       userId
     );

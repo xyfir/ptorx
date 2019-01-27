@@ -47,7 +47,7 @@ const server = new SMTPServer({
           from: fullAddress,
           html: typeof incoming.html == 'string' ? incoming.html : undefined,
           text: incoming.text,
-          to: recipient.message.from
+          to: recipient.message.replyTo || recipient.message.from
         });
 
         await chargeUser(proxyEmail.userId, 2);
@@ -65,7 +65,7 @@ const server = new SMTPServer({
           content: a.content,
           cid: a.cid
         })),
-        subject: incoming.subject,
+        replyTo: incoming.replyTo ? incoming.replyTo.text : undefined,
         headers: incoming.headerLines
           .map(h => ({
             key: h.key,
@@ -73,6 +73,7 @@ const server = new SMTPServer({
           }))
           // Prevent duplicate Content-Types which can cause parsing issues
           .filter(h => h.key != 'content-type'),
+        subject: incoming.subject,
         sender: incoming.from.text,
         html: typeof incoming.html == 'string' ? incoming.html : undefined,
         from: incoming.from.text,
@@ -122,7 +123,7 @@ const server = new SMTPServer({
               ? `${recipient.userId}--${savedMessage.id}--${
                   savedMessage.key
                 }--reply@${recipient.address.split('@')[1]}`
-              : undefined
+              : outgoing.replyTo
           });
           await chargeUser(recipient.userId, 1);
         }
