@@ -34,11 +34,12 @@ test('create message', async () => {
     },
     1234
   );
-  expect(Object.keys(message).length).toBe(12);
+  expect(Object.keys(message).length).toBe(14);
   expect(message.id).toBeNumber();
   expect(message.created).toBeNumber();
   const _message: Ptorx.Message = {
     ...message,
+    userId: 1234,
     proxyEmailId: proxyEmail.id,
     subject: 'subject',
     from: 'sender@domain.com',
@@ -54,7 +55,8 @@ test('create message', async () => {
         id: message.attachments[0].id
       }
     ],
-    replyTo: null
+    replyTo: null,
+    ptorxReplyTo: `${message.id}--${message.key}--reply@ptorx.com`
   };
   expect(message).toMatchObject(_message);
 });
@@ -70,6 +72,12 @@ test('list message', async () => {
     'from'
   ];
   expect(messages[0]).toContainAllKeys(keys);
+});
+
+test('get message with key', async () => {
+  const messages = await listMessages(1234);
+  const message = await getMessage(messages[0].id, 1234);
+  await expect(getMessage(message.id, message.key)).not.toReject();
 });
 
 test('get message attachment binary', async () => {

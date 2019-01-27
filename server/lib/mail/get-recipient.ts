@@ -9,10 +9,9 @@ export async function getRecipient(address: string): Promise<Ptorx.Recipient> {
     // Reply-To address
     if (user.endsWith('--reply')) {
       try {
-        const [userId, messageId, messageKey] = user.split('--');
-        const message = await getMessage(+messageId, +userId);
-        if (message.key != messageKey) throw new Error('Message key mismatch');
-        return { address, message, userId: +userId };
+        const [messageId, messageKey] = user.split('--');
+        const message = await getMessage(+messageId, messageKey);
+        return { address, message, userId: message.userId };
       } catch (err) {
         // ** Send email response explaining problem
         throw new Error('Bad message reply address');

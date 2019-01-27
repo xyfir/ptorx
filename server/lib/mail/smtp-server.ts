@@ -116,11 +116,7 @@ const server = new SMTPServer({
               from: recipient.address,
               to: primaryEmail.address
             },
-            replyTo: savedMessage
-              ? `${recipient.userId}--${savedMessage.id}--${
-                  savedMessage.key
-                }--reply@${recipient.address.split('@')[1]}`
-              : outgoing.replyTo
+            replyTo: savedMessage ? savedMessage.ptorxReplyTo : outgoing.replyTo
           });
           await chargeUser(recipient.userId, 1);
         }

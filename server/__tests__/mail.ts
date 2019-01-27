@@ -50,9 +50,12 @@ test('get recipient: bad address on proxy domain', async () => {
 test('get recipient: reply to message', async () => {
   const [proxyEmail] = await listProxyEmails(1234);
   const message = await addMessage({ proxyEmailId: proxyEmail.id }, 1234);
-  const address = `1234--${message.id}--${message.key}--reply@ptorx.com`;
-  const recipient = await getRecipient(address);
-  const _recipient: Ptorx.Recipient = { userId: 1234, message, address };
+  const recipient = await getRecipient(message.ptorxReplyTo);
+  const _recipient: Ptorx.Recipient = {
+    userId: 1234,
+    message,
+    address: message.ptorxReplyTo
+  };
   expect(recipient).toMatchObject(_recipient);
 });
 
@@ -299,7 +302,7 @@ test('smtp server', async () => {
     expect(
       message.headerLines.find(h => h.key == 'x-custom-header')
     ).not.toBeUndefined();
-    expect(message.replyTo.text).toMatch(/^\d+--\d+--.+--reply@dev.ptorx.com$/);
+    expect(message.replyTo.text).toMatch(/^\d+--.+--reply@dev.ptorx.com$/);
   });
 
   // Send to ACTUAL SMTP server

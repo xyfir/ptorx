@@ -82,6 +82,7 @@ export namespace Ptorx {
 
   export interface Message {
     id: number;
+    userId: number;
     proxyEmailId: Ptorx.ProxyEmail["id"];
     created: number;
     key: string;
@@ -108,6 +109,10 @@ export namespace Ptorx {
       size: number;
       content?: Blob | Buffer;
     }[];
+    /**
+     * @example `"messageId--messageKey--reply@domain.tld"`
+     */
+    ptorxReplyTo: string;
   }
 
   export type MessageList = {

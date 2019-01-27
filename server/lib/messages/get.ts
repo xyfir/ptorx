@@ -3,17 +3,24 @@ import { Ptorx } from 'typings/ptorx';
 
 export async function getMessage(
   messageId: Ptorx.Message['id'],
-  userId: number
+  /** User id of message owner or the message's key */
+  authentication: number | Ptorx.Message['key']
 ): Promise<Ptorx.Message> {
   const db = new MySQL();
   try {
     const [message] = await db.query(
       `
-        SELECT m.* FROM messages m
+        SELECT
+          m.*, pxe.userId,
+          CONCAT(m.id, '--', m.key, '--reply@', d.domain) AS ptorxReplyTo
+        FROM messages m
         INNER JOIN proxy_emails pxe ON m.proxyEmailId = pxe.id
-        WHERE m.id = ? AND pxe.userId = ?
+        INNER JOIN domains d ON d.id = pxe.domainId
+        WHERE m.id = ? AND ${
+          typeof authentication == 'number' ? 'pxe.userId' : 'm.key'
+        } = ?
       `,
-      [messageId, userId]
+      [messageId, authentication]
     );
     if (!message) throw 'Could not find message';
 
