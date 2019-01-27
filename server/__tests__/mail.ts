@@ -254,7 +254,7 @@ test('modify mail', async () => {
 });
 
 test('smtp server', async () => {
-  expect.assertions(8);
+  expect.assertions(12);
 
   captureMail(1, (message, session) => {
     // Envelope from/to should have changed
@@ -262,16 +262,22 @@ test('smtp server', async () => {
       session.envelope.mailFrom !== false
         ? session.envelope.mailFrom.address
         : ''
-    ).toBe('ejection81@test.ptorx.com');
+    ).toBe('ejection81@dev.ptorx.com');
     expect(session.envelope.rcptTo[0].address).toBe('test@example.com');
 
     // Headers from/to should be unchanged
     expect(message.from.text).toBe('You <foo@example.com>');
-    expect(message.to.text).toBe('ejection81@test.ptorx.com');
+    expect(message.to.text).toBe('ejection81@dev.ptorx.com');
 
     expect(message.subject).toBe('Hi');
     expect(message.text).toBe('Hello world?');
     expect(message.html).toBe('<b>Hello world?</b>');
+    expect(message.attachments).toBeArrayOfSize(1);
+    expect(message.attachments[0].content.toString()).toBe('Hello World');
+    expect(
+      message.headerLines.find(h => h.key == 'x-custom-header')
+    ).not.toBeUndefined();
+    expect(message.replyTo.text).toMatch(/^\d+--\d+--.+--reply@dev.ptorx.com$/);
   });
 
   const transporter = createTransport({
@@ -280,14 +286,22 @@ test('smtp server', async () => {
     secure: false,
     tls: { rejectUnauthorized: false }
   });
-  // foo@example.com -> ejection81@test.ptorx.com -> test@example.com
+  // foo@example.com -> ejection81@dev.ptorx.com -> test@example.com
   await expect(
     transporter.sendMail({
-      from: 'You <foo@example.com>',
-      to: 'ejection81@test.ptorx.com',
+      attachments: [
+        {
+          contentType: 'text/html',
+          filename: 'test.txt',
+          content: Buffer.from('Hello World')
+        }
+      ],
+      headers: [{ key: 'X-Custom-Header', value: 'Hello' }],
       subject: 'Hi',
+      from: 'You <foo@example.com>',
+      html: '<b>Hello world?</b>',
       text: 'Hello world?',
-      html: '<b>Hello world?</b>'
+      to: 'ejection81@dev.ptorx.com'
     })
   ).not.toReject();
 });
