@@ -1,16 +1,16 @@
 import { SendMailOptions, createTransport } from 'nodemailer';
-import { ParsedMail, simpleParser } from 'mailparser';
 import { listProxyEmails } from 'lib/proxy-emails/list';
 import { addProxyEmail } from 'lib/proxy-emails/add';
 import { getProxyEmail } from 'lib/proxy-emails/get';
 import { getRecipient } from 'lib/mail/get-recipient';
 import { editModifier } from 'lib/modifiers/edit';
+import { captureMail } from 'lib/tests/capture-mail';
 import { addModifier } from 'lib/modifiers/add';
 import { editFilter } from 'lib/filters/edit';
 import { addMessage } from 'lib/messages/add';
 import { modifyMail } from 'lib/mail/modify';
 import { filterMail } from 'lib/mail/filter';
-import { SMTPServer } from 'smtp-server';
+import { ParsedMail } from 'mailparser';
 import { addFilter } from 'lib/filters/add';
 import { saveMail } from 'lib/mail/save';
 import * as CONFIG from 'constants/config';
@@ -256,33 +256,23 @@ test('modify mail', async () => {
 test('smtp server', async () => {
   expect.assertions(8);
 
-  const server = new SMTPServer({
-    authOptional: true,
-    async onData(stream, session, callback) {
-      const message = await simpleParser(stream);
+  captureMail(1, (message, session) => {
+    // Envelope from/to should have changed
+    expect(
+      session.envelope.mailFrom !== false
+        ? session.envelope.mailFrom.address
+        : ''
+    ).toBe('ejection81@test.ptorx.com');
+    expect(session.envelope.rcptTo[0].address).toBe('test@example.com');
 
-      // Envelope from/to should have changed
-      expect(
-        session.envelope.mailFrom !== false
-          ? session.envelope.mailFrom.address
-          : ''
-      ).toBe('ejection81@test.ptorx.com');
-      expect(session.envelope.rcptTo[0].address).toBe('test@example.com');
+    // Headers from/to should be unchanged
+    expect(message.from.text).toBe('You <foo@example.com>');
+    expect(message.to.text).toBe('ejection81@test.ptorx.com');
 
-      // Headers from/to should be unchanged
-      expect(message.from.text).toBe('You <foo@example.com>');
-      expect(message.to.text).toBe('ejection81@test.ptorx.com');
-
-      expect(message.subject).toBe('Hi');
-      expect(message.text).toBe('Hello world?');
-      expect(message.html).toBe('<b>Hello world?</b>');
-      callback();
-    }
+    expect(message.subject).toBe('Hi');
+    expect(message.text).toBe('Hello world?');
+    expect(message.html).toBe('<b>Hello world?</b>');
   });
-  server.on('error', e => {
-    throw e;
-  });
-  server.listen(CONFIG.TEST_SMTP_PORT);
 
   const transporter = createTransport({
     host: '127.0.0.1',

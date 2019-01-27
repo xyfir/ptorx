@@ -3,11 +3,9 @@ import { replyToMessage } from 'lib/messages/reply';
 import { addProxyEmail } from 'lib/proxy-emails/add';
 import { deleteMessage } from 'lib/messages/delete';
 import { listMessages } from 'lib/messages/list';
-import { simpleParser } from 'mailparser';
+import { captureMail } from 'lib/tests/capture-mail';
 import { sendMessage } from 'lib/messages/send';
 import { addMessage } from 'lib/messages/add';
-import { SMTPServer } from 'smtp-server';
-import * as CONFIG from 'constants/config';
 import { Ptorx } from 'typings/ptorx';
 import 'lib/tests/prepare';
 
@@ -86,21 +84,13 @@ test('send and reply to messages', async () => {
 
   const messages = await listMessages(1234);
   const message = await getMessage(messages[0].id, 1234);
-  const server = new SMTPServer({
-    authOptional: true,
-    async onData(stream, session, callback) {
-      const incoming = await simpleParser(stream);
-      expect(incoming.text.trim()).toBe('content');
-      expect(incoming.from.text).toEndWith('@ptorx.com');
-      expect(incoming.to.text).toBe('sender@domain.com');
-      expect(incoming.subject).toBe('subject');
-      callback();
-    }
+
+  captureMail(2, incoming => {
+    expect(incoming.text.trim()).toBe('content');
+    expect(incoming.from.text).toEndWith('@ptorx.com');
+    expect(incoming.to.text).toBe('sender@domain.com');
+    expect(incoming.subject).toBe('subject');
   });
-  server.on('error', e => {
-    throw e;
-  });
-  server.listen(CONFIG.TEST_SMTP_PORT);
 
   await expect(
     sendMessage(
