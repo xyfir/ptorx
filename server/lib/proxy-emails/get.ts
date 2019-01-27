@@ -20,7 +20,6 @@ export async function getProxyEmail(
     db.release();
 
     proxyEmail.saveMail = !!proxyEmail.saveMail;
-    proxyEmail.directForward = !!proxyEmail.directForward;
 
     return proxyEmail;
   } catch (err) {

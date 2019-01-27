@@ -15,16 +15,10 @@ export async function editProxyEmail(
     const result = await db.query(
       `
         UPDATE proxy_emails
-        SET name = ?, saveMail = ?, directForward = ?
+        SET name = ?, saveMail = ?
         WHERE id = ? AND userId = ?
       `,
-      [
-        proxyEmail.name,
-        proxyEmail.saveMail,
-        proxyEmail.directForward,
-        proxyEmail.id,
-        userId
-      ]
+      [proxyEmail.name, proxyEmail.saveMail, proxyEmail.id, userId]
     );
     if (!result.affectedRows) throw 'Could not update proxy email';
 

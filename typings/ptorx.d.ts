@@ -58,7 +58,6 @@ export namespace Ptorx {
     name: string;
     created: number;
     saveMail: boolean;
-    directForward: boolean;
     links: ProxyEmailLink[];
   }
 

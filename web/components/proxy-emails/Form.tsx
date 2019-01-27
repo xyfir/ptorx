@@ -22,7 +22,6 @@ export class EmailForm extends React.Component<EmailFormProps, EmailFormState> {
       name: '',
       toEmail: '',
       saveMail: false,
-      directForward: false,
       noToAddress: false,
       filters: [],
       modifiers: [],
@@ -151,13 +150,6 @@ export class EmailForm extends React.Component<EmailFormProps, EmailFormState> {
             name="save-mail"
             label="Save Mail"
             defaultChecked={email.saveMail}
-          />
-
-          <Checkbox
-            id="checkbox--direct-forward"
-            name="direct-forward"
-            label="Direct Forward"
-            defaultChecked={email.directForward}
           />
         </Paper>
 
