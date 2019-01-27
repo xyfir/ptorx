@@ -6,9 +6,9 @@ import { Ptorx } from 'typings/ptorx';
 const transporter =
   typeof test != 'undefined'
     ? createTransport({
-        host: '127.0.0.1',
-        port: CONFIG.TEST_SMTP_PORT,
         secure: false,
+        host: '127.0.0.1',
+        port: CONFIG.TESTS.SMTP_PORT,
         tls: { rejectUnauthorized: false }
       })
     : createTransport({ sendmail: true });

@@ -6,12 +6,17 @@ import { addProxyEmail } from 'lib/proxy-emails/add';
 import { getProxyEmail } from 'lib/proxy-emails/get';
 import { addModifier } from 'lib/modifiers/add';
 import { addFilter } from 'lib/filters/add';
+import * as CONFIG from 'constants/config';
 import { Ptorx } from 'typings/ptorx';
 import 'lib/tests/prepare';
 
 test('create custom proxy email', async () => {
   const proxyEmail = await addProxyEmail(
-    { address: 'test', domainId: 1, name: 'name' },
+    {
+      domainId: CONFIG.TESTS.PERSISTENT_DOMAIN_ID,
+      address: 'test',
+      name: 'name'
+    },
     1234
   );
   expect(Object.keys(proxyEmail).length).toBe(9);
@@ -22,10 +27,10 @@ test('create custom proxy email', async () => {
     ...proxyEmail,
     name: 'name',
     address: 'test',
-    domainId: 1,
+    domainId: CONFIG.TESTS.PERSISTENT_DOMAIN_ID,
     saveMail: false,
     links: [],
-    fullAddress: 'test@ptorx.com'
+    fullAddress: `test@${CONFIG.TESTS.PERSISTENT_DOMAIN_NAME}`
   };
   expect(proxyEmail).toMatchObject(_proxyEmail);
 });
@@ -35,7 +40,7 @@ test('create random proxy email', async () => {
     {
       address: '',
       name: '',
-      domainId: 1,
+      domainId: CONFIG.TESTS.PERSISTENT_DOMAIN_ID,
       saveMail: true
     },
     1234
@@ -44,7 +49,7 @@ test('create random proxy email', async () => {
   const _proxyEmail: Ptorx.ProxyEmail = {
     ...proxyEmail,
     name: '',
-    domainId: 1,
+    domainId: CONFIG.TESTS.PERSISTENT_DOMAIN_ID,
     saveMail: true
   };
   expect(proxyEmail).toMatchObject(_proxyEmail);

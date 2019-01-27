@@ -6,12 +6,13 @@ import { listMessages } from 'lib/messages/list';
 import { captureMail } from 'lib/tests/capture-mail';
 import { sendMessage } from 'lib/messages/send';
 import { addMessage } from 'lib/messages/add';
+import * as CONFIG from 'constants/config';
 import { Ptorx } from 'typings/ptorx';
 import 'lib/tests/prepare';
 
 test('create message', async () => {
   const proxyEmail = await addProxyEmail(
-    { domainId: 1, address: '', name: '' },
+    { domainId: CONFIG.TESTS.PERSISTENT_DOMAIN_ID, address: '', name: '' },
     1234
   );
   const message = await addMessage(
@@ -19,7 +20,7 @@ test('create message', async () => {
       proxyEmailId: proxyEmail.id,
       subject: 'subject',
       from: 'sender@domain.com',
-      to: 'test@ptorx.com',
+      to: `test@${CONFIG.TESTS.PERSISTENT_DOMAIN_NAME}`,
       text: 'Hello World',
       html: '<div>Hello World</div>',
       headers: ['Content-Type: text/html; charset="utf-8"'],
@@ -43,7 +44,7 @@ test('create message', async () => {
     proxyEmailId: proxyEmail.id,
     subject: 'subject',
     from: 'sender@domain.com',
-    to: 'test@ptorx.com',
+    to: `test@${CONFIG.TESTS.PERSISTENT_DOMAIN_NAME}`,
     text: 'Hello World',
     html: '<div>Hello World</div>',
     headers: ['Content-Type: text/html; charset="utf-8"'],
@@ -56,7 +57,9 @@ test('create message', async () => {
       }
     ],
     replyTo: null,
-    ptorxReplyTo: `${message.id}--${message.key}--reply@ptorx.com`
+    ptorxReplyTo: `${message.id}--${message.key}--reply@${
+      CONFIG.TESTS.PERSISTENT_DOMAIN_NAME
+    }`
   };
   expect(message).toMatchObject(_message);
 });
@@ -95,7 +98,9 @@ test('send and reply to messages', async () => {
 
   captureMail(2, incoming => {
     expect(incoming.text.trim()).toBe('content');
-    expect(incoming.from.text).toEndWith('@ptorx.com');
+    expect(incoming.from.text).toEndWith(
+      `@${CONFIG.TESTS.PERSISTENT_DOMAIN_NAME}`
+    );
     expect(incoming.to.text).toBe('sender@domain.com');
     expect(incoming.subject).toBe('subject');
   });
