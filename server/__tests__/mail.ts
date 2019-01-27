@@ -30,8 +30,7 @@ test('get recipient: proxy email', async () => {
   const proxyEmail = await addProxyEmail(
     {
       domainId: CONFIG.TESTS.PERSISTENT_DOMAIN_ID,
-      address: 'recipient',
-      name: ''
+      address: 'recipient'
     },
     1234
   );

@@ -38,8 +38,6 @@ test('create custom proxy email', async () => {
 test('create random proxy email', async () => {
   const proxyEmail = await addProxyEmail(
     {
-      address: '',
-      name: '',
       domainId: CONFIG.TESTS.PERSISTENT_DOMAIN_ID,
       saveMail: true
     },

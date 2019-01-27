@@ -18,7 +18,7 @@ export async function addProxyEmail(
       throw 'You cannot use that domain';
 
     // Generate an available address
-    if (proxyEmail.address == '') {
+    if (!proxyEmail.address) {
       proxyEmail.address = rword.generateFromPool(1) as string;
       while (true) {
         proxyEmail.address += Date.now()

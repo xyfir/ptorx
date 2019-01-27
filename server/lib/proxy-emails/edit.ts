@@ -8,7 +8,6 @@ export async function editProxyEmail(
 ): Promise<Ptorx.ProxyEmail> {
   const db = new MySQL();
   try {
-    if (typeof proxyEmail.name != 'string') throw 'Missing name';
     if (proxyEmail.address && !/^[a-zA-Z0-9]{1,64}$/.test(proxyEmail.address))
       throw 'Bad address: only 1-64 alphanumerical characters allowed';
 

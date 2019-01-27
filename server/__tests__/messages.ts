@@ -12,7 +12,7 @@ import 'lib/tests/prepare';
 
 test('create message', async () => {
   const proxyEmail = await addProxyEmail(
-    { domainId: CONFIG.TESTS.PERSISTENT_DOMAIN_ID, address: '', name: '' },
+    { domainId: CONFIG.TESTS.PERSISTENT_DOMAIN_ID },
     1234
   );
   const message = await addMessage(

@@ -218,3 +218,5 @@ ALTER TABLE `domains` ADD `publicKey` TEXT NOT NULL AFTER `domain`, ADD `private
 ALTER TABLE `proxy_emails` DROP `directForward`;
 -- add replyTo
 ALTER TABLE `messages` ADD `replyTo` TEXT NULL DEFAULT NULL AFTER `headers`;
+-- proxy_emails.name cannot be null
+ALTER TABLE `proxy_emails` CHANGE `name` `name` VARCHAR(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL;
