@@ -59,16 +59,17 @@ export namespace Ptorx {
     created: number;
     saveMail: boolean;
     links: ProxyEmailLink[];
+    /**
+     * @example `"address@domain.com"`
+     */
+    fullAddress: string;
   }
 
   export type ProxyEmailList = {
-    id: number;
-    name: string;
-    /**
-     * @example `"ejection81@sandbox86b2c.mailgun.org"`
-     */
-    address: string;
-    created: number;
+    id: Ptorx.ProxyEmail["id"];
+    name: Ptorx.ProxyEmail["name"];
+    created: Ptorx.ProxyEmail["created"];
+    fullAddress: Ptorx.ProxyEmail["fullAddress"];
   }[];
 
   export interface ProxyEmailLink {

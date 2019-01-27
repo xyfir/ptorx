@@ -14,7 +14,7 @@ test('create custom proxy email', async () => {
     { address: 'test', domainId: 1, name: 'name' },
     1234
   );
-  expect(Object.keys(proxyEmail).length).toBe(8);
+  expect(Object.keys(proxyEmail).length).toBe(9);
   expect(proxyEmail.id).toBeNumber();
   expect(proxyEmail.created).toBeNumber();
   expect(proxyEmail.userId).toBe(1234);
@@ -24,7 +24,8 @@ test('create custom proxy email', async () => {
     address: 'test',
     domainId: 1,
     saveMail: false,
-    links: []
+    links: [],
+    fullAddress: 'test@ptorx.com'
   };
   expect(proxyEmail).toMatchObject(_proxyEmail);
 });
@@ -53,7 +54,7 @@ test('list proxy emails', async () => {
   const proxyEmails = await listProxyEmails(1234);
   expect(proxyEmails).toBeArrayOfSize(2);
   const keys: Array<keyof Ptorx.ProxyEmailList[0]> = [
-    'address',
+    'fullAddress',
     'created',
     'id',
     'name'

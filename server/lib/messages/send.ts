@@ -1,6 +1,5 @@
 import { getProxyEmail } from 'lib/proxy-emails/get';
 import { chargeUser } from 'lib/users/charge';
-import { getDomain } from 'lib/domains/get';
 import { sendMail } from 'lib/mail/send';
 import { Ptorx } from 'typings/ptorx';
 
@@ -15,10 +14,9 @@ export async function sendMessage(
 ): Promise<void> {
   try {
     const proxyEmail = await getProxyEmail(data.proxyEmailId, userId);
-    const domain = await getDomain(proxyEmail.domainId, userId);
-    await sendMail(domain.id, {
+    await sendMail(proxyEmail.domainId, {
       subject: data.subject,
-      from: `${proxyEmail.address}@${domain.domain}`,
+      from: proxyEmail.fullAddress,
       text: data.content,
       to: data.to
     });

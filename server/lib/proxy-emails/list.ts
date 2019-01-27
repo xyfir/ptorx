@@ -10,7 +10,7 @@ export async function listProxyEmails(
       `
         SELECT
           pxe.id, pxe.name, pxe.created,
-          CONCAT(pxe.address, '@', d.domain) AS address
+          CONCAT(pxe.address, '@', d.domain) AS fullAddress
         FROM proxy_emails pxe
         LEFT JOIN domains d ON d.id = pxe.domainId
         WHERE pxe.userId = ?

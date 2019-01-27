@@ -7,7 +7,6 @@ import { chargeUser } from 'lib/users/charge';
 import { filterMail } from 'lib/mail/filter';
 import { modifyMail } from 'lib/mail/modify';
 import { SMTPServer } from 'smtp-server';
-import { getDomain } from 'lib/domains/get';
 import { saveMail } from 'lib/mail/save';
 import { sendMail } from 'lib/mail/send';
 import * as CONFIG from 'constants/config';
@@ -38,13 +37,11 @@ const server = new SMTPServer({
           recipient.message.proxyEmailId,
           recipient.userId
         );
-        const domain = await getDomain(proxyEmail.domainId, proxyEmail.userId);
 
-        const fullAddress = `${proxyEmail.address}@${domain.domain}`;
-        await sendMail(domain.id, {
+        await sendMail(proxyEmail.domainId, {
           subject: incoming.subject,
-          sender: fullAddress,
-          from: fullAddress,
+          sender: proxyEmail.fullAddress,
+          from: proxyEmail.fullAddress,
           html: typeof incoming.html == 'string' ? incoming.html : undefined,
           text: incoming.text,
           to: recipient.message.replyTo || recipient.message.from
