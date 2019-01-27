@@ -331,3 +331,41 @@ test('smtp server', async () => {
     })
   ).not.toReject();
 });
+
+test('reply to message', async () => {
+  expect.assertions(5);
+  const [proxyEmail] = await listProxyEmails(1234);
+  const message = await addMessage(
+    {
+      proxyEmailId: proxyEmail.id,
+      subject: 'Hello',
+      from: 'test@example.com',
+      text: 'Hello World',
+      to: proxyEmail.fullAddress
+    },
+    1234
+  );
+  // Catch REDIRECTED mail
+  captureMail(1, message => {
+    expect(message.text.trim()).toBe('This is a reply');
+    expect(message.from.text).toBe(proxyEmail.fullAddress);
+    expect(message.to.text).toBe('test@example.com');
+    expect(message.subject).toBe('Hello');
+  });
+  // Send to ACTUAL SMTP server
+  const transporter = createTransport({
+    host: '127.0.0.1',
+    port: CONFIG.SMTP_PORT,
+    secure: false,
+    tls: { rejectUnauthorized: false }
+  });
+  // foo@example.com -> ...--reply@dev.ptorx.com -> test@example.com
+  await expect(
+    transporter.sendMail({
+      subject: 'Hello',
+      from: 'foo@example.com',
+      text: 'This is a reply',
+      to: message.ptorxReplyTo
+    })
+  ).not.toReject();
+});
