@@ -4,6 +4,8 @@
     "**/node_modules": true
   },
   "search.exclude": {
+    "**/coverage": true,
     "**/dist": true
-  }
+  },
+  "search.useIgnoreFiles": false
 }
