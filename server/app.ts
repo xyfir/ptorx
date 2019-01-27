@@ -1,5 +1,5 @@
 import 'app-module-path/register';
-
+import { startSMTPServer } from 'lib/mail/smtp-server';
 import * as Session from 'express-session';
 import * as Express from 'express';
 import * as parser from 'body-parser';
@@ -8,7 +8,6 @@ import * as Store from 'express-mysql-session';
 import { router } from 'api/router';
 import * as path from 'path';
 import { cron } from 'jobs/cron';
-import 'lib/mail/smtp-server';
 
 // @ts-ignore
 const SessionStore = Store(Session);
@@ -63,3 +62,5 @@ app.use(
 );
 
 if (CONFIG.CRON) cron();
+
+startSMTPServer();

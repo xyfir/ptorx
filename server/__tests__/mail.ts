@@ -1,5 +1,6 @@
 import { SendMailOptions, createTransport } from 'nodemailer';
 import { listProxyEmails } from 'lib/proxy-emails/list';
+import { startSMTPServer } from 'lib/mail/smtp-server';
 import { addProxyEmail } from 'lib/proxy-emails/add';
 import { getProxyEmail } from 'lib/proxy-emails/get';
 import { getRecipient } from 'lib/mail/get-recipient';
@@ -17,7 +18,6 @@ import { sendMail } from 'lib/mail/send';
 import { saveMail } from 'lib/mail/save';
 import * as CONFIG from 'constants/config';
 import { Ptorx } from 'typings/ptorx';
-import 'lib/mail/smtp-server';
 import 'lib/tests/prepare';
 
 test('get recipient: non-ptorx email', async () => {
@@ -289,6 +289,8 @@ test('send mail', async () => {
 test('smtp server', async () => {
   expect.assertions(12);
 
+  const server = startSMTPServer();
+
   // Catch REDIRECTED mail
   captureMail(1, (message, session) => {
     // Envelope from/to should have changed
@@ -341,10 +343,14 @@ test('smtp server', async () => {
       to: CONFIG.TESTS.PERSISTENT_PROXY_EMAIL
     })
   ).not.toReject();
+
+  await new Promise(r => server.close(r));
 });
 
 test('reply to message', async () => {
   expect.assertions(5);
+  const server = startSMTPServer();
+
   const [proxyEmail] = await listProxyEmails(1234);
   const message = await addMessage(
     {
@@ -379,4 +385,6 @@ test('reply to message', async () => {
       to: message.ptorxReplyTo
     })
   ).not.toReject();
+
+  await new Promise(r => server.close(r));
 });
