@@ -6,6 +6,7 @@ import { getRecipient } from 'lib/mail/get-recipient';
 import { editModifier } from 'lib/modifiers/edit';
 import { captureMail } from 'lib/tests/capture-mail';
 import { addModifier } from 'lib/modifiers/add';
+import { listDomains } from 'lib/domains/list';
 import { editFilter } from 'lib/filters/edit';
 import { addMessage } from 'lib/messages/add';
 import { modifyMail } from 'lib/mail/modify';
@@ -17,6 +18,7 @@ import * as CONFIG from 'constants/config';
 import { Ptorx } from 'typings/ptorx';
 import 'lib/mail/smtp-server';
 import 'lib/tests/prepare';
+import { sendMail } from 'lib/mail/send';
 
 test('get recipient: non-ptorx email', async () => {
   const recipient = await getRecipient('test@gmail.com');
@@ -253,9 +255,29 @@ test('modify mail', async () => {
   expect(mail.html).toBeUndefined();
 });
 
+test.only('send mail', async () => {
+  const [domain] = await listDomains(1234);
+  expect.assertions(5);
+  captureMail(domain.id, incoming => {
+    expect(incoming.text.trim()).toBe('Hello world');
+    expect(incoming.from.text).toBe(`test@${domain.domain}`);
+    expect(incoming.to.text).toBe('test@example.com');
+    expect(incoming.subject).toBe('Hi');
+  });
+  await expect(
+    sendMail(domain.id, {
+      subject: 'Hi',
+      from: `test@${domain.domain}`,
+      text: 'Hello world',
+      to: 'test@example.com'
+    })
+  ).not.toReject();
+}, 10000);
+
 test('smtp server', async () => {
   expect.assertions(12);
 
+  // Catch REDIRECTED mail
   captureMail(1, (message, session) => {
     // Envelope from/to should have changed
     expect(
@@ -280,6 +302,7 @@ test('smtp server', async () => {
     expect(message.replyTo.text).toMatch(/^\d+--\d+--.+--reply@dev.ptorx.com$/);
   });
 
+  // Send to ACTUAL SMTP server
   const transporter = createTransport({
     host: '127.0.0.1',
     port: CONFIG.SMTP_PORT,
