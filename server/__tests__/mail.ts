@@ -255,10 +255,10 @@ test('modify mail', async () => {
   expect(mail.html).toBeUndefined();
 });
 
-test.only('send mail', async () => {
+test('send mail', async () => {
   const [domain] = await listDomains(1234);
   expect.assertions(5);
-  captureMail(domain.id, incoming => {
+  captureMail(1, incoming => {
     expect(incoming.text.trim()).toBe('Hello world');
     expect(incoming.from.text).toBe(`test@${domain.domain}`);
     expect(incoming.to.text).toBe('test@example.com');
