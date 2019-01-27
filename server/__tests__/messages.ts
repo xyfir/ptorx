@@ -1,12 +1,15 @@
+import { getMessage, getMessageAttachmentBin } from 'lib/messages/get';
 import { replyToMessage } from 'lib/messages/reply';
 import { addProxyEmail } from 'lib/proxy-emails/add';
 import { deleteMessage } from 'lib/messages/delete';
 import { listMessages } from 'lib/messages/list';
+import { simpleParser } from 'mailparser';
 import { sendMessage } from 'lib/messages/send';
 import { addMessage } from 'lib/messages/add';
+import { SMTPServer } from 'smtp-server';
+import * as CONFIG from 'constants/config';
 import { Ptorx } from 'typings/ptorx';
 import 'lib/tests/prepare';
-import { getMessage, getMessageAttachmentBin } from 'lib/messages/get';
 
 test('create message', async () => {
   const proxyEmail = await addProxyEmail(
@@ -77,25 +80,40 @@ test('get message attachment binary', async () => {
   expect(buffer.toString()).toBe('Hello World');
 });
 
-test('send message', async () => {
+test('send and reply to messages', async () => {
+  expect.assertions(10);
+
   const messages = await listMessages(1234);
+  const message = await getMessage(messages[0].id, 1234);
+  const server = new SMTPServer({
+    authOptional: true,
+    async onData(stream, session, callback) {
+      const incoming = await simpleParser(stream);
+      expect(incoming.text.trim()).toBe('content');
+      expect(incoming.from.text).toEndWith('@ptorx.com');
+      expect(incoming.to.text).toBe('sender@domain.com');
+      expect(incoming.subject).toBe('subject');
+      callback();
+    }
+  });
+  server.on('error', e => {
+    throw e;
+  });
+  server.listen(CONFIG.TEST_SMTP_PORT);
+
   await expect(
     sendMessage(
       {
         proxyEmailId: messages[0].proxyEmailId,
         content: 'content',
         subject: 'subject',
-        to: 'to@example.com'
+        to: 'sender@domain.com'
       },
       1234
     )
   ).not.toReject();
-});
-
-test('reply to message', async () => {
-  const [message] = await listMessages(1234);
   await expect(replyToMessage(message.id, 'content', 1234)).not.toReject();
-});
+}, 10000);
 
 test('delete message', async () => {
   let messages = await listMessages(1234);
