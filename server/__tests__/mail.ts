@@ -1,6 +1,7 @@
 import { SendMailOptions, createTransport } from 'nodemailer';
 import { listProxyEmails } from 'lib/proxy-emails/list';
 import { startSMTPServer } from 'lib/mail/smtp-server';
+import { buildTemplate } from 'lib/mail/templates/build';
 import { addProxyEmail } from 'lib/proxy-emails/add';
 import { getProxyEmail } from 'lib/proxy-emails/get';
 import { getRecipient } from 'lib/mail/get-recipient';
@@ -19,6 +20,14 @@ import { saveMail } from 'lib/mail/save';
 import * as CONFIG from 'constants/config';
 import { Ptorx } from 'typings/ptorx';
 import 'lib/tests/prepare';
+
+test('build template', async () => {
+  const template = await buildTemplate('verify-email', {
+    link: 'https://google.com'
+  });
+  expect(template.html).toMatch(/http.+Verify My Email/);
+  expect(template.text).toMatch(/Verify My Email: http/);
+});
 
 test('get recipient: non-ptorx email', async () => {
   const recipient = await getRecipient('test@gmail.com');
