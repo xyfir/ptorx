@@ -3,10 +3,22 @@ import { deletePrimaryEmail } from 'lib/primary-emails/delete';
 import { listPrimaryEmails } from 'lib/primary-emails/list';
 import { getPrimaryEmail } from 'lib/primary-emails/get';
 import { addPrimaryEmail } from 'lib/primary-emails/add';
+import { captureMail } from 'lib/tests/capture-mail';
+import * as CONFIG from 'constants/config';
 import { Ptorx } from 'typings/ptorx';
 import 'lib/tests/prepare';
 
 test('create primary email', async () => {
+  expect.assertions(12);
+
+  captureMail(1, message => {
+    expect(message.subject).toBe(`Verify your email for ${CONFIG.NAME}`);
+    expect(message.from.text).toBe(`noreply--x@${CONFIG.DOMAIN}`);
+    expect(message.to.text).toBe('test@example.com');
+    expect(message.html).toMatch(/http.+Verify My Email/);
+    expect(message.text).toMatch(/Verify My Email: http/);
+  });
+
   const primaryEmail = await addPrimaryEmail(
     { address: 'test@example.com' },
     1234
