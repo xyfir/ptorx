@@ -29,29 +29,25 @@ test('get recipient: non-ptorx email', async () => {
 test('get recipient: proxy email', async () => {
   const proxyEmail = await addProxyEmail(
     {
-      domainId: CONFIG.TESTS.PERSISTENT_DOMAIN_ID,
+      domainId: CONFIG.DOMAIN_ID,
       address: 'recipient'
     },
     1234
   );
-  const recipient = await getRecipient(
-    `recipient@${CONFIG.TESTS.PERSISTENT_DOMAIN_NAME}`
-  );
+  const recipient = await getRecipient(`recipient@${CONFIG.DOMAIN}`);
   const _recipient: Ptorx.Recipient = {
     userId: 1234,
-    address: `recipient@${CONFIG.TESTS.PERSISTENT_DOMAIN_NAME}`,
-    domainId: CONFIG.TESTS.PERSISTENT_DOMAIN_ID,
+    address: `recipient@${CONFIG.DOMAIN}`,
+    domainId: CONFIG.DOMAIN_ID,
     proxyEmailId: proxyEmail.id
   };
   expect(recipient).toMatchObject(_recipient);
 });
 
 test('get recipient: bad address on proxy domain', async () => {
-  const recipient = await getRecipient(
-    `doesnotexist@${CONFIG.TESTS.PERSISTENT_DOMAIN_NAME}`
-  );
+  const recipient = await getRecipient(`doesnotexist@${CONFIG.DOMAIN}`);
   const _recipient: Ptorx.Recipient = {
-    address: `doesnotexist@${CONFIG.TESTS.PERSISTENT_DOMAIN_NAME}`
+    address: `doesnotexist@${CONFIG.DOMAIN}`
   };
   expect(recipient).toMatchObject(_recipient);
 });
@@ -97,7 +93,7 @@ test('save mail', async () => {
       text: 'Hello',
       to: {
         html: '',
-        text: `user@${CONFIG.TESTS.PERSISTENT_DOMAIN_NAME}`,
+        text: `user@${CONFIG.DOMAIN}`,
         value: []
       },
       textAsHtml: '',
@@ -119,7 +115,7 @@ test('save mail', async () => {
     headers: ['Header: Value'],
     html: null,
     subject: 'subject',
-    to: `user@${CONFIG.TESTS.PERSISTENT_DOMAIN_NAME}`,
+    to: `user@${CONFIG.DOMAIN}`,
     text: 'Hello'
   };
   expect(message).toMatchObject(_message);
@@ -139,7 +135,7 @@ test('filter mail', async () => {
     text: 'Match',
     to: {
       html: '',
-      text: `match@${CONFIG.TESTS.PERSISTENT_DOMAIN_NAME}`,
+      text: `match@${CONFIG.DOMAIN}`,
       value: []
     },
     textAsHtml: '',
@@ -158,7 +154,7 @@ test('filter mail', async () => {
     text: 'No',
     to: {
       html: '',
-      text: `no@${CONFIG.TESTS.PERSISTENT_DOMAIN_NAME}`,
+      text: `no@${CONFIG.DOMAIN}`,
       value: []
     },
     textAsHtml: '',
@@ -219,7 +215,7 @@ test('modify mail', async () => {
     html: '<div>Hello <b>world</b>!</div>',
     from: 'user@example.com',
     text: 'Hello world!',
-    to: `user@${CONFIG.TESTS.PERSISTENT_DOMAIN_NAME}`
+    to: `user@${CONFIG.DOMAIN}`
   };
 
   let modifier = await addModifier(
@@ -298,12 +294,12 @@ test('smtp server', async () => {
       session.envelope.mailFrom !== false
         ? session.envelope.mailFrom.address
         : ''
-    ).toBe(CONFIG.TESTS.PERSISTENT_PROXY_EMAIL);
+    ).toBe(CONFIG.PERSISTENT_PROXY_EMAIL);
     expect(session.envelope.rcptTo[0].address).toBe('test@example.com');
 
     // Headers from/to should be unchanged
     expect(message.from.text).toBe('You <foo@example.com>');
-    expect(message.to.text).toBe(CONFIG.TESTS.PERSISTENT_PROXY_EMAIL);
+    expect(message.to.text).toBe(CONFIG.PERSISTENT_PROXY_EMAIL);
 
     expect(message.subject).toBe('Hi');
     expect(message.text).toBe('Hello world?');
@@ -314,18 +310,18 @@ test('smtp server', async () => {
       message.headerLines.find(h => h.key == 'x-custom-header')
     ).not.toBeUndefined();
     expect(message.replyTo.text).toMatch(
-      new RegExp(`^\\d+--.+--reply@${CONFIG.TESTS.PERSISTENT_DOMAIN_NAME}$`)
+      new RegExp(`^\\d+--.+--reply@${CONFIG.DOMAIN}$`)
     );
   });
 
   // Send to ACTUAL SMTP server
   const transporter = createTransport({
+    secure: false,
     host: '127.0.0.1',
     port: CONFIG.SMTP_PORT,
-    secure: false,
     tls: { rejectUnauthorized: false }
   });
-  // foo@example.com -> CONFIG.TESTS.PERSISTENT_PROXY_EMAIL -> test@example.com
+  // foo@example.com -> CONFIG.PERSISTENT_PROXY_EMAIL -> test@example.com
   await expect(
     transporter.sendMail({
       attachments: [
@@ -340,7 +336,7 @@ test('smtp server', async () => {
       from: 'You <foo@example.com>',
       html: '<b>Hello world?</b>',
       text: 'Hello world?',
-      to: CONFIG.TESTS.PERSISTENT_PROXY_EMAIL
+      to: CONFIG.PERSISTENT_PROXY_EMAIL
     })
   ).not.toReject();
 
@@ -376,7 +372,7 @@ test('reply to message', async () => {
     secure: false,
     tls: { rejectUnauthorized: false }
   });
-  // foo@example.com -> ...--reply@CONFIG.TESTS.PERSISTENT_DOMAIN_NAME -> test@example.com
+  // foo@example.com -> ...--reply@CONFIG.DOMAIN -> test@example.com
   await expect(
     transporter.sendMail({
       subject: 'Hello',
