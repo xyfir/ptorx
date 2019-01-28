@@ -111,6 +111,7 @@ export function startSMTPServer(): SMTPServer {
               link.primaryEmailId,
               recipient.userId
             );
+            if (!primaryEmail.verified) continue;
             await sendMail(proxyEmail.domainId, {
               ...outgoing,
               envelope: {
