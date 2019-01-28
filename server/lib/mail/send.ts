@@ -8,7 +8,7 @@ const transporter =
     ? createTransport({
         secure: false,
         host: '127.0.0.1',
-        port: CONFIG.TESTS.SMTP_PORT,
+        port: CONFIG.TEST_SMTP_PORT,
         tls: { rejectUnauthorized: false }
       })
     : createTransport({ sendmail: true });

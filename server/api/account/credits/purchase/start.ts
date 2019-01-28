@@ -38,7 +38,7 @@ export async function api_startCreditsPurchase(
       },
       email: user.email,
       redirect_url: `${
-        CONFIG.PTORX_URL
+        CONFIG.URL
       }/api/account/credits/purchase?payment_id=PAYMENT_ID`
     });
 

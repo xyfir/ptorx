@@ -22,7 +22,7 @@ export function captureMail(
       server.on('error', e => {
         throw e;
       });
-      server.listen(CONFIG.TESTS.SMTP_PORT);
+      server.listen(CONFIG.TEST_SMTP_PORT);
     } catch (err) {
       server ? server.close(resolve) : resolve();
     }

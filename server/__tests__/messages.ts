@@ -11,16 +11,13 @@ import { Ptorx } from 'typings/ptorx';
 import 'lib/tests/prepare';
 
 test('create message', async () => {
-  const proxyEmail = await addProxyEmail(
-    { domainId: CONFIG.TESTS.PERSISTENT_DOMAIN_ID },
-    1234
-  );
+  const proxyEmail = await addProxyEmail({ domainId: CONFIG.DOMAIN_ID }, 1234);
   const message = await addMessage(
     {
       proxyEmailId: proxyEmail.id,
       subject: 'subject',
       from: 'sender@domain.com',
-      to: `test@${CONFIG.TESTS.PERSISTENT_DOMAIN_NAME}`,
+      to: `test@${CONFIG.DOMAIN}`,
       text: 'Hello World',
       html: '<div>Hello World</div>',
       headers: ['Content-Type: text/html; charset="utf-8"'],
@@ -44,7 +41,7 @@ test('create message', async () => {
     proxyEmailId: proxyEmail.id,
     subject: 'subject',
     from: 'sender@domain.com',
-    to: `test@${CONFIG.TESTS.PERSISTENT_DOMAIN_NAME}`,
+    to: `test@${CONFIG.DOMAIN}`,
     text: 'Hello World',
     html: '<div>Hello World</div>',
     headers: ['Content-Type: text/html; charset="utf-8"'],
@@ -57,9 +54,7 @@ test('create message', async () => {
       }
     ],
     replyTo: null,
-    ptorxReplyTo: `${message.id}--${message.key}--reply@${
-      CONFIG.TESTS.PERSISTENT_DOMAIN_NAME
-    }`
+    ptorxReplyTo: `${message.id}--${message.key}--reply@${CONFIG.DOMAIN}`
   };
   expect(message).toMatchObject(_message);
 });
@@ -98,9 +93,7 @@ test('send and reply to messages', async () => {
 
   captureMail(2, incoming => {
     expect(incoming.text.trim()).toBe('content');
-    expect(incoming.from.text).toEndWith(
-      `@${CONFIG.TESTS.PERSISTENT_DOMAIN_NAME}`
-    );
+    expect(incoming.from.text).toEndWith(`@${CONFIG.DOMAIN}`);
     expect(incoming.to.text).toBe('sender@domain.com');
     expect(incoming.subject).toBe('subject');
   });

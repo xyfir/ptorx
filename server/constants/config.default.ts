@@ -11,25 +11,28 @@ export const MYSQL = {
   user: 'root',
   charset: 'UTF8MB4_UNICODE_CI',
   password: '',
-  database: 'ptorx',
+  database: '',
   dateStrings: true,
   connectionLimit: 100,
   supportBigNumbers: true,
   waitForConnections: true
 };
 
-export const TESTS = {
-  PERSISTENT_DOMAIN_NAME: '',
-  PERSISTENT_PROXY_EMAIL: '',
-  PERSISTENT_DOMAIN_ID: 1,
-  SMTP_PORT: 2072
-};
+export const NAME = '';
+
+export const DOMAIN = '';
+
+export const DOMAIN_ID = 4;
+
+export const PERSISTENT_PROXY_EMAIL = '';
+
+export const TEST_SMTP_PORT = 2072;
 
 export const API_PORT = 2070;
 
 export const SMTP_PORT = 2071;
 
-export const PTORX_URL = 'http://localhost:2070';
+export const URL = 'http://localhost:2070';
 
 export const XYPAYMENTS_ID = 13;
 
@@ -45,7 +48,7 @@ export const XYACCOUNTS_URL = 'http://localhost:2000';
 
 export const ACCESS_TOKEN_KEY = '';
 
-export const PTORX_CALLBACK_URL = PTORX_URL;
+export const CALLBACK_URL = 'http://9973719b.ngrok.io';
 
 export const XYPAYMENTS_PRODUCTS = {
   1: 10,

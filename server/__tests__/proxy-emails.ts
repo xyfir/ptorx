@@ -13,7 +13,7 @@ import 'lib/tests/prepare';
 test('create custom proxy email', async () => {
   const proxyEmail = await addProxyEmail(
     {
-      domainId: CONFIG.TESTS.PERSISTENT_DOMAIN_ID,
+      domainId: CONFIG.DOMAIN_ID,
       address: 'test',
       name: 'name'
     },
@@ -27,10 +27,10 @@ test('create custom proxy email', async () => {
     ...proxyEmail,
     name: 'name',
     address: 'test',
-    domainId: CONFIG.TESTS.PERSISTENT_DOMAIN_ID,
+    domainId: CONFIG.DOMAIN_ID,
     saveMail: false,
     links: [],
-    fullAddress: `test@${CONFIG.TESTS.PERSISTENT_DOMAIN_NAME}`
+    fullAddress: `test@${CONFIG.DOMAIN}`
   };
   expect(proxyEmail).toMatchObject(_proxyEmail);
 });
@@ -38,7 +38,7 @@ test('create custom proxy email', async () => {
 test('create random proxy email', async () => {
   const proxyEmail = await addProxyEmail(
     {
-      domainId: CONFIG.TESTS.PERSISTENT_DOMAIN_ID,
+      domainId: CONFIG.DOMAIN_ID,
       saveMail: true
     },
     1234
@@ -47,7 +47,7 @@ test('create random proxy email', async () => {
   const _proxyEmail: Ptorx.ProxyEmail = {
     ...proxyEmail,
     name: '',
-    domainId: CONFIG.TESTS.PERSISTENT_DOMAIN_ID,
+    domainId: CONFIG.DOMAIN_ID,
     saveMail: true
   };
   expect(proxyEmail).toMatchObject(_proxyEmail);

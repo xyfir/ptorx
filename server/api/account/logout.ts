@@ -6,5 +6,5 @@ export function api_logout(
   res: Response,
   next: NextFunction
 ): void {
-  req.session.destroy(() => res.redirect(CONFIG.PTORX_URL));
+  req.session.destroy(() => res.redirect(CONFIG.URL));
 }
