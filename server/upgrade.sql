@@ -220,3 +220,6 @@ ALTER TABLE `proxy_emails` DROP `directForward`;
 ALTER TABLE `messages` ADD `replyTo` TEXT NULL DEFAULT NULL AFTER `headers`;
 -- proxy_emails.name cannot be null
 ALTER TABLE `proxy_emails` CHANGE `name` `name` VARCHAR(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL;
+-- primary emails must be verified
+ALTER TABLE `primary_emails` ADD `key` VARCHAR(36) NOT NULL AFTER `created`, ADD `verified` BOOLEAN NOT NULL AFTER `key`;
+UPDATE primary_emails SET verified = 1;

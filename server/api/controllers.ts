@@ -44,3 +44,4 @@ export * from './modifiers/get';
 export * from './primary-emails/add';
 export * from './primary-emails/delete';
 export * from './primary-emails/list';
+export * from './primary-emails/verify';

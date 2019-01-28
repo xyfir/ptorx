@@ -6,15 +6,18 @@ export async function listPrimaryEmails(
 ): Promise<Ptorx.PrimaryEmailList> {
   const db = new MySQL();
   try {
-    const primaryEmails = await db.query(
+    const primaryEmails: Ptorx.PrimaryEmailList = await db.query(
       `
-        SELECT id, userId, address, created
+        SELECT id, userId, address, created, verified
         FROM primary_emails WHERE userId = ?
       `,
       [userId]
     );
     db.release();
-    return primaryEmails;
+    return primaryEmails.map(e => {
+      e.verified = !!e.verified;
+      return e;
+    });
   } catch (err) {
     db.release();
     throw err;

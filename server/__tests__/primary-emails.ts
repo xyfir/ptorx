@@ -1,5 +1,7 @@
+import { verifyPrimaryEmail } from 'lib/primary-emails/verify';
 import { deletePrimaryEmail } from 'lib/primary-emails/delete';
 import { listPrimaryEmails } from 'lib/primary-emails/list';
+import { getPrimaryEmail } from 'lib/primary-emails/get';
 import { addPrimaryEmail } from 'lib/primary-emails/add';
 import { Ptorx } from 'typings/ptorx';
 import 'lib/tests/prepare';
@@ -9,15 +11,13 @@ test('create primary email', async () => {
     { address: 'test@example.com' },
     1234
   );
-  expect(Object.keys(primaryEmail).length).toBe(4);
+  expect(Object.keys(primaryEmail).length).toBe(6);
   expect(primaryEmail.id).toBeNumber();
   expect(primaryEmail.created).toBeNumber();
   expect(primaryEmail.userId).toBe(1234);
-  const _primaryEmail: Ptorx.PrimaryEmail = {
-    ...primaryEmail,
-    address: 'test@example.com'
-  };
-  expect(primaryEmail).toMatchObject(_primaryEmail);
+  expect(primaryEmail.address).toBe('test@example.com');
+  expect(primaryEmail.verified).toBeFalse();
+  expect(primaryEmail.key).toHaveLength(36);
 });
 
 test('list primary emails', async () => {
@@ -27,9 +27,21 @@ test('list primary emails', async () => {
     'id',
     'userId',
     'address',
-    'created'
+    'created',
+    'verified'
   ];
   expect(primaryEmails[0]).toContainAllKeys(keys);
+});
+
+test('verify primary email', async () => {
+  const primaryEmails = await listPrimaryEmails(1234);
+  const primaryEmail = await getPrimaryEmail(primaryEmails[0].id, 1234);
+  await expect(verifyPrimaryEmail(primaryEmail.id, 'nope', 1234)).toReject();
+  await expect(
+    verifyPrimaryEmail(primaryEmail.id, primaryEmail.key, 1234)
+  ).not.toReject();
+  const _primaryEmail = await getPrimaryEmail(primaryEmail.id, 1234);
+  await expect(_primaryEmail.verified).toBeTrue();
 });
 
 test('delete primary emails', async () => {

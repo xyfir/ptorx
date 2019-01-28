@@ -10,10 +10,10 @@ export async function editPrimaryEmail(
   try {
     await db.query(
       `
-        UPDATE primary_emails SET address = ?
+        UPDATE primary_emails SET verified = ?
         WHERE id = ? AND userId = ?
       `,
-      [primaryEmail.address, primaryEmail.id, userId]
+      [primaryEmail.verified, primaryEmail.id, userId]
     );
     db.release();
     return await getPrimaryEmail(primaryEmail.id, userId);

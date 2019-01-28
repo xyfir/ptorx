@@ -175,9 +175,17 @@ export namespace Ptorx {
     userId: number;
     address: string;
     created: number;
+    key: string;
+    verified: boolean;
   }
 
-  export type PrimaryEmailList = PrimaryEmail[];
+  export type PrimaryEmailList = {
+    id: PrimaryEmail["id"];
+    userId: PrimaryEmail["userId"];
+    address: PrimaryEmail["address"];
+    created: PrimaryEmail["created"];
+    verified: PrimaryEmail["verified"];
+  }[];
 
   export interface Recipient {
     proxyEmailId?: Ptorx.ProxyEmail["id"];

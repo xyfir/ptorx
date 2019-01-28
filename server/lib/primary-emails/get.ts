@@ -7,14 +7,12 @@ export async function getPrimaryEmail(
 ): Promise<Ptorx.PrimaryEmail> {
   const db = new MySQL();
   try {
-    const [primaryEmail] = await db.query(
-      `
-        SELECT id, userId, address, created
-        FROM primary_emails WHERE id = ? AND userId = ?
-      `,
+    const [primaryEmail]: Ptorx.PrimaryEmail[] = await db.query(
+      'SELECT * FROM primary_emails WHERE id = ? AND userId = ?',
       [primaryEmailId, userId]
     );
     db.release();
+    primaryEmail.verified = !!primaryEmail.verified;
     return primaryEmail;
   } catch (err) {
     db.release();
