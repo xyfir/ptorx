@@ -25,6 +25,7 @@ export function startSMTPServer(): SMTPServer {
     async onData(stream, session, callback) {
       const incoming = await simpleParser(stream);
       if (stream.sizeExceeded) return callback(new Error('Message too big'));
+      else callback();
 
       for (let { address } of session.envelope.rcptTo) {
         const recipient = await getRecipient(address);
@@ -126,8 +127,6 @@ export function startSMTPServer(): SMTPServer {
           }
         }
       }
-
-      callback();
     }
   });
   server.on('error', console.error);
