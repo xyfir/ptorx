@@ -23,11 +23,13 @@ export function startSMTPServer(): SMTPServer {
     authOptional: true,
     size: 25000000,
     async onData(stream, session, callback) {
+      const recipients = session.envelope.rcptTo.map(r => r.address);
       const incoming = await simpleParser(stream);
+
       if (stream.sizeExceeded) return callback(new Error('Message too big'));
       else callback();
 
-      for (let { address } of session.envelope.rcptTo) {
+      for (let address of recipients) {
         const recipient = await getRecipient(address);
 
         // Ignore if not for Ptorx
