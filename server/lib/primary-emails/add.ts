@@ -37,7 +37,7 @@ export async function addPrimaryEmail(
     });
     await sendMail(CONFIG.DOMAIN_ID, {
       subject: `Verify your email for ${CONFIG.NAME}`,
-      from: `noreply--x@${CONFIG.DOMAIN}`,
+      from: `noreply-x@${CONFIG.DOMAIN}`,
       html,
       text,
       to: _primaryEmail.address

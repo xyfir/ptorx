@@ -13,7 +13,7 @@ test('create primary email', async () => {
 
   captureMail(1, message => {
     expect(message.subject).toBe(`Verify your email for ${CONFIG.NAME}`);
-    expect(message.from.text).toBe(`noreply--x@${CONFIG.DOMAIN}`);
+    expect(message.from.text).toBe(`noreply-x@${CONFIG.DOMAIN}`);
     expect(message.to.text).toBe('test@example.com');
     expect(message.html).toMatch(/http.+Verify My Email/);
     expect(message.text).toMatch(/Verify My Email: http/);

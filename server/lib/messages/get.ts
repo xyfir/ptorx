@@ -12,7 +12,7 @@ export async function getMessage(
       `
         SELECT
           m.*, pxe.userId,
-          CONCAT(m.id, '--', m.key, '--reply@', d.domain) AS ptorxReplyTo
+          CONCAT(m.id, '--', m.key, '--reply-x@', d.domain) AS ptorxReplyTo
         FROM messages m
         INNER JOIN proxy_emails pxe ON m.proxyEmailId = pxe.id
         INNER JOIN domains d ON d.id = pxe.domainId

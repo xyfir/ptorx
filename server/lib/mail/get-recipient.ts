@@ -7,7 +7,7 @@ export async function getRecipient(address: string): Promise<Ptorx.Recipient> {
   const db = new MySQL();
   try {
     // Reply-To address
-    if (user.endsWith('--reply')) {
+    if (user.endsWith('--reply-x')) {
       try {
         const [messageId, messageKey] = user.split('--');
         const message = await getMessage(+messageId, messageKey);

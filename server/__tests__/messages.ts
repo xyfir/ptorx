@@ -54,7 +54,7 @@ test('create message', async () => {
       }
     ],
     replyTo: null,
-    ptorxReplyTo: `${message.id}--${message.key}--reply@${CONFIG.DOMAIN}`
+    ptorxReplyTo: `${message.id}--${message.key}--reply-x@${CONFIG.DOMAIN}`
   };
   expect(message).toMatchObject(_message);
 });

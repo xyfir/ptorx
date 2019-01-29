@@ -110,7 +110,7 @@ export namespace Ptorx {
       content?: Blob | Buffer;
     }[];
     /**
-     * @example `"messageId--messageKey--reply@domain.tld"`
+     * @example `"messageId--messageKey--reply-x@domain.tld"`
      */
     ptorxReplyTo: string;
   }

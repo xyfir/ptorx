@@ -319,7 +319,7 @@ test('smtp server', async () => {
       message.headerLines.find(h => h.key == 'x-custom-header')
     ).not.toBeUndefined();
     expect(message.replyTo.text).toMatch(
-      new RegExp(`^\\d+--.+--reply@${CONFIG.DOMAIN}$`)
+      new RegExp(`^\\d+--.+--reply-x@${CONFIG.DOMAIN}$`)
     );
   });
 
@@ -381,7 +381,7 @@ test('reply to message', async () => {
     secure: false,
     tls: { rejectUnauthorized: false }
   });
-  // foo@example.com -> ...--reply@CONFIG.DOMAIN -> test@example.com
+  // foo@example.com -> --reply-x@CONFIG.DOMAIN -> test@example.com
   await expect(
     transporter.sendMail({
       subject: 'Hello',
