@@ -1,3 +1,4 @@
 module.exports = {
-  modulePaths: ['<rootDir>/dist']
+  modulePaths: ['<rootDir>/dist'],
+  testMatch: ['**/dist/__tests__/**/*.js']
 };

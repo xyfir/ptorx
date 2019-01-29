@@ -47,12 +47,12 @@
     "@types/jest": "^23.3.13",
     "@types/mailparser": "^2.0.2",
     "@types/mysql": "^2.15.5",
-    "@types/node": "^10.12.18",
+    "@types/node": "^10.12.19",
     "@types/node-forge": "^0.7.11",
     "@types/smtp-server": "^3.5.0",
     "@types/uuid": "^3.4.4",
-    "jest": "^23.6.0",
-    "jest-extended": "^0.11.0",
+    "jest": "^24.0.0",
+    "jest-extended": "^0.11.1",
     "typescript": "^3.2.4"
   }
 }
