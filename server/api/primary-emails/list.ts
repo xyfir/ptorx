@@ -6,7 +6,7 @@ export function api_listPrimaryEmails(
   res: Response,
   next: NextFunction
 ): void {
-  listPrimaryEmails(req.session.uid)
+  listPrimaryEmails(req.jwt.userId)
     .then(primaryEmails => res.status(200).json(primaryEmails))
     .catch(next);
 }

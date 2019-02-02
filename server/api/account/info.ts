@@ -70,7 +70,7 @@ export async function api_getAccountInfo(
     db.release();
 
     // Set session, return account info
-    req.session.uid = uid;
+    req.jwt.userId = uid;
 
     res.status(200).json({
       loggedIn: true,
@@ -81,8 +81,7 @@ export async function api_getAccountInfo(
     });
   } catch (err) {
     db.release();
-    // @ts-ignore
-    req.session.destroy();
+    res.clearCookie('jwt');
     res.status(200).json({ loggedIn: false });
   }
 }

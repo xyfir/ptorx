@@ -6,7 +6,7 @@ export function api_addPrimaryEmail(
   res: Response,
   next: NextFunction
 ): void {
-  addPrimaryEmail({ address: req.body.address }, req.session.uid)
+  addPrimaryEmail({ address: req.body.address }, req.jwt.userId)
     .then(primaryEmail => res.status(200).json(primaryEmail))
     .catch(next);
 }

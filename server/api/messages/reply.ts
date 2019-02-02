@@ -6,7 +6,7 @@ export function api_replyToMessage(
   res: Response,
   next: NextFunction
 ): void {
-  replyToMessage(req.query.message, req.body.content, req.session.uid)
+  replyToMessage(req.query.message, req.body.content, req.jwt.userId)
     .then(() => res.status(200).json({}))
     .catch(next);
 }

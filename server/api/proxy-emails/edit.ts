@@ -6,7 +6,7 @@ export function api_editProxyEmail(
   res: Response,
   next: NextFunction
 ): void {
-  editProxyEmail(req.body, req.session.uid)
+  editProxyEmail(req.body, req.jwt.userId)
     .then(proxyEmail => res.status(200).json(proxyEmail))
     .catch(next);
 }

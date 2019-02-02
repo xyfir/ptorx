@@ -9,10 +9,10 @@ export function api_getFilters(
 ): void {
   const filterId = +req.query.filter;
   filterId
-    ? getFilter(filterId, req.session.uid)
+    ? getFilter(filterId, req.jwt.userId)
         .then(filter => res.status(200).json(filter))
         .catch(next)
-    : listFilters(req.session.uid)
+    : listFilters(req.jwt.userId)
         .then(filters => res.status(200).json(filters))
         .catch(next);
 }

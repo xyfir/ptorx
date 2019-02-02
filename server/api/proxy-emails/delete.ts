@@ -6,7 +6,7 @@ export function api_deleteProxyEmail(
   res: Response,
   next: NextFunction
 ): void {
-  deleteProxyEmail(+req.query.proxyEmail, +req.session.uid)
+  deleteProxyEmail(+req.query.proxyEmail, +req.jwt.userId)
     .then(() => res.status(200).json({}))
     .catch(next);
 }

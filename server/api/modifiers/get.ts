@@ -9,10 +9,10 @@ export function api_getModifiers(
 ): void {
   const modifierId = +req.query.modifier;
   modifierId
-    ? getModifier(modifierId, req.session.uid)
+    ? getModifier(modifierId, req.jwt.userId)
         .then(modifier => res.status(200).json(modifier))
         .catch(next)
-    : listModifiers(req.session.uid)
+    : listModifiers(req.jwt.userId)
         .then(modifiers => res.status(200).json(modifiers))
         .catch(next);
 }

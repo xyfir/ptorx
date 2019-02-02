@@ -6,7 +6,7 @@ export function api_deletePrimaryEmail(
   res: Response,
   next: NextFunction
 ): void {
-  deletePrimaryEmail(+req.query.primaryEmail, req.session.uid)
+  deletePrimaryEmail(+req.query.primaryEmail, req.jwt.userId)
     .then(() => res.status(200).json({}))
     .catch(next);
 }

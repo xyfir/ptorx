@@ -12,7 +12,7 @@ export async function api_startCreditsPurchase(
 
   try {
     const [user] = await db.query('SELECT email FROM users WHERE userId = ?', [
-      req.session.uid
+      req.jwt.userId
     ]);
     if (!user) throw 'No user';
     db.release();
@@ -34,7 +34,7 @@ export async function api_startCreditsPurchase(
       description: 'Ptorx Premium',
       info: {
         credits: { 1: 8333, 2: 18181, 3: 50000 }[req.body.package],
-        userId: req.session.uid
+        userId: req.jwt.userId
       },
       email: user.email,
       redirect_url: `${

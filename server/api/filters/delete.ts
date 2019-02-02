@@ -6,7 +6,7 @@ export function api_deleteFilter(
   res: Response,
   next: NextFunction
 ): void {
-  deleteFilter(+req.query.filter, req.session.uid)
+  deleteFilter(+req.query.filter, req.jwt.userId)
     .then(() => res.status(200).json({}))
     .catch(next);
 }

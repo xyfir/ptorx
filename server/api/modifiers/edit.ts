@@ -6,7 +6,7 @@ export function api_editModifier(
   res: Response,
   next: NextFunction
 ): void {
-  editModifier(req.body, req.session.uid)
+  editModifier(req.body, req.jwt.userId)
     .then(modifier => res.status(200).json(modifier))
     .catch(next);
 }

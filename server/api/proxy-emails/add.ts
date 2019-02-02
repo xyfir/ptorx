@@ -6,7 +6,7 @@ export function api_addProxyEmail(
   res: Response,
   next: NextFunction
 ): void {
-  addProxyEmail(req.body, req.session.uid)
+  addProxyEmail(req.body, req.jwt.userId)
     .then(proxyEmail => res.status(200).json(proxyEmail))
     .catch(next);
 }

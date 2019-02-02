@@ -6,7 +6,7 @@ export function api_addFilter(
   res: Response,
   next: NextFunction
 ): void {
-  addFilter(req.body, req.session.uid)
+  addFilter(req.body, req.jwt.userId)
     .then(filter => res.status(200).json(filter))
     .catch(next);
 }

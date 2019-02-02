@@ -6,7 +6,7 @@ export function api_listDomainUsers(
   res: Response,
   next: NextFunction
 ): void {
-  listDomainUsers(+req.query.domain, req.session.uid)
+  listDomainUsers(+req.query.domain, req.jwt.userId)
     .then(domainUsers => res.status(200).json(domainUsers))
     .catch(next);
 }

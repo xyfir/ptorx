@@ -6,7 +6,7 @@ export function api_verifyDomain(
   res: Response,
   next: NextFunction
 ): void {
-  verifyDomain(+req.body.domainId, req.session.uid)
+  verifyDomain(+req.body.domainId, req.jwt.userId)
     .then(() => res.status(200).json({}))
     .catch(next);
 }

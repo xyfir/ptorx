@@ -6,7 +6,7 @@ export function api_sendMessage(
   res: Response,
   next: NextFunction
 ): void {
-  sendMessage(req.body, req.session.uid)
+  sendMessage(req.body, req.jwt.userId)
     .then(() => res.status(200).json({}))
     .catch(next);
 }

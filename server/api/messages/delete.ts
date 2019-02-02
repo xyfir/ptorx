@@ -6,7 +6,7 @@ export function api_deleteMessage(
   res: Response,
   next: NextFunction
 ): void {
-  deleteMessage(req.query.message, req.session.uid)
+  deleteMessage(req.query.message, req.jwt.userId)
     .then(() => res.status(200).json({}))
     .catch(next);
 }

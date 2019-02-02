@@ -9,10 +9,10 @@ export function api_getProxyEmails(
 ): void {
   const proxyEmailId = +req.query.proxyEmail;
   proxyEmailId
-    ? getProxyEmail(proxyEmailId, req.session.uid)
+    ? getProxyEmail(proxyEmailId, req.jwt.userId)
         .then(proxyEmail => res.status(200).json(proxyEmail))
         .catch(next)
-    : listProxyEmails(req.session.uid)
+    : listProxyEmails(req.jwt.userId)
         .then(proxyEmails => res.status(200).json(proxyEmails))
         .catch(next);
 }

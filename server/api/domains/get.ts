@@ -9,10 +9,10 @@ export function api_getDomains(
 ): void {
   const domainId = +req.query.domain;
   domainId
-    ? getDomain(domainId, req.session.uid)
+    ? getDomain(domainId, req.jwt.userId)
         .then(domain => res.status(200).json(domain))
         .catch(next)
-    : listDomains(req.session.uid)
+    : listDomains(req.jwt.userId)
         .then(domains => res.status(200).json(domains))
         .catch(next);
 }

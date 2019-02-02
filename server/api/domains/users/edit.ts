@@ -6,7 +6,7 @@ export function api_editDomainUser(
   res: Response,
   next: NextFunction
 ): void {
-  editDomainUser(req.body, req.session.uid)
+  editDomainUser(req.body, req.jwt.userId)
     .then(() => res.status(200).json({}))
     .catch(next);
 }

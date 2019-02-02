@@ -23,13 +23,13 @@ export async function api_finishCreditsPurchase(
 
     if (payment.data.fulfilled) throw 'Payment was already fulfilled';
     if (payment.data.paid === null) throw 'Payment was not paid';
-    if (payment.data.info.userId != req.session.uid) throw 'Wrong user';
+    if (payment.data.info.userId != req.jwt.userId) throw 'Wrong user';
 
     // Update user's account
 
     await db.query('UPDATE users SET credits = ? WHERE userId = ?', [
       payment.data.info.credits,
-      req.session.uid
+      req.jwt.userId
     ]);
 
     // Mark payment fulfilled

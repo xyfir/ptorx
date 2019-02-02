@@ -6,7 +6,7 @@ export function api_deleteModifier(
   res: Response,
   next: NextFunction
 ): void {
-  deleteModifier(+req.query.modifier, req.session.uid)
+  deleteModifier(+req.query.modifier, req.jwt.userId)
     .then(() => res.status(200).json({}))
     .catch(next);
 }

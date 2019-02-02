@@ -6,7 +6,7 @@ export function api_editFilter(
   res: Response,
   next: NextFunction
 ): void {
-  editFilter(req.body, req.session.uid)
+  editFilter(req.body, req.jwt.userId)
     .then(filter => res.status(200).json(filter))
     .catch(next);
 }

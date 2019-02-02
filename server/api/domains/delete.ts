@@ -6,7 +6,7 @@ export function api_deleteDomain(
   res: Response,
   next: NextFunction
 ): void {
-  deleteDomain(+req.query.domain, req.session.uid)
+  deleteDomain(+req.query.domain, req.jwt.userId)
     .then(() => res.status(200).json({}))
     .catch(next);
 }

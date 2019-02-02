@@ -6,7 +6,7 @@ export function api_addDomainUser(
   res: Response,
   next: NextFunction
 ): void {
-  addDomainUser(req.body.domain, req.session.uid)
+  addDomainUser(req.body.domain, req.jwt.userId)
     .then(domainUser =>
       res.status(200).json({ requestKey: domainUser.requestKey })
     )

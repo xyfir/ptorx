@@ -53,7 +53,7 @@ export async function api_login(
       await db.query(sql, vars);
       db.release();
 
-      req.session.uid = result.insertId;
+      req.jwt.userId = result.insertId;
 
       res.status(200).json({
         accessToken: cryptr.encrypt(
@@ -71,7 +71,7 @@ export async function api_login(
 
       if (!result.affectedRows) throw '---';
 
-      req.session.uid = rows[0].userId;
+      req.jwt.userId = rows[0].userId;
 
       res.status(200).json({
         accessToken: cryptr.encrypt(

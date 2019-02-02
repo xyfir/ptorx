@@ -9,7 +9,7 @@ export function api_verifyPrimaryEmail(
   verifyPrimaryEmail(
     +req.query.primaryEmailId,
     req.query.primaryEmailKey,
-    req.session.uid
+    req.jwt.userId
   )
     .then(() => res.status(200).redirect('/primary-emails'))
     .catch(next);
