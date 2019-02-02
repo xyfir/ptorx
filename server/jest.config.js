@@ -1,4 +1,5 @@
 module.exports = {
+  watchPathIgnorePatterns: ['\\.ts$'],
   modulePaths: ['<rootDir>/dist'],
-  testMatch: ['**/dist/__tests__/**/*.js']
+  testMatch: ['<rootDir>/dist/__tests__/**/*.js']
 };
