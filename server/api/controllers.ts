@@ -1,7 +1,7 @@
 export * from './account/credits/purchase/finish';
 export * from './account/credits/purchase/start';
 
-export * from './account/email/template';
+export * from './account/set-template';
 
 export * from './account/info';
 export * from './account/login';
