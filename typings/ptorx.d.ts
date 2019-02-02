@@ -1,13 +1,13 @@
 export namespace Ptorx {
   export interface User {
-    id: number;
+    userId: number;
     email: string;
     credits: number;
     emailTemplate?: number;
   }
 
   export interface JWT {
-    userId: Ptorx.User["id"];
+    userId: Ptorx.User["userId"];
     email: Ptorx.User["email"];
   }
 
