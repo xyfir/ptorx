@@ -275,7 +275,7 @@ test('modify mail', async () => {
 test('send mail', async () => {
   const [domain] = await listDomains(1234);
   expect.assertions(5);
-  captureMail(1, incoming => {
+  const promise = captureMail(1, incoming => {
     expect(incoming.text.trim()).toBe('Hello world');
     expect(incoming.from.text).toBe(`test@${domain.domain}`);
     expect(incoming.to.text).toBe('test@example.com');
@@ -289,15 +289,16 @@ test('send mail', async () => {
       to: 'test@example.com'
     })
   ).not.toReject();
+  await promise;
 }, 10000);
 
 test('smtp server', async () => {
-  expect.assertions(12);
+  expect.assertions(11);
 
   const server = startSMTPServer();
 
   // Catch REDIRECTED mail
-  captureMail(1, (message, session) => {
+  const promise = captureMail(1, (message, session) => {
     // Envelope from/to should have changed
     expect(
       session.envelope.mailFrom !== false
@@ -331,29 +332,27 @@ test('smtp server', async () => {
     tls: { rejectUnauthorized: false }
   });
   // foo@example.com -> CONFIG.PERSISTENT_PROXY_EMAIL -> test@example.com
-  await expect(
-    transporter.sendMail({
-      attachments: [
-        {
-          contentType: 'text/html',
-          filename: 'test.txt',
-          content: Buffer.from('Hello World')
-        }
-      ],
-      headers: [{ key: 'X-Custom-Header', value: 'Hello' }],
-      subject: 'Hi',
-      from: 'You <foo@example.com>',
-      html: '<b>Hello world?</b>',
-      text: 'Hello world?',
-      to: CONFIG.PERSISTENT_PROXY_EMAIL
-    })
-  ).not.toReject();
-
+  await transporter.sendMail({
+    attachments: [
+      {
+        contentType: 'text/html',
+        filename: 'test.txt',
+        content: Buffer.from('Hello World')
+      }
+    ],
+    headers: [{ key: 'X-Custom-Header', value: 'Hello' }],
+    subject: 'Hi',
+    from: 'You <foo@example.com>',
+    html: '<b>Hello world?</b>',
+    text: 'Hello world?',
+    to: CONFIG.PERSISTENT_PROXY_EMAIL
+  });
+  await promise;
   await new Promise(r => server.close(r));
 });
 
 test('reply to message', async () => {
-  expect.assertions(5);
+  expect.assertions(4);
   const server = startSMTPServer();
 
   const [proxyEmail] = await listProxyEmails(1234);
@@ -368,7 +367,7 @@ test('reply to message', async () => {
     1234
   );
   // Catch REDIRECTED mail
-  captureMail(1, message => {
+  const promise = captureMail(1, message => {
     expect(message.text.trim()).toBe('This is a reply');
     expect(message.from.text).toBe(proxyEmail.fullAddress);
     expect(message.to.text).toBe('test@example.com');
@@ -382,14 +381,12 @@ test('reply to message', async () => {
     tls: { rejectUnauthorized: false }
   });
   // foo@example.com -> --reply-x@CONFIG.DOMAIN -> test@example.com
-  await expect(
-    transporter.sendMail({
-      subject: 'Hello',
-      from: 'foo@example.com',
-      text: 'This is a reply',
-      to: message.ptorxReplyTo
-    })
-  ).not.toReject();
-
+  await transporter.sendMail({
+    subject: 'Hello',
+    from: 'foo@example.com',
+    text: 'This is a reply',
+    to: message.ptorxReplyTo
+  });
+  await promise;
   await new Promise(r => server.close(r));
 });
