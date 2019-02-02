@@ -4,7 +4,6 @@ export * from './account/credits/purchase/start';
 export * from './account/set-template';
 
 export * from './account/get';
-export * from './account/login';
 export * from './account/logout';
 
 export * from './domains/users/edit';
