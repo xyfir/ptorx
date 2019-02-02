@@ -30,7 +30,7 @@ router.post('/primary-emails', c.api_addPrimaryEmail);
 router.delete('/primary-emails', c.api_deletePrimaryEmail);
 router.get('/primary-emails/verify', c.api_verifyPrimaryEmail);
 
-router.get('/account', c.api_getAccountInfo);
+router.get('/account', c.api_getUser);
 router.put('/account/template', c.api_setEmailTemplate);
 router.post('/account/login', c.api_login);
 router.get('/account/logout', c.api_logout);

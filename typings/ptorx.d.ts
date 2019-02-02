@@ -1,9 +1,14 @@
 export namespace Ptorx {
-  export interface Account {
-    loggedIn: boolean;
-    uid: number;
+  export interface User {
+    id: number;
+    email: string;
     credits: number;
     emailTemplate?: number;
+  }
+
+  export interface JWT {
+    userId: Ptorx.User["id"];
+    email: Ptorx.User["email"];
   }
 
   export interface Domain {

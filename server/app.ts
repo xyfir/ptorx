@@ -1,32 +1,29 @@
 import 'app-module-path/register';
 import { startSMTPServer } from 'lib/mail/smtp-server';
-import * as Session from 'express-session';
+import * as cookieParser from 'cookie-parser';
+import * as bodyParser from 'body-parser';
 import * as Express from 'express';
-import * as parser from 'body-parser';
 import * as CONFIG from 'constants/config';
-import * as Store from 'express-mysql-session';
 import { router } from 'api/router';
+import { Ptorx } from 'typings/ptorx';
 import * as path from 'path';
+import * as jwt from 'jsonwebtoken';
 import { cron } from 'jobs/cron';
 
-// @ts-ignore
-const SessionStore = Store(Session);
+declare module 'express' {
+  interface Request {
+    jwt?: Ptorx.JWT;
+  }
+}
+
 const app = Express();
-
-app.listen(CONFIG.API_PORT, () => console.log('Listening on', CONFIG.API_PORT));
-
-app.use(
-  Session({
-    store: new SessionStore(CONFIG.MYSQL),
-    secret: CONFIG.SESSION_SECRET,
-    resave: false,
-    saveUninitialized: false
-  })
-);
 if (!CONFIG.PROD) {
+  // Needed to allow communication from webpack-dev-server host
   app.use((req, res, next) => {
-    req.session.uid = 1;
-    res.header('Access-Control-Allow-Origin', '*');
+    res.header(
+      'Access-Control-Allow-Origin',
+      `http://localhost:${CONFIG.WEBPACK_PORT}`
+    );
     res.header(
       'Access-Control-Allow-Methods',
       'GET, POST, OPTIONS, PUT, DELETE'
@@ -35,12 +32,40 @@ if (!CONFIG.PROD) {
       'Access-Control-Allow-Headers',
       'Origin, X-Requested-With, Content-Type, Accept'
     );
+    res.header('Access-Control-Allow-Credentials', 'true');
     next();
   });
 }
-app.use(parser.json({ limit: '26mb' }));
-app.use(parser.urlencoded({ extended: true, limit: '26mb' }));
 app.use('/static', Express.static(__dirname + '../web/dist'));
+app.use(bodyParser.json({ limit: '35mb' }));
+app.use(bodyParser.urlencoded({ extended: true, limit: '35mb' }));
+app.use(cookieParser());
+app.use(
+  async (
+    req: Express.Request,
+    res: Express.Response,
+    next: Express.NextFunction
+  ) => {
+    try {
+      // Verify JWT
+      if (req.cookies.jwt) {
+        req.jwt = await new Promise((resolve, reject) =>
+          jwt.verify(req.cookies.jwt, CONFIG.JWT_KEY, {}, (err, token) =>
+            err ? reject(err) : resolve(token as Express.Request['jwt'])
+          )
+        );
+      }
+      // Nothing to verify
+      else {
+        throw 'No JWT provided';
+      }
+    } catch (err) {
+      req.jwt = null;
+      if (req.cookies.jwt) res.clearCookie('jwt');
+    }
+    next();
+  }
+);
 app.use('/api/6', router);
 app.get('/*', (req, res) =>
   res.sendFile(path.resolve(CONFIG.DIRECTORIES.WEB, 'dist', 'index.html'))
@@ -60,6 +85,7 @@ app.use(
     }
   }
 );
+app.listen(CONFIG.API_PORT, () => console.log('Listening on', CONFIG.API_PORT));
 
 if (CONFIG.CRON) cron();
 
