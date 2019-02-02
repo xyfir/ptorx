@@ -223,3 +223,34 @@ ALTER TABLE `proxy_emails` CHANGE `name` `name` VARCHAR(100) CHARACTER SET utf8m
 -- primary emails must be verified
 ALTER TABLE `primary_emails` ADD `key` VARCHAR(36) NOT NULL AFTER `created`, ADD `verified` BOOLEAN NOT NULL AFTER `key`;
 UPDATE primary_emails SET verified = 1;
+
+-----
+
+-- updates for new account system
+ALTER TABLE `users` DROP `xyfirId`;
+ALTER TABLE `ptorx`.`domains` DROP FOREIGN KEY `fk__domains__userId`;
+ALTER TABLE `domains` DROP INDEX `fk__domains__userId`;
+ALTER TABLE `ptorx`.`domain_users` DROP FOREIGN KEY `fk__domain_users__userId`;
+ALTER TABLE `domain_users` DROP INDEX `fk__domain_users__userId`;
+ALTER TABLE `ptorx`.`filters` DROP FOREIGN KEY `fk__filters__userId`;
+ALTER TABLE `filters` DROP INDEX `fk__filters__userId`;
+ALTER TABLE `ptorx`.`modifiers` DROP FOREIGN KEY `fk__modifiers__userId`;
+ALTER TABLE `modifiers` DROP INDEX `fk__modifiers__userId`;
+ALTER TABLE `ptorx`.`primary_emails` DROP FOREIGN KEY `fk__primary_emails__user_id`;
+ALTER TABLE `primary_emails` DROP INDEX `fk__primary_emails__userId`;
+ALTER TABLE `ptorx`.`proxy_emails` DROP FOREIGN KEY `fk__proxy_emails__userId`;
+ALTER TABLE `proxy_emails` DROP INDEX `fk__proxy_emails__userId`;
+ALTER TABLE `users` CHANGE `userId` `userId` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT;
+ALTER TABLE `domains` CHANGE `userId` `userId` BIGINT UNSIGNED NOT NULL;
+ALTER TABLE `domain_users` CHANGE `userId` `userId` BIGINT UNSIGNED NOT NULL;
+ALTER TABLE `filters` CHANGE `userId` `userId` BIGINT UNSIGNED NOT NULL;
+ALTER TABLE `modifiers` CHANGE `userId` `userId` BIGINT UNSIGNED NOT NULL;
+ALTER TABLE `primary_emails` CHANGE `userId` `userId` BIGINT UNSIGNED NOT NULL;
+ALTER TABLE `proxy_emails` CHANGE `userId` `userId` BIGINT UNSIGNED NOT NULL;
+ALTER TABLE `domains` ADD CONSTRAINT `fk__domains__userId` FOREIGN KEY (`userId`) REFERENCES `users`(`userId`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `domain_users` ADD CONSTRAINT `fk__domain_users__userId` FOREIGN KEY (`userId`) REFERENCES `users`(`userId`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `filters` ADD CONSTRAINT `fk__filters__userId` FOREIGN KEY (`userId`) REFERENCES `users`(`userId`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `modifiers` ADD CONSTRAINT `fk__modifiers__userId` FOREIGN KEY (`userId`) REFERENCES `users`(`userId`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `primary_emails` ADD CONSTRAINT `fk__primary_emails__userId` FOREIGN KEY (`userId`) REFERENCES `users`(`userId`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `proxy_emails` ADD CONSTRAINT `fk__proxy_emails__userId` FOREIGN KEY (`userId`) REFERENCES `users`(`userId`) ON DELETE CASCADE ON UPDATE CASCADE;
+DROP TABLE `ptorx`.`sessions`
