@@ -29,7 +29,7 @@
     "mailparser": "^2.4.3",
     "moment": "^2.24.0",
     "mysql": "^2.16.0",
-    "node-forge": "^0.7.6",
+    "node-forge": "^0.8.0",
     "nodemailer": "^5.1.1",
     "rword": "^3.0.0",
     "smtp-server": "^3.5.0",
@@ -45,12 +45,12 @@
     "@types/jsonwebtoken": "^8.3.0",
     "@types/mailparser": "^2.0.2",
     "@types/mysql": "^2.15.5",
-    "@types/node": "^10.12.19",
+    "@types/node": "^10.12.21",
     "@types/node-forge": "^0.7.11",
     "@types/smtp-server": "^3.5.0",
     "@types/uuid": "^3.4.4",
     "jest": "^24.0.0",
     "jest-extended": "^0.11.1",
-    "typescript": "^3.2.4"
+    "typescript": "^3.3.1"
   }
 }
