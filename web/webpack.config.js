@@ -58,17 +58,7 @@ module.exports = {
           ]
         }
       },
-      {
-        test: /\.s?css$/,
-        use: [
-          'style-loader',
-          'css-loader',
-          {
-            loader: 'sass-loader',
-            options: { outputStyle: PROD ? 'compressed' : 'expanded' }
-          }
-        ]
-      },
+      { test: /\.css$/, use: ['style-loader', 'css-loader'] },
       {
         test: /\.(png|woff|woff2|eot|ttf|svg)$/,
         use: [

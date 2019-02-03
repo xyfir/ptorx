@@ -1,4 +1,3 @@
-import 'styles/styles.scss';
 import 'typeface-roboto';
 
 import { AppRouter } from 'components/app/Router';
