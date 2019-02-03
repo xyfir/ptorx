@@ -1,8 +1,8 @@
+import { AppState } from 'components/App';
 import * as React from 'react';
-import { Ptorx } from 'typings/ptorx';
 
-export type AppContextValue = {
-  account: Ptorx.User;
-};
+export interface AppContextValue extends AppState {
+  reload(): void;
+}
 
 export const AppContext = React.createContext<AppContextValue | null>(null);
