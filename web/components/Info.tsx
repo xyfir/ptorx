@@ -1,4 +1,4 @@
-import { ACCOWNT_URL } from 'constants/config';
+import { ACCOWNT_WEB_URL } from 'constants/config';
 import { Button } from '@material-ui/core';
 import * as React from 'react';
 
@@ -9,11 +9,11 @@ export const Info = () => (
       Protect your privacy, strengthen your security, and take control of your
       emails.
     </p>
-    <Button variant="contained" color="primary" href={ACCOWNT_URL}>
+    <Button variant="contained" color="primary" href={ACCOWNT_WEB_URL}>
       Login
     </Button>{' '}
     or{' '}
-    <Button variant="contained" color="primary" href={ACCOWNT_URL}>
+    <Button variant="contained" color="primary" href={ACCOWNT_WEB_URL}>
       Register
     </Button>
     <h2>How It Works</h2>
