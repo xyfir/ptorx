@@ -1,6 +1,6 @@
 import { ACCOWNT_API_URL, HELP_DOCS_URL, NAME } from 'constants/config';
 import { AccountBox, ExitToApp, Help, Menu } from '@material-ui/icons';
-import { Search } from 'components/Search';
+import { Search } from 'components/panel/Search';
 import * as React from 'react';
 import { Link } from 'react-router-dom';
 import {

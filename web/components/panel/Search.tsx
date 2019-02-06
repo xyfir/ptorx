@@ -1,5 +1,5 @@
 import { TextField, ListItemText, ListItem, List } from '@material-ui/core';
-import { PanelState } from 'components/Panel';
+import { PanelState } from 'components/panel/Panel';
 import { AppContext } from 'lib/AppContext';
 import * as moment from 'moment';
 import * as React from 'react';
@@ -16,6 +16,8 @@ interface SearchState {
 }
 
 export class Search extends React.Component<SearchProps, SearchState> {
+  state: SearchState = { search: '' };
+
   search<T>(items: T[]): T[] {
     const { search } = this.state;
     if (search) {

@@ -1,11 +1,11 @@
-import { MuiThemeProvider, CssBaseline } from '@material-ui/core';
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
+import { MuiThemeProvider, CssBaseline } from '@material-ui/core';
 import { AppContext } from 'lib/AppContext';
 import * as React from 'react';
 import { theme } from 'constants/theme';
-import { Panel } from 'components/Panel';
+import { Panel } from 'components/panel/Panel';
 import { Ptorx } from 'typings/ptorx';
-import { Info } from 'components/Info';
+import { Info } from 'components/info/Info';
 import { api } from 'lib/api';
 
 export interface AppState {
