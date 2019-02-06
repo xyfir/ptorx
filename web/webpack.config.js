@@ -1,19 +1,17 @@
 const CompressionPlugin = require('compression-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const webpack = require('webpack');
-const config = require('./constants/config');
+const CONFIG = require('./constants/config');
 const path = require('path');
 
-const PROD = config.ENVIRONMENT == 'production';
-
 module.exports = {
-  mode: config.ENVIRONMENT,
+  mode: CONFIG.PROD ? 'production' : 'development',
 
   entry: './lib/index.ts',
 
   output: {
     publicPath: '/static/',
-    filename: PROD ? '[name].[hash].js' : '[name].js',
+    filename: CONFIG.PROD ? '[name].[hash].js' : '[name].js',
     pathinfo: false,
     path: path.resolve(__dirname, 'dist')
   },
@@ -74,16 +72,16 @@ module.exports = {
   plugins: [
     new webpack.DefinePlugin({
       'process.env': {
-        NODE_ENV: JSON.stringify(config.ENVIRONMENT)
+        NODE_ENV: JSON.stringify(CONFIG.PROD ? 'production' : 'development')
       }
     }),
     new HtmlWebpackPlugin({
       title: 'Send & Receive Mail Anonymously with Ptorx',
-      minify: PROD,
+      minify: CONFIG.PROD,
       template: 'template.html'
     }),
-    PROD ? new CompressionPlugin({ filename: '[path].gz' }) : null,
-    PROD ? null : new webpack.HotModuleReplacementPlugin()
+    CONFIG.PROD ? new CompressionPlugin({ filename: '[path].gz' }) : null,
+    CONFIG.PROD ? null : new webpack.HotModuleReplacementPlugin()
   ].filter(p => p !== null),
 
   devtool: 'inline-source-map',
@@ -98,7 +96,7 @@ module.exports = {
     /** @todo remove this eventually */
     disableHostCheck: true,
     contentBase: path.join(__dirname, 'dist'),
-    port: 20070,
+    port: CONFIG.PORT,
     hot: true
   }
 };
