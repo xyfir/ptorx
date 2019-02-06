@@ -1,54 +1,110 @@
-import { ACCOWNT_WEB_URL } from 'constants/config';
-import { Button } from '@material-ui/core';
+import { ACCOWNT_WEB_URL, NAME } from 'constants/config';
 import * as React from 'react';
+import {
+  createStyles,
+  Typography,
+  WithStyles,
+  withStyles,
+  Button,
+  Theme
+} from '@material-ui/core';
 
-export const Info = () => (
-  <div>
-    <h1>Send and Receive Mail Anonymously</h1>
-    <p>
+const styles = (theme: Theme) =>
+  createStyles({
+    root: {
+      padding: '2em'
+    },
+    buttons: {
+      marginBottom: '1.5em'
+    },
+    h1: {
+      fontWeight: 'bold',
+      fontSize: '250%',
+      color: theme.palette.primary.main
+    },
+    h2: {
+      fontWeight: 'bold',
+      fontSize: '200%',
+      color: theme.palette.secondary.main
+    },
+    ol: {
+      fontFamily: '"Roboto"',
+      fontSize: '110%'
+    },
+    p: {
+      fontSize: '110%',
+      lineHeight: '125%',
+      marginBottom: '1.5em'
+    },
+    a: {
+      textDecoration: 'none',
+      color: theme.palette.primary.main
+    }
+  });
+
+const _Info = ({ classes }: WithStyles<typeof styles>) => (
+  <div className={classes.root}>
+    <Typography variant="h1" className={classes.h1}>
+      Send and Receive Mail Anonymously
+    </Typography>
+    <Typography variant="body2" className={classes.p}>
       Protect your privacy, strengthen your security, and take control of your
-      emails.
-    </p>
-    <Button variant="contained" color="primary" href={ACCOWNT_WEB_URL}>
-      Login
-    </Button>{' '}
-    or{' '}
-    <Button variant="contained" color="primary" href={ACCOWNT_WEB_URL}>
-      Register
-    </Button>
-    <h2>How It Works</h2>
-    <ol>
+      emails with {NAME}.
+    </Typography>
+    <div className={classes.buttons}>
+      <Button variant="contained" color="primary" href={ACCOWNT_WEB_URL}>
+        Login
+      </Button>{' '}
+      or{' '}
+      <Button variant="contained" color="primary" href={ACCOWNT_WEB_URL}>
+        Register
+      </Button>
+    </div>
+    <Typography variant="h2" className={classes.h2}>
+      How It Works
+    </Typography>
+    <ol className={classes.ol}>
       <li>Create a proxy email</li>
       <li>Tell us where to forward incoming mail to</li>
       <li>View mail sent to your proxy email from your preferred email app</li>
       <li>Reply to mail and it'll show as being sent from your proxy email</li>
     </ol>
-    <h2>What's a Proxy Email?</h2>
-    <p>
+    <Typography variant="h2" className={classes.h2}>
+      What's a Proxy Email?
+    </Typography>
+    <Typography variant="body2" className={classes.p}>
       A proxy email is like an email alias or a forwarding address. Any mail
       sent to it is redirected to the email addresses you configure. Proxy
       emails also allow for many extra features like filtering and modifying
       your incoming mail before it's forwarded.
-    </p>
-    <h2>Why Use a Proxy Email?</h2>
-    <p>
+    </Typography>
+    <Typography variant="h2" className={classes.h2}>
+      Why Use a Proxy Email?
+    </Typography>
+    <Typography variant="body2" className={classes.p}>
       To prevent spam, keep your email off of "people search" websites, thwart
       hackers and spammers when database breaches occur, easily transfer mail
       when you update primary email addresses, filter out mail before it ever
       reaches your inbox, and the list goes on.
-    </p>
-    <h2>Bring Your Own Domains</h2>
-    <p>
+    </Typography>
+    <Typography variant="h2" className={classes.h2}>
+      Bring Your Own Domains
+    </Typography>
+    <Typography variant="body2" className={classes.p}>
       As many of them as you want. Configure a few easy DNS records and create
       proxy emails for your own domain.
-    </p>
-    <h2>Open Source</h2>
-    <p>
+    </Typography>
+    <Typography variant="h2" className={classes.h2}>
+      Open Source
+    </Typography>
+    <Typography variant="body2" className={classes.p}>
       Don't trust us with your emails?{' '}
-      <a href="https://github.com/Xyfir/Ptorx">
+      <a href="https://github.com/Xyfir/Ptorx" className={classes.a}>
         Our code is completely open source for you to view.
       </a>{' '}
       Host your own server if you'd like.
-    </p>
+    </Typography>
   </div>
 );
+
+export const Info = withStyles(styles)(_Info);
