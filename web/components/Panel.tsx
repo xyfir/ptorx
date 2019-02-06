@@ -1,17 +1,22 @@
 import { ACCOWNT_API_URL, HELP_DOCS_URL, NAME } from 'constants/config';
+import { AccountBox, ExitToApp, Help, Menu } from '@material-ui/icons';
 import { Search } from 'components/Search';
 import * as React from 'react';
-import { Menu } from '@material-ui/icons';
 import { Link } from 'react-router-dom';
 import {
+  ListItemSecondaryAction,
+  ListSubheader,
+  ListItemIcon,
   ListItemText,
   createStyles,
   WithStyles,
+  withStyles,
   IconButton,
   Typography,
   ListItem,
   Toolbar,
   Divider,
+  Switch,
   Hidden,
   AppBar,
   Drawer,
@@ -24,6 +29,9 @@ const styles = (theme: Theme) =>
   createStyles({
     root: {
       display: 'flex'
+    },
+    link: {
+      textDecoration: 'none'
     },
     drawer: {
       [theme.breakpoints.up('sm')]: {
@@ -63,10 +71,7 @@ export interface PanelState {
   >;
 }
 
-export class Panel extends React.Component<
-  WithStyles<typeof styles>,
-  PanelState
-> {
+class _Panel extends React.Component<WithStyles<typeof styles>, PanelState> {
   state: PanelState = { showDrawer: false, categories: ['proxy emails'] };
 
   onSelectCategory(category: PanelState['categories'][0]) {}
@@ -76,65 +81,101 @@ export class Panel extends React.Component<
     const { classes } = this.props;
     const drawer = (
       <div>
-        <div className={classes.toolbar} />
-        <Divider />
+        <ListSubheader>Filters</ListSubheader>
+
         <List>
-          <ListItem
-            selected={categories.indexOf('primary emails') > -1}
-            onClick={() => this.onSelectCategory('primary emails')}
-            button
-          >
-            <ListItemText primary="primary emails" />
+          <ListItem>
+            <ListItemText primary="Primary Emails" />
+            <ListItemSecondaryAction>
+              <Switch
+                onChange={() => this.onSelectCategory('primary emails')}
+                checked={categories.indexOf('primary emails') > -1}
+              />
+            </ListItemSecondaryAction>
           </ListItem>
-          <ListItem
-            selected={categories.indexOf('proxy emails') > -1}
-            onClick={() => this.onSelectCategory('proxy emails')}
-            button
-          >
-            <ListItemText primary="proxy emails" />
+
+          <ListItem>
+            <ListItemText primary="Proxy Emails" />
+            <ListItemSecondaryAction>
+              <Switch
+                onChange={() => this.onSelectCategory('proxy emails')}
+                checked={categories.indexOf('proxy emails') > -1}
+              />
+            </ListItemSecondaryAction>
           </ListItem>
-          <ListItem
-            selected={categories.indexOf('modifiers') > -1}
-            onClick={() => this.onSelectCategory('modifiers')}
-            button
-          >
-            <ListItemText primary="modifiers" />
+
+          <ListItem>
+            <ListItemText primary="Modifiers" />
+            <ListItemSecondaryAction>
+              <Switch
+                onChange={() => this.onSelectCategory('modifiers')}
+                checked={categories.indexOf('modifiers') > -1}
+              />
+            </ListItemSecondaryAction>
           </ListItem>
-          <ListItem
-            selected={categories.indexOf('messages') > -1}
-            onClick={() => this.onSelectCategory('messages')}
-            button
-          >
-            <ListItemText primary="messages" />
+
+          <ListItem>
+            <ListItemText primary="Messages" />
+            <ListItemSecondaryAction>
+              <Switch
+                onChange={() => this.onSelectCategory('messages')}
+                checked={categories.indexOf('messages') > -1}
+              />
+            </ListItemSecondaryAction>
           </ListItem>
-          <ListItem
-            selected={categories.indexOf('filters') > -1}
-            onClick={() => this.onSelectCategory('filters')}
-            button
-          >
-            <ListItemText primary="filters" />
+
+          <ListItem>
+            <ListItemText primary="Filters" />
+            <ListItemSecondaryAction>
+              <Switch
+                onChange={() => this.onSelectCategory('filters')}
+                checked={categories.indexOf('filters') > -1}
+              />
+            </ListItemSecondaryAction>
           </ListItem>
-          <ListItem
-            selected={categories.indexOf('domains') > -1}
-            onClick={() => this.onSelectCategory('domains')}
-            button
-          >
-            <ListItemText primary="domains" />
+
+          <ListItem>
+            <ListItemText primary="Domains" />
+            <ListItemSecondaryAction>
+              <Switch
+                onChange={() => this.onSelectCategory('domains')}
+                checked={categories.indexOf('domains') > -1}
+              />
+            </ListItemSecondaryAction>
           </ListItem>
         </List>
+
         <Divider />
+
         <List>
-          <Link to="/app/account">
-            <ListItem>
-              <ListItemText primary="account" />
+          <Link to="/app/account" className={classes.link}>
+            <ListItem button>
+              <ListItemIcon>
+                <AccountBox />
+              </ListItemIcon>
+              <ListItemText primary="Account" />
             </ListItem>
           </Link>
-          <ListItem href={`${ACCOWNT_API_URL}/login/logout`}>
-            <ListItemText primary="logout" />
-          </ListItem>
-          <ListItem target="_blank" href={`${HELP_DOCS_URL}#terminology`}>
-            <ListItemText primary="help" />
-          </ListItem>
+          <a href={`${ACCOWNT_API_URL}/login/logout`} className={classes.link}>
+            <ListItem button>
+              <ListItemIcon>
+                <ExitToApp />
+              </ListItemIcon>
+              <ListItemText primary="Logout" />
+            </ListItem>
+          </a>
+          <a
+            href={`${HELP_DOCS_URL}#terminology`}
+            target="_blank"
+            className={classes.link}
+          >
+            <ListItem button>
+              <ListItemIcon>
+                <Help />
+              </ListItemIcon>
+              <ListItemText primary="Help" />
+            </ListItem>
+          </a>
         </List>
       </div>
     );
@@ -185,3 +226,5 @@ export class Panel extends React.Component<
     );
   }
 }
+
+export const Panel = withStyles(styles)(_Panel);
