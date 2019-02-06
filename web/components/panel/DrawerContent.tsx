@@ -45,54 +45,48 @@ const Filter = ({ category }: { category: PanelState['categories'][0] }) => (
 );
 
 const _DrawerContent = ({ classes }: WithStyles<typeof styles>) => (
-  <PanelContext.Consumer>
-    {context => (
-      <div>
-        <ListSubheader>Filters</ListSubheader>
-        <List>
-          <Filter category="Primary Emails" />
-          <Filter category="Proxy Emails" />
-          <Filter category="Modifiers" />
-          <Filter category="Messages" />
-          <Filter category="Filters" />
-          <Filter category="Domains" />
-        </List>
-
-        <Divider />
-
-        <List>
-          <Link to="/app/account" className={classes.link}>
-            <ListItem button>
-              <ListItemIcon>
-                <AccountBox />
-              </ListItemIcon>
-              <ListItemText primary="Account" />
-            </ListItem>
-          </Link>
-          <a href={`${ACCOWNT_API_URL}/login/logout`} className={classes.link}>
-            <ListItem button>
-              <ListItemIcon>
-                <ExitToApp />
-              </ListItemIcon>
-              <ListItemText primary="Logout" />
-            </ListItem>
-          </a>
-          <a
-            href={`${HELP_DOCS_URL}#terminology`}
-            target="_blank"
-            className={classes.link}
-          >
-            <ListItem button>
-              <ListItemIcon>
-                <Help />
-              </ListItemIcon>
-              <ListItemText primary="Help" />
-            </ListItem>
-          </a>
-        </List>
-      </div>
-    )}
-  </PanelContext.Consumer>
+  <div>
+    <ListSubheader>Filters</ListSubheader>
+    <List>
+      <Filter category="Primary Emails" />
+      <Filter category="Proxy Emails" />
+      <Filter category="Modifiers" />
+      <Filter category="Messages" />
+      <Filter category="Filters" />
+      <Filter category="Domains" />
+    </List>
+    <Divider />
+    <List>
+      <Link to="/app/account" className={classes.link}>
+        <ListItem button>
+          <ListItemIcon>
+            <AccountBox />
+          </ListItemIcon>
+          <ListItemText primary="Account" />
+        </ListItem>
+      </Link>
+      <a href={`${ACCOWNT_API_URL}/login/logout`} className={classes.link}>
+        <ListItem button>
+          <ListItemIcon>
+            <ExitToApp />
+          </ListItemIcon>
+          <ListItemText primary="Logout" />
+        </ListItem>
+      </a>
+      <a
+        href={`${HELP_DOCS_URL}#terminology`}
+        target="_blank"
+        className={classes.link}
+      >
+        <ListItem button>
+          <ListItemIcon>
+            <Help />
+          </ListItemIcon>
+          <ListItemText primary="Help" />
+        </ListItem>
+      </a>
+    </List>
+  </div>
 );
 
 export const DrawerContent = withStyles(styles)(_DrawerContent);
