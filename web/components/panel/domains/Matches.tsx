@@ -4,6 +4,7 @@ import { Ptorx } from 'typings/ptorx';
 import { Link } from 'react-router-dom';
 import { NAME } from 'constants/config';
 import {
+  ListSubheader,
   ListItemText,
   createStyles,
   withStyles,
@@ -23,6 +24,7 @@ class _DomainMatches extends React.Component<DomainMatchesProps> {
     const { classes, domains } = this.props;
     return (
       <List>
+        <ListSubheader color="primary">Domains</ListSubheader>
         {domains.map(domain => (
           <Link
             className={classes.link}

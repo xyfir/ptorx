@@ -3,6 +3,7 @@ import * as React from 'react';
 import { Ptorx } from 'typings/ptorx';
 import { Link } from 'react-router-dom';
 import {
+  ListSubheader,
   ListItemText,
   createStyles,
   withStyles,
@@ -22,6 +23,7 @@ class _PrimaryEmailMatches extends React.Component<PrimaryEmailMatchesProps> {
     const { classes, primaryEmails } = this.props;
     return (
       <List>
+        <ListSubheader color="primary">Primary Emails</ListSubheader>
         {primaryEmails.map(primaryEmail => (
           <Link
             className={classes.link}
