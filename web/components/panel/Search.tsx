@@ -1,15 +1,13 @@
-import { TextField, ListItemText, ListItem, List } from '@material-ui/core';
 import { PrimaryEmailMatches } from 'components/panel/primary-emails/Matches';
 import { ProxyEmailMatches } from 'components/panel/proxy-emails/Matches';
 import { ModifierMatches } from 'components/panel/modifiers/Matches';
+import { MessageMatches } from 'components/panel/messages/Matches';
 import { DomainMatches } from 'components/panel/domains/Matches';
 import { FilterMatches } from 'components/panel/filters/Matches';
 import { PanelContext } from 'lib/PanelContext';
-import * as moment from 'moment';
+import { TextField } from '@material-ui/core';
 import * as React from 'react';
-import { Ptorx } from 'typings/ptorx';
 import * as Fuse from 'fuse.js';
-import { Link } from 'react-router-dom';
 
 export class Search extends React.Component {
   static contextType = PanelContext;
@@ -46,26 +44,6 @@ export class Search extends React.Component {
     return items;
   }
 
-  renderMessages(messages: Ptorx.MessageList) {
-    if ([].indexOf('Messages') == -1 || !messages.length) return null;
-    return (
-      <List>
-        {this.search(messages).map(message => (
-          <Link key={message.id} to={`/app/messages/${message.id}`}>
-            <ListItem>
-              <ListItemText
-                primary={message.subject}
-                secondary={`From ${message.from} ${moment
-                  .unix(message.created)
-                  .fromNow()}`}
-              />
-            </ListItem>
-          </Link>
-        ))}
-      </List>
-    );
-  }
-
   render() {
     const {
       primaryEmails,
@@ -92,7 +70,9 @@ export class Search extends React.Component {
         {categories.indexOf('Proxy Emails') > -1 && proxyEmails.length ? (
           <ProxyEmailMatches proxyEmails={this.search(proxyEmails)} />
         ) : null}
-        {this.renderMessages(messages)}
+        {categories.indexOf('Messages') > -1 && messages.length ? (
+          <MessageMatches messages={this.search(messages)} />
+        ) : null}
         {categories.indexOf('Primary Emails') > -1 && primaryEmails.length ? (
           <PrimaryEmailMatches primaryEmails={this.search(primaryEmails)} />
         ) : null}
