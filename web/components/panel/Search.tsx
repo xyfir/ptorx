@@ -1,4 +1,5 @@
 import { TextField, ListItemText, ListItem, List } from '@material-ui/core';
+import { PrimaryEmailMatches } from 'components/panel/primary-emails/Matches';
 import { DomainMatches } from 'components/panel/domains/Matches';
 import { PanelContext } from 'lib/PanelContext';
 import * as moment from 'moment';
@@ -31,30 +32,6 @@ export class Search extends React.Component {
       items = fuse.search(search);
     }
     return items;
-  }
-
-  renderPrimaryEmails(primaryEmails: Ptorx.PrimaryEmailList) {
-    if ([].indexOf('Primary Emails') == -1 || !primaryEmails.length)
-      return null;
-    return (
-      <List>
-        {this.search(primaryEmails).map(primaryEmail => (
-          <Link
-            key={primaryEmail.id}
-            to={`/app/primary-emails/${primaryEmail.id}`}
-          >
-            <ListItem>
-              <ListItemText
-                primary={primaryEmail.address}
-                secondary={`Created ${moment
-                  .unix(primaryEmail.created)
-                  .fromNow()}`}
-              />
-            </ListItem>
-          </Link>
-        ))}
-      </List>
-    );
   }
 
   renderProxyEmails(proxyEmails: Ptorx.ProxyEmailList) {
@@ -156,7 +133,9 @@ export class Search extends React.Component {
           onChange={e => dispatch({ search: e.target.value.toLowerCase() })}
           placeholder="Search..."
         />
-        {this.renderPrimaryEmails(primaryEmails)}
+        {categories.indexOf('Primary Emails') > -1 && primaryEmails.length ? (
+          <PrimaryEmailMatches primaryEmails={this.search(primaryEmails)} />
+        ) : null}
         {this.renderProxyEmails(proxyEmails)}
         {this.renderModifiers(modifiers)}
         {this.renderMessages(messages)}
