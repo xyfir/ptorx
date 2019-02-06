@@ -1,5 +1,6 @@
 import { TextField, ListItemText, ListItem, List } from '@material-ui/core';
 import { PrimaryEmailMatches } from 'components/panel/primary-emails/Matches';
+import { ProxyEmailMatches } from 'components/panel/proxy-emails/Matches';
 import { ModifierMatches } from 'components/panel/modifiers/Matches';
 import { DomainMatches } from 'components/panel/domains/Matches';
 import { FilterMatches } from 'components/panel/filters/Matches';
@@ -45,26 +46,6 @@ export class Search extends React.Component {
     return items;
   }
 
-  renderProxyEmails(proxyEmails: Ptorx.ProxyEmailList) {
-    if ([].indexOf('Proxy Emails') == -1 || !proxyEmails.length) return null;
-    return (
-      <List>
-        {this.search(proxyEmails).map(proxyEmail => (
-          <Link key={proxyEmail.id} to={`/app/proxy-emails/${proxyEmail.id}`}>
-            <ListItem>
-              <ListItemText
-                primary={proxyEmail.fullAddress}
-                secondary={`Created ${moment
-                  .unix(proxyEmail.created)
-                  .fromNow()}`}
-              />
-            </ListItem>
-          </Link>
-        ))}
-      </List>
-    );
-  }
-
   renderMessages(messages: Ptorx.MessageList) {
     if ([].indexOf('Messages') == -1 || !messages.length) return null;
     return (
@@ -108,16 +89,18 @@ export class Search extends React.Component {
           onChange={e => dispatch({ search: e.target.value.toLowerCase() })}
           placeholder="Search..."
         />
+        {categories.indexOf('Proxy Emails') > -1 && proxyEmails.length ? (
+          <ProxyEmailMatches proxyEmails={this.search(proxyEmails)} />
+        ) : null}
+        {this.renderMessages(messages)}
         {categories.indexOf('Primary Emails') > -1 && primaryEmails.length ? (
           <PrimaryEmailMatches primaryEmails={this.search(primaryEmails)} />
         ) : null}
-        {this.renderProxyEmails(proxyEmails)}
-        {categories.indexOf('Modifiers') > -1 && modifiers.length ? (
-          <ModifierMatches modifiers={this.search(modifiers)} />
-        ) : null}
-        {this.renderMessages(messages)}
         {categories.indexOf('Filters') > -1 && filters.length ? (
           <FilterMatches filters={this.search(filters)} />
+        ) : null}
+        {categories.indexOf('Modifiers') > -1 && modifiers.length ? (
+          <ModifierMatches modifiers={this.search(modifiers)} />
         ) : null}
         {categories.indexOf('Domains') > -1 && domains.length ? (
           <DomainMatches domains={this.search(domains)} />
