@@ -30,9 +30,12 @@ export interface PanelState {
   primaryEmails: Ptorx.PrimaryEmailList;
   proxyEmails: Ptorx.ProxyEmailList;
   modifiers: Ptorx.ModifierList;
+  dispatch: (state: Partial<PanelState>) => void;
   messages: Ptorx.MessageList;
   filters: Ptorx.FilterList;
   domains: Ptorx.DomainList;
+  search: string;
+  user: Ptorx.User;
 }
 
 export interface PanelProps extends WithStyles<typeof styles> {
@@ -45,18 +48,15 @@ class _Panel extends React.Component<PanelProps, PanelState> {
     proxyEmails: [],
     categories: ['proxy emails'],
     modifiers: [],
+    dispatch: state => this.setState(state as PanelState),
     messages: [],
     filters: [],
-    domains: []
+    domains: [],
+    search: '',
+    user: this.props.user
   };
 
   componentDidMount() {
-    this.reload();
-  }
-
-  onSelectCategory(category: PanelState['categories'][0]) {}
-
-  reload() {
     Promise.all([
       api.get('/primary-emails'),
       api.get('/proxy-emails'),
@@ -79,16 +79,9 @@ class _Panel extends React.Component<PanelProps, PanelState> {
   }
 
   render() {
-    const { classes, user } = this.props;
+    const { classes } = this.props;
     return (
-      <PanelContext.Provider
-        value={{
-          ...this.state,
-          onSelectCategory: this.onSelectCategory,
-          reload: this.reload,
-          user
-        }}
-      >
+      <PanelContext.Provider value={this.state}>
         <div className={classes.root}>
           <PanelControls />
           <main className={classes.content}>
