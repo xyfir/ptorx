@@ -16,75 +16,46 @@ import {
   Switch,
   List
 } from '@material-ui/core';
+import { PanelState } from './Panel';
 
 const styles = createStyles({ link: { textDecoration: 'none' } });
+
+const Filter = ({ category }: { category: PanelState['categories'][0] }) => (
+  <PanelContext.Consumer>
+    {context => (
+      <ListItem>
+        <ListItemText primary={category} />
+        <ListItemSecondaryAction>
+          <Switch
+            onChange={() =>
+              context.dispatch(
+                context.categories.indexOf(category) > -1
+                  ? {
+                      categories: context.categories.filter(c => c != category)
+                    }
+                  : { categories: context.categories.concat([category]) }
+              )
+            }
+            checked={context.categories.indexOf(category) > -1}
+          />
+        </ListItemSecondaryAction>
+      </ListItem>
+    )}
+  </PanelContext.Consumer>
+);
 
 const _DrawerContent = ({ classes }: WithStyles<typeof styles>) => (
   <PanelContext.Consumer>
     {context => (
       <div>
         <ListSubheader>Filters</ListSubheader>
-
         <List>
-          <ListItem>
-            <ListItemText primary="Primary Emails" />
-            <ListItemSecondaryAction>
-              <Switch
-                onChange={() => this.onSelectCategory('primary emails')}
-                checked={context.categories.indexOf('primary emails') > -1}
-              />
-            </ListItemSecondaryAction>
-          </ListItem>
-
-          <ListItem>
-            <ListItemText primary="Proxy Emails" />
-            <ListItemSecondaryAction>
-              <Switch
-                onChange={() => this.onSelectCategory('proxy emails')}
-                checked={context.categories.indexOf('proxy emails') > -1}
-              />
-            </ListItemSecondaryAction>
-          </ListItem>
-
-          <ListItem>
-            <ListItemText primary="Modifiers" />
-            <ListItemSecondaryAction>
-              <Switch
-                onChange={() => this.onSelectCategory('modifiers')}
-                checked={context.categories.indexOf('modifiers') > -1}
-              />
-            </ListItemSecondaryAction>
-          </ListItem>
-
-          <ListItem>
-            <ListItemText primary="Messages" />
-            <ListItemSecondaryAction>
-              <Switch
-                onChange={() => this.onSelectCategory('messages')}
-                checked={context.categories.indexOf('messages') > -1}
-              />
-            </ListItemSecondaryAction>
-          </ListItem>
-
-          <ListItem>
-            <ListItemText primary="Filters" />
-            <ListItemSecondaryAction>
-              <Switch
-                onChange={() => this.onSelectCategory('filters')}
-                checked={context.categories.indexOf('filters') > -1}
-              />
-            </ListItemSecondaryAction>
-          </ListItem>
-
-          <ListItem>
-            <ListItemText primary="Domains" />
-            <ListItemSecondaryAction>
-              <Switch
-                onChange={() => this.onSelectCategory('domains')}
-                checked={context.categories.indexOf('domains') > -1}
-              />
-            </ListItemSecondaryAction>
-          </ListItem>
+          <Filter category="Primary Emails" />
+          <Filter category="Proxy Emails" />
+          <Filter category="Modifiers" />
+          <Filter category="Messages" />
+          <Filter category="Filters" />
+          <Filter category="Domains" />
         </List>
 
         <Divider />
