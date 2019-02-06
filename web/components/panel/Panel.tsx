@@ -1,8 +1,11 @@
 import { ACCOWNT_API_URL, HELP_DOCS_URL, NAME } from 'constants/config';
 import { AccountBox, ExitToApp, Help, Menu } from '@material-ui/icons';
+import { PanelContext } from 'lib/PanelContext';
 import { Search } from 'components/panel/Search';
 import * as React from 'react';
+import { Ptorx } from 'typings/ptorx';
 import { Link } from 'react-router-dom';
+import { api } from 'lib/api';
 import {
   ListItemSecondaryAction,
   ListSubheader,
@@ -69,16 +72,61 @@ export interface PanelState {
     | 'filters'
     | 'domains'
   >;
+  primaryEmails: Ptorx.PrimaryEmailList;
+  proxyEmails: Ptorx.ProxyEmailList;
+  modifiers: Ptorx.ModifierList;
+  messages: Ptorx.MessageList;
+  filters: Ptorx.FilterList;
+  domains: Ptorx.DomainList;
 }
 
-class _Panel extends React.Component<WithStyles<typeof styles>, PanelState> {
-  state: PanelState = { showDrawer: false, categories: ['proxy emails'] };
+export interface PanelProps extends WithStyles<typeof styles> {
+  user: Ptorx.User;
+}
+
+class _Panel extends React.Component<PanelProps, PanelState> {
+  state: PanelState = {
+    primaryEmails: [],
+    proxyEmails: [],
+    categories: ['proxy emails'],
+    showDrawer: false,
+    modifiers: [],
+    messages: [],
+    filters: [],
+    domains: []
+  };
+
+  componentDidMount() {
+    this.reload();
+  }
 
   onSelectCategory(category: PanelState['categories'][0]) {}
 
+  reload() {
+    Promise.all([
+      api.get('/primary-emails'),
+      api.get('/proxy-emails'),
+      api.get('/modifiers'),
+      api.get('/messages'),
+      api.get('/filters'),
+      api.get('/domains')
+    ])
+      .then(res =>
+        this.setState({
+          primaryEmails: res[0].data,
+          proxyEmails: res[1].data,
+          modifiers: res[2].data,
+          messages: res[3].data,
+          filters: res[4].data,
+          domains: res[5].data
+        })
+      )
+      .catch(console.error);
+  }
+
   render() {
     const { showDrawer, categories } = this.state;
-    const { classes } = this.props;
+    const { classes, user } = this.props;
     const drawer = (
       <div>
         <ListSubheader>Filters</ListSubheader>
@@ -180,49 +228,53 @@ class _Panel extends React.Component<WithStyles<typeof styles>, PanelState> {
       </div>
     );
     return (
-      <div className={classes.root}>
-        <AppBar position="fixed" className={classes.appBar}>
-          <Toolbar>
-            <IconButton
-              color="inherit"
-              onClick={() => this.setState({ showDrawer: !showDrawer })}
-              className={classes.menuButton}
-              aria-label="Open drawer"
-            >
-              <Menu />
-            </IconButton>
-            <Typography variant="h6" color="inherit" noWrap>
-              {NAME}
-            </Typography>
-          </Toolbar>
-        </AppBar>
-        <nav className={classes.drawer}>
-          <Hidden smUp implementation="css">
-            <Drawer
-              open={this.state.showDrawer}
-              anchor="left"
-              variant="temporary"
-              onClose={() => this.setState({ showDrawer: !showDrawer })}
-              classes={{ paper: classes.drawerPaper }}
-            >
-              {drawer}
-            </Drawer>
-          </Hidden>
-          <Hidden xsDown implementation="css">
-            <Drawer
-              classes={{ paper: classes.drawerPaper }}
-              variant="permanent"
-              open
-            >
-              {drawer}
-            </Drawer>
-          </Hidden>
-        </nav>
-        <main className={classes.content}>
-          <div className={classes.toolbar} />
-          <Search categories={categories} />
-        </main>
-      </div>
+      <PanelContext.Provider
+        value={{ ...this.state, reload: this.reload, user }}
+      >
+        <div className={classes.root}>
+          <AppBar position="fixed" className={classes.appBar}>
+            <Toolbar>
+              <IconButton
+                color="inherit"
+                onClick={() => this.setState({ showDrawer: !showDrawer })}
+                className={classes.menuButton}
+                aria-label="Open drawer"
+              >
+                <Menu />
+              </IconButton>
+              <Typography variant="h6" color="inherit" noWrap>
+                {NAME}
+              </Typography>
+            </Toolbar>
+          </AppBar>
+          <nav className={classes.drawer}>
+            <Hidden smUp implementation="css">
+              <Drawer
+                open={this.state.showDrawer}
+                anchor="left"
+                variant="temporary"
+                onClose={() => this.setState({ showDrawer: !showDrawer })}
+                classes={{ paper: classes.drawerPaper }}
+              >
+                {drawer}
+              </Drawer>
+            </Hidden>
+            <Hidden xsDown implementation="css">
+              <Drawer
+                classes={{ paper: classes.drawerPaper }}
+                variant="permanent"
+                open
+              >
+                {drawer}
+              </Drawer>
+            </Hidden>
+          </nav>
+          <main className={classes.content}>
+            <div className={classes.toolbar} />
+            <Search categories={categories} />
+          </main>
+        </div>
+      </PanelContext.Provider>
     );
   }
 }

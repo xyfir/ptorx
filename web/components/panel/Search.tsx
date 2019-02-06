@@ -1,6 +1,6 @@
 import { TextField, ListItemText, ListItem, List } from '@material-ui/core';
 import { PanelState } from 'components/panel/Panel';
-import { AppContext } from 'lib/AppContext';
+import { PanelContext } from 'lib/PanelContext';
 import * as moment from 'moment';
 import * as React from 'react';
 import { Ptorx } from 'typings/ptorx';
@@ -161,7 +161,7 @@ export class Search extends React.Component<SearchProps, SearchState> {
   render() {
     const { search } = this.state;
     return (
-      <AppContext.Consumer>
+      <PanelContext.Consumer>
         {context => (
           <div>
             <TextField
@@ -181,7 +181,7 @@ export class Search extends React.Component<SearchProps, SearchState> {
             {this.renderDomains(context.domains)}
           </div>
         )}
-      </AppContext.Consumer>
+      </PanelContext.Consumer>
     );
   }
 }
