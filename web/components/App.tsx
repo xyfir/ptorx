@@ -60,7 +60,7 @@ export class App extends React.Component<{}, AppState> {
 
   render() {
     const { loading, user } = this.state;
-    if (!loading) return null;
+    if (loading) return null;
     return (
       <MuiThemeProvider theme={theme}>
         <CssBaseline />
