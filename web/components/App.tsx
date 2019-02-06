@@ -9,18 +9,26 @@ import { Info } from 'components/Info';
 import { api } from 'lib/api';
 
 export interface AppState {
-  primaryEmails?: Ptorx.PrimaryEmailList;
-  proxyEmails?: Ptorx.ProxyEmailList;
-  modifiers?: Ptorx.ModifierList;
-  messages?: Ptorx.MessageList;
-  filters?: Ptorx.FilterList;
-  domains?: Ptorx.DomainList;
+  primaryEmails: Ptorx.PrimaryEmailList;
+  proxyEmails: Ptorx.ProxyEmailList;
+  modifiers: Ptorx.ModifierList;
+  messages: Ptorx.MessageList;
+  filters: Ptorx.FilterList;
+  domains: Ptorx.DomainList;
   loading: boolean;
   user?: Ptorx.User;
 }
 
 export class App extends React.Component<{}, AppState> {
-  state: AppState = { loading: true };
+  state: AppState = {
+    primaryEmails: [],
+    proxyEmails: [],
+    modifiers: [],
+    messages: [],
+    filters: [],
+    domains: [],
+    loading: true
+  };
 
   constructor(props) {
     super(props);
