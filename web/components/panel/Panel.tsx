@@ -46,7 +46,7 @@ class _Panel extends React.Component<PanelProps, PanelState> {
   state: PanelState = {
     primaryEmails: [],
     proxyEmails: [],
-    categories: ['Proxy Emails'],
+    categories: (localStorage.categories || 'Proxy Emails').split(','),
     modifiers: [],
     dispatch: state => this.setState(state as PanelState),
     messages: [],

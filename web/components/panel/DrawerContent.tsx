@@ -20,40 +20,50 @@ import { PanelState } from './Panel';
 
 const styles = createStyles({ link: { textDecoration: 'none' } });
 
-const Filter = ({ category }: { category: PanelState['categories'][0] }) => (
-  <PanelContext.Consumer>
-    {context => (
+class CategoryToggle extends React.Component<{
+  category: PanelState['categories'][0];
+}> {
+  static contextType = PanelContext;
+  context!: React.ContextType<typeof PanelContext>;
+
+  onToggle() {
+    const { categories, dispatch } = this.context;
+    const { category } = this.props;
+    const _categories =
+      categories.indexOf(category) > -1
+        ? categories.filter(c => c != category)
+        : categories.concat([category]);
+    dispatch({ categories: _categories });
+    localStorage.categories = _categories;
+  }
+
+  render() {
+    const { categories } = this.context;
+    const { category } = this.props;
+    return (
       <ListItem>
         <ListItemText primary={category} />
         <ListItemSecondaryAction>
           <Switch
-            onChange={() =>
-              context.dispatch(
-                context.categories.indexOf(category) > -1
-                  ? {
-                      categories: context.categories.filter(c => c != category)
-                    }
-                  : { categories: context.categories.concat([category]) }
-              )
-            }
-            checked={context.categories.indexOf(category) > -1}
+            onChange={() => this.onToggle()}
+            checked={categories.indexOf(category) > -1}
           />
         </ListItemSecondaryAction>
       </ListItem>
-    )}
-  </PanelContext.Consumer>
-);
+    );
+  }
+}
 
 const _DrawerContent = ({ classes }: WithStyles<typeof styles>) => (
   <div>
     <ListSubheader>Filters</ListSubheader>
     <List>
-      <Filter category="Primary Emails" />
-      <Filter category="Proxy Emails" />
-      <Filter category="Modifiers" />
-      <Filter category="Messages" />
-      <Filter category="Filters" />
-      <Filter category="Domains" />
+      <CategoryToggle category="Primary Emails" />
+      <CategoryToggle category="Proxy Emails" />
+      <CategoryToggle category="Modifiers" />
+      <CategoryToggle category="Messages" />
+      <CategoryToggle category="Filters" />
+      <CategoryToggle category="Domains" />
     </List>
     <Divider />
     <List>
