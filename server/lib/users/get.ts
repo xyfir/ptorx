@@ -4,7 +4,7 @@ import { MySQL } from 'lib/MySQL';
 export async function getUser(jwt: Ptorx.JWT | null): Promise<Ptorx.User> {
   const db = new MySQL();
   try {
-    if (!jwt === null) throw 'Not logged in';
+    if (jwt === null) throw 'Not logged in';
     let [row] = await db.query('SELECT * FROM users WHERE userId = ?', [
       jwt.userId
     ]);
