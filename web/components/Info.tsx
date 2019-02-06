@@ -1,4 +1,5 @@
-import { ACCOWNT_WEB_URL, NAME } from 'constants/config';
+import { ACCOWNT_WEB_URL, ACCOWNT_API_URL, NAME } from 'constants/config';
+import { AppContext } from 'lib/AppContext';
 import * as React from 'react';
 import {
   createStyles,
@@ -31,6 +32,12 @@ const styles = (theme: Theme) =>
       fontFamily: '"Roboto"',
       fontSize: '110%'
     },
+    or: {
+      fontFamily: '"Roboto"',
+      fontWeight: 'bold',
+      fontSize: '110%',
+      margin: '0.5em'
+    },
     p: {
       fontSize: '110%',
       lineHeight: '125%',
@@ -43,68 +50,96 @@ const styles = (theme: Theme) =>
   });
 
 const _Info = ({ classes }: WithStyles<typeof styles>) => (
-  <div className={classes.root}>
-    <Typography variant="h1" className={classes.h1}>
-      Send and Receive Mail Anonymously
-    </Typography>
-    <Typography variant="body2" className={classes.p}>
-      Protect your privacy, strengthen your security, and take control of your
-      emails with {NAME}.
-    </Typography>
-    <div className={classes.buttons}>
-      <Button variant="contained" color="primary" href={ACCOWNT_WEB_URL}>
-        Login
-      </Button>{' '}
-      or{' '}
-      <Button variant="contained" color="primary" href={ACCOWNT_WEB_URL}>
-        Register
-      </Button>
-    </div>
-    <Typography variant="h2" className={classes.h2}>
-      How It Works
-    </Typography>
-    <ol className={classes.ol}>
-      <li>Create a proxy email</li>
-      <li>Tell us where to forward incoming mail to</li>
-      <li>View mail sent to your proxy email from your preferred email app</li>
-      <li>Reply to mail and it'll show as being sent from your proxy email</li>
-    </ol>
-    <Typography variant="h2" className={classes.h2}>
-      What's a Proxy Email?
-    </Typography>
-    <Typography variant="body2" className={classes.p}>
-      A proxy email is like an email alias or a forwarding address. Any mail
-      sent to it is redirected to the email addresses you configure. Proxy
-      emails also allow for many extra features like filtering and modifying
-      your incoming mail before it's forwarded.
-    </Typography>
-    <Typography variant="h2" className={classes.h2}>
-      Why Use a Proxy Email?
-    </Typography>
-    <Typography variant="body2" className={classes.p}>
-      To prevent spam, keep your email off of "people search" websites, thwart
-      hackers and spammers when database breaches occur, easily transfer mail
-      when you update primary email addresses, filter out mail before it ever
-      reaches your inbox, and the list goes on.
-    </Typography>
-    <Typography variant="h2" className={classes.h2}>
-      Bring Your Own Domains
-    </Typography>
-    <Typography variant="body2" className={classes.p}>
-      As many of them as you want. Configure a few easy DNS records and create
-      proxy emails for your own domain.
-    </Typography>
-    <Typography variant="h2" className={classes.h2}>
-      Open Source
-    </Typography>
-    <Typography variant="body2" className={classes.p}>
-      Don't trust us with your emails?{' '}
-      <a href="https://github.com/Xyfir/Ptorx" className={classes.a}>
-        Our code is completely open source for you to view.
-      </a>{' '}
-      Host your own server if you'd like.
-    </Typography>
-  </div>
+  <AppContext.Consumer>
+    {context => (
+      <div className={classes.root}>
+        <Typography variant="h1" className={classes.h1}>
+          Send and Receive Mail Anonymously
+        </Typography>
+        <Typography variant="body2" className={classes.p}>
+          Protect your privacy, strengthen your security, and take control of
+          your emails with {NAME}.
+        </Typography>
+        {context.user ? (
+          <div className={classes.buttons}>
+            <Button variant="contained" color="primary" href="/app">
+              Go to App
+            </Button>
+            <span className={classes.or}>or</span>
+            <Button
+              variant="contained"
+              color="secondary"
+              href={`${ACCOWNT_API_URL}/login/logout`}
+            >
+              Logout
+            </Button>
+          </div>
+        ) : (
+          <div className={classes.buttons}>
+            <Button variant="contained" color="primary" href={ACCOWNT_WEB_URL}>
+              Login
+            </Button>
+            <span className={classes.or}>or</span>
+            <Button
+              variant="contained"
+              color="secondary"
+              href={ACCOWNT_WEB_URL}
+            >
+              Register
+            </Button>
+          </div>
+        )}
+        <Typography variant="h2" className={classes.h2}>
+          How It Works
+        </Typography>
+        <ol className={classes.ol}>
+          <li>Create a proxy email</li>
+          <li>Tell us where to forward incoming mail to</li>
+          <li>
+            View mail sent to your proxy email from your preferred email app
+          </li>
+          <li>
+            Reply to mail and it'll show as being sent from your proxy email
+          </li>
+        </ol>
+        <Typography variant="h2" className={classes.h2}>
+          What's a Proxy Email?
+        </Typography>
+        <Typography variant="body2" className={classes.p}>
+          A proxy email is like an email alias or a forwarding address. Any mail
+          sent to it is redirected to the email addresses you configure. Proxy
+          emails also allow for many extra features like filtering and modifying
+          your incoming mail before it's forwarded.
+        </Typography>
+        <Typography variant="h2" className={classes.h2}>
+          Why Use a Proxy Email?
+        </Typography>
+        <Typography variant="body2" className={classes.p}>
+          To prevent spam, keep your email off of "people search" websites,
+          thwart hackers and spammers when database breaches occur, easily
+          transfer mail when you update primary email addresses, filter out mail
+          before it ever reaches your inbox, and the list goes on.
+        </Typography>
+        <Typography variant="h2" className={classes.h2}>
+          Bring Your Own Domains
+        </Typography>
+        <Typography variant="body2" className={classes.p}>
+          As many of them as you want. Configure a few easy DNS records and
+          create proxy emails for your own domain.
+        </Typography>
+        <Typography variant="h2" className={classes.h2}>
+          Open Source
+        </Typography>
+        <Typography variant="body2" className={classes.p}>
+          Don't trust us with your emails?{' '}
+          <a href="https://github.com/Xyfir/Ptorx" className={classes.a}>
+            Our code is completely open source for you to view.
+          </a>{' '}
+          Host your own server if you'd like.
+        </Typography>
+      </div>
+    )}
+  </AppContext.Consumer>
 );
 
 export const Info = withStyles(styles)(_Info);
