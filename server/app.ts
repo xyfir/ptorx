@@ -36,7 +36,10 @@ if (!CONFIG.PROD) {
     next();
   });
 }
-app.use('/static', Express.static(__dirname + '../web/dist'));
+app.use(
+  '/static',
+  Express.static(path.resolve(CONFIG.DIRECTORIES.WEB, 'dist'))
+);
 app.use(bodyParser.json({ limit: '35mb' }));
 app.use(bodyParser.urlencoded({ extended: true, limit: '35mb' }));
 app.use(cookieParser());
