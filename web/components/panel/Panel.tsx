@@ -20,12 +20,12 @@ const styles = (theme: Theme) =>
 
 export interface PanelState {
   categories: Array<
-    | 'primary emails'
-    | 'proxy emails'
-    | 'modifiers'
-    | 'messages'
-    | 'filters'
-    | 'domains'
+    | 'Primary Emails'
+    | 'Proxy Emails'
+    | 'Modifiers'
+    | 'Messages'
+    | 'Filters'
+    | 'Domains'
   >;
   primaryEmails: Ptorx.PrimaryEmailList;
   proxyEmails: Ptorx.ProxyEmailList;
@@ -46,7 +46,7 @@ class _Panel extends React.Component<PanelProps, PanelState> {
   state: PanelState = {
     primaryEmails: [],
     proxyEmails: [],
-    categories: ['proxy emails'],
+    categories: ['Proxy Emails'],
     modifiers: [],
     dispatch: state => this.setState(state as PanelState),
     messages: [],
