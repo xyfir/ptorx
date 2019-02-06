@@ -1,5 +1,4 @@
 import { TextField, ListItemText, ListItem, List } from '@material-ui/core';
-import { PanelState } from 'components/panel/Panel';
 import { PanelContext } from 'lib/PanelContext';
 import * as moment from 'moment';
 import * as React from 'react';
@@ -7,15 +6,11 @@ import { Ptorx } from 'typings/ptorx';
 import * as Fuse from 'fuse.js';
 import { Link } from 'react-router-dom';
 
-interface SearchProps {
-  categories: PanelState['categories'];
-}
-
 interface SearchState {
   search: string;
 }
 
-export class Search extends React.Component<SearchProps, SearchState> {
+export class Search extends React.Component<{}, SearchState> {
   state: SearchState = { search: '' };
 
   search<T>(items: T[]): T[] {
@@ -33,10 +28,7 @@ export class Search extends React.Component<SearchProps, SearchState> {
   }
 
   renderPrimaryEmails(primaryEmails: Ptorx.PrimaryEmailList) {
-    if (
-      this.props.categories.indexOf('primary emails') == -1 ||
-      !primaryEmails.length
-    )
+    if ([].indexOf('primary emails') == -1 || !primaryEmails.length)
       return null;
     return (
       <List>
@@ -57,11 +49,7 @@ export class Search extends React.Component<SearchProps, SearchState> {
   }
 
   renderProxyEmails(proxyEmails: Ptorx.ProxyEmailList) {
-    if (
-      this.props.categories.indexOf('proxy emails') == -1 ||
-      !proxyEmails.length
-    )
-      return null;
+    if ([].indexOf('proxy emails') == -1 || !proxyEmails.length) return null;
     return (
       <List>
         {this.search(proxyEmails).map(proxyEmail => (
@@ -81,8 +69,7 @@ export class Search extends React.Component<SearchProps, SearchState> {
   }
 
   renderModifiers(modifiers: Ptorx.ModifierList) {
-    if (this.props.categories.indexOf('modifiers') == -1 || !modifiers.length)
-      return null;
+    if ([].indexOf('modifiers') == -1 || !modifiers.length) return null;
     return (
       <List>
         {this.search(modifiers).map(modifier => (
@@ -100,8 +87,7 @@ export class Search extends React.Component<SearchProps, SearchState> {
   }
 
   renderMessages(messages: Ptorx.MessageList) {
-    if (this.props.categories.indexOf('messages') == -1 || !messages.length)
-      return null;
+    if ([].indexOf('messages') == -1 || !messages.length) return null;
     return (
       <List>
         {this.search(messages).map(message => (
@@ -121,8 +107,7 @@ export class Search extends React.Component<SearchProps, SearchState> {
   }
 
   renderFilters(filters: Ptorx.FilterList) {
-    if (this.props.categories.indexOf('filters') == -1 || !filters.length)
-      return null;
+    if ([].indexOf('filters') == -1 || !filters.length) return null;
     return (
       <List>
         {this.search(filters).map(filter => (
@@ -140,8 +125,7 @@ export class Search extends React.Component<SearchProps, SearchState> {
   }
 
   renderDomains(domains: Ptorx.DomainList) {
-    if (this.props.categories.indexOf('domains') == -1 || !domains.length)
-      return null;
+    if ([].indexOf('domains') == -1 || !domains.length) return null;
     return (
       <List>
         {this.search(domains).map(domain => (
