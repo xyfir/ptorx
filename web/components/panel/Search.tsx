@@ -1,5 +1,6 @@
 import { TextField, ListItemText, ListItem, List } from '@material-ui/core';
 import { PrimaryEmailMatches } from 'components/panel/primary-emails/Matches';
+import { ModifierMatches } from 'components/panel/modifiers/Matches';
 import { DomainMatches } from 'components/panel/domains/Matches';
 import { FilterMatches } from 'components/panel/filters/Matches';
 import { PanelContext } from 'lib/PanelContext';
@@ -64,24 +65,6 @@ export class Search extends React.Component {
     );
   }
 
-  renderModifiers(modifiers: Ptorx.ModifierList) {
-    if ([].indexOf('Modifiers') == -1 || !modifiers.length) return null;
-    return (
-      <List>
-        {this.search(modifiers).map(modifier => (
-          <Link key={modifier.id} to={`/app/modifiers/${modifier.id}`}>
-            <ListItem>
-              <ListItemText
-                primary={modifier.name}
-                secondary={`Created ${moment.unix(modifier.created).fromNow()}`}
-              />
-            </ListItem>
-          </Link>
-        ))}
-      </List>
-    );
-  }
-
   renderMessages(messages: Ptorx.MessageList) {
     if ([].indexOf('Messages') == -1 || !messages.length) return null;
     return (
@@ -129,7 +112,9 @@ export class Search extends React.Component {
           <PrimaryEmailMatches primaryEmails={this.search(primaryEmails)} />
         ) : null}
         {this.renderProxyEmails(proxyEmails)}
-        {this.renderModifiers(modifiers)}
+        {categories.indexOf('Modifiers') > -1 && modifiers.length ? (
+          <ModifierMatches modifiers={this.search(modifiers)} />
+        ) : null}
         {this.renderMessages(messages)}
         {categories.indexOf('Filters') > -1 && filters.length ? (
           <FilterMatches filters={this.search(filters)} />
