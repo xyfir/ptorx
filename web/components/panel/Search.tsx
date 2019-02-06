@@ -1,6 +1,7 @@
 import { TextField, ListItemText, ListItem, List } from '@material-ui/core';
 import { PrimaryEmailMatches } from 'components/panel/primary-emails/Matches';
 import { DomainMatches } from 'components/panel/domains/Matches';
+import { FilterMatches } from 'components/panel/filters/Matches';
 import { PanelContext } from 'lib/PanelContext';
 import * as moment from 'moment';
 import * as React from 'react';
@@ -18,6 +19,7 @@ export class Search extends React.Component {
       subject?: string;
       address?: string;
       domain?: string;
+      type?: string;
       name?: string;
       from?: string;
     }
@@ -27,7 +29,15 @@ export class Search extends React.Component {
       const fuse = new Fuse(items, {
         shouldSort: true,
         threshold: 0.4,
-        keys: ['from', 'name', 'domain', 'address', 'subject', 'fullAddress']
+        keys: [
+          'from',
+          'name',
+          'type',
+          'domain',
+          'address',
+          'subject',
+          'fullAddress'
+        ]
       });
       items = fuse.search(search);
     }
@@ -92,24 +102,6 @@ export class Search extends React.Component {
     );
   }
 
-  renderFilters(filters: Ptorx.FilterList) {
-    if ([].indexOf('Filters') == -1 || !filters.length) return null;
-    return (
-      <List>
-        {this.search(filters).map(filter => (
-          <Link key={filter.id} to={`/app/filters/${filter.id}`}>
-            <ListItem>
-              <ListItemText
-                primary={filter.name}
-                secondary={`Created ${moment.unix(filter.created).fromNow()}`}
-              />
-            </ListItem>
-          </Link>
-        ))}
-      </List>
-    );
-  }
-
   render() {
     const {
       primaryEmails,
@@ -139,7 +131,9 @@ export class Search extends React.Component {
         {this.renderProxyEmails(proxyEmails)}
         {this.renderModifiers(modifiers)}
         {this.renderMessages(messages)}
-        {this.renderFilters(filters)}
+        {categories.indexOf('Filters') > -1 && filters.length ? (
+          <FilterMatches filters={this.search(filters)} />
+        ) : null}
         {categories.indexOf('Domains') > -1 && domains.length ? (
           <DomainMatches domains={this.search(domains)} />
         ) : null}
