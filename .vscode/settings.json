@@ -5,6 +5,7 @@
   },
   "search.exclude": {
     "**/coverage": true,
+    "**/accownt": true,
     "**/dist": true
   },
   "search.useIgnoreFiles": false
