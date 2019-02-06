@@ -6,15 +6,12 @@ import { Ptorx } from 'typings/ptorx';
 import * as Fuse from 'fuse.js';
 import { Link } from 'react-router-dom';
 
-interface SearchState {
-  search: string;
-}
-
-export class Search extends React.Component<{}, SearchState> {
-  state: SearchState = { search: '' };
+export class Search extends React.Component {
+  static contextType = PanelContext;
+  context!: React.ContextType<typeof PanelContext>;
 
   search<T>(items: T[]): T[] {
-    const { search } = this.state;
+    const { search } = this.context;
     if (search) {
       const fuse = new Fuse(items, {
         shouldSort: true,
@@ -143,29 +140,25 @@ export class Search extends React.Component<{}, SearchState> {
   }
 
   render() {
-    const { search } = this.state;
+    const { context } = this;
     return (
-      <PanelContext.Consumer>
-        {context => (
-          <div>
-            <TextField
-              fullWidth
-              id="search"
-              type="search"
-              value={search}
-              margin="normal"
-              onChange={e => this.setState({ search: e.target.value })}
-              placeholder="Search..."
-            />
-            {this.renderPrimaryEmails(context.primaryEmails)}
-            {this.renderProxyEmails(context.proxyEmails)}
-            {this.renderModifiers(context.modifiers)}
-            {this.renderMessages(context.messages)}
-            {this.renderFilters(context.filters)}
-            {this.renderDomains(context.domains)}
-          </div>
-        )}
-      </PanelContext.Consumer>
+      <div>
+        <TextField
+          fullWidth
+          id="search"
+          type="search"
+          value={context.search}
+          margin="normal"
+          onChange={e => context.dispatch({ search: e.target.value })}
+          placeholder="Search..."
+        />
+        {this.renderPrimaryEmails(context.primaryEmails)}
+        {this.renderProxyEmails(context.proxyEmails)}
+        {this.renderModifiers(context.modifiers)}
+        {this.renderMessages(context.messages)}
+        {this.renderFilters(context.filters)}
+        {this.renderDomains(context.domains)}
+      </div>
     );
   }
 }
