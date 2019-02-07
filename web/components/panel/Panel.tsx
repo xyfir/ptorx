@@ -1,6 +1,7 @@
 import { createStyles, WithStyles, withStyles, Theme } from '@material-ui/core';
 import { PanelControls } from 'components/panel/Controls';
 import { PanelContext } from 'lib/PanelContext';
+import { PanelDialog } from 'components/panel/Dialog';
 import { Create } from 'components/panel/Create';
 import { Search } from 'components/panel/Search';
 import * as React from 'react';
@@ -89,6 +90,7 @@ class _Panel extends React.Component<PanelProps, PanelState> {
             <div className={classes.toolbar} />
             <Create />
             <Search />
+            <PanelDialog />
           </main>
         </div>
       </PanelContext.Provider>
