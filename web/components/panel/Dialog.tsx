@@ -1,6 +1,8 @@
 import { Redirect, Switch, Route } from 'react-router';
+import { AddPrimaryEmail } from 'components/panel/primary-emails/add';
 import * as React from 'react';
 import { Close } from '@material-ui/icons';
+import { NAME } from 'constants/config';
 import {
   withMobileDialog,
   DialogContent,
@@ -9,6 +11,7 @@ import {
   WithStyles,
   withStyles,
   IconButton,
+  Typography,
   Hidden,
   Dialog,
   Theme
@@ -56,6 +59,7 @@ class _PanelDialog extends React.Component<PanelDialogProps, PanelDialogState> {
       >
         <Hidden smUp implementation="css">
           <DialogTitle disableTypography className={classes.title}>
+            <Typography variant="h6">{NAME}</Typography>
             <IconButton
               aria-label="Close"
               className={classes.close}
@@ -70,21 +74,27 @@ class _PanelDialog extends React.Component<PanelDialogProps, PanelDialogState> {
             <Redirect to="/app" />
           ) : (
             <Switch>
-              <Route path="/primary-emails/add" render={() => null} />
-              <Route path="/proxy-emails/add" render={() => null} />
-              <Route path="/modifiers/add" render={() => null} />
-              <Route path="/messages/send" render={() => null} />
-              <Route path="/messages/add" render={() => null} />
-              <Route path="/filters/add" render={() => null} />
-              <Route path="/domains/add" render={() => null} />
-              <Route path="/primary-emails/:primaryEmail" render={() => null} />
-              <Route path="/proxy-emails/:proxyEmail" render={() => null} />
-              <Route path="/modifiers/:modifier" render={() => null} />
-              <Route path="/messages/:message" render={() => null} />
-              <Route path="/filters/:filter" render={() => null} />
-              <Route path="/domains/:domain" render={() => null} />
-              <Route path="/account/credits" render={() => null} />
-              <Route path="/account" render={() => null} />
+              <Route
+                path="/app/primary-emails/add"
+                component={AddPrimaryEmail}
+              />
+              <Route path="/app/proxy-emails/add" render={() => null} />
+              <Route path="/app/modifiers/add" render={() => null} />
+              <Route path="/app/messages/send" render={() => null} />
+              <Route path="/app/messages/add" render={() => null} />
+              <Route path="/app/filters/add" render={() => null} />
+              <Route path="/app/domains/add" render={() => null} />
+              <Route
+                path="/app/primary-emails/:primaryEmail"
+                render={() => null}
+              />
+              <Route path="/app/proxy-emails/:proxyEmail" render={() => null} />
+              <Route path="/app/modifiers/:modifier" render={() => null} />
+              <Route path="/app/messages/:message" render={() => null} />
+              <Route path="/app/filters/:filter" render={() => null} />
+              <Route path="/app/domains/:domain" render={() => null} />
+              <Route path="/app/account/credits" render={() => null} />
+              <Route path="/app/account" render={() => null} />
             </Switch>
           )}
         </DialogContent>
