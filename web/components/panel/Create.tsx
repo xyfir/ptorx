@@ -42,19 +42,19 @@ class _Create extends React.Component<WithStyles<typeof styles>, CreateState> {
           onClose={() => this.setState({ open: false })}
           aria-labelledby="create-dialog"
         >
-          <DialogTitle id="create-dialog-title">Create a new...</DialogTitle>
+          <DialogTitle id="create-dialog-title">
+            Create or add a new...
+          </DialogTitle>
           <List>
             {CATEGORIES.map(category => (
               <Link
                 className={classes.link}
                 onClick={() => this.setState({ open: false })}
-                key={category}
-                to={`/app/${category.toLowerCase().replace(' ', '-')}/add`}
+                key={category.variable}
+                to={`/app/${category.route}/add`}
               >
                 <ListItem button>
-                  <ListItemText
-                    primary={category.substr(0, category.length - 1)}
-                  />
+                  <ListItemText primary={category.singular} />
                 </ListItem>
               </Link>
             ))}
