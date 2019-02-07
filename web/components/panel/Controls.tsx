@@ -1,8 +1,9 @@
-import { DrawerContent } from 'components/panel/DrawerContent';
 import { PanelContext, PanelContextValue } from 'lib/PanelContext';
+import { DrawerContent } from 'components/panel/DrawerContent';
 import { CATEGORIES } from 'constants/categories';
 import * as React from 'react';
 import { NAME } from 'constants/config';
+import { Link } from 'react-router-dom';
 import { api } from 'lib/api';
 import {
   createStyles,
@@ -21,6 +22,7 @@ import {
   Brightness2 as Moon,
   WbSunny as Sun,
   Refresh,
+  Send,
   Menu
 } from '@material-ui/icons';
 
@@ -29,6 +31,9 @@ const styles = (theme: Theme) =>
   createStyles({
     title: {
       flexGrow: 1
+    },
+    send: {
+      color: theme.palette.getContrastText(theme.palette.primary.main)
     },
     drawer: {
       [theme.breakpoints.up('sm')]: {
@@ -119,6 +124,13 @@ class _PanelControls extends React.Component<WithStyles<typeof styles>> {
               <IconButton onClick={() => this.onRefresh()}>
                 <Refresh />
               </IconButton>
+            </Tooltip>
+            <Tooltip title="Send mail from a proxy address" color="inherit">
+              <Link to="/app/messages/send">
+                <IconButton className={classes.send}>
+                  <Send />
+                </IconButton>
+              </Link>
             </Tooltip>
           </Toolbar>
         </AppBar>
