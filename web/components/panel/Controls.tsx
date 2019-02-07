@@ -1,13 +1,14 @@
+import { WbSunny as Sun, Brightness2 as Moon, Menu } from '@material-ui/icons';
 import { DrawerContent } from 'components/panel/DrawerContent';
 import * as React from 'react';
 import { NAME } from 'constants/config';
-import { Menu } from '@material-ui/icons';
 import {
   createStyles,
   WithStyles,
   withStyles,
   IconButton,
   Typography,
+  Tooltip,
   Toolbar,
   Hidden,
   AppBar,
@@ -18,6 +19,9 @@ import {
 const DRAWER_WIDTH = 240;
 const styles = (theme: Theme) =>
   createStyles({
+    title: {
+      flexGrow: 1
+    },
     drawer: {
       [theme.breakpoints.up('sm')]: {
         width: DRAWER_WIDTH,
@@ -46,6 +50,11 @@ interface PanelControlsState {
 class _PanelControls extends React.Component<WithStyles<typeof styles>> {
   state: PanelControlsState = { showDrawer: false };
 
+  onTheme(dark: boolean) {
+    localStorage.theme = dark ? 'dark' : 'light';
+    location.reload();
+  }
+
   render() {
     const { showDrawer } = this.state;
     const { classes } = this.props;
@@ -61,9 +70,21 @@ class _PanelControls extends React.Component<WithStyles<typeof styles>> {
             >
               <Menu />
             </IconButton>
-            <Typography variant="h6" color="inherit" noWrap>
+            <Typography
+              className={classes.title}
+              variant="h6"
+              noWrap
+              color="inherit"
+            >
               {NAME}
             </Typography>
+            <Tooltip title="Toggle light/dark theme" color="inherit">
+              <IconButton
+                onClick={() => this.onTheme(localStorage.theme != 'dark')}
+              >
+                {localStorage.theme == 'dark' ? <Sun /> : <Moon />}
+              </IconButton>
+            </Tooltip>
           </Toolbar>
         </AppBar>
         <nav className={classes.drawer}>
