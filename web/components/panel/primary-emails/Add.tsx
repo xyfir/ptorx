@@ -1,3 +1,4 @@
+import { withSnackbar, InjectedNotistackProps } from 'notistack';
 import { RouteComponentProps } from 'react-router';
 import { TextField, Button } from '@material-ui/core';
 import { PanelContext } from 'lib/PanelContext';
@@ -8,8 +9,8 @@ interface AddPrimaryEmailState {
   address: string;
 }
 
-export class AddPrimaryEmail extends React.Component<
-  RouteComponentProps,
+class _AddPrimaryEmail extends React.Component<
+  RouteComponentProps & InjectedNotistackProps,
   AddPrimaryEmailState
 > {
   static contextType = PanelContext;
@@ -24,7 +25,7 @@ export class AddPrimaryEmail extends React.Component<
         return api.get('/primary-emails');
       })
       .then(res => this.context.dispatch({ primaryEmails: res.data }))
-      .catch(console.error);
+      .catch(err => this.props.enqueueSnackbar(err.response.data.error));
   }
 
   render() {
@@ -52,3 +53,5 @@ export class AddPrimaryEmail extends React.Component<
     );
   }
 }
+
+export const AddPrimaryEmail = withSnackbar(_AddPrimaryEmail);

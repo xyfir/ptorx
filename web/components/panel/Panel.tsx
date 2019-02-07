@@ -1,4 +1,4 @@
-import { createStyles, WithStyles, withStyles, Theme } from '@material-ui/core';
+import { SnackbarProvider } from 'notistack';
 import { PanelControls } from 'components/panel/Controls';
 import { PanelContext } from 'lib/PanelContext';
 import { PanelDialog } from 'components/panel/Dialog';
@@ -7,6 +7,13 @@ import { Search } from 'components/panel/Search';
 import * as React from 'react';
 import { Ptorx } from 'typings/ptorx';
 import { api } from 'lib/api';
+import {
+  createStyles,
+  WithStyles,
+  withStyles,
+  Button,
+  Theme
+} from '@material-ui/core';
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -83,17 +90,27 @@ class _Panel extends React.Component<PanelProps, PanelState> {
   render() {
     const { classes } = this.props;
     return (
-      <PanelContext.Provider value={this.state}>
-        <div className={classes.root}>
-          <PanelControls />
-          <main className={classes.content}>
-            <div className={classes.toolbar} />
-            <Create />
-            <Search />
-            <PanelDialog />
-          </main>
-        </div>
-      </PanelContext.Provider>
+      <SnackbarProvider
+        action={[
+          <Button color="primary" size="small">
+            Dismiss
+          </Button>
+        ]}
+        maxSnack={2}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      >
+        <PanelContext.Provider value={this.state}>
+          <div className={classes.root}>
+            <PanelControls />
+            <main className={classes.content}>
+              <div className={classes.toolbar} />
+              <Create />
+              <Search />
+              <PanelDialog />
+            </main>
+          </div>
+        </PanelContext.Provider>
+      </SnackbarProvider>
     );
   }
 }

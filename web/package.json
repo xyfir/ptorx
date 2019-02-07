@@ -21,6 +21,7 @@
     "clipboard-copy": "^2.0.1",
     "fuse.js": "^3.3.0",
     "moment": "^2.23.0",
+    "notistack": "^0.4.2",
     "qs": "^6.6.0",
     "react": "^16.7.0",
     "react-dom": "^16.7.0",
