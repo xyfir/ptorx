@@ -1,7 +1,9 @@
-import { WbSunny as Sun, Brightness2 as Moon, Menu } from '@material-ui/icons';
 import { DrawerContent } from 'components/panel/DrawerContent';
+import { PanelContext, PanelContextValue } from 'lib/PanelContext';
+import { CATEGORIES } from 'constants/categories';
 import * as React from 'react';
 import { NAME } from 'constants/config';
+import { api } from 'lib/api';
 import {
   createStyles,
   WithStyles,
@@ -15,6 +17,12 @@ import {
   Drawer,
   Theme
 } from '@material-ui/core';
+import {
+  Brightness2 as Moon,
+  WbSunny as Sun,
+  Refresh,
+  Menu
+} from '@material-ui/icons';
 
 const DRAWER_WIDTH = 240;
 const styles = (theme: Theme) =>
@@ -48,7 +56,29 @@ interface PanelControlsState {
 }
 
 class _PanelControls extends React.Component<WithStyles<typeof styles>> {
+  static contextType = PanelContext;
+  context!: React.ContextType<typeof PanelContext>;
   state: PanelControlsState = { showDrawer: false };
+
+  onRefresh() {
+    const { categories, dispatch } = this.context;
+    Promise.all([
+      api.get('/account'),
+      ...categories.map(c1 =>
+        api.get(`/${CATEGORIES.find(c2 => c1 == c2.name).route}`)
+      )
+    ])
+      .then(res => {
+        const state: Partial<PanelContextValue> = { user: res[0].data };
+        categories.forEach(
+          (c1, i) =>
+            (state[CATEGORIES.find(c2 => c1 == c2.name).variable] =
+              res[i + 1].data)
+        );
+        dispatch(state);
+      })
+      .catch(console.error);
+  }
 
   onTheme(dark: boolean) {
     localStorage.theme = dark ? 'dark' : 'light';
@@ -83,6 +113,11 @@ class _PanelControls extends React.Component<WithStyles<typeof styles>> {
                 onClick={() => this.onTheme(localStorage.theme != 'dark')}
               >
                 {localStorage.theme == 'dark' ? <Sun /> : <Moon />}
+              </IconButton>
+            </Tooltip>
+            <Tooltip title="Refresh enabled categories" color="inherit">
+              <IconButton onClick={() => this.onRefresh()}>
+                <Refresh />
               </IconButton>
             </Tooltip>
           </Toolbar>
