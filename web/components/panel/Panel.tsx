@@ -1,6 +1,7 @@
 import { createStyles, WithStyles, withStyles, Theme } from '@material-ui/core';
 import { PanelControls } from 'components/panel/Controls';
 import { PanelContext } from 'lib/PanelContext';
+import { Create } from 'components/panel/Create';
 import { Search } from 'components/panel/Search';
 import * as React from 'react';
 import { Ptorx } from 'typings/ptorx';
@@ -86,6 +87,7 @@ class _Panel extends React.Component<PanelProps, PanelState> {
           <PanelControls />
           <main className={classes.content}>
             <div className={classes.toolbar} />
+            <Create />
             <Search />
           </main>
         </div>
