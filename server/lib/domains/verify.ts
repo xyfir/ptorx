@@ -1,7 +1,7 @@
 import { editDomain } from 'lib/domains/edit';
 import { resolveTxt } from 'dns';
 import { getDomain } from 'lib/domains/get';
-import { Ptorx } from 'typings/ptorx';
+import { Ptorx } from 'types/ptorx';
 
 export async function verifyDomain(
   domainId: Ptorx.Domain['id'],

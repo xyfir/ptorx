@@ -1,6 +1,6 @@
 import { addMessage } from 'lib/messages/add';
 import { ParsedMail } from 'mailparser';
-import { Ptorx } from 'typings/ptorx';
+import { Ptorx } from 'types/ptorx';
 
 export async function saveMail(
   original: ParsedMail,

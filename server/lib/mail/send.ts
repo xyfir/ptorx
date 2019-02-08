@@ -1,7 +1,7 @@
 import { SendMailOptions, createTransport } from 'nodemailer';
 import { getDomainAuth } from 'lib/domains/get';
 import * as CONFIG from 'constants/config';
-import { Ptorx } from 'typings/ptorx';
+import { Ptorx } from 'types/ptorx';
 
 const transporter =
   typeof test != 'undefined'

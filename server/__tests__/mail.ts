@@ -18,7 +18,7 @@ import { addFilter } from 'lib/filters/add';
 import { sendMail } from 'lib/mail/send';
 import { saveMail } from 'lib/mail/save';
 import * as CONFIG from 'constants/config';
-import { Ptorx } from 'typings/ptorx';
+import { Ptorx } from 'types/ptorx';
 import 'lib/tests/prepare';
 
 test('build template', async () => {

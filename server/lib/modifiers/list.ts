@@ -1,4 +1,4 @@
-import { Ptorx } from 'typings/ptorx';
+import { Ptorx } from 'types/ptorx';
 import { MySQL } from 'lib/MySQL';
 
 export async function listModifiers(

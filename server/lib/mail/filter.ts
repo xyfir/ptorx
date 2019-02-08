@@ -1,7 +1,7 @@
 import * as escapeRegExp from 'escape-string-regexp';
 import { ParsedMail } from 'mailparser';
 import { getFilter } from 'lib/filters/get';
-import { Ptorx } from 'typings/ptorx';
+import { Ptorx } from 'types/ptorx';
 
 export async function filterMail(
   mail: ParsedMail,

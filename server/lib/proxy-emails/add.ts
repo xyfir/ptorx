@@ -3,7 +3,7 @@ import { editProxyEmail } from 'lib/proxy-emails/edit';
 import { getProxyEmail } from 'lib/proxy-emails/get';
 import { listDomains } from 'lib/domains/list';
 import * as moment from 'moment';
-import { Ptorx } from 'typings/ptorx';
+import { Ptorx } from 'types/ptorx';
 import { MySQL } from 'lib/MySQL';
 import { rword } from 'rword';
 

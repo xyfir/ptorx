@@ -7,7 +7,7 @@ import { getProxyEmail } from 'lib/proxy-emails/get';
 import { addModifier } from 'lib/modifiers/add';
 import { addFilter } from 'lib/filters/add';
 import * as CONFIG from 'constants/config';
-import { Ptorx } from 'typings/ptorx';
+import { Ptorx } from 'types/ptorx';
 import 'lib/tests/prepare';
 
 test('create custom proxy email', async () => {

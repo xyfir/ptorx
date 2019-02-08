@@ -1,6 +1,6 @@
 import { deleteProxyEmail } from 'lib/proxy-emails/delete';
 import { getDomainUser } from 'lib/domains/users/get';
-import { Ptorx } from 'typings/ptorx';
+import { Ptorx } from 'types/ptorx';
 import { MySQL } from 'lib/MySQL';
 
 export async function deleteDomainUser(

@@ -1,7 +1,7 @@
 import { editMessage } from 'lib/messages/edit';
 import { getMessage } from 'lib/messages/get';
 import * as moment from 'moment';
-import { Ptorx } from 'typings/ptorx';
+import { Ptorx } from 'types/ptorx';
 import { MySQL } from 'lib/MySQL';
 import * as uuid from 'uuid/v4';
 

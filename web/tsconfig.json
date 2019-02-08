@@ -10,7 +10,7 @@
     "outDir": "./dist",
     "watch": true,
     "paths": {
-      "typings/*": ["../typings/*"]
+      "types/*": ["../types/*"]
     },
     "jsx": "react"
   },

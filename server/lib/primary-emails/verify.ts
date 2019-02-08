@@ -1,6 +1,6 @@
 import { editPrimaryEmail } from 'lib/primary-emails/edit';
 import { getPrimaryEmail } from 'lib/primary-emails/get';
-import { Ptorx } from 'typings/ptorx';
+import { Ptorx } from 'types/ptorx';
 
 export async function verifyPrimaryEmail(
   primaryEmailId: Ptorx.PrimaryEmail['id'],

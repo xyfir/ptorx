@@ -3,7 +3,7 @@ import { MuiThemeProvider, CssBaseline } from '@material-ui/core';
 import * as React from 'react';
 import { theme } from 'constants/theme';
 import { Panel } from 'components/panel/Panel';
-import { Ptorx } from 'typings/ptorx';
+import { Ptorx } from 'types/ptorx';
 import { Info } from 'components/info/Info';
 import { api } from 'lib/api';
 

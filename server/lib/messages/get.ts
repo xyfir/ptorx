@@ -1,5 +1,5 @@
 import { MySQL } from 'lib/MySQL';
-import { Ptorx } from 'typings/ptorx';
+import { Ptorx } from 'types/ptorx';
 
 export async function getMessage(
   messageId: Ptorx.Message['id'],

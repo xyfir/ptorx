@@ -5,7 +5,7 @@ import { verifyDomain } from 'lib/domains/verify';
 import { deleteDomain } from 'lib/domains/delete';
 import { listDomains } from 'lib/domains/list';
 import { addDomain } from 'lib/domains/add';
-import { Ptorx } from 'typings/ptorx';
+import { Ptorx } from 'types/ptorx';
 import 'lib/tests/prepare';
 
 test('create domain', async () => {

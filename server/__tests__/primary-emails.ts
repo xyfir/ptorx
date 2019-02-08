@@ -5,7 +5,7 @@ import { getPrimaryEmail } from 'lib/primary-emails/get';
 import { addPrimaryEmail } from 'lib/primary-emails/add';
 import { captureMail } from 'lib/tests/capture-mail';
 import * as CONFIG from 'constants/config';
-import { Ptorx } from 'typings/ptorx';
+import { Ptorx } from 'types/ptorx';
 import 'lib/tests/prepare';
 
 test('create primary email', async () => {

@@ -1,5 +1,5 @@
 import { getPrimaryEmail } from 'lib/primary-emails/get';
-import { Ptorx } from 'typings/ptorx';
+import { Ptorx } from 'types/ptorx';
 import { MySQL } from 'lib/MySQL';
 
 export async function editPrimaryEmail(

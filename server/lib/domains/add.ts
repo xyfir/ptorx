@@ -4,7 +4,7 @@ import { editDomain } from 'lib/domains/edit';
 import { getDomain } from 'lib/domains/get';
 import * as moment from 'moment';
 import * as forge from 'node-forge';
-import { Ptorx } from 'typings/ptorx';
+import { Ptorx } from 'types/ptorx';
 import { MySQL } from 'lib/MySQL';
 import { rword } from 'rword';
 

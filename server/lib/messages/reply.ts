@@ -1,6 +1,6 @@
 import { sendMessage } from 'lib/messages/send';
 import { getMessage } from 'lib/messages/get';
-import { Ptorx } from 'typings/ptorx';
+import { Ptorx } from 'types/ptorx';
 
 export async function replyToMessage(
   messageId: Ptorx.Message['id'],

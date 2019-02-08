@@ -1,7 +1,7 @@
 import { deleteFilter } from 'lib/filters/delete';
 import { listFilters } from 'lib/filters/list';
 import { addFilter } from 'lib/filters/add';
-import { Ptorx } from 'typings/ptorx';
+import { Ptorx } from 'types/ptorx';
 import 'lib/tests/prepare';
 
 test('create filter 1', async () => {

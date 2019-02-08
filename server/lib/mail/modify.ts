@@ -1,7 +1,7 @@
 import { SendMailOptions } from 'nodemailer';
 import * as escapeRegExp from 'escape-string-regexp';
 import { getModifier } from 'lib/modifiers/get';
-import { Ptorx } from 'typings/ptorx';
+import { Ptorx } from 'types/ptorx';
 
 export async function modifyMail(
   mail: SendMailOptions,

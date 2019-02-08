@@ -4,7 +4,7 @@ import { RouteComponentProps } from 'react-router';
 import { ChipSelector } from 'components/panel/utils/ChipSelector';
 import { PanelContext } from 'lib/PanelContext';
 import * as React from 'react';
-import { Ptorx } from 'typings/ptorx';
+import { Ptorx } from 'types/ptorx';
 import { api } from 'lib/api';
 
 interface AddProxyEmailState {

@@ -5,7 +5,7 @@ import { PanelDialog } from 'components/panel/Dialog';
 import { Create } from 'components/panel/Create';
 import { Search } from 'components/panel/Search';
 import * as React from 'react';
-import { Ptorx } from 'typings/ptorx';
+import { Ptorx } from 'types/ptorx';
 import { api } from 'lib/api';
 import {
   createStyles,

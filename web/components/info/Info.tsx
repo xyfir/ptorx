@@ -1,6 +1,6 @@
 import { ACCOWNT_WEB_URL, ACCOWNT_API_URL, NAME } from 'constants/config';
 import * as React from 'react';
-import { Ptorx } from 'typings/ptorx';
+import { Ptorx } from 'types/ptorx';
 import {
   createStyles,
   Typography,

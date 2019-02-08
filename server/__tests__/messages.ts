@@ -7,7 +7,7 @@ import { captureMail } from 'lib/tests/capture-mail';
 import { sendMessage } from 'lib/messages/send';
 import { addMessage } from 'lib/messages/add';
 import * as CONFIG from 'constants/config';
-import { Ptorx } from 'typings/ptorx';
+import { Ptorx } from 'types/ptorx';
 import 'lib/tests/prepare';
 
 test('create message', async () => {

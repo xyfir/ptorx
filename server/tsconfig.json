@@ -8,7 +8,7 @@
     "module": "commonjs",
     "outDir": "./dist",
     "paths": {
-      "typings/*": ["../typings/*"]
+      "types/*": ["../types/*"]
     }
   },
   "exclude": ["node_modules", "dist"]

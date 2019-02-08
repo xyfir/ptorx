@@ -1,6 +1,6 @@
 import * as moment from 'moment';
 import * as React from 'react';
-import { Ptorx } from 'typings/ptorx';
+import { Ptorx } from 'types/ptorx';
 import { Link } from 'react-router-dom';
 import {
   TablePagination,

@@ -1,7 +1,7 @@
 import { deleteModifier } from 'lib/modifiers/delete';
 import { listModifiers } from 'lib/modifiers/list';
 import { addModifier } from 'lib/modifiers/add';
-import { Ptorx } from 'typings/ptorx';
+import { Ptorx } from 'types/ptorx';
 import 'lib/tests/prepare';
 
 test('create modifier: text-only', async () => {

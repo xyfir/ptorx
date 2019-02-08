@@ -1,7 +1,7 @@
 import { getProxyEmail } from 'lib/proxy-emails/get';
 import { chargeUser } from 'lib/users/charge';
 import { sendMail } from 'lib/mail/send';
-import { Ptorx } from 'typings/ptorx';
+import { Ptorx } from 'types/ptorx';
 
 export async function sendMessage(
   data: {

@@ -5,7 +5,7 @@ import * as bodyParser from 'body-parser';
 import * as Express from 'express';
 import * as CONFIG from 'constants/config';
 import { router } from 'api/router';
-import { Ptorx } from 'typings/ptorx';
+import { Ptorx } from 'types/ptorx';
 import * as path from 'path';
 import * as jwt from 'jsonwebtoken';
 import { cron } from 'jobs/cron';
