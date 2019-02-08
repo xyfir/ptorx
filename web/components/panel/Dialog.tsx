@@ -1,5 +1,6 @@
 import { Redirect, Switch, Route } from 'react-router';
 import { AddPrimaryEmail } from 'components/panel/primary-emails/add';
+import { AddDomain } from 'components/panel/domains/add';
 import * as React from 'react';
 import { Close } from '@material-ui/icons';
 import { NAME } from 'constants/config';
@@ -83,7 +84,7 @@ class _PanelDialog extends React.Component<PanelDialogProps, PanelDialogState> {
               <Route path="/app/messages/send" render={() => null} />
               <Route path="/app/messages/add" render={() => null} />
               <Route path="/app/filters/add" render={() => null} />
-              <Route path="/app/domains/add" render={() => null} />
+              <Route path="/app/domains/add" component={AddDomain} />
               <Route
                 path="/app/primary-emails/:primaryEmail"
                 render={() => null}
