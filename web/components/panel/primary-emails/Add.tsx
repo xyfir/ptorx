@@ -3,10 +3,11 @@ import { RouteComponentProps } from 'react-router';
 import { TextField, Button } from '@material-ui/core';
 import { PanelContext } from 'lib/PanelContext';
 import * as React from 'react';
+import { Ptorx } from 'typings/ptorx';
 import { api } from 'lib/api';
 
 interface AddPrimaryEmailState {
-  address: string;
+  address: Ptorx.PrimaryEmail['address'];
 }
 
 class _AddPrimaryEmail extends React.Component<

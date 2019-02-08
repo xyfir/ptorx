@@ -3,10 +3,11 @@ import { RouteComponentProps } from 'react-router';
 import { TextField, Button } from '@material-ui/core';
 import { PanelContext } from 'lib/PanelContext';
 import * as React from 'react';
+import { Ptorx } from 'typings/ptorx';
 import { api } from 'lib/api';
 
 interface AddDomainState {
-  domain: string;
+  domain: Ptorx.Domain['domain'];
 }
 
 class _AddDomain extends React.Component<
