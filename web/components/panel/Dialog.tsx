@@ -1,6 +1,7 @@
 import { Redirect, Switch, Route } from 'react-router';
 import { AddPrimaryEmail } from 'components/panel/primary-emails/Add';
 import { AddProxyEmail } from 'components/panel/proxy-emails/Add';
+import { ManageFilter } from 'components/panel/filters/Manage';
 import { AddModifier } from 'components/panel/modifiers/Add';
 import { AddFilter } from 'components/panel/filters/Add';
 import { AddDomain } from 'components/panel/domains/Add';
@@ -33,6 +34,9 @@ const styles = (theme: Theme) =>
       color: theme.palette.grey[500],
       right: theme.spacing.unit,
       top: theme.spacing.unit
+    },
+    content: {
+      padding: '1em'
     }
   });
 
@@ -73,7 +77,7 @@ class _PanelDialog extends React.Component<PanelDialogProps, PanelDialogState> {
             </IconButton>
           </DialogTitle>
         </Hidden>
-        <DialogContent>
+        <DialogContent className={classes.content}>
           {closing ? (
             <Redirect to="/app" />
           ) : (
@@ -95,7 +99,7 @@ class _PanelDialog extends React.Component<PanelDialogProps, PanelDialogState> {
               <Route path="/app/proxy-emails/:proxyEmail" render={() => null} />
               <Route path="/app/modifiers/:modifier" render={() => null} />
               <Route path="/app/messages/:message" render={() => null} />
-              <Route path="/app/filters/:filter" render={() => null} />
+              <Route path="/app/filters/:filter" component={ManageFilter} />
               <Route path="/app/domains/:domain" render={() => null} />
               <Route path="/app/account/credits" render={() => null} />
               <Route path="/app/account" render={() => null} />
