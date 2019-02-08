@@ -1,5 +1,6 @@
 import { Redirect, Switch, Route } from 'react-router';
 import { AddPrimaryEmail } from 'components/panel/primary-emails/Add';
+import { ManageModifier } from 'components/panel/modifiers/Manage';
 import { AddProxyEmail } from 'components/panel/proxy-emails/Add';
 import { ManageFilter } from 'components/panel/filters/Manage';
 import { AddModifier } from 'components/panel/modifiers/Add';
@@ -97,7 +98,10 @@ class _PanelDialog extends React.Component<PanelDialogProps, PanelDialogState> {
                 render={() => null}
               />
               <Route path="/app/proxy-emails/:proxyEmail" render={() => null} />
-              <Route path="/app/modifiers/:modifier" render={() => null} />
+              <Route
+                path="/app/modifiers/:modifier"
+                component={ManageModifier}
+              />
               <Route path="/app/messages/:message" render={() => null} />
               <Route path="/app/filters/:filter" component={ManageFilter} />
               <Route path="/app/domains/:domain" render={() => null} />
