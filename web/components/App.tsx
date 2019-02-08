@@ -15,10 +15,6 @@ interface AppState {
 export class App extends React.Component<{}, AppState> {
   state: AppState = { loading: true };
 
-  constructor(props) {
-    super(props);
-  }
-
   componentDidMount() {
     api
       .get('/account')
