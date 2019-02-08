@@ -4,7 +4,8 @@
   "description": "Ptorx web application",
   "main": "",
   "scripts": {
-    "watch": "webpack-cli --watch",
+    "watch-build": "npm run build -- --watch",
+    "watch-check": "npm run check -- -w",
     "start": "webpack-dev-server",
     "check": "tsc --noEmit",
     "build": "webpack-cli"

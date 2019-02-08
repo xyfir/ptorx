@@ -8,7 +8,6 @@
     "target": "es2018",
     "module": "commonjs",
     "outDir": "./dist",
-    "watch": true,
     "paths": {
       "types/*": ["../types/*"]
     },
