@@ -49,6 +49,7 @@ export namespace Ptorx {
   }
 
   export type DomainUserList = {
+    domainId: DomainUser["domainId"];
     label: DomainUser["label"];
     requestKey: DomainUser["requestKey"];
     created: DomainUser["created"];
