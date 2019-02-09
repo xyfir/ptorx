@@ -42,7 +42,7 @@ class _DomainMatches extends React.Component<
             <Link
               className={classes.link}
               key={domain.id}
-              to={`/app/domains/${domain.id}`}
+              to={domain.isCreator ? `/app/domains/${domain.id}` : '/app'}
             >
               <ListItem button>
                 <ListItemText
