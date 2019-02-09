@@ -9,13 +9,14 @@ export async function listDomainUsers(
   try {
     const domains: Ptorx.DomainUserList = await db.query(
       `
-        SELECT label, requestKey, created, authorized
-        FROM domain_users WHERE domainId IN (
-          SELECT id FROM domains WHERE id = ? AND userId = ?
-        )
+        SELECT label, domainId, requestKey, created, authorized
+        FROM domain_users
+        WHERE
+          domainId IN (SELECT id FROM domains WHERE id = ? AND userId = ?) AND
+          userId != ?
         ORDER BY created DESC
       `,
-      [domainId, userId]
+      [domainId, userId, userId]
     );
     db.release();
     return domains.map(d => {
