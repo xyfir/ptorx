@@ -238,7 +238,7 @@ class _ManageDomain extends React.Component<
               </Paper>
             ) : null}
             <List dense>
-              {matches.map(_domainUser => (
+              {matches.slice((page - 1) * 10, page * 10).map(_domainUser => (
                 <ListItem
                   key={_domainUser.requestKey}
                   button
