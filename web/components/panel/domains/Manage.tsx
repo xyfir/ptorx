@@ -7,12 +7,19 @@ import * as React from 'react';
 import { Ptorx } from 'types/ptorx';
 import { api } from 'lib/api';
 import {
+  FormControlLabel,
+  TablePagination,
   createStyles,
+  ListItemText,
   WithStyles,
   withStyles,
   Typography,
   TextField,
-  Button
+  Checkbox,
+  ListItem,
+  Button,
+  Paper,
+  List
 } from '@material-ui/core';
 
 const styles = createStyles({
@@ -22,14 +29,18 @@ const styles = createStyles({
   title: {
     fontSize: '200%'
   },
+  title2: {
+    fontSize: '150%'
+  },
   button: {
     marginRight: '0.5em'
   },
   dnsRecord: {
     margin: '1em 0'
   },
-  verifyTitle: {
-    fontSize: '150%'
+  selectedUser: {
+    padding: '0.5em',
+    margin: '1em'
   }
 });
 
@@ -53,8 +64,11 @@ const DNSRecord = ({
 
 interface ManageDomainState {
   domainUsers?: Ptorx.DomainUserList;
+  domainUser?: Ptorx.DomainUserList[0];
   deleting: boolean;
   domain?: Ptorx.Domain;
+  search: string;
+  page: number;
 }
 
 class _ManageDomain extends React.Component<
@@ -65,8 +79,11 @@ class _ManageDomain extends React.Component<
   context!: React.ContextType<typeof PanelContext>;
   state: ManageDomainState = {
     domainUsers: null,
+    domainUser: null,
     deleting: false,
-    domain: null
+    domain: null,
+    search: '',
+    page: 1
   };
 
   componentDidMount() {
@@ -100,6 +117,30 @@ class _ManageDomain extends React.Component<
       .catch(err => this.props.enqueueSnackbar(err.response.data.error));
   }
 
+  onChangeUser(key: keyof Ptorx.DomainUserList[0], value: any) {
+    this.setState({ domainUser: { ...this.state.domainUser, [key]: value } });
+  }
+
+  onDeleteUser() {
+    const { domainUser, domain } = this.state;
+    api
+      .delete('/domains/users', {
+        params: { domain: domain.id, key: domainUser.requestKey }
+      })
+      .then(() => {
+        this.setState({ domainUser: null });
+        this.loadUsers();
+      })
+      .catch(err => this.props.enqueueSnackbar(err.response.data.error));
+  }
+
+  onSaveUser() {
+    api
+      .put('/domains/users', this.state.domainUser)
+      .then(() => this.loadUsers())
+      .catch(err => this.props.enqueueSnackbar(err.response.data.error));
+  }
+
   loadUsers() {
     api
       .get('/domains/users', { params: { domain: this.state.domain.id } })
@@ -116,9 +157,21 @@ class _ManageDomain extends React.Component<
   }
 
   render() {
-    const { deleting, domain } = this.state;
     const { classes } = this.props;
-    if (!domain) return null;
+    const {
+      domainUsers,
+      domainUser,
+      deleting,
+      domain,
+      search,
+      page
+    } = this.state;
+    if (!domain || !domainUsers) return null;
+
+    const matches = domainUsers.filter(
+      u => u.label.indexOf(search) > -1 || u.requestKey == search
+    );
+
     return (
       <div>
         <Typography variant="h2" className={classes.title}>
@@ -129,11 +182,95 @@ class _ManageDomain extends React.Component<
         </Typography>
         {domain.verified ? (
           <div className={classes.main}>
-            Domain users Domain users Domain users Domain users Domain users
+            <Typography variant="h3" className={classes.title2}>
+              Users
+            </Typography>
+            <TextField
+              fullWidth
+              id="search"
+              type="search"
+              value={search}
+              margin="normal"
+              onChange={e =>
+                this.setState({ search: e.target.value.toLowerCase() })
+              }
+              placeholder="Search..."
+            />
+            {domainUser ? (
+              <Paper className={classes.selectedUser} elevation={2}>
+                <TextField
+                  fullWidth
+                  id="label"
+                  value={domainUser.label}
+                  margin="normal"
+                  onChange={e =>
+                    this.onChangeUser('label', e.target.value.toLowerCase())
+                  }
+                  placeholder="user label"
+                />
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={domainUser.authorized}
+                      onChange={e =>
+                        this.onChangeUser('authorized', e.target.checked)
+                      }
+                    />
+                  }
+                  label="Authorized"
+                />
+                <div>
+                  <Button
+                    color="primary"
+                    variant="text"
+                    onClick={() => this.onSaveUser()}
+                  >
+                    Save
+                  </Button>
+                  <Button
+                    color="secondary"
+                    variant="text"
+                    onClick={() => this.onDeleteUser()}
+                  >
+                    Delete
+                  </Button>
+                </div>
+              </Paper>
+            ) : null}
+            <List dense>
+              {matches.map(_domainUser => (
+                <ListItem
+                  key={_domainUser.requestKey}
+                  button
+                  onClick={() => this.setState({ domainUser: _domainUser })}
+                  selected={
+                    domainUser &&
+                    _domainUser.requestKey == domainUser.requestKey
+                  }
+                >
+                  <ListItemText
+                    primary={_domainUser.label || _domainUser.requestKey}
+                    secondary={`${
+                      _domainUser.authorized ? 'A' : 'Una'
+                    }uthorized — Requested access ${moment
+                      .unix(_domainUser.created)
+                      .fromNow()}`}
+                  />
+                </ListItem>
+              ))}
+            </List>
+            <TablePagination
+              rowsPerPageOptions={[10]}
+              onChangePage={(e, p) => this.setState({ page: p + 1 })}
+              rowsPerPage={10}
+              component="div"
+              count={matches.length}
+              page={page - 1}
+            />
           </div>
         ) : (
           <div className={classes.main}>
-            <Typography variant="h3" className={classes.verifyTitle}>
+            <Typography variant="h3" className={classes.title2}>
               Verify
             </Typography>
             <Typography variant="body2">
