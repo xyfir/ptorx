@@ -150,19 +150,8 @@ export namespace Ptorx {
     id: number;
     userId: number;
     name: string;
-    type: "text-only" | "replace" | "subject" | "tag" | "concat" | "builder";
-    subject?: string;
-    replacement?: string;
-    flags?: string;
-    regex?: boolean;
-    prepend?: boolean;
-    target?: "subject" | "html" | "text";
-    add?: "from" | "subject";
-    to?: "subject" | "html" | "text";
-    separator?: string;
-    find?: string;
-    tag?: string;
-    template?: string;
+    target: "subject" | "html" | "text";
+    template: string;
     created: number;
   }
 
@@ -170,9 +159,7 @@ export namespace Ptorx {
     id: Ptorx.Modifier["id"];
     userId: Ptorx.Modifier["userId"];
     name: Ptorx.Modifier["name"];
-    type: Ptorx.Modifier["type"];
     created: Ptorx.Modifier["created"];
-    global: boolean;
   }[];
 
   export interface PrimaryEmail {

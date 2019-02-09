@@ -47,7 +47,7 @@ class _ModifierMatches extends React.Component<
               >
                 <ListItem button>
                   <ListItemText
-                    primary={`${modifier.type} — ${modifier.name}`}
+                    primary={modifier.name}
                     secondary={`Created ${moment
                       .unix(modifier.created)
                       .fromNow()}`}

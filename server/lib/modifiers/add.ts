@@ -11,8 +11,8 @@ export async function addModifier(
   const db = new MySQL();
   try {
     const insert: Partial<Ptorx.Modifier> = {
-      type: 'text-only',
       userId,
+      target: 'subject',
       created: moment().unix()
     };
     const result = await db.query('INSERT INTO modifiers SET ?', insert);

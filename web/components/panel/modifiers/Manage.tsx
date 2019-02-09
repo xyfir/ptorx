@@ -125,7 +125,7 @@ class _ManageModifier extends React.Component<
           multiline
           className={classes.textarea}
           helperText="The template to use on the target"
-          placeholder={`Hello from """replace(from, "Bob", "Alice")"""!`}
+          placeholder={`Hello from """replace("from", "Bob", "Alice")"""!`}
         />
 
         <div>

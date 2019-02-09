@@ -8,9 +8,7 @@ export async function listModifiers(
   try {
     const modifiers: Ptorx.ModifierList = await db.query(
       `
-        SELECT
-          id, userId, name, type, created,
-          IF(userId = 0, 1, 0) AS global
+        SELECT id, userId, name, created
         FROM modifiers
         WHERE userId = ? OR userId = 0
         ORDER BY created DESC
@@ -18,10 +16,7 @@ export async function listModifiers(
       [userId]
     );
     db.release();
-    return modifiers.map(m => {
-      m.global = !!m.global;
-      return m;
-    });
+    return modifiers;
   } catch (err) {
     db.release();
     throw err;

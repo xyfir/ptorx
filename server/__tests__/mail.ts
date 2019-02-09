@@ -215,7 +215,7 @@ test('filter mail', async () => {
   expect(await filterMail(noMatch, filter.id, 1234)).toBeFalse();
 });
 
-test('modify mail', async () => {
+test.only('modify mail', async () => {
   const mail: SendMailOptions = {
     attachments: [],
     headers: [{ key: 'Header', value: 'Value' }],
@@ -228,48 +228,40 @@ test('modify mail', async () => {
   };
 
   let modifier = await addModifier(
-    {
-      type: 'replace',
-      find: 'world',
-      replacement: 'universe',
-      regex: false,
-      flags: ''
-    },
+    { target: 'text', template: `"""replace("text", "world", "universe")"""` },
     1234
   );
   await modifyMail(mail, modifier.id, 1234);
   expect(mail.text).toBe('Hello universe!');
-  expect(mail.html).toBe('<div>Hello <b>universe</b>!</div>');
 
   modifier = await editModifier(
-    { ...modifier, type: 'subject', subject: 'subject' },
+    { ...modifier, target: 'subject', template: `Hello """var("subject")"""` },
     1234
   );
   await modifyMail(mail, modifier.id, 1234);
-  expect(mail.subject).toBe('subject');
-
-  modifier = await editModifier(
-    { ...modifier, type: 'tag', prepend: true, tag: 'tag: ' },
-    1234
-  );
-  await modifyMail(mail, modifier.id, 1234);
-  expect(mail.subject).toBe('tag: subject');
+  expect(mail.subject).toBe('Hello Hi there');
 
   modifier = await editModifier(
     {
       ...modifier,
-      type: 'builder',
-      target: 'text',
-      template: '{{from}}\n\n{{text}}'
+      target: 'html',
+      template: `"""replace("html", regex(/w(o|0)?RLD/i), "universe")"""`
     },
     1234
   );
   await modifyMail(mail, modifier.id, 1234);
-  expect(mail.text).toBe('user@example.com\n\nHello universe!');
+  expect(mail.html).toBe('<div>Hello <b>universe</b>!</div>');
 
-  modifier = await editModifier({ ...modifier, type: 'text-only' }, 1234);
+  modifier = await editModifier(
+    {
+      ...modifier,
+      target: 'text',
+      template: `"""var("from")""" -> """var("to")""" ("""header("Header")""")`
+    },
+    1234
+  );
   await modifyMail(mail, modifier.id, 1234);
-  expect(mail.html).toBeUndefined();
+  expect(mail.text).toBe(`user@example.com -> user@${CONFIG.DOMAIN} (Value)`);
 });
 
 test('send mail', async () => {
