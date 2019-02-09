@@ -79,16 +79,15 @@ test('list domain users', async () => {
   const domains = await listDomains(1234);
   const domain = await domains.find(d => !d.global);
   const domainUsers = await listDomainUsers(domain.id, 1234);
-  expect(domainUsers).toBeArrayOfSize(2);
+  expect(domainUsers).toBeArrayOfSize(1);
   const keys: Array<keyof Ptorx.DomainUserList[0]> = [
     'authorized',
     'created',
     'label',
-    'requestKey'
+    'requestKey',
+    'domainId'
   ];
   expect(domainUsers[0]).toContainAllKeys(keys);
-  expect(domainUsers.find(u => u.authorized)).not.toBeUndefined();
-  expect(domainUsers.find(u => !u.authorized)).not.toBeUndefined();
 });
 
 test('delete domain', async () => {
