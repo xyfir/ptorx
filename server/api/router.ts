@@ -42,6 +42,7 @@ router.post('/domains', c.api_addDomain);
 router.delete('/domains', c.api_deleteDomain);
 router.post('/domains/verify', c.api_verifyDomain);
 
+router.get('/domains/users', c.api_listDomainUsers);
 router.post('/domains/users', c.api_addDomainUser);
 router.put('/domains/users', c.api_editDomainUser);
 router.delete('/domains/users', c.api_deleteDomainUser);

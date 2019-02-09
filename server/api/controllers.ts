@@ -16,6 +16,7 @@ export * from './domains/verify';
 
 export * from './domains/users/add';
 export * from './domains/users/edit';
+export * from './domains/users/list';
 export * from './domains/users/delete';
 
 export * from './messages/delete';
