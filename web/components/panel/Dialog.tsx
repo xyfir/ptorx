@@ -3,6 +3,7 @@ import { AddPrimaryEmail } from 'components/panel/primary-emails/Add';
 import { ManageModifier } from 'components/panel/modifiers/Manage';
 import { AddProxyEmail } from 'components/panel/proxy-emails/Add';
 import { ManageFilter } from 'components/panel/filters/Manage';
+import { ManageDomain } from 'components/panel/domains/Manage';
 import { AddModifier } from 'components/panel/modifiers/Add';
 import { AddFilter } from 'components/panel/filters/Add';
 import { AddDomain } from 'components/panel/domains/Add';
@@ -104,7 +105,7 @@ class _PanelDialog extends React.Component<PanelDialogProps, PanelDialogState> {
               />
               <Route path="/app/messages/:message" render={() => null} />
               <Route path="/app/filters/:filter" component={ManageFilter} />
-              <Route path="/app/domains/:domain" render={() => null} />
+              <Route path="/app/domains/:domain" component={ManageDomain} />
               <Route path="/app/account/credits" render={() => null} />
               <Route path="/app/account" render={() => null} />
             </Switch>
