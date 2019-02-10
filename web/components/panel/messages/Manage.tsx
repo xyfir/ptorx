@@ -1,5 +1,6 @@
 import { withSnackbar, InjectedNotistackProps } from 'notistack';
 import { RouteComponentProps } from 'react-router';
+import { parseAddresses } from 'lib/parse-addresses';
 import { PanelContext } from 'lib/PanelContext';
 import { Attachment } from '@material-ui/icons';
 import { TrixEditor } from 'react-trix';
@@ -13,6 +14,7 @@ import {
   Typography,
   WithStyles,
   withStyles,
+  Tooltip,
   Button,
   Paper
 } from '@material-ui/core';
@@ -100,7 +102,14 @@ class _ManageMessage extends React.Component<
   }
 
   render() {
-    const { renderHTML, deleting, message, reply, html } = this.state;
+    const {
+      showHeaders,
+      renderHTML,
+      deleting,
+      message,
+      reply,
+      html
+    } = this.state;
     const { classes } = this.props;
     if (!message) return null;
     return (
@@ -117,6 +126,7 @@ class _ManageMessage extends React.Component<
                 href={`${api.defaults.baseURL}/messages/attachment?attachment=${
                   attachment.id
                 }`}
+                size="small"
                 variant="text"
                 download={attachment.filename}
               >
@@ -127,11 +137,39 @@ class _ManageMessage extends React.Component<
           </div>
         ) : null}
 
-        <Typography variant="body2">
-          Received: {moment.unix(message.created).format('LLL')}
-        </Typography>
-        <Typography variant="body2">From: {message.from}</Typography>
-        <Typography variant="body2">To: {message.to}</Typography>
+        {showHeaders ? (
+          message.headers.map((header, i) => (
+            <Typography variant="body2" key={i}>
+              {header}
+            </Typography>
+          ))
+        ) : (
+          <Tooltip
+            interactive
+            title={
+              <Button
+                onClick={() => this.setState({ showHeaders: true })}
+                variant="text"
+                color="inherit"
+                size="small"
+              >
+                Show Full Headers
+              </Button>
+            }
+          >
+            <div>
+              <Typography variant="body2">
+                Received: {moment.unix(message.created).format('LLL')}
+              </Typography>
+              <Typography variant="body2">
+                From: {parseAddresses(message.from)}
+              </Typography>
+              <Typography variant="body2">
+                To: {parseAddresses(message.to)}
+              </Typography>
+            </div>
+          </Tooltip>
+        )}
 
         <Paper className={classes.content} elevation={2}>
           {renderHTML ? (
@@ -141,6 +179,7 @@ class _ManageMessage extends React.Component<
               <pre>{message.text}</pre>
               {message.html && message.html != message.text ? (
                 <Button
+                  size="small"
                   color="secondary"
                   variant="outlined"
                   onClick={() => this.setState({ renderHTML: true })}
