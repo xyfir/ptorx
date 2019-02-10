@@ -37,6 +37,10 @@ export async function addDomain(
           .slice(-2),
       created: moment().unix()
     };
+    const rows = await db.query('SELECT id FROM domains WHERE domain = ? ', [
+      domain.domain
+    ]);
+    if (rows.length) throw 'That domain already exists in our database';
     const result = await db.query('INSERT INTO domains SET ?', insert);
     db.release();
 
