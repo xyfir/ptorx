@@ -3,17 +3,21 @@ import { getMessage } from 'lib/messages/get';
 import { Ptorx } from 'types/ptorx';
 
 export async function replyToMessage(
-  messageId: Ptorx.Message['id'],
-  content: string,
+  data: {
+    messageId: Ptorx.Message['id'];
+    html: string;
+    text: string;
+  },
   userId: number
 ): Promise<void> {
   try {
-    const message = await getMessage(messageId, userId);
+    const message = await getMessage(data.messageId, userId);
     await sendMessage(
       {
         proxyEmailId: message.proxyEmailId,
         subject: message.subject,
-        content,
+        html: data.html,
+        text: data.text,
         to: message.replyTo || message.from
       },
       userId

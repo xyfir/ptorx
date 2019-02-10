@@ -102,14 +102,20 @@ test('send and reply to messages', async () => {
     sendMessage(
       {
         proxyEmailId: messages[0].proxyEmailId,
-        content: 'content',
         subject: 'subject',
+        html: '<div>content</div>',
+        text: 'content',
         to: 'sender@domain.com'
       },
       1234
     )
   ).not.toReject();
-  await expect(replyToMessage(message.id, 'content', 1234)).not.toReject();
+  await expect(
+    replyToMessage(
+      { messageId: message.id, html: '<div>content</div>', text: 'content' },
+      1234
+    )
+  ).not.toReject();
 }, 10000);
 
 test('delete message', async () => {

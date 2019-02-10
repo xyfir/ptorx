@@ -6,8 +6,9 @@ import { Ptorx } from 'types/ptorx';
 export async function sendMessage(
   data: {
     proxyEmailId: Ptorx.ProxyEmail['id'];
-    content: string;
     subject: string;
+    html: string;
+    text: string;
     to: string;
   },
   userId: number
@@ -17,7 +18,8 @@ export async function sendMessage(
     await sendMail(proxyEmail.domainId, {
       subject: data.subject,
       from: proxyEmail.fullAddress,
-      text: data.content,
+      html: data.html,
+      text: data.text,
       to: data.to
     });
     await chargeUser(userId, 1);
