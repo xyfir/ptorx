@@ -168,7 +168,7 @@ export namespace Ptorx {
     userId: number;
     address: string;
     created: number;
-    key: string;
+    key?: string;
     verified: boolean;
   }
 
