@@ -49,7 +49,7 @@ class _PrimaryEmailMatches extends React.Component<
                   <ListItemText
                     primary={primaryEmail.address}
                     secondary={`${
-                      primaryEmail.verified ? 'Unv' : 'V'
+                      primaryEmail.verified ? 'V' : 'Unv'
                     }erified email added ${moment
                       .unix(primaryEmail.created)
                       .fromNow()}`}
