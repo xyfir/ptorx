@@ -106,8 +106,7 @@ class _PanelDialog extends React.Component<PanelDialogProps, PanelDialogState> {
               <Route path="/app/messages/:message" render={() => null} />
               <Route path="/app/filters/:filter" component={ManageFilter} />
               <Route path="/app/domains/:domain" component={ManageDomain} />
-              <Route path="/app/account/credits" render={() => null} />
-              <Route path="/app/account" render={() => null} />
+              <Route path="/app/credits" component={null} />
             </Switch>
           )}
         </DialogContent>

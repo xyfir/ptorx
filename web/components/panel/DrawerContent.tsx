@@ -1,4 +1,8 @@
-import { ACCOWNT_API_URL, HELP_DOCS_URL } from 'constants/config';
+import {
+  ACCOWNT_API_URL,
+  HELP_DOCS_URL,
+  ACCOWNT_WEB_URL
+} from 'constants/config';
 import { AccountBox, ExitToApp, Help } from '@material-ui/icons';
 import { PanelContext } from 'lib/PanelContext';
 import * as React from 'react';
@@ -67,14 +71,14 @@ const _DrawerContent = ({ classes }: WithStyles<typeof styles>) => (
     </List>
     <Divider />
     <List>
-      <Link to="/app/account" className={classes.link}>
+      <a href={ACCOWNT_WEB_URL} className={classes.link}>
         <ListItem button>
           <ListItemIcon>
             <AccountBox />
           </ListItemIcon>
           <ListItemText primary="Account" />
         </ListItem>
-      </Link>
+      </a>
       <a href={`${ACCOWNT_API_URL}/login/logout`} className={classes.link}>
         <ListItem button>
           <ListItemIcon>
