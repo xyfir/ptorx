@@ -3,6 +3,7 @@ import { ManagePrimaryEmail } from './primary-emails/Manage';
 import { AddPrimaryEmail } from 'components/panel/primary-emails/Add';
 import { ManageModifier } from 'components/panel/modifiers/Manage';
 import { AddProxyEmail } from 'components/panel/proxy-emails/Add';
+import { ManageMessage } from './messages/Manage';
 import { ManageFilter } from 'components/panel/filters/Manage';
 import { ManageDomain } from 'components/panel/domains/Manage';
 import { AddModifier } from 'components/panel/modifiers/Add';
@@ -25,6 +26,8 @@ import {
   Dialog,
   Theme
 } from '@material-ui/core';
+import 'trix/dist/trix.css';
+import 'trix';
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -104,7 +107,7 @@ class _PanelDialog extends React.Component<PanelDialogProps, PanelDialogState> {
                 path="/app/modifiers/:modifier"
                 component={ManageModifier}
               />
-              <Route path="/app/messages/:message" render={() => null} />
+              <Route path="/app/messages/:message" component={ManageMessage} />
               <Route path="/app/filters/:filter" component={ManageFilter} />
               <Route path="/app/domains/:domain" component={ManageDomain} />
               <Route path="/app/credits" component={null} />

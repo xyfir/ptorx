@@ -11,8 +11,6 @@ import {
   TextField,
   Button
 } from '@material-ui/core';
-import 'trix/dist/trix.css';
-import 'trix';
 
 const styles = createStyles({
   controlGroup: {
