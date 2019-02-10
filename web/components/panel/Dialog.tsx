@@ -6,6 +6,7 @@ import { AddProxyEmail } from 'components/panel/proxy-emails/Add';
 import { ManageFilter } from 'components/panel/filters/Manage';
 import { ManageDomain } from 'components/panel/domains/Manage';
 import { AddModifier } from 'components/panel/modifiers/Add';
+import { SendMessage } from './messages/Send';
 import { AddFilter } from 'components/panel/filters/Add';
 import { AddDomain } from 'components/panel/domains/Add';
 import * as React from 'react';
@@ -91,7 +92,7 @@ class _PanelDialog extends React.Component<PanelDialogProps, PanelDialogState> {
               />
               <Route path="/app/proxy-emails/add" component={AddProxyEmail} />
               <Route path="/app/modifiers/add" component={AddModifier} />
-              <Route path="/app/messages/send" component={null} />
+              <Route path="/app/messages/send" component={SendMessage} />
               <Route path="/app/filters/add" component={AddFilter} />
               <Route path="/app/domains/add" component={AddDomain} />
               <Route
