@@ -1,4 +1,5 @@
 import { withSnackbar, InjectedNotistackProps } from 'notistack';
+import { ProxyEmailWaterfall } from 'components/panel/proxy-emails/Waterfall';
 import { RouteComponentProps } from 'react-router';
 import { PanelContext } from 'lib/PanelContext';
 import * as moment from 'moment';
@@ -42,9 +43,9 @@ class _ManageProxyEmail extends React.Component<
     this.load();
   }
 
-  onChange(key: keyof Ptorx.ProxyEmail, value: any) {
+  onChange = (key: keyof Ptorx.ProxyEmail, value: any) => {
     this.setState({ proxyEmail: { ...this.state.proxyEmail, [key]: value } });
-  }
+  };
 
   onDelete() {
     if (!this.state.deleting) return this.setState({ deleting: true });
@@ -113,6 +114,8 @@ class _ManageProxyEmail extends React.Component<
           }
           label="Save Incoming Mail"
         />
+
+        <ProxyEmailWaterfall proxyEmail={proxyEmail} onChange={this.onChange} />
 
         <div>
           <Button
