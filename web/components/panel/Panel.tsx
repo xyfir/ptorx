@@ -36,13 +36,14 @@ export interface PanelState {
     | 'Filters'
     | 'Domains'
   >;
-  primaryEmails: Ptorx.PrimaryEmailList;
-  proxyEmails: Ptorx.ProxyEmailList;
-  modifiers: Ptorx.ModifierList;
+  primaryEmails?: Ptorx.PrimaryEmailList;
+  proxyEmails?: Ptorx.ProxyEmailList;
+  modifiers?: Ptorx.ModifierList;
   dispatch: (state: Partial<PanelState>) => void;
-  messages: Ptorx.MessageList;
-  filters: Ptorx.FilterList;
-  domains: Ptorx.DomainList;
+  messages?: Ptorx.MessageList;
+  filters?: Ptorx.FilterList;
+  domains?: Ptorx.DomainList;
+  loading: boolean;
   search: string;
   user: Ptorx.User;
 }
@@ -53,14 +54,9 @@ export interface PanelProps extends WithStyles<typeof styles> {
 
 class _Panel extends React.Component<PanelProps, PanelState> {
   state: PanelState = {
-    primaryEmails: [],
-    proxyEmails: [],
     categories: (localStorage.categories || 'Proxy Emails').split(','),
-    modifiers: [],
     dispatch: state => this.setState(state as PanelState),
-    messages: [],
-    filters: [],
-    domains: [],
+    loading: true,
     search: '',
     user: this.props.user
   };
@@ -81,13 +77,15 @@ class _Panel extends React.Component<PanelProps, PanelState> {
           modifiers: res[2].data,
           messages: res[3].data,
           filters: res[4].data,
-          domains: res[5].data
+          domains: res[5].data,
+          loading: false
         })
       )
       .catch(console.error);
   }
 
   render() {
+    if (this.state.loading) return null;
     const { classes } = this.props;
     return (
       <SnackbarProvider
