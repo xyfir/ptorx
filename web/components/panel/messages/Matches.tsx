@@ -1,4 +1,4 @@
-import { parseAddresses } from 'lib/parse-addresses';
+import { displayAddress } from 'lib/display-address';
 import * as moment from 'moment';
 import * as React from 'react';
 import { Ptorx } from 'types/ptorx';
@@ -48,7 +48,7 @@ class _MessageMatches extends React.Component<
               >
                 <ListItem button>
                   <ListItemText
-                    primary={`${parseAddresses(modifier.from)} — ${
+                    primary={`${displayAddress(modifier.from)} — ${
                       modifier.subject
                     }`}
                     secondary={`Received ${moment

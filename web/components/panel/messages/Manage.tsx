@@ -1,6 +1,6 @@
 import { withSnackbar, InjectedNotistackProps } from 'notistack';
 import { RouteComponentProps } from 'react-router';
-import { parseAddresses } from 'lib/parse-addresses';
+import { displayAddress } from 'lib/display-address';
 import { PanelContext } from 'lib/PanelContext';
 import { Attachment } from '@material-ui/icons';
 import { TrixEditor } from 'react-trix';
@@ -162,10 +162,10 @@ class _ManageMessage extends React.Component<
                 Received: {moment.unix(message.created).format('LLL')}
               </Typography>
               <Typography variant="body2">
-                From: {parseAddresses(message.from)}
+                From: {displayAddress(message.from)}
               </Typography>
               <Typography variant="body2">
-                To: {parseAddresses(message.to)}
+                To: {displayAddress(message.to)}
               </Typography>
             </div>
           </Tooltip>
