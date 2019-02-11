@@ -3,7 +3,6 @@ export namespace Ptorx {
     userId: number;
     email: string;
     credits: number;
-    emailTemplate?: number;
   }
 
   export interface JWT {

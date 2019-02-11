@@ -5,12 +5,7 @@ import 'lib/tests/prepare';
 
 test('get user', async () => {
   const userId = Date.now();
-  const _user: Ptorx.User = {
-    credits: 100,
-    email: 'test@example.com',
-    emailTemplate: null,
-    userId
-  };
+  const _user: Ptorx.User = { credits: 100, email: 'test@example.com', userId };
   let user = await getUser({ userId, email: 'test@example.com' });
   expect(user).toMatchObject(_user);
   user = await getUser({ userId, email: 'test@example.com' });

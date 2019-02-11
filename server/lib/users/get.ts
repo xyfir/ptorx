@@ -14,8 +14,7 @@ export async function getUser(jwt: Ptorx.JWT | null): Promise<Ptorx.User> {
       const insert: Ptorx.User = {
         userId: jwt.userId,
         email: jwt.email,
-        credits: 100,
-        emailTemplate: null
+        credits: 100
       };
       await db.query('INSERT INTO users SET ?', insert);
       [row] = await db.query('SELECT * FROM users WHERE userId = ?', [

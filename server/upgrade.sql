@@ -257,3 +257,7 @@ DROP TABLE `ptorx`.`sessions`
 -- new modifier system (only target/template)
 ALTER TABLE `modifiers` DROP `type`, DROP `subject`, DROP `replacement`, DROP `flags`, DROP `regex`, DROP `prepend`, DROP `add`, DROP `to`, DROP `separator`, DROP `find`, DROP `tag`;
 ALTER TABLE `modifiers` CHANGE `target` `target` VARCHAR(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL, CHANGE `template` `template` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL;
+-- remove emailTemplate
+ALTER TABLE ptorx.users DROP FOREIGN KEY fk__users__emailTemplate;
+ALTER TABLE `users` DROP INDEX `fk__users__emailTemplate`;
+ALTER TABLE `users` DROP `emailTemplate`;

@@ -31,7 +31,6 @@ router.delete('/primary-emails', c.api_deletePrimaryEmail);
 router.get('/primary-emails/verify', c.api_verifyPrimaryEmail);
 
 router.get('/account', c.api_getUser);
-router.put('/account/template', c.api_setEmailTemplate);
 router.get('/account/logout', c.api_logout);
 
 router.post('/account/credits/purchase', c.api_startCreditsPurchase);
