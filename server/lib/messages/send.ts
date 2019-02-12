@@ -1,6 +1,7 @@
 import { getProxyEmail } from 'lib/proxy-emails/get';
 import { chargeUser } from 'lib/users/charge';
 import { sendMail } from 'lib/mail/send';
+import { getUser } from 'lib/users/get';
 import { Ptorx } from 'types/ptorx';
 
 export async function sendMessage(
@@ -14,6 +15,9 @@ export async function sendMessage(
   userId: number
 ): Promise<void> {
   try {
+    const user = await getUser(userId);
+    if (user.credits < 1) throw 'You need at least one credit to send mail';
+
     const proxyEmail = await getProxyEmail(data.proxyEmailId, userId);
     await sendMail(proxyEmail.domainId, {
       subject: data.subject,
@@ -22,6 +26,7 @@ export async function sendMessage(
       text: data.text,
       to: data.to
     });
+
     await chargeUser(userId, 1);
   } catch (err) {
     throw err;
