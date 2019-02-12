@@ -1,31 +1,21 @@
 import { MySQL } from 'lib/MySQL';
 
 /**
- * Charges a user's account credits and fails if not enough are available
- * @return The user's remaining credits after charge
+ * Charges a user's account credits. Never fails or checks their balance.
  */
 export async function chargeUser(
   userId: number,
   amount: number
-): Promise<number> {
+): Promise<void> {
   const db = new MySQL();
   try {
-    let [{ credits }]: { credits: number }[] = await db.query(
-      'SELECT credits FROM users WHERE userId = ?',
-      [userId]
-    );
-    if (amount > credits) throw `No credits (need ${amount}; have ${credits})`;
-
-    credits -= amount;
-    await db.query('UPDATE users SET credits = ? WHERE userId = ?', [
-      credits,
+    await db.query('UPDATE users SET credits = credits - ? WHERE userId = ?', [
+      amount,
       userId
     ]);
-
-    db.release();
-    return credits;
   } catch (err) {
-    db.release();
-    throw err;
+    if (err.message.startsWith('ER_DATA_OUT_OF_RANGE:'))
+      await db.query('UPDATE users SET credits = 0 WHERE userId = ?', [userId]);
   }
+  db.release();
 }
