@@ -35,11 +35,17 @@ export function startSMTPServer(): SMTPServer {
         // Ignore if not for Ptorx
         if (!recipient.proxyEmailId && !recipient.message) continue;
 
+        // User does not have enough credits to accept this message
+        if (recipient.user.credits < 1) continue;
+
         // Handle reply to a stored message
         if (recipient.message) {
+          // User does not have enough credits to reply
+          if (recipient.user.credits < 2) continue;
+
           const proxyEmail = await getProxyEmail(
             recipient.message.proxyEmailId,
-            recipient.userId
+            recipient.user.userId
           );
 
           await sendMail(proxyEmail.domainId, {
@@ -82,12 +88,11 @@ export function startSMTPServer(): SMTPServer {
           date: incoming.date,
           to: incoming.to.text
         };
-
         const proxyEmail = await getProxyEmail(
           recipient.proxyEmailId,
-          recipient.userId
+          recipient.user.userId
         );
-        await chargeUser(proxyEmail.userId, 1);
+        let credits = 1;
 
         const savedMessage = proxyEmail.saveMail
           ? await saveMail(incoming, proxyEmail)
@@ -100,21 +105,25 @@ export function startSMTPServer(): SMTPServer {
             const pass = await filterMail(
               incoming,
               link.filterId,
-              recipient.userId
+              recipient.user.userId
             );
             if (!pass) break;
           }
           // Modify mail
           else if (link.modifierId) {
-            await modifyMail(outgoing, link.modifierId, recipient.userId);
+            await modifyMail(outgoing, link.modifierId, recipient.user.userId);
           }
           // Forward mail
           else if (link.primaryEmailId) {
             const primaryEmail = await getPrimaryEmail(
               link.primaryEmailId,
-              recipient.userId
+              recipient.user.userId
             );
             if (!primaryEmail.verified) continue;
+
+            // User does not have enough credits to redirect message
+            if (recipient.user.credits < credits + 1) continue;
+
             await sendMail(proxyEmail.domainId, {
               ...outgoing,
               envelope: {
@@ -125,9 +134,11 @@ export function startSMTPServer(): SMTPServer {
                 ? savedMessage.ptorxReplyTo
                 : outgoing.replyTo
             });
-            await chargeUser(recipient.userId, 1);
+            credits++;
           }
         }
+
+        await chargeUser(recipient.user.userId, credits);
       }
     }
   });
