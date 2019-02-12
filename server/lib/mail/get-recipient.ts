@@ -1,17 +1,19 @@
 import { getMessage } from 'lib/messages/get';
+import { getUser } from 'lib/users/get';
 import { Ptorx } from 'types/ptorx';
 import { MySQL } from 'lib/MySQL';
 
 export async function getRecipient(address: string): Promise<Ptorx.Recipient> {
-  const [user, domain] = address.split('@');
+  const [local, domain] = address.split('@');
   const db = new MySQL();
   try {
     // Reply-To address
-    if (user.endsWith('--reply-x')) {
+    if (local.endsWith('--reply-x')) {
       try {
-        const [messageId, messageKey] = user.split('--');
+        const [messageId, messageKey] = local.split('--');
         const message = await getMessage(+messageId, messageKey);
-        return { address, message, userId: message.userId };
+        const user = await getUser(message.userId);
+        return { address, message, user };
       } catch (err) {
         // ** Send email response explaining problem
         throw new Error('Bad message reply address');
@@ -33,7 +35,7 @@ export async function getRecipient(address: string): Promise<Ptorx.Recipient> {
           WHERE
             d.domain = ? AND d.verified = ?
         `,
-        [user, domain, true]
+        [local, domain, true]
       );
       db.release();
 
@@ -42,7 +44,12 @@ export async function getRecipient(address: string): Promise<Ptorx.Recipient> {
       // Not an active proxy email on verified Ptorx domain
       if (!row.proxyEmailId) throw new Error('User does not exist on domain');
       // Valid, active proxy email
-      return { ...row, address };
+      return {
+        proxyEmailId: row.proxyEmailId,
+        domainId: row.domainId,
+        address,
+        user: await getUser(row.userId)
+      };
     }
   } catch (err) {
     db.release();

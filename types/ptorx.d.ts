@@ -184,6 +184,6 @@ export namespace Ptorx {
     domainId?: number;
     message?: Ptorx.Message;
     address: string;
-    userId?: number;
+    user?: Ptorx.User;
   }
 }

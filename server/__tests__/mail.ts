@@ -18,6 +18,7 @@ import { addFilter } from 'lib/filters/add';
 import { sendMail } from 'lib/mail/send';
 import { saveMail } from 'lib/mail/save';
 import * as CONFIG from 'constants/config';
+import { getUser } from 'lib/users/get';
 import { Ptorx } from 'types/ptorx';
 import 'lib/tests/prepare';
 
@@ -43,9 +44,10 @@ test('get recipient: proxy email', async () => {
     },
     1234
   );
+  const user = await getUser(1234);
   const recipient = await getRecipient(`recipient@${CONFIG.DOMAIN}`);
   const _recipient: Ptorx.Recipient = {
-    userId: 1234,
+    user,
     address: `recipient@${CONFIG.DOMAIN}`,
     domainId: CONFIG.DOMAIN_ID,
     proxyEmailId: proxyEmail.id
@@ -64,9 +66,10 @@ test('get recipient: bad address on proxy domain', async () => {
 test('get recipient: reply to message', async () => {
   const [proxyEmail] = await listProxyEmails(1234);
   const message = await addMessage({ proxyEmailId: proxyEmail.id }, 1234);
+  const user = await getUser(1234);
   const recipient = await getRecipient(message.ptorxReplyTo);
   const _recipient: Ptorx.Recipient = {
-    userId: 1234,
+    user,
     message,
     address: message.ptorxReplyTo
   };
@@ -215,7 +218,7 @@ test('filter mail', async () => {
   expect(await filterMail(noMatch, filter.id, 1234)).toBeFalse();
 });
 
-test.only('modify mail', async () => {
+test('modify mail', async () => {
   const mail: SendMailOptions = {
     attachments: [],
     headers: [{ key: 'Header', value: 'Value' }],
