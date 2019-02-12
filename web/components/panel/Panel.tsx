@@ -2,6 +2,7 @@ import { SnackbarProvider } from 'notistack';
 import { PanelControls } from 'components/panel/Controls';
 import { PanelContext } from 'lib/PanelContext';
 import { PanelDialog } from 'components/panel/Dialog';
+import { Category } from 'constants/categories';
 import { Create } from 'components/panel/Create';
 import { Search } from 'components/panel/Search';
 import * as React from 'react';
@@ -28,16 +29,9 @@ const styles = (theme: Theme) =>
   });
 
 export interface PanelState {
-  categories: Array<
-    | 'Primary Emails'
-    | 'Proxy Emails'
-    | 'Modifiers'
-    | 'Messages'
-    | 'Filters'
-    | 'Domains'
-  >;
   primaryEmails?: Ptorx.PrimaryEmailList;
   proxyEmails?: Ptorx.ProxyEmailList;
+  categories: Category[];
   modifiers?: Ptorx.ModifierList;
   dispatch: (state: Partial<PanelState>) => void;
   messages?: Ptorx.MessageList;
