@@ -8,11 +8,19 @@ test('get user', async () => {
   const _user: Ptorx.User = { credits: 100, email: 'test@example.com', userId };
   let user = await getUser({ userId, email: 'test@example.com' });
   expect(user).toMatchObject(_user);
-  user = await getUser({ userId, email: 'test@example.com' });
+  user = await getUser(userId);
   expect(user).toMatchObject(_user);
 });
 
 test('charge user', async () => {
-  expect(await chargeUser(1234, 3)).toBe(2);
-  expect(chargeUser(1234, 3)).toReject();
+  const userId = Date.now();
+  const _user: Ptorx.User = { credits: 100, email: 'test@example.com', userId };
+  let user = await getUser({ userId, email: 'test@example.com' });
+
+  await chargeUser(userId, 3);
+  user = await getUser(userId);
+  expect(user.credits).toBe(97);
+  await chargeUser(userId, 100);
+  user = await getUser(userId);
+  expect(user.credits).toBe(0);
 });

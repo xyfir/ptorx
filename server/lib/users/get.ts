@@ -1,24 +1,27 @@
 import { Ptorx } from 'types/ptorx';
 import { MySQL } from 'lib/MySQL';
 
-export async function getUser(jwt: Ptorx.JWT | null): Promise<Ptorx.User> {
+export async function getUser(
+  user: Ptorx.JWT | null | number
+): Promise<Ptorx.User> {
   const db = new MySQL();
   try {
-    if (jwt === null) throw 'Not logged in';
+    if (user === null) throw 'Not logged in';
+
     let [row] = await db.query('SELECT * FROM users WHERE userId = ?', [
-      jwt.userId
+      typeof user == 'number' ? user : user.userId
     ]);
 
     // We need to add the user to our database first
-    if (!row) {
+    if (!row && typeof user != 'number') {
       const insert: Ptorx.User = {
-        userId: jwt.userId,
-        email: jwt.email,
+        userId: user.userId,
+        email: user.email,
         credits: 100
       };
       await db.query('INSERT INTO users SET ?', insert);
       [row] = await db.query('SELECT * FROM users WHERE userId = ?', [
-        jwt.userId
+        user.userId
       ]);
     }
 
