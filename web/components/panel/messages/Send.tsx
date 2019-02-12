@@ -54,10 +54,9 @@ class _SendMessage extends React.Component<
 
   onSend() {
     const { subject, from, html, text, to } = this.state;
+    const { proxyEmails, dispatch } = this.context;
     const { enqueueSnackbar } = this.props;
-    const proxyEmailId = this.context.proxyEmails.find(
-      p => p.fullAddress == from
-    ).id;
+    const proxyEmailId = proxyEmails.find(p => p.fullAddress == from).id;
     api
       .post('/messages/send', { proxyEmailId, subject, html, text, to })
       .then(() => {
@@ -70,7 +69,9 @@ class _SendMessage extends React.Component<
           text: '',
           to: ''
         });
+        return api.get('/account');
       })
+      .then(res => dispatch({ user: res.data }))
       .catch(err => enqueueSnackbar(err.response.data.error));
   }
 
