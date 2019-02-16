@@ -261,3 +261,7 @@ ALTER TABLE `modifiers` CHANGE `target` `target` VARCHAR(10) CHARACTER SET utf8m
 ALTER TABLE ptorx.users DROP FOREIGN KEY fk__users__emailTemplate;
 ALTER TABLE `users` DROP INDEX `fk__users__emailTemplate`;
 ALTER TABLE `users` DROP `emailTemplate`;
+-- change user credit system
+ALTER TABLE `users` ADD `tier` VARCHAR(8) NOT NULL AFTER `credits`, ADD `tierExpiration` BIGINT UNSIGNED NOT NULL AFTER `tier`;
+ALTER TABLE `users` CHANGE `tierExpiration` `tierExpiration` BIGINT(20) UNSIGNED NULL DEFAULT NULL;
+UPDATE `users` SET tier = 'premium', tierExpiration = (UNIX_TIMESTAMP() + 86400 * 365) * 1000;

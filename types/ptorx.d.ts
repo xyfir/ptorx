@@ -3,6 +3,8 @@ export namespace Ptorx {
     userId: number;
     email: string;
     credits: number;
+    tier: "basic" | "premium" | "ultimate";
+    tierExpiration?: number;
   }
 
   export interface JWT {

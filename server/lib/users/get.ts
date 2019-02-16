@@ -17,7 +17,8 @@ export async function getUser(
       const insert: Ptorx.User = {
         userId: user.userId,
         email: user.email,
-        credits: 100
+        credits: 100,
+        tier: 'basic'
       };
       await db.query('INSERT INTO users SET ?', insert);
       [row] = await db.query('SELECT * FROM users WHERE userId = ?', [
