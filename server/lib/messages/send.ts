@@ -1,5 +1,5 @@
 import { getProxyEmail } from 'lib/proxy-emails/get';
-import { chargeCredits } from 'lib/users/credits/charge';
+import { chargeCredits } from 'lib/users/charge';
 import { sendMail } from 'lib/mail/send';
 import { getUser } from 'lib/users/get';
 import { Ptorx } from 'types/ptorx';

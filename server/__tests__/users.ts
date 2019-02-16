@@ -1,4 +1,4 @@
-import { chargeCredits } from 'lib/users/credits/charge';
+import { chargeCredits } from 'lib/users/charge';
 import { getUser } from 'lib/users/get';
 import { Ptorx } from 'types/ptorx';
 import 'lib/tests/prepare';
