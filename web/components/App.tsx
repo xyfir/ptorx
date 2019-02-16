@@ -17,7 +17,7 @@ export class App extends React.Component<{}, AppState> {
 
   componentDidMount() {
     api
-      .get('/account')
+      .get('/users')
       .then(res => this.setState({ user: res.data, loading: false }))
       .catch(() => this.setState({ loading: false }));
   }

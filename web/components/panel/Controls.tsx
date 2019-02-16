@@ -68,7 +68,7 @@ class _PanelControls extends React.Component<WithStyles<typeof styles>> {
   onRefresh() {
     const { categories, dispatch } = this.context;
     Promise.all([
-      api.get('/account'),
+      api.get('/users'),
       ...categories.map(c1 =>
         api.get(`/${CATEGORIES.find(c2 => c1 == c2.name).route}`)
       )

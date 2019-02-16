@@ -1,5 +1,5 @@
-export * from './account/get';
-export * from './account/logout';
+export * from './users/get';
+export * from './users/logout';
 
 export * from './domains/users/edit';
 export * from './domains/users/delete';

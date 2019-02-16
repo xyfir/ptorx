@@ -30,8 +30,8 @@ router.post('/primary-emails', c.api_addPrimaryEmail);
 router.delete('/primary-emails', c.api_deletePrimaryEmail);
 router.get('/primary-emails/verify', c.api_verifyPrimaryEmail);
 
-router.get('/account', c.api_getUser);
-router.get('/account/logout', c.api_logout);
+router.get('/users', c.api_getUser);
+router.get('/users/logout', c.api_logout);
 
 router.post('/payments/start', c.api_startPayment);
 router.post('/payments/finish', c.api_finishPayment);

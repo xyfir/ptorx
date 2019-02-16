@@ -69,7 +69,7 @@ class _SendMessage extends React.Component<
           text: '',
           to: ''
         });
-        return api.get('/account');
+        return api.get('/users');
       })
       .then(res => dispatch({ user: res.data }))
       .catch(err => enqueueSnackbar(err.response.data.error));

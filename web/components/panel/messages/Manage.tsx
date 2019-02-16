@@ -97,7 +97,7 @@ class _ManageMessage extends React.Component<
       .then(() => {
         enqueueSnackbar('Reply sent');
         this.setState({ reply: false, html: '', text: '' });
-        return api.get('/account');
+        return api.get('/users');
       })
       .then(res => this.context.dispatch({ user: res.data }))
       .catch(err => enqueueSnackbar(err.response.data.error));
