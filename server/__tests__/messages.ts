@@ -88,36 +88,34 @@ test('get message attachment binary', async () => {
 });
 
 test('send and reply to messages', async () => {
-  expect.assertions(10);
+  expect.assertions(8);
 
   const messages = await listMessages(1234);
   const message = await getMessage(messages[0].id, 1234);
 
-  captureMail(2, incoming => {
+  const promise = captureMail(2, incoming => {
     expect(incoming.text.trim()).toBe('content');
     expect(incoming.from.text).toEndWith(`@${CONFIG.DOMAIN}`);
     expect(incoming.to.text).toBe('sender@domain.com');
     expect(incoming.subject).toBe('subject');
   });
 
-  await expect(
-    sendMessage(
-      {
-        proxyEmailId: messages[0].proxyEmailId,
-        subject: 'subject',
-        html: '<div>content</div>',
-        text: 'content',
-        to: 'sender@domain.com'
-      },
-      1234
-    )
-  ).not.toReject();
-  await expect(
-    replyToMessage(
-      { messageId: message.id, html: '<div>content</div>', text: 'content' },
-      1234
-    )
-  ).not.toReject();
+  await sendMessage(
+    {
+      proxyEmailId: messages[0].proxyEmailId,
+      subject: 'subject',
+      html: '<div>content</div>',
+      text: 'content',
+      to: 'sender@domain.com'
+    },
+    1234
+  );
+  await replyToMessage(
+    { messageId: message.id, html: '<div>content</div>', text: 'content' },
+    1234
+  );
+
+  await promise;
 }, 10000);
 
 test('delete expired messages', async () => {

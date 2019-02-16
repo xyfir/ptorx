@@ -11,7 +11,7 @@ import 'lib/tests/prepare';
 test('create primary email', async () => {
   expect.assertions(12);
 
-  captureMail(1, message => {
+  const promise = captureMail(1, message => {
     expect(message.subject).toBe(`Verify your email for ${CONFIG.NAME}`);
     expect(message.from.text).toBe(`noreply-x@${CONFIG.DOMAIN}`);
     expect(message.to.text).toBe('test@example.com');
@@ -30,6 +30,8 @@ test('create primary email', async () => {
   expect(primaryEmail.address).toBe('test@example.com');
   expect(primaryEmail.verified).toBeFalse();
   expect(primaryEmail.key).toHaveLength(36);
+
+  await promise;
 });
 
 test('list primary emails', async () => {
