@@ -275,3 +275,8 @@ CREATE TABLE `payments` (
  KEY `fk__payments__userId` (`userId`),
  CONSTRAINT `fk__payments__userId` FOREIGN KEY (`userId`) REFERENCES `users` (`userId`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+ALTER TABLE `payments` CHANGE `months` `months` VARCHAR(5) NOT NULL;
+ALTER TABLE `payments` CHANGE `months` `duration` VARCHAR(5) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL;
+ALTER TABLE `payments` ADD `amount` MEDIUMINT UNSIGNED NOT NULL AFTER `duration`;
+ALTER TABLE `users` CHANGE `tierExpiration` `tierExpiration` INT UNSIGNED NULL DEFAULT NULL;
+UPDATE `users` SET tierExpiration = UNIX_TIMESTAMP() + 86400 * 365;
