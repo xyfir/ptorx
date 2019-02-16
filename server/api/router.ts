@@ -33,8 +33,8 @@ router.get('/primary-emails/verify', c.api_verifyPrimaryEmail);
 router.get('/account', c.api_getUser);
 router.get('/account/logout', c.api_logout);
 
-router.post('/account/credits/purchase', c.api_startCreditsPurchase);
-router.get('/account/credits/purchase', c.api_finishCreditsPurchase);
+router.post('/payments/start', c.api_startPayment);
+router.post('/payments/finish', c.api_finishPayment);
 
 router.get('/domains', c.api_getDomains);
 router.post('/domains', c.api_addDomain);

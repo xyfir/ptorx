@@ -1,6 +1,3 @@
-export * from './account/credits/purchase/finish';
-export * from './account/credits/purchase/start';
-
 export * from './account/get';
 export * from './account/logout';
 
@@ -22,6 +19,9 @@ export * from './messages/get';
 export * from './messages/reply';
 export * from './messages/send';
 export * from './messages/attachment';
+
+export * from './payments/finish';
+export * from './payments/start';
 
 export * from './proxy-emails/check';
 export * from './proxy-emails/add';
