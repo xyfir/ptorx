@@ -17,6 +17,7 @@ export async function sendMessage(
   try {
     const user = await getUser(userId);
     if (user.credits < 1) throw 'You need at least one credit to send mail';
+    if (user.tier == 'basic') throw 'Basic tier users cannot send mail';
 
     const proxyEmail = await getProxyEmail(data.proxyEmailId, userId);
     await sendMail(proxyEmail.domainId, {

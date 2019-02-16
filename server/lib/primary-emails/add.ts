@@ -1,8 +1,10 @@
+import { listPrimaryEmails } from 'lib/primary-emails/list';
 import { editPrimaryEmail } from 'lib/primary-emails/edit';
 import { getPrimaryEmail } from 'lib/primary-emails/get';
 import { buildTemplate } from 'lib/mail/templates/build';
 import { sendMail } from 'lib/mail/send';
 import * as CONFIG from 'constants/config';
+import { getUser } from 'lib/users/get';
 import * as moment from 'moment';
 import { Ptorx } from 'types/ptorx';
 import { MySQL } from 'lib/MySQL';
@@ -14,6 +16,13 @@ export async function addPrimaryEmail(
 ): Promise<Ptorx.PrimaryEmail> {
   const db = new MySQL();
   try {
+    const user = await getUser(userId);
+    if (user.tier == 'basic') {
+      const primaryEmails = await listPrimaryEmails(userId);
+      if (primaryEmails.length > 0)
+        throw 'Basic tier users can only have one primary email';
+    }
+
     const insert: Partial<Ptorx.PrimaryEmail> = {
       userId,
       created: moment().unix(),

@@ -94,9 +94,10 @@ export function startSMTPServer(): SMTPServer {
         );
         let credits = 1;
 
-        const savedMessage = proxyEmail.saveMail
-          ? await saveMail(incoming, proxyEmail)
-          : null;
+        const savedMessage =
+          proxyEmail.saveMail && recipient.user.tier != 'basic'
+            ? await saveMail(incoming, proxyEmail)
+            : null;
 
         for (let link of proxyEmail.links) {
           // Filter mail
