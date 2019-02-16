@@ -2,12 +2,12 @@ import 'app-module-path/register';
 import { startSMTPServer } from 'lib/mail/smtp-server';
 import * as cookieParser from 'cookie-parser';
 import * as bodyParser from 'body-parser';
+import { verifyJWT } from 'lib/jwt/verify';
 import * as Express from 'express';
 import * as CONFIG from 'constants/config';
 import { router } from 'api/router';
 import { Ptorx } from 'types/ptorx';
 import * as path from 'path';
-import * as jwt from 'jsonwebtoken';
 import { cron } from 'jobs/cron';
 
 declare module 'express' {
@@ -50,18 +50,8 @@ app.use(
     next: Express.NextFunction
   ) => {
     try {
-      // Verify JWT
-      if (req.cookies.jwt) {
-        req.jwt = await new Promise((resolve, reject) =>
-          jwt.verify(req.cookies.jwt, CONFIG.JWT_KEY, {}, (err, token) =>
-            err ? reject(err) : resolve(token as Express.Request['jwt'])
-          )
-        );
-      }
-      // Nothing to verify
-      else {
-        throw 'No JWT provided';
-      }
+      if (req.cookies.jwt) req.jwt = await verifyJWT(req.cookies.jwt);
+      else throw 'No JWT provided';
     } catch (err) {
       req.jwt = null;
       if (req.cookies.jwt) res.clearCookie('jwt');
