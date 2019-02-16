@@ -32,6 +32,7 @@ export const XYPAYMENTS_ID = 13;
 export const TEST_SMTP_PORT = 2072;
 export const XYPAYMENTS_KEY = '';
 export const XYPAYMENTS_URL = 'http://';
+export const RICH_COW_WEB_URL = 'http://';
 export const XYPAYMENTS_PRODUCTS = { 1: 10, 2: 11, 3: 12 };
 export const PERSISTENT_PROXY_EMAIL = '';
 export const SMTP_SERVER_OPTIONS: SMTPServerOptions = {
