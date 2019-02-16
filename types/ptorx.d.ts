@@ -1,19 +1,22 @@
 export namespace Ptorx {
-  export type AccountTier = "basic" | "premium" | "ultimate";
+  export type Tier = "basic" | "premium" | "ultimate";
+
+  export type TierDuration = "month" | "year" | "life";
 
   export interface User {
     userId: number;
     email: string;
     credits: number;
-    tier: AccountTier;
+    tier: Tier;
     tierExpiration?: number;
   }
 
   export interface Payment {
     id: number;
     userId: User["userId"];
-    tier: AccountTier;
-    months: number;
+    tier: Tier;
+    duration: TierDuration;
+    amount: number;
     paid?: number;
   }
 

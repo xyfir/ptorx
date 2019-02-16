@@ -1,4 +1,5 @@
 import { getPayment } from 'lib/payments/get';
+import { TIERS } from 'constants/tiers';
 import { Ptorx } from 'types/ptorx';
 import { MySQL } from 'lib/MySQL';
 
@@ -8,12 +9,24 @@ export async function editPayment(
 ): Promise<Ptorx.Payment> {
   const db = new MySQL();
   try {
+    const tier = TIERS.find(t => t.name == payment.tier);
+    if (!tier) throw 'Invalid tier';
+    const duration = tier.durations.find(d => d.duration == payment.duration);
+    if (!duration) throw 'Invalid tier duration';
+
     const result = await db.query(
       `
-        UPDATE payments SET tier = ?, months = ?, paid = ?
+        UPDATE payments SET tier = ?, duration = ?, amount = ?, paid = ?
         WHERE id = ? AND userId = ?
       `,
-      [payment.tier, payment.months, payment.paid, payment.id, userId]
+      [
+        payment.tier,
+        payment.duration,
+        duration.cost,
+        payment.paid,
+        payment.id,
+        userId
+      ]
     );
     if (!result.affectedRows) throw 'Could not edit payment';
 
