@@ -1,4 +1,5 @@
 import { getMessage, getMessageAttachmentBin } from 'lib/messages/get';
+import { deleteExpiredMessages } from 'jobs/delete-expired-messages';
 import { replyToMessage } from 'lib/messages/reply';
 import { addProxyEmail } from 'lib/proxy-emails/add';
 import { deleteMessage } from 'lib/messages/delete';
@@ -8,6 +9,7 @@ import { sendMessage } from 'lib/messages/send';
 import { addMessage } from 'lib/messages/add';
 import * as CONFIG from 'constants/config';
 import { Ptorx } from 'types/ptorx';
+import { MySQL } from 'lib/MySQL';
 import 'lib/tests/prepare';
 
 test('create message', async () => {
@@ -117,6 +119,21 @@ test('send and reply to messages', async () => {
     )
   ).not.toReject();
 }, 10000);
+
+test('delete expired messages', async () => {
+  let messages = await listMessages(1234);
+  const unexpiredMessage = await getMessage(messages[0].id, 1234);
+  unexpiredMessage.attachments = [];
+  const expiredMessage = await addMessage(unexpiredMessage, 1234);
+  const db = new MySQL();
+  await db.query('UPDATE messages SET created = 0 WHERE id = ?', [
+    expiredMessage.id
+  ]);
+  await deleteExpiredMessages();
+  messages = await listMessages(1234);
+  expect(messages).toBeArrayOfSize(1);
+  expect(messages[0].id).not.toBe(expiredMessage.id);
+});
 
 test('delete message', async () => {
   let messages = await listMessages(1234);
