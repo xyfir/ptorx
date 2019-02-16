@@ -1,4 +1,6 @@
 import { deleteExpiredMessages } from 'jobs/delete-expired-messages';
+import { topUpCredits } from 'jobs/top-up-credits';
+import { resetTiers } from 'jobs/reset-tiers';
 import { MySQL } from 'lib/MySQL';
 
 interface CronJob {
@@ -23,6 +25,12 @@ export async function cron(): Promise<never> {
       switch (job.name) {
         case 'delete-expired-messages':
           await deleteExpiredMessages();
+          break;
+        case 'top-up-credits':
+          await topUpCredits();
+          break;
+        case 'reset-tiers':
+          await resetTiers();
           break;
         default:
           console.warn('Cannot assign job', job.name);

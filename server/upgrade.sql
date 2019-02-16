@@ -280,3 +280,6 @@ ALTER TABLE `payments` CHANGE `months` `duration` VARCHAR(5) CHARACTER SET utf8m
 ALTER TABLE `payments` ADD `amount` MEDIUMINT UNSIGNED NOT NULL AFTER `duration`;
 ALTER TABLE `users` CHANGE `tierExpiration` `tierExpiration` INT UNSIGNED NULL DEFAULT NULL;
 UPDATE `users` SET tierExpiration = UNIX_TIMESTAMP() + 86400 * 365;
+-- add credit/tier cron jobs
+INSERT INTO `cron_jobs` (`id`, `name`, `lastRun`, `minutesInterval`) VALUES (NULL, 'top-up-credits', NULL, '43800');
+INSERT INTO `cron_jobs` (`id`, `name`, `lastRun`, `minutesInterval`) VALUES (NULL, 'reset-tiers', NULL, '1440');
