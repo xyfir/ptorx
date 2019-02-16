@@ -1,5 +1,4 @@
 import { deleteProxyEmail } from 'lib/proxy-emails/delete';
-import { addPrimaryEmail } from 'lib/primary-emails/add';
 import { listProxyEmails } from 'lib/proxy-emails/list';
 import { editProxyEmail } from 'lib/proxy-emails/edit';
 import { addProxyEmail } from 'lib/proxy-emails/add';
@@ -66,10 +65,6 @@ test('list proxy emails', async () => {
 });
 
 test('edit proxy email links', async () => {
-  const primaryEmail = await addPrimaryEmail(
-    { address: 'test@example.com' },
-    1234
-  );
   const proxyEmails = await listProxyEmails(1234);
   const proxyEmail = await getProxyEmail(proxyEmails[0].id, 1234);
   const modifier = await addModifier({ name: 'name' }, 1234);
@@ -88,11 +83,6 @@ test('edit proxy email links', async () => {
           orderIndex: 2,
           proxyEmailId: proxyEmail.id,
           modifierId: modifier.id
-        },
-        {
-          orderIndex: 3,
-          proxyEmailId: proxyEmail.id,
-          primaryEmailId: primaryEmail.id
         }
       ]
     },
@@ -112,13 +102,6 @@ test('edit proxy email links', async () => {
       modifierId: modifier.id,
       filterId: null,
       primaryEmailId: null
-    },
-    {
-      orderIndex: 3,
-      proxyEmailId: proxyEmail.id,
-      primaryEmailId: primaryEmail.id,
-      filterId: null,
-      modifierId: null
     }
   ];
   expect(_proxyEmail.links).toMatchObject(links);
