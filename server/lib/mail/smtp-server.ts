@@ -57,7 +57,7 @@ export function startSMTPServer(): SMTPServer {
             to: recipient.message.replyTo || recipient.message.from
           });
 
-          await chargeCredits(proxyEmail.userId, 2);
+          await chargeCredits(recipient.user, 2);
           continue;
         }
 
@@ -138,7 +138,7 @@ export function startSMTPServer(): SMTPServer {
           }
         }
 
-        await chargeCredits(recipient.user.userId, credits);
+        await chargeCredits(recipient.user, credits);
       }
     }
   });

@@ -19,12 +19,9 @@ test('get user', async () => {
 });
 
 test('charge credits', async () => {
-  const userId = Date.now();
-  let user = await getUser({ userId, email: 'test@example.com' });
-  await chargeCredits(userId, 3);
-  user = await getUser(userId);
+  let user = await getUser({ userId: Date.now(), email: 'test@example.com' });
+  user = await chargeCredits(user, 3);
   expect(user.credits).toBe(97);
-  await chargeCredits(userId, 100);
-  user = await getUser(userId);
+  user = await chargeCredits(user, 100);
   expect(user.credits).toBe(0);
 });

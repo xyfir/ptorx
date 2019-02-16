@@ -1,21 +1,13 @@
-import { MySQL } from 'lib/MySQL';
+import { editUser } from 'lib/users/edit';
+import { Ptorx } from 'types/ptorx';
 
 /**
- * Charges a user's account credits. Never fails or checks their balance.
+ * Charge user's credits. Does not check balance or fail on insufficient funds.
  */
-export async function chargeCredits(
-  userId: number,
+export function chargeCredits(
+  user: Ptorx.User,
   amount: number
-): Promise<void> {
-  const db = new MySQL();
-  try {
-    await db.query('UPDATE users SET credits = credits - ? WHERE userId = ?', [
-      amount,
-      userId
-    ]);
-  } catch (err) {
-    if (err.message.startsWith('ER_DATA_OUT_OF_RANGE:'))
-      await db.query('UPDATE users SET credits = 0 WHERE userId = ?', [userId]);
-  }
-  db.release();
+): Promise<Ptorx.User> {
+  user.credits = amount > user.credits ? 0 : user.credits - amount;
+  return editUser(user);
 }

@@ -27,7 +27,7 @@ export async function sendMessage(
       to: data.to
     });
 
-    await chargeCredits(userId, 1);
+    await chargeCredits(user, 1);
   } catch (err) {
     throw err;
   }
