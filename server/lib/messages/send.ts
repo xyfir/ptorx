@@ -1,5 +1,5 @@
 import { getProxyEmail } from 'lib/proxy-emails/get';
-import { chargeUser } from 'lib/users/charge';
+import { chargeCredits } from 'lib/users/credits/charge';
 import { sendMail } from 'lib/mail/send';
 import { getUser } from 'lib/users/get';
 import { Ptorx } from 'types/ptorx';
@@ -27,7 +27,7 @@ export async function sendMessage(
       to: data.to
     });
 
-    await chargeUser(userId, 1);
+    await chargeCredits(userId, 1);
   } catch (err) {
     throw err;
   }

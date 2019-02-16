@@ -3,7 +3,7 @@ import { MySQL } from 'lib/MySQL';
 /**
  * Charges a user's account credits. Never fails or checks their balance.
  */
-export async function chargeUser(
+export async function chargeCredits(
   userId: number,
   amount: number
 ): Promise<void> {

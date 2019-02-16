@@ -3,7 +3,7 @@ import { SendMailOptions } from 'nodemailer';
 import { getProxyEmail } from 'lib/proxy-emails/get';
 import { getRecipient } from 'lib/mail/get-recipient';
 import { simpleParser } from 'mailparser';
-import { chargeUser } from 'lib/users/charge';
+import { chargeCredits } from 'lib/users/credits/charge';
 import { filterMail } from 'lib/mail/filter';
 import { modifyMail } from 'lib/mail/modify';
 import { SMTPServer } from 'smtp-server';
@@ -57,7 +57,7 @@ export function startSMTPServer(): SMTPServer {
             to: recipient.message.replyTo || recipient.message.from
           });
 
-          await chargeUser(proxyEmail.userId, 2);
+          await chargeCredits(proxyEmail.userId, 2);
           continue;
         }
 
@@ -138,7 +138,7 @@ export function startSMTPServer(): SMTPServer {
           }
         }
 
-        await chargeUser(recipient.user.userId, credits);
+        await chargeCredits(recipient.user.userId, credits);
       }
     }
   });
