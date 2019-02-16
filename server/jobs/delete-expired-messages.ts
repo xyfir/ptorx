@@ -7,6 +7,8 @@ export async function deleteExpiredMessages() {
     await db.query(`
       DELETE FROM messages WHERE created + 2592000 < UNIX_TIMESTAMP()
     `);
-  } catch (err) {}
+  } catch (err) {
+    console.error('cron/delete-expired-messages', err);
+  }
   db.release();
 }
