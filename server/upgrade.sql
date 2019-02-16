@@ -265,3 +265,13 @@ ALTER TABLE `users` DROP `emailTemplate`;
 ALTER TABLE `users` ADD `tier` VARCHAR(8) NOT NULL AFTER `credits`, ADD `tierExpiration` BIGINT UNSIGNED NOT NULL AFTER `tier`;
 ALTER TABLE `users` CHANGE `tierExpiration` `tierExpiration` BIGINT(20) UNSIGNED NULL DEFAULT NULL;
 UPDATE `users` SET tier = 'premium', tierExpiration = (UNIX_TIMESTAMP() + 86400 * 365) * 1000;
+CREATE TABLE `payments` (
+ `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+ `userId` bigint(20) unsigned NOT NULL,
+ `tier` varchar(8) COLLATE utf8mb4_unicode_ci NOT NULL,
+ `months` tinyint(3) unsigned NOT NULL,
+ `paid` bigint(20) unsigned DEFAULT NULL,
+ PRIMARY KEY (`id`),
+ KEY `fk__payments__userId` (`userId`),
+ CONSTRAINT `fk__payments__userId` FOREIGN KEY (`userId`) REFERENCES `users` (`userId`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
