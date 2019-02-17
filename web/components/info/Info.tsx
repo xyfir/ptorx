@@ -1,4 +1,9 @@
-import { ACCOWNT_WEB_URL, ACCOWNT_API_URL, NAME } from 'constants/config';
+import {
+  ACCOWNT_WEB_URL,
+  ACCOWNT_API_URL,
+  NAME,
+  DOCS_URL
+} from 'constants/config';
 import * as React from 'react';
 import { Ptorx } from 'types/ptorx';
 import {
@@ -12,11 +17,14 @@ import {
 
 const styles = (theme: Theme) =>
   createStyles({
-    root: {
-      padding: '2em'
-    },
     buttons: {
       marginBottom: '1.5em'
+    },
+    footer: {
+      fontFamily: '"Roboto"'
+    },
+    root: {
+      padding: '2em'
     },
     h1: {
       fontWeight: 'bold',
@@ -58,7 +66,7 @@ const _Info = ({ classes, user }: InfoProps) => (
     <Typography variant="h1" className={classes.h1}>
       Send and Receive Mail Anonymously
     </Typography>
-    <Typography variant="body2" className={classes.p}>
+    <Typography className={classes.p}>
       Protect your privacy, strengthen your security, and take control of your
       emails with {NAME}.
     </Typography>
@@ -99,7 +107,7 @@ const _Info = ({ classes, user }: InfoProps) => (
     <Typography variant="h2" className={classes.h2}>
       What's a Proxy Email?
     </Typography>
-    <Typography variant="body2" className={classes.p}>
+    <Typography className={classes.p}>
       A proxy email is like an email alias or a forwarding address. Any mail
       sent to it is redirected to the email addresses you configure. Proxy
       emails also allow for many extra features like filtering and modifying
@@ -108,7 +116,7 @@ const _Info = ({ classes, user }: InfoProps) => (
     <Typography variant="h2" className={classes.h2}>
       Why Use a Proxy Email?
     </Typography>
-    <Typography variant="body2" className={classes.p}>
+    <Typography className={classes.p}>
       To prevent spam, keep your email off of "people search" websites, thwart
       hackers and spammers when database breaches occur, easily transfer mail
       when you update primary email addresses, filter out mail before it ever
@@ -117,20 +125,31 @@ const _Info = ({ classes, user }: InfoProps) => (
     <Typography variant="h2" className={classes.h2}>
       Bring Your Own Domains
     </Typography>
-    <Typography variant="body2" className={classes.p}>
+    <Typography className={classes.p}>
       As many of them as you want. Configure a few easy DNS records and create
       proxy emails for your own domain.
     </Typography>
     <Typography variant="h2" className={classes.h2}>
       Open Source
     </Typography>
-    <Typography variant="body2" className={classes.p}>
+    <Typography className={classes.p}>
       Don't trust us with your emails?{' '}
       <a href="https://github.com/Xyfir/Ptorx" className={classes.a}>
         Our code is completely open source for you to view.
       </a>{' '}
-      Host your own server if you'd like.
+      You can host your own server or contribute to our codebase and make {NAME}{' '}
+      better.
     </Typography>
+
+    <footer className={classes.footer}>
+      <a href={`${DOCS_URL}/terms-of-service.md`} className={classes.a}>
+        Terms of Service
+      </a>
+      {' — '}
+      <a href={`${DOCS_URL}/privacy-policy.md`} className={classes.a}>
+        Privacy Policy
+      </a>
+    </footer>
   </div>
 );
 
