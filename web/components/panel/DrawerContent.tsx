@@ -1,4 +1,4 @@
-import { AccountBox, ExitToApp, Help } from '@material-ui/icons';
+import { AccountBox, ExitToApp, Help, Money } from '@material-ui/icons';
 import { CATEGORIES, Category } from 'constants/categories';
 import { PanelContext } from 'lib/PanelContext';
 import * as React from 'react';
@@ -8,7 +8,6 @@ import {
   ListItemIcon,
   ListItemText,
   createStyles,
-  Typography,
   WithStyles,
   withStyles,
   ListItem,
@@ -59,13 +58,23 @@ class _DrawerContent extends React.Component<WithStyles<typeof styles>> {
         </List>
         <Divider />
         <List>
-          <ListSubheader>Credits: {user.credits}</ListSubheader>
           <a href={ACCOWNT_WEB_URL} className={classes.link}>
             <ListItem button>
               <ListItemIcon>
                 <AccountBox />
               </ListItemIcon>
               <ListItemText primary="Account" />
+            </ListItem>
+          </a>
+          <a href="/app/credits" className={classes.link}>
+            <ListItem button>
+              <ListItemIcon>
+                <Money />
+              </ListItemIcon>
+              <ListItemText
+                primary="Credits"
+                secondary={`${user.tier.toUpperCase()} — ${user.credits}`}
+              />
             </ListItem>
           </a>
           <a href={`${ACCOWNT_API_URL}/login/logout`} className={classes.link}>
