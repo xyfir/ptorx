@@ -2,6 +2,7 @@ import { Redirect, Switch, Route } from 'react-router';
 import { ManagePrimaryEmail } from 'components/panel/primary-emails/Manage';
 import { ManageProxyEmail } from 'components/panel/proxy-emails/Manage';
 import { AddPrimaryEmail } from 'components/panel/primary-emails/Add';
+import { PurchaseCredits } from 'components/panel/PurchaseCredits';
 import { ManageModifier } from 'components/panel/modifiers/Manage';
 import { AddProxyEmail } from 'components/panel/proxy-emails/Add';
 import { ManageMessage } from 'components/panel/messages/Manage';
@@ -114,7 +115,7 @@ class _PanelDialog extends React.Component<PanelDialogProps, PanelDialogState> {
               <Route path="/app/messages/:message" component={ManageMessage} />
               <Route path="/app/filters/:filter" component={ManageFilter} />
               <Route path="/app/domains/:domain" component={ManageDomain} />
-              <Route path="/app/credits" component={null} />
+              <Route path="/app/credits" component={PurchaseCredits} />
             </Switch>
           )}
         </DialogContent>
