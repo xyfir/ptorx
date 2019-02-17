@@ -1,3 +1,4 @@
+import { ACCOWNT_API_URL, ACCOWNT_WEB_URL, DOCS_URL } from 'constants/config';
 import { AccountBox, ExitToApp, Help, Money } from '@material-ui/icons';
 import { CATEGORIES, Category } from 'constants/categories';
 import { PanelContext } from 'lib/PanelContext';
@@ -15,11 +16,6 @@ import {
   Switch,
   List
 } from '@material-ui/core';
-import {
-  ACCOWNT_API_URL,
-  ACCOWNT_WEB_URL,
-  HELP_DOCS_URL
-} from 'constants/config';
 
 const styles = createStyles({ link: { textDecoration: 'none' } });
 
@@ -86,7 +82,7 @@ class _DrawerContent extends React.Component<WithStyles<typeof styles>> {
             </ListItem>
           </a>
           <a
-            href={`${HELP_DOCS_URL}#terminology`}
+            href={`${DOCS_URL}/help.md#terminology`}
             target="_blank"
             className={classes.link}
           >
