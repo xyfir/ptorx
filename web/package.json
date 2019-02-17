@@ -11,7 +11,7 @@
     "build": "webpack-cli"
   },
   "author": "Xyfir",
-  "license": "UNLICENSED",
+  "license": "GPL-3.0",
   "prettier": {
     "singleQuote": true
   },
