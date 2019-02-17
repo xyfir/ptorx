@@ -1,10 +1,10 @@
 import 'app-module-path/register';
+import { PROD, WEB_URL, WEB_DIRECTORY, API_PORT, CRON } from 'constants/config';
 import { startSMTPServer } from 'lib/mail/smtp-server';
 import * as cookieParser from 'cookie-parser';
 import * as bodyParser from 'body-parser';
 import { verifyJWT } from 'lib/jwt/verify';
 import * as Express from 'express';
-import * as CONFIG from 'constants/config';
 import { router } from 'api/router';
 import { Ptorx } from 'types/ptorx';
 import * as path from 'path';
@@ -17,13 +17,9 @@ declare module 'express' {
 }
 
 const app = Express();
-if (!CONFIG.PROD) {
-  // Needed to allow communication from webpack-dev-server host
+if (!PROD) {
   app.use((req, res, next) => {
-    res.header(
-      'Access-Control-Allow-Origin',
-      `http://localhost:${CONFIG.WEBPACK_PORT}`
-    );
+    res.header('Access-Control-Allow-Origin', WEB_URL);
     res.header(
       'Access-Control-Allow-Methods',
       'GET, POST, OPTIONS, PUT, DELETE'
@@ -36,10 +32,7 @@ if (!CONFIG.PROD) {
     next();
   });
 }
-app.use(
-  '/static',
-  Express.static(path.resolve(CONFIG.DIRECTORIES.WEB, 'dist'))
-);
+app.use('/static', Express.static(path.resolve(WEB_DIRECTORY, 'dist')));
 app.use(bodyParser.json({ limit: '35mb' }));
 app.use(bodyParser.urlencoded({ extended: true, limit: '35mb' }));
 app.use(cookieParser());
@@ -61,7 +54,7 @@ app.use(
 );
 app.use('/api/6', router);
 app.get('/*', (req, res) =>
-  res.sendFile(path.resolve(CONFIG.DIRECTORIES.WEB, 'dist', 'index.html'))
+  res.sendFile(path.resolve(WEB_DIRECTORY, 'dist', 'index.html'))
 );
 app.use(
   (
@@ -78,8 +71,8 @@ app.use(
     }
   }
 );
-app.listen(CONFIG.API_PORT, () => console.log('Listening on', CONFIG.API_PORT));
+app.listen(API_PORT, () => console.log('Listening on', API_PORT));
 
-if (CONFIG.CRON) cron();
+if (CRON) cron();
 
 startSMTPServer();

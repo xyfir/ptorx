@@ -23,7 +23,7 @@ export async function sendMail(
     disableFileAccess: true,
     disableUrlAccess: true,
     dkim: {
-      cacheDir: CONFIG.DIRECTORIES.MAIL_CACHE,
+      cacheDir: CONFIG.MAIL_CACHE_DIRECTORY,
       domainName: domain.domain,
       privateKey: domain.privateKey,
       keySelector: domain.selector,
