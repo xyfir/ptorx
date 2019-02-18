@@ -12,16 +12,35 @@ import {
   WithStyles,
   withStyles,
   Button,
+  Paper,
   Theme
 } from '@material-ui/core';
+// @ts-ignore
+import icon from 'icon.png';
 
 const styles = (theme: Theme) =>
   createStyles({
+    iconPaper: {
+      marginBottom: '1.5em',
+      marginRight: '1em',
+      height: '5em',
+      width: '5em'
+    },
     buttons: {
       marginBottom: '1.5em'
     },
+    header: {
+      alignItems: 'center',
+      flexWrap: 'wrap',
+      display: 'flex'
+    },
     footer: {
       fontFamily: '"Roboto"'
+    },
+    icon: {
+      borderRadius: '4px',
+      height: '100%',
+      width: '100%'
     },
     root: {
       padding: '2em'
@@ -63,38 +82,55 @@ interface InfoProps extends WithStyles<typeof styles> {
 
 const _Info = ({ classes, user }: InfoProps) => (
   <div className={classes.root}>
-    <Typography variant="h1" className={classes.h1}>
-      Send and Receive Mail Anonymously
-    </Typography>
-    <Typography className={classes.p}>
-      Protect your privacy, strengthen your security, and take control of your
-      emails with {NAME}.
-    </Typography>
-    {user ? (
-      <div className={classes.buttons}>
-        <Button variant="contained" color="primary" href="/app">
-          Go to App
-        </Button>
-        <span className={classes.or}>or</span>
-        <Button
-          variant="contained"
-          color="secondary"
-          href={`${ACCOWNT_API_URL}/login/logout`}
-        >
-          Logout
-        </Button>
+    <header className={classes.header}>
+      <Paper elevation={2} className={classes.iconPaper}>
+        <img
+          src={icon}
+          alt="The Ptorx Pterodactyl logo"
+          className={classes.icon}
+        />
+      </Paper>
+      <div>
+        <Typography variant="h1" className={classes.h1}>
+          Send and Receive Mail Anonymously
+        </Typography>
+        <Typography className={classes.p}>
+          Protect your privacy, strengthen your security, and take control of
+          your emails with {NAME}.
+        </Typography>
+
+        {user ? (
+          <div className={classes.buttons}>
+            <Button variant="contained" color="primary" href="/app">
+              Go to App
+            </Button>
+            <span className={classes.or}>or</span>
+            <Button
+              variant="contained"
+              color="secondary"
+              href={`${ACCOWNT_API_URL}/login/logout`}
+            >
+              Logout
+            </Button>
+          </div>
+        ) : (
+          <div className={classes.buttons}>
+            <Button variant="contained" color="primary" href={ACCOWNT_WEB_URL}>
+              Login
+            </Button>
+            <span className={classes.or}>or</span>
+            <Button
+              variant="contained"
+              color="secondary"
+              href={ACCOWNT_WEB_URL}
+            >
+              Register
+            </Button>
+          </div>
+        )}
       </div>
-    ) : (
-      <div className={classes.buttons}>
-        <Button variant="contained" color="primary" href={ACCOWNT_WEB_URL}>
-          Login
-        </Button>
-        <span className={classes.or}>or</span>
-        <Button variant="contained" color="secondary" href={ACCOWNT_WEB_URL}>
-          Register
-        </Button>
-      </div>
-    )}
+    </header>
+
     <Typography variant="h2" className={classes.h2}>
       How It Works
     </Typography>
