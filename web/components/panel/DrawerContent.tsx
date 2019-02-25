@@ -2,6 +2,7 @@ import { AccountBox, ExitToApp, Help, Money } from '@material-ui/icons';
 import { CATEGORIES, Category } from 'constants/categories';
 import { PanelContext } from 'lib/PanelContext';
 import * as React from 'react';
+import { Link } from 'react-router-dom';
 import {
   ListItemSecondaryAction,
   ListSubheader,
@@ -61,7 +62,7 @@ class _DrawerContent extends React.Component<WithStyles<typeof styles>> {
               <ListItemText primary="Account" />
             </ListItem>
           </a>
-          <a href="/app/credits" className={classes.link}>
+          <Link to="/app/credits" className={classes.link}>
             <ListItem button>
               <ListItemIcon>
                 <Money />
@@ -71,7 +72,7 @@ class _DrawerContent extends React.Component<WithStyles<typeof styles>> {
                 secondary={`${user.tier.toUpperCase()} — ${user.credits}`}
               />
             </ListItem>
-          </a>
+          </Link>
           <a
             href={`${process.enve.ACCOWNT_API_URL}/login/logout`}
             className={classes.link}
