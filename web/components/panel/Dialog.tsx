@@ -75,7 +75,7 @@ class _PanelDialog extends React.Component<PanelDialogProps, PanelDialogState> {
       >
         <Hidden smUp implementation="css">
           <DialogTitle disableTypography className={classes.title}>
-            <Typography variant="h6">{NAME}</Typography>
+            <Typography variant="h6">{process.enve.NAME}</Typography>
             <IconButton
               aria-label="Close"
               className={classes.close}
