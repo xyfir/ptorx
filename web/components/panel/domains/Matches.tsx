@@ -2,7 +2,6 @@ import * as moment from 'moment';
 import * as React from 'react';
 import { Ptorx } from 'types/ptorx';
 import { Link } from 'react-router-dom';
-import { NAME } from 'constants/config';
 import {
   TablePagination,
   ListSubheader,
@@ -49,7 +48,7 @@ class _DomainMatches extends React.Component<
                   primary={domain.domain}
                   secondary={
                     domain.isCreator
-                      ? `Added to ${NAME} ${moment
+                      ? `Added to ${process.enve.NAME} ${moment
                           .unix(domain.created)
                           .fromNow()}`
                       : `You are authorized to use this${

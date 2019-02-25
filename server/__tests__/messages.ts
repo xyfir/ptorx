@@ -1,3 +1,4 @@
+import 'lib/tests/prepare';
 import { getMessage, getMessageAttachmentBin } from 'lib/messages/get';
 import { deleteExpiredMessages } from 'jobs/delete-expired-messages';
 import { replyToMessage } from 'lib/messages/reply';
@@ -7,19 +8,20 @@ import { listMessages } from 'lib/messages/list';
 import { captureMail } from 'lib/tests/capture-mail';
 import { sendMessage } from 'lib/messages/send';
 import { addMessage } from 'lib/messages/add';
-import * as CONFIG from 'constants/config';
 import { Ptorx } from 'types/ptorx';
 import { MySQL } from 'lib/MySQL';
-import 'lib/tests/prepare';
 
 test('create message', async () => {
-  const proxyEmail = await addProxyEmail({ domainId: CONFIG.DOMAIN_ID }, 1234);
+  const proxyEmail = await addProxyEmail(
+    { domainId: process.enve.DOMAIN_ID },
+    1234
+  );
   const message = await addMessage(
     {
       proxyEmailId: proxyEmail.id,
       subject: 'subject',
       from: 'sender@domain.com',
-      to: `test@${CONFIG.DOMAIN}`,
+      to: `test@${process.enve.DOMAIN}`,
       text: 'Hello World',
       html: '<div>Hello World</div>',
       headers: ['Content-Type: text/html; charset="utf-8"'],
@@ -43,7 +45,7 @@ test('create message', async () => {
     proxyEmailId: proxyEmail.id,
     subject: 'subject',
     from: 'sender@domain.com',
-    to: `test@${CONFIG.DOMAIN}`,
+    to: `test@${process.enve.DOMAIN}`,
     text: 'Hello World',
     html: '<div>Hello World</div>',
     headers: ['Content-Type: text/html; charset="utf-8"'],
@@ -56,7 +58,9 @@ test('create message', async () => {
       }
     ],
     replyTo: null,
-    ptorxReplyTo: `${message.id}--${message.key}--reply-x@${CONFIG.DOMAIN}`
+    ptorxReplyTo: `${message.id}--${message.key}--reply-x@${
+      process.enve.DOMAIN
+    }`
   };
   expect(message).toMatchObject(_message);
 });
@@ -95,7 +99,7 @@ test('send and reply to messages', async () => {
 
   const promise = captureMail(2, incoming => {
     expect(incoming.text.trim()).toBe('content');
-    expect(incoming.from.text).toEndWith(`@${CONFIG.DOMAIN}`);
+    expect(incoming.from.text).toEndWith(`@${process.enve.DOMAIN}`);
     expect(incoming.to.text).toBe('sender@domain.com');
     expect(incoming.subject).toBe('subject');
   });

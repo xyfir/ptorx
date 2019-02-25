@@ -1,11 +1,11 @@
+import 'lib/tests/prepare';
 import { finishPayment } from 'lib/payments/finish';
 import { startPayment } from 'lib/payments/start';
 import { addPayment } from 'lib/payments/add';
 import { verifyJWT } from 'lib/jwt/verify';
+import { getUser } from 'lib/users/get';
 import { signJWT } from 'lib/jwt/sign';
 import { Ptorx } from 'types/ptorx';
-import 'lib/tests/prepare';
-import { getUser } from 'lib/users/get';
 
 test('create payment', async () => {
   const paid = Date.now();

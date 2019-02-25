@@ -1,7 +1,7 @@
+import 'lib/tests/prepare';
 import { chargeCredits } from 'lib/users/charge';
 import { getUser } from 'lib/users/get';
 import { Ptorx } from 'types/ptorx';
-import 'lib/tests/prepare';
 
 test('get user', async () => {
   const userId = Date.now();

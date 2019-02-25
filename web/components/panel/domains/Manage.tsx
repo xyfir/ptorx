@@ -2,7 +2,6 @@ import { withSnackbar, InjectedNotistackProps } from 'notistack';
 import { RouteComponentProps } from 'react-router';
 import { PanelContext } from 'lib/PanelContext';
 import * as moment from 'moment';
-import { DOMAIN } from 'constants/config';
 import * as React from 'react';
 import { Ptorx } from 'types/ptorx';
 import { api } from 'lib/api';
@@ -279,7 +278,7 @@ class _ManageDomain extends React.Component<
             <DNSRecord
               className={classes.dnsRecord}
               hostname={domain.domain}
-              value={`v=spf1 include:${DOMAIN} ~all`}
+              value={`v=spf1 include:${process.enve.DOMAIN} ~all`}
               type="TXT"
             />
             <DNSRecord
@@ -291,7 +290,7 @@ class _ManageDomain extends React.Component<
             <DNSRecord
               className={classes.dnsRecord}
               hostname={domain.domain}
-              value={DOMAIN}
+              value={process.enve.DOMAIN}
               type="MX"
             />
           </div>

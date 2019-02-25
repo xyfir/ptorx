@@ -1,4 +1,5 @@
-import { API_URL } from 'constants/config';
 import axios from 'axios';
-
-export const api = axios.create({ baseURL: API_URL, withCredentials: true });
+export const api = axios.create({
+  baseURL: process.enve.API_URL,
+  withCredentials: true
+});

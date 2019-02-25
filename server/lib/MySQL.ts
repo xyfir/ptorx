@@ -1,7 +1,6 @@
-import * as CONFIG from 'constants/config';
 import * as mysql from 'mysql';
 
-const pool = mysql.createPool(CONFIG.MYSQL);
+const pool = mysql.createPool(process.enve.MYSQL);
 
 export class MySQL {
   cn: mysql.PoolConnection;

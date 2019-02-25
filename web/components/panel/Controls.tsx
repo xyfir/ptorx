@@ -2,7 +2,6 @@ import { PanelContext, PanelContextValue } from 'lib/PanelContext';
 import { DrawerContent } from 'components/panel/DrawerContent';
 import { CATEGORIES } from 'constants/categories';
 import * as React from 'react';
-import { NAME } from 'constants/config';
 import { Link } from 'react-router-dom';
 import { api } from 'lib/api';
 import {
@@ -111,7 +110,7 @@ class _PanelControls extends React.Component<WithStyles<typeof styles>> {
               noWrap
               color="inherit"
             >
-              {NAME}
+              {process.enve.NAME}
             </Typography>
             <Tooltip title="Toggle light/dark theme" color="inherit">
               <IconButton

@@ -1,4 +1,3 @@
-import { ACCOWNT_API_URL, ACCOWNT_WEB_URL, DOCS_URL } from 'constants/config';
 import { AccountBox, ExitToApp, Help, Money } from '@material-ui/icons';
 import { CATEGORIES, Category } from 'constants/categories';
 import { PanelContext } from 'lib/PanelContext';
@@ -54,7 +53,7 @@ class _DrawerContent extends React.Component<WithStyles<typeof styles>> {
         </List>
         <Divider />
         <List>
-          <a href={ACCOWNT_WEB_URL} className={classes.link}>
+          <a href={process.enve.ACCOWNT_WEB_URL} className={classes.link}>
             <ListItem button>
               <ListItemIcon>
                 <AccountBox />
@@ -73,7 +72,10 @@ class _DrawerContent extends React.Component<WithStyles<typeof styles>> {
               />
             </ListItem>
           </a>
-          <a href={`${ACCOWNT_API_URL}/login/logout`} className={classes.link}>
+          <a
+            href={`${process.enve.ACCOWNT_API_URL}/login/logout`}
+            className={classes.link}
+          >
             <ListItem button>
               <ListItemIcon>
                 <ExitToApp />
@@ -82,7 +84,7 @@ class _DrawerContent extends React.Component<WithStyles<typeof styles>> {
             </ListItem>
           </a>
           <a
-            href={`${DOCS_URL}/help.md#terminology`}
+            href={`${process.enve.DOCS_URL}/help.md#terminology`}
             target="_blank"
             className={classes.link}
           >

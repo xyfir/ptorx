@@ -1,6 +1,5 @@
 import { SendMailOptions, createTransport } from 'nodemailer';
 import { getDomainAuth } from 'lib/domains/get';
-import * as CONFIG from 'constants/config';
 import { Ptorx } from 'types/ptorx';
 
 const transporter =
@@ -8,7 +7,7 @@ const transporter =
     ? createTransport({
         secure: false,
         host: '127.0.0.1',
-        port: CONFIG.TEST_SMTP_PORT,
+        port: process.enve.TEST_SMTP_PORT,
         tls: { rejectUnauthorized: false }
       })
     : createTransport({ sendmail: true });
@@ -23,7 +22,7 @@ export async function sendMail(
     disableFileAccess: true,
     disableUrlAccess: true,
     dkim: {
-      cacheDir: CONFIG.MAIL_CACHE_DIRECTORY,
+      cacheDir: process.enve.MAIL_CACHE_DIRECTORY,
       domainName: domain.domain,
       privateKey: domain.privateKey,
       keySelector: domain.selector,

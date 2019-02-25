@@ -1,5 +1,8 @@
 import 'app-module-path/register';
-import { PROD, WEB_URL, WEB_DIRECTORY, API_PORT, CRON } from 'constants/config';
+import { config } from 'dotenv';
+config();
+import 'enve';
+
 import { startSMTPServer } from 'lib/mail/smtp-server';
 import * as cookieParser from 'cookie-parser';
 import * as bodyParser from 'body-parser';
@@ -10,6 +13,14 @@ import { Ptorx } from 'types/ptorx';
 import * as path from 'path';
 import { cron } from 'jobs/cron';
 
+declare global {
+  namespace NodeJS {
+    interface Process {
+      enve: Ptorx.Env.Server;
+    }
+  }
+}
+
 declare module 'express' {
   interface Request {
     jwt?: Ptorx.JWT;
@@ -17,9 +28,9 @@ declare module 'express' {
 }
 
 const app = Express();
-if (!PROD) {
+if (!process.enve.PROD) {
   app.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', WEB_URL);
+    res.header('Access-Control-Allow-Origin', process.enve.WEB_URL);
     res.header(
       'Access-Control-Allow-Methods',
       'GET, POST, OPTIONS, PUT, DELETE'
@@ -32,7 +43,10 @@ if (!PROD) {
     next();
   });
 }
-app.use('/static', Express.static(path.resolve(WEB_DIRECTORY, 'dist')));
+app.use(
+  '/static',
+  Express.static(path.resolve(process.enve.WEB_DIRECTORY, 'dist'))
+);
 app.use(bodyParser.json({ limit: '35mb' }));
 app.use(bodyParser.urlencoded({ extended: true, limit: '35mb' }));
 app.use(cookieParser());
@@ -54,7 +68,7 @@ app.use(
 );
 app.use('/api/6', router);
 app.get('/*', (req, res) =>
-  res.sendFile(path.resolve(WEB_DIRECTORY, 'dist', 'index.html'))
+  res.sendFile(path.resolve(process.enve.WEB_DIRECTORY, 'dist', 'index.html'))
 );
 app.use(
   (
@@ -71,8 +85,10 @@ app.use(
     }
   }
 );
-app.listen(API_PORT, () => console.log('Listening on', API_PORT));
+app.listen(process.enve.API_PORT, () =>
+  console.log('Listening on', process.enve.API_PORT)
+);
 
-if (CRON) cron();
+if (process.enve.CRON) cron();
 
 startSMTPServer();

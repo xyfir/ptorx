@@ -1,7 +1,7 @@
 export namespace Ptorx {
-  export type Tier = "basic" | "premium" | "ultimate";
+  export type Tier = 'basic' | 'premium' | 'ultimate';
 
-  export type TierDuration = "month" | "year" | "life";
+  export type TierDuration = 'month' | 'year' | 'life';
 
   export interface User {
     userId: number;
@@ -13,7 +13,7 @@ export namespace Ptorx {
 
   export interface Payment {
     id: number;
-    userId: User["userId"];
+    userId: User['userId'];
     tier: Tier;
     duration: TierDuration;
     amount: number;
@@ -21,8 +21,8 @@ export namespace Ptorx {
   }
 
   export interface JWT {
-    userId: Ptorx.User["userId"];
-    email: Ptorx.User["email"];
+    userId: Ptorx.User['userId'];
+    email: Ptorx.User['email'];
   }
 
   export interface Domain {
@@ -39,18 +39,18 @@ export namespace Ptorx {
   }
 
   export type DomainList = {
-    id: Domain["id"];
-    domain: Domain["domain"];
-    isCreator: Domain["isCreator"];
-    global: Domain["global"];
-    created: Domain["created"];
+    id: Domain['id'];
+    domain: Domain['domain'];
+    isCreator: Domain['isCreator'];
+    global: Domain['global'];
+    created: Domain['created'];
   }[];
 
   export interface DomainAuth {
-    domain: Ptorx.Domain["domain"];
-    publicKey: Ptorx.Domain["publicKey"];
-    privateKey: Ptorx.Domain["privateKey"];
-    selector: Ptorx.Domain["selector"];
+    domain: Ptorx.Domain['domain'];
+    publicKey: Ptorx.Domain['publicKey'];
+    privateKey: Ptorx.Domain['privateKey'];
+    selector: Ptorx.Domain['selector'];
   }
 
   export interface DomainUser {
@@ -63,17 +63,17 @@ export namespace Ptorx {
   }
 
   export type DomainUserList = {
-    domainId: DomainUser["domainId"];
-    label: DomainUser["label"];
-    requestKey: DomainUser["requestKey"];
-    created: DomainUser["created"];
-    authorized: DomainUser["authorized"];
+    domainId: DomainUser['domainId'];
+    label: DomainUser['label'];
+    requestKey: DomainUser['requestKey'];
+    created: DomainUser['created'];
+    authorized: DomainUser['authorized'];
   }[];
 
   export interface ProxyEmail {
     id: number;
     userId: number;
-    domainId: Ptorx.Domain["id"];
+    domainId: Ptorx.Domain['id'];
     address: string;
     name: string;
     created: number;
@@ -86,24 +86,24 @@ export namespace Ptorx {
   }
 
   export type ProxyEmailList = {
-    id: Ptorx.ProxyEmail["id"];
-    name: Ptorx.ProxyEmail["name"];
-    created: Ptorx.ProxyEmail["created"];
-    fullAddress: Ptorx.ProxyEmail["fullAddress"];
+    id: Ptorx.ProxyEmail['id'];
+    name: Ptorx.ProxyEmail['name'];
+    created: Ptorx.ProxyEmail['created'];
+    fullAddress: Ptorx.ProxyEmail['fullAddress'];
   }[];
 
   export interface ProxyEmailLink {
-    proxyEmailId: Ptorx.ProxyEmail["id"];
+    proxyEmailId: Ptorx.ProxyEmail['id'];
     orderIndex: number;
-    primaryEmailId?: Ptorx.PrimaryEmail["id"];
-    modifierId?: Ptorx.Modifier["id"];
-    filterId?: Ptorx.Filter["id"];
+    primaryEmailId?: Ptorx.PrimaryEmail['id'];
+    modifierId?: Ptorx.Modifier['id'];
+    filterId?: Ptorx.Filter['id'];
   }
 
   export interface Message {
     id: number;
     userId: number;
-    proxyEmailId: Ptorx.ProxyEmail["id"];
+    proxyEmailId: Ptorx.ProxyEmail['id'];
     created: number;
     key: string;
     subject: string;
@@ -136,18 +136,18 @@ export namespace Ptorx {
   }
 
   export type MessageList = {
-    id: Message["id"];
-    proxyEmailId: Message["proxyEmailId"];
-    created: Message["created"];
-    subject: Message["subject"];
-    from: Message["from"];
+    id: Message['id'];
+    proxyEmailId: Message['proxyEmailId'];
+    created: Message['created'];
+    subject: Message['subject'];
+    from: Message['from'];
   }[];
 
   export interface Filter {
     id: number;
     userId: number;
     name: string;
-    type: "subject" | "address" | "text" | "html" | "header";
+    type: 'subject' | 'address' | 'text' | 'html' | 'header';
     find: string;
     blacklist: boolean;
     regex: boolean;
@@ -155,26 +155,26 @@ export namespace Ptorx {
   }
 
   export type FilterList = {
-    id: Filter["id"];
-    name: Filter["name"];
-    type: Filter["type"];
-    created: Filter["created"];
+    id: Filter['id'];
+    name: Filter['name'];
+    type: Filter['type'];
+    created: Filter['created'];
   }[];
 
   export interface Modifier {
     id: number;
     userId: number;
     name: string;
-    target: "subject" | "html" | "text";
+    target: 'subject' | 'html' | 'text';
     template: string;
     created: number;
   }
 
   export type ModifierList = {
-    id: Ptorx.Modifier["id"];
-    userId: Ptorx.Modifier["userId"];
-    name: Ptorx.Modifier["name"];
-    created: Ptorx.Modifier["created"];
+    id: Ptorx.Modifier['id'];
+    userId: Ptorx.Modifier['userId'];
+    name: Ptorx.Modifier['name'];
+    created: Ptorx.Modifier['created'];
   }[];
 
   export interface PrimaryEmail {
@@ -187,18 +187,123 @@ export namespace Ptorx {
   }
 
   export type PrimaryEmailList = {
-    id: PrimaryEmail["id"];
-    userId: PrimaryEmail["userId"];
-    address: PrimaryEmail["address"];
-    created: PrimaryEmail["created"];
-    verified: PrimaryEmail["verified"];
+    id: PrimaryEmail['id'];
+    userId: PrimaryEmail['userId'];
+    address: PrimaryEmail['address'];
+    created: PrimaryEmail['created'];
+    verified: PrimaryEmail['verified'];
   }[];
 
   export interface Recipient {
-    proxyEmailId?: Ptorx.ProxyEmail["id"];
+    proxyEmailId?: Ptorx.ProxyEmail['id'];
     domainId?: number;
     message?: Ptorx.Message;
     address: string;
     user?: Ptorx.User;
+  }
+
+  export namespace Env {
+    export interface Common {
+      /**
+       * Name of the application as displayed to the user.
+       */
+      NAME: string;
+      /**
+       * Is this a production environment?
+       */
+      PROD: boolean;
+      /**
+       * The app's main domain name.
+       */
+      DOMAIN: string;
+      /**
+       * The app's root API URL.
+       * @example "https://ptorx.com/api/6"
+       */
+      API_URL: string;
+    }
+
+    export interface Server extends Ptorx.Env.Common {
+      /**
+       * Should app run cron jobs?
+       */
+      CRON: boolean;
+      /**
+       * MySQL / MariaDB connection object passed to mysql.createPool()
+       * https://github.com/mysqljs/mysql#pooling-connections
+       */
+      MYSQL: object;
+      /**
+       * Shared secret (also used by Accownt and Rich Cow) used for signing and
+       *  verifying JSON Web Tokens.
+       */
+      JWT_KEY: string;
+      /**
+       * The app's root web client URL.
+       * @example "https://ptorx.com"
+       */
+      WEB_URL: string;
+      /**
+       * The port to host the API server on.
+       */
+      API_PORT: number;
+      /**
+       * The internal database id of `DOMAIN`.
+       */
+      DOMAIN_ID: number;
+      /**
+       * The port to host the SMTP server on.
+       */
+      SMTP_PORT: number;
+      /**
+       * Absolute path for ptorx-web.
+       * @example "/path/to/ptorx/web"
+       */
+      WEB_DIRECTORY: string;
+      /**
+       * The port to host the test SMTP server on. Used for capturing outgoing mail
+       *  in a testing environment.
+       */
+      TEST_SMTP_PORT: number;
+      /**
+       * URL for the Rich Cow web client.
+       * @example "https://ptorx.com/rich-cow"
+       */
+      RICH_COW_WEB_URL: string;
+      /**
+       * Configuration for the SMTP server.
+       * https://nodemailer.com/extras/smtp-server/#step-3-create-smtpserver-instance
+       */
+      SMTP_SERVER_OPTIONS: object;
+      /**
+       * Absolute path for where to temporarily cache large outgoing mail for
+       *  before being signed.
+       */
+      MAIL_CACHE_DIRECTORY: string;
+      /**
+       * A proxy email within the database. Used for testing.
+       * @example "test@ptorx.com"
+       */
+      PERSISTENT_PROXY_EMAIL: string;
+    }
+
+    export interface Web extends Ptorx.Env.Common {
+      /**
+       * Port for the Webpack dev server. Only needed for Ptorx developers.
+       */
+      PORT: number;
+      /**
+       * The root documentation URL.
+       */
+      DOCS_URL: 'https://github.com/Xyfir/Ptorx/blob/docs';
+      /**
+       * The URL for the Accownt web client.
+       */
+      ACCOWNT_WEB_URL: 'https://ptorx.com/accownt';
+      /**
+       * The URL for the Accownt API.
+       */
+      ACCOWNT_API_URL: 'https://ptorx.com/api/accownt';
+    }
   }
 }

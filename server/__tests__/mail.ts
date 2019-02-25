@@ -1,3 +1,4 @@
+import 'lib/tests/prepare';
 import { SendMailOptions, createTransport } from 'nodemailer';
 import { listProxyEmails } from 'lib/proxy-emails/list';
 import { startSMTPServer } from 'lib/mail/smtp-server';
@@ -17,10 +18,8 @@ import { ParsedMail } from 'mailparser';
 import { addFilter } from 'lib/filters/add';
 import { sendMail } from 'lib/mail/send';
 import { saveMail } from 'lib/mail/save';
-import * as CONFIG from 'constants/config';
 import { getUser } from 'lib/users/get';
 import { Ptorx } from 'types/ptorx';
-import 'lib/tests/prepare';
 
 test('build template', async () => {
   const template = await buildTemplate('verify-email', {
@@ -39,26 +38,26 @@ test('get recipient: non-ptorx email', async () => {
 test('get recipient: proxy email', async () => {
   const proxyEmail = await addProxyEmail(
     {
-      domainId: CONFIG.DOMAIN_ID,
+      domainId: process.enve.DOMAIN_ID,
       address: 'recipient'
     },
     1234
   );
   const user = await getUser(1234);
-  const recipient = await getRecipient(`recipient@${CONFIG.DOMAIN}`);
+  const recipient = await getRecipient(`recipient@${process.enve.DOMAIN}`);
   const _recipient: Ptorx.Recipient = {
     user,
-    address: `recipient@${CONFIG.DOMAIN}`,
-    domainId: CONFIG.DOMAIN_ID,
+    address: `recipient@${process.enve.DOMAIN}`,
+    domainId: process.enve.DOMAIN_ID,
     proxyEmailId: proxyEmail.id
   };
   expect(recipient).toMatchObject(_recipient);
 });
 
 test('get recipient: bad address on proxy domain', async () => {
-  const recipient = await getRecipient(`doesnotexist@${CONFIG.DOMAIN}`);
+  const recipient = await getRecipient(`doesnotexist@${process.enve.DOMAIN}`);
   const _recipient: Ptorx.Recipient = {
-    address: `doesnotexist@${CONFIG.DOMAIN}`
+    address: `doesnotexist@${process.enve.DOMAIN}`
   };
   expect(recipient).toMatchObject(_recipient);
 });
@@ -105,7 +104,7 @@ test('save mail', async () => {
       text: 'Hello',
       to: {
         html: '',
-        text: `user@${CONFIG.DOMAIN}`,
+        text: `user@${process.enve.DOMAIN}`,
         value: []
       },
       textAsHtml: '',
@@ -127,7 +126,7 @@ test('save mail', async () => {
     headers: ['Header: Value'],
     html: null,
     subject: 'subject',
-    to: `user@${CONFIG.DOMAIN}`,
+    to: `user@${process.enve.DOMAIN}`,
     text: 'Hello'
   };
   expect(message).toMatchObject(_message);
@@ -147,7 +146,7 @@ test('filter mail', async () => {
     text: 'Match',
     to: {
       html: '',
-      text: `match@${CONFIG.DOMAIN}`,
+      text: `match@${process.enve.DOMAIN}`,
       value: []
     },
     textAsHtml: '',
@@ -166,7 +165,7 @@ test('filter mail', async () => {
     text: 'No',
     to: {
       html: '',
-      text: `no@${CONFIG.DOMAIN}`,
+      text: `no@${process.enve.DOMAIN}`,
       value: []
     },
     textAsHtml: '',
@@ -227,7 +226,7 @@ test('modify mail', async () => {
     html: '<div>Hello <b>world</b>!</div>',
     from: 'user@example.com',
     text: 'Hello world!',
-    to: `user@${CONFIG.DOMAIN}`
+    to: `user@${process.enve.DOMAIN}`
   };
 
   let modifier = await addModifier(
@@ -264,7 +263,9 @@ test('modify mail', async () => {
     1234
   );
   await modifyMail(mail, modifier.id, 1234);
-  expect(mail.text).toBe(`user@example.com -> user@${CONFIG.DOMAIN} (Value)`);
+  expect(mail.text).toBe(
+    `user@example.com -> user@${process.enve.DOMAIN} (Value)`
+  );
 });
 
 test('send mail', async () => {
@@ -299,12 +300,12 @@ test('smtp server', async () => {
       session.envelope.mailFrom !== false
         ? session.envelope.mailFrom.address
         : ''
-    ).toBe(CONFIG.PERSISTENT_PROXY_EMAIL);
+    ).toBe(process.enve.PERSISTENT_PROXY_EMAIL);
     expect(session.envelope.rcptTo[0].address).toBe('test@example.com');
 
     // Headers from/to should be unchanged
     expect(message.from.text).toBe('You <foo@example.com>');
-    expect(message.to.text).toBe(CONFIG.PERSISTENT_PROXY_EMAIL);
+    expect(message.to.text).toBe(process.enve.PERSISTENT_PROXY_EMAIL);
 
     expect(message.subject).toBe('Hi');
     expect(message.text).toBe('Hello world?');
@@ -315,7 +316,7 @@ test('smtp server', async () => {
       message.headerLines.find(h => h.key == 'x-custom-header')
     ).not.toBeUndefined();
     expect(message.replyTo.text).toMatch(
-      new RegExp(`^\\d+--.+--reply-x@${CONFIG.DOMAIN}$`)
+      new RegExp(`^\\d+--.+--reply-x@${process.enve.DOMAIN}$`)
     );
   });
 
@@ -323,10 +324,10 @@ test('smtp server', async () => {
   const transporter = createTransport({
     secure: false,
     host: '127.0.0.1',
-    port: CONFIG.SMTP_PORT,
+    port: process.enve.SMTP_PORT,
     tls: { rejectUnauthorized: false }
   });
-  // foo@example.com -> CONFIG.PERSISTENT_PROXY_EMAIL -> test@example.com
+  // foo@example.com -> process.enve.PERSISTENT_PROXY_EMAIL -> test@example.com
   await transporter.sendMail({
     attachments: [
       {
@@ -340,7 +341,7 @@ test('smtp server', async () => {
     from: 'You <foo@example.com>',
     html: '<b>Hello world?</b>',
     text: 'Hello world?',
-    to: CONFIG.PERSISTENT_PROXY_EMAIL
+    to: process.enve.PERSISTENT_PROXY_EMAIL
   });
   await promise;
   await new Promise(r => server.close(r));
@@ -371,11 +372,11 @@ test('reply to message', async () => {
   // Send to ACTUAL SMTP server
   const transporter = createTransport({
     host: '127.0.0.1',
-    port: CONFIG.SMTP_PORT,
+    port: process.enve.SMTP_PORT,
     secure: false,
     tls: { rejectUnauthorized: false }
   });
-  // foo@example.com -> --reply-x@CONFIG.DOMAIN -> test@example.com
+  // foo@example.com -> --reply-x@process.enve.DOMAIN -> test@example.com
   await transporter.sendMail({
     subject: 'Hello',
     from: 'foo@example.com',

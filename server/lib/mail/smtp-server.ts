@@ -9,7 +9,6 @@ import { modifyMail } from 'lib/mail/modify';
 import { SMTPServer } from 'smtp-server';
 import { saveMail } from 'lib/mail/save';
 import { sendMail } from 'lib/mail/send';
-import * as CONFIG from 'constants/config';
 
 declare module 'mailparser' {
   interface ParsedMail {
@@ -19,7 +18,7 @@ declare module 'mailparser' {
 
 export function startSMTPServer(): SMTPServer {
   const server = new SMTPServer({
-    ...CONFIG.SMTP_SERVER_OPTIONS,
+    ...process.enve.SMTP_SERVER_OPTIONS,
     authOptional: true,
     size: 25000000,
     async onData(stream, session, callback) {
@@ -144,6 +143,6 @@ export function startSMTPServer(): SMTPServer {
     }
   });
   server.on('error', console.error);
-  server.listen(CONFIG.SMTP_PORT);
+  server.listen(process.enve.SMTP_PORT);
   return server;
 }

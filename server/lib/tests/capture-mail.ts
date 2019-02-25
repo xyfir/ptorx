@@ -1,6 +1,5 @@
 import { SMTPServer, SMTPServerSession } from 'smtp-server';
 import { simpleParser, ParsedMail } from 'mailparser';
-import * as CONFIG from 'constants/config';
 
 export function captureMail(
   expected: number,
@@ -22,7 +21,7 @@ export function captureMail(
       server.on('error', e => {
         throw e;
       });
-      server.listen(CONFIG.TEST_SMTP_PORT);
+      server.listen(process.enve.TEST_SMTP_PORT);
     } catch (err) {
       server ? server.close(resolve) : resolve();
     }

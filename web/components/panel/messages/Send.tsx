@@ -1,7 +1,6 @@
 import { withSnackbar, InjectedNotistackProps } from 'notistack';
 import { PanelContext } from 'lib/PanelContext';
 import { TrixEditor } from 'react-trix';
-import { DOMAIN } from 'constants/config';
 import * as React from 'react';
 import { api } from 'lib/api';
 import {
@@ -91,7 +90,7 @@ class _SendMessage extends React.Component<
           helperText={
             !!from && !isValidFrom ? 'Not a valid proxy email' : undefined
           }
-          placeholder={`From: proxy@${DOMAIN}`}
+          placeholder={`From: proxy@${process.enve.DOMAIN}`}
         />
         <TextField
           fullWidth

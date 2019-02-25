@@ -1,9 +1,3 @@
-import {
-  ACCOWNT_WEB_URL,
-  ACCOWNT_API_URL,
-  NAME,
-  DOCS_URL
-} from 'constants/config';
 import * as React from 'react';
 import { Ptorx } from 'types/ptorx';
 import {
@@ -96,7 +90,7 @@ const _Info = ({ classes, user }: InfoProps) => (
         </Typography>
         <Typography className={classes.p}>
           Protect your privacy, strengthen your security, and take control of
-          your emails with {NAME}.
+          your emails with {process.enve.NAME}.
         </Typography>
 
         {user ? (
@@ -108,21 +102,25 @@ const _Info = ({ classes, user }: InfoProps) => (
             <Button
               variant="contained"
               color="secondary"
-              href={`${ACCOWNT_API_URL}/login/logout`}
+              href={`${process.enve.ACCOWNT_API_URL}/login/logout`}
             >
               Logout
             </Button>
           </div>
         ) : (
           <div className={classes.buttons}>
-            <Button variant="contained" color="primary" href={ACCOWNT_WEB_URL}>
+            <Button
+              variant="contained"
+              color="primary"
+              href={process.enve.ACCOWNT_WEB_URL}
+            >
               Login
             </Button>
             <span className={classes.or}>or</span>
             <Button
               variant="contained"
               color="secondary"
-              href={ACCOWNT_WEB_URL}
+              href={process.enve.ACCOWNT_WEB_URL}
             >
               Register
             </Button>
@@ -173,16 +171,22 @@ const _Info = ({ classes, user }: InfoProps) => (
       <a href="https://github.com/Xyfir/Ptorx" className={classes.a}>
         Our code is completely open source for you to view.
       </a>{' '}
-      You can host your own server or contribute to our codebase and make {NAME}{' '}
-      better.
+      You can host your own server or contribute to our codebase and make{' '}
+      {process.enve.NAME} better.
     </Typography>
 
     <footer className={classes.footer}>
-      <a href={`${DOCS_URL}/terms-of-service.md`} className={classes.a}>
+      <a
+        href={`${process.enve.DOCS_URL}/terms-of-service.md`}
+        className={classes.a}
+      >
         Terms of Service
       </a>
       {' — '}
-      <a href={`${DOCS_URL}/privacy-policy.md`} className={classes.a}>
+      <a
+        href={`${process.enve.DOCS_URL}/privacy-policy.md`}
+        className={classes.a}
+      >
         Privacy Policy
       </a>
     </footer>

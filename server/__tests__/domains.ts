@@ -1,12 +1,12 @@
-import { getDomainAuth, getDomain } from 'lib/domains/get';
+import 'lib/tests/prepare';
 import { listDomainUsers } from 'lib/domains/users/list';
 import { addDomainUser } from 'lib/domains/users/add';
+import { getDomainAuth } from 'lib/domains/get';
 import { verifyDomain } from 'lib/domains/verify';
 import { deleteDomain } from 'lib/domains/delete';
 import { listDomains } from 'lib/domains/list';
 import { addDomain } from 'lib/domains/add';
 import { Ptorx } from 'types/ptorx';
-import 'lib/tests/prepare';
 
 test('create domain', async () => {
   const domain = await addDomain({ domain: 'example.com' }, 1234);

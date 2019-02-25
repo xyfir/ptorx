@@ -1,3 +1,4 @@
+import 'lib/tests/prepare';
 import { deleteProxyEmail } from 'lib/proxy-emails/delete';
 import { listProxyEmails } from 'lib/proxy-emails/list';
 import { editProxyEmail } from 'lib/proxy-emails/edit';
@@ -5,14 +6,12 @@ import { addProxyEmail } from 'lib/proxy-emails/add';
 import { getProxyEmail } from 'lib/proxy-emails/get';
 import { addModifier } from 'lib/modifiers/add';
 import { addFilter } from 'lib/filters/add';
-import * as CONFIG from 'constants/config';
 import { Ptorx } from 'types/ptorx';
-import 'lib/tests/prepare';
 
 test('create custom proxy email', async () => {
   const proxyEmail = await addProxyEmail(
     {
-      domainId: CONFIG.DOMAIN_ID,
+      domainId: process.enve.DOMAIN_ID,
       address: 'test',
       name: 'name'
     },
@@ -26,10 +25,10 @@ test('create custom proxy email', async () => {
     ...proxyEmail,
     name: 'name',
     address: 'test',
-    domainId: CONFIG.DOMAIN_ID,
+    domainId: process.enve.DOMAIN_ID,
     saveMail: false,
     links: [],
-    fullAddress: `test@${CONFIG.DOMAIN}`
+    fullAddress: `test@${process.enve.DOMAIN}`
   };
   expect(proxyEmail).toMatchObject(_proxyEmail);
 });
@@ -37,7 +36,7 @@ test('create custom proxy email', async () => {
 test('create random proxy email', async () => {
   const proxyEmail = await addProxyEmail(
     {
-      domainId: CONFIG.DOMAIN_ID,
+      domainId: process.enve.DOMAIN_ID,
       saveMail: true
     },
     1234
@@ -46,7 +45,7 @@ test('create random proxy email', async () => {
   const _proxyEmail: Ptorx.ProxyEmail = {
     ...proxyEmail,
     name: '',
-    domainId: CONFIG.DOMAIN_ID,
+    domainId: process.enve.DOMAIN_ID,
     saveMail: true
   };
   expect(proxyEmail).toMatchObject(_proxyEmail);

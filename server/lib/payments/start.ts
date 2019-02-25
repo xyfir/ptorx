@@ -1,4 +1,3 @@
-import { RICH_COW_WEB_URL } from 'constants/config';
 import { addPayment } from 'lib/payments/add';
 import { signJWT } from 'lib/jwt/sign';
 import { Ptorx } from 'types/ptorx';
@@ -16,5 +15,5 @@ export async function startPayment(
     },
     '1d'
   );
-  return { url: `${RICH_COW_WEB_URL}?jwt=${jwt}` };
+  return { url: `${process.enve.RICH_COW_WEB_URL}?jwt=${jwt}` };
 }

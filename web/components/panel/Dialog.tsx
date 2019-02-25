@@ -14,7 +14,6 @@ import { AddFilter } from 'components/panel/filters/Add';
 import { AddDomain } from 'components/panel/domains/Add';
 import * as React from 'react';
 import { Close } from '@material-ui/icons';
-import { NAME } from 'constants/config';
 import {
   withMobileDialog,
   DialogContent,

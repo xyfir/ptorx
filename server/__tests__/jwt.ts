@@ -1,6 +1,6 @@
+import 'lib/tests/prepare';
 import { verifyJWT } from 'lib/jwt/verify';
 import { signJWT } from 'lib/jwt/sign';
-import 'lib/tests/prepare';
 
 test('sign and verify jwt', async () => {
   const encoded = await signJWT(
