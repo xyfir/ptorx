@@ -4,6 +4,7 @@ import { getProxyEmail } from 'lib/proxy-emails/get';
 import { getRecipient } from 'lib/mail/get-recipient';
 import { simpleParser } from 'mailparser';
 import { chargeCredits } from 'lib/users/charge';
+import { readFileSync } from 'fs';
 import { filterMail } from 'lib/mail/filter';
 import { modifyMail } from 'lib/mail/modify';
 import { SMTPServer } from 'smtp-server';
@@ -17,6 +18,14 @@ declare module 'mailparser' {
 }
 
 export function startSMTPServer(): SMTPServer {
+  // Load cert/key from files if needed
+  const { SMTP_SERVER_OPTIONS } = process.enve;
+  let { cert, key } = SMTP_SERVER_OPTIONS;
+  if (cert && !cert.startsWith('-----'))
+    SMTP_SERVER_OPTIONS.cert = readFileSync(cert);
+  if (key && !key.startsWith('-----'))
+    SMTP_SERVER_OPTIONS.key = readFileSync(key);
+
   const server = new SMTPServer({
     ...process.enve.SMTP_SERVER_OPTIONS,
     authOptional: true,

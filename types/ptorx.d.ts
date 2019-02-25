@@ -232,7 +232,7 @@ export namespace Ptorx {
        * MySQL / MariaDB connection object passed to mysql.createPool()
        * https://github.com/mysqljs/mysql#pooling-connections
        */
-      MYSQL: object;
+      MYSQL: any;
       /**
        * Shared secret (also used by Accownt and Rich Cow) used for signing and
        *  verifying JSON Web Tokens.
@@ -272,9 +272,11 @@ export namespace Ptorx {
       RICH_COW_WEB_URL: string;
       /**
        * Configuration for the SMTP server.
-       * https://nodemailer.com/extras/smtp-server/#step-3-create-smtpserver-instance
+       *  https://nodemailer.com/extras/smtp-server/#step-3-create-smtpserver-instance
+       *  Note that unlike the original object, the `cert` and `key` properties
+       *  also accept file paths.
        */
-      SMTP_SERVER_OPTIONS: object;
+      SMTP_SERVER_OPTIONS: any;
       /**
        * Absolute path for where to temporarily cache large outgoing mail for
        *  before being signed.
