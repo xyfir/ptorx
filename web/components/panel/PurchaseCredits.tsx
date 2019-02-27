@@ -41,7 +41,11 @@ class _PurchaseCredits extends React.Component<
     if (!jwt) return;
     api
       .post('/payments/finish', { jwt })
-      .then(() => this.props.enqueueSnackbar('Payment complete'))
+      .then(() => {
+        this.props.enqueueSnackbar('Payment complete');
+        return api.get('/users');
+      })
+      .then(res => this.context.dispatch({ user: res.data }))
       .catch(err => this.props.enqueueSnackbar(err.response.data.error));
   }
 
