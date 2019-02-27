@@ -11,11 +11,9 @@ export async function topUpCredits() {
             ${TIERS.map(() => `WHEN tier = ? THEN ?`).join('\n')}
           END
       `,
-      [
-        /** @todo remove @ts-ignore eventually */
-        // @ts-ignore
-        TIERS.map(tier => [tier.name, tier.credits].flat())
-      ]
+      /** @todo remove @ts-ignore eventually */
+      // @ts-ignore
+      TIERS.map(tier => [tier.name, tier.credits].flat())
     );
   } catch (err) {
     console.error('cron/top-up-credits', err);
