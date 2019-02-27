@@ -11,6 +11,10 @@ export function api_verifyPrimaryEmail(
     req.query.primaryEmailKey,
     req.jwt.userId
   )
-    .then(() => res.status(200).redirect('/primary-emails'))
+    .then(() =>
+      res
+        .status(200)
+        .redirect(`/app/primary-emails/${+req.query.primaryEmailId}`)
+    )
     .catch(next);
 }
