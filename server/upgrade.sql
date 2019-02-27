@@ -253,7 +253,7 @@ ALTER TABLE `filters` ADD CONSTRAINT `fk__filters__userId` FOREIGN KEY (`userId`
 ALTER TABLE `modifiers` ADD CONSTRAINT `fk__modifiers__userId` FOREIGN KEY (`userId`) REFERENCES `users`(`userId`) ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE `primary_emails` ADD CONSTRAINT `fk__primary_emails__userId` FOREIGN KEY (`userId`) REFERENCES `users`(`userId`) ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE `proxy_emails` ADD CONSTRAINT `fk__proxy_emails__userId` FOREIGN KEY (`userId`) REFERENCES `users`(`userId`) ON DELETE CASCADE ON UPDATE CASCADE;
-DROP TABLE `ptorx`.`sessions`
+DROP TABLE `ptorx`.`sessions`;
 -- new modifier system (only target/template)
 ALTER TABLE `modifiers` DROP `type`, DROP `subject`, DROP `replacement`, DROP `flags`, DROP `regex`, DROP `prepend`, DROP `add`, DROP `to`, DROP `separator`, DROP `find`, DROP `tag`;
 ALTER TABLE `modifiers` CHANGE `target` `target` VARCHAR(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL, CHANGE `template` `template` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL;
