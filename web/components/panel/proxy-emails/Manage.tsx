@@ -5,6 +5,8 @@ import { PanelContext } from 'lib/PanelContext';
 import * as moment from 'moment';
 import * as React from 'react';
 import { Ptorx } from 'types/ptorx';
+// @ts-ignore
+import * as copy from 'clipboard-copy';
 import { api } from 'lib/api';
 import {
   FormControlLabel,
@@ -94,6 +96,13 @@ class _ManageProxyEmail extends React.Component<
         <Typography variant="body2">
           Created on {moment.unix(proxyEmail.created).format('LLL')}
         </Typography>
+        <Button
+          onClick={() => copy(proxyEmail.fullAddress)}
+          variant="text"
+          color="primary"
+        >
+          Copy Address
+        </Button>
 
         <TextField
           fullWidth
