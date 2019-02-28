@@ -160,10 +160,12 @@ export async function v5tov6() {
       const links = linkedFilters
         .filter(f => f.email_id == oldProxyEmail.email_id)
         .map((f, i) => ({ orderIndex: i, filterId: f.id }));
-      links.push({
-        orderIndex: links.length,
-        primaryEmailId: oldProxyEmail.primary_email_id
-      });
+      if (oldProxyEmail.primary_email_id) {
+        links.push({
+          orderIndex: links.length,
+          primaryEmailId: oldProxyEmail.primary_email_id
+        });
+      }
       await addProxyEmail(
         {
           address: oldProxyEmail.address,
