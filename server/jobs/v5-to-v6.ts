@@ -1,6 +1,8 @@
 import { addProxyEmail } from 'lib/proxy-emails/add';
 import { addDomain } from 'lib/domains/add';
 import * as storage from 'node-persist';
+import * as moment from 'moment';
+import * as mysql from 'mysql';
 import { MySQL } from 'lib/MySQL';
 
 /**
@@ -13,13 +15,20 @@ import { MySQL } from 'lib/MySQL';
 export async function v5tov6() {
   const oldDB = new MySQL();
   const newDB = new MySQL();
-  oldDB.cn.config.database = process.enve.OLD_DATABASE_NAME;
   try {
+    // @ts-ignore
+    oldDB.cn = mysql.createConnection({
+      ...process.enve.MYSQL,
+      database: process.enve.OLD_DATABASE_NAME
+    });
+
     await storage.init({ dir: process.enve.ACCOWNT_DB_DIRECTORY });
 
     // Convert users
     const users = await oldDB.query('SELECT * FROM users');
+    console.log(`Found ${users.length} users`);
     for (let oldUser of users) {
+      console.log(`Converting user ${oldUser.user_id}`);
       const accowntUser = {
         id: oldUser.user_id,
         email: oldUser.email,
@@ -34,25 +43,33 @@ export async function v5tov6() {
         email: accowntUser.email,
         credits: 1500,
         tier: 'premium',
-        tierExpiration: Date.now() + 60 * 60 * 24 * 365 * 1000
+        tierExpiration: moment()
+          .add(1, 'year')
+          .unix()
       });
     }
 
     // Convert primary emails
     const primaryEmails = await oldDB.query('SELECT * FROM primary_emails');
+    console.log(`Found ${primaryEmails.length} primary emails`);
     for (let oldPrimaryEmail of primaryEmails) {
+      console.log(`Converting primary email ${oldPrimaryEmail.email_id}`);
+      if (!oldPrimaryEmail.user_id) continue;
       await newDB.query('INSERT INTO primary_emails SET ?', {
         id: oldPrimaryEmail.email_id,
         userId: oldPrimaryEmail.user_id,
         address: oldPrimaryEmail.address,
-        created: Date.now(),
+        created: moment().unix(),
         verified: true
       });
     }
 
     // Convert filters
     const filters = await oldDB.query('SELECT * FROM filters');
+    console.log(`Found ${filters.length} filters`);
     for (let oldFilter of filters) {
+      console.log(`Converting filter ${oldFilter.filter_id}`);
+      if (!oldFilter.user_id) continue;
       await newDB.query('INSERT INTO filters SET ?', {
         id: oldFilter.filter_id,
         userId: oldFilter.user_id,
@@ -72,7 +89,7 @@ export async function v5tov6() {
         find: oldFilter.find,
         blacklist: !oldFilter.accept_on_match,
         regex: oldFilter.use_regex,
-        created: Date.now()
+        created: moment().unix()
       });
     }
 
@@ -80,31 +97,66 @@ export async function v5tov6() {
 
     // Convert domains
     const domains = await oldDB.query('SELECT * FROM domains');
+    console.log(`Found ${domains.length} domains`);
     for (let oldDomain of domains) {
+      console.log(`Converting domain ${oldDomain.id}`);
+      if (!oldDomain.user_id) continue;
       const newDomain = await addDomain(
-        { domain: oldDomain.domain, global: false },
+        { domain: oldDomain.domain, global: oldDomain.global },
         oldDomain.user_id
       );
       domainMap[oldDomain.id] = newDomain.id;
     }
 
-    // Convert domains
+    // Convert domain users
     const domainUsers = await oldDB.query('SELECT * FROM domain_users');
+    console.log(`Found ${domainUsers.length} domain users`);
     for (let oldDomainUser of domainUsers) {
-      await newDB.query('INSERT INTO domain_users SET ?', {
-        userId: oldDomainUser.user_id,
-        domainId: oldDomainUser.domain_id,
-        label: oldDomainUser.label,
-        request_key: oldDomainUser.requestKey,
-        created: Date.now(),
-        authorized: true
-      });
+      console.log(
+        `Converting domain user ${oldDomainUser.user_id}-${
+          oldDomainUser.domain_id
+        }`
+      );
+      if (!oldDomainUser.user_id) continue;
+      try {
+        await newDB.query('INSERT INTO domain_users SET ?', {
+          userId: oldDomainUser.user_id,
+          domainId: domainMap[oldDomainUser.domain_id],
+          label: oldDomainUser.label,
+          requestKey: oldDomainUser.request_key,
+          created: moment().unix(),
+          authorized: true
+        });
+      } catch (err) {
+        if (!err.message.startsWith('ER_DUP_ENTRY:')) throw err;
+      }
     }
 
     // Convert proxy emails
     const proxyEmails = await oldDB.query('SELECT * FROM proxy_emails');
     const linkedFilters = await oldDB.query('SELECT * FROM linked_filters');
+    console.log(`Found ${proxyEmails.length} proxy emails`);
+    console.log(`Found ${linkedFilters.length} linked filters`);
     for (let oldProxyEmail of proxyEmails) {
+      // Convert deleted proxy emails
+      if (!oldProxyEmail.user_id) {
+        console.log(
+          `Converting deleted proxy email ${oldProxyEmail.address}-${
+            oldProxyEmail.domain_id
+          }`
+        );
+        await newDB.query('INSERT INTO deleted_proxy_emails SET ?', {
+          domainId: domainMap[oldProxyEmail.domain_id],
+          address: oldProxyEmail.address
+        });
+        continue;
+      }
+
+      console.log(
+        `Converting proxy email ${oldProxyEmail.address}-${
+          oldProxyEmail.domain_id
+        }`
+      );
       const links = linkedFilters
         .filter(f => f.email_id == oldProxyEmail.email_id)
         .map((f, i) => ({ orderIndex: i, filterId: f.id }));
@@ -112,7 +164,7 @@ export async function v5tov6() {
         orderIndex: links.length,
         primaryEmailId: oldProxyEmail.primary_email_id
       });
-      addProxyEmail(
+      await addProxyEmail(
         {
           address: oldProxyEmail.address,
           domainId: domainMap[oldProxyEmail.domain_id],
@@ -124,9 +176,10 @@ export async function v5tov6() {
         oldProxyEmail.user_id
       );
     }
+
+    console.log('Done');
   } catch (err) {
     console.error('jobs/v5-to-v6', err);
   }
-  oldDB.release();
   newDB.release();
 }
