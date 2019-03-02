@@ -214,6 +214,7 @@ export namespace Ptorx {
       PROD: boolean;
       /**
        * The app's main domain name.
+       * @example "example.com"
        */
       DOMAIN: string;
       /**
@@ -250,14 +251,16 @@ export namespace Ptorx {
       WEB_URL: string;
       /**
        * The port to host the API server on.
+       * @example 2070
        */
       API_PORT: number;
       /**
-       * The internal database id of `DOMAIN`.
+       * The internal database id of `DOMAIN`. Probably `1`.
        */
       DOMAIN_ID: number;
       /**
        * The port to host the SMTP server on.
+       * @example 2071
        */
       SMTP_PORT: number;
       /**
@@ -268,6 +271,7 @@ export namespace Ptorx {
       /**
        * The port to host the test SMTP server on. Used for capturing outgoing mail
        *  in a testing environment.
+       * @example 2072
        */
       TEST_SMTP_PORT: number;
       /**
@@ -279,12 +283,13 @@ export namespace Ptorx {
        * Configuration for the SMTP server.
        *  https://nodemailer.com/extras/smtp-server/#step-3-create-smtpserver-instance
        *  Note that unlike the original object, the `cert` and `key` properties
-       *  also accept file paths.
+       *  also accept file paths. `name` and `banner` should be `DOMAIN`.
        */
       SMTP_SERVER_OPTIONS: any;
       /**
        * Absolute path for where to temporarily cache large outgoing mail for
        *  before being signed.
+       * @example "/path/to/mail-cache"
        */
       MAIL_CACHE_DIRECTORY: string;
       /**
@@ -297,6 +302,7 @@ export namespace Ptorx {
     export interface Web extends Ptorx.Env.Common {
       /**
        * Port for the Webpack dev server. Only needed for Ptorx developers.
+       * @example 2073
        */
       PORT: number;
       /**
@@ -305,12 +311,14 @@ export namespace Ptorx {
       DOCS_URL: 'https://github.com/Xyfir/Ptorx/blob/docs';
       /**
        * The URL for the Accownt web client.
+       * @example "https://ptorx.com/accownt"
        */
-      ACCOWNT_WEB_URL: 'https://ptorx.com/accownt';
+      ACCOWNT_WEB_URL: string;
       /**
        * The URL for the Accownt API.
+       * @example "https://ptorx.com/api/accownt"
        */
-      ACCOWNT_API_URL: 'https://ptorx.com/api/accownt';
+      ACCOWNT_API_URL: string;
     }
   }
 }
