@@ -8,7 +8,6 @@ import * as cookieParser from 'cookie-parser';
 import * as bodyParser from 'body-parser';
 import { verifyJWT } from 'lib/jwt/verify';
 import * as Express from 'express';
-import { v5tov6 } from 'jobs/v5-to-v6';
 import { router } from 'api/router';
 import { Ptorx } from 'types/ptorx';
 import * as path from 'path';
@@ -93,4 +92,3 @@ app.listen(process.enve.API_PORT, () =>
 if (process.enve.CRON) cron();
 
 startSMTPServer();
-v5tov6();

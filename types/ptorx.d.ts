@@ -224,12 +224,7 @@ export namespace Ptorx {
       API_URL: string;
     }
 
-    export interface Temporary {
-      OLD_DATABASE_NAME: string;
-      ACCOWNT_DB_DIRECTORY: string;
-    }
-
-    export interface Server extends Ptorx.Env.Common, Ptorx.Env.Temporary {
+    export interface Server extends Ptorx.Env.Common {
       /**
        * Should app run cron jobs?
        */
