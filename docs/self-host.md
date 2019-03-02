@@ -53,11 +53,69 @@ sudo mysql -u root -e "CREATE DATABASE ptorx"
 Next we'll build the database, so assuming we're still in `ptorx/`:
 
 ```bash
-sudo mysql -u root -p ptorx < db/build/structure.sql
-sudo mysql -u root -p ptorx < db/build/data.sql
+sudo mysql -u root -p ptorx < server/db/build/structure.sql
+sudo mysql -u root -p ptorx < server/db/build/data.sql
 ```
 
 Replace `ptorx` with the name of your database.
+
+# Step 3: Create Data Directories
+
+Now we need to create the data directories where Ptorx and its submodules will write both temporary and permanent data to the disk. You can put them wherever you'd like (just remember it for Step 4), but for now will put them alongside `ptorx/`.
+
+```bash
+mkdir ../accownt-db ../mail-cache ../rich-cow-db
+```
+
+You can also name the three directories however you'd like.
+
+# Step 4: Set Environment Variables
+
+Ptorx and its submodules are configured via environment variables which are loaded into the applications via `.env` files located in each modules's directory.
+
+To understand the syntax of the `.env` files, know that they are first loaded via [dotenv](https://www.npmjs.com/package/dotenv) and then the string values provided by dotenv are parsed by [enve](https://www.npmjs.com/package/dotenv).
+
+## Step 4a: Create `.env` Files
+
+First we'll create each file and then we'll work our way through populating them with values.
+
+```bash
+touch server/.env web/.env accownt/server/.env accownt/web/.env rich-cow/server/.env rich-cow/web/.env
+```
+
+## Step 4b: Configure Rich Cow
+
+See [Xyfir/rich-cow](https://github.com/Xyfir/rich-cow) for instructions.
+
+Use `vim` or `nano` or similar to edit the files `rich-cow/server/.env` and `rich-cow/web/.env` assuming we're still in `ptorx/`.
+
+## Step 4c: Configure Accownt
+
+See [Xyfir/accownt](https://github.com/Xyfir/accownt) for instructions.
+
+Use `vim` or `nano` or similar to edit the files `accownt/server/.env` and `accownt/web/.env` assuming we're still in `ptorx/`.
+
+## Step 4d: Configure Ptorx
+
+Now we'll do the same thing for Ptorx. You can find the available environment variables in [types/ptorx.d.ts](https://github.com/Xyfir/ptorx/blob/master/types/ptorx.d.ts) under the `Ptorx.Env` namespace.
+
+# Step 5: Build From Source
+
+```bash
+cd server
+npm run build
+cd ../web
+npm run build
+cd ../accownt/server
+npm run build
+cd ../web
+npm run build
+cd ../../rich-cow/server
+npm run build
+cd ../web
+npm run build
+cd ../../
+```
 
 # Step N: Set Reverse DNS
 
