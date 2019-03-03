@@ -11,6 +11,7 @@ Hosting Ptorx yourself gives you a greater level of control and privacy (assumin
 - Let's Encrypt or similar geniune TLS (SSL) certificate (no self-signed certs!) for your main domain where the instance of Ptorx will be hosted (additional mail-only domains don't need this)
 - Node.js installed on your server (the latest version available at time of the last [server/package.json](https://github.com/Xyfir/ptorx/blob/master/server/package.json) update)
 - MariaDB or MySQL installed on your server (ptorx.com runs MariaDB so there may be unknown discrepancies with MySQL)
+- sendmail installed on your server (make sure your server's hostname is set correctly to prevent slow mail)
 
 # Step 1: Download Code and npm Dependencies
 
@@ -121,15 +122,18 @@ cd ../../
 
 # Step 6: Port Forward
 
-Next we'll need to forward incoming traffic from port `25` to the port you set for the SMTP server via `SMTP_PORT` in `server/.env`.
+Next we'll need to forward incoming traffic from port `25` to the port you set for the SMTP server via `SMTP_PORT` in `server/.env`, which we'll assume is `2071`. Before doing this, make sure your firewall allows connections to both ports.
 
 ```bash
-# replace 2071 with the value in SMTP_PORT
 sudo iptables -t nat -A PREROUTING -p tcp --dport 25 -j REDIRECT --to-port 2071
 ```
 
-# Step 7: Set Reverse DNS
+# Step 7: Set DNS Records
+
+# Step 8: Set Reverse DNS
 
 This is an important step that can help prevent your mail from being marked as spam. Go to your server's control panel and change the reverse DNS to your domain name. By default its value probably looks something like `0.0.0.0.yourhost.com` where `0.0.0.0` is your server's IPv4 address and `yourhost.com` is the name of your server host. For example with [VULTR](https://www.vultr.com/?ref=7140527), which Ptorx uses, it'll look like `140.82.16.198.vultr.com`, and it can be found under the `Settings > IPv4` tab when viewing your server instance.
+
+# Step 9: Start Servers
 
 # Upgrading Ptorx
