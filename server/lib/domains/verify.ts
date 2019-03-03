@@ -15,11 +15,9 @@ export async function verifyDomain(
         (err, records) => resolve(err || records)
       )
     );
-    if (
-      !Array.isArray(records) ||
-      records.findIndex(a => a.findIndex(b => b == domain.publicKey) > -1) == -1
-    )
-      throw 'Domain could not be verified';
+    if (!Array.isArray(records) || !records.length)
+      throw 'Could not find domain key';
+    if (records[0].join('') != domain.publicKey) throw 'Invalid domain key';
     await editDomain({ ...domain, verified: true }, userId);
   } catch (err) {
     throw err;
