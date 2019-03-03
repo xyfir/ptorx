@@ -278,7 +278,8 @@ export namespace Ptorx {
        * Configuration for the SMTP server.
        *  https://nodemailer.com/extras/smtp-server/#step-3-create-smtpserver-instance
        *  Note that unlike the original object, the `cert` and `key` properties
-       *  also accept file paths. `name` and `banner` should be `DOMAIN`.
+       *  also accept file paths. `name` and `banner` should be your server's
+       *  hostname.
        */
       SMTP_SERVER_OPTIONS: any;
       /**
