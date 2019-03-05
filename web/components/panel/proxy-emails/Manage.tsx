@@ -114,6 +114,7 @@ class _ManageProxyEmail extends React.Component<
           helperText="Name your proxy email to find it easier"
           placeholder="My Proxy Email"
         />
+
         <FormControlLabel
           control={
             <Checkbox
@@ -123,6 +124,23 @@ class _ManageProxyEmail extends React.Component<
           }
           label="Save Incoming Mail"
         />
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={proxyEmail.saveMail}
+              onChange={e => this.onChange('saveMail', e.target.checked)}
+            />
+          }
+          label="Allow Anonymous Replies"
+        />
+
+        {proxyEmail.saveMail ? null : (
+          <Typography>
+            <strong>Warning!</strong> Some mail may <em>not</em> be redirected
+            due to its sender's strict anti-spam rules. Saving mail ensures
+            these rejected messages are not lost entirely.
+          </Typography>
+        )}
 
         <ProxyEmailWaterfall proxyEmail={proxyEmail} onChange={this.onChange} />
 
