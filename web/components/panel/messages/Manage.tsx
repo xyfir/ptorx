@@ -20,6 +20,9 @@ import {
 } from '@material-ui/core';
 
 const styles = createStyles({
+  pre: {
+    overflow: 'auto'
+  },
   title: {
     fontSize: '200%'
   },
@@ -141,8 +144,12 @@ class _ManageMessage extends React.Component<
 
         {showHeaders ? (
           message.headers.map((header, i) => (
-            <Typography variant="body2" key={i}>
-              {header}
+            <Typography key={i}>
+              <strong>{header.split(': ')[0]}</strong>:{' '}
+              {header
+                .split(': ')
+                .slice(1)
+                .join(': ')}
             </Typography>
           ))
         ) : (
@@ -160,14 +167,15 @@ class _ManageMessage extends React.Component<
             }
           >
             <div>
-              <Typography variant="body2">
-                Received: {moment.unix(message.created).format('LLL')}
+              <Typography>
+                <strong>Received</strong>:{' '}
+                {moment.unix(message.created).format('LLL')}
               </Typography>
-              <Typography variant="body2">
-                From: {displayAddress(message.from)}
+              <Typography>
+                <strong>From</strong>: {displayAddress(message.from)}
               </Typography>
-              <Typography variant="body2">
-                To: {displayAddress(message.to)}
+              <Typography>
+                <strong>To</strong>: {displayAddress(message.to)}
               </Typography>
             </div>
           </Tooltip>
@@ -178,7 +186,7 @@ class _ManageMessage extends React.Component<
             <div dangerouslySetInnerHTML={{ __html: sanitize(message.html) }} />
           ) : (
             <React.Fragment>
-              <pre>{message.text}</pre>
+              <pre className={classes.pre}>{message.text}</pre>
               {message.html && message.html != message.text ? (
                 <Button
                   size="small"
