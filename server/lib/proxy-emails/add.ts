@@ -44,7 +44,8 @@ export async function addProxyEmail(
       userId,
       created: moment().unix(),
       address: proxyEmail.address,
-      domainId: proxyEmail.domainId
+      domainId: proxyEmail.domainId,
+      saveMail: true
     };
     const result = await db.query('INSERT INTO proxy_emails SET ?', insert);
     const _proxyEmail = await getProxyEmail(result.insertId, userId);

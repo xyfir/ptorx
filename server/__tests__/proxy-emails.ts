@@ -26,7 +26,7 @@ test('create custom proxy email', async () => {
     name: 'name',
     address: 'test',
     domainId: process.enve.DOMAIN_ID,
-    saveMail: false,
+    saveMail: true,
     links: [],
     fullAddress: `test@${process.enve.DOMAIN}`
   };
