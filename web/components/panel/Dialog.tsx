@@ -70,6 +70,7 @@ class _PanelDialog extends React.Component<PanelDialogProps, PanelDialogState> {
       <Dialog
         aria-labelledby="panel-dialog"
         fullScreen={fullScreen}
+        maxWidth={false}
         onClose={() => this.setState({ closing: true })}
         open={location.pathname.length > 5}
       >
