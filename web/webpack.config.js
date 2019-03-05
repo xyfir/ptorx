@@ -5,15 +5,16 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const webpack = require('webpack');
 const path = require('path');
 
+const PROD = process.enve.NODE_ENV == 'production';
+
 module.exports = {
-  // mode: process.enve.NODE_ENV,
-  mode: process.enve.PROD ? 'production' : 'development',
+  mode: process.enve.NODE_ENV,
 
   entry: './lib/index.ts',
 
   output: {
     publicPath: '/static/',
-    filename: process.enve.PROD ? '[name].[hash].js' : '[name].js',
+    filename: PROD ? '[name].[hash].js' : '[name].js',
     pathinfo: false,
     path: path.resolve(__dirname, 'dist')
   },
@@ -81,11 +82,11 @@ module.exports = {
     }),
     new HtmlWebpackPlugin({
       title: 'Send & Receive Mail Anonymously with Ptorx',
-      minify: process.enve.PROD,
+      minify: PROD,
       template: 'template.html'
     }),
-    process.enve.PROD ? new CompressionPlugin({ filename: '[path].gz' }) : null,
-    process.enve.PROD ? null : new webpack.HotModuleReplacementPlugin()
+    PROD ? new CompressionPlugin({ filename: '[path].gz' }) : null,
+    PROD ? null : new webpack.HotModuleReplacementPlugin()
   ].filter(p => p !== null),
 
   devtool: 'inline-source-map',

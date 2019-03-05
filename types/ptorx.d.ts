@@ -209,10 +209,6 @@ export namespace Ptorx {
        */
       NAME: string;
       /**
-       * Is this a production environment?
-       */
-      PROD: boolean;
-      /**
        * The app's main domain name.
        * @example "example.com"
        */
@@ -222,6 +218,10 @@ export namespace Ptorx {
        * @example "https://ptorx.com/api/6"
        */
       API_URL: string;
+      /**
+       * Node environment.
+       */
+      NODE_ENV: 'development' | 'production';
     }
 
     export interface Server extends Ptorx.Env.Common {

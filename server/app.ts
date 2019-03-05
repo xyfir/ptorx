@@ -28,7 +28,7 @@ declare module 'express' {
 }
 
 const app = Express();
-if (!process.enve.PROD) {
+if (process.enve.NODE_ENV == 'development') {
   app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', process.enve.WEB_URL);
     res.header(
