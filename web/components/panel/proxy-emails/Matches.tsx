@@ -28,7 +28,7 @@ class _ProxyEmailMatches extends React.Component<
   ProxyEmailMatchesProps,
   ProxyEmailMatchesState
 > {
-  state: ProxyEmailMatchesState = { perPage: 5, page: 1 };
+  state: ProxyEmailMatchesState = { perPage: 10, page: 1 };
 
   render() {
     const { classes, proxyEmails } = this.props;

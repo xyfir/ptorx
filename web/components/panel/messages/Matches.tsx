@@ -29,7 +29,7 @@ class _MessageMatches extends React.Component<
   MessageMatchesProps,
   MessageMatchesState
 > {
-  state: MessageMatchesState = { perPage: 5, page: 1 };
+  state: MessageMatchesState = { perPage: 25, page: 1 };
 
   render() {
     const { classes, messages } = this.props;
