@@ -13,18 +13,23 @@ Hosting Ptorx yourself gives you a greater level of control and privacy (assumin
 - MariaDB or MySQL installed on your server. Ptorx.com runs MariaDB so there may be unknown discrepancies with MySQL.
 - sendmail installed on your server. (Make sure your server's hostname is set correctly to prevent slow mail!)
 
-# Step 1: Download Code and npm Dependencies
+# Step 0: Clone the Repo
 
 First change to the directory where you wish to keep Ptorx.
 
 ```bash
 git clone --recurse-submodules https://github.com/Xyfir/ptorx.git
+cd ptorx
 ```
 
-Then install npm depencies for each module:
+From now on we'll assume commands are run from `ptorx/`.
+
+# Step 1: Download npm Dependencies
+
+Install npm depencies for each module:
 
 ```bash
-cd ptorx/server
+cd server
 npm install
 cd ../web
 npm install
@@ -38,8 +43,6 @@ cd ../web
 npm install
 cd ../../ # back to ptorx/
 ```
-
-From now on we'll assume commands are run from `ptorx/`.
 
 Then install pm2 to manage our API servers:
 
@@ -203,7 +206,7 @@ git submodule update --recursive
 
 Now we'll once again run through some of the steps above:
 
-- Go to [Step 1](#step-1-download-code-and-npm-dependencies) to update dependencies.
+- Go to [Step 1](#step-1-download-npm-dependencies) to update dependencies.
 - Go to [Step 4](#step-4-set-environment-variables) to update any `.env` files that may require changes.
 - Go to [Step 5](#step-5-build-from-source) to rebuild the apps.
 
