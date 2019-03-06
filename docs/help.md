@@ -148,9 +148,11 @@ After initiating the process of adding your domain to Ptorx, you must verify tha
 
 `example.com` should be whatever domain you entered into Ptorx. If you already have MX records set on your domain for another service, you should use a subdomain for mail that Ptorx will handle. Information for the second `TXT` record will be provided to you within the app.
 
-**Note:** Removing or altering these records after verification will likely prevent your domain from working with Ptorx properly.
+For your `MX` record, you can set the priority to any number you like. `10` is typically the convention.
 
 In certain cases it may take up to a day or two for these records to propagate. Use the 'verify' button when viewing your domain on Ptorx to check the values again. Mail will not be able to be received or sent until your domain is verified.
+
+Removing or altering these records after verification will likely prevent your domain from working with Ptorx properly.
 
 ## Requesting Access to Domains
 
