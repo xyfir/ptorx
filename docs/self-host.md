@@ -185,8 +185,40 @@ cd ../accownt/server
 pm2 start --name accownt npm -- run start
 cd ../../rich-cow/server
 pm2 start --name rich-cow npm -- run start
+pm2 startup # then follow instructions
 ```
 
 # Upgrading Ptorx
 
-Reset the repo; pull updates for repo and submodules; npm install everything; npm build everything; pm2 restart all; run appropriate files in server/db/upgrade; ... Tutorial will be improved later.
+This is a general guide for upgrading from one version of Ptorx to another. It's likely there are more specific steps you'll have to follow based on your current version and that of which you wish to upgrade to.
+
+To begin the process of upgrading Ptorx, let's first reset the repos and pull in changes:
+
+```bash
+git reset --hard origin/master
+git submodule foreach git reset --hard
+git pull
+git submodule update --recursive
+```
+
+Now we'll once again run through some of the steps above:
+
+- Go to [Step 1](#step-1-download-code-and-npm-dependencies) to update dependencies.
+- Go to [Step 4](#step-4-set-environment-variables) to update any `.env` files that may require changes.
+- Go to [Step 5](#step-5-build-from-source) to rebuild the apps.
+
+Update your database if needed by running _in order_ the `server/db/upgrade/` SQL files for every version _after_ your current installation's. For example, assuming you're on version `1.0.0` and the latest is `1.1.0`:
+
+```bash
+sudo mysql -u root -p ptorx < server/db/upgrade/1.0.1.sql
+sudo mysql -u root -p ptorx < server/db/upgrade/1.0.2.sql
+sudo mysql -u root -p ptorx < server/db/upgrade/1.1.0.sql
+```
+
+Be sure to replace `ptorx` with the actual name of your database.
+
+Finally, restart the servers:
+
+```bash
+pm2 restart all
+```
