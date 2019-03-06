@@ -58,6 +58,9 @@ const DNSRecord = ({
     <TextField fullWidth value={type} label="Type" margin="normal" />
     <TextField fullWidth value={hostname} label="Hostname" margin="normal" />
     <TextField fullWidth value={value} label="Value" margin="normal" />
+    {type == 'MX' ? (
+      <TextField fullWidth value={10} label="Priority" margin="normal" />
+    ) : null}
   </div>
 );
 
