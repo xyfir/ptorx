@@ -13,22 +13,10 @@ export const CATEGORIES: {
   variable: string;
 }[] = [
   {
-    name: 'Primary Emails',
-    route: 'primary-emails',
-    singular: 'Primary Email',
-    variable: 'primaryEmails'
-  },
-  {
     name: 'Proxy Emails',
     route: 'proxy-emails',
     singular: 'Proxy Email',
     variable: 'proxyEmails'
-  },
-  {
-    name: 'Modifiers',
-    route: 'modifiers',
-    singular: 'Modifier',
-    variable: 'modifiers'
   },
   {
     name: 'Messages',
@@ -37,10 +25,22 @@ export const CATEGORIES: {
     variable: 'messages'
   },
   {
+    name: 'Primary Emails',
+    route: 'primary-emails',
+    singular: 'Primary Email',
+    variable: 'primaryEmails'
+  },
+  {
     name: 'Filters',
     route: 'filters',
     singular: 'Filter',
     variable: 'filters'
+  },
+  {
+    name: 'Modifiers',
+    route: 'modifiers',
+    singular: 'Modifier',
+    variable: 'modifiers'
   },
   {
     name: 'Domains',
