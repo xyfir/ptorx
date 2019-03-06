@@ -46,7 +46,7 @@ class _Create extends React.Component<WithStyles<typeof styles>, CreateState> {
             Create or add a new...
           </DialogTitle>
           <List>
-            {CATEGORIES.map(category => (
+            {CATEGORIES.filter(c => c.name != 'Messages').map(category => (
               <Link
                 className={classes.link}
                 onClick={() => this.setState({ open: false })}
