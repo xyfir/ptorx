@@ -292,18 +292,13 @@ test('send mail', async () => {
 }, 10000);
 
 test('smtp server', async () => {
-  expect.assertions(11);
+  expect.assertions(10);
 
   const server = startSMTPServer();
 
   // Catch REDIRECTED mail
   const promise = captureMail(1, (message, session) => {
-    // Envelope from/to should have changed
-    expect(
-      session.envelope.mailFrom !== false
-        ? session.envelope.mailFrom.address
-        : ''
-    ).toBe(process.enve.PERSISTENT_PROXY_EMAIL);
+    // Envelope to should have changed
     expect(session.envelope.rcptTo[0].address).toBe('test@example.com');
 
     // Headers from/to should be unchanged

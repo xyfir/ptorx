@@ -37,6 +37,22 @@ export function startSMTPServer(): SMTPServer {
       if (stream.sizeExceeded) return callback(new Error('Message too big'));
       else callback();
 
+      // Check if the message has a DKIM signature and whether the Reply-To
+      // header is part of it
+      let hasDKIM = false;
+      const replyToSigned =
+        incoming.headerLines.findIndex(h => {
+          if (h.key.toLowerCase() != 'dkim-signature') return false;
+          hasDKIM = true;
+          return (
+            h.line
+              .split('; h=')[1]
+              .split(';')[0]
+              .split(':')
+              .findIndex(f => f.trim().toLowerCase() == 'reply-to') > -1
+          );
+        }) > -1;
+
       for (let address of recipients) {
         const recipient = await getRecipient(address);
 
@@ -100,18 +116,25 @@ export function startSMTPServer(): SMTPServer {
           date: incoming.date,
           to: incoming.to.text
         };
+
+        let credits = 1;
+        let isModified = false;
         const proxyEmail = await getProxyEmail(
           recipient.proxyEmailId,
           recipient.user.userId
         );
-        let credits = 1;
-
         const savedMessage =
           proxyEmail.saveMail && recipient.user.tier != 'basic'
             ? await saveMail(incoming, proxyEmail)
             : null;
 
-        for (let link of proxyEmail.links) {
+        for (
+          let linkIndex = 0;
+          linkIndex < proxyEmail.links.length;
+          linkIndex++
+        ) {
+          const link = proxyEmail.links[linkIndex];
+
           // Filter mail
           if (link.filterId) {
             // Stop waterfall if filter did not pass
@@ -125,6 +148,7 @@ export function startSMTPServer(): SMTPServer {
           // Modify mail
           else if (link.modifierId) {
             await modifyMail(outgoing, link.modifierId, recipient.user.userId);
+            isModified = true;
           }
           // Forward mail
           else if (link.primaryEmailId) {
@@ -137,19 +161,29 @@ export function startSMTPServer(): SMTPServer {
             // User does not have enough credits to redirect message
             if (recipient.user.credits < credits + 1) continue;
 
-            await sendMail(
-              {
-                ...outgoing,
-                envelope: {
-                  from: recipient.address,
-                  to: primaryEmail.address
-                },
-                replyTo: savedMessage
-                  ? savedMessage.ptorxReplyTo
-                  : outgoing.replyTo
-              },
-              proxyEmail.domainId
-            );
+            const mail: SendMailOptions = {
+              ...outgoing,
+              envelope: { to: primaryEmail.address },
+              replyTo: savedMessage
+                ? savedMessage.ptorxReplyTo
+                : outgoing.replyTo
+            };
+
+            // Send mail from Ptorx with our own signature because:
+            // - the modified mail would break DKIM
+            // - and/or setting Reply-To would break DKIM
+            if (hasDKIM && (isModified || (savedMessage && replyToSigned))) {
+              mail.from = `"${proxyEmail.name}" <${proxyEmail.fullAddress}>`;
+              mail.envelope.from = recipient.address;
+              await sendMail(mail, proxyEmail.domainId);
+            }
+            // Redirect mail as is without changing sender and DKIM signature
+            // SPF will fail but DKIM and alignment are fine
+            else {
+              if (session.envelope.mailFrom)
+                mail.envelope.from = session.envelope.mailFrom.address;
+              await sendMail(mail);
+            }
             credits++;
           }
         }
