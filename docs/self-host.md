@@ -12,6 +12,7 @@ Hosting Ptorx yourself gives you a greater level of control and privacy (assumin
 - Node.js installed on your server. Ptorx targets the latest version available at time of the last [server/package.json](https://github.com/Xyfir/ptorx/blob/master/server/package.json) update.
 - MariaDB or MySQL installed on your server. Ptorx.com runs MariaDB so there may be unknown discrepancies with MySQL.
 - sendmail installed on your server. (Make sure your server's hostname is set correctly to prevent slow mail!)
+- iptables-persistent installed on your server.
 
 # Step 0: Clone the Repo
 
@@ -133,6 +134,7 @@ Next we'll need to forward incoming traffic from port `25` to the port you set f
 
 ```bash
 sudo iptables -t nat -A PREROUTING -p tcp --dport 25 -j REDIRECT --to-port 2071
+iptables-save > /etc/iptables/rules.v4
 ```
 
 # Step 7: Set DNS Records
@@ -193,7 +195,7 @@ pm2 startup # then follow instructions
 
 # Upgrading Ptorx
 
-This is a general guide for upgrading from one version of Ptorx to another. It's likely there are more specific steps you'll have to follow based on your current version and that of which you wish to upgrade to.
+This is a general guide for upgrading from one version of Ptorx to another. It's likely there are more specific steps you'll have to follow based on your current version and that of which you wish to upgrade to, but these steps should typically get you at least 90% of the way there.
 
 To begin the process of upgrading Ptorx, let's first reset the repos and pull in changes:
 
