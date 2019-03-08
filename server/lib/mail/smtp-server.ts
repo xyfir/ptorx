@@ -46,7 +46,7 @@ export function startSMTPServer(): SMTPServer {
           hasDKIM = true;
           return (
             h.line
-              .split('; h=')[1]
+              .split(/\bh=/)[1]
               .split(';')[0]
               .split(':')
               .findIndex(f => f.trim().toLowerCase() == 'reply-to') > -1
