@@ -21,13 +21,22 @@ export async function editProxyEmail(
         throw 'Bad address: cannot contain two or more consecutive underscores';
     }
 
+    if (proxyEmail.canReply && !proxyEmail.saveMail)
+      throw 'You cannot reply to mail unless it is saved to Ptorx';
+
     const result = await db.query(
       `
         UPDATE proxy_emails
-        SET name = ?, saveMail = ?
+        SET name = ?, saveMail = ?, canReply = ?
         WHERE id = ? AND userId = ?
       `,
-      [proxyEmail.name, proxyEmail.saveMail, proxyEmail.id, userId]
+      [
+        proxyEmail.name,
+        proxyEmail.saveMail,
+        proxyEmail.canReply,
+        proxyEmail.id,
+        userId
+      ]
     );
     if (!result.affectedRows) throw 'Could not update proxy email';
 

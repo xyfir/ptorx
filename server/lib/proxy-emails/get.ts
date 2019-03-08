@@ -25,6 +25,7 @@ export async function getProxyEmail(
     db.release();
 
     proxyEmail.saveMail = !!proxyEmail.saveMail;
+    proxyEmail.canReply = !!proxyEmail.canReply;
 
     return proxyEmail;
   } catch (err) {

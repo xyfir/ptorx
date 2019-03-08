@@ -78,6 +78,10 @@ export namespace Ptorx {
     name: string;
     created: number;
     saveMail: boolean;
+    /**
+     * Can the user reply anonymously from a non-Ptorx mail client?
+     */
+    canReply: boolean;
     links: ProxyEmailLink[];
     /**
      * @example `"address@domain.com"`

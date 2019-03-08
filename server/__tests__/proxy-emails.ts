@@ -17,7 +17,7 @@ test('create custom proxy email', async () => {
     },
     1234
   );
-  expect(Object.keys(proxyEmail).length).toBe(9);
+  expect(Object.keys(proxyEmail).length).toBe(10);
   expect(proxyEmail.id).toBeNumber();
   expect(proxyEmail.created).toBeNumber();
   expect(proxyEmail.userId).toBe(1234);
@@ -26,7 +26,8 @@ test('create custom proxy email', async () => {
     name: 'name',
     address: 'test',
     domainId: process.enve.DOMAIN_ID,
-    saveMail: true,
+    saveMail: false,
+    canReply: false,
     links: [],
     fullAddress: `test@${process.enve.DOMAIN}`
   };
@@ -37,7 +38,8 @@ test('create random proxy email', async () => {
   const proxyEmail = await addProxyEmail(
     {
       domainId: process.enve.DOMAIN_ID,
-      saveMail: true
+      saveMail: true,
+      canReply: true
     },
     1234
   );
@@ -46,7 +48,8 @@ test('create random proxy email', async () => {
     ...proxyEmail,
     name: '',
     domainId: process.enve.DOMAIN_ID,
-    saveMail: true
+    saveMail: true,
+    canReply: true
   };
   expect(proxyEmail).toMatchObject(_proxyEmail);
 });
