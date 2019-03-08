@@ -13,15 +13,18 @@ const transporter =
     : createTransport({ sendmail: true });
 
 export async function sendMail(
-  domainId: Ptorx.Domain['id'],
-  mail: SendMailOptions
+  mail: SendMailOptions,
+  domainId?: Ptorx.Domain['id']
 ): Promise<void> {
-  const domain = await getDomainAuth(domainId);
-  await transporter.sendMail({
+  const _mail: SendMailOptions = {
     ...mail,
     disableFileAccess: true,
-    disableUrlAccess: true,
-    dkim: {
+    disableUrlAccess: true
+  };
+
+  if (domainId) {
+    const domain = await getDomainAuth(domainId);
+    _mail.dkim = {
       cacheDir: process.enve.MAIL_CACHE_DIRECTORY,
       domainName: domain.domain,
       privateKey: domain.privateKey,
@@ -29,6 +32,8 @@ export async function sendMail(
       cacheTreshold: 512 * 1000,
       headerFieldNames:
         'from:sender:reply-to:subject:date:message-id:to:cc:mime-version:content-type:content-transfer-encoding:content-id:content-description:resent-date:resent-from:resent-sender:resent-to:resent-cc:resent-message-id:in-reply-to:references:list-id:list-help:list-unsubscribe:list-subscribe:list-post:list-owner:list-archive'
-    }
-  });
+    };
+  }
+
+  await transporter.sendMail(_mail);
 }

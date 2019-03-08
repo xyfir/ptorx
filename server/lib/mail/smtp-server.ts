@@ -56,14 +56,18 @@ export function startSMTPServer(): SMTPServer {
             recipient.user.userId
           );
 
-          await sendMail(proxyEmail.domainId, {
-            subject: incoming.subject,
-            sender: proxyEmail.fullAddress,
-            from: proxyEmail.fullAddress,
-            html: typeof incoming.html == 'string' ? incoming.html : undefined,
-            text: incoming.text,
-            to: recipient.message.replyTo || recipient.message.from
-          });
+          await sendMail(
+            {
+              subject: incoming.subject,
+              sender: proxyEmail.fullAddress,
+              from: proxyEmail.fullAddress,
+              html:
+                typeof incoming.html == 'string' ? incoming.html : undefined,
+              text: incoming.text,
+              to: recipient.message.replyTo || recipient.message.from
+            },
+            proxyEmail.domainId
+          );
 
           await chargeCredits(recipient.user, 2);
           continue;
@@ -133,16 +137,19 @@ export function startSMTPServer(): SMTPServer {
             // User does not have enough credits to redirect message
             if (recipient.user.credits < credits + 1) continue;
 
-            await sendMail(proxyEmail.domainId, {
-              ...outgoing,
-              envelope: {
-                from: recipient.address,
-                to: primaryEmail.address
+            await sendMail(
+              {
+                ...outgoing,
+                envelope: {
+                  from: recipient.address,
+                  to: primaryEmail.address
+                },
+                replyTo: savedMessage
+                  ? savedMessage.ptorxReplyTo
+                  : outgoing.replyTo
               },
-              replyTo: savedMessage
-                ? savedMessage.ptorxReplyTo
-                : outgoing.replyTo
-            });
+              proxyEmail.domainId
+            );
             credits++;
           }
         }

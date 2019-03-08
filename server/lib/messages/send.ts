@@ -20,13 +20,16 @@ export async function sendMessage(
     if (user.tier == 'basic') throw 'Basic tier users cannot send mail';
 
     const proxyEmail = await getProxyEmail(data.proxyEmailId, userId);
-    await sendMail(proxyEmail.domainId, {
-      subject: data.subject,
-      from: proxyEmail.fullAddress,
-      html: data.html,
-      text: data.text,
-      to: data.to
-    });
+    await sendMail(
+      {
+        subject: data.subject,
+        from: proxyEmail.fullAddress,
+        html: data.html,
+        text: data.text,
+        to: data.to
+      },
+      proxyEmail.domainId
+    );
 
     await chargeCredits(user, 1);
   } catch (err) {

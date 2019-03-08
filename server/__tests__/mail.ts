@@ -278,12 +278,15 @@ test('send mail', async () => {
     expect(incoming.subject).toBe('Hi');
   });
   await expect(
-    sendMail(domain.id, {
-      subject: 'Hi',
-      from: `test@${domain.domain}`,
-      text: 'Hello world',
-      to: 'test@example.com'
-    })
+    sendMail(
+      {
+        subject: 'Hi',
+        from: `test@${domain.domain}`,
+        text: 'Hello world',
+        to: 'test@example.com'
+      },
+      domain.id
+    )
   ).not.toReject();
   await promise;
 }, 10000);

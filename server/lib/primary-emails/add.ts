@@ -44,13 +44,16 @@ export async function addPrimaryEmail(
         _primaryEmail.id
       }&primaryEmailKey=${_primaryEmail.key}`
     });
-    await sendMail(process.enve.DOMAIN_ID, {
-      subject: `Verify your email for ${process.enve.NAME}`,
-      from: `noreply-x@${process.enve.DOMAIN}`,
-      html,
-      text,
-      to: _primaryEmail.address
-    });
+    await sendMail(
+      {
+        subject: `Verify your email for ${process.enve.NAME}`,
+        from: `noreply-x@${process.enve.DOMAIN}`,
+        html,
+        text,
+        to: _primaryEmail.address
+      },
+      process.enve.DOMAIN_ID
+    );
 
     return _primaryEmail;
   } catch (err) {
