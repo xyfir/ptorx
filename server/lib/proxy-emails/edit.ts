@@ -23,6 +23,8 @@ export async function editProxyEmail(
 
     if (proxyEmail.canReply && !proxyEmail.saveMail)
       throw 'You cannot reply to mail unless it is saved to Ptorx';
+    if (proxyEmail.name.indexOf('"') > -1)
+      throw 'Name cannot contain "double quotes"';
 
     const result = await db.query(
       `
