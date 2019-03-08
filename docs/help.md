@@ -21,14 +21,20 @@ By deleting a proxy email, that specific email is completely removed from your a
 
 ## Replying to Redirected Mail
 
-You can safely reply to mail that is sent to a proxy email if that proxy email has `Save Mail` enabled. You can reply to this mail either from within the Ptorx app or by replying to the message you received in your email client as you would reply to any other message.
+You can safely reply to mail that is sent to a proxy email if that proxy email has `Save Mail` and `Allow Anonymous Reply` enabled. You can reply to this mail either from within the Ptorx app or by replying to the message you received in your email client as you would reply to any other message.
 
 There are some limitations with this feature:
 
-- You will only be able to reply to mail up to 30 days after receiving the message.
+- You will only be able to reply to mail so long as a copy of it is still stored on Ptorx.
 - If you reply to mail from within your email client, that client must support the `Reply-To` email header. Most popular clients (like Gmail) should support this.
 
 The replies will be sent to the original sender using the address of the proxy email that received the message.
+
+## Forwarded Mail Marked as Spam
+
+Due to the nature of the service, for very technical reasons we won't bother with here, sometimes forwarded mail will end up in your spam folder even though it's perfectly legitimate mail. The solution to this is to whitelist `ptorx.com` or whichever proxy email domains or addresses you use. This process will differ based on your mailbox provider.
+
+For Gmail, the most popular option, you'd create a filter for the domain (`@ptorx.com`) or a specific address (`example@ptorx.com`) and set the `Never send it to Spam` action. Alternatively, you can also add individual addresses to your contacts whenever you receive a message by viewing the mail and selecting the `Add example@example.com to Contacts list` option. A good tutorial can be found [here](https://www.jotform.com/help/404-How-to-Prevent-Emails-from-Landing-in-Gmail-s-Spam-Folder).
 
 # Modifiers
 
