@@ -1,4 +1,4 @@
-import { withSnackbar, InjectedNotistackProps } from 'notistack';
+import { withSnackbar, withSnackbarProps } from 'notistack';
 import { ProxyEmailWaterfall } from 'components/panel/proxy-emails/Waterfall';
 import { RouteComponentProps } from 'react-router';
 import { PanelContext } from 'lib/PanelContext';
@@ -34,7 +34,7 @@ interface ManageProxyEmailState {
 }
 
 class _ManageProxyEmail extends React.Component<
-  RouteComponentProps & InjectedNotistackProps & WithStyles<typeof styles>,
+  RouteComponentProps & withSnackbarProps & WithStyles<typeof styles>,
   ManageProxyEmailState
 > {
   static contextType = PanelContext;
@@ -111,7 +111,7 @@ class _ManageProxyEmail extends React.Component<
           value={proxyEmail.name}
           margin="normal"
           onChange={e => this.onChange('name', e.target.value)}
-          helperText="Name your proxy email to find it easier"
+          helperText="Display name used for redirected mail"
           placeholder="My Proxy Email"
         />
 

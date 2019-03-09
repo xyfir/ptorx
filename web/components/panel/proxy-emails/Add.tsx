@@ -1,4 +1,4 @@
-import { withSnackbar, InjectedNotistackProps } from 'notistack';
+import { withSnackbar, withSnackbarProps } from 'notistack';
 import { Typography, TextField, Button } from '@material-ui/core';
 import { RouteComponentProps } from 'react-router';
 import { ChipSelector } from 'components/panel/utils/ChipSelector';
@@ -14,7 +14,7 @@ interface AddProxyEmailState {
 }
 
 class _AddProxyEmail extends React.Component<
-  RouteComponentProps & InjectedNotistackProps,
+  RouteComponentProps & withSnackbarProps,
   AddProxyEmailState
 > {
   static contextType = PanelContext;
@@ -60,7 +60,7 @@ class _AddProxyEmail extends React.Component<
           value={name}
           margin="normal"
           onChange={e => this.setState({ name: e.target.value })}
-          helperText="Give your proxy email a name to find it easier"
+          helperText="Display name used for redirected mail"
         />
         <TextField
           fullWidth
@@ -69,7 +69,7 @@ class _AddProxyEmail extends React.Component<
           value={address}
           margin="normal"
           onChange={e => this.setState({ address: e.target.value })}
-          helperText={`This is the 'name' part of name@${
+          helperText={`This is the 'user' part of user@${
             domainId ? domains.find(d => d.id == domainId).domain : 'domain.tld'
           }. Leave blank for random`}
         />
