@@ -13,34 +13,38 @@ interface CronJob {
 export async function cron(): Promise<never> {
   const db = new MySQL();
   while (true) {
-    const jobs: CronJob[] = await db.query(`
+    try {
+      const jobs: CronJob[] = await db.query(`
       SELECT * FROM cron_jobs WHERE
         DATE_ADD(lastRun, INTERVAL minutesInterval MINUTE) < NOW() OR
         lastRun IS NULL
     `);
 
-    for (let job of jobs) {
-      console.log(new Date().toLocaleString(), `Running job ${job.name}`);
+      for (let job of jobs) {
+        console.log(new Date().toLocaleString(), `Running job ${job.name}`);
 
-      switch (job.name) {
-        case 'delete-expired-messages':
-          await deleteExpiredMessages();
-          break;
-        case 'top-up-credits':
-          await topUpCredits();
-          break;
-        case 'reset-tiers':
-          await resetTiers();
-          break;
-        default:
-          console.warn('Cannot assign job', job.name);
+        switch (job.name) {
+          case 'delete-expired-messages':
+            await deleteExpiredMessages();
+            break;
+          case 'top-up-credits':
+            await topUpCredits();
+            break;
+          case 'reset-tiers':
+            await resetTiers();
+            break;
+          default:
+            console.warn('Cannot assign job', job.name);
+        }
+
+        await db.query('UPDATE cron_jobs SET lastRun = NOW() WHERE id = ?', [
+          job.id
+        ]);
       }
 
-      await db.query('UPDATE cron_jobs SET lastRun = NOW() WHERE id = ?', [
-        job.id
-      ]);
+      await new Promise(r => setTimeout(r, 60 * 1000));
+    } catch (err) {
+      console.error('cron', err);
     }
-
-    await new Promise(r => setTimeout(r, 60 * 1000));
   }
 }
