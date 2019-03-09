@@ -13,7 +13,7 @@ export async function topUpCredits() {
       `,
       /** @todo remove @ts-ignore eventually */
       // @ts-ignore
-      TIERS.map(tier => [tier.name, tier.credits].flat())
+      TIERS.map(tier => [tier.name, tier.credits]).flat()
     );
   } catch (err) {
     console.error('cron/top-up-credits', err);
