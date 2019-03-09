@@ -1,4 +1,4 @@
-import { withSnackbar, InjectedNotistackProps } from 'notistack';
+import { withSnackbar, withSnackbarProps } from 'notistack';
 import { RouteComponentProps } from 'react-router';
 import { PanelContext } from 'lib/PanelContext';
 import * as React from 'react';
@@ -31,7 +31,7 @@ const styles = createStyles({
 });
 
 class _PurchaseCredits extends React.Component<
-  RouteComponentProps & InjectedNotistackProps & WithStyles<typeof styles>
+  RouteComponentProps & withSnackbarProps & WithStyles<typeof styles>
 > {
   static contextType = PanelContext;
   context!: React.ContextType<typeof PanelContext>;

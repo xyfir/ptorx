@@ -1,4 +1,4 @@
-import { withSnackbar, InjectedNotistackProps } from 'notistack';
+import { withSnackbar, withSnackbarProps } from 'notistack';
 import { RouteComponentProps } from 'react-router';
 import { TextField, Button } from '@material-ui/core';
 import { PanelContext } from 'lib/PanelContext';
@@ -11,7 +11,7 @@ interface AddPrimaryEmailState {
 }
 
 class _AddPrimaryEmail extends React.Component<
-  RouteComponentProps & InjectedNotistackProps,
+  RouteComponentProps & withSnackbarProps,
   AddPrimaryEmailState
 > {
   static contextType = PanelContext;

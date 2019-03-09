@@ -1,4 +1,4 @@
-import { withSnackbar, InjectedNotistackProps } from 'notistack';
+import { withSnackbar, withSnackbarProps } from 'notistack';
 import { RouteComponentProps } from 'react-router';
 import { displayAddress } from 'lib/display-address';
 import { PanelContext } from 'lib/PanelContext';
@@ -56,7 +56,7 @@ interface ManageMessageState {
 }
 
 class _ManageMessage extends React.Component<
-  RouteComponentProps & InjectedNotistackProps & WithStyles<typeof styles>,
+  RouteComponentProps & withSnackbarProps & WithStyles<typeof styles>,
   ManageMessageState
 > {
   static contextType = PanelContext;

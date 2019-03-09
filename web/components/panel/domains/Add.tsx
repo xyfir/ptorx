@@ -1,4 +1,4 @@
-import { withSnackbar, InjectedNotistackProps } from 'notistack';
+import { withSnackbar, withSnackbarProps } from 'notistack';
 import { Typography, TextField, Button } from '@material-ui/core';
 import { RouteComponentProps } from 'react-router';
 import { PanelContext } from 'lib/PanelContext';
@@ -12,7 +12,7 @@ interface AddDomainState {
 }
 
 class _AddDomain extends React.Component<
-  RouteComponentProps & InjectedNotistackProps,
+  RouteComponentProps & withSnackbarProps,
   AddDomainState
 > {
   static contextType = PanelContext;

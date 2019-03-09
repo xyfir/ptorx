@@ -1,4 +1,4 @@
-import { withSnackbar, InjectedNotistackProps } from 'notistack';
+import { withSnackbar, withSnackbarProps } from 'notistack';
 import { RouteComponentProps } from 'react-router';
 import { PanelContext } from 'lib/PanelContext';
 import * as moment from 'moment';
@@ -74,7 +74,7 @@ interface ManageDomainState {
 }
 
 class _ManageDomain extends React.Component<
-  RouteComponentProps & InjectedNotistackProps & WithStyles<typeof styles>,
+  RouteComponentProps & withSnackbarProps & WithStyles<typeof styles>,
   ManageDomainState
 > {
   static contextType = PanelContext;

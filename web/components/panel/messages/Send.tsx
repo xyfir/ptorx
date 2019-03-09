@@ -1,4 +1,4 @@
-import { withSnackbar, InjectedNotistackProps } from 'notistack';
+import { withSnackbar, withSnackbarProps } from 'notistack';
 import { PanelContext } from 'lib/PanelContext';
 import { TrixEditor } from 'react-trix';
 import * as React from 'react';
@@ -29,7 +29,7 @@ interface SendMessageState {
 }
 
 class _SendMessage extends React.Component<
-  InjectedNotistackProps & WithStyles<typeof styles>,
+  withSnackbarProps & WithStyles<typeof styles>,
   SendMessageState
 > {
   static contextType = PanelContext;
