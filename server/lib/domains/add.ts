@@ -21,6 +21,8 @@ export async function addDomain(
         )
     );
 
+    domain.domain = domain.domain.toLowerCase();
+
     const insert: Partial<Ptorx.Domain> = {
       userId,
       domain: domain.domain,

@@ -33,6 +33,7 @@ export async function addProxyEmail(
     }
     // Make sure address exists
     else {
+      proxyEmail.address = proxyEmail.address.toLowerCase();
       const { available } = await checkProxyEmail(
         proxyEmail.domainId,
         proxyEmail.address
