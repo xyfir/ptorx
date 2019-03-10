@@ -1,15 +1,17 @@
 import { getPrimaryEmail } from 'lib/primary-emails/get';
 import { SendMailOptions } from 'nodemailer';
 import { getProxyEmail } from 'lib/proxy-emails/get';
+import { chargeCredits } from 'lib/users/charge';
 import { getRecipient } from 'lib/mail/get-recipient';
 import { simpleParser } from 'mailparser';
-import { chargeCredits } from 'lib/users/charge';
 import { readFileSync } from 'fs';
 import { filterMail } from 'lib/mail/filter';
 import { modifyMail } from 'lib/mail/modify';
 import { SMTPServer } from 'smtp-server';
+import { getDomain } from 'lib/domains/get';
 import { saveMail } from 'lib/mail/save';
 import { sendMail } from 'lib/mail/send';
+import { SRS } from 'sender-rewriting-scheme';
 
 declare module 'mailparser' {
   interface ParsedMail {
@@ -26,6 +28,8 @@ export function startSMTPServer(): SMTPServer {
   if (key && !key.startsWith('-----'))
     SMTP_SERVER_OPTIONS.key = readFileSync(key);
 
+  const srs = new SRS({ secret: process.enve.SRS_KEY });
+
   const server = new SMTPServer({
     ...process.enve.SMTP_SERVER_OPTIONS,
     authOptional: true,
@@ -33,6 +37,9 @@ export function startSMTPServer(): SMTPServer {
     async onData(stream, session, callback) {
       const recipients = session.envelope.rcptTo.map(r => r.address);
       const incoming = await simpleParser(stream);
+      const mailFrom = session.envelope.mailFrom
+        ? session.envelope.mailFrom.address
+        : null;
 
       if (stream.sizeExceeded) return callback(new Error('Message too big'));
       else callback();
@@ -41,10 +48,15 @@ export function startSMTPServer(): SMTPServer {
         const recipient = await getRecipient(address);
 
         // Ignore if not for Ptorx
-        if (!recipient.proxyEmailId && !recipient.message) continue;
+        if (
+          !recipient.proxyEmailId &&
+          !recipient.bounceTo &&
+          !recipient.message
+        )
+          continue;
 
         // User does not have enough credits to accept this message
-        if (recipient.user.credits < 1) continue;
+        if (recipient.user && recipient.user.credits < 1) continue;
 
         // Handle reply to a stored message
         if (recipient.message) {
@@ -101,6 +113,15 @@ export function startSMTPServer(): SMTPServer {
           to: incoming.to.text
         };
 
+        // Bounced message needs to be forwarded
+        if (recipient.bounceTo) {
+          await sendMail({
+            ...outgoing,
+            envelope: { from: '', to: recipient.bounceTo }
+          });
+          continue;
+        }
+
         let credits = 1;
         const proxyEmail = await getProxyEmail(
           recipient.proxyEmailId,
@@ -110,6 +131,7 @@ export function startSMTPServer(): SMTPServer {
           proxyEmail.saveMail && recipient.user.tier != 'basic'
             ? await saveMail(incoming, proxyEmail)
             : null;
+        const domain = await getDomain(proxyEmail.domainId, proxyEmail.userId);
 
         for (let link of proxyEmail.links) {
           // Filter mail
@@ -142,7 +164,9 @@ export function startSMTPServer(): SMTPServer {
               {
                 ...outgoing,
                 envelope: {
-                  from: recipient.address,
+                  from: mailFrom
+                    ? srs.forward(mailFrom, domain.domain)
+                    : proxyEmail.fullAddress,
                   to: primaryEmail.address
                 },
                 replyTo:
@@ -151,7 +175,7 @@ export function startSMTPServer(): SMTPServer {
                     : outgoing.replyTo,
                 from: `"${proxyEmail.name}" <${proxyEmail.fullAddress}>`
               },
-              proxyEmail.domainId
+              domain.id
             );
             credits++;
           }
