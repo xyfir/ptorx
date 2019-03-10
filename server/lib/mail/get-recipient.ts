@@ -2,13 +2,26 @@ import { getMessage } from 'lib/messages/get';
 import { getUser } from 'lib/users/get';
 import { Ptorx } from 'types/ptorx';
 import { MySQL } from 'lib/MySQL';
+import { SRS } from 'sender-rewriting-scheme';
+
+const srs = new SRS({ secret: process.enve.SRS_KEY });
 
 export async function getRecipient(address: string): Promise<Ptorx.Recipient> {
   const [local, domain] = address.split('@');
   const db = new MySQL();
   try {
+    // Check if recipient is an SRS address we generated
+    if (local.startsWith('SRS')) {
+      try {
+        const reversed = srs.reverse(address);
+        if (reversed === null) throw new Error('Not an SRS address');
+        return { address, bounceTo: reversed };
+      } catch (err) {
+        throw new Error('Invalid SRS address');
+      }
+    }
     // Reply-To address
-    if (local.endsWith('--reply-x')) {
+    else if (local.endsWith('--reply-x')) {
       try {
         const [messageId, messageKey] = local.split('--');
         const message = await getMessage(+messageId, messageKey);

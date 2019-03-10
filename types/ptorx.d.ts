@@ -201,6 +201,10 @@ export namespace Ptorx {
   export interface Recipient {
     proxyEmailId?: Ptorx.ProxyEmail['id'];
     domainId?: number;
+    /**
+     * An address we should forward the bounced message to.
+     */
+    bounceTo?: string;
     message?: Ptorx.Message;
     address: string;
     user?: Ptorx.User;
@@ -243,6 +247,10 @@ export namespace Ptorx {
        *  verifying JSON Web Tokens.
        */
       JWT_KEY: string;
+      /**
+       * Hash secret for Sender Rewriting Scheme.
+       */
+      SRS_KEY: string;
       /**
        * The app's root web client URL.
        * @example "https://ptorx.com"
