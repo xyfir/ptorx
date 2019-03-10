@@ -20,6 +20,7 @@ import { sendMail } from 'lib/mail/send';
 import { saveMail } from 'lib/mail/save';
 import { getUser } from 'lib/users/get';
 import { Ptorx } from 'types/ptorx';
+import { SRS } from 'sender-rewriting-scheme';
 
 test('build template', async () => {
   const template = await buildTemplate('verify-email', {
@@ -71,6 +72,25 @@ test('get recipient: reply to message', async () => {
     user,
     message,
     address: message.ptorxReplyTo
+  };
+  expect(recipient).toMatchObject(_recipient);
+});
+
+test('get recipient: srs', async () => {
+  const srs = new SRS({ secret: process.enve.SRS_KEY });
+  const forwarded = srs.forward('test@gmail.com', 'ptorx.com');
+  const recipient = await getRecipient(forwarded);
+  const _recipient: Ptorx.Recipient = {
+    address: forwarded,
+    bounceTo: 'test@gmail.com'
+  };
+  expect(recipient).toMatchObject(_recipient);
+});
+
+test('get recipient: bad srs', async () => {
+  const recipient = await getRecipient('SRS0=ABCD=AB=gmail.com=test@ptorx.com');
+  const _recipient: Ptorx.Recipient = {
+    address: 'SRS0=ABCD=AB=gmail.com=test@ptorx.com'
   };
   expect(recipient).toMatchObject(_recipient);
 });
@@ -292,17 +312,20 @@ test('send mail', async () => {
 }, 10000);
 
 test('smtp server', async () => {
-  expect.assertions(10);
+  expect.assertions(11);
 
   const server = startSMTPServer();
 
   // Catch REDIRECTED mail
   const promise = captureMail(1, (message, session) => {
-    // Envelope to should have changed
     expect(session.envelope.rcptTo[0].address).toBe('test@example.com');
+    expect(
+      session.envelope.mailFrom && session.envelope.mailFrom.address
+    ).toMatch(/^SRS0=\w{4}=\w{2}=example\.com=foo@/);
 
-    // Headers from/to should be unchanged
-    expect(message.from.text).toBe('You <foo@example.com>');
+    expect(message.from.text).toBe(
+      `Untitled Custom Proxy Email <${process.enve.PERSISTENT_PROXY_EMAIL}>`
+    );
     expect(message.to.text).toBe(process.enve.PERSISTENT_PROXY_EMAIL);
 
     expect(message.subject).toBe('Hi');
@@ -380,6 +403,42 @@ test('reply to message', async () => {
     from: 'foo@example.com',
     text: 'This is a reply',
     to: message.ptorxReplyTo
+  });
+  await promise;
+  await new Promise(r => server.close(r));
+});
+
+test.only('bounced mail', async () => {
+  expect.assertions(4);
+
+  const server = startSMTPServer();
+  const srs = new SRS({ secret: process.enve.SRS_KEY });
+
+  // Catch REDIRECTED mail
+  const promise = captureMail(1, (message, session) => {
+    expect(session.envelope.rcptTo[0].address).toBe('bounce@example.com');
+    expect(session.envelope.mailFrom).toMatchObject({
+      address: '',
+      args: false
+    });
+    expect(message.text.trim()).toBe('Bounce');
+    expect(message.subject).toBe('Bounce');
+  });
+
+  // Send to ACTUAL SMTP server
+  const transporter = createTransport({
+    secure: false,
+    host: '127.0.0.1',
+    port: process.enve.SMTP_PORT,
+    tls: { rejectUnauthorized: false }
+  });
+  const to = srs.forward('bounce@example.com', 'ptorx.com');
+  await transporter.sendMail({
+    envelope: { from: '', to },
+    subject: 'Bounce',
+    from: 'bounce@example.org',
+    text: 'Bounce',
+    to
   });
   await promise;
   await new Promise(r => server.close(r));
