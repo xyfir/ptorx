@@ -1,6 +1,6 @@
 {
   "name": "ptorx-web",
-  "version": "6.0.0-beta.3",
+  "version": "6.0.0-beta.4",
   "description": "Ptorx web application",
   "main": "",
   "scripts": {
@@ -23,7 +23,7 @@
     "dompurify": "^1.0.10",
     "dotenv": "^6.2.0",
     "enve": "^1.0.0",
-    "fuse.js": "^3.4.3",
+    "fuse.js": "^3.4.4",
     "moment": "^2.24.0",
     "notistack": "^0.5.0",
     "react": "^16.8.4",
