@@ -34,6 +34,22 @@ export async function addProxyEmail(
     // Make sure address exists
     else {
       proxyEmail.address = proxyEmail.address.toLowerCase();
+
+      if (proxyEmail.address) {
+        if (!/^[\w\-]{1,64}$/.test(proxyEmail.address))
+          throw 'Bad address: must 1-64 alphanumerical characters';
+        if (proxyEmail.address.startsWith('x-'))
+          throw 'Bad address: cannot start with "x-"';
+        if (proxyEmail.address.endsWith('-x'))
+          throw 'Bad address: cannot end with "-x"';
+        if (proxyEmail.address.indexOf('--') > -1)
+          throw 'Bad address: cannot contain two or more consecutive hyphens';
+        if (proxyEmail.address.indexOf('__') > -1)
+          throw 'Bad address: cannot contain two or more consecutive underscores';
+        if (proxyEmail.address.startsWith('srs'))
+          throw 'Bad address: cannot start with srs';
+      }
+
       const { available } = await checkProxyEmail(
         proxyEmail.domainId,
         proxyEmail.address
