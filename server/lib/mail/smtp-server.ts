@@ -36,17 +36,14 @@ export function startSMTPServer(): SMTPServer {
     authOptional: true,
     size: 25000000,
     async onData(stream, session, callback) {
-      const _stream = new PassThrough();
-      const __stream = new PassThrough();
-      stream.pipe(_stream);
-      stream.pipe(__stream);
-      await new Promise(r => stream.on('end', r));
-
       const recipients = session.envelope.rcptTo.map(r => r.address);
-      const incoming = await simpleParser(_stream);
       const mailFrom = session.envelope.mailFrom
         ? session.envelope.mailFrom.address
         : null;
+
+      const _stream = new PassThrough();
+      stream.pipe(_stream);
+      const incoming = await simpleParser(stream);
 
       if (stream.sizeExceeded) return callback(new Error('Message too big'));
       else callback();
@@ -200,21 +197,29 @@ export function startSMTPServer(): SMTPServer {
             // Send mail from Ptorx with our own signature because:
             // - the modifiers would break DKIM
             // - and/or changing Reply-To would break DKIM
-            if (hasDKIM && (isModified || (savedMessage && replyToSigned))) {
+            if (
+              hasDKIM &&
+              (isModified || (proxyEmail.canReply && replyToSigned))
+            ) {
               Object.assign(mail, outgoing);
               mail.replyTo = replyTo;
               mail.from = `"${proxyEmail.name}" <${proxyEmail.fullAddress}>`;
               await sendMail(mail, proxyEmail.domainId);
             }
-            // Redirect mail as is without changing sender and DKIM signature
-            // SPF will fail but DKIM and alignment are fine
-            else {
-              const ___stream = new PassThrough();
-              ___stream.write(`Reply-To: ${mail.replyTo}\r\n`);
-              __stream.pipe(___stream);
-              mail.raw = ___stream;
+            // Redirect mail as is with Reply-To that won't break DKIM
+            else if (proxyEmail.canReply) {
+              const raw = new PassThrough();
+              raw.write(`Reply-To: ${replyTo}\r\n`);
+              _stream.pipe(raw);
+              mail.raw = raw;
               await sendMail(mail);
             }
+            // Redirect mail as is
+            else {
+              mail.raw = _stream;
+              await sendMail(mail);
+            }
+
             credits++;
           }
         }
