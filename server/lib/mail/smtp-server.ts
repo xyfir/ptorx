@@ -48,21 +48,21 @@ export function startSMTPServer(): SMTPServer {
       if (stream.sizeExceeded) return callback(new Error('Message too big'));
       else callback();
 
-      // Check if the message has a DKIM signature and whether the Reply-To
-      // header is part of it
-      let hasDKIM = false;
-      const replyToSigned =
-        incoming.headerLines.findIndex(h => {
-          if (h.key.toLowerCase() != 'dkim-signature') return false;
-          hasDKIM = true;
-          return (
-            h.line
-              .split(/\bh=/)[1]
-              .split(';')[0]
-              .split(':')
-              .findIndex(f => f.trim().toLowerCase() == 'reply-to') > -1
-          );
-        }) > -1;
+      const dkimSignature = incoming.headerLines.findIndex(
+        h => h.key.toLowerCase() == 'dkim-signature'
+      );
+      const canPrependReplyTo =
+        // Reply-To cannot already exist
+        incoming.headerLines.findIndex(
+          h => h.key.toLowerCase() == 'reply-to'
+        ) == -1 &&
+        // Message cannot have a DKIM-Signature where Reply-To is signed
+        (dkimSignature == -1 ||
+          incoming.headerLines[dkimSignature].line
+            .split(/\bh=/)[1]
+            .split(';')[0]
+            .split(':')
+            .findIndex(f => f.trim().toLowerCase() == 'reply-to') == -1);
 
       for (let address of recipients) {
         const recipient = await getRecipient(address);
@@ -197,10 +197,7 @@ export function startSMTPServer(): SMTPServer {
             // Send mail from Ptorx with our own signature because:
             // - the modifiers would break DKIM
             // - and/or changing Reply-To would break DKIM
-            if (
-              hasDKIM &&
-              (isModified || (proxyEmail.canReply && replyToSigned))
-            ) {
+            if (isModified || (proxyEmail.canReply && !canPrependReplyTo)) {
               Object.assign(mail, outgoing);
               mail.replyTo = replyTo;
               mail.from = `"${proxyEmail.name}" <${proxyEmail.fullAddress}>`;
