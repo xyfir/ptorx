@@ -29,12 +29,14 @@ Ptorx makes managing all those unique emails a breeze, and it works easily with 
 
 ## Screenshots
 
-Here's a glimpse into Ptorx. To see more, [create an account](https://ptorx.com/accownt) yourself; it's free.
+Here's a glimpse into Ptorx:
 
-<img src="https://i.imgur.com/GNnflLX.png" height="200" />
+<img src="https://i.imgur.com/GNnflLX.png" height="250" />
 
-<img src="https://i.imgur.com/JHJUaeL.png" height="300" />
+<img src="https://i.imgur.com/JHJUaeL.png" height="400" />
 
-<img src="https://i.imgur.com/Y97ILuZ.png" height="300" />
+<img src="https://i.imgur.com/Y97ILuZ.png" height="400" />
 
-<img src="https://i.imgur.com/rRww9oc.png" height="200">
+<img src="https://i.imgur.com/rRww9oc.png" height="250">
+
+To see more, [create an account](https://ptorx.com/accownt) yourself; it's free.
