@@ -45,6 +45,7 @@ const styles = (theme: Theme) =>
       color: theme.palette.primary.main
     },
     h2: {
+      marginBottom: '0.2em',
       fontWeight: 'bold',
       fontSize: '200%',
       color: theme.palette.secondary.main
@@ -135,34 +136,53 @@ const _Info = ({ classes, user }: InfoProps) => (
     <ol className={classes.ol}>
       <li>Create a proxy email</li>
       <li>Tell us where to forward incoming mail to</li>
-      <li>View mail sent to your proxy email from your preferred email app</li>
+      <li>View mail sent to your proxy email in your preferred email app</li>
       <li>Reply to mail and it'll show as being sent from your proxy email</li>
     </ol>
+
     <Typography variant="h2" className={classes.h2}>
       What's a Proxy Email?
     </Typography>
     <Typography className={classes.p}>
-      A proxy email is like an email alias or a forwarding address. Any mail
-      sent to it is redirected to the email addresses you configure. Proxy
-      emails also allow for many extra features like filtering and modifying
-      your incoming mail before it's forwarded.
-    </Typography>
-    <Typography variant="h2" className={classes.h2}>
-      Why Use a Proxy Email?
+      Proxy emails act as a middleman between your real email addresses and the
+      rest of the world.
     </Typography>
     <Typography className={classes.p}>
-      To prevent spam, keep your email off of "people search" websites, thwart
-      hackers and spammers when database breaches occur, easily transfer mail
-      when you update primary email addresses, filter out mail before it ever
-      reaches your inbox, and the list goes on.
+      They're like an email alias or a forwarding address: any mail sent to one
+      is redirected to the email addresses you configure. They also allow for
+      advanced features like filtering and modifying your incoming mail before
+      it gets forwarded.
     </Typography>
+
     <Typography variant="h2" className={classes.h2}>
-      Bring Your Own Domains
+      Why Use Ptorx?
+    </Typography>
+    <Typography className={classes.p}>
+      Strengthening your privacy and security is as simple as generating a new
+      proxy email for each website you create an account on, and for each person
+      you email. Keeping your addresses separate and unique for each use-case is
+      an important part of staying protected when a site you use suffers a
+      database breach, when an app you use sells your data, when spammer gets
+      ahold of your email, or when a snoop starts trying to piece together your
+      online activity.
+    </Typography>
+    <Typography className={classes.p}>
+      Ptorx makes managing all those unique emails a breeze, and it works easily
+      with whatever your current email setup is. Gmail? AOL? Your own
+      installation of Roundcube? Whatever it is, we'll forward incoming mail to
+      your real address so you can continue using the tools you're familiar
+      with. You can even reply to received mail anonymously from your proxy
+      emails right within your preferred mailbox provider.
+    </Typography>
+
+    <Typography variant="h2" className={classes.h2}>
+      Use Your Domain
     </Typography>
     <Typography className={classes.p}>
       As many of them as you want. Configure a few easy DNS records and create
       proxy emails for your own domain.
     </Typography>
+
     <Typography variant="h2" className={classes.h2}>
       Open Source
     </Typography>
@@ -188,6 +208,14 @@ const _Info = ({ classes, user }: InfoProps) => (
         className={classes.a}
       >
         Privacy Policy
+      </a>
+      {' — '}
+      <a href={`${process.enve.DOCS_URL}/self-host.md`} className={classes.a}>
+        Self-hosting
+      </a>
+      {' — '}
+      <a href={`${process.enve.DOCS_URL}/help.md`} className={classes.a}>
+        Help Docs
       </a>
     </footer>
   </div>
