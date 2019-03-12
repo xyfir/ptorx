@@ -75,8 +75,17 @@ export function startSMTPServer(): SMTPServer {
         )
           continue;
 
+        // Bounced message needs to be forwarded
+        if (recipient.bounceTo) {
+          await sendMail({
+            envelope: { from: '', to: recipient.bounceTo },
+            raw: _stream
+          });
+          continue;
+        }
+
         // User does not have enough credits to accept this message
-        if (recipient.user && recipient.user.credits < 1) continue;
+        if (recipient.user.credits < 1) continue;
 
         // Handle reply to a stored message
         if (recipient.message) {
@@ -132,15 +141,6 @@ export function startSMTPServer(): SMTPServer {
           date: incoming.date,
           to: incoming.to.text
         };
-
-        // Bounced message needs to be forwarded
-        if (recipient.bounceTo) {
-          await sendMail({
-            ...outgoing,
-            envelope: { from: '', to: recipient.bounceTo }
-          });
-          continue;
-        }
 
         let credits = 1;
         let isModified = false;
