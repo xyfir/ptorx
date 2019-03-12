@@ -1,4 +1,4 @@
-# Self Host Ptorx
+# Self-hosting Ptorx
 
 Hosting Ptorx yourself gives you a greater level of control and privacy (assuming you set everything up correctly) but it does come at a cost: it's not a simple process. If you need a self-hosted Ptorx installation you can either follow this tutorial with no support should you get stuck, or you can hire us to do it for you by sending an email to contact@xyfir.com. Many steps will be vague and generalized, so you'll be expected to know how to fill in the blanks based on your environment and requirements.
 
