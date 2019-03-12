@@ -311,7 +311,7 @@ test('send mail', async () => {
   await promise;
 }, 10000);
 
-test('smtp server', async () => {
+test('forward incoming mail', async () => {
   expect.assertions(11);
 
   const server = startSMTPServer();
@@ -323,9 +323,7 @@ test('smtp server', async () => {
       session.envelope.mailFrom && session.envelope.mailFrom.address
     ).toMatch(/^SRS0=\w{4}=\w{2}=example\.com=foo@/);
 
-    expect(message.from.text).toBe(
-      `Untitled Custom Proxy Email <${process.enve.PERSISTENT_PROXY_EMAIL}>`
-    );
+    expect(message.from.text).toBe('You <foo@example.com>');
     expect(message.to.text).toBe(process.enve.PERSISTENT_PROXY_EMAIL);
 
     expect(message.subject).toBe('Hi');
@@ -408,7 +406,7 @@ test('reply to message', async () => {
   await new Promise(r => server.close(r));
 });
 
-test.only('bounced mail', async () => {
+test('bounced mail', async () => {
   expect.assertions(4);
 
   const server = startSMTPServer();
