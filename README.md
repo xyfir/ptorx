@@ -26,3 +26,15 @@ Ptorx makes managing all those unique emails a breeze, and it works easily with 
 - [Self-hosting](https://github.com/Xyfir/ptorx/blob/master/docs/self-host.md) — Learn how to set up Ptorx on your own server.
 - [Privacy Policy](https://github.com/Xyfir/ptorx/blob/master/docs/privacy-policy.md) — Our site and apps' privacy policy.
 - [Terms of Service](https://github.com/Xyfir/ptorx/blob/master/docs/terms-of-service.md) — Our site and apps' terms of service.
+
+## Screenshots
+
+Here's a glimpse into Ptorx. To see more, [create an account](https://ptorx.com/accownt) yourself; it's free.
+
+<img src="https://i.imgur.com/GNnflLX.png" height="200" />
+
+<img src="https://i.imgur.com/JHJUaeL.png" height="300" />
+
+<img src="https://i.imgur.com/Y97ILuZ.png" height="300" />
+
+<img src="https://i.imgur.com/rRww9oc.png" height="200">
