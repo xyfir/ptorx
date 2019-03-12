@@ -213,10 +213,6 @@ export namespace Ptorx {
   export namespace Env {
     export interface Common {
       /**
-       * Name of the application as displayed to the user.
-       */
-      NAME: string;
-      /**
        * The app's main domain name.
        * @example "example.com"
        */

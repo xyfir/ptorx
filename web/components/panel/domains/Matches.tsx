@@ -48,7 +48,7 @@ class _DomainMatches extends React.Component<
                   primary={domain.domain}
                   secondary={
                     domain.isCreator
-                      ? `Added to ${process.enve.NAME} ${moment
+                      ? `Added to Ptorx ${moment
                           .unix(domain.created)
                           .fromNow()}`
                       : `You are authorized to use this${

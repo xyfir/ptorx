@@ -110,7 +110,7 @@ class _PanelControls extends React.Component<WithStyles<typeof styles>> {
               noWrap
               color="inherit"
             >
-              {process.enve.NAME}
+              Ptorx
             </Typography>
             <Tooltip title="Toggle light/dark theme" color="inherit">
               <IconButton

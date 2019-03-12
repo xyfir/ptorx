@@ -46,7 +46,7 @@ export async function addPrimaryEmail(
     });
     await sendMail(
       {
-        subject: `Verify your email for ${process.enve.NAME}`,
+        subject: 'Verify your email for Ptorx',
         from: `noreply-x@${process.enve.DOMAIN}`,
         html,
         text,

@@ -91,7 +91,7 @@ const _Info = ({ classes, user }: InfoProps) => (
         </Typography>
         <Typography className={classes.p}>
           Protect your privacy, strengthen your security, and take control of
-          your emails with {process.enve.NAME}.
+          your emails with Ptorx.
         </Typography>
 
         {user ? (
@@ -191,8 +191,8 @@ const _Info = ({ classes, user }: InfoProps) => (
       <a href="https://github.com/Xyfir/Ptorx" className={classes.a}>
         Our code is completely open source for you to view.
       </a>{' '}
-      You can host your own server or contribute to our codebase and make{' '}
-      {process.enve.NAME} better.
+      You can host your own server or contribute to our codebase and make Ptorx
+      better.
     </Typography>
 
     <footer className={classes.footer}>

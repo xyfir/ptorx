@@ -11,7 +11,7 @@ test('create primary email', async () => {
   expect.assertions(12);
 
   const promise = captureMail(1, message => {
-    expect(message.subject).toBe(`Verify your email for ${process.enve.NAME}`);
+    expect(message.subject).toBe('Verify your email for Ptorx');
     expect(message.from.text).toBe(`noreply-x@${process.enve.DOMAIN}`);
     expect(message.to.text).toBe('test@example.com');
     expect(message.html).toMatch(/http.+Verify My Email/);
