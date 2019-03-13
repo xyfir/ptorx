@@ -1,6 +1,6 @@
 {
   "name": "ptorx-web",
-  "version": "6.0.0-beta.4",
+  "version": "6.0.0-beta.5",
   "description": "Ptorx web application",
   "main": "",
   "scripts": {
@@ -41,7 +41,7 @@
     "@babel/preset-typescript": "^7.3.3",
     "@types/dompurify": "0.0.32",
     "@types/dotenv": "^6.1.0",
-    "@types/react": "^16.8.7",
+    "@types/react": "^16.8.8",
     "@types/react-dom": "^16.8.2",
     "@types/react-router-dom": "^4.3.1",
     "babel-loader": "^8.0.5",
