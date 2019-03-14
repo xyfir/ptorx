@@ -4,14 +4,14 @@ This privacy policy details how your 'Personally Identifiable Information' (PII)
 
 ## Information Collection and Usage
 
-When ordering, registering, linking services to your account, or at other times on our site, as appropriate, you may be asked to enter your email address or other details to help you with your experience. Your information is only stored by Ptorx when you make actions that would require Ptorx to do so. For example when creating an account, proxy email, or other digital items in our app.
+When ordering, registering, linking services to your account, or at other times on our site, as appropriate, you may be asked to enter your email address or other details to help you with your experience. Your information is only stored by Ptorx when you make actions that would require Ptorx to do so. For example when creating an account, email alias, or other digital items in our app.
 
 We may use the information we collect from you when you register, make a purchase, sign up for our newsletter, respond to a survey or marketing communication, surf the website, or use certain other site features in the following ways:
 
 - To personalize your experience and to allow us to deliver the type of content and product offerings in which you are most interested.
 - To improve our website in order to better serve you.
 
-Ptorx does not save any mail in part or full that is sent or received by our proxy emails unless the specific proxy email has the `Save Mail` feature enabled. When this feature is enabled, a full copy of every incoming email is stored for a month after it is received. Ptorx does not use the mail we store for any purposes other than to provide with the optional, requested features.
+Ptorx does not save any mail in part or full that is sent or received by our alias emails unless the specific alias email has the `Save Mail` feature enabled. When this feature is enabled, a full copy of every incoming email is stored until it expires or is manually deleted by the user. Ptorx does not use the mail we store for any purposes other than to provide the optional, requested features.
 
 ## Information Security
 

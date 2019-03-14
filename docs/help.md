@@ -1,44 +1,44 @@
 # Terminology
 
-- **Proxy Emails**
-  - 'Proxy' emails (also known as redirect, alias, or forwarding emails) are email addresses created via Ptorx that typically act as a middleman for your primary emails by receiving mail and redirecting allowed mail to your primary email addresses.
+- **Email Aliases**
+  - Email aliases (also known as redirect or forwarding emails) are email addresses created via Ptorx that typically act as a middleman for your primary emails by receiving mail and forwarding allowed mail to your primary email addresses.
 - **Waterfall**
-  - Every proxy email has a waterfall that allows you to link filters, modifiers, and primary emails to it in a specific order. Each linked item is acted on in order, allowing you to redirect different mail to different primary emails based on filters and modifiers.
+  - Every alias has a waterfall that allows you to link filters, modifiers, and primary emails to it in a specific order. Each linked item is acted on in order, allowing you to redirect different mail to different primary emails based on filters and modifiers.
 - **Primary Emails**
-  - 'Primary' emails (also known as main, normal, or real emails) are your actual email addresses where you normally receive mail. These emails are where mail sent to your 'proxy' email addresses can be redirected to.
+  - Primary emails (also known as main or real emails) are your actual email addresses where you normally receive mail. These emails are where mail sent to your alias addresses will be redirected to.
 - **Filters**
-  - Filters allow you to filter out mail (with whitelists or blacklists) before it reaches any primary emails that come after it in a proxy email's waterfall.
+  - Filters allow you to filter out mail (with whitelists or blacklists) before it reaches any primary emails that come after it in an alias's waterfall.
 - **Modifiers**
-  - Modifiers allow you to modify components of an incoming email before it gets redirected to primary emails below it in a proxy email's waterfall.
+  - Modifiers allow you to modify components of an incoming email before it gets redirected to primary emails below it in an alias's waterfall.
 - **Messages**
-  - Messages (also known as mail) are any received by your proxy email addresses.
+  - Messages (also known as mail) are any received by your alias addresses.
 
-# Proxy Emails
+# Aliases
 
-## Deleting Proxy Emails
+## Deleting Aliases
 
-By deleting a proxy email, that specific email is completely removed from your account, however it remains on Ptorx's system simply as a placeholder to prevent that address from ever being claimed again in the future. This means that once you delete a proxy address there is no way for you or another user to claim that address. Deleted proxy emails will of course not redirect or save received mail.
+By deleting an email alias, that specific email is completely removed from your account, however it remains on Ptorx's system simply as a placeholder to prevent that address from ever being claimed again in the future. This means that once you delete an alias address there is no way for you or another user to claim that address. Deleted aliases will not forward or save received mail.
 
-## Replying to Redirected Mail
+## Replying to Forwarded Mail
 
-You can safely reply to mail that is sent to a proxy email if that proxy email has `Save Mail` and `Allow Anonymous Reply` enabled. You can reply to this mail either from within the Ptorx app or by replying to the message you received in your email client as you would reply to any other message.
+You can safely reply to mail that is sent to an alias if that alias has `Allow Anonymous Reply` enabled. You can reply to this mail either from within the Ptorx app or by replying to the message you received in your email client as you would reply to any other message.
 
 There are some limitations with this feature:
 
 - You will only be able to reply to mail so long as a copy of it is still stored on Ptorx.
 - If you reply to mail from within your email client, that client must support the `Reply-To` email header. Most popular clients (like Gmail) should support this.
 
-The replies will be sent to the original sender using the address of the proxy email that received the message.
+The replies will be sent to the original sender using the address of the alias that received the message.
 
 ## Forwarded Mail Marked as Spam
 
-Due to the nature of the service, for very technical reasons we won't bother with here, sometimes forwarded mail will end up in your spam folder even though it's perfectly legitimate mail. The solution to this is to whitelist `ptorx.com` or whichever proxy email domains or addresses you use. This process will differ based on your mailbox provider.
+Due to the nature of the service and for very technical reasons we won't bother with here, sometimes forwarded mail will end up in your spam folder even though it's perfectly legitimate mail. The solution to this is to whitelist `ptorx.com` or whichever alias email domains or addresses you use. This process will differ based on your mailbox provider.
 
 For Gmail, the most popular option, you'd create a filter for the domain (`@ptorx.com`) or a specific address (`example@ptorx.com`) and set the `Never send it to Spam` action. Alternatively, you can also add individual addresses to your contacts whenever you receive a message by viewing the mail and selecting the `Add example@example.com to Contacts list` option. A good tutorial can be found [here](https://www.jotform.com/help/404-How-to-Prevent-Emails-from-Landing-in-Gmail-s-Spam-Folder).
 
 # Modifiers
 
-Modifiers give you expanded control over the content of the mail that gets sent to you. Modifiers are only applied to mail being redirected to a main email. If you have 'Save Mail' enabled on a proxy email, the saved mail will be unmodified.
+Modifiers give you expanded control over the content of the mail that gets sent to you. Modifiers are only applied to mail being redirected to a main email. If you have 'Save Mail' enabled on an alias, the saved mail will be unmodified.
 
 ## Functions
 
@@ -136,13 +136,13 @@ Email from: user@domain.com
 
 # Domains
 
-A domain on Ptorx is a normal domain name that can be used to create proxy emails. All Ptorx users get access to the `ptorx.com` domain. Optionally, you can add your own domain to Ptorx, or request access to a domain added by another Ptorx user.
+A domain on Ptorx is a normal domain name that can be used to create alias emails. All Ptorx users get access to the `ptorx.com` domain. Optionally, you can add your own domain to Ptorx, or request access to a domain added by another Ptorx user.
 
 Using your own domain, or those used by few other users, can help circumvent blacklists.
 
 ## Adding Your Domain to Ptorx
 
-You can add your own domains to Ptorx, and use them to create proxy emails just like you would with a normal `@ptorx.com` proxy email. This is available at no extra cost and you can add as many domains as you like!
+You can add your own domains to Ptorx, and use them to create aliases just like you would with a normal `@ptorx.com` alias. This is available at no extra cost and you can add as many domains as you like!
 
 After initiating the process of adding your domain to Ptorx, you must verify that you own the domain, so don't bother trying to add a domain you don't own. You will verify ownership by setting a few DNS records:
 
@@ -166,13 +166,13 @@ If another user has already added a domain to Ptorx, you can request access to i
 
 A request key is used to prevent your account's information from needing to be shared with the domain owner.
 
-**Warning!** Using another user's domain can be risky! If they decide to remove their domain from Ptorx, or don't renew its registration before it expires, you will lose access to any proxy emails you have created with that domain. They could _also_ move their domain away from Ptorx which could potentially allow them to view your incoming mail!
+**Warning!** Using another user's domain can be risky! If they decide to remove their domain from Ptorx, or don't renew its registration before it expires, you will lose access to any aliases you have created with that domain. They could _also_ move their domain away from Ptorx which could potentially allow them to view your incoming mail!
 
 ## Deleting a Domain
 
-Deleting a domain from your account if you are the domain's creator will result in all users of your domain, including you, losing any proxy emails they have created with your domain. Your domain will be completely removed from Ptorx. You will be able to add your domain back to Ptorx in the future should you wish.
+Deleting a domain from your account if you are the domain's creator will result in all users of your domain, including you, losing any alias emails they have created with your domain. Your domain will be completely removed from Ptorx. You will be able to add your domain back to Ptorx in the future should you wish.
 
-Deleting a user from your domain if you are the domain's creator will result in all of the user's proxy emails linked to your domain being deleted. The user will not be able to access your domain again without you authorizing their new request key.
+Deleting a user from your domain if you are the domain's creator will result in all of the user's aliases linked to your domain being deleted. The user will not be able to access your domain again without you authorizing their new request key.
 
 Users of a domain must contact the domain's owner and request their account be removed as a user of the domain.
 
@@ -184,14 +184,14 @@ Whenever your account runs out of credits, mail will no longer be received or re
 
 ## Actions
 
-| Action                          | Cost      |
-| ------------------------------- | --------- |
-| Send mail                       | 1 credit  |
-| Receive mail                    | 1 credit  |
-| Reply from app                  | 1 credit  |
-| Reply from third-party inbox    | 2 credits |
-| Redirect to _one_ primary email | 2 credits |
+| Action                         | Cost      |
+| ------------------------------ | --------- |
+| Send mail                      | 1 credit  |
+| Receive mail                   | 1 credit  |
+| Reply from app                 | 1 credit  |
+| Reply from third-party inbox   | 2 credits |
+| Forward to _one_ primary email | 2 credits |
 
-Note that the _Redirect_ action is really just a combination of the _Send_ and _Receive_ actions, as is the _Reply from third-party inbox_ action. To clarify further: if someone sends you an email that is then redirected to one of your primary emails, that will only cost 2 credits. If it's redirected to _two_ primary emails, it will cost 3 credits.
+Note that the _Forward_ action is really just a combination of the _Send_ and _Receive_ actions, as is the _Reply from third-party inbox_ action. To clarify further: if someone sends you an email that is then redirected to one of your primary emails, that will only cost 2 credits. If it's forwarded to _two_ primary emails, it will cost 3 credits.
 
 Everything else on Ptorx can be done without charge.

@@ -1,7 +1,7 @@
 Verify My Email: <%- link %>
 
 You must verify ownership of this address in order to receive forwarded mail
-here from your proxy emails.
+here from your email aliases.
 
 Ignore this message if you were not expecting it; someone probably mistyped
 their own address!
