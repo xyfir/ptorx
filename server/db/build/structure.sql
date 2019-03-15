@@ -16,6 +16,23 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `aliases`
+--
+
+CREATE TABLE `aliases` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `userId` bigint(20) UNSIGNED NOT NULL,
+  `domainId` int(10) UNSIGNED NOT NULL,
+  `address` varchar(64) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created` int(10) UNSIGNED NOT NULL,
+  `saveMail` tinyint(1) NOT NULL,
+  `canReply` tinyint(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `cron_jobs`
 --
 
@@ -29,10 +46,10 @@ CREATE TABLE `cron_jobs` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `deleted_proxy_emails`
+-- Table structure for table `deleted_aliases`
 --
 
-CREATE TABLE `deleted_proxy_emails` (
+CREATE TABLE `deleted_aliases` (
   `domainId` int(10) UNSIGNED NOT NULL,
   `address` varchar(64) COLLATE utf8mb4_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -94,7 +111,7 @@ CREATE TABLE `filters` (
 --
 
 CREATE TABLE `links` (
-  `proxyEmailId` int(10) UNSIGNED NOT NULL,
+  `aliasId` int(10) UNSIGNED NOT NULL,
   `orderIndex` tinyint(3) UNSIGNED NOT NULL,
   `primaryEmailId` int(10) UNSIGNED DEFAULT NULL,
   `modifierId` int(10) UNSIGNED DEFAULT NULL,
@@ -109,7 +126,7 @@ CREATE TABLE `links` (
 
 CREATE TABLE `messages` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `proxyEmailId` int(10) UNSIGNED NOT NULL,
+  `aliasId` int(10) UNSIGNED NOT NULL,
   `key` varchar(36) CHARACTER SET utf8mb4 NOT NULL,
   `created` int(10) UNSIGNED NOT NULL,
   `subject` text COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -184,22 +201,6 @@ CREATE TABLE `primary_emails` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `proxy_emails`
---
-
-CREATE TABLE `proxy_emails` (
-  `id` int(10) UNSIGNED NOT NULL,
-  `userId` bigint(20) UNSIGNED NOT NULL,
-  `domainId` int(10) UNSIGNED NOT NULL,
-  `address` varchar(64) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `created` int(10) UNSIGNED NOT NULL,
-  `saveMail` tinyint(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `users`
 --
 
@@ -216,15 +217,23 @@ CREATE TABLE `users` (
 --
 
 --
+-- Indexes for table `aliases`
+--
+ALTER TABLE `aliases`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk__aliases__userId` (`userId`),
+  ADD KEY `fk__aliases__domainId` (`domainId`) USING BTREE;
+
+--
 -- Indexes for table `cron_jobs`
 --
 ALTER TABLE `cron_jobs`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `deleted_proxy_emails`
+-- Indexes for table `deleted_aliases`
 --
-ALTER TABLE `deleted_proxy_emails`
+ALTER TABLE `deleted_aliases`
   ADD UNIQUE KEY `domainId` (`domainId`,`address`);
 
 --
@@ -253,17 +262,17 @@ ALTER TABLE `filters`
 -- Indexes for table `links`
 --
 ALTER TABLE `links`
-  ADD KEY `fk__link__proxyEmailId` (`proxyEmailId`),
   ADD KEY `fk__link__primaryEmailId` (`primaryEmailId`),
   ADD KEY `fk__link__modifierId` (`modifierId`),
-  ADD KEY `fk__link__filterId` (`filterId`);
+  ADD KEY `fk__link__filterId` (`filterId`),
+  ADD KEY `fk__link__aliasId` (`aliasId`);
 
 --
 -- Indexes for table `messages`
 --
 ALTER TABLE `messages`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `fk__messages__proxyEmailId` (`proxyEmailId`) USING BTREE;
+  ADD KEY `fk__messages__aliasId` (`aliasId`) USING BTREE;
 
 --
 -- Indexes for table `message_attachments`
@@ -294,14 +303,6 @@ ALTER TABLE `primary_emails`
   ADD KEY `fk__primary_emails__userId` (`userId`);
 
 --
--- Indexes for table `proxy_emails`
---
-ALTER TABLE `proxy_emails`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `fk__proxy_emails__domainId` (`domainId`) USING BTREE,
-  ADD KEY `fk__proxy_emails__userId` (`userId`);
-
---
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
@@ -310,6 +311,12 @@ ALTER TABLE `users`
 --
 -- AUTO_INCREMENT for dumped tables
 --
+
+--
+-- AUTO_INCREMENT for table `aliases`
+--
+ALTER TABLE `aliases`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=86;
 
 --
 -- AUTO_INCREMENT for table `cron_jobs`
@@ -333,13 +340,13 @@ ALTER TABLE `filters`
 -- AUTO_INCREMENT for table `messages`
 --
 ALTER TABLE `messages`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=533;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=590;
 
 --
 -- AUTO_INCREMENT for table `message_attachments`
 --
 ALTER TABLE `message_attachments`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=178;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=212;
 
 --
 -- AUTO_INCREMENT for table `modifiers`
@@ -360,12 +367,6 @@ ALTER TABLE `primary_emails`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
--- AUTO_INCREMENT for table `proxy_emails`
---
-ALTER TABLE `proxy_emails`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=85;
-
---
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
@@ -376,10 +377,17 @@ ALTER TABLE `users`
 --
 
 --
--- Constraints for table `deleted_proxy_emails`
+-- Constraints for table `aliases`
 --
-ALTER TABLE `deleted_proxy_emails`
-  ADD CONSTRAINT `fk__deleted_proxy_emails__domainId` FOREIGN KEY (`domainId`) REFERENCES `domains` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `aliases`
+  ADD CONSTRAINT `fk__aliases__domainId` FOREIGN KEY (`domainId`) REFERENCES `domains` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk__aliases__userId` FOREIGN KEY (`userId`) REFERENCES `users` (`userId`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `deleted_aliases`
+--
+ALTER TABLE `deleted_aliases`
+  ADD CONSTRAINT `fk__deleted_aliases__domainId` FOREIGN KEY (`domainId`) REFERENCES `domains` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `domains`
@@ -404,16 +412,16 @@ ALTER TABLE `filters`
 -- Constraints for table `links`
 --
 ALTER TABLE `links`
+  ADD CONSTRAINT `fk__link__aliasId` FOREIGN KEY (`aliasId`) REFERENCES `aliases` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `fk__link__filterId` FOREIGN KEY (`filterId`) REFERENCES `filters` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `fk__link__modifierId` FOREIGN KEY (`modifierId`) REFERENCES `modifiers` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `fk__link__primaryEmailId` FOREIGN KEY (`primaryEmailId`) REFERENCES `primary_emails` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `fk__link__proxyEmailId` FOREIGN KEY (`proxyEmailId`) REFERENCES `proxy_emails` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `fk__link__primaryEmailId` FOREIGN KEY (`primaryEmailId`) REFERENCES `primary_emails` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `messages`
 --
 ALTER TABLE `messages`
-  ADD CONSTRAINT `fk__messages__proxyEmailId` FOREIGN KEY (`proxyEmailId`) REFERENCES `proxy_emails` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `fk__messages__aliasId` FOREIGN KEY (`aliasId`) REFERENCES `aliases` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `message_attachments`
@@ -438,13 +446,6 @@ ALTER TABLE `payments`
 --
 ALTER TABLE `primary_emails`
   ADD CONSTRAINT `fk__primary_emails__userId` FOREIGN KEY (`userId`) REFERENCES `users` (`userId`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Constraints for table `proxy_emails`
---
-ALTER TABLE `proxy_emails`
-  ADD CONSTRAINT `fk__proxy_emails__domainId` FOREIGN KEY (`domainId`) REFERENCES `domains` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `fk__proxy_emails__userId` FOREIGN KEY (`userId`) REFERENCES `users` (`userId`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
