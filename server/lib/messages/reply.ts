@@ -14,7 +14,7 @@ export async function replyToMessage(
     const message = await getMessage(data.messageId, userId);
     await sendMessage(
       {
-        proxyEmailId: message.proxyEmailId,
+        aliasId: message.aliasId,
         subject: message.subject,
         html: data.html,
         text: data.text,

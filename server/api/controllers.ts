@@ -23,11 +23,11 @@ export * from './messages/attachment';
 export * from './payments/finish';
 export * from './payments/start';
 
-export * from './proxy-emails/check';
-export * from './proxy-emails/add';
-export * from './proxy-emails/delete';
-export * from './proxy-emails/get';
-export * from './proxy-emails/edit';
+export * from './aliases/check';
+export * from './aliases/add';
+export * from './aliases/delete';
+export * from './aliases/get';
+export * from './aliases/edit';
 
 export * from './filters/add';
 export * from './filters/delete';

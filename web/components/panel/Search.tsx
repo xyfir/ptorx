@@ -1,5 +1,5 @@
 import { PrimaryEmailMatches } from 'components/panel/primary-emails/Matches';
-import { ProxyEmailMatches } from 'components/panel/proxy-emails/Matches';
+import { AliasMatches } from 'components/panel/aliases/Matches';
 import { ModifierMatches } from 'components/panel/modifiers/Matches';
 import { MessageMatches } from 'components/panel/messages/Matches';
 import { DomainMatches } from 'components/panel/domains/Matches';
@@ -47,7 +47,7 @@ export class Search extends React.Component {
   render() {
     const {
       primaryEmails,
-      proxyEmails,
+      aliases,
       categories,
       modifiers,
       messages,
@@ -67,8 +67,8 @@ export class Search extends React.Component {
           onChange={e => dispatch({ search: e.target.value.toLowerCase() })}
           placeholder="Search..."
         />
-        {categories.indexOf('Proxy Emails') > -1 && proxyEmails.length ? (
-          <ProxyEmailMatches proxyEmails={this.search(proxyEmails)} />
+        {categories.indexOf('Aliases') > -1 && aliases.length ? (
+          <AliasMatches aliases={this.search(aliases)} />
         ) : null}
         {categories.indexOf('Messages') > -1 && messages.length ? (
           <MessageMatches messages={this.search(messages)} />

@@ -64,7 +64,7 @@ class _PurchaseCredits extends React.Component<
         {user.tier == 'basic' ? (
           <Typography>
             Upgrade to receive more monthly credits and unlock new features like
-            being able to save mail or send from your proxy emails.
+            being able to save mail or send from your aliases.
           </Typography>
         ) : (
           <Typography>

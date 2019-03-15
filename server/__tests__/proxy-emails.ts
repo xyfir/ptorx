@@ -1,15 +1,15 @@
 import 'lib/tests/prepare';
-import { deleteProxyEmail } from 'lib/proxy-emails/delete';
-import { listProxyEmails } from 'lib/proxy-emails/list';
-import { editProxyEmail } from 'lib/proxy-emails/edit';
-import { addProxyEmail } from 'lib/proxy-emails/add';
-import { getProxyEmail } from 'lib/proxy-emails/get';
+import { deleteAlias } from 'lib/aliases/delete';
+import { listAliases } from 'lib/aliases/list';
+import { editAlias } from 'lib/aliases/edit';
+import { addAlias } from 'lib/aliases/add';
+import { getAlias } from 'lib/aliases/get';
 import { addModifier } from 'lib/modifiers/add';
 import { addFilter } from 'lib/filters/add';
 import { Ptorx } from 'types/ptorx';
 
-test('create custom proxy email', async () => {
-  const proxyEmail = await addProxyEmail(
+test('create custom alias', async () => {
+  const alias = await addAlias(
     {
       domainId: process.enve.DOMAIN_ID,
       address: 'test',
@@ -17,12 +17,12 @@ test('create custom proxy email', async () => {
     },
     1234
   );
-  expect(Object.keys(proxyEmail).length).toBe(10);
-  expect(proxyEmail.id).toBeNumber();
-  expect(proxyEmail.created).toBeNumber();
-  expect(proxyEmail.userId).toBe(1234);
-  const _proxyEmail: Ptorx.ProxyEmail = {
-    ...proxyEmail,
+  expect(Object.keys(alias).length).toBe(10);
+  expect(alias.id).toBeNumber();
+  expect(alias.created).toBeNumber();
+  expect(alias.userId).toBe(1234);
+  const _alias: Ptorx.Alias = {
+    ...alias,
     name: 'name',
     address: 'test',
     domainId: process.enve.DOMAIN_ID,
@@ -31,11 +31,11 @@ test('create custom proxy email', async () => {
     links: [],
     fullAddress: `test@${process.enve.DOMAIN}`
   };
-  expect(proxyEmail).toMatchObject(_proxyEmail);
+  expect(alias).toMatchObject(_alias);
 });
 
-test('create random proxy email', async () => {
-  const proxyEmail = await addProxyEmail(
+test('create random alias', async () => {
+  const alias = await addAlias(
     {
       domainId: process.enve.DOMAIN_ID,
       saveMail: true,
@@ -43,77 +43,77 @@ test('create random proxy email', async () => {
     },
     1234
   );
-  expect(proxyEmail.address).toMatch(/^[a-z0-9]{1,64}$/);
-  const _proxyEmail: Ptorx.ProxyEmail = {
-    ...proxyEmail,
+  expect(alias.address).toMatch(/^[a-z0-9]{1,64}$/);
+  const _alias: Ptorx.Alias = {
+    ...alias,
     name: '',
     domainId: process.enve.DOMAIN_ID,
     saveMail: true,
     canReply: true
   };
-  expect(proxyEmail).toMatchObject(_proxyEmail);
+  expect(alias).toMatchObject(_alias);
 });
 
-test('list proxy emails', async () => {
-  const proxyEmails = await listProxyEmails(1234);
-  expect(proxyEmails).toBeArrayOfSize(2);
-  const keys: Array<keyof Ptorx.ProxyEmailList[0]> = [
+test('list aliases', async () => {
+  const aliases = await listAliases(1234);
+  expect(aliases).toBeArrayOfSize(2);
+  const keys: Array<keyof Ptorx.AliasList[0]> = [
     'fullAddress',
     'created',
     'id',
     'name'
   ];
-  expect(proxyEmails[0]).toContainAllKeys(keys);
+  expect(aliases[0]).toContainAllKeys(keys);
 });
 
-test('edit proxy email links', async () => {
-  const proxyEmails = await listProxyEmails(1234);
-  const proxyEmail = await getProxyEmail(proxyEmails[0].id, 1234);
+test('edit alias links', async () => {
+  const aliases = await listAliases(1234);
+  const alias = await getAlias(aliases[0].id, 1234);
   const modifier = await addModifier({ name: 'name' }, 1234);
   const filter = await addFilter({ type: 'subject', name: 'name' }, 1234);
 
-  const _proxyEmail = await editProxyEmail(
+  const _alias = await editAlias(
     {
-      ...proxyEmail,
+      ...alias,
       links: [
         {
           orderIndex: 1,
-          proxyEmailId: proxyEmail.id,
+          aliasId: alias.id,
           filterId: filter.id
         },
         {
           orderIndex: 2,
-          proxyEmailId: proxyEmail.id,
+          aliasId: alias.id,
           modifierId: modifier.id
         }
       ]
     },
     1234
   );
-  const links: Ptorx.ProxyEmailLink[] = [
+  const links: Ptorx.AliasLink[] = [
     {
       orderIndex: 1,
-      proxyEmailId: proxyEmail.id,
+      aliasId: alias.id,
       filterId: filter.id,
       modifierId: null,
       primaryEmailId: null
     },
     {
       orderIndex: 2,
-      proxyEmailId: proxyEmail.id,
+      aliasId: alias.id,
       modifierId: modifier.id,
       filterId: null,
       primaryEmailId: null
     }
   ];
-  expect(_proxyEmail.links).toMatchObject(links);
+  expect(_alias.links).toMatchObject(links);
 });
 
-test('delete proxy email', async () => {
-  let proxyEmails = await listProxyEmails(1234);
-  const [proxyEmail] = proxyEmails;
-  await deleteProxyEmail(proxyEmail.id, 1234);
-  proxyEmails = await listProxyEmails(1234);
-  expect(proxyEmails).toBeArrayOfSize(1);
-  expect(proxyEmails.find(e => e.id == proxyEmail.id)).toBeUndefined();
+test('delete alias', async () => {
+  let aliases = await listAliases(1234);
+  const [alias] = aliases;
+  await deleteAlias(alias.id, 1234);
+  aliases = await listAliases(1234);
+  expect(aliases).toBeArrayOfSize(1);
+  expect(aliases.find(e => e.id == alias.id)).toBeUndefined();
 });

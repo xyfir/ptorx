@@ -27,12 +27,12 @@ const styles = createStyles({
 
 type LinkType = 'Primary Email' | 'Modifier' | 'Filter';
 
-interface ProxyEmailWaterfallProps {
-  onChange(key: keyof Ptorx.ProxyEmail, value: any): void;
-  proxyEmail: Ptorx.ProxyEmail;
+interface AliasWaterfallProps {
+  onChange(key: keyof Ptorx.Alias, value: any): void;
+  alias: Ptorx.Alias;
 }
 
-interface ProxyEmailWaterfallState {
+interface AliasWaterfallState {
   selected?: {
     type: LinkType;
     id: number;
@@ -42,13 +42,13 @@ interface ProxyEmailWaterfallState {
   page: number;
 }
 
-class _ProxyEmailWaterfall extends React.Component<
-  ProxyEmailWaterfallProps & WithStyles<typeof styles>,
-  ProxyEmailWaterfallState
+class _AliasWaterfall extends React.Component<
+  AliasWaterfallProps & WithStyles<typeof styles>,
+  AliasWaterfallState
 > {
   static contextType = PanelContext;
   context!: React.ContextType<typeof PanelContext>;
-  state: ProxyEmailWaterfallState = {
+  state: AliasWaterfallState = {
     search: '',
     mode: 'linked',
     page: 1
@@ -59,9 +59,9 @@ class _ProxyEmailWaterfall extends React.Component<
    *  so that it's displayed earlier on in the list.
    */
   onMove(up: boolean) {
-    const { proxyEmail, onChange } = this.props;
+    const { alias, onChange } = this.props;
     const { selected } = this.state;
-    const links = proxyEmail.links
+    const links = alias.links
       .slice()
       .sort((a, b) => a.orderIndex - b.orderIndex);
     const index = links.findIndex(l =>
@@ -86,11 +86,11 @@ class _ProxyEmailWaterfall extends React.Component<
   }
 
   onUnlink() {
-    const { proxyEmail, onChange } = this.props;
+    const { alias, onChange } = this.props;
     const { selected } = this.state;
 
     // Remove link from list
-    const links = proxyEmail.links.filter(l =>
+    const links = alias.links.filter(l =>
       selected.type == 'Primary Email'
         ? selected.id != l.primaryEmailId
         : selected.type == 'Modifier'
@@ -110,11 +110,11 @@ class _ProxyEmailWaterfall extends React.Component<
   }
 
   onLink() {
-    const { proxyEmail, onChange } = this.props;
+    const { alias, onChange } = this.props;
     const { selected } = this.state;
-    const link: Ptorx.ProxyEmailLink = {
-      proxyEmailId: proxyEmail.id,
-      orderIndex: proxyEmail.links.length
+    const link: Ptorx.AliasLink = {
+      aliasId: alias.id,
+      orderIndex: alias.links.length
     };
     switch (selected.type) {
       case 'Primary Email':
@@ -127,14 +127,14 @@ class _ProxyEmailWaterfall extends React.Component<
         link.filterId = selected.id;
         break;
     }
-    onChange('links', [...proxyEmail.links, link]);
+    onChange('links', [...alias.links, link]);
     this.setState({ selected: null });
   }
 
   render() {
     const { primaryEmails, modifiers, filters } = this.context;
     const { selected, search, mode, page } = this.state;
-    const { proxyEmail, classes } = this.props;
+    const { alias, classes } = this.props;
     let matches: {
       id: number;
       name: string;
@@ -156,19 +156,17 @@ class _ProxyEmailWaterfall extends React.Component<
               })),
               filters.map(f => ({ id: f.id, name: f.name, type: 'Filter' }))
             )
-            // Filter out items already linked to the proxy email
+            // Filter out items already linked to the alias
             .filter(
               m =>
                 (m.type != 'Primary Email' ||
-                  proxyEmail.links.findIndex(l => l.primaryEmailId == m.id) ==
-                    -1) &&
+                  alias.links.findIndex(l => l.primaryEmailId == m.id) == -1) &&
                 (m.type != 'Modifier' ||
-                  proxyEmail.links.findIndex(l => l.modifierId == m.id) ==
-                    -1) &&
+                  alias.links.findIndex(l => l.modifierId == m.id) == -1) &&
                 (m.type != 'Filter' ||
-                  proxyEmail.links.findIndex(l => l.filterId == m.id) == -1)
+                  alias.links.findIndex(l => l.filterId == m.id) == -1)
             )
-        : proxyEmail.links
+        : alias.links
             // Sort our linked items in ascending order
             .sort((a, b) => a.orderIndex - b.orderIndex)
             // Convert and combine our linked items
@@ -293,4 +291,4 @@ class _ProxyEmailWaterfall extends React.Component<
   }
 }
 
-export const ProxyEmailWaterfall = withStyles(styles)(_ProxyEmailWaterfall);
+export const AliasWaterfall = withStyles(styles)(_AliasWaterfall);

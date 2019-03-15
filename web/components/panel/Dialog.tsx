@@ -1,17 +1,17 @@
 import { Redirect, Switch, Route } from 'react-router';
 import { ManagePrimaryEmail } from 'components/panel/primary-emails/Manage';
-import { ManageProxyEmail } from 'components/panel/proxy-emails/Manage';
 import { AddPrimaryEmail } from 'components/panel/primary-emails/Add';
 import { PurchaseCredits } from 'components/panel/PurchaseCredits';
 import { ManageModifier } from 'components/panel/modifiers/Manage';
-import { AddProxyEmail } from 'components/panel/proxy-emails/Add';
 import { ManageMessage } from 'components/panel/messages/Manage';
 import { ManageFilter } from 'components/panel/filters/Manage';
 import { ManageDomain } from 'components/panel/domains/Manage';
+import { ManageAlias } from 'components/panel/aliases/Manage';
 import { AddModifier } from 'components/panel/modifiers/Add';
 import { SendMessage } from 'components/panel/messages/Send';
 import { AddFilter } from 'components/panel/filters/Add';
 import { AddDomain } from 'components/panel/domains/Add';
+import { AddAlias } from 'components/panel/aliases/Add';
 import * as React from 'react';
 import { Close } from '@material-ui/icons';
 import {
@@ -95,7 +95,7 @@ class _PanelDialog extends React.Component<PanelDialogProps, PanelDialogState> {
                 path="/app/primary-emails/add"
                 component={AddPrimaryEmail}
               />
-              <Route path="/app/proxy-emails/add" component={AddProxyEmail} />
+              <Route path="/app/aliases/add" component={AddAlias} />
               <Route path="/app/modifiers/add" component={AddModifier} />
               <Route path="/app/messages/send" component={SendMessage} />
               <Route path="/app/filters/add" component={AddFilter} />
@@ -104,10 +104,7 @@ class _PanelDialog extends React.Component<PanelDialogProps, PanelDialogState> {
                 path="/app/primary-emails/:primaryEmail"
                 component={ManagePrimaryEmail}
               />
-              <Route
-                path="/app/proxy-emails/:proxyEmail"
-                component={ManageProxyEmail}
-              />
+              <Route path="/app/aliases/:alias" component={ManageAlias} />
               <Route
                 path="/app/modifiers/:modifier"
                 component={ManageModifier}

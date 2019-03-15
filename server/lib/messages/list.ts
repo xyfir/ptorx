@@ -6,9 +6,9 @@ export async function listMessages(userId: number): Promise<Ptorx.MessageList> {
   try {
     const messages = await db.query(
       `
-        SELECT m.id, m.proxyEmailId, m.created, m.subject, m.from
-        FROM messages m WHERE m.proxyEmailId IN (
-          SELECT id FROM proxy_emails WHERE userId = ?
+        SELECT m.id, m.aliasId, m.created, m.subject, m.from
+        FROM messages m WHERE m.aliasId IN (
+          SELECT id FROM aliases WHERE userId = ?
         )
         ORDER BY created DESC
       `,

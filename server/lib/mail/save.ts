@@ -4,7 +4,7 @@ import { Ptorx } from 'types/ptorx';
 
 export async function saveMail(
   original: ParsedMail,
-  proxyEmail: Ptorx.ProxyEmail
+  alias: Ptorx.Alias
 ): Promise<Ptorx.Message> {
   return await addMessage(
     {
@@ -17,11 +17,11 @@ export async function saveMail(
       from: original.from.text,
       headers: original.headerLines.map(h => h.line),
       html: typeof original.html == 'string' ? original.html : undefined,
-      proxyEmailId: proxyEmail.id,
+      aliasId: alias.id,
       subject: original.subject,
       text: original.text,
       to: original.to.text
     },
-    proxyEmail.userId
+    alias.userId
   );
 }

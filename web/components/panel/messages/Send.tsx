@@ -46,18 +46,18 @@ class _SendMessage extends React.Component<
   onChangeFrom(from: string) {
     this.setState({
       isValidFrom:
-        this.context.proxyEmails.findIndex(e => e.fullAddress == from) > -1,
+        this.context.aliases.findIndex(e => e.fullAddress == from) > -1,
       from
     });
   }
 
   onSend() {
     const { subject, from, html, text, to } = this.state;
-    const { proxyEmails, dispatch } = this.context;
+    const { aliases, dispatch } = this.context;
     const { enqueueSnackbar } = this.props;
-    const proxyEmailId = proxyEmails.find(p => p.fullAddress == from).id;
+    const aliasId = aliases.find(p => p.fullAddress == from).id;
     api
-      .post('/messages/send', { proxyEmailId, subject, html, text, to })
+      .post('/messages/send', { aliasId, subject, html, text, to })
       .then(() => {
         enqueueSnackbar(`Message sent to ${to} from ${from}`);
         this.setState({
@@ -87,10 +87,8 @@ class _SendMessage extends React.Component<
           value={from}
           margin="normal"
           onChange={e => this.onChangeFrom(e.target.value)}
-          helperText={
-            !!from && !isValidFrom ? 'Not a valid proxy email' : undefined
-          }
-          placeholder={`From: proxy@${process.enve.DOMAIN}`}
+          helperText={!!from && !isValidFrom ? 'Not a valid alias' : undefined}
+          placeholder={`From: alias@${process.enve.DOMAIN}`}
         />
         <TextField
           fullWidth

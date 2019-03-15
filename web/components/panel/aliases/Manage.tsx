@@ -1,5 +1,5 @@
 import { withSnackbar, withSnackbarProps } from 'notistack';
-import { ProxyEmailWaterfall } from 'components/panel/proxy-emails/Waterfall';
+import { AliasWaterfall } from 'components/panel/aliases/Waterfall';
 import { RouteComponentProps } from 'react-router';
 import { PanelContext } from 'lib/PanelContext';
 import * as moment from 'moment';
@@ -28,76 +28,76 @@ const styles = createStyles({
   }
 });
 
-interface ManageProxyEmailState {
-  proxyEmail?: Ptorx.ProxyEmail;
+interface ManageAliasState {
+  alias?: Ptorx.Alias;
   deleting: boolean;
 }
 
-class _ManageProxyEmail extends React.Component<
+class _ManageAlias extends React.Component<
   RouteComponentProps & withSnackbarProps & WithStyles<typeof styles>,
-  ManageProxyEmailState
+  ManageAliasState
 > {
   static contextType = PanelContext;
   context!: React.ContextType<typeof PanelContext>;
-  state: ManageProxyEmailState = { deleting: false, proxyEmail: null };
+  state: ManageAliasState = { deleting: false, alias: null };
 
   componentDidMount() {
     this.load();
   }
 
-  onChange = (key: keyof Ptorx.ProxyEmail, value: any) => {
-    this.setState({ proxyEmail: { ...this.state.proxyEmail, [key]: value } });
+  onChange = (key: keyof Ptorx.Alias, value: any) => {
+    this.setState({ alias: { ...this.state.alias, [key]: value } });
   };
 
   onDelete() {
     if (!this.state.deleting) return this.setState({ deleting: true });
     api
-      .delete('/proxy-emails', {
-        params: { proxyEmail: this.state.proxyEmail.id }
+      .delete('/aliases', {
+        params: { alias: this.state.alias.id }
       })
       .then(() => {
         this.props.history.push('/app');
-        return api.get('/proxy-emails');
+        return api.get('/aliases');
       })
-      .then(res => this.context.dispatch({ proxyEmails: res.data }))
+      .then(res => this.context.dispatch({ aliases: res.data }))
       .catch(err => this.props.enqueueSnackbar(err.response.data.error));
   }
 
   onSave() {
     api
-      .put('/proxy-emails', this.state.proxyEmail)
+      .put('/aliases', this.state.alias)
       .then(() => {
         this.load();
-        return api.get('/proxy-emails');
+        return api.get('/aliases');
       })
-      .then(res => this.context.dispatch({ proxyEmails: res.data }))
+      .then(res => this.context.dispatch({ aliases: res.data }))
       .catch(err => this.props.enqueueSnackbar(err.response.data.error));
   }
 
   load() {
-    const proxyEmailId = +(this.props.match.params as {
-      proxyEmail: number;
-    }).proxyEmail;
+    const aliasId = +(this.props.match.params as {
+      alias: number;
+    }).alias;
     api
-      .get('/proxy-emails', { params: { proxyEmail: proxyEmailId } })
-      .then(res => this.setState({ proxyEmail: res.data }))
+      .get('/aliases', { params: { alias: aliasId } })
+      .then(res => this.setState({ alias: res.data }))
       .catch(err => this.props.enqueueSnackbar(err.response.data.error));
   }
 
   render() {
-    const { proxyEmail, deleting } = this.state;
+    const { alias, deleting } = this.state;
     const { classes } = this.props;
-    if (!proxyEmail) return null;
+    if (!alias) return null;
     return (
       <div>
         <Typography variant="h2" className={classes.title}>
-          {proxyEmail.fullAddress} — {proxyEmail.name}
+          {alias.fullAddress} — {alias.name}
         </Typography>
         <Typography variant="body2">
-          Created on {moment.unix(proxyEmail.created).format('LLL')}
+          Created on {moment.unix(alias.created).format('LLL')}
         </Typography>
         <Button
-          onClick={() => copy(proxyEmail.fullAddress)}
+          onClick={() => copy(alias.fullAddress)}
           variant="text"
           color="primary"
         >
@@ -108,17 +108,17 @@ class _ManageProxyEmail extends React.Component<
           fullWidth
           id="name"
           type="text"
-          value={proxyEmail.name}
+          value={alias.name}
           margin="normal"
           onChange={e => this.onChange('name', e.target.value)}
           helperText="Display name used for redirected mail"
-          placeholder="My Proxy Email"
+          placeholder="My Alias"
         />
 
         <FormControlLabel
           control={
             <Checkbox
-              checked={proxyEmail.saveMail}
+              checked={alias.saveMail}
               onChange={e => this.onChange('saveMail', e.target.checked)}
             />
           }
@@ -127,14 +127,14 @@ class _ManageProxyEmail extends React.Component<
         <FormControlLabel
           control={
             <Checkbox
-              checked={proxyEmail.canReply}
+              checked={alias.canReply}
               onChange={e => this.onChange('canReply', e.target.checked)}
             />
           }
           label="Allow Anonymous Replies"
         />
 
-        <ProxyEmailWaterfall proxyEmail={proxyEmail} onChange={this.onChange} />
+        <AliasWaterfall alias={alias} onChange={this.onChange} />
 
         <div>
           <Button
@@ -158,6 +158,4 @@ class _ManageProxyEmail extends React.Component<
   }
 }
 
-export const ManageProxyEmail = withSnackbar(
-  withStyles(styles)(_ManageProxyEmail)
-);
+export const ManageAlias = withSnackbar(withStyles(styles)(_ManageAlias));

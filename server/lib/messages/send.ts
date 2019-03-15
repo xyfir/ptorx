@@ -1,4 +1,4 @@
-import { getProxyEmail } from 'lib/proxy-emails/get';
+import { getAlias } from 'lib/aliases/get';
 import { chargeCredits } from 'lib/users/charge';
 import { sendMail } from 'lib/mail/send';
 import { getUser } from 'lib/users/get';
@@ -6,7 +6,7 @@ import { Ptorx } from 'types/ptorx';
 
 export async function sendMessage(
   data: {
-    proxyEmailId: Ptorx.ProxyEmail['id'];
+    aliasId: Ptorx.Alias['id'];
     subject: string;
     html: string;
     text: string;
@@ -19,16 +19,16 @@ export async function sendMessage(
     if (user.credits < 1) throw 'You need at least one credit to send mail';
     if (user.tier == 'basic') throw 'Basic tier users cannot send mail';
 
-    const proxyEmail = await getProxyEmail(data.proxyEmailId, userId);
+    const alias = await getAlias(data.aliasId, userId);
     await sendMail(
       {
         subject: data.subject,
-        from: proxyEmail.fullAddress,
+        from: alias.fullAddress,
         html: data.html,
         text: data.text,
         to: data.to
       },
-      proxyEmail.domainId
+      alias.domainId
     );
 
     await chargeCredits(user, 1);

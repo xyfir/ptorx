@@ -124,7 +124,7 @@ class _PanelControls extends React.Component<WithStyles<typeof styles>> {
                 <Refresh />
               </IconButton>
             </Tooltip>
-            <Tooltip title="Send mail from a proxy address" color="inherit">
+            <Tooltip title="Send mail from an alias" color="inherit">
               <Link to="/app/messages/send">
                 <IconButton className={classes.send}>
                   <Send />

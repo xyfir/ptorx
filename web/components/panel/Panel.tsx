@@ -30,7 +30,7 @@ const styles = (theme: Theme) =>
 
 export interface PanelState {
   primaryEmails?: Ptorx.PrimaryEmailList;
-  proxyEmails?: Ptorx.ProxyEmailList;
+  aliases?: Ptorx.AliasList;
   categories: Category[];
   modifiers?: Ptorx.ModifierList;
   dispatch: (state: Partial<PanelState>) => void;
@@ -48,7 +48,7 @@ export interface PanelProps extends WithStyles<typeof styles> {
 
 class _Panel extends React.Component<PanelProps, PanelState> {
   state: PanelState = {
-    categories: (localStorage.categories || 'Proxy Emails').split(','),
+    categories: (localStorage.categories || 'Aliases').split(','),
     dispatch: state => this.setState(state as PanelState),
     loading: true,
     search: '',
@@ -58,7 +58,7 @@ class _Panel extends React.Component<PanelProps, PanelState> {
   componentDidMount() {
     Promise.all([
       api.get('/primary-emails'),
-      api.get('/proxy-emails'),
+      api.get('/aliases'),
       api.get('/modifiers'),
       api.get('/messages'),
       api.get('/filters'),
@@ -67,7 +67,7 @@ class _Panel extends React.Component<PanelProps, PanelState> {
       .then(res =>
         this.setState({
           primaryEmails: res[0].data,
-          proxyEmails: res[1].data,
+          aliases: res[1].data,
           modifiers: res[2].data,
           messages: res[3].data,
           filters: res[4].data,

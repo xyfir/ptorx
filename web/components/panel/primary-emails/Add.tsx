@@ -40,7 +40,7 @@ class _AddPrimaryEmail extends React.Component<
           value={address}
           margin="normal"
           onChange={e => this.setState({ address: e.target.value })}
-          helperText="A primary email is your real email address that will receive incoming mail redirected from a proxy email"
+          helperText="A primary email is your real email address that will receive incoming mail redirected from a alias"
           placeholder="email@example.com"
         />
         <Button

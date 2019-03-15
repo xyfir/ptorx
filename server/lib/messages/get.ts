@@ -11,13 +11,13 @@ export async function getMessage(
     const [message] = await db.query(
       `
         SELECT
-          m.*, pxe.userId,
+          m.*, a.userId,
           CONCAT(m.id, '--', m.key, '--reply-x@', d.domain) AS ptorxReplyTo
         FROM messages m
-        INNER JOIN proxy_emails pxe ON m.proxyEmailId = pxe.id
-        INNER JOIN domains d ON d.id = pxe.domainId
+        INNER JOIN aliases a ON m.aliasId = a.id
+        INNER JOIN domains d ON d.id = a.domainId
         WHERE m.id = ? AND ${
-          typeof authentication == 'number' ? 'pxe.userId' : 'm.key'
+          typeof authentication == 'number' ? 'a.userId' : 'm.key'
         } = ?
       `,
       [messageId, authentication]
@@ -52,8 +52,8 @@ export async function getMessageAttachmentBin(
         SELECT ma.content
         FROM message_attachments ma
         LEFT JOIN messages m ON m.id = ma.messageId
-        LEFT JOIN proxy_emails pxe ON pxe.id = m.proxyEmailId
-        WHERE ma.id = ? AND pxe.userId = ?
+        LEFT JOIN aliases a ON a.id = m.aliasId
+        WHERE ma.id = ? AND a.userId = ?
       `,
       [messageAttachmentId, userId]
     );

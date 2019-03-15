@@ -7,19 +7,19 @@ import * as React from 'react';
 import { Ptorx } from 'types/ptorx';
 import { api } from 'lib/api';
 
-interface AddProxyEmailState {
-  domainId: Ptorx.ProxyEmail['domainId'];
-  address: Ptorx.ProxyEmail['address'];
-  name: Ptorx.ProxyEmail['name'];
+interface AddAliasState {
+  domainId: Ptorx.Alias['domainId'];
+  address: Ptorx.Alias['address'];
+  name: Ptorx.Alias['name'];
 }
 
-class _AddProxyEmail extends React.Component<
+class _AddAlias extends React.Component<
   RouteComponentProps & withSnackbarProps,
-  AddProxyEmailState
+  AddAliasState
 > {
   static contextType = PanelContext;
   context!: React.ContextType<typeof PanelContext>;
-  state: AddProxyEmailState = {
+  state: AddAliasState = {
     domainId: null,
     address: '',
     name: ''
@@ -33,12 +33,12 @@ class _AddProxyEmail extends React.Component<
   onSubmit() {
     const { domainId, address, name } = this.state;
     api
-      .post('/proxy-emails', { domainId, address, name })
+      .post('/aliases', { domainId, address, name })
       .then(res => {
-        this.props.history.push(`/app/proxy-emails/${res.data.id}`);
-        return api.get('/proxy-emails');
+        this.props.history.push(`/app/aliases/${res.data.id}`);
+        return api.get('/aliases');
       })
-      .then(res => this.context.dispatch({ proxyEmails: res.data }))
+      .then(res => this.context.dispatch({ aliases: res.data }))
       .catch(err => this.props.enqueueSnackbar(err.response.data.error));
   }
 
@@ -91,4 +91,4 @@ class _AddProxyEmail extends React.Component<
   }
 }
 
-export const AddProxyEmail = withSnackbar(_AddProxyEmail);
+export const AddAlias = withSnackbar(_AddAlias);

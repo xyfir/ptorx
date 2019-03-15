@@ -32,19 +32,19 @@ export async function getRecipient(address: string): Promise<Ptorx.Recipient> {
         throw new Error('Bad message reply address');
       }
     }
-    // Check if proxy address
+    // Check if alias address
     else {
       const [row]: {
-        proxyEmailId: Ptorx.ProxyEmail['id'];
-        domainId: Ptorx.ProxyEmail['domainId'];
-        userId: Ptorx.ProxyEmail['userId'];
+        aliasId: Ptorx.Alias['id'];
+        domainId: Ptorx.Alias['domainId'];
+        userId: Ptorx.Alias['userId'];
       }[] = await db.query(
         `
-          SELECT pxe.id AS proxyEmailId, pxe.userId, d.id AS domainId
+          SELECT a.id AS aliasId, a.userId, d.id AS domainId
           FROM domains d
-          LEFT JOIN proxy_emails pxe ON
-            pxe.domainId = d.id AND pxe.address = ? AND
-            pxe.userId IS NOT NULL
+          LEFT JOIN aliases a ON
+            a.domainId = d.id AND a.address = ? AND
+            a.userId IS NOT NULL
           WHERE
             d.domain = ? AND d.verified = ?
         `,
@@ -54,11 +54,11 @@ export async function getRecipient(address: string): Promise<Ptorx.Recipient> {
 
       // Not a verified Ptorx domain
       if (!row) return { address };
-      // Not an active proxy email on verified Ptorx domain
-      if (!row.proxyEmailId) throw new Error('User does not exist on domain');
-      // Valid, active proxy email
+      // Not an active alias on verified Ptorx domain
+      if (!row.aliasId) throw new Error('User does not exist on domain');
+      // Valid, active alias
       return {
-        proxyEmailId: row.proxyEmailId,
+        aliasId: row.aliasId,
         domainId: row.domainId,
         address,
         user: await getUser(row.userId)

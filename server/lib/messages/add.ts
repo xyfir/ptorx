@@ -14,7 +14,7 @@ export async function addMessage(
     const insert: Partial<Ptorx.Message> = {
       key: uuid(),
       created: moment().unix(),
-      proxyEmailId: message.proxyEmailId
+      aliasId: message.aliasId
     };
     const result = await db.query('INSERT INTO messages SET ?', insert);
     const _message = await getMessage(result.insertId, userId);

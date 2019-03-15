@@ -14,9 +14,9 @@ export async function editMessage(
           m.subject = ?, m.from = ?, m.to = ?, m.text = ?, m.html = ?,
           m.headers = ?, m.replyTo = ?
         WHERE
-          m.id = ? AND m.proxyEmailId = (
-            SELECT pxe.id FROM proxy_emails pxe
-            WHERE pxe.id = m.proxyEmailId AND pxe.userId = ?
+          m.id = ? AND m.aliasId = (
+            SELECT a.id FROM aliases a
+            WHERE a.id = m.aliasId AND a.userId = ?
           )
       `,
       [

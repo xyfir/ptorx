@@ -2,7 +2,7 @@ import 'lib/tests/prepare';
 import { getMessage, getMessageAttachmentBin } from 'lib/messages/get';
 import { deleteExpiredMessages } from 'jobs/delete-expired-messages';
 import { replyToMessage } from 'lib/messages/reply';
-import { addProxyEmail } from 'lib/proxy-emails/add';
+import { addAlias } from 'lib/aliases/add';
 import { deleteMessage } from 'lib/messages/delete';
 import { listMessages } from 'lib/messages/list';
 import { captureMail } from 'lib/tests/capture-mail';
@@ -12,13 +12,13 @@ import { Ptorx } from 'types/ptorx';
 import { MySQL } from 'lib/MySQL';
 
 test('create message', async () => {
-  const proxyEmail = await addProxyEmail(
+  const alias = await addAlias(
     { domainId: process.enve.DOMAIN_ID },
     1234
   );
   const message = await addMessage(
     {
-      proxyEmailId: proxyEmail.id,
+      aliasId: alias.id,
       subject: 'subject',
       from: 'sender@domain.com',
       to: `test@${process.enve.DOMAIN}`,
@@ -42,7 +42,7 @@ test('create message', async () => {
   const _message: Ptorx.Message = {
     ...message,
     userId: 1234,
-    proxyEmailId: proxyEmail.id,
+    aliasId: alias.id,
     subject: 'subject',
     from: 'sender@domain.com',
     to: `test@${process.enve.DOMAIN}`,
@@ -70,7 +70,7 @@ test('list message', async () => {
   expect(messages).toBeArrayOfSize(1);
   const keys: Array<keyof Ptorx.MessageList[0]> = [
     'id',
-    'proxyEmailId',
+    'aliasId',
     'created',
     'subject',
     'from'
@@ -106,7 +106,7 @@ test('send and reply to messages', async () => {
 
   await sendMessage(
     {
-      proxyEmailId: messages[0].proxyEmailId,
+      aliasId: messages[0].aliasId,
       subject: 'subject',
       html: '<div>content</div>',
       text: 'content',

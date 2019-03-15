@@ -1,4 +1,4 @@
-import { deleteProxyEmail } from 'lib/proxy-emails/delete';
+import { deleteAlias } from 'lib/aliases/delete';
 import { getDomainUser } from 'lib/domains/users/get';
 import { Ptorx } from 'types/ptorx';
 import { MySQL } from 'lib/MySQL';
@@ -24,12 +24,12 @@ export async function deleteDomainUser(
       [domainUser.userId, domainId, userId]
     );
 
-    const proxyEmails: { id: Ptorx.ProxyEmail['id'] }[] = await db.query(
-      'SELECT id FROM proxy_emails WHERE userId = ? AND domainId = ?',
+    const aliases: { id: Ptorx.Alias['id'] }[] = await db.query(
+      'SELECT id FROM aliases WHERE userId = ? AND domainId = ?',
       [domainUser.userId, domainId]
     );
-    for (let proxyEmail of proxyEmails) {
-      await deleteProxyEmail(proxyEmail.id, domainUser.userId);
+    for (let alias of aliases) {
+      await deleteAlias(alias.id, domainUser.userId);
     }
     db.release();
   } catch (err) {

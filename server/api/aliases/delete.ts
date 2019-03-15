@@ -1,12 +1,12 @@
 import { NextFunction, Response, Request } from 'express';
-import { deleteProxyEmail } from 'lib/proxy-emails/delete';
+import { deleteAlias } from 'lib/aliases/delete';
 
-export function api_deleteProxyEmail(
+export function api_deleteAlias(
   req: Request,
   res: Response,
   next: NextFunction
 ): void {
-  deleteProxyEmail(+req.query.proxyEmail, +req.jwt.userId)
+  deleteAlias(+req.query.alias, +req.jwt.userId)
     .then(() => res.status(200).json({}))
     .catch(next);
 }

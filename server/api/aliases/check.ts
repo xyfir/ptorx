@@ -1,12 +1,12 @@
 import { NextFunction, Response, Request } from 'express';
-import { checkProxyEmail } from 'lib/proxy-emails/check';
+import { checkAlias } from 'lib/aliases/check';
 
-export function api_checkProxyEmail(
+export function api_checkAlias(
   req: Request,
   res: Response,
   next: NextFunction
 ): void {
-  checkProxyEmail(req.body.domainId, req.body.address)
+  checkAlias(req.body.domainId, req.body.address)
     .then(data => res.status(200).json(data))
     .catch(next);
 }

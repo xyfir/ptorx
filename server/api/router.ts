@@ -3,11 +3,11 @@ import * as c from './controllers';
 
 export const router = Express.Router();
 
-router.get('/proxy-emails', c.api_getProxyEmails);
-router.put('/proxy-emails', c.api_editProxyEmail);
-router.post('/proxy-emails', c.api_addProxyEmail);
-router.delete('/proxy-emails', c.api_deleteProxyEmail);
-router.post('/proxy-emails/check', c.api_checkProxyEmail);
+router.get('/aliases', c.api_getAliases);
+router.put('/aliases', c.api_editAlias);
+router.post('/aliases', c.api_addAlias);
+router.delete('/aliases', c.api_deleteAlias);
+router.post('/aliases/check', c.api_checkAlias);
 
 router.get('/messages', c.api_getMessages);
 router.delete('/messages', c.api_deleteMessage);

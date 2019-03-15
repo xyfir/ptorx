@@ -1,6 +1,6 @@
 export type Category =
   | 'Primary Emails'
-  | 'Proxy Emails'
+  | 'Aliases'
   | 'Modifiers'
   | 'Messages'
   | 'Filters'
@@ -13,10 +13,10 @@ export const CATEGORIES: {
   variable: string;
 }[] = [
   {
-    name: 'Proxy Emails',
-    route: 'proxy-emails',
-    singular: 'Proxy Email',
-    variable: 'proxyEmails'
+    name: 'Aliases',
+    route: 'aliases',
+    singular: 'Alias',
+    variable: 'aliases'
   },
   {
     name: 'Messages',

@@ -1,10 +1,10 @@
 import 'lib/tests/prepare';
 import { SendMailOptions, createTransport } from 'nodemailer';
-import { listProxyEmails } from 'lib/proxy-emails/list';
+import { listAliases } from 'lib/aliases/list';
 import { startSMTPServer } from 'lib/mail/smtp-server';
 import { buildTemplate } from 'lib/mail/templates/build';
-import { addProxyEmail } from 'lib/proxy-emails/add';
-import { getProxyEmail } from 'lib/proxy-emails/get';
+import { addAlias } from 'lib/aliases/add';
+import { getAlias } from 'lib/aliases/get';
 import { getRecipient } from 'lib/mail/get-recipient';
 import { editModifier } from 'lib/modifiers/edit';
 import { captureMail } from 'lib/tests/capture-mail';
@@ -36,8 +36,8 @@ test('get recipient: non-ptorx email', async () => {
   expect(recipient).toMatchObject(_recipient);
 });
 
-test('get recipient: proxy email', async () => {
-  const proxyEmail = await addProxyEmail(
+test('get recipient: alias', async () => {
+  const alias = await addAlias(
     {
       domainId: process.enve.DOMAIN_ID,
       address: 'recipient'
@@ -50,12 +50,12 @@ test('get recipient: proxy email', async () => {
     user,
     address: `recipient@${process.enve.DOMAIN}`,
     domainId: process.enve.DOMAIN_ID,
-    proxyEmailId: proxyEmail.id
+    aliasId: alias.id
   };
   expect(recipient).toMatchObject(_recipient);
 });
 
-test('get recipient: bad address on proxy domain', async () => {
+test('get recipient: bad address on alias domain', async () => {
   const recipient = await getRecipient(`doesnotexist@${process.enve.DOMAIN}`);
   const _recipient: Ptorx.Recipient = {
     address: `doesnotexist@${process.enve.DOMAIN}`
@@ -64,8 +64,8 @@ test('get recipient: bad address on proxy domain', async () => {
 });
 
 test('get recipient: reply to message', async () => {
-  const [proxyEmail] = await listProxyEmails(1234);
-  const message = await addMessage({ proxyEmailId: proxyEmail.id }, 1234);
+  const [alias] = await listAliases(1234);
+  const message = await addMessage({ aliasId: alias.id }, 1234);
   const user = await getUser(1234);
   const recipient = await getRecipient(message.ptorxReplyTo);
   const _recipient: Ptorx.Recipient = {
@@ -96,8 +96,8 @@ test('get recipient: bad srs', async () => {
 });
 
 test('save mail', async () => {
-  const proxyEmails = await listProxyEmails(1234);
-  const proxyEmail = await getProxyEmail(proxyEmails[0].id, 1234);
+  const aliases = await listAliases(1234);
+  const alias = await getAlias(aliases[0].id, 1234);
   const message = await saveMail(
     {
       attachments: [
@@ -130,7 +130,7 @@ test('save mail', async () => {
       textAsHtml: '',
       headers: new Map()
     },
-    proxyEmail
+    alias
   );
   const _message: Ptorx.Message = {
     ...message,
@@ -324,7 +324,7 @@ test('forward incoming mail', async () => {
     ).toMatch(/^SRS0=\w{4}=\w{2}=example\.com=foo@/);
 
     expect(message.from.text).toBe('You <foo@example.com>');
-    expect(message.to.text).toBe(process.enve.PERSISTENT_PROXY_EMAIL);
+    expect(message.to.text).toBe(process.enve.PERSISTENT_ALIAS);
 
     expect(message.subject).toBe('Hi');
     expect(message.text).toBe('Hello world?');
@@ -346,7 +346,7 @@ test('forward incoming mail', async () => {
     port: process.enve.SMTP_PORT,
     tls: { rejectUnauthorized: false }
   });
-  // foo@example.com -> process.enve.PERSISTENT_PROXY_EMAIL -> test@example.com
+  // foo@example.com -> process.enve.PERSISTENT_ALIAS -> test@example.com
   await transporter.sendMail({
     attachments: [
       {
@@ -360,7 +360,7 @@ test('forward incoming mail', async () => {
     from: 'You <foo@example.com>',
     html: '<b>Hello world?</b>',
     text: 'Hello world?',
-    to: process.enve.PERSISTENT_PROXY_EMAIL
+    to: process.enve.PERSISTENT_ALIAS
   });
   await promise;
   await new Promise(r => server.close(r));
@@ -370,21 +370,21 @@ test('reply to message', async () => {
   expect.assertions(4);
   const server = startSMTPServer();
 
-  const [proxyEmail] = await listProxyEmails(1234);
+  const [alias] = await listAliases(1234);
   const message = await addMessage(
     {
-      proxyEmailId: proxyEmail.id,
+      aliasId: alias.id,
       subject: 'Hello',
       from: 'test@example.com',
       text: 'Hello World',
-      to: proxyEmail.fullAddress
+      to: alias.fullAddress
     },
     1234
   );
   // Catch REDIRECTED mail
   const promise = captureMail(1, message => {
     expect(message.text.trim()).toBe('This is a reply');
-    expect(message.from.text).toBe(proxyEmail.fullAddress);
+    expect(message.from.text).toBe(alias.fullAddress);
     expect(message.to.text).toBe('test@example.com');
     expect(message.subject).toBe('Hello');
   });

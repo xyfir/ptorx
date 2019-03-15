@@ -1,6 +1,6 @@
 import { getPrimaryEmail } from 'lib/primary-emails/get';
 import { SendMailOptions } from 'nodemailer';
-import { getProxyEmail } from 'lib/proxy-emails/get';
+import { getAlias } from 'lib/aliases/get';
 import { chargeCredits } from 'lib/users/charge';
 import { getRecipient } from 'lib/mail/get-recipient';
 import { simpleParser } from 'mailparser';
@@ -68,11 +68,7 @@ export function startSMTPServer(): SMTPServer {
         const recipient = await getRecipient(address);
 
         // Ignore if not for Ptorx
-        if (
-          !recipient.proxyEmailId &&
-          !recipient.bounceTo &&
-          !recipient.message
-        )
+        if (!recipient.aliasId && !recipient.bounceTo && !recipient.message)
           continue;
 
         // Bounced message needs to be forwarded
@@ -92,22 +88,22 @@ export function startSMTPServer(): SMTPServer {
           // User does not have enough credits to reply
           if (recipient.user.credits < 2) continue;
 
-          const proxyEmail = await getProxyEmail(
-            recipient.message.proxyEmailId,
+          const alias = await getAlias(
+            recipient.message.aliasId,
             recipient.user.userId
           );
 
           await sendMail(
             {
               subject: incoming.subject,
-              sender: proxyEmail.fullAddress,
-              from: proxyEmail.fullAddress,
+              sender: alias.fullAddress,
+              from: alias.fullAddress,
               html:
                 typeof incoming.html == 'string' ? incoming.html : undefined,
               text: incoming.text,
               to: recipient.message.replyTo || recipient.message.from
             },
-            proxyEmail.domainId
+            alias.domainId
           );
 
           await chargeCredits(recipient.user, 2);
@@ -144,17 +140,17 @@ export function startSMTPServer(): SMTPServer {
 
         let credits = 1;
         let isModified = false;
-        const proxyEmail = await getProxyEmail(
-          recipient.proxyEmailId,
+        const alias = await getAlias(
+          recipient.aliasId,
           recipient.user.userId
         );
         const savedMessage =
-          proxyEmail.saveMail && recipient.user.tier != 'basic'
-            ? await saveMail(incoming, proxyEmail)
+          alias.saveMail && recipient.user.tier != 'basic'
+            ? await saveMail(incoming, alias)
             : null;
-        const domain = await getDomain(proxyEmail.domainId, proxyEmail.userId);
+        const domain = await getDomain(alias.domainId, alias.userId);
 
-        for (let link of proxyEmail.links) {
+        for (let link of alias.links) {
           // Filter mail
           if (link.filterId) {
             // Stop waterfall if filter did not pass
@@ -182,14 +178,14 @@ export function startSMTPServer(): SMTPServer {
             if (recipient.user.credits < credits + 1) continue;
 
             const replyTo =
-              proxyEmail.saveMail && proxyEmail.canReply
+              alias.saveMail && alias.canReply
                 ? savedMessage.ptorxReplyTo
                 : outgoing.replyTo;
             const mail: SendMailOptions = {
               envelope: {
                 from: mailFrom
                   ? srs.forward(mailFrom, domain.domain)
-                  : proxyEmail.fullAddress,
+                  : alias.fullAddress,
                 to: primaryEmail.address
               }
             };
@@ -197,14 +193,14 @@ export function startSMTPServer(): SMTPServer {
             // Send mail from Ptorx with our own signature because:
             // - the modifiers would break DKIM
             // - and/or changing Reply-To would break DKIM
-            if (isModified || (proxyEmail.canReply && !canPrependReplyTo)) {
+            if (isModified || (alias.canReply && !canPrependReplyTo)) {
               Object.assign(mail, outgoing);
               mail.replyTo = replyTo;
-              mail.from = `"${proxyEmail.name}" <${proxyEmail.fullAddress}>`;
-              await sendMail(mail, proxyEmail.domainId);
+              mail.from = `"${alias.name}" <${alias.fullAddress}>`;
+              await sendMail(mail, alias.domainId);
             }
             // Redirect mail as is with Reply-To that won't break DKIM
-            else if (proxyEmail.canReply) {
+            else if (alias.canReply) {
               const raw = new PassThrough();
               raw.write(`Reply-To: ${replyTo}\r\n`);
               _stream.pipe(raw);

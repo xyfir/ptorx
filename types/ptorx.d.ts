@@ -70,7 +70,7 @@ export namespace Ptorx {
     authorized: DomainUser['authorized'];
   }[];
 
-  export interface ProxyEmail {
+  export interface Alias {
     id: number;
     userId: number;
     domainId: Ptorx.Domain['id'];
@@ -82,22 +82,22 @@ export namespace Ptorx {
      * Can the user reply anonymously from a non-Ptorx mail client?
      */
     canReply: boolean;
-    links: ProxyEmailLink[];
+    links: AliasLink[];
     /**
      * @example `"address@domain.com"`
      */
     fullAddress: string;
   }
 
-  export type ProxyEmailList = {
-    id: Ptorx.ProxyEmail['id'];
-    name: Ptorx.ProxyEmail['name'];
-    created: Ptorx.ProxyEmail['created'];
-    fullAddress: Ptorx.ProxyEmail['fullAddress'];
+  export type AliasList = {
+    id: Ptorx.Alias['id'];
+    name: Ptorx.Alias['name'];
+    created: Ptorx.Alias['created'];
+    fullAddress: Ptorx.Alias['fullAddress'];
   }[];
 
-  export interface ProxyEmailLink {
-    proxyEmailId: Ptorx.ProxyEmail['id'];
+  export interface AliasLink {
+    aliasId: Ptorx.Alias['id'];
     orderIndex: number;
     primaryEmailId?: Ptorx.PrimaryEmail['id'];
     modifierId?: Ptorx.Modifier['id'];
@@ -107,7 +107,7 @@ export namespace Ptorx {
   export interface Message {
     id: number;
     userId: number;
-    proxyEmailId: Ptorx.ProxyEmail['id'];
+    aliasId: Ptorx.Alias['id'];
     created: number;
     key: string;
     subject: string;
@@ -141,7 +141,7 @@ export namespace Ptorx {
 
   export type MessageList = {
     id: Message['id'];
-    proxyEmailId: Message['proxyEmailId'];
+    aliasId: Message['aliasId'];
     created: Message['created'];
     subject: Message['subject'];
     from: Message['from'];
@@ -199,7 +199,7 @@ export namespace Ptorx {
   }[];
 
   export interface Recipient {
-    proxyEmailId?: Ptorx.ProxyEmail['id'];
+    aliasId?: Ptorx.Alias['id'];
     domainId?: number;
     /**
      * An address we should forward the bounced message to.
@@ -278,6 +278,11 @@ export namespace Ptorx {
        */
       TEST_SMTP_PORT: number;
       /**
+       * An alias within the database. Used for testing.
+       * @example "test@ptorx.com"
+       */
+      PERSISTENT_ALIAS: string;
+      /**
        * URL for the Rich Cow web client.
        * @example "https://ptorx.com/rich-cow"
        */
@@ -296,11 +301,6 @@ export namespace Ptorx {
        * @example "/path/to/mail-cache"
        */
       MAIL_CACHE_DIRECTORY: string;
-      /**
-       * A proxy email within the database. Used for testing.
-       * @example "test@ptorx.com"
-       */
-      PERSISTENT_PROXY_EMAIL: string;
     }
 
     export interface Web extends Ptorx.Env.Common {
