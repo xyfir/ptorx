@@ -81,7 +81,7 @@ module.exports = {
       }, {})
     }),
     new HtmlWebpackPlugin({
-      title: 'Send & Receive Mail Anonymously with Ptorx',
+      title: 'Email Forwarding and Aliases by Ptorx',
       minify: PROD,
       template: 'template.html'
     }),

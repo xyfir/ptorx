@@ -87,11 +87,11 @@ const _Info = ({ classes, user }: InfoProps) => (
       </Paper>
       <div>
         <Typography variant="h1" className={classes.h1}>
-          Send and Receive Mail Anonymously
+          Email Forwarding and Aliases by Ptorx
         </Typography>
         <Typography className={classes.p}>
-          Protect your privacy, strengthen your security, and take control of
-          your emails with Ptorx.
+          Send and receive mail anonymously with email forwarding and aliases
+          through Ptorx.
         </Typography>
 
         {user ? (
