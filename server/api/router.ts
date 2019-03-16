@@ -31,6 +31,7 @@ router.delete('/primary-emails', c.api_deletePrimaryEmail);
 router.get('/primary-emails/verify', c.api_verifyPrimaryEmail);
 
 router.get('/users', c.api_getUser);
+router.put('/users/keys', c.api_setPGPKeys);
 router.get('/users/logout', c.api_logout);
 
 router.post('/payments/start', c.api_startPayment);

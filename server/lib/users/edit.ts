@@ -7,10 +7,19 @@ export async function editUser(user: Ptorx.User): Promise<Ptorx.User> {
   try {
     const result = await db.query(
       `
-        UPDATE users SET credits = ?, tier = ?, tierExpiration = ?
+        UPDATE users SET
+          credits = ?, tier = ?, tierExpiration = ?, publicKey = ?,
+          privateKey = ?
         WHERE userId = ?
       `,
-      [user.credits, user.tier, user.tierExpiration, user.userId]
+      [
+        user.credits,
+        user.tier,
+        user.tierExpiration,
+        user.publicKey,
+        user.privateKey,
+        user.userId
+      ]
     );
     if (!result.affectedRows) throw 'Could not edit user';
     db.release();

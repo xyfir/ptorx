@@ -1,5 +1,6 @@
 export * from './users/get';
 export * from './users/logout';
+export * from './users/set-keys';
 
 export * from './domains/users/edit';
 export * from './domains/users/delete';
