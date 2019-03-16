@@ -15,6 +15,9 @@ export async function getUser(
     // We need to add the user to our database first
     if (!row && typeof user != 'number') {
       const insert: Ptorx.User = {
+        tierExpiration: null,
+        privateKey: null,
+        publicKey: null,
         userId: user.userId,
         email: user.email,
         credits: 100,
