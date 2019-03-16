@@ -8,3 +8,5 @@ ALTER TABLE `links` DROP FOREIGN KEY `fk__link__proxyEmailId`; ALTER TABLE `link
 ALTER TABLE `messages` CHANGE `proxyEmailId` `aliasId` INT(10) UNSIGNED NOT NULL;
 ALTER TABLE `messages` DROP FOREIGN KEY `fk__messages__proxyEmailId`; ALTER TABLE `messages` ADD CONSTRAINT `fk__messages__aliasId` FOREIGN KEY (`aliasId`) REFERENCES `aliases`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE `ptorx`.`messages` DROP INDEX `fk__messages__proxyEmailId`, ADD INDEX `fk__messages__aliasId` (`aliasId`) USING BTREE;
+
+ALTER TABLE `users` ADD `publicKey` TEXT NULL DEFAULT NULL AFTER `tierExpiration`, ADD `privateKey` TEXT NULL DEFAULT NULL AFTER `publicKey`;

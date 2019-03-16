@@ -209,7 +209,9 @@ CREATE TABLE `users` (
   `email` varchar(64) COLLATE utf8mb4_unicode_ci NOT NULL,
   `credits` int(10) UNSIGNED NOT NULL,
   `tier` varchar(8) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `tierExpiration` int(10) UNSIGNED DEFAULT NULL
+  `tierExpiration` int(10) UNSIGNED DEFAULT NULL,
+  `publicKey` text COLLATE utf8mb4_unicode_ci,
+  `privateKey` text COLLATE utf8mb4_unicode_ci
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --

@@ -8,7 +8,9 @@ export namespace Ptorx {
     email: string;
     credits: number;
     tier: Tier;
-    tierExpiration?: number;
+    tierExpiration: number | null;
+    publicKey: string | null;
+    privateKey: string | null;
   }
 
   export interface Payment {
