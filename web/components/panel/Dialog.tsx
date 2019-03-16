@@ -1,7 +1,7 @@
 import { Redirect, Switch, Route } from 'react-router';
 import { ManagePrimaryEmail } from 'components/panel/primary-emails/Manage';
+import { PurchaseCredits } from 'components/panel/account/PurchaseCredits';
 import { AddPrimaryEmail } from 'components/panel/primary-emails/Add';
-import { PurchaseCredits } from 'components/panel/PurchaseCredits';
 import { ManageModifier } from 'components/panel/modifiers/Manage';
 import { ManageMessage } from 'components/panel/messages/Manage';
 import { ManageFilter } from 'components/panel/filters/Manage';
@@ -12,6 +12,7 @@ import { SendMessage } from 'components/panel/messages/Send';
 import { AddFilter } from 'components/panel/filters/Add';
 import { AddDomain } from 'components/panel/domains/Add';
 import { AddAlias } from 'components/panel/aliases/Add';
+import { PGPKeys } from 'components/panel/account/Keys';
 import * as React from 'react';
 import { Close } from '@material-ui/icons';
 import {
@@ -113,6 +114,7 @@ class _PanelDialog extends React.Component<PanelDialogProps, PanelDialogState> {
               <Route path="/app/filters/:filter" component={ManageFilter} />
               <Route path="/app/domains/:domain" component={ManageDomain} />
               <Route path="/app/credits" component={PurchaseCredits} />
+              <Route path="/app/keys" component={PGPKeys} />
             </Switch>
           )}
         </DialogContent>

@@ -1,4 +1,4 @@
-import { AccountBox, ExitToApp, Help, Money } from '@material-ui/icons';
+import { AccountBox, ExitToApp, Help, Money, VpnKey } from '@material-ui/icons';
 import { CATEGORIES, Category } from 'constants/categories';
 import { PanelContext } from 'lib/PanelContext';
 import * as React from 'react';
@@ -39,7 +39,7 @@ class _DrawerContent extends React.Component<WithStyles<typeof styles>> {
     return (
       <div>
         <List>
-          <ListSubheader>Filters</ListSubheader>
+          <ListSubheader>Categories</ListSubheader>
           {CATEGORIES.map(category => (
             <ListItem key={category.name}>
               <ListItemText primary={category.name} />
@@ -84,6 +84,14 @@ class _DrawerContent extends React.Component<WithStyles<typeof styles>> {
               <ListItemText primary="Logout" />
             </ListItem>
           </a>
+          <Link to="/app/keys" className={classes.link}>
+            <ListItem button>
+              <ListItemIcon>
+                <VpnKey />
+              </ListItemIcon>
+              <ListItemText primary="Keys" />
+            </ListItem>
+          </Link>
           <a
             href={`${process.enve.DOCS_URL}/help.md#terminology`}
             target="_blank"
