@@ -1,17 +1,21 @@
 # Terminology
 
-- **Email Aliases**
-  - Email aliases (also known as redirect or forwarding emails) are email addresses created via Ptorx that typically act as a middleman for your primary emails by receiving mail and forwarding allowed mail to your primary email addresses.
+- **Email Aliases**, alias emails, or forwarding emails
+  - Email addresses created via Ptorx that typically act as a middleman for your primary emails by receiving mail and forwarding allowed mail to your primary email addresses.
 - **Waterfall**
   - Every alias has a waterfall that allows you to link filters, modifiers, and primary emails to it in a specific order. Each linked item is acted on in order, allowing you to redirect different mail to different primary emails based on filters and modifiers.
-- **Primary Emails**
-  - Primary emails (also known as main or real emails) are your actual email addresses where you normally receive mail. These emails are where mail sent to your alias addresses will be redirected to.
+- **Primary Emails**, or real emails
+  - Your actual email addresses where you normally receive mail. These emails are where mail sent to your alias addresses will be redirected to.
 - **Filters**
   - Filters allow you to filter out mail (with whitelists or blacklists) before it reaches any primary emails that come after it in an alias's waterfall.
 - **Modifiers**
   - Modifiers allow you to modify components of an incoming email before it gets redirected to primary emails below it in an alias's waterfall.
-- **Messages**
-  - Messages (also known as mail) are any received by your alias addresses.
+- **Messages**, or mail
+  - Messages are any incoming pieces of mail received by your alias addresses.
+- **Keys**, or PGP keys
+  - Your optional private and public keys which will be used to encrypt the text and HTML body contents of mail stored on Ptorx servers. Mail is encrypted by Ptorx servers with your public key and decrypted later in the app using the private key.
+- **Mailbox Password**
+  - Separate from your account password, this is used to encrypt your private key if you have one. It's important this is a strong password because your encrypted private key will be stored on Ptorx for convenience. Only you, with your access to this password, will be able to read your encrypted mail.
 
 # Aliases
 
@@ -195,3 +199,15 @@ Whenever your account runs out of credits, mail will no longer be received or re
 Note that the _Forward_ action is really just a combination of the _Send_ and _Receive_ actions, as is the _Reply from third-party inbox_ action. To clarify further: if someone sends you an email that is then redirected to one of your primary emails, that will only cost 2 credits. If it's forwarded to _two_ primary emails, it will cost 3 credits.
 
 Everything else on Ptorx can be done without charge.
+
+# Subscriptions
+
+Ptorx subscriptions allow full access to all of Ptorx's features while also increasing the amount of credits your account will be topped up to every month.
+
+**Premium** and **Ultimate** users are able to do things that Basic users (free, non-paying) cannot:
+
+- Send mail from your alias
+- Have more than one primary email
+- Reply to mail using your alias on Ptorx
+- Save incoming mail to Ptorx for later viewing within the app
+- Reply to mail anonymously using your alias from your non-Ptorx mailbox
