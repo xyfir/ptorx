@@ -11,9 +11,6 @@ declare global {
       enve: Ptorx.Env.Web;
     }
   }
-  interface Window {
-    openpgp: typeof import('openpgp');
-  }
 }
 
 render(

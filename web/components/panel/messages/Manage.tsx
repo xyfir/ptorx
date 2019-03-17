@@ -2,6 +2,7 @@ import { withSnackbar, withSnackbarProps } from 'notistack';
 import { RouteComponentProps } from 'react-router';
 import { displayAddress } from 'lib/display-address';
 import { PanelContext } from 'lib/PanelContext';
+import { loadOpenPGP } from 'lib/load-openpgp';
 import { Attachment } from '@material-ui/icons';
 import { TrixEditor } from 'react-trix';
 import { sanitize } from 'dompurify';
@@ -86,15 +87,16 @@ class _ManageMessage extends React.Component<
       // Decrypt contents if needed and able
       if (message.text.startsWith('-----BEGIN PGP MESSAGE-----')) {
         try {
-          let plaintext = await window.openpgp.decrypt({
-            message: await window.openpgp.message.readArmored(message.text),
+          const openpgp = await loadOpenPGP();
+          let plaintext = await openpgp.decrypt({
+            message: await openpgp.message.readArmored(message.text),
             privateKeys: [unlockedPrivateKey]
           });
           message.text = plaintext.data as string;
 
           if (message.html !== null) {
-            plaintext = await window.openpgp.decrypt({
-              message: await window.openpgp.message.readArmored(message.html),
+            plaintext = await openpgp.decrypt({
+              message: await openpgp.message.readArmored(message.html),
               privateKeys: [unlockedPrivateKey]
             });
             message.html = plaintext.data as string;
@@ -125,10 +127,11 @@ class _ManageMessage extends React.Component<
     const { dispatch, user } = this.context;
     const { message, pass } = this.state;
     let unlockedPrivateKey;
+    const openpgp = await loadOpenPGP();
 
     // Decrypt private key
     try {
-      const { keys } = await window.openpgp.key.readArmored(user.privateKey);
+      const { keys } = await openpgp.key.readArmored(user.privateKey);
       await keys[0].decrypt(pass);
       dispatch({ unlockedPrivateKey: keys[0] });
       unlockedPrivateKey = keys[0];
@@ -139,15 +142,15 @@ class _ManageMessage extends React.Component<
 
     // Decrypt message
     try {
-      let plaintext = await window.openpgp.decrypt({
-        message: await window.openpgp.message.readArmored(message.text),
+      let plaintext = await openpgp.decrypt({
+        message: await openpgp.message.readArmored(message.text),
         privateKeys: [unlockedPrivateKey]
       });
       message.text = plaintext.data as string;
 
       if (message.html !== null) {
-        plaintext = await window.openpgp.decrypt({
-          message: await window.openpgp.message.readArmored(message.html),
+        plaintext = await openpgp.decrypt({
+          message: await openpgp.message.readArmored(message.html),
           privateKeys: [unlockedPrivateKey]
         });
         message.html = plaintext.data as string;

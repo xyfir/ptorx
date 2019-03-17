@@ -26,6 +26,7 @@
     "fuse.js": "^3.4.4",
     "moment": "^2.24.0",
     "notistack": "^0.5.1",
+    "openpgp": "^4.4.10",
     "react": "^16.8.4",
     "react-dom": "^16.8.4",
     "react-hot-loader": "^4.8.0",

@@ -1,6 +1,7 @@
 import { withSnackbar, withSnackbarProps } from 'notistack';
 import { RouteComponentProps } from 'react-router';
 import { PanelContext } from 'lib/PanelContext';
+import { loadOpenPGP } from 'lib/load-openpgp';
 import * as React from 'react';
 // @ts-ignore
 import * as copy from 'clipboard-copy';
@@ -36,21 +37,14 @@ class _PGPKeys extends React.Component<
   static contextType = PanelContext;
   context!: React.ContextType<typeof PanelContext>;
 
-  componentDidMount() {
-    if (typeof window['openpgp'] != 'undefined') return;
-    const s = document.createElement('script');
-    s.src =
-      'https://cdnjs.cloudflare.com/ajax/libs/openpgp/4.4.10/openpgp.min.js';
-    document.head.appendChild(s);
-  }
-
   async onGenerate() {
     this.setState({ generating: true });
 
     const { dispatch, user } = this.context;
     const { pass } = this.state;
 
-    const key = await window.openpgp.generateKey({
+    const openpgp = await loadOpenPGP();
+    const key = await openpgp.generateKey({
       numBits: 2048,
       userIds: [{ name: user.email, email: user.email }],
       passphrase: pass
