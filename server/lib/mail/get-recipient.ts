@@ -11,7 +11,7 @@ export async function getRecipient(address: string): Promise<Ptorx.Recipient> {
   const db = new MySQL();
   try {
     // Check if recipient is an SRS address we generated
-    if (local.startsWith('SRS')) {
+    if (/^SRS/i.test(local)) {
       try {
         const reversed = srs.reverse(address);
         if (reversed === null) throw new Error('Not an SRS address');
