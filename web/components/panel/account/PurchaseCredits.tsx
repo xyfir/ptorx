@@ -67,6 +67,11 @@ class _PurchaseCredits extends React.Component<
     const { user } = this.context;
     return (
       <div className={classes.root}>
+        <Typography>
+          Experience Ptorx with all of its features and increased credits per
+          month.
+        </Typography>
+
         {user.tier == 'basic' ? (
           <Typography>
             Upgrade to receive more monthly credits and unlock new features like
