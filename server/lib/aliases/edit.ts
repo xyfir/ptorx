@@ -1,4 +1,5 @@
 import { getAlias } from 'lib/aliases/get';
+import { getUser } from 'lib/users/get';
 import { Ptorx } from 'types/ptorx';
 import { MySQL } from 'lib/MySQL';
 
@@ -8,6 +9,10 @@ export async function editAlias(
 ): Promise<Ptorx.Alias> {
   const db = new MySQL();
   try {
+    const user = await getUser(userId);
+
+    if (user.tier == 'basic' && alias.saveMail)
+      throw 'Basic users cannot save mail';
     if (alias.canReply && !alias.saveMail)
       throw 'You cannot reply to mail unless it is saved to Ptorx';
     if (alias.name.indexOf('"') > -1)
