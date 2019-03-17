@@ -10,25 +10,31 @@ import {
   Typography,
   withStyles,
   Button,
+  Theme,
   Paper
 } from '@material-ui/core';
 
-const styles = createStyles({
-  buttons: {
-    flexDirection: 'column',
-    display: 'flex'
-  },
-  button: {
-    margin: '1em 0'
-  },
-  paper: {
-    padding: '0.5em',
-    margin: '1em'
-  },
-  root: {
-    textAlign: 'center'
-  }
-});
+const styles = (theme: Theme) =>
+  createStyles({
+    buttons: {
+      flexDirection: 'column',
+      display: 'flex'
+    },
+    button: {
+      margin: '1em 0'
+    },
+    paper: {
+      padding: '0.5em',
+      margin: '1em'
+    },
+    email: {
+      textDecoration: 'none',
+      color: theme.palette.primary.main
+    },
+    root: {
+      textAlign: 'center'
+    }
+  });
 
 class _PurchaseCredits extends React.Component<
   RouteComponentProps & withSnackbarProps & WithStyles<typeof styles>
@@ -84,14 +90,14 @@ class _PurchaseCredits extends React.Component<
               onClick={() => this.onBuy('premium', 'month')}
               className={classes.button}
             >
-              $1 USD — 1 Month
+              $1.50 USD — 1 Month
             </Button>
             <Button
               color="primary"
               variant="contained"
               onClick={() => this.onBuy('premium', 'year')}
             >
-              $10 USD — 1 Year
+              $15 USD — 1 Year
             </Button>
           </div>
         </Paper>
@@ -117,6 +123,14 @@ class _PurchaseCredits extends React.Component<
             </Button>
           </div>
         </Paper>
+
+        <Typography>
+          Need more than 10K per month? Send us an email:{' '}
+          <a href="mailto:contact@xyfir.com" className={classes.email}>
+            contact@xyfir.com
+          </a>
+          .
+        </Typography>
       </div>
     );
   }

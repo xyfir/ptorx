@@ -17,8 +17,8 @@ export const TIERS: {
     name: 'premium',
     credits: 1500,
     durations: [
-      { duration: 'month', cost: 100 },
-      { duration: 'year', cost: 1000 }
+      { duration: 'month', cost: 150 },
+      { duration: 'year', cost: 1500 }
     ]
   },
   {
