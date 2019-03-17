@@ -1,17 +1,15 @@
 import { addMessage } from 'lib/messages/add';
 import { ParsedMail } from 'mailparser';
 import * as openpgp from 'openpgp';
-import { getUser } from 'lib/users/get';
 import { Ptorx } from 'types/ptorx';
 
 export async function saveMail(
-  original: ParsedMail,
-  alias: Ptorx.Alias
+  mail: ParsedMail,
+  alias: Ptorx.Alias,
+  user: Ptorx.User
 ): Promise<Ptorx.Message> {
-  const user = await getUser(alias.userId);
-
-  let html = typeof original.html == 'string' ? original.html : undefined;
-  let text = original.text;
+  let html = typeof mail.html == 'string' ? mail.html : undefined;
+  let text = mail.text;
 
   // Encrypt email body
   if (user.publicKey) {
@@ -33,19 +31,19 @@ export async function saveMail(
 
   return await addMessage(
     {
-      attachments: original.attachments.map(a => ({
+      attachments: mail.attachments.map(a => ({
         filename: a.filename,
         contentType: a.contentType,
         content: a.content,
         size: a.content.byteLength
       })),
-      from: original.from.text,
-      headers: original.headerLines.map(h => h.line),
+      from: mail.from.text,
+      headers: mail.headerLines.map(h => h.line),
       html,
       aliasId: alias.id,
-      subject: original.subject,
+      subject: mail.subject,
       text,
-      to: original.to.text
+      to: mail.to.text
     },
     alias.userId
   );

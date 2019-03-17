@@ -98,6 +98,8 @@ test('get recipient: bad srs', async () => {
 test('save mail', async () => {
   const aliases = await listAliases(1234);
   const alias = await getAlias(aliases[0].id, 1234);
+  const user = await getUser(1234);
+
   const message = await saveMail(
     {
       attachments: [
@@ -130,7 +132,8 @@ test('save mail', async () => {
       textAsHtml: '',
       headers: new Map()
     },
-    alias
+    alias,
+    user
   );
   const _message: Ptorx.Message = {
     ...message,

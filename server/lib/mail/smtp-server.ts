@@ -140,13 +140,10 @@ export function startSMTPServer(): SMTPServer {
 
         let credits = 1;
         let isModified = false;
-        const alias = await getAlias(
-          recipient.aliasId,
-          recipient.user.userId
-        );
+        const alias = await getAlias(recipient.aliasId, recipient.user.userId);
         const savedMessage =
           alias.saveMail && recipient.user.tier != 'basic'
-            ? await saveMail(incoming, alias)
+            ? await saveMail(incoming, alias, recipient.user)
             : null;
         const domain = await getDomain(alias.domainId, alias.userId);
 
