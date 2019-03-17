@@ -5,6 +5,7 @@ import { addPayment } from 'lib/payments/add';
 import { verifyJWT } from 'lib/jwt/verify';
 import { getUser } from 'lib/users/get';
 import { signJWT } from 'lib/jwt/sign';
+import { TIERS } from 'constants/tiers';
 import { Ptorx } from 'types/ptorx';
 
 test('create payment', async () => {
@@ -18,7 +19,7 @@ test('create payment', async () => {
   expect(payment.userId).toBe(1234);
   const _payment: Ptorx.Payment = {
     ...payment,
-    amount: 100,
+    amount: 150,
     duration: 'month',
     tier: 'premium',
     paid
@@ -27,8 +28,9 @@ test('create payment', async () => {
 });
 
 test('start and finish payment', async () => {
+  const [, tier] = TIERS;
   const { url } = await startPayment(
-    { tier: 'premium', duration: 'month' },
+    { tier: tier.name, duration: 'month' },
     1234
   );
   const { id }: { id: Ptorx.Payment['id'] } = await verifyJWT(
@@ -43,7 +45,7 @@ test('start and finish payment', async () => {
   await expect(finishPayment(jwt, 1234)).toReject();
 
   const user = await getUser(1234);
-  expect(user.tier).toBe('premium');
+  expect(user.tier).toBe(tier.name);
   expect(user.tierExpiration).toBeNumber();
-  expect(user.credits).toBeGreaterThan(100);
+  expect(user.credits).toBe(tier.credits);
 });

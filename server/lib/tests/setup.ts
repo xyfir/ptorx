@@ -6,7 +6,7 @@ export async function setupTests() {
     INSERT INTO users (userId, email, credits, tier, tierExpiration) VALUES
       (1234, 'test@example.com', 10000, 'ultimate', UNIX_TIMESTAMP() + 999),
       (12345, 'test@example.com', 1500, 'premium', UNIX_TIMESTAMP() + 999),
-      (123456, 'test@example.com', 100, 'basic', NULL)
+      (123456, 'test@example.com', 200, 'basic', NULL)
   `);
   db.release();
 }

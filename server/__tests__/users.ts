@@ -2,15 +2,17 @@ import 'lib/tests/prepare';
 import { chargeCredits } from 'lib/users/charge';
 import { setPGPKeys } from 'lib/users/set-keys';
 import { getUser } from 'lib/users/get';
+import { TIERS } from 'constants/tiers';
 import { Ptorx } from 'types/ptorx';
 
 test('get user', async () => {
   const userId = Date.now();
+  const [tier] = TIERS;
   const _user: Ptorx.User = {
-    credits: 100,
+    credits: tier.credits,
     email: 'test@example.com',
     userId,
-    tier: 'basic',
+    tier: tier.name,
     tierExpiration: null,
     privateKey: null,
     publicKey: null
@@ -22,10 +24,11 @@ test('get user', async () => {
 });
 
 test('charge credits', async () => {
+  const [tier] = TIERS;
   let user = await getUser({ userId: Date.now(), email: 'test@example.com' });
   user = await chargeCredits(user, 3);
-  expect(user.credits).toBe(97);
-  user = await chargeCredits(user, 100);
+  expect(user.credits).toBe(tier.credits - 3);
+  user = await chargeCredits(user, tier.credits);
   expect(user.credits).toBe(0);
 });
 

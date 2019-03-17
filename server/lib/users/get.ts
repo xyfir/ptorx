@@ -1,3 +1,4 @@
+import { TIERS } from 'constants/tiers';
 import { Ptorx } from 'types/ptorx';
 import { MySQL } from 'lib/MySQL';
 
@@ -20,8 +21,8 @@ export async function getUser(
         publicKey: null,
         userId: user.userId,
         email: user.email,
-        credits: 100,
-        tier: 'basic'
+        credits: TIERS[0].credits,
+        tier: TIERS[0].name
       };
       await db.query('INSERT INTO users SET ?', insert);
       [row] = await db.query('SELECT * FROM users WHERE userId = ?', [

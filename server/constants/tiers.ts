@@ -10,7 +10,7 @@ export const TIERS: {
 }[] = [
   {
     name: 'basic',
-    credits: 100,
+    credits: 200,
     durations: [{ duration: 'life', cost: 0 }]
   },
   {
