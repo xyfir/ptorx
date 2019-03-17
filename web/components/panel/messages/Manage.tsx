@@ -14,6 +14,7 @@ import {
   Typography,
   WithStyles,
   withStyles,
+  TextField,
   Tooltip,
   Button,
   Paper
@@ -51,6 +52,7 @@ interface ManageMessageState {
   deleting: boolean;
   message?: Ptorx.Message;
   reply: boolean;
+  pass: string;
   html: string;
   text: string;
 }
@@ -66,17 +68,44 @@ class _ManageMessage extends React.Component<
     renderHTML: false,
     deleting: false,
     reply: false,
+    pass: '',
     html: '',
     text: ''
   };
 
-  componentDidMount() {
+  async componentDidMount() {
     const { enqueueSnackbar, match } = this.props;
-    const messageId = +(match.params as { message: number }).message;
-    api
-      .get('/messages', { params: { message: messageId } })
-      .then(res => this.setState({ message: res.data }))
-      .catch(err => enqueueSnackbar(err.response.data.error));
+    const { unlockedPrivateKey } = this.context;
+
+    try {
+      const res = await api.get('/messages', {
+        params: { message: +(match.params as { message: number }).message }
+      });
+      const message: Ptorx.Message = res.data;
+
+      // Decrypt contents if needed and able
+      if (message.text.startsWith('-----BEGIN PGP MESSAGE-----')) {
+        try {
+          let plaintext = await window.openpgp.decrypt({
+            message: await window.openpgp.message.readArmored(message.text),
+            privateKeys: [unlockedPrivateKey]
+          });
+          message.text = plaintext.data as string;
+
+          if (message.html !== null) {
+            plaintext = await window.openpgp.decrypt({
+              message: await window.openpgp.message.readArmored(message.html),
+              privateKeys: [unlockedPrivateKey]
+            });
+            message.html = plaintext.data as string;
+          }
+        } catch (err) {}
+      }
+
+      this.setState({ message });
+    } catch (err) {
+      enqueueSnackbar(err.response.data.error);
+    }
   }
 
   onDelete() {
@@ -89,6 +118,45 @@ class _ManageMessage extends React.Component<
       })
       .then(res => this.context.dispatch({ messages: res.data }))
       .catch(err => this.props.enqueueSnackbar(err.response.data.error));
+  }
+
+  async onDecrypt() {
+    const { enqueueSnackbar } = this.props;
+    const { dispatch, user } = this.context;
+    const { message, pass } = this.state;
+    let unlockedPrivateKey;
+
+    // Decrypt private key
+    try {
+      const { keys } = await window.openpgp.key.readArmored(user.privateKey);
+      await keys[0].decrypt(pass);
+      dispatch({ unlockedPrivateKey: keys[0] });
+      unlockedPrivateKey = keys[0];
+    } catch (err) {
+      enqueueSnackbar('Could not decrypt private key with password');
+      return;
+    }
+
+    // Decrypt message
+    try {
+      let plaintext = await window.openpgp.decrypt({
+        message: await window.openpgp.message.readArmored(message.text),
+        privateKeys: [unlockedPrivateKey]
+      });
+      message.text = plaintext.data as string;
+
+      if (message.html !== null) {
+        plaintext = await window.openpgp.decrypt({
+          message: await window.openpgp.message.readArmored(message.html),
+          privateKeys: [unlockedPrivateKey]
+        });
+        message.html = plaintext.data as string;
+      }
+
+      this.setState({ message });
+    } catch (err) {
+      enqueueSnackbar('Could not decrypt message with private key');
+    }
   }
 
   onReply() {
@@ -107,12 +175,14 @@ class _ManageMessage extends React.Component<
   }
 
   render() {
+    const { unlockedPrivateKey } = this.context;
     const {
       showHeaders,
       renderHTML,
       deleting,
       message,
       reply,
+      pass,
       html
     } = this.state;
     const { classes } = this.props;
@@ -182,7 +252,28 @@ class _ManageMessage extends React.Component<
         )}
 
         <Paper className={classes.content} elevation={2}>
-          {renderHTML ? (
+          {message.text.startsWith('-----BEGIN PGP MESSAGE-----') &&
+          !unlockedPrivateKey ? (
+            <div>
+              <TextField
+                fullWidth
+                id="pass"
+                type="password"
+                value={pass}
+                label="Mailbox Password"
+                margin="normal"
+                onChange={e => this.setState({ pass: e.target.value })}
+                helperText="Enter your mailbox password to decrypt this email"
+              />
+              <Button
+                onClick={() => this.onDecrypt()}
+                variant="contained"
+                color="primary"
+              >
+                Decrypt
+              </Button>
+            </div>
+          ) : renderHTML ? (
             <div dangerouslySetInnerHTML={{ __html: sanitize(message.html) }} />
           ) : (
             <React.Fragment>
