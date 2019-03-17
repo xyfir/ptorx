@@ -25,11 +25,11 @@
     "enve": "^1.0.0",
     "fuse.js": "^3.4.4",
     "moment": "^2.24.0",
-    "notistack": "^0.5.0",
+    "notistack": "^0.5.1",
     "react": "^16.8.4",
     "react-dom": "^16.8.4",
     "react-hot-loader": "^4.8.0",
-    "react-router-dom": "^4.3.1",
+    "react-router-dom": "^4.4.0",
     "react-trix": "^0.4.1",
     "typeface-roboto": "0.0.54"
   },
@@ -41,6 +41,7 @@
     "@babel/preset-typescript": "^7.3.3",
     "@types/dompurify": "0.0.32",
     "@types/dotenv": "^6.1.0",
+    "@types/openpgp": "^4.4.1",
     "@types/react": "^16.8.8",
     "@types/react-dom": "^16.8.2",
     "@types/react-router-dom": "^4.3.1",
@@ -52,7 +53,7 @@
     "style-loader": "^0.23.1",
     "typescript": "^3.3.3333",
     "webpack": "^4.29.6",
-    "webpack-cli": "^3.2.3",
+    "webpack-cli": "^3.3.0",
     "webpack-dev-server": "^3.2.1"
   }
 }
