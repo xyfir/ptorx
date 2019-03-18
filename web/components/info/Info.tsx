@@ -86,6 +86,22 @@ interface InfoProps extends WithStyles<typeof styles> {
   user?: Ptorx.User;
 }
 
+const CTAButton = ({ loggedIn }: { loggedIn: boolean }) =>
+  loggedIn ? (
+    <Button variant="contained" color="primary" size="large" href="/app">
+      Launch App
+    </Button>
+  ) : (
+    <Button
+      variant="contained"
+      color="primary"
+      href={process.enve.ACCOWNT_WEB_URL}
+      size="large"
+    >
+      Get it now for free
+    </Button>
+  );
+
 const _Info = ({ classes, user }: InfoProps) => (
   <div>
     <header className={classes.header}>
@@ -98,20 +114,7 @@ const _Info = ({ classes, user }: InfoProps) => (
           through Ptorx.
         </Typography>
 
-        {user ? (
-          <Button variant="contained" color="primary" size="large" href="/app">
-            Launch App
-          </Button>
-        ) : (
-          <Button
-            variant="contained"
-            color="primary"
-            href={process.enve.ACCOWNT_WEB_URL}
-            size="large"
-          >
-            Get it now for free
-          </Button>
-        )}
+        <CTAButton loggedIn={!!user} />
       </div>
     </header>
 
@@ -183,14 +186,17 @@ const _Info = ({ classes, user }: InfoProps) => (
 
     <section className={classes.section}>
       <Typography variant="h2" className={classes.h2}>
-        How's it work?
+        How does it work?
       </Typography>
       <ol className={classes.ol}>
-        <li>Create a forwarding email with an email alias</li>
-        <li>Give us your real address to forward incoming mail to</li>
-        <li>View mail sent to your alias in your preferred email app</li>
+        <li>Create a contact or site-specific alias through Ptorx</li>
+        <li>Mail sent to your alias is forwarded to your preferred inbox</li>
         <li>Reply to mail and it'll show as being sent from your alias</li>
       </ol>
+    </section>
+
+    <section className={classes.section}>
+      <CTAButton loggedIn={!!user} />
     </section>
 
     <section className={classes.section}>
