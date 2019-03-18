@@ -29,7 +29,7 @@ const styles = (theme: Theme) =>
       fontWeight: 'bold',
       fontSize: '120%'
     },
-    content: {
+    section: {
       padding: '2em'
     },
     footer: {
@@ -58,8 +58,7 @@ const styles = (theme: Theme) =>
     },
     p: {
       fontSize: '110%',
-      lineHeight: '125%',
-      marginBottom: '1.5em'
+      lineHeight: '125%'
     },
     a: {
       textDecoration: 'none',
@@ -100,7 +99,7 @@ const _Info = ({ classes, user }: InfoProps) => (
       </div>
     </header>
 
-    <div className={classes.content}>
+    <section className={classes.section}>
       <Typography variant="h2" className={classes.h2}>
         Stop sharing your real email, keep your current inbox
       </Typography>
@@ -108,7 +107,9 @@ const _Info = ({ classes, user }: InfoProps) => (
         Create unique email address aliases that are linked to your real emails.
         You'll still send and receive mail with their apps as usual.
       </Typography>
+    </section>
 
+    <section className={classes.section}>
       <Typography variant="h2" className={classes.h2}>
         No more typing in your email address
       </Typography>
@@ -116,7 +117,9 @@ const _Info = ({ classes, user }: InfoProps) => (
         Quickly generate an email address alias whenever needed from your
         browser or mobile device.
       </Typography>
+    </section>
 
+    <section className={classes.section}>
       <Typography variant="h2" className={classes.h2}>
         Easily manage all of your email aliases
       </Typography>
@@ -124,7 +127,9 @@ const _Info = ({ classes, user }: InfoProps) => (
         Ptorx will keep track of all your aliases in a single, easily searchable
         place, accessible from all of your devices.
       </Typography>
+    </section>
 
+    <section className={classes.section}>
       <Typography variant="h2" className={classes.h2}>
         Avoid the security breach domino effect
       </Typography>
@@ -132,7 +137,9 @@ const _Info = ({ classes, user }: InfoProps) => (
         If a site you use is compromised, just disable, delete, or regenerate
         the alias associated with that merchant.
       </Typography>
+    </section>
 
+    <section className={classes.section}>
       <Typography variant="h2" className={classes.h2}>
         Keep your accounts separate
       </Typography>
@@ -141,7 +148,9 @@ const _Info = ({ classes, user }: InfoProps) => (
         private information becomes publicly available on people search websites
         or the dark web.
       </Typography>
+    </section>
 
+    <section className={classes.section}>
       <Typography variant="h2" className={classes.h2}>
         How's it work?
       </Typography>
@@ -151,9 +160,11 @@ const _Info = ({ classes, user }: InfoProps) => (
         <li>View mail sent to your alias in your preferred email app</li>
         <li>Reply to mail and it'll show as being sent from your alias</li>
       </ol>
+    </section>
 
+    <section className={classes.section}>
       <Typography variant="h2" className={classes.h2}>
-        What's an Email Alias?
+        What's an email alias?
       </Typography>
       <Typography className={classes.p}>
         An email alias acts as a middleman between your real email addresses and
@@ -161,9 +172,11 @@ const _Info = ({ classes, user }: InfoProps) => (
         email addresses you configure. They also allow for advanced features
         like filtering and modifying your mail.
       </Typography>
+    </section>
 
+    <section className={classes.section}>
       <Typography variant="h2" className={classes.h2}>
-        Why Use Ptorx?
+        Why use Ptorx?
       </Typography>
       <Typography className={classes.p}>
         Strengthening your privacy and security is as simple as generating a new
@@ -174,35 +187,31 @@ const _Info = ({ classes, user }: InfoProps) => (
         ahold of your email, or when a snoop starts trying to piece together
         your online activity.
       </Typography>
-      <Typography className={classes.p}>
-        Ptorx makes managing all those unique emails a breeze, and it works with
-        whatever your current email setup is. Gmail? AOL? Your own installation
-        of Roundcube? Whatever it is, we'll forward incoming mail to your real
-        address so you can continue using the tools you're familiar with. You
-        can even reply to received mail anonymously using your alias from right
-        within your preferred mailbox provider.
-      </Typography>
+    </section>
 
+    <section className={classes.section}>
       <Typography variant="h2" className={classes.h2}>
-        Use Your Domain
+        Use your domain
       </Typography>
       <Typography className={classes.p}>
         As many of them as you want. Configure a few easy DNS records and create
         aliases and forwarding addresses for your own domain.
       </Typography>
+    </section>
 
+    <section className={classes.section}>
       <Typography variant="h2" className={classes.h2}>
-        Open Source
+        100% open source
       </Typography>
       <Typography className={classes.p}>
         Don't trust us with your emails?{' '}
-        <a href="https://github.com/Xyfir/Ptorx" className={classes.a}>
+        <a href="https://github.com/Xyfir/ptorx" className={classes.a}>
           Our code is completely open source for you to view.
         </a>{' '}
         You can host your own server or contribute to our codebase and make
         Ptorx better.
       </Typography>
-    </div>
+    </section>
 
     <footer className={classes.footer}>
       <a
@@ -225,6 +234,10 @@ const _Info = ({ classes, user }: InfoProps) => (
       {' — '}
       <a href={`${process.enve.DOCS_URL}/help.md`} className={classes.a}>
         Help Docs
+      </a>
+      {' — '}
+      <a href="https://www.xyfir.com" className={classes.a}>
+        Part of the Xyfir Network
       </a>
     </footer>
   </div>
