@@ -11,30 +11,47 @@ import {
 
 const styles = (theme: Theme) =>
   createStyles({
+    headerContent: {
+      display: 'flex',
+      flexDirection: 'column',
+      textAlign: 'center',
+      alignItems: 'center'
+    },
     header: {
       backgroundSize: 'cover',
       background:
-        // 'url(https://i.imgur.com/FHFuqKf.jpg) center center no-repeat',
-        // 'url(https://i.imgur.com/vRPc225.jpg) center center no-repeat',
         'url(https://i.imgur.com/eWQsizj.jpg) center center no-repeat',
       alignItems: 'center',
       minHeight: '80vh',
       position: 'relative',
       flexWrap: 'wrap',
       display: 'flex',
-      padding: '2em'
+      padding: '2em',
+      border: `solid ${theme.palette.primary.main} 1em`
     },
     subtitle: {
       marginBottom: '2em',
       fontWeight: 'bold',
       fontSize: '120%'
     },
+    content: {
+      maxWidth: '40em'
+    },
     section: {
-      padding: '2em'
+      justifyContent: 'center',
+      alignItems: 'center',
+      flexWrap: 'wrap',
+      padding: '2em',
+      display: 'flex'
     },
     footer: {
       fontFamily: '"Roboto"',
+      textAlign: 'center',
       padding: '2em'
+    },
+    image: {
+      height: '15em',
+      width: '15em'
     },
     icon: {
       borderRadius: '4px',
@@ -73,7 +90,7 @@ interface InfoProps extends WithStyles<typeof styles> {
 const _Info = ({ classes, user }: InfoProps) => (
   <div>
     <header className={classes.header}>
-      <div>
+      <div className={classes.headerContent}>
         <Typography variant="h1" className={classes.h1}>
           Send and receive mail without using your real email address
         </Typography>
@@ -100,54 +117,69 @@ const _Info = ({ classes, user }: InfoProps) => (
     </header>
 
     <section className={classes.section}>
-      <Typography variant="h2" className={classes.h2}>
-        Stop sharing your real email, keep your current inbox
-      </Typography>
-      <Typography className={classes.p}>
-        Create unique email address aliases that are linked to your real emails.
-        You'll still send and receive mail with their apps as usual.
-      </Typography>
+      <img src="https://i.imgur.com/2I9G31x.png" className={classes.image} />
+      <div className={classes.content}>
+        <Typography variant="h2" className={classes.h2}>
+          Stop sharing your real email, keep your current inbox
+        </Typography>
+        <Typography className={classes.p}>
+          Create unique email address aliases that are linked to your real
+          emails. You'll still send and receive mail with their apps as usual.
+        </Typography>
+      </div>
     </section>
 
     <section className={classes.section}>
-      <Typography variant="h2" className={classes.h2}>
-        No more typing in your email address
-      </Typography>
-      <Typography className={classes.p}>
-        Quickly generate an email address alias whenever needed from your
-        browser or mobile device.
-      </Typography>
+      <div className={classes.content}>
+        <Typography variant="h2" className={classes.h2}>
+          No more typing in your email address
+        </Typography>
+        <Typography className={classes.p}>
+          Quickly generate an email address alias whenever needed from your
+          browser or mobile device.
+        </Typography>
+      </div>
+      <img src="https://i.imgur.com/Za7GtZk.png" className={classes.image} />
     </section>
 
     <section className={classes.section}>
-      <Typography variant="h2" className={classes.h2}>
-        Easily manage all of your email aliases
-      </Typography>
-      <Typography className={classes.p}>
-        Ptorx will keep track of all your aliases in a single, easily searchable
-        place, accessible from all of your devices.
-      </Typography>
+      <img src="https://i.imgur.com/AMQzak1.png" className={classes.image} />
+      <div className={classes.content}>
+        <Typography variant="h2" className={classes.h2}>
+          Easily manage all of your email aliases
+        </Typography>
+        <Typography className={classes.p}>
+          Ptorx will keep track of all your aliases in a single, easily
+          searchable place, accessible from all of your devices.
+        </Typography>
+      </div>
     </section>
 
     <section className={classes.section}>
-      <Typography variant="h2" className={classes.h2}>
-        Avoid the security breach domino effect
-      </Typography>
-      <Typography className={classes.p}>
-        If a site you use is compromised, just disable, delete, or regenerate
-        the alias associated with that merchant.
-      </Typography>
+      <div className={classes.content}>
+        <Typography variant="h2" className={classes.h2}>
+          Avoid the security breach domino effect
+        </Typography>
+        <Typography className={classes.p}>
+          If a site you use is compromised, just disable, delete, or regenerate
+          the alias associated with that site.
+        </Typography>
+      </div>
+      <img src="https://i.imgur.com/AAbUvj3.png" className={classes.image} />
     </section>
 
     <section className={classes.section}>
-      <Typography variant="h2" className={classes.h2}>
-        Keep your accounts separate
-      </Typography>
-      <Typography className={classes.p}>
-        Whether sold to third-parties or stolen by hackers, too often your
-        private information becomes publicly available on people search websites
-        or the dark web.
-      </Typography>
+      <img src="https://i.imgur.com/pJ95lbP.png" className={classes.image} />
+      <div className={classes.content}>
+        <Typography variant="h2" className={classes.h2}>
+          Keep your accounts separate
+        </Typography>
+        <Typography className={classes.p}>
+          Whether sold to third-parties or stolen by hackers, too often your
+          private information becomes publicly available on people search
+          websites or the dark web.
+        </Typography>
+      </div>
     </section>
 
     <section className={classes.section}>
@@ -163,54 +195,66 @@ const _Info = ({ classes, user }: InfoProps) => (
     </section>
 
     <section className={classes.section}>
-      <Typography variant="h2" className={classes.h2}>
-        What's an email alias?
-      </Typography>
-      <Typography className={classes.p}>
-        An email alias acts as a middleman between your real email addresses and
-        the rest of the world. Any mail sent to an alias is forwarded to the
-        email addresses you configure. They also allow for advanced features
-        like filtering and modifying your mail.
-      </Typography>
+      <div className={classes.content}>
+        <Typography variant="h2" className={classes.h2}>
+          What's an email alias?
+        </Typography>
+        <Typography className={classes.p}>
+          An email alias acts as a middleman between your real email addresses
+          and the rest of the world. Any mail sent to an alias is forwarded to
+          the email addresses you configure. They also allow for advanced
+          features like filtering and modifying your mail.
+        </Typography>
+      </div>
+      <img src="https://i.imgur.com/UqP9fS0.png" className={classes.image} />
     </section>
 
     <section className={classes.section}>
-      <Typography variant="h2" className={classes.h2}>
-        Why use Ptorx?
-      </Typography>
-      <Typography className={classes.p}>
-        Strengthening your privacy and security is as simple as generating a new
-        alias for each website you create an account on, and for each person you
-        email. Keeping your addresses separate and unique for each use-case is
-        an important part of staying protected when a site you use suffers a
-        database breach, when an app you use sells your data, when spammer gets
-        ahold of your email, or when a snoop starts trying to piece together
-        your online activity.
-      </Typography>
+      <img src="https://i.imgur.com/ET9r7PZ.png" className={classes.image} />
+      <div className={classes.content}>
+        <Typography variant="h2" className={classes.h2}>
+          Why use Ptorx?
+        </Typography>
+        <Typography className={classes.p}>
+          Strengthening your privacy and security is as simple as generating a
+          new alias for each website you create an account on, and for each
+          person you email. Keeping your addresses separate and unique for each
+          use-case is an important part of staying protected when a site you use
+          suffers a database breach, when an app you use sells your data, when a
+          spammer gets ahold of your email, or when a snoop starts trying to
+          piece together your online activity.
+        </Typography>
+      </div>
     </section>
 
     <section className={classes.section}>
-      <Typography variant="h2" className={classes.h2}>
-        Use your domain
-      </Typography>
-      <Typography className={classes.p}>
-        As many of them as you want. Configure a few easy DNS records and create
-        aliases and forwarding addresses for your own domain.
-      </Typography>
+      <div className={classes.content}>
+        <Typography variant="h2" className={classes.h2}>
+          Use your domain
+        </Typography>
+        <Typography className={classes.p}>
+          As many of them as you want. Configure a few easy DNS records and
+          create aliases and forwarding addresses for your own domain.
+        </Typography>
+      </div>
+      <img src="https://i.imgur.com/I3VLOLI.png" className={classes.image} />
     </section>
 
     <section className={classes.section}>
-      <Typography variant="h2" className={classes.h2}>
-        100% open source
-      </Typography>
-      <Typography className={classes.p}>
-        Don't trust us with your emails?{' '}
-        <a href="https://github.com/Xyfir/ptorx" className={classes.a}>
-          Our code is completely open source for you to view.
-        </a>{' '}
-        You can host your own server or contribute to our codebase and make
-        Ptorx better.
-      </Typography>
+      <img src="https://i.imgur.com/ABIST3Q.png" className={classes.image} />
+      <div className={classes.content}>
+        <Typography variant="h2" className={classes.h2}>
+          100% open source
+        </Typography>
+        <Typography className={classes.p}>
+          Don't trust us with your emails?{' '}
+          <a href="https://github.com/Xyfir/ptorx" className={classes.a}>
+            Our code is completely open source for you to view.
+          </a>{' '}
+          You can even host your own server or contribute to our codebase and
+          make Ptorx better.
+        </Typography>
+      </div>
     </section>
 
     <footer className={classes.footer}>
