@@ -12,22 +12,21 @@ import {
 const styles = (theme: Theme) =>
   createStyles({
     headerContent: {
-      display: 'flex',
       flexDirection: 'column',
+      alignItems: 'center',
       textAlign: 'center',
-      alignItems: 'center'
+      display: 'flex',
+      width: '100%'
     },
     header: {
       backgroundSize: 'cover',
       background:
-        'url(https://i.imgur.com/eWQsizj.jpg) center center no-repeat',
+        'url(https://i.imgur.com/2UpbGfX.jpg) center center no-repeat',
       alignItems: 'center',
       minHeight: '80vh',
-      position: 'relative',
       flexWrap: 'wrap',
       display: 'flex',
-      padding: '2em',
-      border: `solid ${theme.palette.primary.main} 1em`
+      padding: '2em'
     },
     subtitle: {
       marginBottom: '2em',
@@ -230,7 +229,7 @@ const _Info = ({ classes, user }: InfoProps) => (
     <section className={classes.section}>
       <div className={classes.content}>
         <Typography variant="h2" className={classes.h2}>
-          Use your domain
+          Use your own domain
         </Typography>
         <Typography className={classes.p}>
           As many of them as you want. Configure a few easy DNS records and
@@ -251,7 +250,7 @@ const _Info = ({ classes, user }: InfoProps) => (
           <a href="https://github.com/Xyfir/ptorx" className={classes.a}>
             Our code is completely open source for you to view.
           </a>{' '}
-          You can even host your own server or contribute to our codebase and
+          You can even host your own server or contribute to our codebase to
           make Ptorx better.
         </Typography>
       </div>
