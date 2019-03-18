@@ -1,3 +1,4 @@
+import * as IMAGES from 'constants/images';
 import * as React from 'react';
 import { Ptorx } from 'types/ptorx';
 import {
@@ -20,8 +21,7 @@ const styles = (theme: Theme) =>
     },
     header: {
       backgroundSize: 'cover',
-      background:
-        'url(https://i.imgur.com/2UpbGfX.jpg) center center no-repeat',
+      background: `url(${IMAGES.HERO}) center center no-repeat`,
       alignItems: 'center',
       minHeight: '80vh',
       flexWrap: 'wrap',
@@ -119,7 +119,7 @@ const _Info = ({ classes, user }: InfoProps) => (
     </header>
 
     <section className={classes.section}>
-      <img src="https://i.imgur.com/2I9G31x.png" className={classes.image} />
+      <img src={IMAGES.FORWARD_MAIL} className={classes.image} />
       <div className={classes.content}>
         <Typography variant="h2" className={classes.h2}>
           Stop sharing your real email, keep your current inbox
@@ -141,11 +141,11 @@ const _Info = ({ classes, user }: InfoProps) => (
           browser or mobile device.
         </Typography>
       </div>
-      <img src="https://i.imgur.com/Za7GtZk.png" className={classes.image} />
+      <img src={IMAGES.KEYBOARD} className={classes.image} />
     </section>
 
     <section className={classes.section}>
-      <img src="https://i.imgur.com/AMQzak1.png" className={classes.image} />
+      <img src={IMAGES.MAGNIFYING_GLASS} className={classes.image} />
       <div className={classes.content}>
         <Typography variant="h2" className={classes.h2}>
           Easily manage all of your email aliases
@@ -167,11 +167,11 @@ const _Info = ({ classes, user }: InfoProps) => (
           the alias associated with that site.
         </Typography>
       </div>
-      <img src="https://i.imgur.com/AAbUvj3.png" className={classes.image} />
+      <img src={IMAGES.DOMINOES} className={classes.image} />
     </section>
 
     <section className={classes.section}>
-      <img src="https://i.imgur.com/pJ95lbP.png" className={classes.image} />
+      <img src={IMAGES.BROKEN_CHAIN} className={classes.image} />
       <div className={classes.content}>
         <Typography variant="h2" className={classes.h2}>
           Keep your accounts separate
@@ -211,11 +211,11 @@ const _Info = ({ classes, user }: InfoProps) => (
           features like filtering and modifying your mail.
         </Typography>
       </div>
-      <img src="https://i.imgur.com/UqP9fS0.png" className={classes.image} />
+      <img src={IMAGES.SPY} className={classes.image} />
     </section>
 
     <section className={classes.section}>
-      <img src="https://i.imgur.com/ET9r7PZ.png" className={classes.image} />
+      <img src={IMAGES.PTERODACTYL} className={classes.image} />
       <div className={classes.content}>
         <Typography variant="h2" className={classes.h2}>
           Why use Ptorx?
@@ -242,11 +242,11 @@ const _Info = ({ classes, user }: InfoProps) => (
           create aliases and forwarding addresses for your own domain.
         </Typography>
       </div>
-      <img src="https://i.imgur.com/I3VLOLI.png" className={classes.image} />
+      <img src={IMAGES.WWW} className={classes.image} />
     </section>
 
     <section className={classes.section}>
-      <img src="https://i.imgur.com/ABIST3Q.png" className={classes.image} />
+      <img src={IMAGES.CODE} className={classes.image} />
       <div className={classes.content}>
         <Typography variant="h2" className={classes.h2}>
           100% open source
