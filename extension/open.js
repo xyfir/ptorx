@@ -1,2 +1,2 @@
-chrome.tabs.create({ url: chrome.runtime.getURL('app.html') });
+chrome.tabs.create({ url: 'https://ptorx.com/app?r=source~extension' });
 window.close();

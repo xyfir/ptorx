@@ -2,19 +2,14 @@
   "name": "Email Forwarding and Aliases by Ptorx",
   "short_name": "Ptorx",
   "description": "Send and receive mail anonymously with email forwarding and aliases through Ptorx.",
-  "version": "1.2.1",
+  "version": "2.0.0",
   "manifest_version": 2,
   "browser_action": {
     "default_icon": {
-      "36": "res/icons/android-chrome-36x36.png",
-      "48": "res/icons/android-chrome-48x48.png",
-      "72": "res/icons/android-chrome-72x72.png",
-      "96": "res/icons/android-chrome-96x96.png",
-      "144": "res/icons/android-chrome-144x144.png",
-      "192": "res/icons/android-chrome-192x192.png",
-      "256": "res/icons/android-chrome-256x256.png",
-      "384": "res/icons/android-chrome-384x384.png",
-      "512": "res/icons/android-chrome-512x512.png"
+      "16": "icons/16.png",
+      "36": "icons/32.png",
+      "192": "icons/192.png",
+      "512": "icons/512.png"
     },
     "default_title": "Ptorx",
     "default_popup": "open.html"
@@ -23,21 +18,16 @@
     "page": "open.html"
   },
   "icons": {
-    "36": "res/icons/android-chrome-36x36.png",
-    "48": "res/icons/android-chrome-48x48.png",
-    "72": "res/icons/android-chrome-72x72.png",
-    "96": "res/icons/android-chrome-96x96.png",
-    "144": "res/icons/android-chrome-144x144.png",
-    "192": "res/icons/android-chrome-192x192.png",
-    "256": "res/icons/android-chrome-256x256.png",
-    "384": "res/icons/android-chrome-384x384.png",
-    "512": "res/icons/android-chrome-512x512.png"
+    "16": "icons/16.png",
+    "36": "icons/32.png",
+    "192": "icons/192.png",
+    "512": "icons/512.png"
   },
   "permissions": ["tabs", "storage"],
   "applications": {
     "gecko": {
       "id": "ptorx@xyfir.com",
-      "strict_min_version": "55.0"
+      "strict_min_version": "65.0"
     }
   }
 }
