@@ -36,6 +36,7 @@ class _DrawerContent extends React.Component<WithStyles<typeof styles>> {
   render() {
     const { categories, user } = this.context;
     const { classes } = this.props;
+    const phonegap = /source~phonegap/.test(localStorage.r);
     return (
       <div>
         <List>
@@ -62,7 +63,10 @@ class _DrawerContent extends React.Component<WithStyles<typeof styles>> {
               <ListItemText primary="Account" />
             </ListItem>
           </a>
-          <Link to="/app/credits" className={classes.link}>
+          <Link
+            to={phonegap ? '/app' : '/app/credits'}
+            className={classes.link}
+          >
             <ListItem button>
               <ListItemIcon>
                 <Money />

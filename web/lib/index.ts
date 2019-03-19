@@ -13,4 +13,7 @@ declare global {
   }
 }
 
+if (location.search.startsWith('?r='))
+  localStorage.r = location.search.substr(3);
+
 render(React.createElement(hot(App)), document.getElementById('content'));
