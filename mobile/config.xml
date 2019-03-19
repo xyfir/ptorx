@@ -18,36 +18,26 @@
   </author>
 
   <!-- Preferences -->
-  <preference name="phonegap-version" value="cli-8.1.1" />
+  <preference name="phonegap-version" value="cli-8.1.1"/>
 
   <preference name="permissions" value="none"/>
-  <preference name="orientation" value="portrait" />
-  <preference name="target-device" value="universal" />
-  <preference name="fullscreen" value="true" />
-  <preference name="webviewbounce" value="false" />
-  <preference name="DisallowOverscroll" value="true" />
-  <preference name="prerendered-icon" value="true" />
-  <preference name="stay-in-webview" value="true" />
-  <preference name="exit-on-suspend" value="false" />
-  <preference name="show-splash-screen-spinner" value="false" />
-  <preference name="auto-hide-splash-screen" value="true" />
-  <preference name="android-installLocation" value="auto" />
-  <preference name="CRIPageLoadPromptInterval" value="0" />
-  <preference name="CRIShowConnectionErrorDialog" value="0" />
+  <preference name="orientation" value="portrait"/>
+  <preference name="target-device" value="universal"/>
+  <preference name="fullscreen" value="true"/>
+  <preference name="webviewbounce" value="false"/>
+  <preference name="DisallowOverscroll" value="true"/>
+  <preference name="prerendered-icon" value="true"/>
+  <preference name="stay-in-webview" value="true"/>
+  <preference name="exit-on-suspend" value="false"/>
+  <preference name="show-splash-screen-spinner" value="false"/>
+  <preference name="auto-hide-splash-screen" value="true"/>
 
   <!-- Core plugins -->
-  <plugin name="cordova-plugin-console" />
-  <plugin name="cordova-plugin-device" />
-  <plugin name="cordova-plugin-dialogs" />
-  <plugin name="cordova-plugin-file" />
-  <plugin name="cordova-plugin-geolocation" />
-  <plugin name="cordova-plugin-globalization" />
-  <plugin name="cordova-plugin-inappbrowser" />
-  <plugin name="cordova-plugin-media" />
-  <plugin name="cordova-plugin-network-information" />
-  <plugin name="cordova-plugin-splashscreen" />
-  <plugin name="cordova-plugin-whitelist" />
-  <plugin name="cordova-plugin-statusbar" />
+  <plugin name="cordova-plugin-device"/>
+  <plugin name="cordova-plugin-inappbrowser"/>
+  <plugin name="cordova-plugin-splashscreen"/>
+  <plugin name="cordova-plugin-whitelist"/>
+  <plugin name="cordova-plugin-statusbar"/>
 
   <platform name="ios">
     <icon src="res/icon/ios/icon-1024.png" width="1024" height="1024"/>
@@ -82,6 +72,7 @@
 
   <platform name="android">
     <preference name="SplashMaintainAspectRatio" value="true"/>
+    <preference name="android-installLocation" value="auto"/>
     <preference name="SplashShowOnlyFirstTime" value="true"/>
 
     <icon density="ldpi" src="res/icon/android/ldpi.png"/>
@@ -101,12 +92,12 @@
   </platform>
 
   <!-- Whitelist the entire network, over HTTP and HTTPS -->
-  <allow-navigation href="*" />
+  <allow-navigation href="*"/>
 
   <!-- Allow links to web pages to open in a browser -->
-  <allow-intent href="http://*/*" />
-  <allow-intent href="https://*/*" />
+  <allow-intent href="http://*/*"/>
+  <allow-intent href="https://*/*"/>
 
-  <meta http-equiv="Content-Security-Policy" content="default-src *; style-src * 'unsafe-inline'; script-src * 'unsafe-inline'; media-src *; img-src * data:;" />
+  <meta http-equiv="Content-Security-Policy" content="default-src *; style-src * 'unsafe-inline'; script-src * 'unsafe-inline'; media-src *; img-src * data:;"/>
 
 </widget>
