@@ -16,6 +16,9 @@ export class App extends React.Component<{}, AppState> {
   state: AppState = { loading: true };
 
   componentDidMount() {
+    if (location.search.startsWith('?r='))
+      localStorage.r = location.search.substr(3);
+
     api
       .get('/users')
       .then(res => this.setState({ user: res.data, loading: false }))
@@ -34,7 +37,12 @@ export class App extends React.Component<{}, AppState> {
             {user ? (
               <Route path="/app" render={() => <Panel user={user} />} />
             ) : (
-              <Redirect from="/app" to="/info" />
+              <Route
+                path="/app"
+                render={() => (
+                  location.replace(process.enve.ACCOWNT_WEB_URL), null
+                )}
+              />
             )}
             <Redirect exact from="/" to="/info" />
           </Switch>
