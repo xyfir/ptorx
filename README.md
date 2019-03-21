@@ -4,7 +4,7 @@
 
 Anonymously forward and send mail with email forwarding and aliases through **[Ptorx](https://ptorx.com)**.
 
-![](https://i.imgur.com/nQpV5IP.png)
+![](https://i.imgur.com/wscxXEc.png)
 
 ### Stop sharing your real email, keep your current inbox
 
