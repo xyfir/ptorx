@@ -1,6 +1,7 @@
 import * as IMAGES from 'constants/images';
 import * as React from 'react';
 import { Ptorx } from 'types/ptorx';
+import { Link } from 'react-router-dom';
 import {
   createStyles,
   Typography,
@@ -88,9 +89,11 @@ interface InfoProps extends WithStyles<typeof styles> {
 
 const CTAButton = ({ loggedIn }: { loggedIn: boolean }) =>
   loggedIn ? (
-    <Button variant="contained" color="primary" size="large" href="/app">
-      Launch App
-    </Button>
+    <Link to="/app">
+      <Button variant="contained" color="primary" size="large">
+        Launch App
+      </Button>
+    </Link>
   ) : (
     <Button
       variant="contained"
