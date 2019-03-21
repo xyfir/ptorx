@@ -1,6 +1,6 @@
 import { addMessage } from 'lib/messages/add';
 import { ParsedMail } from 'mailparser';
-import * as openpgp from 'openpgp';
+import { openpgp } from 'openpgp';
 import { Ptorx } from 'types/ptorx';
 
 export async function saveMail(
@@ -18,14 +18,14 @@ export async function saveMail(
       message: openpgp.message.fromText(text),
       publicKeys: keys
     });
-    text = ciphertext.data;
+    text = ciphertext.data as string;
 
     if (html !== undefined) {
       ciphertext = await openpgp.encrypt({
         message: openpgp.message.fromText(html),
         publicKeys: keys
       });
-      html = ciphertext.data;
+      html = ciphertext.data as string;
     }
   }
 
