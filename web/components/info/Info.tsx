@@ -87,9 +87,9 @@ interface InfoProps extends WithStyles<typeof styles> {
   user?: Ptorx.User;
 }
 
-const CTAButton = ({ loggedIn }: { loggedIn: boolean }) =>
-  loggedIn ? (
-    <Link to="/app">
+const CTAButton = ({ classes, user }: InfoProps) =>
+  user ? (
+    <Link to="/app" className={classes.a}>
       <Button variant="contained" color="primary" size="large">
         Launch App
       </Button>
@@ -117,7 +117,7 @@ const _Info = ({ classes, user }: InfoProps) => (
           through Ptorx.
         </Typography>
 
-        <CTAButton loggedIn={!!user} />
+        <CTAButton classes={classes} user={user} />
       </div>
     </header>
 
@@ -199,7 +199,7 @@ const _Info = ({ classes, user }: InfoProps) => (
     </section>
 
     <section className={classes.section}>
-      <CTAButton loggedIn={!!user} />
+      <CTAButton classes={classes} user={user} />
     </section>
 
     <section className={classes.section}>
