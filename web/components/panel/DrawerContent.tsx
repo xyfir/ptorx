@@ -96,18 +96,14 @@ class _DrawerContent extends React.Component<WithStyles<typeof styles>> {
               <ListItemText primary="Keys" />
             </ListItem>
           </Link>
-          <a
-            href={`${process.enve.DOCS_URL}/help.md#terminology`}
-            target="_blank"
-            className={classes.link}
-          >
+          <Link to="/app/docs/help" className={classes.link}>
             <ListItem button>
               <ListItemIcon>
                 <Help />
               </ListItemIcon>
               <ListItemText primary="Help" />
             </ListItem>
-          </a>
+          </Link>
         </List>
       </div>
     );

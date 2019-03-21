@@ -15,6 +15,7 @@ import { AddAlias } from 'components/panel/aliases/Add';
 import { PGPKeys } from 'components/panel/account/Keys';
 import * as React from 'react';
 import { Close } from '@material-ui/icons';
+import { Docs } from 'components/panel/Docs';
 import {
   withMobileDialog,
   DialogContent,
@@ -113,6 +114,7 @@ class _PanelDialog extends React.Component<PanelDialogProps, PanelDialogState> {
               <Route path="/app/messages/:message" component={ManageMessage} />
               <Route path="/app/filters/:filter" component={ManageFilter} />
               <Route path="/app/domains/:domain" component={ManageDomain} />
+              <Route path="/app/docs/:file" component={Docs} />
               <Route path="/app/credits" component={PurchaseCredits} />
               <Route path="/app/keys" component={PGPKeys} />
             </Switch>
