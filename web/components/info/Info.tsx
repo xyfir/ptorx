@@ -4,15 +4,41 @@ import { Ptorx } from 'types/ptorx';
 import { Link } from 'react-router-dom';
 import {
   createStyles,
+  ButtonBase,
   Typography,
   WithStyles,
   withStyles,
   Button,
+  Paper,
   Theme
 } from '@material-ui/core';
 
+const phonegap = /source~phonegap/.test(localStorage.r);
+
 const styles = (theme: Theme) =>
   createStyles({
+    downloadButtonWrapper: {
+      '&:hover': {
+        border: `solid ${theme.palette.primary.main} 0.1em`
+      },
+      border: 'solid transparent 0.1em',
+      margin: '1em',
+      width: '9em'
+    },
+    downloadButtonCTA: {
+      fontWeight: 'bold',
+      color: theme.palette.secondary.main
+    },
+    downloadButtons: {
+      justifyContent: 'center',
+      flexWrap: 'wrap',
+      display: 'flex'
+    },
+    downloadButton: {
+      flexDirection: 'column',
+      display: 'flex',
+      padding: '1em'
+    },
     headerContent: {
       flexDirection: 'column',
       alignItems: 'center',
@@ -20,13 +46,16 @@ const styles = (theme: Theme) =>
       display: 'flex',
       width: '100%'
     },
-    header: {
-      backgroundSize: 'cover',
-      background: `url(${IMAGES.HERO}) center center no-repeat`,
-      alignItems: 'center',
-      minHeight: '80vh',
-      flexWrap: 'wrap',
-      display: 'flex',
+    platformImage: {
+      height: '5em',
+      width: '5em'
+    },
+    sectionImage: {
+      height: '15em',
+      width: '15em'
+    },
+    getPtorx: {
+      textAlign: 'center',
       padding: '2em'
     },
     subtitle: {
@@ -49,9 +78,14 @@ const styles = (theme: Theme) =>
       textAlign: 'center',
       padding: '2em'
     },
-    image: {
-      height: '15em',
-      width: '15em'
+    header: {
+      backgroundSize: 'cover',
+      background: `url(${IMAGES.HERO}) center center no-repeat`,
+      alignItems: 'center',
+      minHeight: '80vh',
+      flexWrap: 'wrap',
+      display: 'flex',
+      padding: '2em'
     },
     icon: {
       borderRadius: '4px',
@@ -98,7 +132,9 @@ const CTAButton = ({ classes, user }: InfoProps) =>
     <Button
       variant="contained"
       color="primary"
-      href={process.enve.ACCOWNT_WEB_URL}
+      href={
+        phonegap ? process.enve.ACCOWNT_WEB_URL : 'https://appurl.io/aK_AM7rV7'
+      }
       size="large"
     >
       Get it now for free
@@ -122,7 +158,7 @@ const _Info = ({ classes, user }: InfoProps) => (
     </header>
 
     <section className={classes.section}>
-      <img src={IMAGES.FORWARD_MAIL} className={classes.image} />
+      <img src={IMAGES.FORWARD_MAIL} className={classes.sectionImage} />
       <div className={classes.content}>
         <Typography variant="h2" className={classes.h2}>
           Stop sharing your real email, keep your current inbox
@@ -134,6 +170,89 @@ const _Info = ({ classes, user }: InfoProps) => (
       </div>
     </section>
 
+    {phonegap ? null : (
+      <section className={classes.getPtorx}>
+        <Typography variant="h2" className={classes.h2}>
+          Get Ptorx
+        </Typography>
+        <Typography className={classes.p}>
+          It's available for free on all your devices.
+        </Typography>
+
+        <div className={classes.downloadButtons}>
+          <Paper elevation={1} className={classes.downloadButtonWrapper}>
+            <ButtonBase
+              href="/app"
+              className={classes.downloadButton}
+              focusRipple
+            >
+              <img src={IMAGES.WWW} className={classes.platformImage} />
+              <Typography>Web</Typography>
+              <Typography className={classes.downloadButtonCTA}>
+                Launch App
+              </Typography>
+            </ButtonBase>
+          </Paper>
+
+          <Paper elevation={1} className={classes.downloadButtonWrapper}>
+            <ButtonBase
+              href="https://itunes.apple.com/us/app/id1161180537"
+              className={classes.downloadButton}
+              focusRipple
+            >
+              <img src={IMAGES.APPLE} className={classes.platformImage} />
+              <Typography>iPhone/iPad</Typography>
+              <Typography className={classes.downloadButtonCTA}>
+                Get App
+              </Typography>
+            </ButtonBase>
+          </Paper>
+
+          <Paper elevation={1} className={classes.downloadButtonWrapper}>
+            <ButtonBase
+              href="https://play.google.com/store/apps/details?id=com.xyfir.ptorx"
+              className={classes.downloadButton}
+              focusRipple
+            >
+              <img src={IMAGES.ANDROID} className={classes.platformImage} />
+              <Typography>Android</Typography>
+              <Typography className={classes.downloadButtonCTA}>
+                Get App
+              </Typography>
+            </ButtonBase>
+          </Paper>
+
+          <Paper elevation={1} className={classes.downloadButtonWrapper}>
+            <ButtonBase
+              href="https://chrome.google.com/webstore/detail/jjhgjgpgkbnlihngkfnkafaidoggljge"
+              className={classes.downloadButton}
+              focusRipple
+            >
+              <img src={IMAGES.CHROME} className={classes.platformImage} />
+              <Typography>Chrome</Typography>
+              <Typography className={classes.downloadButtonCTA}>
+                Get Extension
+              </Typography>
+            </ButtonBase>
+          </Paper>
+
+          <Paper elevation={1} className={classes.downloadButtonWrapper}>
+            <ButtonBase
+              href="https://addons.mozilla.org/en-US/firefox/addon/email-aliases-by-ptorx"
+              className={classes.downloadButton}
+              focusRipple
+            >
+              <img src={IMAGES.FIREFOX} className={classes.platformImage} />
+              <Typography>Firefox</Typography>
+              <Typography className={classes.downloadButtonCTA}>
+                Get Extension
+              </Typography>
+            </ButtonBase>
+          </Paper>
+        </div>
+      </section>
+    )}
+
     <section className={classes.section}>
       <div className={classes.content}>
         <Typography variant="h2" className={classes.h2}>
@@ -144,11 +263,11 @@ const _Info = ({ classes, user }: InfoProps) => (
           browser or mobile device.
         </Typography>
       </div>
-      <img src={IMAGES.KEYBOARD} className={classes.image} />
+      <img src={IMAGES.KEYBOARD} className={classes.sectionImage} />
     </section>
 
     <section className={classes.section}>
-      <img src={IMAGES.MAGNIFYING_GLASS} className={classes.image} />
+      <img src={IMAGES.MAGNIFYING_GLASS} className={classes.sectionImage} />
       <div className={classes.content}>
         <Typography variant="h2" className={classes.h2}>
           Easily manage all of your email aliases
@@ -170,11 +289,11 @@ const _Info = ({ classes, user }: InfoProps) => (
           the alias associated with that site.
         </Typography>
       </div>
-      <img src={IMAGES.DOMINOES} className={classes.image} />
+      <img src={IMAGES.DOMINOES} className={classes.sectionImage} />
     </section>
 
     <section className={classes.section}>
-      <img src={IMAGES.BROKEN_CHAIN} className={classes.image} />
+      <img src={IMAGES.BROKEN_CHAIN} className={classes.sectionImage} />
       <div className={classes.content}>
         <Typography variant="h2" className={classes.h2}>
           Keep your accounts separate
@@ -214,11 +333,11 @@ const _Info = ({ classes, user }: InfoProps) => (
           features like filtering and modifying your mail.
         </Typography>
       </div>
-      <img src={IMAGES.SPY} className={classes.image} />
+      <img src={IMAGES.SPY} className={classes.sectionImage} />
     </section>
 
     <section className={classes.section}>
-      <img src={IMAGES.PTERODACTYL} className={classes.image} />
+      <img src={IMAGES.PTERODACTYL} className={classes.sectionImage} />
       <div className={classes.content}>
         <Typography variant="h2" className={classes.h2}>
           Why use Ptorx?
@@ -245,11 +364,11 @@ const _Info = ({ classes, user }: InfoProps) => (
           create aliases and forwarding addresses for your own domain.
         </Typography>
       </div>
-      <img src={IMAGES.WWW} className={classes.image} />
+      <img src={IMAGES.WWW} className={classes.sectionImage} />
     </section>
 
     <section className={classes.section}>
-      <img src={IMAGES.CODE} className={classes.image} />
+      <img src={IMAGES.CODE} className={classes.sectionImage} />
       <div className={classes.content}>
         <Typography variant="h2" className={classes.h2}>
           100% open source
