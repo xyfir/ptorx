@@ -11,6 +11,14 @@ export { default as DOMINOES } from 'images/dominoes.png';
 // @ts-ignore
 export { default as KEYBOARD } from 'images/keyboard.png';
 // @ts-ignore
+export { default as FIREFOX } from 'images/firefox.png';
+// @ts-ignore
+export { default as ANDROID } from 'images/android.png';
+// @ts-ignore
+export { default as CHROME } from 'images/chrome.png';
+// @ts-ignore
+export { default as APPLE } from 'images/apple.png';
+// @ts-ignore
 export { default as CODE } from 'images/code.png';
 // @ts-ignore
 export { default as HERO } from 'images/hero.jpg';
