@@ -46,13 +46,15 @@ As many of them as you want. Configure a few easy DNS records and create aliases
 
 ## Apps
 
-- [Ptorx for iOS](https://itunes.apple.com/us/app/id1161180537) — Ptorx on your iPhone or iPad.
-- [Ptorx for web](https://ptorx.com/app) — Access the Ptorx app from your browser, desktop or mobile.
-- [Ptorx for Android](https://play.google.com/store/apps/details?id=com.xyfir.ptorx) — Ptorx on your Android phone or tablet.
+- [iOS](https://itunes.apple.com/us/app/id1161180537) — Ptorx on your iPhone or iPad.
+- **[Web](https://ptorx.com/app) — Access the Ptorx app from your desktop or mobile browser.**
+- [Firefox](https://addons.mozilla.org/en-US/firefox/addon/email-aliases-by-ptorx) — A simple Mozilla Firefox extension.
+- [Chrome](https://chrome.google.com/webstore/detail/jjhgjgpgkbnlihngkfnkafaidoggljge) — A simple Google Chrome extension.
+- [Android](https://play.google.com/store/apps/details?id=com.xyfir.ptorx) — Ptorx on your Android phone or tablet.
 
 ## Documentation
 
-- [Help Docs](https://github.com/Xyfir/ptorx/blob/master/docs/help.md) — Learn more about how Ptorx works.
+- **[Help Docs](https://github.com/Xyfir/ptorx/blob/master/docs/help.md) — Learn more about how Ptorx works.**
 - [Self-hosting](https://github.com/Xyfir/ptorx/blob/master/docs/self-host.md) — Learn how to set up Ptorx on your own server.
 - [Privacy Policy](https://github.com/Xyfir/ptorx/blob/master/docs/privacy-policy.md) — Our site and app's privacy policy.
 - [Terms of Service](https://github.com/Xyfir/ptorx/blob/master/docs/terms-of-service.md) — Our site and app's terms of service.
