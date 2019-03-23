@@ -38,7 +38,7 @@ cd ../accownt/server
 npm install
 cd ../web
 npm install
-cd ../../rich-cow/server
+cd ../../ccashcow/server
 npm install
 cd ../web
 npm install
@@ -75,7 +75,7 @@ Replace `ptorx` with the name of your database.
 Now we need to create the data directories where Ptorx and its submodules will write both temporary and permanent data to the disk. You can put them wherever you'd like (just remember it for Step 4), but for now we'll put them alongside `ptorx/`.
 
 ```bash
-mkdir ../accownt-db ../mail-cache ../rich-cow-db
+mkdir ../accownt-db ../mail-cache ../ccashcow-db
 ```
 
 You can also name the three directories however you'd like.
@@ -91,14 +91,14 @@ To understand the syntax of the `.env` files, know that they are first loaded vi
 First we'll create each file and then we'll work our way through populating them with values.
 
 ```bash
-touch server/.env web/.env accownt/server/.env accownt/web/.env rich-cow/server/.env rich-cow/web/.env
+touch server/.env web/.env accownt/server/.env accownt/web/.env ccashcow/server/.env ccashcow/web/.env
 ```
 
-## Step 4b: Configure Rich Cow
+## Step 4b: Configure CCashCow
 
-See [Xyfir/rich-cow](https://github.com/Xyfir/rich-cow) for instructions.
+See [Xyfir/ccashcow](https://github.com/Xyfir/ccashcow) for instructions.
 
-Use `vim` or `nano` or similar to edit the files `rich-cow/server/.env` and `rich-cow/web/.env`.
+Use `vim` or `nano` or similar to edit the files `ccashcow/server/.env` and `ccashcow/web/.env`.
 
 ## Step 4c: Configure Accownt
 
@@ -121,7 +121,7 @@ cd ../accownt/server
 npm run build
 cd ../web
 npm run build
-cd ../../rich-cow/server
+cd ../../ccashcow/server
 npm run build
 cd ../web
 npm run build
@@ -188,8 +188,8 @@ cd server
 pm2 start --name ptorx npm -- run start
 cd ../accownt/server
 pm2 start --name accownt npm -- run start
-cd ../../rich-cow/server
-pm2 start --name rich-cow npm -- run start
+cd ../../ccashcow/server
+pm2 start --name ccashcow npm -- run start
 pm2 startup # then follow instructions
 ```
 

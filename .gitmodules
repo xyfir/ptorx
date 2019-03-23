@@ -1,3 +1,6 @@
 [submodule "accownt"]
 	path = accownt
 	url = https://github.com/Xyfir/accownt.git
+[submodule "ccashcow"]
+	path = ccashcow
+	url = https://github.com/Xyfir/ccashcow.git

@@ -15,5 +15,6 @@ export async function startPayment(
     },
     '1d'
   );
-  return { url: `${process.enve.RICH_COW_WEB_URL}?jwt=${jwt}` };
+
+  return { url: `${process.enve.CCASHCOW_WEB_URL}?jwt=${jwt}` };
 }

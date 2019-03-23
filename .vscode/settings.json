@@ -5,7 +5,7 @@
   },
   "search.exclude": {
     "**/coverage": true,
-    "**/rich-cow": true,
+    "**/ccashcow": true,
     "**/accownt": true,
     "**/dist": true
   },

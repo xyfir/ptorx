@@ -241,7 +241,7 @@ export namespace Ptorx {
        */
       MYSQL: any;
       /**
-       * Shared secret (also used by Accownt and Rich Cow) used for signing and
+       * Shared secret (also used by Accownt and CCashCow) used for signing and
        *  verifying JSON Web Tokens.
        */
       JWT_KEY: string;
@@ -285,10 +285,10 @@ export namespace Ptorx {
        */
       PERSISTENT_ALIAS: string;
       /**
-       * URL for the Rich Cow web client.
-       * @example "https://ptorx.com/rich-cow"
+       * URL for the CCashCow web client.
+       * @example "https://ptorx.com/ccashcow"
        */
-      RICH_COW_WEB_URL: string;
+      CCASHCOW_WEB_URL: string;
       /**
        * Configuration for the SMTP server.
        *  https://nodemailer.com/extras/smtp-server/#step-3-create-smtpserver-instance
