@@ -1,6 +1,3 @@
 [submodule "accownt"]
 	path = accownt
 	url = https://github.com/Xyfir/accownt.git
-[submodule "rich-cow"]
-	path = rich-cow
-	url = https://github.com/Xyfir/rich-cow.git
