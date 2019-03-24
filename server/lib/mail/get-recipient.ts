@@ -21,7 +21,7 @@ export async function getRecipient(address: string): Promise<Ptorx.Recipient> {
       }
     }
     // Reply-To address
-    else if (local.endsWith('--reply-x')) {
+    else if (/--reply-x$/i.test(local)) {
       try {
         const [messageId, messageKey] = local.split('--');
         const message = await getMessage(+messageId, messageKey);
