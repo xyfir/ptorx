@@ -51,21 +51,18 @@ export function startSMTPServer(): SMTPServer {
       if (stream.sizeExceeded) return callback(new Error('Message too big'));
       else callback();
 
+      // Get index of DKIM-Signature header
       const dkimSignature = incoming.headerLines.findIndex(
         h => h.key.toLowerCase() == 'dkim-signature'
       );
-      const canPrependReplyTo =
-        // Reply-To cannot already exist
-        incoming.headerLines.findIndex(
-          h => h.key.toLowerCase() == 'reply-to'
-        ) == -1 &&
-        // Message cannot have a DKIM-Signature where Reply-To is signed
-        (dkimSignature == -1 ||
-          incoming.headerLines[dkimSignature].line
-            .split(/\bh=/)[1]
-            .split(';')[0]
-            .split(':')
-            .findIndex(f => f.trim().toLowerCase() == 'reply-to') == -1);
+      // Does DKIM-Signature sign Reply-To header?
+      const isReplyToSigned =
+        dkimSignature > -1 &&
+        incoming.headerLines[dkimSignature].line
+          .split(/\bh=/)[1]
+          .split(';')[0]
+          .split(':')
+          .findIndex(f => f.trim().toLowerCase() == 'reply-to') == -1;
 
       for (let address of recipients) {
         const recipient = await getRecipient(address);
@@ -190,21 +187,25 @@ export function startSMTPServer(): SMTPServer {
               }
             };
 
-            // Send mail from Ptorx with our own signature because:
-            // - the modifiers would break DKIM
-            // - and/or changing Reply-To would break DKIM
-            if (isModified || (alias.canReply && !canPrependReplyTo)) {
+            // Remail as from Ptorx with our own signature because some
+            // necessary modification would break DKIM
+            if (isModified || (alias.canReply && isReplyToSigned)) {
               Object.assign(mail, outgoing);
               mail.replyTo = replyTo;
               mail.from = `"${alias.name}" <${alias.fullAddress}>`;
               await sendMail(mail, alias.domainId);
             }
-            // Redirect mail as is with Reply-To that won't break DKIM
+            // Forward mail as is with Reply-To that won't break DKIM
             else if (alias.canReply) {
-              mail.raw = `Reply-To: ${replyTo}\r\n` + raw;
+              mail.raw = incoming.headers.has('reply-to')
+                ? raw.replace(
+                    new RegExp(`^Reply-To: ${outgoing.replyTo}`, 'im'),
+                    `Reply-To: ${replyTo}`
+                  )
+                : `Reply-To: ${replyTo}\r\n` + raw;
               await sendMail(mail);
             }
-            // Redirect mail as is
+            // Forward mail as is
             else {
               mail.raw = raw;
               await sendMail(mail);
