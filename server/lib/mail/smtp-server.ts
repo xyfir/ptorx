@@ -1,15 +1,14 @@
 import { getPrimaryEmail } from 'lib/primary-emails/get';
 import { SendMailOptions } from 'nodemailer';
-import { getAlias } from 'lib/aliases/get';
 import { chargeCredits } from 'lib/users/charge';
 import { getRecipient } from 'lib/mail/get-recipient';
 import { simpleParser } from 'mailparser';
 import { readFileSync } from 'fs';
-import { PassThrough } from 'stream';
 import { filterMail } from 'lib/mail/filter';
 import { modifyMail } from 'lib/mail/modify';
 import { SMTPServer } from 'smtp-server';
 import { getDomain } from 'lib/domains/get';
+import { getAlias } from 'lib/aliases/get';
 import { saveMail } from 'lib/mail/save';
 import { sendMail } from 'lib/mail/send';
 import { SRS } from 'sender-rewriting-scheme';
@@ -41,9 +40,13 @@ export function startSMTPServer(): SMTPServer {
         ? session.envelope.mailFrom.address
         : null;
 
-      const _stream = new PassThrough();
-      stream.pipe(_stream);
-      const incoming = await simpleParser(stream);
+      let raw = '';
+      stream.on('data', d => (raw += d));
+      await new Promise((resolve, reject) => {
+        stream.on('end', resolve);
+        stream.on('error', reject);
+      });
+      const incoming = await simpleParser(raw);
 
       if (stream.sizeExceeded) return callback(new Error('Message too big'));
       else callback();
@@ -75,7 +78,7 @@ export function startSMTPServer(): SMTPServer {
         if (recipient.bounceTo) {
           await sendMail({
             envelope: { from: '', to: recipient.bounceTo },
-            raw: _stream
+            raw
           });
           continue;
         }
@@ -198,15 +201,12 @@ export function startSMTPServer(): SMTPServer {
             }
             // Redirect mail as is with Reply-To that won't break DKIM
             else if (alias.canReply) {
-              const raw = new PassThrough();
-              raw.write(`Reply-To: ${replyTo}\r\n`);
-              _stream.pipe(raw);
-              mail.raw = raw;
+              mail.raw = `Reply-To: ${replyTo}\r\n` + raw;
               await sendMail(mail);
             }
             // Redirect mail as is
             else {
-              mail.raw = _stream;
+              mail.raw = raw;
               await sendMail(mail);
             }
 
