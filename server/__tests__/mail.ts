@@ -1,12 +1,10 @@
 import 'lib/tests/prepare';
 import { SendMailOptions, createTransport } from 'nodemailer';
-import { listAliases } from 'lib/aliases/list';
 import { startSMTPServer } from 'lib/mail/smtp-server';
 import { buildTemplate } from 'lib/mail/templates/build';
-import { addAlias } from 'lib/aliases/add';
-import { getAlias } from 'lib/aliases/get';
 import { getRecipient } from 'lib/mail/get-recipient';
 import { editModifier } from 'lib/modifiers/edit';
+import { listAliases } from 'lib/aliases/list';
 import { captureMail } from 'lib/tests/capture-mail';
 import { addModifier } from 'lib/modifiers/add';
 import { listDomains } from 'lib/domains/list';
@@ -16,6 +14,8 @@ import { modifyMail } from 'lib/mail/modify';
 import { filterMail } from 'lib/mail/filter';
 import { ParsedMail } from 'mailparser';
 import { addFilter } from 'lib/filters/add';
+import { addAlias } from 'lib/aliases/add';
+import { getAlias } from 'lib/aliases/get';
 import { sendMail } from 'lib/mail/send';
 import { saveMail } from 'lib/mail/save';
 import { getUser } from 'lib/users/get';
@@ -334,9 +334,7 @@ test('forward incoming mail', async () => {
     expect(message.html).toBe('<b>Hello world?</b>');
     expect(message.attachments).toBeArrayOfSize(1);
     expect(message.attachments[0].content.toString()).toBe('Hello World');
-    expect(
-      message.headerLines.find(h => h.key == 'x-custom-header')
-    ).not.toBeUndefined();
+    expect(message.headers.has('dkim-signature')).toBeTrue();
     expect(message.replyTo.text).toMatch(
       new RegExp(`^\\d+--.+--reply-x@${process.enve.DOMAIN}$`)
     );
@@ -358,7 +356,13 @@ test('forward incoming mail', async () => {
         content: Buffer.from('Hello World')
       }
     ],
-    headers: [{ key: 'X-Custom-Header', value: 'Hello' }],
+    headers: [
+      {
+        key: 'DKIM-Signature',
+        value:
+          'v=1; d=example.com; h=Date:From:To:Subject:MIME-Version:Content-Type; bh=yZ7tYf=; b=f+pK2Y='
+      }
+    ],
     subject: 'Hi',
     from: 'You <foo@example.com>',
     html: '<b>Hello world?</b>',
