@@ -373,6 +373,45 @@ test('forward incoming mail', async () => {
   await new Promise(r => server.close(r));
 });
 
+test('remail incoming mail', async () => {
+  expect.assertions(8);
+
+  const server = startSMTPServer();
+
+  // Catch REDIRECTED mail
+  const promise = captureMail(1, (message, session) => {
+    expect(session.envelope.rcptTo[0].address).toBe('test@example.com');
+    expect(
+      session.envelope.mailFrom && session.envelope.mailFrom.address
+    ).toMatch(/^SRS0=\w{4}=\w{2}=example\.com=foo@/);
+    expect(message.from.text).toMatch(process.enve.PERSISTENT_ALIAS);
+    expect(message.to.text).toBe(process.enve.PERSISTENT_ALIAS);
+    expect(message.subject).toBe('Hi');
+    expect(message.text).toBe('Hello world?');
+    expect(message.html).toBe('<b>Hello world?</b>');
+    expect(message.replyTo.text).toMatch(
+      new RegExp(`^\\d+--.+--reply-x@${process.enve.DOMAIN}$`)
+    );
+  });
+
+  // Send to ACTUAL SMTP server
+  const transporter = createTransport({
+    secure: false,
+    host: '127.0.0.1',
+    port: process.enve.SMTP_PORT,
+    tls: { rejectUnauthorized: false }
+  });
+  await transporter.sendMail({
+    subject: 'Hi',
+    from: 'You <foo@example.com>',
+    html: '<b>Hello world?</b>',
+    text: 'Hello world?',
+    to: process.enve.PERSISTENT_ALIAS
+  });
+  await promise;
+  await new Promise(r => server.close(r));
+});
+
 test('reply to message', async () => {
   expect.assertions(4);
   const server = startSMTPServer();
