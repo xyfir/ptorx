@@ -62,7 +62,7 @@ export function startSMTPServer(): SMTPServer {
           .split(/\bh=/)[1]
           .split(';')[0]
           .split(':')
-          .findIndex(f => f.trim().toLowerCase() == 'reply-to') == -1;
+          .some(f => f.trim().toLowerCase() == 'reply-to');
 
       for (let address of recipients) {
         const recipient = await getRecipient(address);
@@ -188,8 +188,13 @@ export function startSMTPServer(): SMTPServer {
             };
 
             // Remail as from Ptorx with our own signature because some
-            // necessary modification would break DKIM
-            if (isModified || (alias.canReply && isReplyToSigned)) {
+            // necessary modification would break DKIM or because the original
+            // message is not signed
+            if (
+              isModified ||
+              dkimSignature == -1 ||
+              (alias.canReply && isReplyToSigned)
+            ) {
               Object.assign(mail, outgoing);
               mail.replyTo = replyTo;
               mail.from = `"${alias.name}" <${alias.fullAddress}>`;
