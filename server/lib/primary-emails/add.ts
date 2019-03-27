@@ -3,7 +3,6 @@ import { editPrimaryEmail } from 'lib/primary-emails/edit';
 import { getPrimaryEmail } from 'lib/primary-emails/get';
 import { buildTemplate } from 'lib/mail/templates/build';
 import { sendMail } from 'lib/mail/send';
-
 import { getUser } from 'lib/users/get';
 import * as moment from 'moment';
 import { Ptorx } from 'types/ptorx';
@@ -39,10 +38,11 @@ export async function addPrimaryEmail(
       userId
     );
 
-    const { html, text } = await buildTemplate('verify-email', {
+    const { html, text } = await buildTemplate('verify-primary-email', {
       link: `${process.enve.API_URL}/primary-emails/verify?primaryEmailId=${
         _primaryEmail.id
-      }&primaryEmailKey=${_primaryEmail.key}`
+      }&primaryEmailKey=${_primaryEmail.key}`,
+      year: moment().format('YYYY')
     });
     await sendMail(
       {

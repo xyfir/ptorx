@@ -5,7 +5,7 @@ import { render } from 'ejs';
 const _readFile = promisify(readFile);
 
 export async function buildTemplate(
-  name: 'verify-email',
+  name: 'verify-primary-email',
   data: object
 ): Promise<{ html: string; text: string }> {
   const [html, text] = await Promise.all([
