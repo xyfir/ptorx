@@ -14,8 +14,8 @@ test('create primary email', async () => {
     expect(message.subject).toBe('Verify your email for Ptorx');
     expect(message.from.text).toBe(`noreply-x@${process.enve.DOMAIN}`);
     expect(message.to.text).toBe('test@example.com');
-    expect(message.html).toMatch(/http.+Verify My Email/);
-    expect(message.text).toMatch(/Verify My Email: http/);
+    expect(message.html).toMatch(/Verify Primary Email/);
+    expect(message.text).toMatch(/Verify Primary Email/);
   });
 
   const primaryEmail = await addPrimaryEmail(

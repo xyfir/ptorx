@@ -26,8 +26,8 @@ test('build template', async () => {
   const template = await buildTemplate('verify-primary-email', {
     link: 'https://google.com'
   });
-  expect(template.html).toMatch(/http.+Verify My Email/);
-  expect(template.text).toMatch(/Verify My Email: http/);
+  expect(template.html).toMatch(/Verify Primary Email/);
+  expect(template.text).toMatch(/Verify Primary Email/);
 });
 
 test('get recipient: non-ptorx email', async () => {
