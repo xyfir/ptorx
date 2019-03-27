@@ -1,0 +1,5 @@
+Verify Primary Email: <%- link %>
+
+You must verify ownership of this address in order to receive forwarded mail from your email aliases.
+
+If you did not request this email you can ignore it.
