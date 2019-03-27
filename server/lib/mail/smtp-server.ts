@@ -174,10 +174,9 @@ export function startSMTPServer(): SMTPServer {
             // User does not have enough credits to redirect message
             if (recipient.user.credits < credits + 1) continue;
 
-            const replyTo =
-              alias.saveMail && alias.canReply
-                ? savedMessage.ptorxReplyTo
-                : outgoing.replyTo;
+            const replyTo = savedMessage
+              ? savedMessage.ptorxReplyTo
+              : outgoing.replyTo;
             const mail: SendMailOptions = {
               envelope: {
                 from: mailFrom
