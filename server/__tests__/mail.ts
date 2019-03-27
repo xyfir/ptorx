@@ -19,13 +19,11 @@ import { getAlias } from 'lib/aliases/get';
 import { sendMail } from 'lib/mail/send';
 import { saveMail } from 'lib/mail/save';
 import { getUser } from 'lib/users/get';
-import * as moment from 'moment';
 import { Ptorx } from 'types/ptorx';
 import { SRS } from 'sender-rewriting-scheme';
 
 test('build template', async () => {
   const template = await buildTemplate('verify-primary-email', {
-    year: moment().format('YYYY'),
     link: 'https://google.com'
   });
   expect(template.html).toMatch(/http.+Verify My Email/);

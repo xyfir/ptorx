@@ -41,8 +41,7 @@ export async function addPrimaryEmail(
     const { html, text } = await buildTemplate('verify-primary-email', {
       link: `${process.enve.API_URL}/primary-emails/verify?primaryEmailId=${
         _primaryEmail.id
-      }&primaryEmailKey=${_primaryEmail.key}`,
-      year: moment().format('YYYY')
+      }&primaryEmailKey=${_primaryEmail.key}`
     });
     await sendMail(
       {
