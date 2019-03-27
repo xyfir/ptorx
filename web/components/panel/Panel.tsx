@@ -29,7 +29,7 @@ const styles = (theme: Theme) =>
   });
 
 export interface PanelState {
-  unlockedPrivateKey?: import('openpgp').openpgp.key.Key;
+  unlockedPrivateKey?: import('openpgp').key.Key;
   primaryEmails?: Ptorx.PrimaryEmailList;
   aliases?: Ptorx.AliasList;
   categories: Category[];

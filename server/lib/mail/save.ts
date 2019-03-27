@@ -1,9 +1,7 @@
 import { addMessage } from 'lib/messages/add';
 import { ParsedMail } from 'mailparser';
+import * as openpgp from 'openpgp';
 import { Ptorx } from 'types/ptorx';
-
-// Latest type updates screwed everything up
-const openpgp: typeof import('openpgp').openpgp = require('openpgp');
 
 export async function saveMail(
   mail: ParsedMail,
