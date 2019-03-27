@@ -1,0 +1,5 @@
+Verify Account: <%LINK%>
+
+You must verify ownership of this address in order to activate your Ptorx account.
+
+If you did not create this account you can ignore this email.
