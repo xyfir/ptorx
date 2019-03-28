@@ -11,6 +11,7 @@ import { AddModifier } from 'components/panel/modifiers/Add';
 import { SendMessage } from 'components/panel/messages/Send';
 import { AddFilter } from 'components/panel/filters/Add';
 import { AddDomain } from 'components/panel/domains/Add';
+import { Extension } from 'components/panel/Extension';
 import { AddAlias } from 'components/panel/aliases/Add';
 import { PGPKeys } from 'components/panel/account/Keys';
 import * as React from 'react';
@@ -115,6 +116,7 @@ class _PanelDialog extends React.Component<PanelDialogProps, PanelDialogState> {
               <Route path="/app/filters/:filter" component={ManageFilter} />
               <Route path="/app/domains/:domain" component={ManageDomain} />
               <Route path="/app/docs/:file" component={Docs} />
+              <Route path="/app/extension" component={Extension} />
               <Route path="/app/credits" component={PurchaseCredits} />
               <Route path="/app/keys" component={PGPKeys} />
             </Switch>
