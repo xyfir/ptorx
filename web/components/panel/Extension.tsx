@@ -1,4 +1,5 @@
 import { withSnackbar, withSnackbarProps } from 'notistack';
+import { CATEGORIES, Category } from 'constants/categories';
 import { RouteComponentProps } from 'react-router';
 import { PanelContext } from 'lib/PanelContext';
 import { Search } from 'components/panel/Search';
@@ -23,10 +24,18 @@ import {
   WithStyles,
   TextField,
   ListItem,
+  Divider,
+  Button,
   List
 } from '@material-ui/core';
 
-const styles = createStyles({ link: { textDecoration: 'none' } });
+const styles = createStyles({
+  link: { textDecoration: 'none' },
+  hr: {
+    margin: '0.5em',
+    marginBottom: '0'
+  }
+});
 
 interface ExtensionProps
   extends WithStyles<typeof styles>,
@@ -60,8 +69,18 @@ class _Extension extends React.Component<ExtensionProps> {
       .catch(err => enqueueSnackbar(err.response.data.error));
   }
 
+  onToggle(category: Category) {
+    const { categories, dispatch } = this.context;
+    const _categories =
+      categories.indexOf(category) > -1
+        ? categories.filter(c => c != category)
+        : categories.concat([category]);
+    dispatch({ categories: _categories });
+    localStorage.categories = _categories;
+  }
+
   render() {
-    const { dispatch, search } = this.context;
+    const { categories, dispatch, search } = this.context;
     const { classes } = this.props;
     return search ? (
       <Search />
@@ -76,7 +95,7 @@ class _Extension extends React.Component<ExtensionProps> {
           onChange={e => dispatch({ search: e.target.value.toLowerCase() })}
           fullWidth
           autoFocus
-          placeholder="Search..."
+          placeholder={`Search for ${categories.join(', ').toLowerCase()}...`}
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
@@ -85,6 +104,20 @@ class _Extension extends React.Component<ExtensionProps> {
             )
           }}
         />
+        {CATEGORIES.map(category => (
+          <Button
+            key={category.name}
+            size="small"
+            color={
+              categories.indexOf(category.name) > -1 ? 'primary' : 'default'
+            }
+            variant="text"
+            onClick={() => this.onToggle(category.name)}
+          >
+            {category.name}
+          </Button>
+        ))}
+        <Divider className={classes.hr} />
         <List>
           <ListItem button onClick={() => this.onCreateInstantAlias()}>
             <ListItemIcon>
