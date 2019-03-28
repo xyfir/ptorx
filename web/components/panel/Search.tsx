@@ -10,7 +10,32 @@ import { PanelContext } from 'lib/PanelContext';
 import * as React from 'react';
 import * as Fuse from 'fuse.js';
 
-export class Search extends React.Component {
+export const SearchInput = () => (
+  <PanelContext.Consumer>
+    {({ search, dispatch, categories }) => (
+      <TextField
+        id="search"
+        type="search"
+        value={search}
+        margin="normal"
+        variant="outlined"
+        onChange={e => dispatch({ search: e.target.value.toLowerCase() })}
+        fullWidth
+        autoFocus
+        placeholder={`Search for ${categories.join(', ').toLowerCase()}...`}
+        InputProps={{
+          startAdornment: (
+            <InputAdornment position="start">
+              <SearchIcon />
+            </InputAdornment>
+          )
+        }}
+      />
+    )}
+  </PanelContext.Consumer>
+);
+
+export class SearchMatches extends React.Component {
   static contextType = PanelContext;
   context!: React.ContextType<typeof PanelContext>;
 
@@ -52,31 +77,11 @@ export class Search extends React.Component {
       categories,
       modifiers,
       messages,
-      dispatch,
       domains,
-      filters,
-      search
+      filters
     } = this.context;
     return (
       <div>
-        <TextField
-          id="search"
-          type="search"
-          value={search}
-          margin="normal"
-          variant="outlined"
-          onChange={e => dispatch({ search: e.target.value.toLowerCase() })}
-          fullWidth
-          autoFocus
-          placeholder="Search..."
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <SearchIcon />
-              </InputAdornment>
-            )
-          }}
-        />
         {categories.indexOf('Aliases') > -1 && aliases.length ? (
           <AliasMatches aliases={this.search(aliases)} />
         ) : null}
@@ -99,3 +104,10 @@ export class Search extends React.Component {
     );
   }
 }
+
+export const Search = () => (
+  <React.Fragment>
+    <SearchInput />
+    <SearchMatches />
+  </React.Fragment>
+);
