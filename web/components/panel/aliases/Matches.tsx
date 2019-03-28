@@ -1,12 +1,17 @@
+import { FileCopy } from '@material-ui/icons';
 import * as moment from 'moment';
 import * as React from 'react';
+// @ts-ignore
+import * as copy from 'clipboard-copy';
 import { Ptorx } from 'types/ptorx';
 import { Link } from 'react-router-dom';
 import {
+  ListItemSecondaryAction,
   TablePagination,
   ListSubheader,
   ListItemText,
   createStyles,
+  IconButton,
   withStyles,
   WithStyles,
   ListItem,
@@ -48,6 +53,15 @@ class _AliasMatches extends React.Component<
                   primary={`${alias.fullAddress} — ${alias.name}`}
                   secondary={`Created ${moment.unix(alias.created).fromNow()}`}
                 />
+                <ListItemSecondaryAction>
+                  <IconButton
+                    aria-label="Copy alias address to clipboard"
+                    onClick={e => (e.preventDefault(), copy(alias.fullAddress))}
+                    color="secondary"
+                  >
+                    <FileCopy />
+                  </IconButton>
+                </ListItemSecondaryAction>
               </ListItem>
             </Link>
           ))}
