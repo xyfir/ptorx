@@ -77,7 +77,7 @@ class _PanelDialog extends React.Component<PanelDialogProps, PanelDialogState> {
         onClose={() => this.setState({ closing: true })}
         open={location.pathname.length > 5}
       >
-        <Hidden smUp implementation="css">
+        <Hidden mdUp implementation="css">
           <DialogTitle disableTypography className={classes.title}>
             <Typography variant="h6">Ptorx</Typography>
             <IconButton
@@ -127,4 +127,6 @@ class _PanelDialog extends React.Component<PanelDialogProps, PanelDialogState> {
   }
 }
 
-export const PanelDialog = withMobileDialog()(withStyles(styles)(_PanelDialog));
+export const PanelDialog = withMobileDialog({ breakpoint: 'sm' })(
+  withStyles(styles)(_PanelDialog)
+);
