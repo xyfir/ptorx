@@ -1,3 +1,5 @@
+import { InputAdornment, TextField } from '@material-ui/core';
+import { Search as SearchIcon } from '@material-ui/icons';
 import { PrimaryEmailMatches } from 'components/panel/primary-emails/Matches';
 import { ModifierMatches } from 'components/panel/modifiers/Matches';
 import { MessageMatches } from 'components/panel/messages/Matches';
@@ -5,7 +7,6 @@ import { DomainMatches } from 'components/panel/domains/Matches';
 import { FilterMatches } from 'components/panel/filters/Matches';
 import { AliasMatches } from 'components/panel/aliases/Matches';
 import { PanelContext } from 'lib/PanelContext';
-import { TextField } from '@material-ui/core';
 import * as React from 'react';
 import * as Fuse from 'fuse.js';
 
@@ -63,10 +64,18 @@ export class Search extends React.Component {
           type="search"
           value={search}
           margin="normal"
+          variant="outlined"
           onChange={e => dispatch({ search: e.target.value.toLowerCase() })}
           fullWidth
           autoFocus
           placeholder="Search..."
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <SearchIcon />
+              </InputAdornment>
+            )
+          }}
         />
         {categories.indexOf('Aliases') > -1 && aliases.length ? (
           <AliasMatches aliases={this.search(aliases)} />
