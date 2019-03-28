@@ -1,8 +1,9 @@
+import { AddCircleOutline, AddCircle, Launch } from '@material-ui/icons';
 import { withSnackbar, withSnackbarProps } from 'notistack';
+import { SearchMatches, SearchInput } from 'components/panel/Search';
 import { CATEGORIES, Category } from 'constants/categories';
 import { RouteComponentProps } from 'react-router';
 import { PanelContext } from 'lib/PanelContext';
-import { Search } from 'components/panel/Search';
 import * as React from 'react';
 // @ts-ignore
 import * as copy from 'clipboard-copy';
@@ -10,19 +11,11 @@ import { Ptorx } from 'types/ptorx';
 import { Link } from 'react-router-dom';
 import { api } from 'lib/api';
 import {
-  Search as SearchIcon,
-  AddCircleOutline,
-  AddCircle,
-  Launch
-} from '@material-ui/icons';
-import {
-  InputAdornment,
   ListItemText,
   createStyles,
   ListItemIcon,
   withStyles,
   WithStyles,
-  TextField,
   ListItem,
   Divider,
   Button,
@@ -80,36 +73,17 @@ class _Extension extends React.Component<ExtensionProps> {
   }
 
   render() {
-    const { categories, dispatch, search } = this.context;
+    const { categories, search } = this.context;
     const { classes } = this.props;
-    return search ? (
-      <Search />
-    ) : (
+    return (
       <div>
-        <TextField
-          id="search"
-          type="search"
-          value={search}
-          margin="normal"
-          variant="outlined"
-          onChange={e => dispatch({ search: e.target.value.toLowerCase() })}
-          fullWidth
-          autoFocus
-          placeholder={`Search for ${categories.join(', ').toLowerCase()}...`}
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <SearchIcon />
-              </InputAdornment>
-            )
-          }}
-        />
+        <SearchInput />
         {CATEGORIES.map(category => (
           <Button
             key={category.name}
             size="small"
             color={
-              categories.indexOf(category.name) > -1 ? 'primary' : 'default'
+              categories.indexOf(category.name) > -1 ? 'secondary' : 'default'
             }
             variant="text"
             onClick={() => this.onToggle(category.name)}
@@ -118,28 +92,33 @@ class _Extension extends React.Component<ExtensionProps> {
           </Button>
         ))}
         <Divider className={classes.hr} />
-        <List>
-          <ListItem button onClick={() => this.onCreateInstantAlias()}>
-            <ListItemIcon>
-              <AddCircle />
-            </ListItemIcon>
-            <ListItemText primary="Create Instant Alias" />
-          </ListItem>
-          <Link className={classes.link} to="/app/aliases/add">
-            <ListItem button>
+
+        {search ? (
+          <SearchMatches />
+        ) : (
+          <List>
+            <ListItem button onClick={() => this.onCreateInstantAlias()}>
               <ListItemIcon>
-                <AddCircleOutline />
+                <AddCircle />
               </ListItemIcon>
-              <ListItemText primary="Create Custom Alias" />
+              <ListItemText primary="Create Instant Alias" />
             </ListItem>
-          </Link>
-          <ListItem button onClick={() => window.open('/app')}>
-            <ListItemIcon>
-              <Launch />
-            </ListItemIcon>
-            <ListItemText primary="Launch Ptorx" />
-          </ListItem>
-        </List>
+            <Link className={classes.link} to="/app/aliases/add">
+              <ListItem button>
+                <ListItemIcon>
+                  <AddCircleOutline />
+                </ListItemIcon>
+                <ListItemText primary="Create Custom Alias" />
+              </ListItem>
+            </Link>
+            <ListItem button onClick={() => window.open('/app')}>
+              <ListItemIcon>
+                <Launch />
+              </ListItemIcon>
+              <ListItemText primary="Launch Ptorx" />
+            </ListItem>
+          </List>
+        )}
       </div>
     );
   }
