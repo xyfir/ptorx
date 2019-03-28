@@ -91,7 +91,7 @@ class _PanelDialog extends React.Component<PanelDialogProps, PanelDialogState> {
         </Hidden>
         <DialogContent className={classes.content}>
           {closing ? (
-            <Redirect to="/app" />
+            <Redirect push to="/app" />
           ) : (
             <Switch>
               <Route
