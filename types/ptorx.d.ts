@@ -312,10 +312,6 @@ export namespace Ptorx {
        */
       PORT: number;
       /**
-       * The root documentation URL.
-       */
-      DOCS_URL: 'https://github.com/Xyfir/Ptorx/blob/docs';
-      /**
        * The URL for the Accownt web client.
        * @example "https://ptorx.com/accownt"
        */
