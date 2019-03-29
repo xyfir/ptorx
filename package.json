@@ -1,0 +1,29 @@
+{
+  "name": "ptorx",
+  "version": "6.0.0",
+  "description": "Send and receive mail anonymously with email forwarding and aliases through Ptorx.",
+  "main": "",
+  "author": "Xyfir, LLC <contact@xyfir.com> (https://www.xyfir.com)",
+  "license": "GPL-3.0",
+  "prettier": {
+    "singleQuote": true
+  },
+  "dependencies": {
+    "ptorx-server": "6.0.0",
+    "ptorx-web": "6.0.0"
+  },
+  "keywords": [
+    "email forwarding",
+    "email",
+    "spam filtering",
+    "aliases",
+    "smtp",
+    "forwarding",
+    "forward",
+    "mail",
+    "proxy",
+    "mta",
+    "alias",
+    "pgp"
+  ]
+}

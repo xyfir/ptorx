@@ -1,7 +1,7 @@
 {
   "name": "ptorx-server",
   "version": "6.0.0",
-  "description": "Ptorx server",
+  "description": "Send and receive mail anonymously with email forwarding and aliases through Ptorx.",
   "main": "app.js",
   "scripts": {
     "watch-coverage": "npm run coverage -- --watch",
@@ -58,5 +58,19 @@
     "jest": "^24.5.0",
     "jest-extended": "^0.11.1",
     "typescript": "^3.3.4000"
-  }
+  },
+  "keywords": [
+    "email forwarding",
+    "email",
+    "spam filtering",
+    "aliases",
+    "smtp",
+    "forwarding",
+    "forward",
+    "mail",
+    "proxy",
+    "mta",
+    "alias",
+    "pgp"
+  ]
 }

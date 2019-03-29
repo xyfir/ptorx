@@ -1,7 +1,7 @@
 {
   "name": "ptorx-web",
   "version": "6.0.0",
-  "description": "Ptorx web application",
+  "description": "Send and receive mail anonymously with email forwarding and aliases through Ptorx.",
   "main": "",
   "scripts": {
     "watch-build": "npm run build -- --watch",
@@ -57,5 +57,19 @@
     "webpack": "^4.29.6",
     "webpack-cli": "^3.3.0",
     "webpack-dev-server": "^3.2.1"
-  }
+  },
+  "keywords": [
+    "email forwarding",
+    "email",
+    "spam filtering",
+    "aliases",
+    "smtp",
+    "forwarding",
+    "forward",
+    "mail",
+    "proxy",
+    "mta",
+    "alias",
+    "pgp"
+  ]
 }
