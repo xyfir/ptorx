@@ -14,6 +14,8 @@ import {
 } from '@material-ui/core';
 
 const phonegap = /source~phonegap/.test(localStorage.r);
+const REPO_URL = 'https://github.com/Xyfir/ptorx';
+const DOCS_URL = `${REPO_URL}/blob/docs`;
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -50,9 +52,20 @@ const styles = (theme: Theme) =>
       height: '5em',
       width: '5em'
     },
+    footerSection: {
+      minWidth: '12em',
+      padding: '2em',
+      flex: 1
+    },
     sectionImage: {
       height: '15em',
       width: '15em'
+    },
+    xyfirNetwork: {
+      marginBottom: '2em',
+      fontWeight: 'bold',
+      textAlign: 'center',
+      width: '100%'
     },
     getPtorx: {
       textAlign: 'center',
@@ -74,9 +87,10 @@ const styles = (theme: Theme) =>
       display: 'flex'
     },
     footer: {
+      justifyContent: 'center',
       fontFamily: '"Roboto"',
-      textAlign: 'center',
-      padding: '2em'
+      flexWrap: 'wrap',
+      display: 'flex'
     },
     header: {
       backgroundSize: 'cover',
@@ -102,6 +116,16 @@ const styles = (theme: Theme) =>
       fontWeight: 'bold',
       fontSize: '180%',
       color: theme.palette.secondary.main
+    },
+    h3: {
+      marginBottom: '0.2em',
+      fontSize: '150%'
+    },
+    ul: {
+      lineHeight: '2em',
+      listStyle: 'none',
+      padding: 0,
+      margin: 0
     },
     ol: {
       fontFamily: '"Roboto"',
@@ -375,7 +399,7 @@ const _Info = ({ classes, user }: InfoProps) => (
         </Typography>
         <Typography className={classes.p}>
           Don't trust us with your emails?{' '}
-          <a href="https://github.com/Xyfir/ptorx" className={classes.a}>
+          <a href={REPO_URL} className={classes.a}>
             Our code is completely open source for you to view.
           </a>{' '}
           You can even host your own server or contribute to our codebase to
@@ -385,31 +409,104 @@ const _Info = ({ classes, user }: InfoProps) => (
     </section>
 
     <footer className={classes.footer}>
-      <a
-        href={`${process.enve.DOCS_URL}/terms-of-service.md`}
-        className={classes.a}
-      >
-        Terms of Service
-      </a>
-      {' — '}
-      <a
-        href={`${process.enve.DOCS_URL}/privacy-policy.md`}
-        className={classes.a}
-      >
-        Privacy Policy
-      </a>
-      {' — '}
-      <a href={`${process.enve.DOCS_URL}/self-host.md`} className={classes.a}>
-        Self-hosting
-      </a>
-      {' — '}
-      <a href={`${process.enve.DOCS_URL}/help.md`} className={classes.a}>
-        Help Docs
-      </a>
-      {' — '}
-      <a href="https://www.xyfir.com" className={classes.a}>
-        Part of the Xyfir Network
-      </a>
+      <div className={classes.footerSection}>
+        <Typography variant="h3" className={classes.h3}>
+          Community and support
+        </Typography>
+        <Typography>Contact us or other members of the community.</Typography>
+        <ul className={classes.ul}>
+          <li>
+            <a href="mailto:contact@xyfir.com" className={classes.a}>
+              Send us an email
+            </a>
+          </li>
+          <li>
+            <a href="https://twitter.com/PtorxMail" className={classes.a}>
+              Twitter
+            </a>
+          </li>
+          <li>
+            <a href="https://discord.gg/3T2gztb" className={classes.a}>
+              Discord
+            </a>
+          </li>
+          <li>
+            <a href={REPO_URL} className={classes.a}>
+              Github
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <div className={classes.footerSection}>
+        <Typography variant="h3" className={classes.h3}>
+          Resources
+        </Typography>
+        <Typography>Learn about how Ptorx works.</Typography>
+        <ul className={classes.ul}>
+          <li>
+            <a href={`${DOCS_URL}/terms-of-service.md`} className={classes.a}>
+              Terms of Service
+            </a>
+          </li>
+          <li>
+            <a href={`${DOCS_URL}/privacy-policy.md`} className={classes.a}>
+              Privacy Policy
+            </a>
+          </li>
+          <li>
+            <a href={`${DOCS_URL}/self-host.md`} className={classes.a}>
+              Self-hosting
+            </a>
+          </li>
+          <li>
+            <a href={`${DOCS_URL}/help.md`} className={classes.a}>
+              Help Docs
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <div className={classes.footerSection}>
+        <Typography variant="h3" className={classes.h3}>
+          Spread the word
+        </Typography>
+        <Typography>
+          Everyone deserves privacy. Tell a friend, and help us sustain.
+        </Typography>
+        <ul className={classes.ul}>
+          <li>
+            <a
+              href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(
+                'Send and receive mail anonymously with @PtorxMail. https://ptorx.com'
+              )}`}
+              className={classes.a}
+            >
+              Share on Twitter
+            </a>
+          </li>
+          <li>
+            <a href={REPO_URL} className={classes.a}>
+              Star on Github
+            </a>
+          </li>
+          <li>
+            <a
+              href="https://alternativeto.net/software/ptorx/"
+              className={classes.a}
+            >
+              Like on AlternativeTo
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <Typography className={classes.xyfirNetwork}>
+        Ptorx is part of the{' '}
+        <a href="https://www.xyfir.com" className={classes.a}>
+          Xyfir Network
+        </a>
+      </Typography>
     </footer>
   </div>
 );
