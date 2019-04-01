@@ -1,11 +1,11 @@
 import 'lib/tests/prepare';
 import { deleteAlias } from 'lib/aliases/delete';
 import { listAliases } from 'lib/aliases/list';
+import { addModifier } from 'lib/modifiers/add';
 import { editAlias } from 'lib/aliases/edit';
+import { addFilter } from 'lib/filters/add';
 import { addAlias } from 'lib/aliases/add';
 import { getAlias } from 'lib/aliases/get';
-import { addModifier } from 'lib/modifiers/add';
-import { addFilter } from 'lib/filters/add';
 import { Ptorx } from 'types/ptorx';
 
 test('create custom alias', async () => {
@@ -17,10 +17,12 @@ test('create custom alias', async () => {
     },
     1234
   );
-  expect(Object.keys(alias).length).toBe(10);
+  expect(Object.keys(alias).length).toBe(11);
   expect(alias.id).toBeNumber();
   expect(alias.created).toBeNumber();
   expect(alias.userId).toBe(1234);
+  expect(alias.smtpKey).toBeString();
+  expect(alias.smtpKey).toHaveLength(36);
   const _alias: Ptorx.Alias = {
     ...alias,
     name: 'name',

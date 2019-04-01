@@ -79,6 +79,7 @@ export namespace Ptorx {
     address: string;
     name: string;
     created: number;
+    smtpKey: string;
     saveMail: boolean;
     /**
      * Can the user reply anonymously from a non-Ptorx mail client?

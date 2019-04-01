@@ -2,6 +2,7 @@ import { getAlias } from 'lib/aliases/get';
 import { getUser } from 'lib/users/get';
 import { Ptorx } from 'types/ptorx';
 import { MySQL } from 'lib/MySQL';
+import * as uuid from 'uuid/v4';
 
 export async function editAlias(
   alias: Ptorx.Alias,
@@ -18,13 +19,22 @@ export async function editAlias(
     if (alias.name.indexOf('"') > -1)
       throw 'Name cannot contain "double quotes"';
 
+    if (!alias.smtpKey) alias.smtpKey = uuid();
+
     const result = await db.query(
       `
         UPDATE aliases
-        SET name = ?, saveMail = ?, canReply = ?
+        SET name = ?, saveMail = ?, canReply = ?, smtpKey = ?
         WHERE id = ? AND userId = ?
       `,
-      [alias.name, alias.saveMail, alias.canReply, alias.id, userId]
+      [
+        alias.name,
+        alias.saveMail,
+        alias.canReply,
+        alias.smtpKey,
+        alias.id,
+        userId
+      ]
     );
     if (!result.affectedRows) throw 'Could not update alias';
 

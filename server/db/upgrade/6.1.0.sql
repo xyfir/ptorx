@@ -1,0 +1,1 @@
+ALTER TABLE `aliases` ADD `smtpKey` VARCHAR(36) BINARY NOT NULL AFTER `created`;
