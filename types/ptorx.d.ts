@@ -265,18 +265,23 @@ export namespace Ptorx {
        */
       DOMAIN_ID: number;
       /**
-       * The port to host the SMTP server on.
+       * The port to host the MTA SMTP server on.
        * @example 2071
        */
       MTA_PORT: number;
+      /**
+       * The port to host the MSA SMTP server on.
+       * @example 2076
+       */
+      MSA_PORT: number;
       /**
        * Absolute path for ptorx-web.
        * @example "/path/to/ptorx/web"
        */
       WEB_DIRECTORY: string;
       /**
-       * The port to host the test SMTP server on. Used for capturing outgoing mail
-       *  in a testing environment.
+       * The port to host the test MTA SMTP server on. Used for capturing
+       *  outgoing mail in a testing environment.
        * @example 2072
        */
       TEST_MTA_PORT: number;
@@ -291,7 +296,7 @@ export namespace Ptorx {
        */
       CCASHCOW_WEB_URL: string;
       /**
-       * Configuration for the SMTP server.
+       * General configuration for the MTA and MSA SMTP servers.
        *  https://nodemailer.com/extras/smtp-server/#step-3-create-smtpserver-instance
        *  Note that unlike the original object, the `cert` and `key` properties
        *  also accept file paths. `name` and `banner` should be your server's

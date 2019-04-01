@@ -7,6 +7,7 @@ import * as cookieParser from 'cookie-parser';
 import * as bodyParser from 'body-parser';
 import { verifyJWT } from 'lib/jwt/verify';
 import { startMTA } from 'lib/mail/mta';
+import { startMSA } from 'lib/mail/msa';
 import * as Express from 'express';
 import { router } from 'api/router';
 import { Ptorx } from 'types/ptorx';
@@ -92,3 +93,4 @@ app.listen(process.enve.API_PORT, () =>
 if (process.enve.CRON) cron();
 
 startMTA();
+startMSA();
