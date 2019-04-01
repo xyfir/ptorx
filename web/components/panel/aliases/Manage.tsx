@@ -1,7 +1,8 @@
 import { withSnackbar, withSnackbarProps } from 'notistack';
-import { AliasWaterfall } from 'components/panel/aliases/Waterfall';
 import { RouteComponentProps } from 'react-router';
+import { AliasWaterfall } from 'components/panel/aliases/Waterfall';
 import { PanelContext } from 'lib/PanelContext';
+import { Refresh } from '@material-ui/icons';
 import * as moment from 'moment';
 import * as React from 'react';
 import { Ptorx } from 'types/ptorx';
@@ -14,12 +15,20 @@ import {
   WithStyles,
   withStyles,
   Typography,
+  IconButton,
   TextField,
   Checkbox,
   Button
 } from '@material-ui/core';
 
 const styles = createStyles({
+  genPass: {
+    marginLeft: '0.5em'
+  },
+  smtpKey: {
+    display: 'flex',
+    alignItems: 'center'
+  },
   title: {
     fontSize: '200%'
   },
@@ -133,6 +142,25 @@ class _ManageAlias extends React.Component<
           }
           label="Allow Anonymous Replies"
         />
+
+        <div className={classes.smtpKey}>
+          <TextField
+            fullWidth
+            id="name"
+            type="text"
+            value={alias.smtpKey}
+            margin="normal"
+            helperText="SMTP credentials passkey"
+            placeholder="Save alias to generate SMTP passkey"
+          />
+          <IconButton
+            onClick={() => this.onChange('smtpKey', '')}
+            disabled={!alias.smtpKey}
+            className={classes.genPass}
+          >
+            <Refresh />
+          </IconButton>
+        </div>
 
         <AliasWaterfall alias={alias} onChange={this.onChange} />
 
