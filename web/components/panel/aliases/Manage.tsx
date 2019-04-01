@@ -96,6 +96,7 @@ class _ManageAlias extends React.Component<
   render() {
     const { alias, deleting } = this.state;
     const { classes } = this.props;
+    const { user } = this.context;
     if (!alias) return null;
     return (
       <div>
@@ -143,24 +144,26 @@ class _ManageAlias extends React.Component<
           label="Allow Anonymous Replies"
         />
 
-        <div className={classes.smtpKey}>
-          <TextField
-            fullWidth
-            id="name"
-            type="text"
-            value={alias.smtpKey}
-            margin="normal"
-            helperText="SMTP credentials passkey"
-            placeholder="Save alias to generate SMTP passkey"
-          />
-          <IconButton
-            onClick={() => this.onChange('smtpKey', '')}
-            disabled={!alias.smtpKey}
-            className={classes.genPass}
-          >
-            <Refresh />
-          </IconButton>
-        </div>
+        {user.tier == 'basic' ? null : (
+          <div className={classes.smtpKey}>
+            <TextField
+              fullWidth
+              id="name"
+              type="text"
+              value={alias.smtpKey}
+              margin="normal"
+              helperText="SMTP credentials passkey"
+              placeholder="Save alias to generate SMTP passkey"
+            />
+            <IconButton
+              onClick={() => this.onChange('smtpKey', '')}
+              disabled={!alias.smtpKey}
+              className={classes.genPass}
+            >
+              <Refresh />
+            </IconButton>
+          </div>
+        )}
 
         <AliasWaterfall alias={alias} onChange={this.onChange} />
 
