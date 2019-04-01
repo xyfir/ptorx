@@ -2,6 +2,7 @@ import { SMTPServerSession, SMTPServer } from 'smtp-server';
 import { SendMailOptions } from 'nodemailer';
 import { readFileSync } from 'fs';
 import { sendMail } from 'lib/mail/send';
+import { getUser } from 'lib/users/get';
 import { Ptorx } from 'types/ptorx';
 import { MySQL } from 'lib/MySQL';
 
@@ -9,6 +10,7 @@ declare module 'smtp-server' {
   interface SMTPServerSession {
     user: {
       domainId: Ptorx.Alias['domainId'];
+      userId: Ptorx.Alias['userId'];
       alias: Ptorx.Alias['fullAddress'];
     };
   }
@@ -32,19 +34,24 @@ export function startMSA(): SMTPServer {
       const [local, domain] = auth.username.split('@');
       const [row]: SMTPServerSession['user'][] = await db.query(
         `
-          SELECT d.id AS domainId
+          SELECT a.userId, a.domainId
           FROM domains d, aliases a
           WHERE
-            d.domain = ? AND d.verified = ? AND
+            d.domain = ? AND d.verified = 1 AND
             a.domainId = d.id AND a.address = ? AND
             a.smtpKey != '' AND a.smtpKey = ?
         `,
-        [domain, true, local, auth.password]
+        [domain, local, auth.password]
       );
       db.release();
 
-      if (!row) callback(new Error('Bad auth'));
-      else callback(null, { user: { ...row, alias: auth.username } });
+      if (!row) return callback(new Error('Bad auth'));
+
+      const user = await getUser(row.userId);
+      if (user.credits < 1) return callback(new Error('Not enough credits'));
+      if (user.tier == 'basic') return callback(new Error('Not a paid user'));
+
+      callback(null, { user: { ...row, alias: auth.username } });
     },
     async onData(stream, session, callback) {
       let raw = '';
