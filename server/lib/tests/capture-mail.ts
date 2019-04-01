@@ -21,7 +21,7 @@ export function captureMail(
       server.on('error', e => {
         throw e;
       });
-      server.listen(process.enve.TEST_SMTP_PORT);
+      server.listen(process.enve.TEST_MTA_PORT);
     } catch (err) {
       server ? server.close(resolve) : resolve();
     }

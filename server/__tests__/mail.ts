@@ -1,6 +1,5 @@
 import 'lib/tests/prepare';
 import { SendMailOptions, createTransport } from 'nodemailer';
-import { startSMTPServer } from 'lib/mail/smtp-server';
 import { buildTemplate } from 'lib/mail/templates/build';
 import { getRecipient } from 'lib/mail/get-recipient';
 import { editModifier } from 'lib/modifiers/edit';
@@ -18,6 +17,7 @@ import { addAlias } from 'lib/aliases/add';
 import { getAlias } from 'lib/aliases/get';
 import { sendMail } from 'lib/mail/send';
 import { saveMail } from 'lib/mail/save';
+import { startMTA } from 'lib/mail/mta';
 import { getUser } from 'lib/users/get';
 import { Ptorx } from 'types/ptorx';
 import { SRS } from 'sender-rewriting-scheme';
@@ -317,7 +317,7 @@ test('send mail', async () => {
 test('forward incoming mail', async () => {
   expect.assertions(11);
 
-  const server = startSMTPServer();
+  const server = startMTA();
 
   // Catch REDIRECTED mail
   const promise = captureMail(1, (message, session) => {
@@ -344,7 +344,7 @@ test('forward incoming mail', async () => {
   const transporter = createTransport({
     secure: false,
     host: '127.0.0.1',
-    port: process.enve.SMTP_PORT,
+    port: process.enve.MTA_PORT,
     tls: { rejectUnauthorized: false }
   });
   // foo@example.com -> process.enve.PERSISTENT_ALIAS -> test@example.com
@@ -376,7 +376,7 @@ test('forward incoming mail', async () => {
 test('remail incoming mail', async () => {
   expect.assertions(8);
 
-  const server = startSMTPServer();
+  const server = startMTA();
 
   // Catch REDIRECTED mail
   const promise = captureMail(1, (message, session) => {
@@ -398,7 +398,7 @@ test('remail incoming mail', async () => {
   const transporter = createTransport({
     secure: false,
     host: '127.0.0.1',
-    port: process.enve.SMTP_PORT,
+    port: process.enve.MTA_PORT,
     tls: { rejectUnauthorized: false }
   });
   await transporter.sendMail({
@@ -414,7 +414,7 @@ test('remail incoming mail', async () => {
 
 test('reply to message', async () => {
   expect.assertions(4);
-  const server = startSMTPServer();
+  const server = startMTA();
 
   const [alias] = await listAliases(1234);
   const message = await addMessage(
@@ -437,7 +437,7 @@ test('reply to message', async () => {
   // Send to ACTUAL SMTP server
   const transporter = createTransport({
     host: '127.0.0.1',
-    port: process.enve.SMTP_PORT,
+    port: process.enve.MTA_PORT,
     secure: false,
     tls: { rejectUnauthorized: false }
   });
@@ -455,7 +455,7 @@ test('reply to message', async () => {
 test('bounced mail', async () => {
   expect.assertions(4);
 
-  const server = startSMTPServer();
+  const server = startMTA();
   const srs = new SRS({ secret: process.enve.SRS_KEY });
 
   // Catch REDIRECTED mail
@@ -473,7 +473,7 @@ test('bounced mail', async () => {
   const transporter = createTransport({
     secure: false,
     host: '127.0.0.1',
-    port: process.enve.SMTP_PORT,
+    port: process.enve.MTA_PORT,
     tls: { rejectUnauthorized: false }
   });
   const to = srs.forward('bounce@example.com', 'ptorx.com');

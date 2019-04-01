@@ -7,7 +7,7 @@ const transporter =
     ? createTransport({
         secure: false,
         host: '127.0.0.1',
-        port: process.enve.TEST_SMTP_PORT,
+        port: process.enve.TEST_MTA_PORT,
         tls: { rejectUnauthorized: false }
       })
     : createTransport({ sendmail: true });

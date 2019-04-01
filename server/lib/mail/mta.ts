@@ -19,19 +19,20 @@ declare module 'mailparser' {
   }
 }
 
-export function startSMTPServer(): SMTPServer {
+export function startMTA(): SMTPServer {
+  const { SMTP_SERVER_OPTIONS, MTA_PORT, SRS_KEY } = process.enve;
+
   // Load cert/key from files if needed
-  const { SMTP_SERVER_OPTIONS } = process.enve;
   let { cert, key } = SMTP_SERVER_OPTIONS;
   if (cert && !cert.startsWith('-----'))
     SMTP_SERVER_OPTIONS.cert = readFileSync(cert);
   if (key && !key.startsWith('-----'))
     SMTP_SERVER_OPTIONS.key = readFileSync(key);
 
-  const srs = new SRS({ secret: process.enve.SRS_KEY });
+  const srs = new SRS({ secret: SRS_KEY });
 
   const server = new SMTPServer({
-    ...process.enve.SMTP_SERVER_OPTIONS,
+    ...SMTP_SERVER_OPTIONS,
     authOptional: true,
     size: 25000000,
     async onData(stream, session, callback) {
@@ -224,6 +225,6 @@ export function startSMTPServer(): SMTPServer {
     }
   });
   server.on('error', console.error);
-  server.listen(process.enve.SMTP_PORT);
+  server.listen(MTA_PORT);
   return server;
 }

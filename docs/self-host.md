@@ -130,7 +130,7 @@ cd ../../
 
 # Step 6: Open and Forward Ports
 
-Next we'll need to forward incoming traffic from port `25` to the port you set for the SMTP server via `SMTP_PORT` in `server/.env`, which we'll assume is `2071`. Before doing this, make sure your firewall allows connections to both.
+Next we'll need to forward incoming traffic from port `25` to the port you set for the MTA server via `MTA_PORT` in `server/.env`, which we'll assume is `2071`. Before doing this, make sure your firewall allows connections to both.
 
 ```bash
 sudo iptables -t nat -A PREROUTING -p tcp --dport 25 -j REDIRECT --to-port 2071

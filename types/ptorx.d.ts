@@ -267,7 +267,7 @@ export namespace Ptorx {
        * The port to host the SMTP server on.
        * @example 2071
        */
-      SMTP_PORT: number;
+      MTA_PORT: number;
       /**
        * Absolute path for ptorx-web.
        * @example "/path/to/ptorx/web"
@@ -278,7 +278,7 @@ export namespace Ptorx {
        *  in a testing environment.
        * @example 2072
        */
-      TEST_SMTP_PORT: number;
+      TEST_MTA_PORT: number;
       /**
        * An alias within the database. Used for testing.
        * @example "test@ptorx.com"
