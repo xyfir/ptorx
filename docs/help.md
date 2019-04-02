@@ -19,11 +19,11 @@
 
 # Aliases
 
-## Deleting Aliases
+## Deleting aliases
 
 By deleting an email alias, that specific email is completely removed from your account, however it remains on Ptorx's system simply as a placeholder to prevent that address from ever being claimed again in the future. This means that once you delete an alias address there is no way for you or another user to claim that address. Deleted aliases will not forward or save received mail.
 
-## Replying to Forwarded Mail
+## Replying to forwarded mail
 
 You can safely reply to mail that is sent to an alias if that alias has `Allow Anonymous Reply` enabled. You can reply to this mail either from within the Ptorx app or by replying to the message you received in your email client as you would reply to any other message.
 
@@ -34,11 +34,22 @@ There are some limitations with this feature:
 
 The replies will be sent to the original sender using the address of the alias that received the message.
 
-## Forwarded Mail Marked as Spam
+## Forwarded mail marked as spam
 
 Due to the nature of the service and for very technical reasons we won't bother with here, sometimes forwarded mail will end up in your spam folder even though it's perfectly legitimate mail. The solution to this is to whitelist `ptorx.com` or whichever alias email domains or addresses you use. This process will differ based on your mailbox provider.
 
 For Gmail, the most popular option, you'd create a filter for the domain (`@ptorx.com`) or a specific address (`example@ptorx.com`) and set the `Never send it to Spam` action. Alternatively, you can also add individual addresses to your contacts whenever you receive a message by viewing the mail and selecting the `Add example@example.com to Contacts list` option. A good tutorial can be found [here](https://www.jotform.com/help/404-How-to-Prevent-Emails-from-Landing-in-Gmail-s-Spam-Folder).
+
+## Send mail from alias using another app
+
+Each alias has unique SMTP authentication credentials that can be used to send mail from that alias using a third-party, non-Ptorx email client like Gmail or Outlook.
+
+- **Host**: `smtp.ptorx.com`
+- **Port**: `587`
+- **User**: `your-alias@ptorx-or-your-domain.com`
+- **Pass**: SMTP passkey provided when viewing alias in-app.
+
+_Note: Sending mail programmatically using your credentials is forbidden._
 
 # Modifiers
 
@@ -48,7 +59,7 @@ Modifiers give you expanded control over the content of the mail that gets sent 
 
 Special functions are available within templates allow you to access and manipulate email content. All functions are accessed via the `"""func()"""` syntax, where `func` is the name of the function.
 
-### Get Variables
+### Get variables
 
 `var("var")`
 
@@ -92,7 +103,7 @@ becomes
 Send replies to: replies@example.com
 ```
 
-### Find & Replace
+### Find and replace
 
 `replace("var", "substr", "replacement")`
 
@@ -110,7 +121,7 @@ becomes
 Email from: user@domain.com
 ```
 
-### Find & Replace with Regular Expressions
+### Find and replace with regular expressions
 
 `replace("var", regex(/pattern/flags), "replacement")`
 
@@ -144,7 +155,7 @@ A domain on Ptorx is a normal domain name that can be used to create alias email
 
 Using your own domain, or those used by few other users, can help circumvent blacklists.
 
-## Adding Your Domain to Ptorx
+## Adding your domain to Ptorx
 
 You can add your own domains to Ptorx, and use them to create aliases just like you would with a normal `@ptorx.com` alias. This is available at no extra cost and you can add as many domains as you like!
 
@@ -164,7 +175,7 @@ In certain cases it may take up to a day or two for these records to propagate. 
 
 Removing or altering these records after verification will likely prevent your domain from working with Ptorx properly.
 
-## Requesting Access to Domains
+## Requesting access to domains
 
 If another user has already added a domain to Ptorx, you can request access to it by using the 'request access key' that is generated for you when you attempt to add the domain. You must send that key to the user who originally added the domain to Ptorx, and they must then authorize that key to use their domain.
 
@@ -172,7 +183,7 @@ A request key is used to prevent your account's information from needing to be s
 
 **Warning!** Using another user's domain can be risky! If they decide to remove their domain from Ptorx, or don't renew its registration before it expires, you will lose access to any aliases you have created with that domain. They could _also_ move their domain away from Ptorx which could potentially allow them to view your incoming mail!
 
-## Deleting a Domain
+## Deleting a domain
 
 Deleting a domain from your account if you are the domain's creator will result in all users of your domain, including you, losing any alias emails they have created with your domain. Your domain will be completely removed from Ptorx. You will be able to add your domain back to Ptorx in the future should you wish.
 
@@ -206,8 +217,9 @@ Ptorx subscriptions allow full access to all of Ptorx's features while also incr
 
 **Premium** and **Ultimate** users are able to do things that Basic users (free, non-paying) cannot:
 
-- Send mail from your alias
+- Send mail from an alias on Ptorx
 - Have more than one primary email
-- Reply to mail using your alias on Ptorx
+- Reply to mail using and alias on Ptorx
 - Save incoming mail to Ptorx for later viewing within the app
-- Reply to mail anonymously using your alias from your non-Ptorx mailbox
+- Reply to mail anonymously using an alias from your non-Ptorx mailbox
+- Send mail from an alias using its SMTP credentials in non-Ptorx email clients
