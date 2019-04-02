@@ -30,7 +30,7 @@ test('send mail through msa', async () => {
     port: process.enve.MSA_PORT,
     auth: {
       user: alias.fullAddress,
-      pass: 'alias.smtpKey'
+      pass: alias.smtpKey
     },
     tls: { rejectUnauthorized: false }
   });
