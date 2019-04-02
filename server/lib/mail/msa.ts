@@ -1,6 +1,5 @@
 import { SMTPServerSession, SMTPServer } from 'smtp-server';
 import { SendMailOptions } from 'nodemailer';
-import { readFileSync } from 'fs';
 import { sendMail } from 'lib/mail/send';
 import { getUser } from 'lib/users/get';
 import { Ptorx } from 'types/ptorx';
@@ -17,21 +16,12 @@ declare module 'smtp-server' {
 }
 
 export function startMSA(): SMTPServer {
-  const { SMTP_SERVER_OPTIONS, MSA_PORT } = process.enve;
-  const db = new MySQL();
-
-  // Load cert/key from files if needed
-  let { cert, key } = SMTP_SERVER_OPTIONS;
-  if (cert && !cert.startsWith('-----'))
-    SMTP_SERVER_OPTIONS.cert = readFileSync(cert);
-  if (key && !key.startsWith('-----'))
-    SMTP_SERVER_OPTIONS.key = readFileSync(key);
-
   const server = new SMTPServer({
-    ...SMTP_SERVER_OPTIONS,
+    ...process.enve.SMTP_SERVER_OPTIONS,
     authMethods: ['PLAIN', 'LOGIN'],
     async onAuth(auth, session, callback) {
       const [local, domain] = auth.username.split('@');
+      const db = new MySQL();
       const [row]: SMTPServerSession['user'][] = await db.query(
         `
           SELECT a.userId, a.domainId
@@ -73,6 +63,6 @@ export function startMSA(): SMTPServer {
     }
   });
   server.on('error', console.error);
-  server.listen(MSA_PORT);
+  server.listen(process.enve.MSA_PORT);
   return server;
 }

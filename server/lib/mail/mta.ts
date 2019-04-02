@@ -3,7 +3,6 @@ import { SendMailOptions } from 'nodemailer';
 import { chargeCredits } from 'lib/users/charge';
 import { getRecipient } from 'lib/mail/get-recipient';
 import { simpleParser } from 'mailparser';
-import { readFileSync } from 'fs';
 import { filterMail } from 'lib/mail/filter';
 import { modifyMail } from 'lib/mail/modify';
 import { SMTPServer } from 'smtp-server';
@@ -20,19 +19,9 @@ declare module 'mailparser' {
 }
 
 export function startMTA(): SMTPServer {
-  const { SMTP_SERVER_OPTIONS, MTA_PORT, SRS_KEY } = process.enve;
-
-  // Load cert/key from files if needed
-  let { cert, key } = SMTP_SERVER_OPTIONS;
-  if (cert && !cert.startsWith('-----'))
-    SMTP_SERVER_OPTIONS.cert = readFileSync(cert);
-  if (key && !key.startsWith('-----'))
-    SMTP_SERVER_OPTIONS.key = readFileSync(key);
-
-  const srs = new SRS({ secret: SRS_KEY });
-
+  const srs = new SRS({ secret: process.enve.SRS_KEY });
   const server = new SMTPServer({
-    ...SMTP_SERVER_OPTIONS,
+    ...process.enve.SMTP_SERVER_OPTIONS,
     authOptional: true,
     size: 25000000,
     async onData(stream, session, callback) {
@@ -225,6 +214,6 @@ export function startMTA(): SMTPServer {
     }
   });
   server.on('error', console.error);
-  server.listen(MTA_PORT);
+  server.listen(process.enve.MTA_PORT);
   return server;
 }

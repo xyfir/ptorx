@@ -4,6 +4,7 @@ config();
 import 'enve';
 
 import * as cookieParser from 'cookie-parser';
+import { readFileSync } from 'fs';
 import * as bodyParser from 'body-parser';
 import { verifyJWT } from 'lib/jwt/verify';
 import { startMTA } from 'lib/mail/mta';
@@ -91,6 +92,13 @@ app.listen(process.enve.API_PORT, () =>
 );
 
 if (process.enve.CRON) cron();
+
+// Load cert/key from files if needed
+let { cert, key } = process.enve.SMTP_SERVER_OPTIONS;
+if (cert && !cert.startsWith('-----'))
+  process.enve.SMTP_SERVER_OPTIONS.cert = readFileSync(cert);
+if (key && !key.startsWith('-----'))
+  process.enve.SMTP_SERVER_OPTIONS.key = readFileSync(key);
 
 startMTA();
 startMSA();
