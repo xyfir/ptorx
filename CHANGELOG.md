@@ -8,6 +8,16 @@ Changes that require manual, atypical updates for those running their own instan
 
 ## [Unreleased]
 
+## [6.1.1] - 2019-04-03
+
+### Changed
+
+- Update dependencies
+
+### Fixed
+
+- Broken links in email templates used by Accownt
+
 ## [6.1.0] - 2019-04-02
 
 ### Added
@@ -32,6 +42,7 @@ Changes that require manual, atypical updates for those running their own instan
 
 - Release 6.0.0
 
-[unreleased]: https://github.com/Xyfir/ptorx/compare/6.1.0...HEAD
+[unreleased]: https://github.com/Xyfir/ptorx/compare/6.1.1...HEAD
+[6.1.1]: https://github.com/Xyfir/ptorx/compare/6.0.1...6.1.1
 [6.1.0]: https://github.com/Xyfir/ptorx/compare/6.0.0...6.1.0
 [6.0.0]: https://github.com/Xyfir/ptorx/releases/tag/6.0.0

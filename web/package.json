@@ -1,6 +1,6 @@
 {
   "name": "ptorx-web",
-  "version": "6.1.0",
+  "version": "6.1.1",
   "description": "Send and receive mail anonymously with email forwarding and aliases through Ptorx.",
   "main": "",
   "scripts": {
@@ -36,15 +36,15 @@
     "typeface-roboto": "0.0.54"
   },
   "devDependencies": {
-    "@babel/core": "^7.4.0",
+    "@babel/core": "^7.4.3",
     "@babel/plugin-proposal-class-properties": "^7.4.0",
-    "@babel/preset-env": "^7.4.2",
+    "@babel/preset-env": "^7.4.3",
     "@babel/preset-react": "^7.0.0",
     "@babel/preset-typescript": "^7.3.3",
     "@types/dompurify": "0.0.32",
     "@types/dotenv": "^6.1.1",
     "@types/openpgp": "^4.4.3",
-    "@types/react": "^16.8.10",
+    "@types/react": "^16.8.11",
     "@types/react-dom": "^16.8.3",
     "@types/react-router-dom": "^4.3.1",
     "babel-loader": "^8.0.5",
