@@ -130,13 +130,37 @@ cd ../../
 
 # Step 6: Open and Forward Ports
 
-Next we'll need to forward incoming traffic from port `25` to the port you set for the MTA server via `MTA_PORT` in `server/.env`. Next, we'll forward `587` to the port for the MSA server, as configured via `MSA_PORT`. We'll assume the suggested ports for each. Before doing either, make sure your firewall allows connections to both.
+Make sure your firewall allows traffic through the needed ports. If you're using `ufw`, it'll look something like:
+
+```bash
+sudo ufw allow smtp # 25
+sudo ufw allow submission # 587
+sudo ufw allow 2071 # -> 25
+sudo ufw allow 2076 # -> 587
+```
+
+Next we'll need to forward incoming traffic from port `25` to the port you set for the MTA server via `MTA_PORT` in `server/.env`. We'll also forward `587` to the port for the MSA server, as configured via `MSA_PORT`. We'll assume the suggested ports for each.
 
 ```bash
 sudo iptables -t nat -A PREROUTING -p tcp --dport 25 -j REDIRECT --to-port 2071
 sudo iptables -t nat -A PREROUTING -p tcp --dport 587 -j REDIRECT --to-port 2076
+sudo iptables -t nat -nvL # optionally validate your rules
 iptables-save > /etc/iptables/rules.v4
 ```
+
+## Suggested Ports
+
+Ptorx requires a lot of servers. The suggested _local_ ports are as follows:
+
+| Name                   | Port |
+| ---------------------- | ---- |
+| Ptorx API              | 2070 |
+| Ptorx MTA              | 2071 |
+| Ptorx test MTA         | 2072 |
+| Ptorx client (for dev) | 2073 |
+| Accownt                | 2074 |
+| CCashCow               | 2075 |
+| Ptorx MSA              | 2076 |
 
 # Step 7: Set DNS Records
 
