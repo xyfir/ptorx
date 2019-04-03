@@ -1,4 +1,4 @@
-Verify Account: <%LINK%>
+Verify Account: %LINK%
 
 You must verify ownership of this address in order to activate your Ptorx account.
 
