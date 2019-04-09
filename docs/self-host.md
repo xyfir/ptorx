@@ -42,6 +42,12 @@ cd ../../ccashcow/server
 npm install
 cd ../web
 npm install
+cd ../../yalcs/loader
+npm install
+cd ../server
+npm install
+cd ../web
+npm install
 cd ../../ # back to ptorx/
 ```
 
@@ -75,7 +81,7 @@ Replace `ptorx` with the name of your database.
 Now we need to create the data directories where Ptorx and its submodules will write both temporary and permanent data to the disk. You can put them wherever you'd like (just remember it for Step 4), but for now we'll put them alongside `ptorx/`.
 
 ```bash
-mkdir ../accownt-db ../mail-cache ../ccashcow-db
+mkdir ../accownt-db ../mail-cache ../ccashcow-db ../yalcs-db
 ```
 
 You can also name the three directories however you'd like.
@@ -106,7 +112,13 @@ See [Xyfir/accownt](https://github.com/Xyfir/accownt) for instructions.
 
 Edit the files `accownt/server/.env` and `accownt/web/.env`.
 
-## Step 4d: Configure Ptorx
+## Step 4d: Configure Yalcs
+
+See [Xyfir/yalcs](https://github.com/Xyfir/yalcs) for instructions.
+
+Edit the files `yalcs/loader/.env`, `yalcs/server/.env`, and `yalcs/web/.env`.
+
+## Step 4e: Configure Ptorx
 
 Now we'll do the same thing for Ptorx. You can find the available environment variables in [types/ptorx.d.ts](https://github.com/Xyfir/ptorx/blob/master/types/ptorx.d.ts) under the `Ptorx.Env` namespace.
 
@@ -122,6 +134,12 @@ npm run build
 cd ../web
 npm run build
 cd ../../ccashcow/server
+npm run build
+cd ../web
+npm run build
+cd ../../yalcs/loader
+npm run build
+cd ../server
 npm run build
 cd ../web
 npm run build
@@ -161,6 +179,7 @@ Ptorx requires a lot of servers. The suggested _local_ ports are as follows:
 | Accownt                | 2074 |
 | CCashCow               | 2075 |
 | Ptorx MSA              | 2076 |
+| Yalcs                  | 2079 |
 
 # Step 7: Set DNS Records
 
@@ -215,6 +234,9 @@ cd ../accownt/server
 pm2 start --name accownt npm -- run start
 cd ../../ccashcow/server
 pm2 start --name ccashcow npm -- run start
+cd ../../yalcs/server
+pm2 start --name yalcs npm -- run start
+cd ../../
 pm2 startup # then follow instructions
 ```
 
