@@ -4,3 +4,6 @@
 [submodule "ccashcow"]
 	path = ccashcow
 	url = https://github.com/Xyfir/ccashcow.git
+[submodule "yalcs"]
+	path = yalcs
+	url = https://github.com/Xyfir/yalcs.git
