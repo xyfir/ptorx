@@ -84,9 +84,12 @@ module.exports = {
       }, {})
     }),
     new HtmlWebpackPlugin({
-      title: 'Email Forwarding and Aliases by Ptorx',
       minify: PROD,
-      template: 'template.html'
+      template: 'template.html',
+      templateParameters: {
+        YALCS_WEB_URL: process.enve.YALCS_WEB_URL,
+        TITLE: 'Email Forwarding and Aliases by Ptorx'
+      }
     }),
     PROD ? new CompressionPlugin({ filename: '[path].gz' }) : null,
     PROD ? null : new webpack.HotModuleReplacementPlugin()

@@ -318,6 +318,11 @@ export namespace Ptorx {
        */
       PORT: number;
       /**
+       * The URL for the embedded Yalcs web client.
+       * @example "https://ptorx.com/yalcs"
+       */
+      YALCS_WEB_URL: string;
+      /**
        * The URL for the Accownt web client.
        * @example "https://ptorx.com/accownt"
        */
