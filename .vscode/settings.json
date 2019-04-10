@@ -7,6 +7,7 @@
     "**/coverage": true,
     "**/ccashcow": true,
     "**/accownt": true,
+    "**/yalcs": true,
     "**/dist": true
   },
   "search.useIgnoreFiles": false
