@@ -62,7 +62,7 @@ class _Extension extends React.Component<ExtensionProps> {
       .catch(err => enqueueSnackbar(err.response.data.error));
   }
 
-  onToggle(category: Category) {
+  onToggle(category: Category['name']) {
     const { categories, dispatch } = this.context;
     const _categories =
       categories.indexOf(category) > -1

@@ -23,7 +23,7 @@ class _DrawerContent extends React.Component<WithStyles<typeof styles>> {
   static contextType = PanelContext;
   context!: React.ContextType<typeof PanelContext>;
 
-  onToggle(category: Category) {
+  onToggle(category: Category['name']) {
     const { categories, dispatch } = this.context;
     const _categories =
       categories.indexOf(category) > -1

@@ -31,7 +31,7 @@ const styles = (theme: Theme) =>
 export interface PanelState {
   unlockedPrivateKey?: import('openpgp').key.Key;
   primaryEmails?: Ptorx.PrimaryEmailList;
-  categories: Category[];
+  categories: Category['name'][];
   modifiers?: Ptorx.ModifierList;
   selections: {
     primaryEmails: Ptorx.PrimaryEmailList[0]['id'][];

@@ -1,18 +1,18 @@
-export type Category =
-  | 'Primary Emails'
-  | 'Aliases'
-  | 'Modifiers'
-  | 'Messages'
-  | 'Filters'
-  | 'Domains';
-
-export const CATEGORIES: {
-  name: Category;
+export type Category = {
+  name:
+    | 'Primary Emails'
+    | 'Aliases'
+    | 'Modifiers'
+    | 'Messages'
+    | 'Filters'
+    | 'Domains';
   route: string;
   variable: string;
   nameSingular: string;
   variableSingular: string;
-}[] = [
+};
+
+export const CATEGORIES: Category[] = [
   {
     name: 'Aliases',
     route: 'aliases',
