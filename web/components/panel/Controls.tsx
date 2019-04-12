@@ -25,21 +25,24 @@ const styles = createStyles({
   }
 });
 
-interface CreateState {
-  open: boolean;
+interface PanelControlsState {
+  create: boolean;
 }
 
-class _Create extends React.Component<WithStyles<typeof styles>, CreateState> {
-  state: CreateState = { open: false };
+class _PanelControls extends React.Component<
+  WithStyles<typeof styles>,
+  PanelControlsState
+> {
+  state: PanelControlsState = { create: false };
 
   render() {
     const { classes } = this.props;
-    const { open } = this.state;
+    const { create } = this.state;
     return (
       <React.Fragment>
         <Dialog
-          open={open}
-          onClose={() => this.setState({ open: false })}
+          open={create}
+          onClose={() => this.setState({ create: false })}
           aria-labelledby="create-dialog"
         >
           <DialogTitle id="create-dialog-title">
@@ -49,7 +52,7 @@ class _Create extends React.Component<WithStyles<typeof styles>, CreateState> {
             {CATEGORIES.filter(c => c.name != 'Messages').map(category => (
               <Link
                 className={classes.link}
-                onClick={() => this.setState({ open: false })}
+                onClick={() => this.setState({ create: false })}
                 key={category.variable}
                 to={`/app/${category.route}/add`}
               >
@@ -62,7 +65,7 @@ class _Create extends React.Component<WithStyles<typeof styles>, CreateState> {
         </Dialog>
         <Fab
           color="primary"
-          onClick={() => this.setState({ open: true })}
+          onClick={() => this.setState({ create: true })}
           className={classes.fab}
           aria-label="Create new..."
         >
@@ -73,4 +76,4 @@ class _Create extends React.Component<WithStyles<typeof styles>, CreateState> {
   }
 }
 
-export const Create = withStyles(styles)(_Create);
+export const PanelControls = withStyles(styles)(_PanelControls);
