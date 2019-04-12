@@ -1,9 +1,11 @@
 import { SpeedDialAction, SpeedDialIcon, SpeedDial } from '@material-ui/lab';
 import { PanelContext } from 'lib/PanelContext';
 import { Delete, Add } from '@material-ui/icons';
+import { PanelState } from 'components/panel/Panel';
 import { CATEGORIES } from 'constants/categories';
 import * as React from 'react';
 import { Link } from 'react-router-dom';
+import { api } from 'lib/api';
 import {
   createStyles,
   ListItemText,
@@ -12,6 +14,7 @@ import {
   withStyles,
   ListItem,
   Dialog,
+  Button,
   List
 } from '@material-ui/core';
 
@@ -39,14 +42,34 @@ class _PanelControls extends React.Component<
   static contextType = PanelContext;
   context!: React.ContextType<typeof PanelContext>;
 
-  onDelete() {
+  onToggleDelete() {
     const { dispatch, manage } = this.context;
     dispatch({ manage: manage == 'delete' ? null : 'delete' });
+  }
+
+  async onDelete() {
+    const { selections, dispatch } = this.context;
+
+    // Delete all selected items
+    for (let category of CATEGORIES) {
+      for (let id of selections[category.variable]) {
+        await api.delete(`/${category.route}`, {
+          params: { [category.variableSingular]: id }
+        });
+      }
+    }
+
+    // Update lists
+    const res = await Promise.all(CATEGORIES.map(c => api.get(`/${c.route}`)));
+    const state: Partial<PanelState> = {};
+    CATEGORIES.forEach((c, i) => (state[c.variable] = res[i].data));
+    dispatch(state);
   }
 
   render() {
     const { create, open } = this.state;
     const { classes } = this.props;
+    const { manage } = this.context;
     return (
       <React.Fragment>
         <Dialog
@@ -66,7 +89,7 @@ class _PanelControls extends React.Component<
                 to={`/app/${category.route}/add`}
               >
                 <ListItem button>
-                  <ListItemText primary={category.singular} />
+                  <ListItemText primary={category.nameSingular} />
                 </ListItem>
               </Link>
             ))}
@@ -87,16 +110,26 @@ class _PanelControls extends React.Component<
           onMouseLeave={() => this.setState({ open: false })}
         >
           <SpeedDialAction
-            icon={<Delete />}
-            onClick={() => this.onDelete()}
-            tooltipTitle="Delete..."
-          />
-          <SpeedDialAction
             icon={<Add />}
             onClick={() => this.setState({ create: true })}
             tooltipTitle="Create new..."
           />
+          <SpeedDialAction
+            icon={<Delete />}
+            onClick={() => this.onToggleDelete()}
+            tooltipTitle="Delete..."
+          />{' '}
         </SpeedDial>
+
+        {manage == 'delete' ? (
+          <Button
+            onClick={() => this.onDelete()}
+            variant="text"
+            color="primary"
+          >
+            Delete Selected
+          </Button>
+        ) : null}
       </React.Fragment>
     );
   }
