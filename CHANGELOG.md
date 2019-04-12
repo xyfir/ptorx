@@ -8,6 +8,16 @@ Changes that require manual, atypical updates for those running their own instan
 
 ## [Unreleased]
 
+## [6.3.0] - 2019-04-12
+
+### Added
+
+- Ability to delete multiple items at once
+
+### Changed
+
+- Update dependencies
+
 ## [6.2.1] - 2019-04-10
 
 ### Changed
@@ -58,7 +68,8 @@ Changes that require manual, atypical updates for those running their own instan
 
 - Release 6.0.0
 
-[unreleased]: https://github.com/Xyfir/ptorx/compare/6.2.1...HEAD
+[unreleased]: https://github.com/Xyfir/ptorx/compare/6.3.0...HEAD
+[6.3.0]: https://github.com/Xyfir/ptorx/compare/6.2.1...6.3.0
 [6.2.1]: https://github.com/Xyfir/ptorx/compare/6.2.0...6.2.1
 [6.2.0]: https://github.com/Xyfir/ptorx/compare/6.1.1...6.2.0
 [6.1.1]: https://github.com/Xyfir/ptorx/compare/6.0.1...6.1.1
