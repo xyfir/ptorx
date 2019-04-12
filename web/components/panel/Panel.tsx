@@ -31,14 +31,22 @@ const styles = (theme: Theme) =>
 export interface PanelState {
   unlockedPrivateKey?: import('openpgp').key.Key;
   primaryEmails?: Ptorx.PrimaryEmailList;
-  aliases?: Ptorx.AliasList;
   categories: Category[];
   modifiers?: Ptorx.ModifierList;
+  selections: {
+    modifiers: Ptorx.ModifierList[0]['id'][];
+    messages: Ptorx.MessageList[0]['id'][];
+    filters: Ptorx.FilterList[0]['id'][];
+    domains: Ptorx.DomainList[0]['id'][];
+    aliases: Ptorx.AliasList[0]['id'][];
+  };
   dispatch: (state: Partial<PanelState>) => void;
   messages?: Ptorx.MessageList;
   filters?: Ptorx.FilterList;
   domains?: Ptorx.DomainList;
+  aliases?: Ptorx.AliasList;
   loading: boolean;
+  manage?: 'delete';
   search: string;
   user: Ptorx.User;
 }
@@ -50,8 +58,16 @@ export interface PanelProps extends WithStyles<typeof styles> {
 class _Panel extends React.Component<PanelProps, PanelState> {
   state: PanelState = {
     categories: (localStorage.categories || 'Aliases').split(','),
+    selections: {
+      modifiers: [],
+      messages: [],
+      aliases: [],
+      domains: [],
+      filters: []
+    },
     dispatch: state => this.setState(state as PanelState),
     loading: true,
+    manage: null,
     search: '',
     user: this.props.user
   };
