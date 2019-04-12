@@ -112,12 +112,12 @@ class _PanelControls extends React.Component<
           <SpeedDialAction
             icon={<Add />}
             onClick={() => this.setState({ create: true })}
-            tooltipTitle="Create new..."
+            tooltipTitle="Create a new..."
           />
           <SpeedDialAction
             icon={<Delete />}
             onClick={() => this.onToggleDelete()}
-            tooltipTitle="Delete..."
+            tooltipTitle="Toggle deletion mode"
           />{' '}
         </SpeedDial>
 
