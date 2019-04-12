@@ -1,6 +1,6 @@
 import { AddCircleOutline, AddCircle, Launch } from '@material-ui/icons';
 import { withSnackbar, withSnackbarProps } from 'notistack';
-import { SearchMatches, SearchInput } from 'components/panel/Search';
+import { SearchMatches, SearchInput } from 'components/panel/utils/Search';
 import { CATEGORIES, Category } from 'constants/categories';
 import { RouteComponentProps } from 'react-router';
 import { PanelContext } from 'lib/PanelContext';
