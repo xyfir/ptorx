@@ -1,4 +1,5 @@
 import { displayAddress } from 'lib/display-address';
+import { PanelContext } from 'lib/PanelContext';
 import * as moment from 'moment';
 import * as React from 'react';
 import { Ptorx } from 'types/ptorx';
@@ -10,6 +11,7 @@ import {
   createStyles,
   withStyles,
   WithStyles,
+  Checkbox,
   ListItem,
   List
 } from '@material-ui/core';
@@ -30,32 +32,62 @@ class _MessageMatches extends React.Component<
   MessageMatchesState
 > {
   state: MessageMatchesState = { perPage: 25, page: 1 };
+  static contextType = PanelContext;
+  context!: React.ContextType<typeof PanelContext>;
+
+  onSelect(id: Ptorx.MessageList[0]['id']) {
+    const { selections, dispatch } = this.context;
+    let { messages } = selections;
+    if (messages.includes(id)) messages = messages.filter(_id => _id != id);
+    else messages = messages.concat(id);
+    dispatch({ selections: { ...selections, messages } });
+  }
 
   render() {
+    const { selections, manage } = this.context;
     const { classes, messages } = this.props;
     const { perPage, page } = this.state;
     return (
       <div>
         <List>
           <ListSubheader color="primary">Messages</ListSubheader>
-          {messages.slice((page - 1) * perPage, page * perPage).map(message => (
-            <Link
-              className={classes.link}
-              key={message.id}
-              to={`/app/messages/${message.id}`}
-            >
-              <ListItem button>
+          {messages.slice((page - 1) * perPage, page * perPage).map(message =>
+            manage ? (
+              <ListItem
+                onClick={() => this.onSelect(message.id)}
+                button
+                key={message.id}
+              >
+                <Checkbox
+                  checked={selections.messages.includes(message.id)}
+                  tabIndex={-1}
+                  disableRipple
+                />
                 <ListItemText
                   primary={`${displayAddress(message.from)} — ${
                     message.subject
                   }`}
-                  secondary={`Received ${moment
-                    .unix(message.created)
-                    .fromNow()}`}
                 />
               </ListItem>
-            </Link>
-          ))}
+            ) : (
+              <Link
+                className={classes.link}
+                key={message.id}
+                to={`/app/messages/${message.id}`}
+              >
+                <ListItem button>
+                  <ListItemText
+                    primary={`${displayAddress(message.from)} — ${
+                      message.subject
+                    }`}
+                    secondary={`Received ${moment
+                      .unix(message.created)
+                      .fromNow()}`}
+                  />
+                </ListItem>
+              </Link>
+            )
+          )}
         </List>
         <TablePagination
           onChangeRowsPerPage={e => this.setState({ perPage: +e.target.value })}
