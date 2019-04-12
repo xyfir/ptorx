@@ -1,5 +1,5 @@
 import { SnackbarProvider } from 'notistack';
-import { PanelControls } from 'components/panel/Controls';
+import { PanelNavigation } from 'components/panel/Navigation';
 import { PanelContext } from 'lib/PanelContext';
 import { PanelDialog } from 'components/panel/Dialog';
 import { Category } from 'constants/categories';
@@ -112,7 +112,7 @@ class _Panel extends React.Component<PanelProps, PanelState> {
       >
         <PanelContext.Provider value={this.state}>
           <div className={classes.root}>
-            <PanelControls />
+            <PanelNavigation />
             <main className={classes.content}>
               <div className={classes.toolbar} />
               <Create />

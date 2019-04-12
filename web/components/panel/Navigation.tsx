@@ -55,14 +55,14 @@ const styles = (theme: Theme) =>
     }
   });
 
-interface PanelControlsState {
+interface PanelNavigationState {
   showDrawer: boolean;
 }
 
-class _PanelControls extends React.Component<WithStyles<typeof styles>> {
+class _PanelNavigation extends React.Component<WithStyles<typeof styles>> {
   static contextType = PanelContext;
   context!: React.ContextType<typeof PanelContext>;
-  state: PanelControlsState = { showDrawer: false };
+  state: PanelNavigationState = { showDrawer: false };
 
   onRefresh() {
     const { categories, dispatch } = this.context;
@@ -160,4 +160,4 @@ class _PanelControls extends React.Component<WithStyles<typeof styles>> {
   }
 }
 
-export const PanelControls = withStyles(styles)(_PanelControls);
+export const PanelNavigation = withStyles(styles)(_PanelNavigation);
