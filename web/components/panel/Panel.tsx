@@ -1,10 +1,10 @@
+import { SearchMatches, SearchInput } from 'components/panel/utils/Search';
 import { SnackbarProvider } from 'notistack';
 import { PanelNavigation } from 'components/panel/Navigation';
 import { PanelControls } from 'components/panel/Controls';
 import { PanelContext } from 'lib/PanelContext';
 import { PanelDialog } from 'components/panel/Dialog';
 import { Category } from 'constants/categories';
-import { Search } from 'components/panel/utils/Search';
 import * as React from 'react';
 import { Ptorx } from 'types/ptorx';
 import { api } from 'lib/api';
@@ -115,8 +115,9 @@ class _Panel extends React.Component<PanelProps, PanelState> {
             <PanelNavigation />
             <main className={classes.content}>
               <div className={classes.toolbar} />
+              <SearchInput />
               <PanelControls />
-              <Search />
+              <SearchMatches />
               <PanelDialog />
             </main>
           </div>
