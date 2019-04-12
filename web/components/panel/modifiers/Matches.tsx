@@ -1,99 +1,15 @@
-import { PanelContext } from 'lib/PanelContext';
+import { CATEGORIES } from 'constants/categories';
+import { Matches } from 'components/panel/utils/Matches';
 import * as moment from 'moment';
 import * as React from 'react';
 import { Ptorx } from 'types/ptorx';
-import { Link } from 'react-router-dom';
-import {
-  TablePagination,
-  ListSubheader,
-  ListItemText,
-  createStyles,
-  withStyles,
-  WithStyles,
-  Checkbox,
-  ListItem,
-  List
-} from '@material-ui/core';
 
-const styles = createStyles({ link: { textDecoration: 'none' } });
-
-interface ModifierMatchesProps extends WithStyles<typeof styles> {
-  modifiers: Ptorx.ModifierList;
-}
-
-interface ModifierMatchesState {
-  perPage: number;
-  page: number;
-}
-
-class _ModifierMatches extends React.Component<
-  ModifierMatchesProps,
-  ModifierMatchesState
-> {
-  state: ModifierMatchesState = { perPage: 5, page: 1 };
-  static contextType = PanelContext;
-  context!: React.ContextType<typeof PanelContext>;
-
-  onSelect(id: Ptorx.MessageList[0]['id']) {
-    const { selections, dispatch } = this.context;
-    let { modifiers } = selections;
-    if (modifiers.includes(id)) modifiers = modifiers.filter(_id => _id != id);
-    else modifiers = modifiers.concat(id);
-    dispatch({ selections: { ...selections, modifiers } });
-  }
-
-  render() {
-    const { selections, manage } = this.context;
-    const { classes, modifiers } = this.props;
-    const { perPage, page } = this.state;
-    return (
-      <div>
-        <List>
-          <ListSubheader color="primary">Modifiers</ListSubheader>
-          {modifiers.slice((page - 1) * perPage, page * perPage).map(modifier =>
-            manage ? (
-              <ListItem
-                onClick={() => this.onSelect(modifier.id)}
-                button
-                key={modifier.id}
-              >
-                <Checkbox
-                  checked={selections.modifiers.includes(modifier.id)}
-                  tabIndex={-1}
-                  disableRipple
-                />
-                <ListItemText primary={modifier.name} />
-              </ListItem>
-            ) : (
-              <Link
-                className={classes.link}
-                key={modifier.id}
-                to={`/app/modifiers/${modifier.id}`}
-              >
-                <ListItem button>
-                  <ListItemText
-                    primary={modifier.name}
-                    secondary={`Created ${moment
-                      .unix(modifier.created)
-                      .fromNow()}`}
-                  />
-                </ListItem>
-              </Link>
-            )
-          )}
-        </List>
-        <TablePagination
-          onChangeRowsPerPage={e => this.setState({ perPage: +e.target.value })}
-          rowsPerPageOptions={[5, 10, 25, 50, 100]}
-          onChangePage={(e, p) => this.setState({ page: p + 1 })}
-          rowsPerPage={perPage}
-          component="div"
-          count={modifiers.length}
-          page={page - 1}
-        />
-      </div>
-    );
-  }
-}
-
-export const ModifierMatches = withStyles(styles)(_ModifierMatches);
+export const ModifierMatches = () => (
+  <Matches
+    description={(modifier: Ptorx.ModifierList[0]) =>
+      `Created ${moment.unix(modifier.created).fromNow()}`
+    }
+    category={CATEGORIES.find(c => c.name == 'Modifiers')}
+    name={(modifier: Ptorx.ModifierList[0]) => modifier.name}
+  />
+);
