@@ -18,7 +18,7 @@ import {
 const styles = createStyles({ link: { textDecoration: 'none' } });
 
 interface MatchesProps extends WithStyles<typeof styles> {
-  secondaryAction?: JSX.Element;
+  secondaryAction?: (item: any) => React.ReactNode;
   description: (item: any) => string;
   category: Category;
   noLink?: boolean;
@@ -118,8 +118,8 @@ class _Matches extends React.Component<MatchesProps, MatchesState> {
                     primary={name(item)}
                     secondary={description(item)}
                   />
+                  {secondaryAction(item)}
                 </ListItem>
-                {secondaryAction}
               </Link>
             )
           )}
