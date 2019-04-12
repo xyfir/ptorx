@@ -8,7 +8,6 @@ import { FilterMatches } from 'components/panel/filters/Matches';
 import { AliasMatches } from 'components/panel/aliases/Matches';
 import { PanelContext } from 'lib/PanelContext';
 import * as React from 'react';
-import * as Fuse from 'fuse.js';
 
 export const SearchInput = () => (
   <PanelContext.Consumer>
@@ -35,79 +34,37 @@ export const SearchInput = () => (
   </PanelContext.Consumer>
 );
 
-export class SearchMatches extends React.Component {
-  static contextType = PanelContext;
-  context!: React.ContextType<typeof PanelContext>;
-
-  search<
-    T extends {
-      fullAddress?: string;
-      subject?: string;
-      address?: string;
-      domain?: string;
-      type?: string;
-      name?: string;
-      from?: string;
-    }
-  >(items: T[]): T[] {
-    const { search } = this.context;
-    if (search) {
-      const fuse = new Fuse(items, {
-        shouldSort: true,
-        threshold: 0.4,
-        keys: [
-          'from',
-          'name',
-          'type',
-          'domain',
-          'address',
-          'subject',
-          'fullAddress'
-        ]
-      });
-      items = fuse.search(search);
-    }
-    return items;
-  }
-
-  render() {
-    const {
+export const SearchMatches = () => (
+  <PanelContext.Consumer>
+    {({
       primaryEmails,
-      aliases,
       categories,
       modifiers,
       messages,
       domains,
+      aliases,
       filters
-    } = this.context;
-    return (
+    }) => (
       <div>
         {categories.indexOf('Aliases') > -1 && aliases.length ? (
-          <AliasMatches aliases={this.search(aliases)} />
+          <AliasMatches />
         ) : null}
         {categories.indexOf('Messages') > -1 && messages.length ? (
-          <MessageMatches messages={this.search(messages)} />
+          <MessageMatches />
         ) : null}
         {categories.indexOf('Primary Emails') > -1 && primaryEmails.length ? (
-          <PrimaryEmailMatches primaryEmails={this.search(primaryEmails)} />
+          <PrimaryEmailMatches />
         ) : null}
         {categories.indexOf('Filters') > -1 && filters.length ? (
-          <FilterMatches filters={this.search(filters)} />
+          <FilterMatches />
         ) : null}
         {categories.indexOf('Modifiers') > -1 && modifiers.length ? (
-          <ModifierMatches modifiers={this.search(modifiers)} />
+          <ModifierMatches />
         ) : null}
         {categories.indexOf('Domains') > -1 && domains.length ? (
-          <DomainMatches domains={this.search(domains)} />
+          <DomainMatches />
         ) : null}
       </div>
-    );
-  }
-}
-
-export const Search = () => (
-  <React.Fragment>
-    <SearchInput />
-    <SearchMatches />
-  </React.Fragment>
+    )}
+  </PanelContext.Consumer>
 );
