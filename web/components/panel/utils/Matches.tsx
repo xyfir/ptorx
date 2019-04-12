@@ -118,7 +118,7 @@ class _Matches extends React.Component<MatchesProps, MatchesState> {
                     primary={name(item)}
                     secondary={description(item)}
                   />
-                  {secondaryAction(item)}
+                  {secondaryAction && secondaryAction(item)}
                 </ListItem>
               </Link>
             )
