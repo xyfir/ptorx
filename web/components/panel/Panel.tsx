@@ -34,6 +34,7 @@ export interface PanelState {
   categories: Category[];
   modifiers?: Ptorx.ModifierList;
   selections: {
+    primaryEmails: Ptorx.PrimaryEmailList[0]['id'][];
     modifiers: Ptorx.ModifierList[0]['id'][];
     messages: Ptorx.MessageList[0]['id'][];
     filters: Ptorx.FilterList[0]['id'][];
@@ -59,6 +60,7 @@ class _Panel extends React.Component<PanelProps, PanelState> {
   state: PanelState = {
     categories: (localStorage.categories || 'Aliases').split(','),
     selections: {
+      primaryEmails: [],
       modifiers: [],
       messages: [],
       aliases: [],

@@ -1,3 +1,4 @@
+import { PanelContext } from 'lib/PanelContext';
 import * as moment from 'moment';
 import * as React from 'react';
 import { Ptorx } from 'types/ptorx';
@@ -9,6 +10,7 @@ import {
   createStyles,
   withStyles,
   WithStyles,
+  Checkbox,
   ListItem,
   List
 } from '@material-ui/core';
@@ -29,17 +31,40 @@ class _ModifierMatches extends React.Component<
   ModifierMatchesState
 > {
   state: ModifierMatchesState = { perPage: 5, page: 1 };
+  static contextType = PanelContext;
+  context!: React.ContextType<typeof PanelContext>;
+
+  onSelect(id: Ptorx.MessageList[0]['id']) {
+    const { selections, dispatch } = this.context;
+    let { modifiers } = selections;
+    if (modifiers.includes(id)) modifiers = modifiers.filter(_id => _id != id);
+    else modifiers = modifiers.concat(id);
+    dispatch({ selections: { ...selections, modifiers } });
+  }
 
   render() {
+    const { selections, manage } = this.context;
     const { classes, modifiers } = this.props;
     const { perPage, page } = this.state;
     return (
       <div>
         <List>
           <ListSubheader color="primary">Modifiers</ListSubheader>
-          {modifiers
-            .slice((page - 1) * perPage, page * perPage)
-            .map(modifier => (
+          {modifiers.slice((page - 1) * perPage, page * perPage).map(modifier =>
+            manage ? (
+              <ListItem
+                onClick={() => this.onSelect(modifier.id)}
+                button
+                key={modifier.id}
+              >
+                <Checkbox
+                  checked={selections.modifiers.includes(modifier.id)}
+                  tabIndex={-1}
+                  disableRipple
+                />
+                <ListItemText primary={modifier.name} />
+              </ListItem>
+            ) : (
               <Link
                 className={classes.link}
                 key={modifier.id}
@@ -54,7 +79,8 @@ class _ModifierMatches extends React.Component<
                   />
                 </ListItem>
               </Link>
-            ))}
+            )
+          )}
         </List>
         <TablePagination
           onChangeRowsPerPage={e => this.setState({ perPage: +e.target.value })}
