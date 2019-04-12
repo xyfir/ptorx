@@ -9,43 +9,50 @@ export type Category =
 export const CATEGORIES: {
   name: Category;
   route: string;
-  singular: string;
   variable: string;
+  nameSingular: string;
+  variableSingular: string;
 }[] = [
   {
     name: 'Aliases',
     route: 'aliases',
-    singular: 'Alias',
-    variable: 'aliases'
+    variable: 'aliases',
+    nameSingular: 'Alias',
+    variableSingular: 'alias'
   },
   {
     name: 'Messages',
     route: 'messages',
-    singular: 'Message',
-    variable: 'messages'
+    variable: 'messages',
+    nameSingular: 'Message',
+    variableSingular: 'message'
   },
   {
     name: 'Primary Emails',
     route: 'primary-emails',
-    singular: 'Primary Email',
-    variable: 'primaryEmails'
+    variable: 'primaryEmails',
+    nameSingular: 'Primary Email',
+    variableSingular: 'primaryEmail'
   },
   {
     name: 'Filters',
     route: 'filters',
-    singular: 'Filter',
-    variable: 'filters'
+    variable: 'filters',
+    nameSingular: 'Filter',
+    variableSingular: 'filter'
   },
   {
     name: 'Modifiers',
     route: 'modifiers',
-    singular: 'Modifier',
-    variable: 'modifiers'
+    variable: 'modifiers',
+    nameSingular: 'Modifier',
+    variableSingular: 'modifier'
   },
   {
     name: 'Domains',
     route: 'domains',
-    singular: 'Domain',
-    variable: 'domains'
+    variable: 'domains',
+    nameSingular: 'Domain',
+    variableSingular: 'domain'
   }
 ];
