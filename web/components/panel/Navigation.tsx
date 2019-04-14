@@ -1,4 +1,5 @@
 import { PanelContext, PanelContextValue } from 'lib/PanelContext';
+import { withSnackbar, withSnackbarProps } from 'notistack';
 import { DrawerContent } from 'components/panel/DrawerContent';
 import { CATEGORIES } from 'constants/categories';
 import * as React from 'react';
@@ -59,10 +60,21 @@ interface PanelNavigationState {
   showDrawer: boolean;
 }
 
-class _PanelNavigation extends React.Component<WithStyles<typeof styles>> {
+class _PanelNavigation extends React.Component<
+  WithStyles<typeof styles> & withSnackbarProps
+> {
   static contextType = PanelContext;
   context!: React.ContextType<typeof PanelContext>;
   state: PanelNavigationState = { showDrawer: false };
+
+  componentDidMount() {
+    if (localStorage.ptorx) return;
+
+    setTimeout(() => {
+      this.props.enqueueSnackbar('Confused? Check "Help" in the app menu!');
+      localStorage.ptorx = 1;
+    }, 7500);
+  }
 
   onRefresh() {
     const { categories, dispatch } = this.context;
@@ -160,4 +172,6 @@ class _PanelNavigation extends React.Component<WithStyles<typeof styles>> {
   }
 }
 
-export const PanelNavigation = withStyles(styles)(_PanelNavigation);
+export const PanelNavigation = withSnackbar(
+  withStyles(styles)(_PanelNavigation)
+);
