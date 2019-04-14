@@ -3,14 +3,18 @@ import * as React from 'react';
 import { Ptorx } from 'types/ptorx';
 import { Link } from 'react-router-dom';
 import {
+  ListSubheader,
+  ListItemText,
   createStyles,
   ButtonBase,
   Typography,
   WithStyles,
   withStyles,
+  ListItem,
   Button,
   Paper,
-  Theme
+  Theme,
+  List
 } from '@material-ui/core';
 
 const phonegap = /source~phonegap/.test(localStorage.r);
@@ -67,6 +71,11 @@ const styles = (theme: Theme) =>
       textAlign: 'center',
       width: '100%'
     },
+    pricingP: {
+      lineHeight: '125%',
+      textAlign: 'center',
+      fontSize: '110%'
+    },
     getPtorx: {
       textAlign: 'center',
       padding: '2em'
@@ -78,6 +87,12 @@ const styles = (theme: Theme) =>
     },
     content: {
       maxWidth: '40em'
+    },
+    pricing: {
+      flexDirection: 'column',
+      alignItems: 'center',
+      padding: '2em',
+      display: 'flex'
     },
     section: {
       justifyContent: 'center',
@@ -100,6 +115,16 @@ const styles = (theme: Theme) =>
       flexWrap: 'wrap',
       display: 'flex',
       padding: '2em'
+    },
+    tiers: {
+      justifyContent: 'center',
+      flexWrap: 'wrap',
+      display: 'flex'
+    },
+    tier: {
+      minWidth: '9em',
+      margin: '1em',
+      flex: '1'
     },
     icon: {
       borderRadius: '4px',
@@ -389,6 +414,89 @@ const _Info = ({ classes, user }: InfoProps) => (
         </Typography>
       </div>
       <img src={IMAGES.WWW} className={classes.sectionImage} />
+    </section>
+
+    <section className={classes.pricing}>
+      <Typography variant="h2" className={classes.h2}>
+        Pricing
+      </Typography>
+      <Typography className={classes.pricingP}>
+        Sending or receiving mail costs 1 credit. Accounts are refilled monthly
+        based on their tier. Paid accounts also unlock new abilities.
+      </Typography>
+
+      <div className={classes.tiers}>
+        <Paper elevation={1} className={classes.tier}>
+          <List subheader={<ListSubheader disableSticky>Basic</ListSubheader>}>
+            <ListItem>
+              <ListItemText
+                primary="Free!"
+                secondary="Account topped up to 200 credits per month"
+              />
+            </ListItem>
+            <ListItem>
+              <ListItemText
+                primary="Some limitations"
+                secondary="Cannot save, send, or reply to mail, etc"
+              />
+            </ListItem>
+          </List>
+        </Paper>
+
+        <Paper elevation={1} className={classes.tier}>
+          <List
+            subheader={
+              <ListSubheader color="primary" disableSticky>
+                Premium
+              </ListSubheader>
+            }
+          >
+            <ListItem>
+              <ListItemText
+                primary="$1.50 monthly, $15 yearly (USD)"
+                secondary="Account topped up to 200 credits per month"
+              />
+            </ListItem>
+            <ListItem>
+              <ListItemText
+                primary="No Limitations"
+                secondary="Save, send, reply to mail, and more"
+              />
+            </ListItem>
+          </List>
+        </Paper>
+
+        <Paper elevation={1} className={classes.tier}>
+          <List
+            subheader={
+              <ListSubheader color="primary" disableSticky>
+                Ultimate
+              </ListSubheader>
+            }
+          >
+            <ListItem>
+              <ListItemText
+                primary="$5 monthly, $50 yearly (USD)"
+                secondary="Account topped up to 10,000 credits per month"
+              />
+            </ListItem>
+            <ListItem>
+              <ListItemText
+                primary="No Limitations"
+                secondary="Save, send, reply to mail, and more"
+              />
+            </ListItem>
+          </List>
+        </Paper>
+      </div>
+
+      <Typography>
+        Need more than 10K per month? Send us an email:{' '}
+        <a href="mailto:contact@xyfir.com" className={classes.a}>
+          contact@xyfir.com
+        </a>
+        .
+      </Typography>
     </section>
 
     <section className={classes.section}>
