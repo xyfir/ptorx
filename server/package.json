@@ -1,6 +1,6 @@
 {
   "name": "ptorx-server",
-  "version": "6.3.0",
+  "version": "6.4.0",
   "description": "Send and receive mail anonymously with email forwarding and aliases through Ptorx.",
   "main": "app.js",
   "scripts": {

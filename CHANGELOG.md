@@ -8,6 +8,17 @@ Changes that require manual, atypical updates for those running their own instan
 
 ## [Unreleased]
 
+## [6.4.0] - 2019-04-14
+
+### Added
+
+- Helpful alert for new users
+- Pricing section on homepage
+
+### Changed
+
+- !! Update dependencies, CCashCow, and Yalcs
+
 ## [6.3.0] - 2019-04-12
 
 ### Added
@@ -22,7 +33,7 @@ Changes that require manual, atypical updates for those running their own instan
 
 ### Changed
 
-- Update dependencies and Yalcs
+- !! Update dependencies and Yalcs
 
 ## [6.2.0] - 2019-04-09
 
