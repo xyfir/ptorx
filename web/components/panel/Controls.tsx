@@ -44,7 +44,17 @@ class _PanelControls extends React.Component<
 
   onToggleDelete() {
     const { dispatch, manage } = this.context;
-    dispatch({ manage: manage == 'delete' ? null : 'delete' });
+    dispatch({
+      selections: {
+        primaryEmails: [],
+        modifiers: [],
+        messages: [],
+        filters: [],
+        aliases: [],
+        domains: []
+      },
+      manage: manage == 'delete' ? null : 'delete'
+    });
   }
 
   async onDelete() {
@@ -61,7 +71,16 @@ class _PanelControls extends React.Component<
 
     // Update lists
     const res = await Promise.all(CATEGORIES.map(c => api.get(`/${c.route}`)));
-    const state: Partial<PanelState> = {};
+    const state: Partial<PanelState> = {
+      selections: {
+        primaryEmails: [],
+        modifiers: [],
+        messages: [],
+        filters: [],
+        aliases: [],
+        domains: []
+      }
+    };
     CATEGORIES.forEach((c, i) => (state[c.variable] = res[i].data));
     dispatch(state);
   }
