@@ -2,7 +2,7 @@
   "name": "Email Forwarding and Aliases by Ptorx",
   "short_name": "Ptorx",
   "description": "Send and receive mail anonymously with email forwarding and aliases through Ptorx.",
-  "version": "6.4.0",
+  "version": "6.4.1",
   "manifest_version": 2,
   "browser_action": {
     "default_icon": {

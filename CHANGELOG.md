@@ -8,6 +8,17 @@ Changes that require manual, atypical updates for those running their own instan
 
 ## [Unreleased]
 
+## [6.4.1] - 2019-04-15
+
+### Changed
+
+- Increase rows per page for aliases and messages
+
+### Fixed
+
+- Deleting multiple items multiple times
+- Displaying alias name in search matches
+
 ## [6.4.0] - 2019-04-14
 
 ### Added
