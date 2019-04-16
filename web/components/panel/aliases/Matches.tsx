@@ -25,6 +25,6 @@ export const AliasMatches = () => (
       `Created ${moment.unix(alias.created).fromNow()}`
     }
     category={CATEGORIES.find(c => c.name == 'Aliases')}
-    name={(alias: Ptorx.AliasList[0]) => alias.fullAddress}
+    name={(alias: Ptorx.AliasList[0]) => `${alias.fullAddress} — ${alias.name}`}
   />
 );
