@@ -7,6 +7,7 @@ import { Ptorx } from 'types/ptorx';
 
 export const MessageMatches = () => (
   <Matches
+    defaultPerPage={25}
     description={(message: Ptorx.MessageList[0]) =>
       `Received ${moment.unix(message.created).fromNow()}`
     }

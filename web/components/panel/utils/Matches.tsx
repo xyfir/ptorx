@@ -19,6 +19,7 @@ const styles = createStyles({ link: { textDecoration: 'none' } });
 
 interface MatchesProps extends WithStyles<typeof styles> {
   secondaryAction?: (item: any) => React.ReactNode;
+  defaultPerPage?: 5 | 10 | 25 | 50 | 100;
   description: (item: any) => string;
   category: Category;
   noLink?: boolean;
@@ -31,7 +32,7 @@ interface MatchesState {
 }
 
 class _Matches extends React.Component<MatchesProps, MatchesState> {
-  state: MatchesState = { perPage: 5, page: 1 };
+  state: MatchesState = { perPage: this.props.defaultPerPage || 5, page: 1 };
 
   static contextType = PanelContext;
   context!: React.ContextType<typeof PanelContext>;

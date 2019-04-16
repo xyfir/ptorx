@@ -3,9 +3,9 @@ import { CATEGORIES } from 'constants/categories';
 import { FileCopy } from '@material-ui/icons';
 import { Matches } from 'components/panel/utils/Matches';
 import * as moment from 'moment';
+import * as React from 'react';
 // @ts-ignore
 import * as copy from 'clipboard-copy';
-import * as React from 'react';
 import { Ptorx } from 'types/ptorx';
 
 export const AliasMatches = () => (
@@ -21,6 +21,7 @@ export const AliasMatches = () => (
         </IconButton>
       </ListItemSecondaryAction>
     )}
+    defaultPerPage={10}
     description={(alias: Ptorx.AliasList[0]) =>
       `Created ${moment.unix(alias.created).fromNow()}`
     }
