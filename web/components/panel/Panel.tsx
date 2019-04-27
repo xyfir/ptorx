@@ -103,7 +103,7 @@ class _Panel extends React.Component<PanelProps, PanelState> {
     return (
       <SnackbarProvider
         action={[
-          <Button color="primary" size="small">
+          <Button color="primary" size="small" key={0}>
             Dismiss
           </Button>
         ]}
