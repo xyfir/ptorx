@@ -11,10 +11,15 @@ import * as uuid from 'uuid/v4';
 
 export async function addPrimaryEmail(
   primaryEmail: Partial<Ptorx.PrimaryEmail>,
-  userId: number
+  userId: Ptorx.User['userId'],
+  /**
+   * Has the email already been verified?
+   */
+  verified: boolean = false
 ): Promise<Ptorx.PrimaryEmail> {
   const db = new MySQL();
   try {
+    // Limit primary emails by tier
     const user = await getUser(userId);
     if (user.tier == 'basic') {
       const primaryEmails = await listPrimaryEmails(userId);
@@ -22,6 +27,7 @@ export async function addPrimaryEmail(
         throw 'Basic tier users can only have one primary email';
     }
 
+    // Create primary email
     const insert: Partial<Ptorx.PrimaryEmail> = {
       userId,
       created: moment().unix(),
@@ -32,27 +38,31 @@ export async function addPrimaryEmail(
     if (!result.affectedRows) throw 'Could not add primary email';
     db.release();
 
+    // Merge in data and get full primary email
     let _primaryEmail = await getPrimaryEmail(result.insertId, userId);
     _primaryEmail = await editPrimaryEmail(
       { ..._primaryEmail, ...primaryEmail },
       userId
     );
 
-    const { html, text } = await buildTemplate('verify-primary-email', {
-      link: `${process.enve.API_URL}/primary-emails/verify?primaryEmailId=${
-        _primaryEmail.id
-      }&primaryEmailKey=${_primaryEmail.key}`
-    });
-    await sendMail(
-      {
-        subject: 'Verify your email for Ptorx',
-        from: `noreply-x@${process.enve.DOMAIN}`,
-        html,
-        text,
-        to: _primaryEmail.address
-      },
-      process.enve.DOMAIN_ID
-    );
+    // Send verification email
+    if (!verified) {
+      const { html, text } = await buildTemplate('verify-primary-email', {
+        link: `${process.enve.API_URL}/primary-emails/verify?primaryEmailId=${
+          _primaryEmail.id
+        }&primaryEmailKey=${_primaryEmail.key}`
+      });
+      await sendMail(
+        {
+          subject: 'Verify your email for Ptorx',
+          from: `noreply-x@${process.enve.DOMAIN}`,
+          html,
+          text,
+          to: _primaryEmail.address
+        },
+        process.enve.DOMAIN_ID
+      );
+    }
 
     return _primaryEmail;
   } catch (err) {
