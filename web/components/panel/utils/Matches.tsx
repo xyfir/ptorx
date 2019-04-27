@@ -12,6 +12,7 @@ import {
   WithStyles,
   Checkbox,
   ListItem,
+  Divider,
   List
 } from '@material-ui/core';
 
@@ -36,6 +37,19 @@ class _Matches extends React.Component<MatchesProps, MatchesState> {
 
   static contextType = PanelContext;
   context!: React.ContextType<typeof PanelContext>;
+
+  onSelectAll() {
+    const { selections, dispatch } = this.context;
+    const { variable } = this.props.category;
+    const ids: number[] = this.context[variable].map(i => i.id);
+
+    dispatch({
+      selections: {
+        ...selections,
+        [variable]: selections[variable].length == ids.length ? [] : ids
+      }
+    });
+  }
 
   onSelect(id: number) {
     const { selections, dispatch } = this.context;
@@ -79,7 +93,7 @@ class _Matches extends React.Component<MatchesProps, MatchesState> {
   }
 
   render() {
-    const { selections, manage } = this.context;
+    const { selections, manage, search } = this.context;
     const { perPage, page } = this.state;
     const items = this.search();
     const {
@@ -90,10 +104,32 @@ class _Matches extends React.Component<MatchesProps, MatchesState> {
       noLink,
       name
     } = this.props;
+    const allItems: any[] = this.context[category.variable];
     return (
       <div>
         <List>
           <ListSubheader color="primary">{category.name}</ListSubheader>
+
+          {/* Select all toggle if managing and not searching */}
+          {manage && !search ? (
+            <React.Fragment>
+              <ListItem onClick={() => this.onSelectAll()} button>
+                <Checkbox
+                  checked={
+                    selections[category.variable].length ==
+                    this.context[category.variable].length
+                  }
+                  tabIndex={-1}
+                  disableRipple
+                />
+                <ListItemText
+                  primary={`Select All — ${allItems.length} ${category.name}`}
+                />
+              </ListItem>
+              <Divider />
+            </React.Fragment>
+          ) : null}
+
           {items.slice((page - 1) * perPage, page * perPage).map(item =>
             manage ? (
               <ListItem
