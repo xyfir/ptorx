@@ -2,6 +2,7 @@ import 'lib/tests/prepare';
 import { verifyPrimaryEmail } from 'lib/primary-emails/verify';
 import { deletePrimaryEmail } from 'lib/primary-emails/delete';
 import { listPrimaryEmails } from 'lib/primary-emails/list';
+import { editPrimaryEmail } from 'lib/primary-emails/edit';
 import { getPrimaryEmail } from 'lib/primary-emails/get';
 import { addPrimaryEmail } from 'lib/primary-emails/add';
 import { captureMail } from 'lib/tests/capture-mail';
@@ -57,6 +58,15 @@ test('verify primary email', async () => {
   ).not.toReject();
   const _primaryEmail = await getPrimaryEmail(primaryEmail.id, 1234);
   await expect(_primaryEmail.verified).toBeTrue();
+});
+
+test('edit primary email', async () => {
+  const [primaryEmail] = await listPrimaryEmails(1234);
+  const _primaryEmail = await editPrimaryEmail(
+    { ...primaryEmail, autolink: true },
+    1234
+  );
+  expect(_primaryEmail.autolink).toBeTrue();
 });
 
 test('delete primary emails', async () => {
