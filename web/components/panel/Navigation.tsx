@@ -1,5 +1,5 @@
 import { PanelContext, PanelContextValue } from 'lib/PanelContext';
-import { withSnackbar, withSnackbarProps } from 'notistack';
+import { withSnackbar, WithSnackbarProps } from 'notistack';
 import { DrawerContent } from 'components/panel/DrawerContent';
 import { CATEGORIES } from 'constants/categories';
 import * as React from 'react';
@@ -61,7 +61,7 @@ interface PanelNavigationState {
 }
 
 class _PanelNavigation extends React.Component<
-  WithStyles<typeof styles> & withSnackbarProps
+  WithStyles<typeof styles> & WithSnackbarProps
 > {
   static contextType = PanelContext;
   context!: React.ContextType<typeof PanelContext>;

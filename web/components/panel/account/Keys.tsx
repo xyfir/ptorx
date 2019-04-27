@@ -1,4 +1,4 @@
-import { withSnackbar, withSnackbarProps } from 'notistack';
+import { withSnackbar, WithSnackbarProps } from 'notistack';
 import { RouteComponentProps } from 'react-router';
 import { PanelContext } from 'lib/PanelContext';
 import { loadOpenPGP } from 'lib/load-openpgp';
@@ -30,7 +30,7 @@ interface PGPKeysState {
 }
 
 class _PGPKeys extends React.Component<
-  RouteComponentProps & withSnackbarProps & WithStyles<typeof styles>,
+  RouteComponentProps & WithSnackbarProps & WithStyles<typeof styles>,
   PGPKeysState
 > {
   state: PGPKeysState = { generating: false, pass: '' };

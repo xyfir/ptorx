@@ -1,4 +1,4 @@
-import { withSnackbar, withSnackbarProps } from 'notistack';
+import { withSnackbar, WithSnackbarProps } from 'notistack';
 import { RouteComponentProps } from 'react-router';
 import { PanelContext } from 'lib/PanelContext';
 import * as moment from 'moment';
@@ -28,7 +28,7 @@ interface ManagePrimaryEmailState {
 }
 
 class _ManagePrimaryEmail extends React.Component<
-  RouteComponentProps & withSnackbarProps & WithStyles<typeof styles>,
+  RouteComponentProps & WithSnackbarProps & WithStyles<typeof styles>,
   ManagePrimaryEmailState
 > {
   static contextType = PanelContext;

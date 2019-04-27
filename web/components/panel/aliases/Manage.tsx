@@ -1,4 +1,4 @@
-import { withSnackbar, withSnackbarProps } from 'notistack';
+import { withSnackbar, WithSnackbarProps } from 'notistack';
 import { RouteComponentProps } from 'react-router';
 import { AliasWaterfall } from 'components/panel/aliases/Waterfall';
 import { PanelContext } from 'lib/PanelContext';
@@ -43,7 +43,7 @@ interface ManageAliasState {
 }
 
 class _ManageAlias extends React.Component<
-  RouteComponentProps & withSnackbarProps & WithStyles<typeof styles>,
+  RouteComponentProps & WithSnackbarProps & WithStyles<typeof styles>,
   ManageAliasState
 > {
   static contextType = PanelContext;

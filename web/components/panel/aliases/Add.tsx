@@ -1,4 +1,4 @@
-import { withSnackbar, withSnackbarProps } from 'notistack';
+import { withSnackbar, WithSnackbarProps } from 'notistack';
 import { Typography, TextField, Button } from '@material-ui/core';
 import { RouteComponentProps } from 'react-router';
 import { ChipSelector } from 'components/panel/utils/ChipSelector';
@@ -14,7 +14,7 @@ interface AddAliasState {
 }
 
 class _AddAlias extends React.Component<
-  RouteComponentProps & withSnackbarProps,
+  RouteComponentProps & WithSnackbarProps,
   AddAliasState
 > {
   static contextType = PanelContext;
