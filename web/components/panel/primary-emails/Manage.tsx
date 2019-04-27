@@ -6,10 +6,12 @@ import * as React from 'react';
 import { Ptorx } from 'types/ptorx';
 import { api } from 'lib/api';
 import {
+  FormControlLabel,
   createStyles,
   WithStyles,
   withStyles,
   Typography,
+  Checkbox,
   Button
 } from '@material-ui/core';
 
@@ -18,7 +20,7 @@ const styles = createStyles({
     fontSize: '200%'
   },
   button: {
-    marginTop: '0.5em'
+    marginRight: '0.5em'
   }
 });
 
@@ -53,6 +55,23 @@ class _ManagePrimaryEmail extends React.Component<
       .catch(err => this.props.enqueueSnackbar(err.response.data.error));
   }
 
+  onChange(key: keyof Ptorx.PrimaryEmail, value: any) {
+    this.setState({
+      primaryEmail: { ...this.state.primaryEmail, [key]: value }
+    });
+  }
+
+  onSubmit() {
+    api
+      .put('/primary-emails', this.state.primaryEmail)
+      .then(res => {
+        this.load();
+        return api.get('/primary-emails');
+      })
+      .then(res => this.context.dispatch({ primaryEmails: res.data }))
+      .catch(err => this.props.enqueueSnackbar(err.response.data.error));
+  }
+
   load() {
     const primaryEmailId = +(this.props.match.params as {
       primaryEmail: number;
@@ -78,14 +97,34 @@ class _ManagePrimaryEmail extends React.Component<
         <Typography variant="body2">
           Address is {primaryEmail.verified ? '' : 'un'}verified.
         </Typography>
-        <Button
-          color="secondary"
-          variant="contained"
-          onClick={() => this.onDelete()}
-          className={classes.button}
-        >
-          {deleting ? 'Confirm Delete' : 'Delete'}
-        </Button>
+
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={primaryEmail.autolink}
+              onChange={e => this.onChange('autolink', e.target.checked)}
+            />
+          }
+          label="Autolink"
+        />
+
+        <div>
+          <Button
+            color="primary"
+            variant="contained"
+            onClick={() => this.onSubmit()}
+            className={classes.button}
+          >
+            Save
+          </Button>
+          <Button
+            color="secondary"
+            variant="contained"
+            onClick={() => this.onDelete()}
+          >
+            {deleting ? 'Confirm Delete' : 'Delete'}
+          </Button>
+        </div>
       </div>
     );
   }
