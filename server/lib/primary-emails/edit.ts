@@ -9,11 +9,8 @@ export async function editPrimaryEmail(
   const db = new MySQL();
   try {
     await db.query(
-      `
-        UPDATE primary_emails SET verified = ?, autolink = ?
-        WHERE id = ? AND userId = ?
-      `,
-      [primaryEmail.verified, primaryEmail.autolink, primaryEmail.id, userId]
+      `UPDATE primary_emails SET autolink = ? WHERE id = ? AND userId = ?`,
+      [primaryEmail.autolink, primaryEmail.id, userId]
     );
     db.release();
     return await getPrimaryEmail(primaryEmail.id, userId);
