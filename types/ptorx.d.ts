@@ -191,6 +191,7 @@ export namespace Ptorx {
     created: number;
     key?: string;
     verified: boolean;
+    autolink: boolean;
   }
 
   export type PrimaryEmailList = {
@@ -199,6 +200,7 @@ export namespace Ptorx {
     address: PrimaryEmail['address'];
     created: PrimaryEmail['created'];
     verified: PrimaryEmail['verified'];
+    autolink: PrimaryEmail['autolink'];
   }[];
 
   export interface Recipient {
