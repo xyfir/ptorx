@@ -83,7 +83,8 @@ const styles = (theme: Theme) =>
     subtitle: {
       marginBottom: '2em',
       fontWeight: 'bold',
-      fontSize: '120%'
+      fontSize: '120%',
+      color: theme.palette.secondary.main
     },
     content: {
       maxWidth: '40em'
@@ -154,7 +155,8 @@ const styles = (theme: Theme) =>
     },
     ol: {
       fontFamily: '"Roboto"',
-      fontSize: '110%'
+      fontSize: '110%',
+      color: theme.palette.text.primary
     },
     p: {
       fontSize: '110%',
