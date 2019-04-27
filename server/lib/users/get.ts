@@ -1,3 +1,4 @@
+import { addPrimaryEmail } from 'lib/primary-emails/add';
 import { TIERS } from 'constants/tiers';
 import { Ptorx } from 'types/ptorx';
 import { MySQL } from 'lib/MySQL';
@@ -28,6 +29,13 @@ export async function getUser(
       [row] = await db.query('SELECT * FROM users WHERE userId = ?', [
         user.userId
       ]);
+
+      // Add their account email as an autolinking verified primary email
+      await addPrimaryEmail(
+        { address: user.email, autolink: true },
+        user.userId,
+        true
+      );
     }
 
     db.release();
