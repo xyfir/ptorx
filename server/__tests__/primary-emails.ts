@@ -8,7 +8,7 @@ import { captureMail } from 'lib/tests/capture-mail';
 import { Ptorx } from 'types/ptorx';
 
 test('create primary email', async () => {
-  expect.assertions(12);
+  expect.assertions(13);
 
   const promise = captureMail(1, message => {
     expect(message.subject).toBe('Verify your email for Ptorx');
@@ -22,13 +22,14 @@ test('create primary email', async () => {
     { address: 'test@example.com' },
     1234
   );
-  expect(Object.keys(primaryEmail).length).toBe(6);
+  expect(Object.keys(primaryEmail).length).toBe(7);
   expect(primaryEmail.id).toBeNumber();
   expect(primaryEmail.created).toBeNumber();
   expect(primaryEmail.userId).toBe(1234);
   expect(primaryEmail.address).toBe('test@example.com');
   expect(primaryEmail.verified).toBeFalse();
   expect(primaryEmail.key).toHaveLength(36);
+  expect(primaryEmail.autolink).toBeFalse();
 
   await promise;
 });
@@ -41,7 +42,8 @@ test('list primary emails', async () => {
     'userId',
     'address',
     'created',
-    'verified'
+    'verified',
+    'autolink'
   ];
   expect(primaryEmails[0]).toContainAllKeys(keys);
 });

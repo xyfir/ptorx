@@ -12,7 +12,10 @@ export async function getPrimaryEmail(
       [primaryEmailId, userId]
     );
     db.release();
+
     primaryEmail.verified = !!primaryEmail.verified;
+    primaryEmail.autolink = !!primaryEmail.autolink;
+
     return primaryEmail;
   } catch (err) {
     db.release();

@@ -8,7 +8,7 @@ export async function listPrimaryEmails(
   try {
     const primaryEmails: Ptorx.PrimaryEmailList = await db.query(
       `
-        SELECT id, userId, address, created, verified
+        SELECT id, userId, address, created, verified, autolink
         FROM primary_emails WHERE userId = ?
       `,
       [userId]
@@ -16,6 +16,7 @@ export async function listPrimaryEmails(
     db.release();
     return primaryEmails.map(e => {
       e.verified = !!e.verified;
+      e.autolink = !!e.autolink;
       return e;
     });
   } catch (err) {
