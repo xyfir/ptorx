@@ -26,6 +26,7 @@ router.post('/modifiers', c.api_addModifier);
 router.delete('/modifiers', c.api_deleteModifier);
 
 router.get('/primary-emails', c.api_getPrimaryEmails);
+router.put('/primary-emails', c.api_editPrimaryEmail);
 router.post('/primary-emails', c.api_addPrimaryEmail);
 router.delete('/primary-emails', c.api_deletePrimaryEmail);
 router.get('/primary-emails/verify', c.api_verifyPrimaryEmail);
