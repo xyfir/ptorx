@@ -42,7 +42,7 @@ class _PanelControls extends React.Component<
   static contextType = PanelContext;
   context!: React.ContextType<typeof PanelContext>;
 
-  onToggleDelete() {
+  onSetManage(_manage: PanelState['manage']) {
     const { dispatch, manage } = this.context;
     dispatch({
       selections: {
@@ -53,7 +53,7 @@ class _PanelControls extends React.Component<
         aliases: [],
         domains: []
       },
-      manage: manage == 'delete' ? null : 'delete'
+      manage: _manage && manage == _manage ? undefined : _manage
     });
   }
 
@@ -135,7 +135,7 @@ class _PanelControls extends React.Component<
           />
           <SpeedDialAction
             icon={<Delete />}
-            onClick={() => this.onToggleDelete()}
+            onClick={() => this.onSetManage('delete')}
             tooltipTitle="Toggle deletion mode"
           />{' '}
         </SpeedDial>
@@ -147,6 +147,11 @@ class _PanelControls extends React.Component<
             color="primary"
           >
             Delete Selected
+          </Button>
+        ) : null}
+        {manage ? (
+          <Button onClick={() => this.onSetManage(undefined)} variant="text">
+            Cancel
           </Button>
         ) : null}
       </React.Fragment>
