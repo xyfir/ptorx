@@ -3,9 +3,9 @@
 - **Email Aliases**, alias emails, or forwarding emails
   - Email addresses created via Ptorx that typically act as a middleman for your primary emails by receiving mail and forwarding allowed mail to your primary email addresses.
 - **Waterfall**
-  - Every alias has a waterfall that allows you to link filters, modifiers, and primary emails to it in a specific order. Each linked item is acted on in order, allowing you to redirect different mail to different primary emails based on filters and modifiers.
-- **Primary Emails**, or real emails
-  - Your actual email addresses where you normally receive mail. These emails are where mail sent to your alias addresses will be redirected to.
+  - Every alias has a waterfall that allows you to link filters, modifiers, and primary emails to it in a specific order. Each linked item is acted on in order, cascading downward like a waterfall, allowing you to redirect different mail to different primary emails based on filters and modifiers.
+- **Primary Emails**, real, or main emails
+  - Your actual email addresses where you normally receive mail. These emails are where mail sent to your alias addresses will be redirected to. Enable _Autolink_ to automatically link them to any new aliases you create.
 - **Filters**
   - Filters allow you to filter out mail (with whitelists or blacklists) before it reaches any primary emails that come after it in an alias's waterfall.
 - **Modifiers**
