@@ -102,9 +102,9 @@ export namespace Ptorx {
   export interface AliasLink {
     aliasId: Ptorx.Alias['id'];
     orderIndex: number;
-    primaryEmailId?: Ptorx.PrimaryEmail['id'];
-    modifierId?: Ptorx.Modifier['id'];
-    filterId?: Ptorx.Filter['id'];
+    primaryEmailId?: Ptorx.PrimaryEmail['id'] | null;
+    modifierId?: Ptorx.Modifier['id'] | null;
+    filterId?: Ptorx.Filter['id'] | null;
   }
 
   export interface Message {

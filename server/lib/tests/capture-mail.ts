@@ -7,7 +7,7 @@ export function captureMail(
 ): Promise<void> {
   return new Promise(resolve => {
     let received = 0;
-    let server: SMTPServer;
+    let server: SMTPServer | undefined;
     try {
       server = new SMTPServer({
         authOptional: true,
@@ -15,7 +15,7 @@ export function captureMail(
           const message = await simpleParser(stream);
           fn(message, session);
           callback();
-          if (++received >= expected) server.close(resolve);
+          if (++received >= expected) (server as SMTPServer).close(resolve);
         }
       });
       server.on('error', e => {

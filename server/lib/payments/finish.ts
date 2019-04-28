@@ -14,15 +14,18 @@ export async function finishPayment(
   // Validate JWT and payment
   const { id, paid }: Partial<Ptorx.Payment> = await verifyJWT(jwt);
   if (!paid) throw 'Payment was not paid';
-  const payment = await getPayment(id, userId);
+  const payment = await getPayment(id as Ptorx.Payment['id'], userId);
   if (payment.paid) throw 'Payment has already been paid';
+
+  const tier = TIERS.find(t => t.name == payment.tier);
+  if (!tier) throw 'Invalid tier';
 
   // Update user
   const user = await getUser(userId);
   await editUser({
     ...user,
     tier: payment.tier,
-    credits: TIERS.find(t => t.name == payment.tier).credits,
+    credits: tier.credits,
     tierExpiration: moment()
       .add(1, payment.duration as 'year' | 'month')
       .unix()
