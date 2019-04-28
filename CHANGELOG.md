@@ -4,9 +4,25 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0).
 
 Breaking changes may be introduced in minor versions for v6 while its use in the wild is limited to the official Ptorx.com instances. Afterwards the project will adhere to [Semantic Versioning](https://semver.org).
 
-Changes that require manual, atypical updates for those running their own instances of Ptorx will be listed at the bottom of their respective groups (Added, Changed, etc) and prefixed with `!!`.
+Changes that require manual, atypical updates for those running their own instances of Ptorx will be listed at the bottom of their respective groups (Added, Changed, etc) and prefixed with `!!`. Dependency updates will not be mentioned unless the dependency is a submodule like Accownt.
 
 ## [Unreleased]
+
+## [6.5.0] - 2019-04-27
+
+### Added
+
+- Primary emails that can automatically link themselves to new aliases
+- Cancel button when in a manage mode
+- "Select All" button for each category when in manage mode
+
+### Changed
+
+- An account's email is now automatically added as a verified, autolinking primary email upon registration
+
+### Fixed
+
+- Improve color contrast in dark theme ([#1](https://github.com/Xyfir/ptorx/issues/1))
 
 ## [6.4.1] - 2019-04-15
 
@@ -28,7 +44,7 @@ Changes that require manual, atypical updates for those running their own instan
 
 ### Changed
 
-- !! Update dependencies, CCashCow, and Yalcs
+- !! Update CCashCow, and Yalcs
 
 ## [6.3.0] - 2019-04-12
 
@@ -36,15 +52,11 @@ Changes that require manual, atypical updates for those running their own instan
 
 - Ability to delete multiple items at once
 
-### Changed
-
-- Update dependencies
-
 ## [6.2.1] - 2019-04-10
 
 ### Changed
 
-- !! Update dependencies and Yalcs
+- !! Update Yalcs
 
 ## [6.2.0] - 2019-04-09
 
@@ -52,15 +64,7 @@ Changes that require manual, atypical updates for those running their own instan
 
 - !! [Yalcs](https://github.com/Xyfir/yalcs)
 
-### Changed
-
-- Update dependencies
-
 ## [6.1.1] - 2019-04-03
-
-### Changed
-
-- Update dependencies
 
 ### Fixed
 
@@ -75,7 +79,6 @@ Changes that require manual, atypical updates for those running their own instan
 
 ### Changed
 
-- Update dependencies
 - !! Database structure
 - !! `SMTP_PORT` to `MTA_PORT` in server config
 - !! `TEST_SMTP_PORT` to `TEST_MTA_PORT` in server config
@@ -90,7 +93,10 @@ Changes that require manual, atypical updates for those running their own instan
 
 - Release 6.0.0
 
-[unreleased]: https://github.com/Xyfir/ptorx/compare/6.3.0...HEAD
+[unreleased]: https://github.com/Xyfir/ptorx/compare/6.5.0...HEAD
+[6.5.0]: https://github.com/Xyfir/ptorx/compare/6.4.1...6.5.0
+[6.4.1]: https://github.com/Xyfir/ptorx/compare/6.4.0...6.4.1
+[6.4.0]: https://github.com/Xyfir/ptorx/compare/6.3.0...6.4.0
 [6.3.0]: https://github.com/Xyfir/ptorx/compare/6.2.1...6.3.0
 [6.2.1]: https://github.com/Xyfir/ptorx/compare/6.2.0...6.2.1
 [6.2.0]: https://github.com/Xyfir/ptorx/compare/6.1.1...6.2.0
