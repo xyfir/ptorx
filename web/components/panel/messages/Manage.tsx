@@ -1,11 +1,11 @@
 import { withSnackbar, WithSnackbarProps } from 'notistack';
 import { RouteComponentProps } from 'react-router';
+import { addHook, sanitize } from 'dompurify';
 import { displayAddress } from 'lib/display-address';
 import { PanelContext } from 'lib/PanelContext';
 import { loadOpenPGP } from 'lib/load-openpgp';
 import { Attachment } from '@material-ui/icons';
 import { TrixEditor } from 'react-trix';
-import { sanitize } from 'dompurify';
 import * as moment from 'moment';
 import * as React from 'react';
 import { Ptorx } from 'types/ptorx';
@@ -20,6 +20,10 @@ import {
   Button,
   Paper
 } from '@material-ui/core';
+
+addHook('afterSanitizeAttributes', node => {
+  if (node.tagName == 'A') (node as HTMLAnchorElement).target = '_blank';
+});
 
 const styles = createStyles({
   pre: {
