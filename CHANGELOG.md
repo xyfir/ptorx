@@ -8,6 +8,17 @@ Changes that require manual, atypical updates for those running their own instan
 
 ## [Unreleased]
 
+## [6.5.1] - 2019-05-04
+
+### Fixed
+
+- Links in HTML mail to open in a new tab
+- Dark theme not working in certain parts of app
+
+### Changed
+
+- !! Update Accownt and CCashCow
+
 ## [6.5.0] - 2019-04-27
 
 ### Added
