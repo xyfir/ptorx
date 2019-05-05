@@ -123,7 +123,7 @@ export namespace Ptorx {
      */
     to: string;
     text: string;
-    html?: string;
+    html?: string | null;
     /**
      * @example `['Content-Type: text/html; charset="utf-8"']`
      */
