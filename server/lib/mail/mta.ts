@@ -133,7 +133,7 @@ export function startMTA(): SMTPServer {
         const alias = await getAlias(recipient.aliasId, recipient.user.userId);
         const savedMessage =
           alias.saveMail && recipient.user.tier != 'basic'
-            ? await saveMail(incoming, alias, recipient.user)
+            ? await saveMail(raw, incoming, alias, recipient.user)
             : null;
         const domain = await getDomain(alias.domainId, alias.userId);
 

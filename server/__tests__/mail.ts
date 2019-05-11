@@ -101,20 +101,8 @@ test('save mail', async () => {
   const user = await getUser(1234);
 
   const message = await saveMail(
+    'raw',
     {
-      attachments: [
-        {
-          checksum: 'abc123',
-          content: Buffer.from('Hello World'),
-          contentDisposition: 'attachment',
-          contentType: 'text/html',
-          filename: 'test.txt',
-          headers: new Map(),
-          related: false,
-          size: 11,
-          type: 'attachment'
-        }
-      ],
       from: {
         html: '',
         text: 'user@example.com',
@@ -137,20 +125,13 @@ test('save mail', async () => {
   );
   const _message: Ptorx.Message = {
     ...message,
-    attachments: [
-      {
-        contentType: 'text/html',
-        filename: 'test.txt',
-        size: 11,
-        id: message.attachments[0].id
-      }
-    ],
     from: 'user@example.com',
-    headers: ['Header: Value'],
+    headers: null,
     html: null,
     subject: 'subject',
+    raw: 'raw',
     to: `user@${process.enve.DOMAIN}`,
-    text: 'Hello'
+    text: null
   };
   expect(message).toMatchObject(_message);
 });
