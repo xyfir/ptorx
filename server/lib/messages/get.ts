@@ -24,14 +24,16 @@ export async function getMessage(
     );
     if (!message) throw 'Could not find message';
 
-    message.headers = JSON.parse(message.headers || '[]');
-    message.attachments = await db.query(
-      `
-        SELECT id, filename, contentType, size
-        FROM message_attachments WHERE messageId = ?
-      `,
-      [messageId]
-    );
+    if (!message.raw) {
+      message.headers = JSON.parse(message.headers || '[]');
+      message.attachments = await db.query(
+        `
+          SELECT id, filename, contentType, size
+          FROM message_attachments WHERE messageId = ?
+        `,
+        [messageId]
+      );
+    }
 
     db.release();
     return message;
