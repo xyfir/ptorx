@@ -122,14 +122,15 @@ export namespace Ptorx {
      * @example `'"User" <user@example.com>, user@domain.com'`
      */
     to: string;
-    text: string;
+    raw?: string;
+    text?: string;
     html?: string | null;
     /**
      * @example `['Content-Type: text/html; charset="utf-8"']`
      */
-    headers: string[];
+    headers?: string[];
     replyTo?: string;
-    attachments: {
+    attachments?: {
       id?: number;
       filename?: string;
       contentType: string;

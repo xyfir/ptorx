@@ -133,9 +133,10 @@ CREATE TABLE `messages` (
   `subject` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `from` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `to` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `text` mediumtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `raw` longtext COLLATE utf8mb4_unicode_ci,
+  `text` mediumtext COLLATE utf8mb4_unicode_ci,
   `html` mediumtext COLLATE utf8mb4_unicode_ci,
-  `headers` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `headers` text COLLATE utf8mb4_unicode_ci,
   `replyTo` text COLLATE utf8mb4_unicode_ci
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
