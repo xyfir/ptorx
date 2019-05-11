@@ -11,6 +11,7 @@ export async function getPrimaryEmail(
       'SELECT * FROM primary_emails WHERE id = ? AND userId = ?',
       [primaryEmailId, userId]
     );
+    if (!primaryEmail) throw 'Could not find primary email';
     db.release();
 
     primaryEmail.verified = !!primaryEmail.verified;
