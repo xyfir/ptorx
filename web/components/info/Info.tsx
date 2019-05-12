@@ -183,12 +183,10 @@ const CTAButton = ({ classes, user }: InfoProps) =>
     <Button
       variant="contained"
       color="primary"
-      href={
-        phonegap ? process.enve.ACCOWNT_WEB_URL : 'https://appurl.io/aK_AM7rV7'
-      }
+      href={process.enve.ACCOWNT_WEB_URL}
       size="large"
     >
-      Get it now for free
+      Login / Register
     </Button>
   );
 
