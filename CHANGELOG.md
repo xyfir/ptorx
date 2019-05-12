@@ -8,6 +8,18 @@ Changes that require manual, atypical updates for those running their own instan
 
 ## [Unreleased]
 
+## [6.6.0] - 2019-05-11
+
+### Changed
+
+- Mail storage system
+- Encrypted mail now also encrypts the headers (aside from required from/to/subject/reply-to) as well as any attachments
+- Main button on homepage when not logged in
+
+### Deprecated
+
+- Old mail storage system, which will be removed entirely 30+ days after this release
+
 ## [6.5.1] - 2019-05-04
 
 ### Fixed
@@ -104,7 +116,9 @@ Changes that require manual, atypical updates for those running their own instan
 
 - Release 6.0.0
 
-[unreleased]: https://github.com/Xyfir/ptorx/compare/6.5.0...HEAD
+[unreleased]: https://github.com/Xyfir/ptorx/compare/6.6.0...HEAD
+[6.6.0]: https://github.com/Xyfir/ptorx/compare/6.5.0...6.6.0
+[6.5.1]: https://github.com/Xyfir/ptorx/compare/6.5.0...6.5.1
 [6.5.0]: https://github.com/Xyfir/ptorx/compare/6.4.1...6.5.0
 [6.4.1]: https://github.com/Xyfir/ptorx/compare/6.4.0...6.4.1
 [6.4.0]: https://github.com/Xyfir/ptorx/compare/6.3.0...6.4.0
