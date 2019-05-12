@@ -13,4 +13,10 @@ declare global {
   }
 }
 
+declare module 'mailparser' {
+  interface ParsedMail {
+    headerLines: { key: string; line: string }[];
+  }
+}
+
 render(React.createElement(hot(App)), document.getElementById('content'));
