@@ -25,7 +25,7 @@ export async function saveMail(
       aliasId: alias.id,
       from: mail.from.text,
       raw,
-      to: mail.to.text
+      to: mail.to ? mail.to.text : ''
     },
     alias.userId
   );

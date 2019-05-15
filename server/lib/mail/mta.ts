@@ -125,7 +125,7 @@ export function startMTA(): SMTPServer {
           from: incoming.from.text,
           text: incoming.text,
           date: incoming.date,
-          to: incoming.to.text
+          to: incoming.to ? incoming.to.text : undefined
         };
 
         let credits = 1;
