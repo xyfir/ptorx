@@ -10,7 +10,7 @@ Hosting Ptorx yourself gives you a greater level of control and privacy (assumin
 - Nginx or similar software installed to serve static files and act as a proxy for Ptorx and other APIs.
 - Let's Encrypt or similar geniune TLS (SSL) certificate (no self-signed certs!) for your main domain where the instance of Ptorx will be hosted. Additional mail-only domains don't need this.
 - Node.js installed on your server. Ptorx targets the latest version available at time of the last [server/package.json](https://github.com/Xyfir/ptorx/blob/master/server/package.json) update.
-- MariaDB or MySQL installed on your server. Ptorx.com runs MariaDB so there may be unknown discrepancies with MySQL.
+- MariaDB or MySQL installed on your server (no `STRICT_TRANS_TABLES`!). Ptorx.com runs MariaDB so there may be unknown discrepancies with MySQL.
 - sendmail installed on your server. (Make sure your server's hostname is set correctly to prevent slow mail!)
 - iptables-persistent installed on your server.
 
