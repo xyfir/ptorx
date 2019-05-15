@@ -43,9 +43,10 @@ export async function cron(): Promise<never> {
       }
 
       db.release();
-      await new Promise(r => setTimeout(r, 60 * 1000));
     } catch (err) {
       console.error('cron', err);
     }
+
+    await new Promise(r => setTimeout(r, 60 * 1000));
   }
 }
