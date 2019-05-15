@@ -11,9 +11,9 @@ interface CronJob {
 }
 
 export async function cron(): Promise<never> {
-  const db = new MySQL();
   while (true) {
     try {
+      const db = new MySQL();
       const jobs: CronJob[] = await db.query(`
       SELECT * FROM cron_jobs WHERE
         DATE_ADD(lastRun, INTERVAL minutesInterval MINUTE) < NOW() OR
@@ -42,6 +42,7 @@ export async function cron(): Promise<never> {
         ]);
       }
 
+      db.release();
       await new Promise(r => setTimeout(r, 60 * 1000));
     } catch (err) {
       console.error('cron', err);
