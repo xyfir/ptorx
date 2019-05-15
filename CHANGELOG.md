@@ -8,6 +8,14 @@ Changes that require manual, atypical updates for those running their own instan
 
 ## [Unreleased]
 
+## [6.6.1] - 2019-05-15
+
+### Fixed
+
+- Cron jobs breaking from stale database connection
+- Receiving emails that don't have `To` headers
+- !! Issues caused by upgrading MariaDB (disabled `STRICT_TRANS_TABLES`)
+
 ## [6.6.0] - 2019-05-11
 
 ### Changed
@@ -116,7 +124,8 @@ Changes that require manual, atypical updates for those running their own instan
 
 - Release 6.0.0
 
-[unreleased]: https://github.com/Xyfir/ptorx/compare/6.6.0...HEAD
+[unreleased]: https://github.com/Xyfir/ptorx/compare/6.6.1...HEAD
+[6.6.1]: https://github.com/Xyfir/ptorx/compare/6.6.0...6.6.1
 [6.6.0]: https://github.com/Xyfir/ptorx/compare/6.5.0...6.6.0
 [6.5.1]: https://github.com/Xyfir/ptorx/compare/6.5.0...6.5.1
 [6.5.0]: https://github.com/Xyfir/ptorx/compare/6.4.1...6.5.0
