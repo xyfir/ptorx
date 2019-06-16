@@ -1,5 +1,6 @@
 require('dotenv').config();
 require('enve');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const CompressionPlugin = require('compression-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const webpack = require('webpack');
@@ -14,7 +15,7 @@ module.exports = {
 
   output: {
     publicPath: '/static/',
-    filename: PROD ? '[name].[hash].js' : '[name].js',
+    filename: '[name].[hash].js',
     pathinfo: false,
     path: path.resolve(__dirname, 'dist')
   },
@@ -83,6 +84,7 @@ module.exports = {
         return o;
       }, {})
     }),
+    new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
       minify: PROD,
       template: 'template.html',
@@ -95,12 +97,7 @@ module.exports = {
     PROD ? null : new webpack.HotModuleReplacementPlugin()
   ].filter(p => p !== null),
 
-  devtool: 'inline-source-map',
-
-  watchOptions: {
-    aggregateTimeout: 500,
-    ignored: ['node_modules', 'dist']
-  },
+  devtool: PROD ? false : 'inline-source-map',
 
   devServer: {
     historyApiFallback: true,
@@ -110,5 +107,10 @@ module.exports = {
     port: process.enve.PORT,
     // host: '0.0.0.0',
     hot: true
+  },
+
+  watchOptions: {
+    aggregateTimeout: 500,
+    ignored: ['node_modules', 'dist']
   }
 };
