@@ -102,11 +102,6 @@ class _Panel extends React.Component<PanelProps, PanelState> {
     const { classes } = this.props;
     return (
       <SnackbarProvider
-        action={[
-          <Button color="primary" size="small" key={0}>
-            Dismiss
-          </Button>
-        ]}
         maxSnack={2}
         anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
       >
