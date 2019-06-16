@@ -37,14 +37,14 @@ const styles = (theme: Theme) =>
   createStyles({
     title: {
       borderBottom: `1px solid ${theme.palette.divider}`,
-      padding: theme.spacing.unit * 2,
+      padding: theme.spacing(2),
       margin: 0
     },
     close: {
       position: 'absolute',
       color: theme.palette.grey[500],
-      right: theme.spacing.unit,
-      top: theme.spacing.unit
+      right: theme.spacing(),
+      top: theme.spacing()
     },
     content: {
       padding: '1em'

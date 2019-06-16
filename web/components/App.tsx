@@ -1,5 +1,6 @@
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
-import { MuiThemeProvider, CssBaseline } from '@material-ui/core';
+import { ThemeProvider } from '@material-ui/styles';
+import { CssBaseline } from '@material-ui/core';
 import * as React from 'react';
 import { theme } from 'constants/theme';
 import { Panel } from 'components/panel/Panel';
@@ -29,7 +30,7 @@ export class App extends React.Component<{}, AppState> {
     const { loading, user } = this.state;
     if (loading) return null;
     return (
-      <MuiThemeProvider theme={theme}>
+      <ThemeProvider theme={theme}>
         <CssBaseline />
         <BrowserRouter>
           <Switch>
@@ -47,7 +48,7 @@ export class App extends React.Component<{}, AppState> {
             <Redirect exact from="/" to="/info" />
           </Switch>
         </BrowserRouter>
-      </MuiThemeProvider>
+      </ThemeProvider>
     );
   }
 }
