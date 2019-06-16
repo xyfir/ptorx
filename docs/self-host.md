@@ -90,7 +90,7 @@ You can also name the three directories however you'd like.
 
 Ptorx and its submodules are configured via environment variables which are loaded into the applications via `.env` files located in each modules's directory.
 
-To understand the syntax of the `.env` files, know that they are first loaded via [dotenv](https://www.npmjs.com/package/dotenv) and then the string values provided by dotenv are parsed by [enve](https://www.npmjs.com/package/dotenv).
+To understand the syntax of the `.env` files, know that they are first loaded via [dotenv](https://www.npmjs.com/package/dotenv) and then the string values provided by dotenv are parsed by [enve](https://www.npmjs.com/package/enve).
 
 ## Step 4a: Create `.env` Files
 
