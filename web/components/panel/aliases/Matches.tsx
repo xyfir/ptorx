@@ -1,5 +1,5 @@
 import { ListItemSecondaryAction, IconButton } from '@material-ui/core';
-import { CATEGORIES } from 'constants/categories';
+import { CATEGORIES } from 'lib/categories';
 import { FileCopy } from '@material-ui/icons';
 import { Matches } from 'components/panel/utils/Matches';
 import * as moment from 'moment';

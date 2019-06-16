@@ -1,5 +1,5 @@
 import { getPayment } from 'lib/payments/get';
-import { TIERS } from 'constants/tiers';
+import { TIERS } from 'lib/users/tiers';
 import { Ptorx } from 'types/ptorx';
 import { MySQL } from 'lib/MySQL';
 

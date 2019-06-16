@@ -1,4 +1,4 @@
-import * as IMAGES from 'constants/images';
+import * as IMAGES from 'lib/images';
 import * as React from 'react';
 import { Ptorx } from 'types/ptorx';
 import { Link } from 'react-router-dom';

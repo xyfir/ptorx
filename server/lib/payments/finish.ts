@@ -4,7 +4,7 @@ import { verifyJWT } from 'lib/jwt/verify';
 import { editUser } from 'lib/users/edit';
 import { getUser } from 'lib/users/get';
 import * as moment from 'moment';
-import { TIERS } from 'constants/tiers';
+import { TIERS } from 'lib/users/tiers';
 import { Ptorx } from 'types/ptorx';
 
 export async function finishPayment(

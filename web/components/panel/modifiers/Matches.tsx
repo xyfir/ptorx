@@ -1,4 +1,4 @@
-import { CATEGORIES } from 'constants/categories';
+import { CATEGORIES } from 'lib/categories';
 import { Matches } from 'components/panel/utils/Matches';
 import * as moment from 'moment';
 import * as React from 'react';

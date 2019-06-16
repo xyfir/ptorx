@@ -1,7 +1,7 @@
 import { PanelContext, PanelContextValue } from 'lib/PanelContext';
 import { withSnackbar, WithSnackbarProps } from 'notistack';
 import { DrawerContent } from 'components/panel/DrawerContent';
-import { CATEGORIES } from 'constants/categories';
+import { CATEGORIES } from 'lib/categories';
 import * as React from 'react';
 import { Link } from 'react-router-dom';
 import { api } from 'lib/api';

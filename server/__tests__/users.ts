@@ -2,7 +2,7 @@ import 'lib/tests/prepare';
 import { chargeCredits } from 'lib/users/charge';
 import { setPGPKeys } from 'lib/users/set-keys';
 import { getUser } from 'lib/users/get';
-import { TIERS } from 'constants/tiers';
+import { TIERS } from 'lib/users/tiers';
 import { Ptorx } from 'types/ptorx';
 
 test('get user', async () => {

@@ -1,5 +1,5 @@
 import { AccountBox, ExitToApp, Help, Money, VpnKey } from '@material-ui/icons';
-import { CATEGORIES, Category } from 'constants/categories';
+import { CATEGORIES, Category } from 'lib/categories';
 import { PanelContext } from 'lib/PanelContext';
 import * as React from 'react';
 import { Link } from 'react-router-dom';

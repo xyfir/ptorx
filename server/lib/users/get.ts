@@ -1,5 +1,5 @@
 import { addPrimaryEmail } from 'lib/primary-emails/add';
-import { TIERS } from 'constants/tiers';
+import { TIERS } from 'lib/users/tiers';
 import { Ptorx } from 'types/ptorx';
 import { MySQL } from 'lib/MySQL';
 

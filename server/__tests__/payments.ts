@@ -5,7 +5,7 @@ import { addPayment } from 'lib/payments/add';
 import { verifyJWT } from 'lib/jwt/verify';
 import { getUser } from 'lib/users/get';
 import { signJWT } from 'lib/jwt/sign';
-import { TIERS } from 'constants/tiers';
+import { TIERS } from 'lib/users/tiers';
 import { Ptorx } from 'types/ptorx';
 
 test('create payment', async () => {

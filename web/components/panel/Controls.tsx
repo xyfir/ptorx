@@ -2,7 +2,7 @@ import { SpeedDialAction, SpeedDialIcon, SpeedDial } from '@material-ui/lab';
 import { PanelContext } from 'lib/PanelContext';
 import { Delete, Add } from '@material-ui/icons';
 import { PanelState } from 'components/panel/Panel';
-import { CATEGORIES } from 'constants/categories';
+import { CATEGORIES } from 'lib/categories';
 import * as React from 'react';
 import { Link } from 'react-router-dom';
 import { api } from 'lib/api';

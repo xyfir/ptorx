@@ -2,7 +2,7 @@ import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
 import { ThemeProvider } from '@material-ui/styles';
 import { CssBaseline } from '@material-ui/core';
 import * as React from 'react';
-import { theme } from 'constants/theme';
+import { theme } from 'lib/theme';
 import { Panel } from 'components/panel/Panel';
 import { Ptorx } from 'types/ptorx';
 import { Info } from 'components/info/Info';

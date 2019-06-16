@@ -1,4 +1,4 @@
-import { TIERS } from 'constants/tiers';
+import { TIERS } from 'lib/users/tiers';
 import { MySQL } from 'lib/MySQL';
 
 export async function topUpCredits() {

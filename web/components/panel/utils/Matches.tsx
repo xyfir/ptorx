@@ -1,5 +1,5 @@
 import { PanelContext } from 'lib/PanelContext';
-import { Category } from 'constants/categories';
+import { Category } from 'lib/categories';
 import * as React from 'react';
 import * as Fuse from 'fuse.js';
 import { Link } from 'react-router-dom';

@@ -4,7 +4,7 @@ import { PanelNavigation } from 'components/panel/Navigation';
 import { PanelControls } from 'components/panel/Controls';
 import { PanelContext } from 'lib/PanelContext';
 import { PanelDialog } from 'components/panel/Dialog';
-import { Category } from 'constants/categories';
+import { Category } from 'lib/categories';
 import * as React from 'react';
 import { Ptorx } from 'types/ptorx';
 import { api } from 'lib/api';
