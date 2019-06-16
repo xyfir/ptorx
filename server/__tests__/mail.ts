@@ -126,12 +126,9 @@ test('save mail', async () => {
   const _message: Ptorx.Message = {
     ...message,
     from: 'user@example.com',
-    headers: null,
-    html: null,
     subject: 'subject',
     raw: 'raw',
-    to: `user@${process.enve.DOMAIN}`,
-    text: null
+    to: `user@${process.enve.DOMAIN}`
   };
   expect(message).toMatchObject(_message);
 });
@@ -403,7 +400,6 @@ test('reply to message', async () => {
       aliasId: alias.id,
       subject: 'Hello',
       from: 'test@example.com',
-      text: 'Hello World',
       to: alias.fullAddress
     },
     1234

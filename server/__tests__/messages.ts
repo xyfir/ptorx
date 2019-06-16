@@ -43,7 +43,7 @@ test('create message', async () => {
     },
     1234
   );
-  expect(Object.keys(message).length).toBe(14);
+  expect(Object.keys(message).length).toBe(11);
   expect(message.id).toBeNumber();
   expect(message.created).toBeNumber();
   const _message: Ptorx.Message = {
@@ -115,7 +115,6 @@ test('send and reply to messages', async () => {
 test('delete expired messages', async () => {
   let messages = await listMessages(1234);
   const unexpiredMessage = await getMessage(messages[0].id, 1234);
-  unexpiredMessage.attachments = [];
   const expiredMessage = await addMessage(unexpiredMessage, 1234);
   const db = new MySQL();
   await db.query('UPDATE messages SET created = 0 WHERE id = ?', [

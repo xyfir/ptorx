@@ -93,22 +93,23 @@ class _ManageMessage extends React.Component<
       });
       const message: Ptorx.Message = res.data;
 
-      // New format
-      if (message.raw) {
-        // Decrypt if needed and able
-        if (message.raw.startsWith('-----BEGIN PGP MESSAGE-----')) {
-          try {
-            const openpgp = await loadOpenPGP();
-            const plaintext = await openpgp.decrypt({
-              message: await openpgp.message.readArmored(message.raw),
-              privateKeys: [unlockedPrivateKey]
-            });
-            message.raw = plaintext.data as string;
-          } catch (err) {}
-        }
+      // Decrypt if needed and able
+      if (message.raw.startsWith('-----BEGIN PGP MESSAGE-----')) {
+        try {
+          const openpgp = await loadOpenPGP();
+          const plaintext = await openpgp.decrypt({
+            message: await openpgp.message.readArmored(message.raw),
+            privateKeys: [unlockedPrivateKey]
+          });
+          message.raw = plaintext.data as string;
+        } catch (err) {}
+      }
 
+      // Parse raw message if able
+      let mail: ParsedMail;
+      if (!message.raw.startsWith('-----BEGIN PGP MESSAGE-----')) {
         // Parse raw email
-        const mail = await simpleParser(message.raw);
+        mail = await simpleParser(message.raw);
 
         // Generate URLs for each attachment
         if (mail.attachments) {
@@ -116,31 +117,9 @@ class _ManageMessage extends React.Component<
             URL.createObjectURL(new Blob([a.content]))
           );
         }
-
-        this.setState({ mail });
-      }
-      // Old format
-      // Decrypt contents if needed and able
-      else if (message.text.startsWith('-----BEGIN PGP MESSAGE-----')) {
-        try {
-          const openpgp = await loadOpenPGP();
-          let plaintext = await openpgp.decrypt({
-            message: await openpgp.message.readArmored(message.text),
-            privateKeys: [unlockedPrivateKey]
-          });
-          message.text = plaintext.data as string;
-
-          if (message.html !== null) {
-            plaintext = await openpgp.decrypt({
-              message: await openpgp.message.readArmored(message.html),
-              privateKeys: [unlockedPrivateKey]
-            });
-            message.html = plaintext.data as string;
-          }
-        } catch (err) {}
       }
 
-      this.setState({ message });
+      this.setState({ message, mail });
     } catch (err) {
       enqueueSnackbar(err.response.data.error);
     }
@@ -182,44 +161,23 @@ class _ManageMessage extends React.Component<
 
     // Decrypt message
     try {
-      // New format
-      if (message.raw) {
-        const plaintext = await openpgp.decrypt({
-          message: await openpgp.message.readArmored(message.raw),
-          privateKeys: [unlockedPrivateKey]
-        });
-        message.raw = plaintext.data as string;
+      const plaintext = await openpgp.decrypt({
+        message: await openpgp.message.readArmored(message.raw),
+        privateKeys: [unlockedPrivateKey]
+      });
+      message.raw = plaintext.data as string;
 
-        // Parse raw email
-        const mail = await simpleParser(message.raw);
+      // Parse raw email
+      const mail = await simpleParser(message.raw);
 
-        // Generate URLs for each attachment
-        if (mail.attachments) {
-          this.attachmentUrls = mail.attachments.map(a =>
-            URL.createObjectURL(new Blob([a.content]))
-          );
-        }
-
-        this.setState({ mail });
+      // Generate URLs for each attachment
+      if (mail.attachments) {
+        this.attachmentUrls = mail.attachments.map(a =>
+          URL.createObjectURL(new Blob([a.content]))
+        );
       }
-      // Old format
-      else {
-        let plaintext = await openpgp.decrypt({
-          message: await openpgp.message.readArmored(message.text),
-          privateKeys: [unlockedPrivateKey]
-        });
-        message.text = plaintext.data as string;
 
-        if (message.html !== null) {
-          plaintext = await openpgp.decrypt({
-            message: await openpgp.message.readArmored(message.html),
-            privateKeys: [unlockedPrivateKey]
-          });
-          message.html = plaintext.data as string;
-        }
-
-        this.setState({ message });
-      }
+      this.setState({ mail });
     } catch (err) {
       enqueueSnackbar('Could not decrypt message with private key');
     }
@@ -253,31 +211,16 @@ class _ManageMessage extends React.Component<
       mail
     } = this.state;
     const { classes } = this.props;
+
     if (!message) return null;
+
     return (
       <div>
         <Typography variant="h2" className={classes.title}>
           {message.subject}
         </Typography>
 
-        {message.attachments ? (
-          <div className={classes.attachments}>
-            {message.attachments.map((attachment, i) => (
-              <Button
-                key={i}
-                href={`${api.defaults.baseURL}/messages/attachment?attachment=${
-                  attachment.id
-                }`}
-                size="small"
-                variant="text"
-                download={attachment.filename}
-              >
-                <Attachment />
-                {attachment.filename}
-              </Button>
-            ))}
-          </div>
-        ) : mail && mail.attachments ? (
+        {mail && mail.attachments ? (
           <div className={classes.attachments}>
             {mail.attachments.map((attachment, i) => (
               <Button
@@ -331,22 +274,11 @@ class _ManageMessage extends React.Component<
                 .join(': ')}
             </Typography>
           ))
-        ) : (
-          message.headers.map((header, i) => (
-            <Typography key={i}>
-              <strong>{header.split(': ')[0]}</strong>:{' '}
-              {header
-                .split(': ')
-                .slice(1)
-                .join(': ')}
-            </Typography>
-          ))
-        )}
+        ) : null}
 
         <Paper className={classes.content} elevation={2}>
-          {(message.raw || message.text).startsWith(
-            '-----BEGIN PGP MESSAGE-----'
-          ) && !unlockedPrivateKey ? (
+          {message.raw.startsWith('-----BEGIN PGP MESSAGE-----') &&
+          !unlockedPrivateKey ? (
             <div>
               <TextField
                 fullWidth
@@ -369,17 +301,14 @@ class _ManageMessage extends React.Component<
           ) : renderHTML ? (
             <div
               dangerouslySetInnerHTML={{
-                __html: sanitize(mail ? (mail.html as string) : message.html)
+                __html: sanitize(mail.html as string)
               }}
             />
           ) : (
             <React.Fragment>
-              <pre className={classes.pre}>
-                {mail ? mail.text : message.text}
-              </pre>
+              <pre className={classes.pre}>{mail && mail.text}</pre>
 
-              {(message.html && message.html != message.text) ||
-              (mail && mail.html && mail.html != mail.text) ? (
+              {mail && mail.html && mail.html != mail.text ? (
                 <Button
                   size="small"
                   color="secondary"

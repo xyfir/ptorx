@@ -19,7 +19,6 @@ export * from './messages/delete';
 export * from './messages/get';
 export * from './messages/reply';
 export * from './messages/send';
-export * from './messages/attachment';
 
 export * from './payments/finish';
 export * from './payments/start';
