@@ -133,26 +133,8 @@ CREATE TABLE `messages` (
   `subject` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `from` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `to` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `raw` longtext COLLATE utf8mb4_unicode_ci,
-  `text` mediumtext COLLATE utf8mb4_unicode_ci,
-  `html` mediumtext COLLATE utf8mb4_unicode_ci,
-  `headers` text COLLATE utf8mb4_unicode_ci,
+  `raw` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
   `replyTo` text COLLATE utf8mb4_unicode_ci
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `message_attachments`
---
-
-CREATE TABLE `message_attachments` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `messageId` bigint(20) UNSIGNED NOT NULL,
-  `filename` tinytext COLLATE utf8mb4_unicode_ci,
-  `contentType` varchar(25) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `size` int(10) UNSIGNED NOT NULL,
-  `content` longblob NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -280,13 +262,6 @@ ALTER TABLE `messages`
   ADD KEY `fk__messages__aliasId` (`aliasId`) USING BTREE;
 
 --
--- Indexes for table `message_attachments`
---
-ALTER TABLE `message_attachments`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `fk__message_attachments__messageId` (`messageId`);
-
---
 -- Indexes for table `modifiers`
 --
 ALTER TABLE `modifiers`
@@ -321,61 +296,55 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `aliases`
 --
 ALTER TABLE `aliases`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=0;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `cron_jobs`
 --
 ALTER TABLE `cron_jobs`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=0;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `domains`
 --
 ALTER TABLE `domains`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=0;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `filters`
 --
 ALTER TABLE `filters`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=0;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `messages`
 --
 ALTER TABLE `messages`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=0;
-
---
--- AUTO_INCREMENT for table `message_attachments`
---
-ALTER TABLE `message_attachments`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=0;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `modifiers`
 --
 ALTER TABLE `modifiers`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=0;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `payments`
 --
 ALTER TABLE `payments`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=0;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `primary_emails`
 --
 ALTER TABLE `primary_emails`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=0;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `userId` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=0;
+  MODIFY `userId` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- Constraints for dumped tables
@@ -427,12 +396,6 @@ ALTER TABLE `links`
 --
 ALTER TABLE `messages`
   ADD CONSTRAINT `fk__messages__aliasId` FOREIGN KEY (`aliasId`) REFERENCES `aliases` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Constraints for table `message_attachments`
---
-ALTER TABLE `message_attachments`
-  ADD CONSTRAINT `fk__message_attachments__messageId` FOREIGN KEY (`messageId`) REFERENCES `messages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `modifiers`
