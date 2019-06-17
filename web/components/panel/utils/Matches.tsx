@@ -13,10 +13,17 @@ import {
   Checkbox,
   ListItem,
   Divider,
+  Theme,
   List
 } from '@material-ui/core';
 
-const styles = createStyles({ link: { textDecoration: 'none' } });
+const styles = (theme: Theme) =>
+  createStyles({
+    link: {
+      textDecoration: 'none',
+      color: theme.palette.getContrastText(theme.palette.background.default)
+    }
+  });
 
 interface MatchesProps extends WithStyles<typeof styles> {
   secondaryAction?: (item: any) => React.ReactNode;

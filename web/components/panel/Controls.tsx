@@ -15,19 +15,22 @@ import {
   ListItem,
   Dialog,
   Button,
+  Theme,
   List
 } from '@material-ui/core';
 
-const styles = createStyles({
-  link: {
-    textDecoration: 'none'
-  },
-  speedDial: {
-    position: 'fixed',
-    bottom: '1em',
-    zIndex: 1
-  }
-});
+const styles = (theme: Theme) =>
+  createStyles({
+    link: {
+      textDecoration: 'none',
+      color: theme.palette.getContrastText(theme.palette.background.paper)
+    },
+    speedDial: {
+      position: 'fixed',
+      bottom: '1em',
+      zIndex: 1
+    }
+  });
 
 interface PanelControlsState {
   create: boolean;

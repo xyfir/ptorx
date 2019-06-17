@@ -19,16 +19,21 @@ import {
   ListItem,
   Divider,
   Button,
+  Theme,
   List
 } from '@material-ui/core';
 
-const styles = createStyles({
-  link: { textDecoration: 'none' },
-  hr: {
-    margin: '0.5em',
-    marginBottom: '0'
-  }
-});
+const styles = (theme: Theme) =>
+  createStyles({
+    link: {
+      textDecoration: 'none',
+      color: theme.palette.getContrastText(theme.palette.background.paper)
+    },
+    hr: {
+      margin: '0.5em',
+      marginBottom: '0'
+    }
+  });
 
 interface ExtensionProps
   extends WithStyles<typeof styles>,
