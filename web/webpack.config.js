@@ -104,6 +104,7 @@ module.exports = {
     /** @todo remove this eventually */
     disableHostCheck: true,
     contentBase: path.join(__dirname, 'dist'),
+    writeToDisk: true,
     port: process.enve.PORT,
     // host: '0.0.0.0',
     hot: true
