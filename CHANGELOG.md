@@ -8,6 +8,17 @@ Changes that require manual, atypical updates for those running their own instan
 
 ## [Unreleased]
 
+## [6.7.0] - 2019-06-17
+
+### Changed
+
+- Significantly decrease app size
+- `!!` Upgrade submodules
+
+### Removed
+
+- Deprecated saved message format
+
 ## [6.6.1] - 2019-05-15
 
 ### Fixed
@@ -124,7 +135,8 @@ Changes that require manual, atypical updates for those running their own instan
 
 - Release 6.0.0
 
-[unreleased]: https://github.com/Xyfir/ptorx/compare/6.6.1...HEAD
+[unreleased]: https://github.com/Xyfir/ptorx/compare/6.7.0...HEAD
+[6.7.0]: https://github.com/Xyfir/ptorx/compare/6.6.1...6.7.0
 [6.6.1]: https://github.com/Xyfir/ptorx/compare/6.6.0...6.6.1
 [6.6.0]: https://github.com/Xyfir/ptorx/compare/6.5.0...6.6.0
 [6.5.1]: https://github.com/Xyfir/ptorx/compare/6.5.0...6.5.1
