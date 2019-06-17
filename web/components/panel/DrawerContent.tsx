@@ -26,12 +26,11 @@ const useStyles = makeStyles(theme =>
 );
 
 export function DrawerContent() {
-  const { categories, user } = React.useContext(PanelContext);
+  const { categories, dispatch, user } = React.useContext(PanelContext);
   const phonegap = /source~phonegap/.test(localStorage.r);
   const classes = useStyles({});
 
   function onToggle(category: Category['name']) {
-    const { categories, dispatch } = this.context;
     const _categories =
       categories.indexOf(category) > -1
         ? categories.filter(c => c != category)
