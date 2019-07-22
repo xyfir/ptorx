@@ -8,6 +8,16 @@ Changes that require manual, atypical updates for those running their own instan
 
 ## [Unreleased]
 
+## [6.7.1] - 2019-07-21
+
+### Changed
+
+- Small updates and code tweaks
+
+### Fixed
+
+- CHANGELOG version links
+
 ## [6.7.0] - 2019-06-17
 
 ### Changed
@@ -136,16 +146,17 @@ Changes that require manual, atypical updates for those running their own instan
 - Release 6.0.0
 
 [unreleased]: https://github.com/Xyfir/ptorx/compare/6.7.0...HEAD
-[6.7.0]: https://github.com/Xyfir/ptorx/compare/6.6.1...6.7.0
-[6.6.1]: https://github.com/Xyfir/ptorx/compare/6.6.0...6.6.1
-[6.6.0]: https://github.com/Xyfir/ptorx/compare/6.5.0...6.6.0
-[6.5.1]: https://github.com/Xyfir/ptorx/compare/6.5.0...6.5.1
-[6.5.0]: https://github.com/Xyfir/ptorx/compare/6.4.1...6.5.0
-[6.4.1]: https://github.com/Xyfir/ptorx/compare/6.4.0...6.4.1
-[6.4.0]: https://github.com/Xyfir/ptorx/compare/6.3.0...6.4.0
-[6.3.0]: https://github.com/Xyfir/ptorx/compare/6.2.1...6.3.0
-[6.2.1]: https://github.com/Xyfir/ptorx/compare/6.2.0...6.2.1
-[6.2.0]: https://github.com/Xyfir/ptorx/compare/6.1.1...6.2.0
-[6.1.1]: https://github.com/Xyfir/ptorx/compare/6.0.1...6.1.1
-[6.1.0]: https://github.com/Xyfir/ptorx/compare/6.0.0...6.1.0
+[6.7.1]: https://github.com/Xyfir/ptorx/releases/tag/6.7.1
+[6.7.0]: https://github.com/Xyfir/ptorx/releases/tag/6.7.0
+[6.6.1]: https://github.com/Xyfir/ptorx/releases/tag/6.6.1
+[6.6.0]: https://github.com/Xyfir/ptorx/releases/tag/6.6.0
+[6.5.1]: https://github.com/Xyfir/ptorx/releases/tag/6.5.1
+[6.5.0]: https://github.com/Xyfir/ptorx/releases/tag/6.5.0
+[6.4.1]: https://github.com/Xyfir/ptorx/releases/tag/6.4.1
+[6.4.0]: https://github.com/Xyfir/ptorx/releases/tag/6.4.0
+[6.3.0]: https://github.com/Xyfir/ptorx/releases/tag/6.3.0
+[6.2.1]: https://github.com/Xyfir/ptorx/releases/tag/6.2.1
+[6.2.0]: https://github.com/Xyfir/ptorx/releases/tag/6.2.0
+[6.1.1]: https://github.com/Xyfir/ptorx/releases/tag/6.1.1
+[6.1.0]: https://github.com/Xyfir/ptorx/releases/tag/6.1.0
 [6.0.0]: https://github.com/Xyfir/ptorx/releases/tag/6.0.0
