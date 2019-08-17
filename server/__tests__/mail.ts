@@ -1,4 +1,3 @@
-import 'lib/tests/prepare';
 import { SendMailOptions, createTransport } from 'nodemailer';
 import { buildTemplate } from 'lib/mail/templates/build';
 import { getRecipient } from 'lib/mail/get-recipient';

@@ -1,4 +1,3 @@
-import 'lib/tests/prepare';
 import { listDomainUsers } from 'lib/domains/users/list';
 import { addDomainUser } from 'lib/domains/users/add';
 import { getDomainAuth } from 'lib/domains/get';

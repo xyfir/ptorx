@@ -1,4 +1,3 @@
-import 'lib/tests/prepare';
 import { chargeCredits } from 'lib/users/charge';
 import { setPGPKeys } from 'lib/users/set-keys';
 import { getUser } from 'lib/users/get';

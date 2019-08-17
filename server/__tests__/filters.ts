@@ -1,4 +1,3 @@
-import 'lib/tests/prepare';
 import { deleteFilter } from 'lib/filters/delete';
 import { listFilters } from 'lib/filters/list';
 import { addFilter } from 'lib/filters/add';

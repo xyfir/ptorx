@@ -1,4 +1,3 @@
-import 'lib/tests/prepare';
 import { createTransport } from 'nodemailer';
 import { captureMail } from 'lib/tests/capture-mail';
 import { addAlias } from 'lib/aliases/add';

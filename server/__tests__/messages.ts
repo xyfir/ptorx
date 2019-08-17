@@ -1,4 +1,3 @@
-import 'lib/tests/prepare';
 import { deleteExpiredMessages } from 'jobs/delete-expired-messages';
 import { replyToMessage } from 'lib/messages/reply';
 import { deleteMessage } from 'lib/messages/delete';

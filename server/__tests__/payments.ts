@@ -1,4 +1,3 @@
-import 'lib/tests/prepare';
 import { finishPayment } from 'lib/payments/finish';
 import { startPayment } from 'lib/payments/start';
 import { addPayment } from 'lib/payments/add';

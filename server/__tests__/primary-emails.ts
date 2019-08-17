@@ -1,4 +1,3 @@
-import 'lib/tests/prepare';
 import { verifyPrimaryEmail } from 'lib/primary-emails/verify';
 import { deletePrimaryEmail } from 'lib/primary-emails/delete';
 import { listPrimaryEmails } from 'lib/primary-emails/list';

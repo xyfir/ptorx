@@ -1,4 +1,3 @@
-import 'lib/tests/prepare';
 import { verifyJWT } from 'lib/jwt/verify';
 import { signJWT } from 'lib/jwt/sign';
 

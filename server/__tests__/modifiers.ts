@@ -1,4 +1,3 @@
-import 'lib/tests/prepare';
 import { deleteModifier } from 'lib/modifiers/delete';
 import { listModifiers } from 'lib/modifiers/list';
 import { addModifier } from 'lib/modifiers/add';

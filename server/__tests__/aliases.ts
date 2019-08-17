@@ -1,4 +1,3 @@
-import 'lib/tests/prepare';
 import { deleteAlias } from 'lib/aliases/delete';
 import { listAliases } from 'lib/aliases/list';
 import { addModifier } from 'lib/modifiers/add';
