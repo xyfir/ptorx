@@ -3,7 +3,7 @@ import { captureMail } from 'lib/tests/capture-mail';
 import { addAlias } from 'lib/aliases/add';
 import { startMSA } from 'lib/mail/msa';
 
-test('send mail through msa', async () => {
+test('lib/mail/msa', async () => {
   expect.assertions(7);
 
   const server = startMSA();
