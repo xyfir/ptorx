@@ -1,6 +1,7 @@
+import { verifyJWT, signJWT } from 'lib/jwt';
 import { editPayment } from 'lib/payments/edit';
 import { getPayment } from 'lib/payments/get';
-import { verifyJWT } from 'lib/jwt';
+import { addPayment } from 'lib/payments/add';
 import { editUser } from 'lib/users/edit';
 import { getUser } from 'lib/users/get';
 import * as moment from 'moment';
@@ -33,4 +34,21 @@ export async function finishPayment(
 
   // Mark payment as paid
   await editPayment({ ...payment, paid }, userId);
+}
+
+export async function startPayment(
+  payment: Partial<Ptorx.Payment>,
+  userId: number
+): Promise<{ url: string }> {
+  const _payment = await addPayment(payment, userId);
+  const jwt = await signJWT(
+    {
+      id: _payment.id,
+      amount: _payment.amount,
+      methods: ['coinbase-commerce', 'square']
+    },
+    '1d'
+  );
+
+  return { url: `${process.enve.CCASHCOW_WEB_URL}?jwt=${jwt}` };
 }

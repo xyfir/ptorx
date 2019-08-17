@@ -1,31 +1,10 @@
+import { finishPayment, startPayment } from 'lib/payments/pay';
 import { verifyJWT, signJWT } from 'lib/jwt';
-import { finishPayment } from 'lib/payments/finish';
-import { startPayment } from 'lib/payments/start';
-import { addPayment } from 'lib/payments/add';
 import { getUser } from 'lib/users/get';
 import { TIERS } from 'lib/users/tiers';
 import { Ptorx } from 'types/ptorx';
 
-test('create payment', async () => {
-  const paid = Date.now();
-  const payment = await addPayment(
-    { duration: 'month', tier: 'premium', paid },
-    1234
-  );
-  expect(Object.keys(payment).length).toBe(6);
-  expect(payment.id).toBeNumber();
-  expect(payment.userId).toBe(1234);
-  const _payment: Ptorx.Payment = {
-    ...payment,
-    amount: 150,
-    duration: 'month',
-    tier: 'premium',
-    paid
-  };
-  expect(payment).toMatchObject(_payment);
-});
-
-test('start and finish payment', async () => {
+test('finishPayment(), startPayment()', async () => {
   const [, tier] = TIERS;
   const { url } = await startPayment(
     { tier: tier.name, duration: 'month' },
