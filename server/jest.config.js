@@ -1,6 +1,8 @@
 module.exports = {
-  watchPathIgnorePatterns: ['\\.ts$'],
-  setupFilesAfterEnv: ['<rootDir>/dist/lib/tests/prepare.js'],
-  modulePaths: ['<rootDir>/dist'],
-  testMatch: ['<rootDir>/dist/__tests__/**/*.js']
+  setupFilesAfterEnv: ['<rootDir>/lib/tests/prepare.ts'],
+  modulePaths: ['<rootDir>'],
+  transform: {
+    '^.+\\.tsx?$': 'ts-jest'
+  },
+  testMatch: ['<rootDir>/__tests__/**/*.ts']
 };
