@@ -1,5 +1,5 @@
 import { addPayment } from 'lib/payments/add';
-import { signJWT } from 'lib/jwt/sign';
+import { signJWT } from 'lib/jwt';
 import { Ptorx } from 'types/ptorx';
 
 export async function startPayment(

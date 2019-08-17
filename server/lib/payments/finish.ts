@@ -1,6 +1,6 @@
 import { editPayment } from 'lib/payments/edit';
 import { getPayment } from 'lib/payments/get';
-import { verifyJWT } from 'lib/jwt/verify';
+import { verifyJWT } from 'lib/jwt';
 import { editUser } from 'lib/users/edit';
 import { getUser } from 'lib/users/get';
 import * as moment from 'moment';
