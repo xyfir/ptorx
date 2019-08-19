@@ -97,7 +97,9 @@ To understand the syntax of the `.env` files, know that they are first loaded vi
 First we'll create each file and then we'll work our way through populating them with values.
 
 ```bash
-touch server/.env web/.env accownt/server/.env accownt/web/.env ccashcow/server/.env ccashcow/web/.env
+touch accownt/server/.env accownt/web/.env ccashcow/server/.env ccashcow/web/.env
+cp server/example.env server/.env
+cp web/example.env web/.env
 ```
 
 ## Step 4b: Configure CCashCow
