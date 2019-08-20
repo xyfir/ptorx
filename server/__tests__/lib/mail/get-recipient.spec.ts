@@ -1,5 +1,4 @@
 import { getRecipient } from 'lib/mail/get-recipient';
-import { listAliases } from 'lib/aliases/list';
 import { addMessage } from 'lib/messages/add';
 import { addAlias } from 'lib/aliases/add';
 import { getUser } from 'lib/users/get';
@@ -40,7 +39,7 @@ test('getRecipient() bad address on alias domain', async () => {
 });
 
 test('getRecipient() reply to message', async () => {
-  const [alias] = await listAliases(1234);
+  const alias = await addAlias({ domainId: process.enve.DOMAIN_ID }, 1234);
   const message = await addMessage({ aliasId: alias.id }, 1234);
   const user = await getUser(1234);
   const recipient = await getRecipient(message.ptorxReplyTo);
