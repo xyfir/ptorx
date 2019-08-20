@@ -1,15 +1,12 @@
--- Disable STRICT_TRANS_TABLES
-SET GLOBAL sql_mode='ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION';
-
 -- Add user
 INSERT INTO `users` (`email`, `credits`, `tier`, `tierExpiration`) VALUES ('test@xyfir.com', 1500, 'premium', 2147483647);
 
 -- Add domain
-INSERT INTO `domains` (`userId`, `domain`, `verified`, `global`) VALUES (1, 'dev.ptorx.com', 1, 1);
+INSERT INTO `domains` (`userId`, `domain`, `verified`, `global`, `publicKey`, `privateKey`, `selector`, `created`) VALUES (1, 'dev.ptorx.com', 1, 1, '', '', '', 0);
 
 -- Add alias
-INSERT INTO `aliases` (`userId`, `domainId`, `address`) VALUES (1, 1, 'alias12');
+INSERT INTO `aliases` (`userId`, `domainId`, `address`, `name`, `created`, `smtpKey`, `saveMail`, `canReply`) VALUES (1, 1, 'alias12', '', 0, '', 0, 0);
 
 -- Add primary email and link to alias
-INSERT INTO `primary_emails` (`userId`, `address`, `verified`) VALUES (1, 'user@example.com', 1);
-INSERT INTO `links` (`aliasId`, `primaryEmailId`) VALUES (1, 1);
+INSERT INTO `primary_emails` (`userId`, `address`, `verified`, `created`, `key`, `autolink`) VALUES (1, 'user@example.com', 1, 0, '', 0);
+INSERT INTO `links` (`aliasId`, `primaryEmailId`, `orderIndex`) VALUES (1, 1, 0);
