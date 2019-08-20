@@ -34,3 +34,5 @@ deploy:
       condition: $PACKAGE = .
       repo: xyfir/ptorx
       tags: true
+addons:
+  mariadb: '10.4'
