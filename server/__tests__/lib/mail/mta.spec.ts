@@ -12,7 +12,7 @@ test('lib/mail/mta forward incoming', async () => {
 
   // Catch REDIRECTED mail
   const promise = captureMail(1, (message, session) => {
-    expect(session.envelope.rcptTo[0].address).toBe('test@example.com');
+    expect(session.envelope.rcptTo[0].address).toBe('user@example.com');
     expect(
       session.envelope.mailFrom && session.envelope.mailFrom.address
     ).toMatch(/^SRS0=\w{4}=\w{2}=example\.com=foo@/);
@@ -38,7 +38,7 @@ test('lib/mail/mta forward incoming', async () => {
     port: process.enve.MTA_PORT,
     tls: { rejectUnauthorized: false }
   });
-  // foo@example.com -> process.enve.PERSISTENT_ALIAS -> test@example.com
+  // foo@example.com -> process.enve.PERSISTENT_ALIAS -> user@example.com
   await transporter.sendMail({
     attachments: [
       {
@@ -71,7 +71,7 @@ test('lib/mail/mta remail incoming', async () => {
 
   // Catch REDIRECTED mail
   const promise = captureMail(1, (message, session) => {
-    expect(session.envelope.rcptTo[0].address).toBe('test@example.com');
+    expect(session.envelope.rcptTo[0].address).toBe('user@example.com');
     expect(
       session.envelope.mailFrom && session.envelope.mailFrom.address
     ).toMatch(/^SRS0=\w{4}=\w{2}=example\.com=foo@/);
@@ -112,7 +112,7 @@ test('lib/mail/mta reply to message', async () => {
     {
       aliasId: alias.id,
       subject: 'Hello',
-      from: 'test@example.com',
+      from: 'user@example.com',
       to: alias.fullAddress
     },
     1234
@@ -121,7 +121,7 @@ test('lib/mail/mta reply to message', async () => {
   const promise = captureMail(1, message => {
     expect(message.text.trim()).toBe('This is a reply');
     expect(message.from.text).toBe(alias.fullAddress);
-    expect(message.to.text).toBe('test@example.com');
+    expect(message.to.text).toBe('user@example.com');
     expect(message.subject).toBe('Hello');
   });
   // Send to ACTUAL SMTP server
@@ -131,7 +131,7 @@ test('lib/mail/mta reply to message', async () => {
     secure: false,
     tls: { rejectUnauthorized: false }
   });
-  // foo@example.com -> --reply-x@process.enve.DOMAIN -> test@example.com
+  // foo@example.com -> --reply-x@process.enve.DOMAIN -> user@example.com
   await transporter.sendMail({
     subject: 'Hello',
     from: 'foo@example.com',
