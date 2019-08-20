@@ -1,3 +1,6 @@
+-- Disable STRICT_TRANS_TABLES
+SET GLOBAL sql_mode='ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION';
+
 -- Add user
 INSERT INTO `users` (`email`, `credits`, `tier`, `tierExpiration`) VALUES ('test@xyfir.com', 1500, 'premium', 2147483647);
 
