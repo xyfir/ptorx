@@ -1,0 +1,36 @@
+language: node_js
+node_js: node
+before_install: cd "/home/travis/build/xyfir/ptorx/$PACKAGE"
+jobs:
+  include:
+    - stage: server
+      script: bash ../.travis.sh
+      env:
+        - PACKAGE="server"
+    - stage: web
+      script: bash ../.travis.sh
+      env:
+        - PACKAGE="web"
+    - stage: root
+      script: bash .travis.sh
+      env:
+        - PACKAGE="."
+stages:
+  - server
+  - web
+  - root
+deploy:
+  - provider: npm
+    email: contact@xyfir.com
+    api_key:
+      secure: OmxKLIW2SXPu3CbYgmkHkIiuXg9JkAzekS8N6Ov8KuzRMzi15ZexMbLK2W5HLup9UWG4J26CQBuzY9PURnlnpRA+l2WS8WY9XfdOxE9p5qjAO5hsS6RwIpVbInhnMuPXZP3WlOePaMhI8E4O1ipOoZr9Dt8ajlGmkLoOYHqKIrTJjew1Amt+mvzlJGfC5q4+k7cNs29DOCEtRAiLoT98B6ln6Jb49ryIXpTSLj9CyIZ1HUaZ1O0e5PBfOxICVR21OmEUEGCoBo/XPZWwEnqeaHzhCjL0CDpQp79PYPRmX1yKqlBsHLegAs2P7tQjQ45AoVbG11g2xvT7Er4yd0+8G84Pn2Ph+6FyPiV4yx8U/Lo1n2zRiQLlbhcBX6pGSORV/UyBjKKhMtNG5yxRQTKvbYtrdjVESW8lTyCWCMMRWeA9UZ6ydkY9rc8eeVwwKLM9qMlTs61IuxYDroXkrfKPdT8RngbSDYjzIXwQlSz4RkXavsUcI6IWmp1rezWVYrdcbjL7XT8Qjasv3e4XZZETO7GTts10bXVjbrA39EqNo1dE3lwIQdYVJSVJ+tmeR5RA6IAeSZ57MoXlINE1/C9Ig/OvPxlKP8AWcSg9k4a0CZfBJUmqTpEW//LcGwX7h4NaubkiuOVNAMVS/drPZrlvx046At4Zv/KSicp/cJUH4Zg=
+    on:
+      repo: xyfir/ptorx
+      tags: true
+  - provider: releases
+    api_key:
+      secure: jyWIu1H+vge5rRHv5wLQEKYot6yc6A0qYBHReu7f7Y/QCL/9gwblKdxuTtM3vi6bJ4O71FpHBK5AQjbAHhwBWYoKJ2E2ok4SEHzoo41CpwC3/ExiKBuUSJYT3S33HHeFEA40f3qNP5vMDl8lYtWsVsatFT3sT0XxcbGApIyTXIQKYGavRX07Q/vCP0cKu0hMRb6/FEwmp+6LQ2VSVxbWnt+BadQCubwBSXrMbuuKA1kBCz/+y4Q50ZvHKjirgOc/jTNrhqlroZuAwODEeNFumYkQzNbNUwlXTO6XgIJp5pZX1dDgPegeWOnfSnm2jQsqzMp7YGmGyv5XexVHBOJ9q1Ul+1i+o5WizwwTo9Ze31bDxQZd1SWBRhSZE5pgO6GgqDu26G1H34GFp4hKxGKuhuVsz181YGEaa5L3g7cxKjnPAu9BPPoEd/i68WuqMhHTVEeOED47C2gW5LPu+SWMY7FvZAYtDt8g+jTwtUdNgThBCT38Pv6+yZ+507d/bod5cxAXhWRj9Hsyc0R27PtamOySYlQk6isSlDH4XF4vsFiFFZ/QTY9B7WaSrym+GsBQpIQrOTYpRMukcw4gHZ5so0Orc/nFpOdGvbXaDFUfEy4H/APxpJm3hwmttGdx/JEJLM7bEgIJ/LEJrYYe+H9sGCf/XqGl16Oubjz/P4tHXDk=
+    on:
+      condition: $PACKAGE = .
+      repo: xyfir/ptorx
+      tags: true
