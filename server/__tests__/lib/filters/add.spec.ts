@@ -25,7 +25,7 @@ test('addFilter() address', async () => {
   );
   const _filter: Ptorx.Filter = {
     ...filter,
-    name: '',
+    name: 'Untitled Filter',
     type: 'address',
     find: 'find',
     blacklist: true,

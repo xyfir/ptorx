@@ -12,7 +12,7 @@ test('addDomainUser()', async () => {
   const _domainUser: Ptorx.DomainUser = {
     ...domainUser,
     userId: 12345,
-    label: '',
+    label: 'Domain User',
     authorized: false
   };
   expect(domainUser).toMatchObject(_domainUser);

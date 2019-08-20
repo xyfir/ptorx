@@ -24,11 +24,11 @@ CREATE TABLE `aliases` (
   `userId` bigint(20) UNSIGNED NOT NULL,
   `domainId` int(10) UNSIGNED NOT NULL,
   `address` varchar(64) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `created` int(10) UNSIGNED NOT NULL,
-  `smtpKey` varchar(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
-  `saveMail` tinyint(1) NOT NULL,
-  `canReply` tinyint(1) NOT NULL
+  `name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'Untitled Alias',
+  `created` int(10) UNSIGNED NOT NULL DEFAULT '0',
+  `smtpKey` varchar(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT '',
+  `saveMail` tinyint(1) NOT NULL DEFAULT '0',
+  `canReply` tinyint(1) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -67,10 +67,10 @@ CREATE TABLE `domains` (
   `domain` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `publicKey` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `privateKey` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `selector` varchar(12) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `created` int(10) UNSIGNED NOT NULL,
-  `verified` tinyint(1) NOT NULL,
-  `global` tinyint(1) NOT NULL
+  `selector` varchar(12) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `created` int(10) UNSIGNED NOT NULL DEFAULT '0',
+  `verified` tinyint(1) NOT NULL DEFAULT '0',
+  `global` tinyint(1) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -82,10 +82,10 @@ CREATE TABLE `domains` (
 CREATE TABLE `domain_users` (
   `domainId` int(10) UNSIGNED NOT NULL,
   `userId` bigint(20) UNSIGNED NOT NULL,
-  `label` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `requestKey` varchar(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
-  `created` int(10) UNSIGNED NOT NULL,
-  `authorized` tinyint(1) NOT NULL
+  `label` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'Domain User',
+  `requestKey` varchar(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT '',
+  `created` int(10) UNSIGNED NOT NULL DEFAULT '0',
+  `authorized` tinyint(1) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -97,12 +97,12 @@ CREATE TABLE `domain_users` (
 CREATE TABLE `filters` (
   `id` int(10) UNSIGNED NOT NULL,
   `userId` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `type` varchar(7) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `find` varchar(250) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `blacklist` tinyint(1) NOT NULL,
-  `regex` tinyint(1) NOT NULL,
-  `created` int(10) UNSIGNED NOT NULL
+  `name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'Untitled Filter',
+  `type` varchar(7) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'text',
+  `find` varchar(250) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `blacklist` tinyint(1) NOT NULL DEFAULT '0',
+  `regex` tinyint(1) NOT NULL DEFAULT '0',
+  `created` int(10) UNSIGNED NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -113,7 +113,7 @@ CREATE TABLE `filters` (
 
 CREATE TABLE `links` (
   `aliasId` int(10) UNSIGNED NOT NULL,
-  `orderIndex` tinyint(3) UNSIGNED NOT NULL,
+  `orderIndex` tinyint(3) UNSIGNED NOT NULL DEFAULT '0',
   `primaryEmailId` int(10) UNSIGNED DEFAULT NULL,
   `modifierId` int(10) UNSIGNED DEFAULT NULL,
   `filterId` int(10) UNSIGNED DEFAULT NULL
@@ -128,8 +128,8 @@ CREATE TABLE `links` (
 CREATE TABLE `messages` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `aliasId` int(10) UNSIGNED NOT NULL,
-  `key` varchar(36) CHARACTER SET utf8mb4 NOT NULL,
-  `created` int(10) UNSIGNED NOT NULL,
+  `key` varchar(36) CHARACTER SET utf8mb4 NOT NULL DEFAULT '',
+  `created` int(10) UNSIGNED NOT NULL DEFAULT '0',
   `subject` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `from` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `to` text COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -146,10 +146,10 @@ CREATE TABLE `messages` (
 CREATE TABLE `modifiers` (
   `id` int(10) UNSIGNED NOT NULL,
   `userId` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `target` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'Untitled Modifier',
+  `target` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'text',
   `template` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `created` int(10) UNSIGNED NOT NULL
+  `created` int(10) UNSIGNED NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -161,9 +161,9 @@ CREATE TABLE `modifiers` (
 CREATE TABLE `payments` (
   `id` int(10) UNSIGNED NOT NULL,
   `userId` bigint(20) UNSIGNED NOT NULL,
-  `tier` varchar(8) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `duration` varchar(5) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `amount` mediumint(8) UNSIGNED NOT NULL,
+  `tier` varchar(8) COLLATE utf8mb4_unicode_ci DEFAULT 'basic',
+  `duration` varchar(5) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'month',
+  `amount` mediumint(8) UNSIGNED NOT NULL DEFAULT '0',
   `paid` bigint(20) UNSIGNED DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -176,11 +176,11 @@ CREATE TABLE `payments` (
 CREATE TABLE `primary_emails` (
   `id` int(10) UNSIGNED NOT NULL,
   `userId` bigint(20) UNSIGNED NOT NULL,
-  `address` varchar(320) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `created` int(10) UNSIGNED NOT NULL,
-  `key` varchar(36) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `verified` tinyint(1) NOT NULL,
-  `autolink` tinyint(1) NOT NULL
+  `address` varchar(320) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `created` int(10) UNSIGNED NOT NULL DEFAULT '0',
+  `key` varchar(36) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `verified` tinyint(1) NOT NULL DEFAULT '0',
+  `autolink` tinyint(1) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------

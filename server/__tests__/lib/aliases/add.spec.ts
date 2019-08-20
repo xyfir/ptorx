@@ -41,7 +41,7 @@ test('addAlias() random', async () => {
   expect(alias.address).toMatch(/^[a-z0-9]{1,64}$/);
   const _alias: Ptorx.Alias = {
     ...alias,
-    name: '',
+    name: 'Untitled Alias',
     domainId: process.enve.DOMAIN_ID,
     saveMail: true,
     canReply: true
