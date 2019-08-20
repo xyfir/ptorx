@@ -1,4 +1,9 @@
--- Add user
+-- Add MySQL user
+CREATE USER 'ptorx'@'localhost' IDENTIFIED BY 'password';
+GRANT SELECT, INSERT, UPDATE, DELETE ON *.* TO 'ptorx'@'localhost';
+FLUSH PRIVILEGES;
+
+-- Add Ptorx user
 INSERT INTO `users` (`email`, `credits`, `tier`, `tierExpiration`) VALUES ('test@xyfir.com', 1500, 'premium', 2147483647);
 
 -- Add domain
