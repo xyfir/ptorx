@@ -3,9 +3,9 @@ if [ "$PACKAGE" == "server" ]; then
   # sudo apt install mariadb-server
   # sudo systemctl enable mysql
   sudo mysql -u root -e "CREATE DATABASE ptorx"
-  sudo mysql -u root -p ptorx < db/build/structure.sql
-  sudo mysql -u root -p ptorx < db/build/data.sql
-  sudo mysql -u root -p ptorx < db/build/test-data.sql
+  sudo mysql -u root ptorx < db/build/structure.sql
+  sudo mysql -u root ptorx < db/build/data.sql
+  sudo mysql -u root ptorx < db/build/test-data.sql
 
   # misc config
   mkdir mail-cache
