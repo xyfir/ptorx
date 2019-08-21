@@ -2,11 +2,19 @@
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0).
 
-Breaking changes may be introduced in minor versions for v6 while its use in the wild is limited to the official Ptorx.com instances. Afterwards the project will adhere to [Semantic Versioning](https://semver.org).
-
-Changes that require manual, atypical updates for those running their own instances of Ptorx will be listed at the bottom of their respective groups (Added, Changed, etc) and prefixed with `!!`. Dependency updates will not be mentioned unless the dependency is a submodule like Accownt.
+This project adheres to [Semantic Versioning](https://semver.org) after `v6.7.2`.
 
 ## [Unreleased]
+
+## [6.7.2] - 2019-08-20
+
+### Added
+
+- Travic CI testing and deployment
+
+### Changed
+
+- Improve code and tests
 
 ## [6.7.1] - 2019-07-21
 
@@ -23,7 +31,6 @@ Changes that require manual, atypical updates for those running their own instan
 ### Changed
 
 - Significantly decrease app size
-- `!!` Upgrade submodules
 
 ### Removed
 
@@ -35,7 +42,7 @@ Changes that require manual, atypical updates for those running their own instan
 
 - Cron jobs breaking from stale database connection
 - Receiving emails that don't have `To` headers
-- !! Issues caused by upgrading MariaDB (disabled `STRICT_TRANS_TABLES`)
+- Issues caused by upgrading MariaDB (disabled `STRICT_TRANS_TABLES`)
 
 ## [6.6.0] - 2019-05-11
 
@@ -55,10 +62,6 @@ Changes that require manual, atypical updates for those running their own instan
 
 - Links in HTML mail to open in a new tab
 - Dark theme not working in certain parts of app
-
-### Changed
-
-- !! Update Accownt and CCashCow
 
 ## [6.5.0] - 2019-04-27
 
@@ -94,10 +97,6 @@ Changes that require manual, atypical updates for those running their own instan
 - Helpful alert for new users
 - Pricing section on homepage
 
-### Changed
-
-- !! Update CCashCow, and Yalcs
-
 ## [6.3.0] - 2019-04-12
 
 ### Added
@@ -108,13 +107,13 @@ Changes that require manual, atypical updates for those running their own instan
 
 ### Changed
 
-- !! Update Yalcs
+- Update Yalcs
 
 ## [6.2.0] - 2019-04-09
 
 ### Added
 
-- !! [Yalcs](https://github.com/Xyfir/yalcs)
+- [Yalcs](https://github.com/Xyfir/yalcs)
 
 ## [6.1.1] - 2019-04-03
 
@@ -127,17 +126,17 @@ Changes that require manual, atypical updates for those running their own instan
 ### Added
 
 - Allow sending mail through third-party clients with our MSA server and alias SMTP credentials
-- !! `MSA_PORT` to server config
+- `MSA_PORT` to server config
 
 ### Changed
 
-- !! Database structure
-- !! `SMTP_PORT` to `MTA_PORT` in server config
-- !! `TEST_SMTP_PORT` to `TEST_MTA_PORT` in server config
+- Database structure
+- `SMTP_PORT` to `MTA_PORT` in server config
+- `TEST_SMTP_PORT` to `TEST_MTA_PORT` in server config
 
 ### Removed
 
-- !! Hard-coded message size limit
+- Hard-coded message size limit
 
 ## [6.0.0] - 2019-03-29
 
@@ -145,7 +144,8 @@ Changes that require manual, atypical updates for those running their own instan
 
 - Release 6.0.0
 
-[unreleased]: https://github.com/Xyfir/ptorx/compare/6.7.0...HEAD
+[unreleased]: https://github.com/Xyfir/ptorx/compare/6.7.2...HEAD
+[6.7.2]: https://github.com/Xyfir/ptorx/releases/tag/6.7.2
 [6.7.1]: https://github.com/Xyfir/ptorx/releases/tag/6.7.1
 [6.7.0]: https://github.com/Xyfir/ptorx/releases/tag/6.7.0
 [6.6.1]: https://github.com/Xyfir/ptorx/releases/tag/6.6.1
