@@ -12,7 +12,11 @@ export async function addMessage(
   const db = new MySQL();
   try {
     const insert: Partial<Ptorx.Message> = {
+      to: '',
+      raw: '',
       key: uuid(),
+      from: '',
+      subject: '',
       created: moment().unix(),
       aliasId: message.aliasId
     };

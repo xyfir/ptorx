@@ -13,7 +13,8 @@ export async function addModifier(
     const insert: Partial<Ptorx.Modifier> = {
       userId,
       target: 'subject',
-      created: moment().unix()
+      created: moment().unix(),
+      template: ''
     };
     const result = await db.query('INSERT INTO modifiers SET ?', insert);
     if (!result.affectedRows) throw 'Could not add modifier';
