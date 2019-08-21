@@ -10,7 +10,7 @@
     "coverage": "npm run test -- --coverage",
     "build": "tsc -p ./",
     "start": "node dist/app",
-    "test": "jest --detectOpenHandles --runInBand"
+    "test": "jest --detectOpenHandles --runInBand --forceExit"
   },
   "author": "Xyfir, LLC <contact@xyfir.com> (https://www.xyfir.com)",
   "license": "GPL-3.0",
