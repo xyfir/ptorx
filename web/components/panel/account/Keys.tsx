@@ -73,8 +73,9 @@ class _PGPKeys extends React.Component<
     return (
       <div>
         <Typography>
-          <strong>Note:</strong> This will <em>not</em> modify any existing
-          messages stored on Ptorx.
+          <strong>Warning:</strong> This will <em>not</em> (re)encrypt any
+          messages currently saved to your inbox. Any password changes will
+          cause mail that's already encrypted to no longer be accessible.
         </Typography>
 
         <TextField
