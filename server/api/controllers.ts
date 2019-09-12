@@ -1,4 +1,5 @@
 export * from './users/get';
+export * from './users/delete';
 export * from './users/logout';
 export * from './users/set-keys';
 
