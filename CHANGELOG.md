@@ -6,6 +6,16 @@ This project adheres to [Semantic Versioning](https://semver.org) after `v6.7.2`
 
 ## [Unreleased]
 
+## [6.8.0] - 2019-09-XX
+
+### Added
+
+- Ability for users to delete their account
+
+### Changed
+
+- Improve warning when updating mailbox password
+
 ## [6.7.2] - 2019-08-20
 
 ### Added
@@ -144,7 +154,8 @@ This project adheres to [Semantic Versioning](https://semver.org) after `v6.7.2`
 
 - Release 6.0.0
 
-[unreleased]: https://github.com/Xyfir/ptorx/compare/6.7.2...HEAD
+[unreleased]: https://github.com/Xyfir/ptorx/compare/6.8.0...HEAD
+[6.8.0]: https://github.com/Xyfir/ptorx/releases/tag/6.8.0
 [6.7.2]: https://github.com/Xyfir/ptorx/releases/tag/6.7.2
 [6.7.1]: https://github.com/Xyfir/ptorx/releases/tag/6.7.1
 [6.7.0]: https://github.com/Xyfir/ptorx/releases/tag/6.7.0
