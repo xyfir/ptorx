@@ -42,6 +42,12 @@ nvm install X.X.X
 
 Get the latest nvm version number from their [repo](https://github.com/nvm-sh/nvm) and the latest [Node version](https://nodejs.org/en/download/releases/) that was available upon last [server/package.json](https://github.com/Xyfir/ptorx/blob/master/server/package.json) update.
 
+Sendmail:
+
+```bash
+sudo apt install sendmail
+```
+
 ## Step 1C: Enable Swap
 
 If you're running on a small server with RAM under ~2GB, you should allocate some swap space. The build process often fails on low-memory systems without it.
