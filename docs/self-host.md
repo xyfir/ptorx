@@ -1,13 +1,68 @@
 # Self-hosting Ptorx
 
-Hosting Ptorx yourself gives you a greater level of control and privacy (assuming you set everything up correctly) but it does come at a cost: it's not a simple process. If you need a self-hosted Ptorx installation you can either follow this tutorial with no support should you get stuck, or you can hire us to do it for you by sending an email to contact@xyfir.com. Many steps will be vague and generalized, so you'll be expected to know how to fill in the blanks based on your environment and requirements.
+Hosting Ptorx yourself gives you a greater level of control and privacy (assuming you set everything up correctly) but it does come at a cost: it's not a simple process. If you need a self-hosted Ptorx installation you can either follow this tutorial with no support should you get stuck, or you can hire us to do it for you by sending an email to contact@xyfir.com. Some steps will be implied, or vague and generalized, so you'll be expected to know how to fill in the blanks based on your environment and requirements.
 
 # Requisites
 
 - Access to a domain whose DNS records you can configure.
-- A Linux server (we'll use Ubuntu) whose host allows it to send mail, which primarily means that outgoing port 25 should be open.
+- A Linux server (we'll use Ubuntu) whose host allows it to send mail, which primarily means that outgoing port 25 should be open and unrestricted.
 
-# Step 0: Clone the Repo
+# Step 1: General Server Configuration
+
+For this tutorial, we'll assume you're using a non-`root` user with `sudo` access.
+
+## Step 1A: Set Hostname
+
+We'll use `example.com` as a placeholder for your domain and `ptorx.example.com` as a placeholder for your hostname/subdomain. Even if you plan to send and receive mail and access Ptorx from `example.com` you still _need_ a matching hostname/subdomain which the underlying mail servers will communicate on.
+
+```bash
+hostnamectl # get current hostname
+sudo hostnamectl set-hostname ptorx.example.com
+sudo nano /etc/hosts
+```
+
+In `/etc/hosts`, replace the old hostname with `ptorx.example.com` and add `127.0.0.1 ptorx.example.com` if it's missing. If `/etc/cloud/cloud.cfg` exists, set `preserve_hostname` to `true`.
+
+## Step 1B: Install Dependencies
+
+Nginx:
+
+```bash
+sudo apt install nginx
+sudo ufw allow 'Nginx Full' # assuming your firewall is on
+```
+
+Node.js / nvm:
+
+```bash
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/vX.X.X/install.sh | bash
+# run command it prints to console
+nvm install X.X.X
+```
+
+Get the latest nvm version number from their [repo](https://github.com/nvm-sh/nvm) and the latest [Node version](https://nodejs.org/en/download/releases/) that was available upon last [server/package.json](https://github.com/Xyfir/ptorx/blob/master/server/package.json) update.
+
+## Step 1C: Enable Swap
+
+If you're running on a small server with RAM under ~2GB, you should allocate some swap space. The build process often fails on low-memory systems without it.
+
+```bash
+sudo fallocate -l 4G /swapfile # 1-2GB is probably good enough
+sudo chmod 600 /swapfile
+sudo mkswap /swapfile
+sudo swapon /swapfile
+echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab
+sudo nano /etc/sysctl.conf
+```
+
+In the configuration file, edit or add the following values:
+
+```
+vm.swappiness=30
+vm.vfs_cache_pressure=50
+```
+
+# Step 2: Clone the Repo
 
 First change to the directory where you wish to keep Ptorx.
 
@@ -18,7 +73,7 @@ cd ptorx
 
 From now on we'll assume commands are run from `ptorx/`.
 
-# Step 1: Download npm Dependencies
+# Step 3: Download npm Dependencies
 
 Install npm depencies for each module:
 
@@ -52,7 +107,7 @@ npm install -g pm2
 
 Technically pm2 is not required, but it's what we'll use for this tutorial.
 
-# Step 2: Configure Database
+# Step 4: Configure Database
 
 ```bash
 sudo apt install mariadb-server
@@ -78,7 +133,7 @@ sudo mysql -u root -p ptorx < server/db/build/data.sql
 
 Replace `ptorx` with the name of your database.
 
-# Step 3: Create Data Directories
+# Step 5: Create Data Directories
 
 Now we need to create the data directories where Ptorx and its submodules will write both temporary and permanent data to the disk. You can put them wherever you'd like (just remember it for Step 4), but for now we'll put them alongside `ptorx/`.
 
@@ -88,13 +143,13 @@ mkdir ../accownt-db ../mail-cache ../ccashcow-db ../yalcs-db
 
 You can also name the three directories however you'd like.
 
-# Step 4: Set Environment Variables
+# Step 6: Set Environment Variables
 
 Ptorx and its submodules are configured via environment variables which are loaded into the applications via `.env` files located in each modules's directory.
 
 To understand the syntax of the `.env` files, know that they are first loaded via [dotenv](https://www.npmjs.com/package/dotenv) and then the string values provided by dotenv are parsed by [enve](https://www.npmjs.com/package/enve).
 
-## Step 4a: Create `.env` Files
+## Step 6A: Create `.env` Files
 
 First we'll create each file and then we'll work our way through populating them with values.
 
@@ -104,29 +159,33 @@ cp server/example.env server/.env
 cp web/example.env web/.env
 ```
 
-## Step 4b: Configure CCashCow
+## Step 6B: Configure CCashCow
+
+_Note: This is our payment module. You can safely skip it._
 
 See [Xyfir/ccashcow](https://github.com/Xyfir/ccashcow) for instructions.
 
 Use `vim` or `nano` or similar to edit the files `ccashcow/server/.env` and `ccashcow/web/.env`.
 
-## Step 4c: Configure Accownt
+## Step 6C: Configure Accownt
 
 See [Xyfir/accownt](https://github.com/Xyfir/accownt) for instructions.
 
 Edit the files `accownt/server/.env` and `accownt/web/.env`.
 
-## Step 4d: Configure Yalcs
+## Step 6D: Configure Yalcs
+
+_Note: This is our live chat module. You can safely skip it._
 
 See [Xyfir/yalcs](https://github.com/Xyfir/yalcs) for instructions.
 
 Edit the files `yalcs/loader/.env`, `yalcs/server/.env`, and `yalcs/web/.env`.
 
-## Step 4e: Configure Ptorx
+## Step 6E: Configure Ptorx
 
 Now we'll do the same thing for Ptorx. You can find the available environment variables in [types/ptorx.d.ts](https://github.com/Xyfir/ptorx/blob/master/types/ptorx.d.ts) under the `Ptorx.Env` namespace.
 
-# Step 5: Build From Source
+# Step 7: Build From Source
 
 ```bash
 cd server
@@ -150,7 +209,7 @@ npm run build
 cd ../../
 ```
 
-# Step 6: Open and Forward Ports
+# Step 8: Open and Forward Ports
 
 Make sure your firewall allows traffic through the needed ports. If you're using `ufw`, it'll look something like:
 
@@ -185,19 +244,19 @@ Ptorx requires a lot of servers. The suggested _local_ ports are as follows:
 | Ptorx MSA              | 2076 |
 | Yalcs                  | 2079 |
 
-# Step 7: Set DNS Records
+# Step 9: Set DNS Records
 
 For this step, we'll be using `example.com` as a placeholder for your domain.
 
-## Step 7a: DKIM
+## Step 9A: DKIM
 
 First of all, set the domain key TXT record to `<SELECTOR>._domainkey.example.com` as provided by the Ptorx app after you've added your domain. Ignore the other records it tells you to set.
 
-## Step 7b: MX
+## Step 9B: MX
 
 Create a single MX record for `example.com` that points to your server's IP address, which will probably be the same as your domain's A record. The priority doesn't matter with only a single server, but we'll set it to `10`.
 
-## Step 7c: SPF
+## Step 9C: SPF
 
 _This step is optional but highly recommended to prevent your mail from being marked as spam._
 
@@ -209,7 +268,7 @@ Create a TXT record for `example.com` with something like this:
 
 Before you blindly copy and paste, you should understand how SPF works and how best to utilize it according your needs.
 
-## Step 7d: DMARC
+## Step 9D: DMARC
 
 _This step is optional but highly recommended to prevent your mail from being marked as spam._
 
@@ -221,13 +280,13 @@ Create a TXT record for `_dmarc.example.com` with something like this:
 
 Before you blindly copy and paste, you should understand how DMARC works and how best to utilize it according your needs.
 
-## Step 7e: Reverse DNS
+## Step 9E: Reverse DNS
 
 _This step is optional but highly recommended to prevent your mail from being marked as spam._
 
 Go to your server host's control panel and change the reverse DNS to your domain name. By default its value probably looks something like `0.0.0.0.yourhost.com` where `0.0.0.0` is your server's IPv4 address and `yourhost.com` is the name of your server host. For example with [VULTR](https://www.vultr.com/?ref=7140527), which Ptorx uses, it'll look like `140.82.16.198.vultr.com`, and it can be found under the `Settings > IPv4` tab when viewing your server instance.
 
-# Step 8: Start Servers
+# Step 10: Start Servers
 
 Last but not least, start the servers with pm2, which you should have installed earlier:
 
@@ -259,9 +318,9 @@ git submodule update --recursive
 
 Now we'll once again run through some of the steps above:
 
-- Go to [Step 1](#step-1-download-npm-dependencies) to update dependencies.
-- Go to [Step 4](#step-4-set-environment-variables) to update any `.env` files that may require changes.
-- Go to [Step 5](#step-5-build-from-source) to rebuild the apps.
+- Go to [Step 3](#step-3-download-npm-dependencies) to update dependencies.
+- Go to [Step 6](#step-6-set-environment-variables) to update any `.env` files that may require changes.
+- Go to [Step 7](#step-7-build-from-source) to rebuild the apps.
 
 Update your database if needed by running _in order_ the `server/db/upgrade/` SQL files for every version _after_ your current installation's. For example, assuming you're on version `1.0.0` and the latest is `1.1.0`:
 
