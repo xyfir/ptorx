@@ -6,13 +6,6 @@ Hosting Ptorx yourself gives you a greater level of control and privacy (assumin
 
 - Access to a domain whose DNS records you can configure.
 - A Linux server (we'll use Ubuntu) whose host allows it to send mail, which primarily means that outgoing port 25 should be open.
-- Know-how to set up a secure server before we install Ptorx onto it.
-- Nginx or similar software installed to serve static files and act as a proxy for Ptorx and other APIs.
-- Let's Encrypt or similar geniune TLS (SSL) certificate (no self-signed certs!) for your main domain where the instance of Ptorx will be hosted. Additional mail-only domains don't need this.
-- Node.js installed on your server. Ptorx targets the latest version available at time of the last [server/package.json](https://github.com/Xyfir/ptorx/blob/master/server/package.json) update.
-- MariaDB or MySQL installed on your server (no `STRICT_TRANS_TABLES`!). Ptorx.com runs MariaDB so there may be unknown discrepancies with MySQL.
-- sendmail installed on your server. (Make sure your server's hostname is set correctly to prevent slow mail!)
-- iptables-persistent installed on your server.
 
 # Step 0: Clone the Repo
 
@@ -59,12 +52,21 @@ npm install -g pm2
 
 Technically pm2 is not required, but it's what we'll use for this tutorial.
 
-# Step 2: Create Database
-
-Create a database and preferably a non-root MySQL user with `SELECT`, `INSERT`, `UPDATE`, and `DELETE` privileges as well. We'll name our database `ptorx` but any name will do.
+# Step 2: Configure Database
 
 ```bash
-sudo mysql -u root -e "CREATE DATABASE ptorx"
+sudo apt install mariadb-server
+sudo systemctl enable mysql
+sudo mysql_secure_installation
+sudo mysql -u root
+```
+
+```sql
+-- user, pass, and database name are of course all configurable
+CREATE USER 'ptorx'@'localhost' IDENTIFIED BY 'PASSWORD_123';
+GRANT SELECT, INSERT, UPDATE, DELETE ON *.* TO 'ptorx'@'localhost';
+FLUSH PRIVILEGES;
+CREATE DATABASE 'ptorx';
 ```
 
 Next we'll build the database:
