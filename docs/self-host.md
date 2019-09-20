@@ -5,7 +5,11 @@ Hosting Ptorx yourself gives you a greater level of control and privacy (assumin
 # Requisites
 
 - Access to a domain whose DNS records you can configure.
-- A Linux server (we'll use Ubuntu) whose host allows it to send mail, which primarily means that outgoing port 25 should be open and unrestricted.
+- A Linux server. We'll use Ubuntu.
+
+Ptorx can run on fairly low-spec servers, but we recommend at least 1GB of RAM with 1-2GB of swap space.
+
+Make sure your server's host allows you to send mail.
 
 # Step 1: General Server Configuration
 
@@ -40,7 +44,7 @@ curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/vX.X.X/install.sh | bash
 nvm install X.X.X
 ```
 
-Get the latest nvm version number from their [repo](https://github.com/nvm-sh/nvm) and the latest [Node version](https://nodejs.org/en/download/releases/) that was available upon last [server/package.json](https://github.com/Xyfir/ptorx/blob/master/server/package.json) update.
+Get the latest nvm version number from their [repo](https://github.com/nvm-sh/nvm) and the latest [Node version](https://nodejs.org/en/download/releases/) that was available upon last [server/package.json](https://github.com/xyfir/ptorx/blob/master/server/package.json) update.
 
 Sendmail:
 
@@ -73,7 +77,7 @@ vm.vfs_cache_pressure=50
 First change to the directory where you wish to keep Ptorx.
 
 ```bash
-git clone --recurse-submodules https://github.com/Xyfir/ptorx.git
+git clone --recurse-submodules https://github.com/xyfir/ptorx.git
 cd ptorx
 ```
 
@@ -137,8 +141,6 @@ sudo mysql -u root -p ptorx < server/db/build/structure.sql
 sudo mysql -u root -p ptorx < server/db/build/data.sql
 ```
 
-Replace `ptorx` with the name of your database.
-
 # Step 5: Create Data Directories
 
 Now we need to create the data directories where Ptorx and its submodules will write both temporary and permanent data to the disk. You can put them wherever you'd like (just remember it for Step 4), but for now we'll put them alongside `ptorx/`.
@@ -169,13 +171,13 @@ cp web/example.env web/.env
 
 _Note: This is our payment module. You can safely skip it._
 
-See [Xyfir/ccashcow](https://github.com/Xyfir/ccashcow) for instructions.
+See [xyfir/ccashcow](https://github.com/xyfir/ccashcow) for instructions.
 
 Use `vim` or `nano` or similar to edit the files `ccashcow/server/.env` and `ccashcow/web/.env`.
 
 ## Step 6C: Configure Accownt
 
-See [Xyfir/accownt](https://github.com/Xyfir/accownt) for instructions.
+See [xyfir/accownt](https://github.com/xyfir/accownt) for instructions.
 
 Edit the files `accownt/server/.env` and `accownt/web/.env`.
 
@@ -183,13 +185,13 @@ Edit the files `accownt/server/.env` and `accownt/web/.env`.
 
 _Note: This is our live chat module. You can safely skip it._
 
-See [Xyfir/yalcs](https://github.com/Xyfir/yalcs) for instructions.
+See [xyfir/yalcs](https://github.com/xyfir/yalcs) for instructions.
 
 Edit the files `yalcs/loader/.env`, `yalcs/server/.env`, and `yalcs/web/.env`.
 
 ## Step 6E: Configure Ptorx
 
-Now we'll do the same thing for Ptorx. You can find the available environment variables in [types/ptorx.d.ts](https://github.com/Xyfir/ptorx/blob/master/types/ptorx.d.ts) under the `Ptorx.Env` namespace.
+Now we'll do the same thing for Ptorx. You can find the available environment variables in [types/ptorx.d.ts](https://github.com/xyfir/ptorx/blob/master/types/ptorx.d.ts) under the `Ptorx.Env` namespace.
 
 # Step 7: Build From Source
 
@@ -335,8 +337,6 @@ sudo mysql -u root -p ptorx < server/db/upgrade/1.0.1.sql
 sudo mysql -u root -p ptorx < server/db/upgrade/1.0.2.sql
 sudo mysql -u root -p ptorx < server/db/upgrade/1.1.0.sql
 ```
-
-Be sure to replace `ptorx` with the actual name of your database.
 
 Finally, restart the servers:
 
