@@ -290,11 +290,125 @@ Before you blindly copy and paste, you should understand how DMARC works and how
 
 ## Step 9E: Reverse DNS
 
-_This step is optional but highly recommended to prevent your mail from being marked as spam._
+Go to your server host's control panel and change the reverse DNS to your domain name. By default its value probably looks something like `0.0.0.0.yourhost.com` where `0.0.0.0` is your server's IPv4 address and `yourhost.com` is the name of your server host.
 
-Go to your server host's control panel and change the reverse DNS to your domain name. By default its value probably looks something like `0.0.0.0.yourhost.com` where `0.0.0.0` is your server's IPv4 address and `yourhost.com` is the name of your server host. For example with [VULTR](https://www.vultr.com/?ref=7140527), which Ptorx uses, it'll look like `140.82.16.198.vultr.com`, and it can be found under the `Settings > IPv4` tab when viewing your server instance.
+For example with [VULTR](https://www.vultr.com/?ref=7140527), it'll look like `140.82.16.198.vultr.com`, and it can be found under the `Settings > IPv4` tab when viewing your server instance.
 
-# Step 10: Start Servers
+# Step 10: Generate TLS Certificates
+
+Generate TLS certificates from Let's Encrypt:
+
+```bash
+sudo apt install letsencrypt
+sudo letsencrypt certonly --webroot -w /var/www/html -d example.com
+```
+
+Then we'll enable auto-renewal:
+
+```bash
+sudo crontab -e
+```
+
+Add something like...
+
+```
+11 4 * * * letsencrypt renew
+```
+
+Finally, we'll need to make sure our Node server can read the certificate. The _easiest_ way to do that is:
+
+```bash
+sudo chmod 755 /etc/letsencrypt/live/
+sudo chmod 755 /etc/letsencrypt/archive/
+```
+
+# Step 11: Configure Nginx
+
+Create a config file for your site or edit `/etc/nginx/nginx.conf` directly, placing the following code within the `http { ... }` block:
+
+```nginx
+server {
+  listen 80;
+  server_name example.com;
+  return 301 https://$host$request_uri;
+}
+
+server {
+  listen 443 ssl;
+  server_name example.com;
+
+  ssl_certificate /etc/letsencrypt/live/example.com/fullchain.pem;
+  ssl_certificate_key /etc/letsencrypt/live/example.com/privkey.pem;
+
+  add_header Strict-Transport-Security "max-age=31536000; includeSubDomains";
+  add_header X-XSS-Protection "1; mode=block";
+  add_header X-Content-Type-Options nosniff;
+
+  location / {
+    root /path/to/ptorx/web/dist;
+    try_files /index.html =404;
+  }
+  location /api {
+    proxy_pass http://localhost:2070;
+  }
+  location /yalcs {
+    root /path/to/ptorx/yalcs/web/dist;
+    try_files /index.html =404;
+  }
+  location /static {
+    gzip_static on;
+    alias /path/to/ptorx/web/dist;
+  }
+  location /accownt {
+    root /path/to/ptorx/accownt/web/dist;
+    try_files /index.html =404;
+  }
+  location /ccashcow {
+    root /path/to/ptorx/ccashcow/web/dist;
+    try_files /index.html =404;
+  }
+  location /icon.png {
+    root /path/to/ptorx/mobile;
+    try_files /icon.png =404;
+  }
+  location /.well-known {
+    alias /var/www/html/.well-known;
+  }
+  location /yalcs/api/ {
+    proxy_read_timeout 3600;
+    proxy_pass http://localhost:2079/api/;
+  }
+  location /accownt/api/ {
+    proxy_pass http://localhost:2074/api/;
+  }
+  location /yalcs/static {
+    gzip_static on;
+    alias /path/to/ptorx/yalcs/web/dist;
+  }
+  location /ccashcow/api/ {
+    proxy_pass http://localhost:2075/api/;
+  }
+  location /accownt/static {
+    gzip_static on;
+    alias /path/to/ptorx/accownt/web/dist;
+  }
+  location /ccashcow/static {
+    gzip_static on;
+    alias /path/to/ptorx/ccashcow/web/dist;
+  }
+}
+```
+
+As always, replace `example.com`, the ports you chose, and `/path/to`. Anything with `yalcs` or `ccashcow` is optional.
+
+Test your config and restart Nginx:
+
+```bash
+sudo nginx -t
+sudo systemctl restart nginx
+```
+
+# Step 12: Start Servers
 
 Last but not least, start the servers with pm2, which you should have installed earlier:
 
