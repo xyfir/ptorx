@@ -234,7 +234,7 @@ Next we'll need to forward incoming traffic from port `25` to the port you set f
 sudo iptables -t nat -A PREROUTING -p tcp --dport 25 -j REDIRECT --to-port 2071
 sudo iptables -t nat -A PREROUTING -p tcp --dport 587 -j REDIRECT --to-port 2076
 sudo iptables -t nat -nvL # optionally validate your rules
-iptables-save > /etc/iptables/rules.v4
+sudo apt install iptables-persistent # save files on prompt
 ```
 
 ## Suggested Ports
