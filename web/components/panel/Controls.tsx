@@ -122,7 +122,7 @@ class _PanelControls extends React.Component<
           open={open}
           icon={<SpeedDialIcon />}
           onBlur={() => this.setState({ open: false })}
-          onClick={() => this.setState({ open: true })}
+          onClick={() => this.setState({ open: !open })}
           onFocus={() => this.setState({ open: true })}
           onClose={() => this.setState({ open: false })}
           direction="up"
