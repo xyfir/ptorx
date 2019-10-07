@@ -170,8 +170,7 @@ class _Matches extends React.Component<MatchesProps, MatchesState> {
         </List>
 
         <TablePagination
-          onChangeRowsPerPage={e => this.setState({ perPage: +e.target.value })}
-          rowsPerPageOptions={[5, 10, 25, 50, 100]}
+          rowsPerPageOptions={[perPage]}
           onChangePage={(e, p) => this.setState({ page: p + 1 })}
           rowsPerPage={perPage}
           component="div"
