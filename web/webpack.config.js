@@ -21,6 +21,9 @@ module.exports = {
   },
 
   resolve: {
+    alias: {
+      'react-dom': '@hot-loader/react-dom'
+    },
     modules: [__dirname, 'node_modules'],
     extensions: ['.ts', '.tsx', '.js', '.jsx']
   },
@@ -54,10 +57,7 @@ module.exports = {
             ],
             '@babel/preset-react'
           ],
-          plugins: [
-            '@babel/plugin-proposal-class-properties',
-            'react-hot-loader/babel'
-          ]
+          plugins: ['@babel/plugin-proposal-class-properties']
         }
       },
       { test: /\.css$/, use: ['style-loader', 'css-loader'] },
