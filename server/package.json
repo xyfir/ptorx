@@ -1,6 +1,6 @@
 {
   "name": "ptorx-server",
-  "version": "6.8.1",
+  "version": "6.8.2",
   "description": "Send and receive mail anonymously with email forwarding and aliases through Ptorx.",
   "main": "app.js",
   "scripts": {
@@ -50,9 +50,9 @@
     "@types/jsonwebtoken": "^8.3.4",
     "@types/mailparser": "^2.4.0",
     "@types/mysql": "^2.15.7",
-    "@types/node": "^12.7.8",
+    "@types/node": "^12.7.11",
     "@types/node-forge": "^0.8.6",
-    "@types/openpgp": "^4.4.6",
+    "@types/openpgp": "^4.4.7",
     "@types/smtp-server": "^3.5.2",
     "@types/uuid": "^3.4.5",
     "jest": "^24.9.0",
