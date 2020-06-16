@@ -10,23 +10,23 @@ export const TIERS: {
 }[] = [
   {
     name: 'basic',
-    credits: 200,
-    durations: [{ duration: 'life', cost: 0 }]
+    credits: 0,
+    durations: [{ duration: 'life', cost: 0 }],
   },
   {
     name: 'premium',
     credits: 1500,
     durations: [
       { duration: 'month', cost: 150 },
-      { duration: 'year', cost: 1500 }
-    ]
+      { duration: 'year', cost: 1500 },
+    ],
   },
   {
     name: 'ultimate',
     credits: 10000,
     durations: [
       { duration: 'month', cost: 500 },
-      { duration: 'year', cost: 5000 }
-    ]
-  }
+      { duration: 'year', cost: 5000 },
+    ],
+  },
 ];

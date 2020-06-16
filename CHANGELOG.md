@@ -6,6 +6,18 @@ This project adheres to [Semantic Versioning](https://semver.org) after `v6.7.2`
 
 ## [Unreleased]
 
+## [6.8.3] - 2020-06-15
+
+I'm trying to figure out what the future holds for Ptorx. I'm very busy with
+other projects and can't give Ptorx users the attention they deserve. Still,
+many people use it, including myself, so it's not going offline. - Mr. Xyfir
+
+### Removed
+
+- Free account credits
+- Ability to purchase credits
+- Yalcs live support
+
 ## [6.8.2] - 2019-10-07
 
 ### Fixed
@@ -161,7 +173,8 @@ This project adheres to [Semantic Versioning](https://semver.org) after `v6.7.2`
 
 - Release 6.0.0
 
-[unreleased]: https://github.com/Xyfir/ptorx/compare/6.8.2...HEAD
+[unreleased]: https://github.com/Xyfir/ptorx/compare/6.8.3...HEAD
+[6.8.3]: https://github.com/Xyfir/ptorx/releases/tag/6.8.3
 [6.8.2]: https://github.com/Xyfir/ptorx/releases/tag/6.8.2
 [6.8.0]: https://github.com/Xyfir/ptorx/releases/tag/6.8.0
 [6.7.2]: https://github.com/Xyfir/ptorx/releases/tag/6.7.2

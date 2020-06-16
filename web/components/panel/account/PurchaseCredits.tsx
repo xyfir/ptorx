@@ -11,29 +11,29 @@ import {
   withStyles,
   Button,
   Theme,
-  Paper
+  Paper,
 } from '@material-ui/core';
 
 const styles = (theme: Theme) =>
   createStyles({
     buttons: {
       flexDirection: 'column',
-      display: 'flex'
+      display: 'flex',
     },
     button: {
-      margin: '1em 0'
+      margin: '1em 0',
     },
     paper: {
       padding: '0.5em',
-      margin: '1em'
+      margin: '1em',
     },
     email: {
       textDecoration: 'none',
-      color: theme.palette.primary.main
+      color: theme.palette.primary.main,
     },
     root: {
-      textAlign: 'center'
-    }
+      textAlign: 'center',
+    },
   });
 
 class _PurchaseCredits extends React.Component<
@@ -51,15 +51,15 @@ class _PurchaseCredits extends React.Component<
         this.props.enqueueSnackbar('Payment complete');
         return api.get('/users');
       })
-      .then(res => this.context.dispatch({ user: res.data }))
-      .catch(err => this.props.enqueueSnackbar(err.response.data.error));
+      .then((res) => this.context.dispatch({ user: res.data }))
+      .catch((err) => this.props.enqueueSnackbar(err.response.data.error));
   }
 
   onBuy(tier: Ptorx.Payment['tier'], duration: Ptorx.Payment['duration']) {
     api
       .post('/payments/start', { tier, duration })
-      .then(res => (location.href = res.data.url))
-      .catch(err => this.props.enqueueSnackbar(err.response.data.error));
+      .then((res) => (location.href = res.data.url))
+      .catch((err) => this.props.enqueueSnackbar(err.response.data.error));
   }
 
   render() {
@@ -67,7 +67,7 @@ class _PurchaseCredits extends React.Component<
     const { user } = this.context;
     return (
       <div className={classes.root}>
-        <Typography>
+        {/* <Typography>
           Experience Ptorx with all of its features and increased credits per
           month.
         </Typography>
@@ -135,6 +135,13 @@ class _PurchaseCredits extends React.Component<
             contact@xyfir.com
           </a>
           .
+        </Typography> */}
+        <Typography>
+          Purchasing credits is disabled until further notice. Email us at{' '}
+          <a href="mailto:contact@xyfir.com" className={classes.email}>
+            contact@xyfir.com
+          </a>{' '}
+          with questions.
         </Typography>
       </div>
     );
