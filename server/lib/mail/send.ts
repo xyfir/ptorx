@@ -10,7 +10,10 @@ const transporter =
         port: process.enve.TEST_MTA_PORT,
         tls: { rejectUnauthorized: false }
       })
-    : createTransport({ sendmail: true });
+    : createTransport({
+        sendmail: true,
+        path: '/usr/sbin/sendmail'
+      });
 
 export async function sendMail(
   mail: SendMailOptions,
