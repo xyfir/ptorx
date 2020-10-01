@@ -12,7 +12,7 @@ const transporter =
       })
     : createTransport({
         sendmail: true,
-        path: '/usr/sbin/sendmail'
+        path: process.enve.SENDMAIL_PATH || 'sendmail'
       });
 
 export async function sendMail(

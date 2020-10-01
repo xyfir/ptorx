@@ -299,6 +299,11 @@ export namespace Ptorx {
        * @example "/path/to/mail-cache"
        */
       MAIL_CACHE_DIRECTORY: string;
+	  /**
+	   * Absolute path of sendmail command for outgoing mails.
+	   * @example "/usr/sbin/sendmail"
+	   */
+	  SENDMAIL_PATH: string;	   
     }
 
     export interface Web extends Ptorx.Env.Common {
